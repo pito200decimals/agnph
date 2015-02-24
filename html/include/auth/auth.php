@@ -6,21 +6,34 @@ include_once("../constants.php");
 include_once("../util/core.php");
 
 if (UserLoggedIn()) {
-	die("ERROR: Already defined \$user: $user");
+	debug_die("Already defined \$user: $user");
 }
 if (!isset($_COOKIE[COOKIE_NAME])) {
+	debug("User is a guest!");
 	// Normal guest user. Don't define $user.
+	unset($user);
 	return;
 }
 
-function Login($cookie) {
+function Authenticate($cookie) {
+	debug("Authenticating user with cookie=$cookie");
 	global $user;
-	// TODO: Get $uid
+	// TODO: Get $uid, $md5 from cookie
+	$uid = 0;
+	$md5 = md5("");
 	// TODO: Lookup password and login info from db.
-	$user = array('uid' => 0);  // TODO: Initialize other parameters from db data.
-	// TODO: Set up cookie, db entry.
+	$db_md5 = md5("");
+	if ($md5 !== $db_md5) {
+		// Cookie did not match user credentials, do not log in.
+		debug("User did not pass authentication");
+		unset($user);
+		return;
+	}
+	// TODO: Initialize $user variable.
+	$user = array('uid' => $uid);  // TODO: Initialize other parameters from db data.
+	debug("User has been authenticated!");
 }
 
-Login($_COOKIE[COOKIE_NAME]);
+Authenticate($_COOKIE[COOKIE_NAME]);
 
 ?>
