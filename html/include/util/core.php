@@ -1,7 +1,7 @@
 <?php
 // Core utility functions for general php code.
 
-include_once("../constants.php");
+include_once(__DIR__."/../constants.php");
 
 function CookiesExist() {
 	return isset($_COOKIE[UID_COOKIE]) && isset($_COOKIE[SALT_COOKIE]);

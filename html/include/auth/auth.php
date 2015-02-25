@@ -1,9 +1,9 @@
 <?php
 // General user-authentication code. Will be included and run once at the beginning of each public-facing page.
 
-include_once("../config.php");
-include_once("../constants.php");
-include_once("../util/core.php");
+include_once(__DIR__."/../config.php");
+include_once(__DIR__."/../constants.php");
+include_once(__DIR__."/../util/core.php");
 
 if (isset($user)) {
 	debug_die("Already defined \$user: $user");
@@ -36,7 +36,7 @@ if (CookiesExist()) {
 	AuthenticateUser($_COOKIE[UID_COOKIE], $_COOKIE[SALT_COOKIE]);
 } else {
 	debug("User is a guest!");
-	// Normal guest user. Don't define $user.
+	// Normal guest user. Don't define $user or cookies.
 	unset($user);
 	return;
 }
