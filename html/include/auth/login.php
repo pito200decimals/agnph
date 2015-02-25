@@ -1,29 +1,39 @@
 <?php
-// General code to set up a user's login cookie.
+// General code to set up a user's login cookie. Should be included INSTEAD of auth.php.
 
 include_once("../config.php");
 include_once("../constants.php");
 include_once("../util/core.php");
-
-// Authenticates the user if already logged in.
 include_once("auth.php");
 
-if (UserLoggedIn()) {
-	debug_die("Can't include login.php when the user is already logged in!");
-}
-if (isset($_COOKIE[COOKIE_NAME])) {
-	// User cookie already set.
-	debug_die("Unexpected user cookie already set: ".$_COOKIE[COOKIE_NAME]);
-}
-
+// Returns true and sets global $user if login successful. Also sets cookies.
+// Returns false and unsets global $user if login unsuccessful. Also unsets cookies.
+// Either way, cookies are set/unset in some way.
 function Login($username, $password) {
-	// TODO: Actually generate a cookie.
-	$cookie = "COOKIE";
-	setcookie(COOKIE_NAME, $cookie, time() + COOKIE_DURATION);
-	Authenticate($cookie);
+	// TODO: Look up only uid, email and password from user db (enough to compute the cookies).
+	$uid = "1";
+	$email = "";
+	$encryptedPassword = "";
+	
+	if ($encryptedPassword !== md5($password)) {
+		// Did not provide correct password.
+		//debug("Incorrect credentials provided");
+		//UnsetCookies();
+		//return false;
+	}
+	$salt = md5($email.$encryptedPassword);
+	if (AuthenticateUser($uid, $salt)) {
+		setcookie(UID_COOKIE, $uid, time() + COOKIE_DURATION);
+		setcookie(SALT_COOKIE, $salt, time() + COOKIE_DURATION);
+		return true;
+	} else {
+		// Cookies are unset by AuthenticateUser().
+		return false;
+	}
 }
 
-// TODO: Obfuscate the field names.
-Login($_POST['username'], $_POST['password']);
+if (!isset($user)) {
+	Login($_POST['username'], $_POST['password']);
+}
 
 ?>
