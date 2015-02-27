@@ -2,7 +2,6 @@
 // General code to set up a user's login cookie. Should be included INSTEAD of auth.php.
 
 include_once(__DIR__."/../../header.php");
-include_once(SITE_ROOT."include/auth/auth.php");
 
 // Returns true and sets global $user if login successful. Also sets cookies.
 // Returns false and unsets global $user if login unsuccessful. Also unsets cookies.
