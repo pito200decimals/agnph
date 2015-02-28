@@ -1,3 +1,4 @@
+{% spaceless %}
 <!DOCTYPE html>
 <html>
     <head>
@@ -29,8 +30,11 @@
             {% endblock %}
         </div>
         <hr />
+        <div id="footer">
         {% block footer %}
             Copyright AGNPH 2015
         {% endblock %}
+        </div>
     </body>
 </html>
+{% endspaceless %}

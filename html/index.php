@@ -8,5 +8,5 @@ $content = "";
 
 // This is how to output the template.
 $vars['content'] = $content;
-echo $twig->render('index.tpl', $vars);
+echo $twig->render("index.tpl", $vars);
 ?>

@@ -9,8 +9,8 @@ include_once(__DIR__."/../../header.php");
 function Login($username, $password) {
     // TODO: Look up only uid, email and password from user db (enough to compute the cookies).
     $uid = "1";
-    $email = "";
-    $encryptedPassword = "";
+    $email = "Email $uid";
+    $encryptedPassword = md5("Password $uid");
     
     if ($encryptedPassword !== md5($password)) {
         // Did not provide correct password.

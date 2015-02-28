@@ -13,8 +13,7 @@ if (isset($user)) {
 function AuthenticateUser($uid, $salt) {
     global $user;
     debug("Authenticating user with uid=$uid, salt=$salt");
-    // TODO: Look up all user info from db and initialize the $user object.
-    $user = array('uid' => $uid, 'email' => "", 'password' => "");
+    LoadUser($uid, $user);
     if ($user['suspended']) {
         debug("User account was suspended.");
         UnsetCookies();
