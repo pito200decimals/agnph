@@ -6,6 +6,6 @@ define("SALT_COOKIE", "agnph_salt");
 define("SECONDS_IN_DAY", 60 * 60 * 24);
 define("COOKIE_DURATION", 30 * SECONDS_IN_DAY);  // 30 days.
 
-define("SITE_PREFIX", "/AGNPH");  // Used for testing. Leave blank.
+define("SITE_PREFIX", "");  // Used for testing. Leave blank.
 
 ?>
