@@ -11,27 +11,50 @@ function UnsetCookies() {
     setcookie(SALT_COOKIE, "", time() - 3600, "/");
 }
 
-// Loads the user data into the $user array.
+// Loads the user data into the $user array. Returns true on success, false on failure.
 function LoadUser($uid, &$user) {
     // TODO: Load user from db.
-    $user['uid'] = $uid;
-    $user['display_name'] = "Username $uid";
-    $user['email'] = "Email $uid";
-    $user['password'] = md5("Password $uid");
-    $user['suspended'] = false;
+    static $cache = array();
+    if (isset($cache[$uid])) {
+        $user = $cache[$uid];
+        return true;
+    }
+    
+    $result = sql_query("SELECT * FROM user WHERE UserID=$uid LIMIT 1;");
+    if (!$result || $result->num_rows <= 0) {
+        debug("LoadUser SQL failed!");
+        debug("Tried to query for UserID $uid");
+        return false;
+    }
+    $tmp = $result->fetch_assoc();
+    
+    //$tmp['uid'] = $uid;
+    //$tmp['displayname'] = "Username $uid";
+    //$tmp['email'] = "Email $uid";
+    //$tmp['password'] = md5("Password $uid");
+    $tmp['suspended'] = false;
+    $cache[$uid] = $tmp;
+    $user = $tmp;
+    return true;
 }
 
 function debug($message) {
     print("<strong>[DEBUG]</strong>: ");
-    print_r($message);
+    var_dump($message);
     print("\n<br />");
 }
 
-function debug_die($message, $file, $line) {
+function debug_die($message) {
     print("<strong>[FATAL]</strong>: ");
-    print_r($message);
+    var_dump($message);
     print("\n<br />");
     die();
+}
+
+function do_or_die($result) {
+    if (!$result) {
+        debug_die("FAILURE");
+    }
 }
 
 function RenderPage($template) {

@@ -21,7 +21,7 @@ function AuthenticateUser($uid, $salt) {
         return false;
     }
     
-    $targetSalt = md5($user['email'].$user['password']);
+    $targetSalt = md5($user['Email'].$user['Password']);
     if ($targetSalt !== $salt) {
         // Cookie did not match user credentials, do not log in.
         debug("User did not pass authentication.");

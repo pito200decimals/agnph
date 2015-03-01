@@ -8,7 +8,7 @@
     </head>
     <body>
         {% block welcome %}
-            <h1>Welcome, {{ user.display_name }}!</h1>
+            <h1>Welcome, {{ user.DisplayName }}!</h1>
         {% endblock %}
         <hr />
         {% block navigation %}
@@ -26,7 +26,11 @@
         <hr />
         <div id="content">
             {% block content %}
-                {{ content }}
+                {% if content %}
+                    {{ content }}
+                {% else %}
+                    No content here.
+                {% endif %}
             {% endblock %}
         </div>
         <hr />

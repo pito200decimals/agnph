@@ -18,6 +18,7 @@ unset($folder_level);
 include_once(SITE_ROOT."includes/config.php");
 include_once(SITE_ROOT."includes/constants.php");
 include_once(SITE_ROOT."includes/util/core.php");
+include_once(SITE_ROOT."includes/util/sql.php");
 // Authenticate logged-in user.
 include_once(SITE_ROOT."includes/auth/auth.php");
 

@@ -7,16 +7,26 @@ include_once(__DIR__."/../../header.php");
 // Returns false and unsets global $user if login unsuccessful. Also unsets cookies.
 // Either way, cookies are set/unset in some way.
 function Login($username, $password) {
+    // Mocked data.
+    $username = "Cyn";
+    $password = "Password 1";
+    
     // TODO: Look up only uid, email and password from user db (enough to compute the cookies).
-    $uid = "1";
-    $email = "Email $uid";
-    $encryptedPassword = md5("Password $uid");
+    $escapedName = sql_escape($username);
+    $result = sql_query("SELECT UserID,Email,Password FROM user WHERE UserName='$escapedName' LIMIT 1;");
+    if (!$result || $result->num_rows <= 0) {
+        return false;
+    }
+    $user = $result->fetch_assoc();
+    $uid = $user['UserID'];
+    $email = $user['Email'];
+    $encryptedPassword = $user['Password'];
     
     if ($encryptedPassword !== md5($password)) {
         // Did not provide correct password.
         debug("Incorrect credentials provided");
         UnsetCookies();
-        //return false;
+        return false;
     }
     $salt = md5($email.$encryptedPassword);
     if (AuthenticateUser($uid, $salt)) {

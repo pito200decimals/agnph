@@ -6,13 +6,6 @@
 // Site includes, including login authentication.
 include_once("../../header.php");
 
-// MOCKUP: Thread 1.
-if (!isset($_GET['t'])) {
-    $_GET['t'] = 1;
-} else {
-    debug("Viewing thread ".$_GET['t']);
-}
-
 if (!isset($_GET['t'])) {
     // No thread, quit.
     $vars['content'] = "Thread not found.";
@@ -22,21 +15,21 @@ if (!isset($_GET['t'])) {
 $tid = $_GET['t'];
 if (!isset($_GET['p'])) {
     // No page set, just assume post offset 0.
-    $page = 0;
+    $postoffset = 0;
 } else {
-    $page = $_GET['p'];
-    debug("Viewing post offset $page");
+    $postoffset = $_GET['p'];
+    debug("Viewing post offset $postoffset");
 }
 
 // TODO: Get thread content.
 $thread = array(
-        'title' => "The best thread in the world!",
+        'title' => "The best thread in the world: Thread $tid!",
         'posts' => array(),
     );
 // TODO: Write out thread title and other info?
 
 // MOCKUP: Post 10 messages.
-for ($i = 0; $i < 30; $i++) {
+for ($i = $postoffset; $i < 30; $i++) {
     //$poster = $user;
     $poster = array();
     LoadUser(($i % 3) + 1, $poster);
@@ -51,5 +44,4 @@ $vars['content'] = "Thread not found";
 // Render page template.
 $vars['thread'] = $thread;
 RenderPage("forums/thread/viewthread.tpl");
-phpinfo();
 ?>
