@@ -14,34 +14,80 @@ if (!isset($_GET['t'])) {
 }
 $tid = $_GET['t'];
 if (!isset($_GET['p'])) {
-    // No page set, just assume post offset 0.
+    // No offset set, just assume post offset 0.
     $postoffset = 0;
 } else {
     $postoffset = $_GET['p'];
     debug("Viewing post offset $postoffset");
 }
 
-// TODO: Get thread content.
-$thread = array(
-        'title' => "The best thread in the world: Thread $tid!",
-        'posts' => array(),
-    );
-// TODO: Write out thread title and other info?
+// Get thread content.
+$user = LoadLoggedInUserAllData($user['UserId']);
+$posts_per_page = $user['PostsPerPage'];
+$curr_page = floor($postoffset / $posts_per_page) + 1;
 
-// MOCKUP: Post 10 messages.
-for ($i = $postoffset; $i < 30; $i++) {
-    //$poster = $user;
-    $poster = array();
-    LoadUser(($i % 3) + 1, $poster);
-    $post = array('id' => $i, 'poster' => $poster, 'content' => "This is message $i");
-    if ($i >= 12) $post['new'] = true;
-    $thread['posts'][] = $post;
+$result = sql_query("SELECT * FROM ".FORUMS_THREAD_TABLE." WHERE ThreadId=$tid;");
+if ($result && $result->num_rows > 0) {
+    $thread = $result->fetch_assoc();
+    if (!LoadUser($thread['CreatorUserId'], $thread['creator'])) {
+        unset($thread);
+    } else {
+        // TODO: Filter out only a limited set per page.
+        $num_posts_in_thread = sizeof(explode(",", $thread['Posts']));
+        $max_pages = ceil($num_posts_in_thread / $posts_per_page);
+        $posts = GetPostsFromCSVList($thread['Posts'], $postoffset, $posts_per_page);
+        if ($posts) {
+            $thread['Posts'] = $posts;
+            $vars['thread'] = $thread;
+            $vars['page_iterator'] = ConstructPageIterator($curr_page, $max_pages, DEFAULT_PAGE_ITERATOR_SIZE, function($i, $txt) use ($tid, $curr_page, $posts_per_page) {
+                if ($i == $curr_page) {
+                    return "$txt";
+                } else {
+                    $offset = ($i - 1) * $posts_per_page;
+                    return "<a href='/forums/thread/$tid/$offset/' style='margin-left:3px;margin-right:3px;text-decoration:none;'>$txt</a>";
+                }
+            });
+        } else {
+            unset($thread);
+        }
+    }
+} else {
+    unset($thread);
 }
 
 // Default content.
 $vars['content'] = "Thread not found";
 
 // Render page template.
-$vars['thread'] = $thread;
 RenderPage("forums/thread/viewthread.tpl");
+return;
+
+// General helper functions.
+function GetPostsFromCSVList($postcsvlist, $postoffset, $max_count) {
+    $post_ids = explode(",", $postcsvlist);
+    $post_ids = array_slice($post_ids, $postoffset, $max_count);
+    $postcsvlist = implode(",", $post_ids);
+    $result = sql_query("SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId IN ($postcsvlist)");
+    if (!$result) return null;
+    $posts = array();
+    $uids = array();
+    while ($row = $result->fetch_assoc()) {
+        $posts[$row['PostId']] = $row;
+        $uids[] = $row['UserId'];
+    }
+    $retlist = array();
+    $users = array();
+    LoadUsers($uids, $users);
+    mt_srand(time());
+    foreach ($post_ids as $pid) {
+        $post = array();
+        $post['PostId'] = $posts[$pid]['PostId'];
+        $post['poster'] = $users[$posts[$pid]['UserId']];
+        $post['Content'] = $posts[$pid]['Content'];
+        $post['PostDate'] = FormatDate($posts[$pid]['PostDate']);
+        $post['EditDate'] = FormatDate($posts[$pid]['EditDate']);
+        $retlist[] = $post;
+    }
+    return $retlist;
+}
 ?>

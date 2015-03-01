@@ -3,12 +3,23 @@
 {% block content %}
     {% if thread %}
         <div style="margin: 10px;">
-            <h3>Thread Title: {{ thread.title }}</h3>
+            <h3>Thread Title: {{ thread.Title }}</h3>
+            <small>Thread posted by {{ thread.creator.DisplayName }}</small>
         </div>
-        {% if thread.posts %}
-            {% for post in thread.posts %}
+        {% if thread.Posts %}
+            {% autoescape false %}
+                <div style="margin:15px;">
+                    {{ page_iterator }}
+                </div>
+            {% endautoescape %}
+            {% for post in thread.Posts %}
                 {% include 'forums/thread/postblock.tpl' %}
             {% endfor %}
+            {% autoescape false %}
+                <div style="margin:15px;">
+                    {{ page_iterator }}
+                </div>
+            {% endautoescape %}
         {% endif %}
     {% elseif content %}
         {{ content }}

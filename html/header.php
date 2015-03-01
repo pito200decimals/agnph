@@ -36,14 +36,18 @@ if (isset($user)) {
 }
 
 // Set up site-wide defaults.
-// TODO: Load from db.
-$vars['navigation'] = array(
-    array('href' => "/", 'caption' => "Home"),
-    array('href' => "/forums/", 'caption' => "Forums"),
-    array('href' => "/gallery/", 'caption' => "Gallery"),
-    array('href' => "/fics/", 'caption' => "Fics"),
-    array('href' => "/oekaki/", 'caption' => "Oekaki"),
-    array('href' => "/about/", 'caption' => "About"));
+// Navigation links.
+$vars['navigation'] = array();
+$result = sql_query("SELECT * FROM ".SITE_NAV_TABLE." ORDER BY ItemOrder;");
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        $vars['navigation'][] = array('href' => $row['Link'], 'caption' => $row['Label']);
+    }
+} else {
+    $vars['navigation'][] = array('href' => "/", 'caption' => "Home");
+}
+
+// Account management and login links.
 $vars['account_links'] = array();
 if (isset($user)) {
     $vars['account_links'][] = array('href' => "/", 'caption' => "Account");
@@ -57,9 +61,11 @@ if (isset($user)) {
 include_once(__DIR__."/../lib/Twig/Autoloader.php");
 Twig_Autoloader::register();
 
-// TODO: Get skin preference from db, and set the template dir path.
-$skin = "agnph";
-//$loader = new Twig_Loader_Filesystem(__DIR__."/skin/agnph/");
+if (isset($user)) {
+    $skin = $user['Skin'];
+} else {
+    $skin = DEFAULT_SKIN;
+}
 $loader = new Twig_Loader_Filesystem(__DIR__."/skin/$skin/");
 $twig = new Twig_Environment($loader);
 ?>
