@@ -1,0 +1,5 @@
+# Rewrites for the whole site. Will split into separate files later.
+
+# Rewrites for /forums/thread/
+RewriteRule ^forums/thread/(\d+)/?$ /forums/thread/viewthread.php?t=$1
+RewriteRule ^forums/thread/(\d+)/(\d+)/?$ /forums/thread/viewthread.php?t=$1&p=$2

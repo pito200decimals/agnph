@@ -37,19 +37,19 @@ if (isset($user)) {
 // Set up site-wide defaults.
 // TODO: Load from db.
 $vars['navigation'] = array(
-    array('href' => SITE_PREFIX."/", 'caption' => "Home"),
-    array('href' => SITE_PREFIX."/forums/", 'caption' => "Forums"),
-    array('href' => SITE_PREFIX."/gallery/", 'caption' => "Gallery"),
-    array('href' => SITE_PREFIX."/fics/", 'caption' => "Fics"),
-    array('href' => SITE_PREFIX."/oekaki/", 'caption' => "Oekaki"),
-    array('href' => SITE_PREFIX."/about/", 'caption' => "About"));
+    array('href' => "/", 'caption' => "Home"),
+    array('href' => "/forums/", 'caption' => "Forums"),
+    array('href' => "/gallery/", 'caption' => "Gallery"),
+    array('href' => "/fics/", 'caption' => "Fics"),
+    array('href' => "/oekaki/", 'caption' => "Oekaki"),
+    array('href' => "/about/", 'caption' => "About"));
 $vars['account_links'] = array();
 if (isset($user)) {
-    $vars['account_links'][] = array('href' => SITE_PREFIX."/", 'caption' => "Account");
-    $vars['account_links'][] = array('href' => SITE_PREFIX."/includes/auth/logout.php", 'caption' => "Log Out");
+    $vars['account_links'][] = array('href' => "/", 'caption' => "Account");
+    $vars['account_links'][] = array('href' => "/includes/auth/logout.php", 'caption' => "Log Out");
 } else {
-    $vars['account_links'][] = array('href' => SITE_PREFIX."/includes/auth/login.php", 'caption' => "Login");
-    $vars['account_links'][] = array('href' => SITE_PREFIX."/", 'caption' => "Register");
+    $vars['account_links'][] = array('href' => "/includes/auth/login.php", 'caption' => "Login");
+    $vars['account_links'][] = array('href' => "/", 'caption' => "Register");
 }
 
 // Template engine includes.

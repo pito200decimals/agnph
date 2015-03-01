@@ -1,13 +1,17 @@
 <?php
 // Page where a user can view a thread.
-// URL format: /forums/thread/{thread-id}/{page}/#p{post-id}
-// Rewritten format: /forums/thread/viewthread.php?t={thread-id}&p={page}#p{post-id}
+// URL format: /forums/thread/{thread-id}/{post-offset}/#p{post-id}
+// Rewritten format: /forums/thread/viewthread.php?t={thread-id}&p={post-offset}#p{post-id}
 
 // Site includes, including login authentication.
 include_once("../../header.php");
 
 // MOCKUP: Thread 1.
-$_GET['t'] = 1;
+if (!isset($_GET['t'])) {
+    $_GET['t'] = 1;
+} else {
+    debug("Viewing thread ".$_GET['t']);
+}
 
 if (!isset($_GET['t'])) {
     // No thread, quit.
@@ -17,10 +21,11 @@ if (!isset($_GET['t'])) {
 }
 $tid = $_GET['t'];
 if (!isset($_GET['p'])) {
-    // No page set, just assume page 1.
-    $page = 1;
+    // No page set, just assume post offset 0.
+    $page = 0;
 } else {
     $page = $_GET['p'];
+    debug("Viewing post offset $page");
 }
 
 // TODO: Get thread content.
@@ -46,4 +51,5 @@ $vars['content'] = "Thread not found";
 // Render page template.
 $vars['thread'] = $thread;
 RenderPage("forums/thread/viewthread.tpl");
+phpinfo();
 ?>
