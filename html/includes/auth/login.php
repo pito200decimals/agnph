@@ -8,12 +8,12 @@ include_once(__DIR__."/../../header.php");
 // Either way, cookies are set/unset in some way.
 function Login($username, $password) {
     // Mocked data.
-    $username = "Cyn";
+    $username = "User 1";
     $password = "Password 1";
     
     // TODO: Look up only uid, email and password from user db (enough to compute the cookies).
     $escapedName = sql_escape($username);
-    $result = sql_query("SELECT UserID,Email,Password FROM user WHERE UserName='$escapedName' LIMIT 1;");
+    $result = sql_query("SELECT UserID,Email,Password FROM ".USER_TABLE." WHERE UserName='$escapedName' LIMIT 1;");
     if (!$result || $result->num_rows <= 0) {
         return false;
     }

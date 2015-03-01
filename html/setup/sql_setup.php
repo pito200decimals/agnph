@@ -4,10 +4,10 @@
 include_once("../header.php");
 
 // If doesn't exist, is a no-op.
-sql_query("DROP TABLE User;");
+sql_query("DROP TABLE ".USER_TABLE.";");
 
 do_or_die(sql_query(
-    "CREATE TABLE User (
+    "CREATE TABLE ".USER_TABLE." (
         UserId INT(11) UNSIGNED AUTO_INCREMENT,
         UserName VARCHAR(24) NOT NULL,
         DisplayName VARCHAR(24) NOT NULL,

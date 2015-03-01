@@ -31,8 +31,8 @@ if (isset($user)) {
     $vars['user'] = $user;
 } else {
     // Set up defaults for a guest.
-    $vars['user']['display_name'] = "Guest";
-    $vars['user']['uid'] = 0;
+    $vars['user']['DisplayName'] = "Guest";
+    $vars['user']['UserID'] = 0;
 }
 
 // Set up site-wide defaults.

@@ -8,7 +8,7 @@ ini_set("error_reporting", E_ALL);
 
 // MySQL DB settings.
 $dbhost = "localhost";
-$dbuser = "";
+$dbuser = "";  // Don't show this in github :)
 $dbpass = "";  // Don't show this in github :)
 $dbname = "agnph";
 

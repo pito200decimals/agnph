@@ -20,7 +20,7 @@ function LoadUser($uid, &$user) {
         return true;
     }
     
-    $result = sql_query("SELECT * FROM user WHERE UserID=$uid LIMIT 1;");
+    $result = sql_query("SELECT * FROM ".USER_TABLE." WHERE UserID=$uid LIMIT 1;");
     if (!$result || $result->num_rows <= 0) {
         debug("LoadUser SQL failed!");
         debug("Tried to query for UserID $uid");
