@@ -18,13 +18,16 @@ if (!isset($_GET['p'])) {
     $postoffset = 0;
 } else {
     $postoffset = $_GET['p'];
-    debug("Viewing post offset $postoffset");
 }
 
 // Get thread content.
-$user = LoadLoggedInUserAllData($user['UserId']);
-$posts_per_page = $user['PostsPerPage'];
+if (isset($user)) {
+    $posts_per_page = $user['PostsPerPage'];
+} else {
+    $posts_per_page = DEFAULT_POSTS_PER_PAGE;
+}
 $curr_page = floor($postoffset / $posts_per_page) + 1;
+$postoffset = ($curr_page - 1) * $posts_per_page;
 
 $result = sql_query("SELECT * FROM ".FORUMS_THREAD_TABLE." WHERE ThreadId=$tid;");
 if ($result && $result->num_rows > 0) {
@@ -33,20 +36,22 @@ if ($result && $result->num_rows > 0) {
         unset($thread);
     } else {
         // TODO: Filter out only a limited set per page.
-        $num_posts_in_thread = sizeof(explode(",", $thread['Posts']));
+        $posts = GetAllPostsInThread($thread['ThreadId']);
+        $num_posts_in_thread = sizeof($posts);
         $max_pages = ceil($num_posts_in_thread / $posts_per_page);
-        $posts = GetPostsFromCSVList($thread['Posts'], $postoffset, $posts_per_page);
+        $posts = array_slice($posts, $postoffset, $posts_per_page);
         if ($posts) {
             $thread['Posts'] = $posts;
             $vars['thread'] = $thread;
-            $vars['page_iterator'] = ConstructPageIterator($curr_page, $max_pages, DEFAULT_PAGE_ITERATOR_SIZE, function($i, $txt) use ($tid, $curr_page, $posts_per_page) {
-                if ($i == $curr_page) {
-                    return "$txt";
-                } else {
-                    $offset = ($i - 1) * $posts_per_page;
-                    return "<a href='/forums/thread/$tid/$offset/' style='margin-left:3px;margin-right:3px;text-decoration:none;'>$txt</a>";
-                }
-            });
+            $vars['page_iterator'] = ConstructPageIterator($curr_page, $max_pages, DEFAULT_PAGE_ITERATOR_SIZE,
+                function($i, $txt) use ($tid, $curr_page, $posts_per_page) {
+                    if ($i == $curr_page) {
+                        return "$txt";
+                    } else {
+                        $offset = ($i - 1) * $posts_per_page;
+                        return "<a href='/forums/thread/$tid/$offset/' style='margin-left:3px;margin-right:3px;text-decoration:none;'>$txt</a>";
+                    }
+                });
         } else {
             unset($thread);
         }
@@ -63,11 +68,9 @@ RenderPage("forums/thread/viewthread.tpl");
 return;
 
 // General helper functions.
-function GetPostsFromCSVList($postcsvlist, $postoffset, $max_count) {
-    $post_ids = explode(",", $postcsvlist);
-    $post_ids = array_slice($post_ids, $postoffset, $max_count);
-    $postcsvlist = implode(",", $post_ids);
-    $result = sql_query("SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId IN ($postcsvlist)");
+function GetAllPostsInThread($tid) {
+    //$result = sql_query("SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId IN ($postcsvlist);");
+    $result = sql_query("SELECT * FROM ".FORUMS_POST_TABLE." WHERE ParentThreadId=$tid;");
     if (!$result) return null;
     $posts = array();
     $uids = array();
@@ -75,19 +78,19 @@ function GetPostsFromCSVList($postcsvlist, $postoffset, $max_count) {
         $posts[$row['PostId']] = $row;
         $uids[] = $row['UserId'];
     }
-    $retlist = array();
     $users = array();
-    LoadUsers($uids, $users);
+    LoadUsers($uids, $users, array(FORUMS_USER_PREF_TABLE));
     mt_srand(time());
-    foreach ($post_ids as $pid) {
-        $post = array();
-        $post['PostId'] = $posts[$pid]['PostId'];
-        $post['poster'] = $users[$posts[$pid]['UserId']];
-        $post['Content'] = $posts[$pid]['Content'];
-        $post['PostDate'] = FormatDate($posts[$pid]['PostDate']);
-        $post['EditDate'] = FormatDate($posts[$pid]['EditDate']);
-        $retlist[] = $post;
+    foreach ($posts as $pid => $post) {
+        $posts[$pid]['poster'] = $users[$post['UserId']];
+        $posts[$pid]['PostDate'] = FormatDate($post['PostDate']);
+        if ($posts[$pid]['EditDate'] != 0) {
+            $posts[$pid]['EditDate'] = FormatDate($post['EditDate']);
+        } else {
+            // Don't display EditDate.
+            unset($posts[$pid]['EditDate']);
+        }
     }
-    return $retlist;
+    return $posts;
 }
 ?>

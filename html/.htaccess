@@ -3,3 +3,7 @@
 # Rewrites for /forums/thread/
 RewriteRule ^forums/thread/(\d+)/?$ /forums/thread/viewthread.php?t=$1
 RewriteRule ^forums/thread/(\d+)/(\d+)/?$ /forums/thread/viewthread.php?t=$1&p=$2
+
+# Rewrites for /forums/board/
+RewriteRule ^forums/board/(\d+)/?$ /forums/viewboard.php?b=$1
+#RewriteRule ^forums/?$ /forums/viewboard.php # TODO: Investigate why this doesn't work.

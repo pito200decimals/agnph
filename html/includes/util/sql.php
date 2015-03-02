@@ -3,7 +3,7 @@
 
 function sql_query($sql) {
     global $sqlconn;
-    debug("SQL: $sql");
+    debug("<strong>[SQL]:</strong> $sql");
     return $sqlconn->query($sql);
 }
 

@@ -11,55 +11,57 @@ function UnsetCookies() {
     setcookie(SALT_COOKIE, "", time() - 3600, "/");
 }
 
-// Join all user preference tables.
-function LoadLoggedInUserAllData($uid) {
-    static $cache = array();
-    if (!isset($cache[$uid])) {
-        $result = sql_query("SELECT * FROM ".USER_TABLE." JOIN ".FORUMS_USER_PREF_TABLE." ON ".USER_TABLE.".UserId=".FORUMS_USER_PREF_TABLE.".UserId WHERE ".USER_TABLE.".UserId=$uid;");
-        if (!$result) {
-            return null;
-        }
-        $cache[$uid] = $result->fetch_assoc();
-    }
-    return $cache[$uid];
+// Loads all user settings. Should be for the currently logged-in user.
+function LoadAllUserPreferences($uid, &$user, $fresh = false) {
+    $table_list = array(FORUMS_USER_PREF_TABLE);
+    return LoadUser($uid, $user, $table_list, $fresh);
 }
 
 // Loads the user data into the $user array. Returns true on success, false on failure.
-function LoadUser($uid, &$user, $fresh = false) {
+function LoadUser($uid, &$user, $table_list = array(), $fresh = false) {
     $retlist = array();
-    $result = LoadUsers(array($uid), $retlist, $fresh);
+    $result = LoadUsers(array($uid), $retlist, $table_list, $fresh);
     if (!$result) return false;
     $user = $retlist[$uid];
     return true;
 }
 
 // Loads a bunch of users into the $userlist array. Returns true on success, false on failure.
-function LoadUsers($uids, &$userlist, $fresh = false) {
+function LoadUsers($uids, &$userlist, $table_list = array(), $fresh = false) {
     static $cache = array();
+    $table_list = array_unique($table_list);
+    sort($table_list);
+    $table_list_key = implode(",", $table_list);
     $ids_to_load = array();
     if ($fresh) {
         $ids_to_load = $uids;
     } else {
         foreach ($uids as $uid) {
-            if (isset($cache[$uid])) {
-                $userlist[$uid] = $cache[$uid];
+            if (isset($cache[$table_list_key]) && isset($cache[$table_list_key][$uid])) {
+                $userlist[$uid] = $cache[$table_list_key][$uid];
             } else {
                 $ids_to_load[] = $uid;
             }
         }
     }
     if (sizeof($ids_to_load) > 0) {
-        $joined = implode(",", $ids_to_load);
-        $result = sql_query("SELECT * FROM ".USER_TABLE." WHERE UserId IN ($joined);");
+        $ids = implode(",", array_unique($ids_to_load));
+        $sql_table_join = USER_TABLE;
+        foreach ($table_list as $table) {
+            if ($table != USER_TABLE) {
+                $sql_table_join .= " JOIN $table ON ".USER_TABLE.".UserId=$table.UserId";
+            }
+        }
+        $result = sql_query("SELECT * FROM $sql_table_join WHERE ".USER_TABLE.".UserId IN ($ids);");
         if (!$result || $result->num_rows <= 0) {
             debug("LoadUsers SQL failed!");
-            debug("Tried to query for UserIds [$joined]");
+            debug("Tried to query for UserIds [$ids]");
             return false;
         }
         while ($row = $result->fetch_assoc()) {
             $row['suspended'] = false;
             $uid = $row['UserId'];
-            $cache[$uid] = $row;
+            $cache[$table_list_key][$uid] = $row;
             $userlist[$uid] = $row;
         }
     }

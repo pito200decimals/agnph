@@ -13,7 +13,7 @@ if (isset($user)) {
 function AuthenticateUser($uid, $salt) {
     global $user;
     debug("Authenticating user with uid=$uid, salt=$salt");
-    LoadUser($uid, $user);
+    LoadAllUserPreferences($uid, $user);
     if ($user['suspended']) {
         debug("User account was suspended.");
         UnsetCookies();
@@ -35,8 +35,6 @@ function AuthenticateUser($uid, $salt) {
 }
 
 // Try to authenticate if cookies exist.
-debug("Cookie:");
-debug($_COOKIE);
 if (CookiesExist()) {
     AuthenticateUser($_COOKIE[UID_COOKIE], $_COOKIE[SALT_COOKIE]);
 } else {
