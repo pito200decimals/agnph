@@ -19,7 +19,7 @@ do_or_die(sql_query(
     "CREATE TABLE ".USER_TABLE." (
         UserId INT(11) UNSIGNED AUTO_INCREMENT,".
         // User/admin/signup-assigned values.
-       "UserName VARCHAR(24) NOT NULL,
+       "UserName VARCHAR(24) UNIQUE NOT NULL,
         DisplayName VARCHAR(24) NOT NULL,
         Email VARCHAR(64) NOT NULL,
         Password CHAR(32) NOT NULL,
@@ -91,6 +91,8 @@ do_or_die(sql_query(
         PostsPerPage INT(11) DEFAULT ".DEFAULT_POSTS_PER_PAGE.",
         PRIMARY KEY(UserId)
     );"));
+
+// TODO: Logging tables.
     
 include_once("load_sql_mock_data.php");
 

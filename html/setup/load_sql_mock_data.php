@@ -36,7 +36,7 @@ do_or_die(sql_query(
     ('About', '/about/', 5);"));
     
 function rand_date() {
-    return mt_rand(0, 2147483647)*2+mt_rand(0,1);
+    return mt_rand(0, 2147483647);
 }
 function rand_date2() {
     return 0;
@@ -60,9 +60,16 @@ do_or_die(sql_query(
     "INSERT INTO ".FORUMS_THREAD_TABLE."
     (ThreadId, ParentLobbyId, Title, CreateDate, CreatorUserId, Sticky)
     VALUES
-    (1, 4, 'Title of thread 1', ".rand_date().", 1, 0),
+    (1, 4, 'Title of thread 1', ".rand_date().", 1, 1),
     (2, 4, 'Title of thread 2', ".rand_date().", 2, 0),
-    (3, 4, 'Title of thread 3', ".rand_date().", 3, 1);"));
+    (3, 4, 'Title of thread 3', ".rand_date().", 3, 0),
+    (4, 4, 'Title of thread 4', ".rand_date().", 1, 0),
+    (5, 4, 'Title of thread 5', ".rand_date().", 2, 0),
+    (6, 4, 'Title of thread 6', ".rand_date().", 3, 0),
+    (7, 4, 'Title of thread 7', ".rand_date().", 1, 0),
+    (8, 4, 'Title of thread 8', ".rand_date().", 2, 0),
+    (9, 4, 'Title of thread 9', ".rand_date().", 3, 0),
+    (10, 4, 'Title of thread 10', ".rand_date().", 1, 0);"));
 do_or_die(sql_query(
     "INSERT INTO ".FORUMS_POST_TABLE."
     (PostId, UserId, PostDate, EditDate, ParentThreadId, Content)

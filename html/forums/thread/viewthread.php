@@ -13,11 +13,11 @@ if (!isset($_GET['t'])) {
     return;
 }
 $tid = $_GET['t'];
-if (!isset($_GET['p'])) {
+if (!isset($_GET['offset'])) {
     // No offset set, just assume post offset 0.
     $postoffset = 0;
 } else {
-    $postoffset = $_GET['p'];
+    $postoffset = $_GET['offset'];
 }
 
 // Get thread content.
@@ -26,25 +26,19 @@ if (isset($user)) {
 } else {
     $posts_per_page = DEFAULT_POSTS_PER_PAGE;
 }
-$curr_page = floor($postoffset / $posts_per_page) + 1;
-$postoffset = ($curr_page - 1) * $posts_per_page;
-
+// Query for thread data.
 $result = sql_query("SELECT * FROM ".FORUMS_THREAD_TABLE." WHERE ThreadId=$tid;");
 if ($result && $result->num_rows > 0) {
     $thread = $result->fetch_assoc();
+    // Load creator of thread.
     if (!LoadUser($thread['CreatorUserId'], $thread['creator'])) {
         unset($thread);
     } else {
-        // TODO: Filter out only a limited set per page.
+        // Get all posts.
         $posts = GetAllPostsInThread($thread['ThreadId']);
-        $num_posts_in_thread = sizeof($posts);
-        $max_pages = ceil($num_posts_in_thread / $posts_per_page);
-        $posts = array_slice($posts, $postoffset, $posts_per_page);
         if ($posts) {
-            $thread['Posts'] = $posts;
-            $vars['thread'] = $thread;
-            $vars['page_iterator'] = ConstructPageIterator($curr_page, $max_pages, DEFAULT_PAGE_ITERATOR_SIZE,
-                function($i, $txt) use ($tid, $curr_page, $posts_per_page) {
+            $vars['page_iterator'] = Paginate($posts, $postoffset, $posts_per_page,
+                function($i, $txt, $curr_page) use ($tid, $posts_per_page) {
                     if ($i == $curr_page) {
                         return "$txt";
                     } else {
@@ -52,6 +46,10 @@ if ($result && $result->num_rows > 0) {
                         return "<a href='/forums/thread/$tid/$offset/' style='margin-left:3px;margin-right:3px;text-decoration:none;'>$txt</a>";
                     }
                 });
+            // Get poster user data for each post.
+            GetAllPosterData($posts);
+            $thread['Posts'] = $posts;
+            $vars['thread'] = $thread;
         } else {
             unset($thread);
         }
@@ -73,14 +71,19 @@ function GetAllPostsInThread($tid) {
     $result = sql_query("SELECT * FROM ".FORUMS_POST_TABLE." WHERE ParentThreadId=$tid;");
     if (!$result) return null;
     $posts = array();
-    $uids = array();
     while ($row = $result->fetch_assoc()) {
         $posts[$row['PostId']] = $row;
-        $uids[] = $row['UserId'];
+    }
+    return $posts;
+}
+
+function GetAllPosterData(&$posts) {
+    $uids = array();
+    foreach ($posts as $post) {
+        $uids[] = $post['UserId'];
     }
     $users = array();
     LoadUsers($uids, $users, array(FORUMS_USER_PREF_TABLE));
-    mt_srand(time());
     foreach ($posts as &$post) {
         $post['poster'] = $users[$post['UserId']];
         $post['PostDate'] = FormatDate($post['PostDate']);
@@ -91,6 +94,5 @@ function GetAllPostsInThread($tid) {
             unset($post['EditDate']);
         }
     }
-    return $posts;
 }
 ?>

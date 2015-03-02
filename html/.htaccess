@@ -1,9 +1,17 @@
 # Rewrites for the whole site. Will split into separate files later.
 
+
+# TODO: Add [QSA] to rewrites so that sorting/ordering can be passed via parameters for lists of things.
+
 # Rewrites for /forums/thread/
 RewriteRule ^forums/thread/(\d+)/?$ /forums/thread/viewthread.php?t=$1
-RewriteRule ^forums/thread/(\d+)/(\d+)/?$ /forums/thread/viewthread.php?t=$1&p=$2
+RewriteRule ^forums/thread/(\d+)/(\d+)/?$ /forums/thread/viewthread.php?t=$1&offset=$2
 
 # Rewrites for /forums/board/
 RewriteRule ^forums/board/(\d+)/?$ /forums/viewboard.php?b=$1
+RewriteRule ^forums/board/(\d+)/(\d+)/?$ /forums/viewboard.php?b=$1&offset=$2
 RewriteRule ^forums/?$ /forums/viewboard.php
+
+# Rewrites for /forums/create/ and /forums/reply/
+RewriteRule ^forums/create/?$ /forums/compose.php?create=true
+RewriteRule ^forums/reply/(\d+)/?$ /forums/compose.php?create=false&post=$1

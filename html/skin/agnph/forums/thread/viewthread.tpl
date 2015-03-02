@@ -9,15 +9,16 @@
         {% if thread.Posts %}
             {% autoescape false %}
                 <div style="margin:15px;">
-                    {{ page_iterator }}
+                    Pages: {{ page_iterator }}
                 </div>
             {% endautoescape %}
             {% for post in thread.Posts %}
+                {% if post.new %}<a name="new" />{% endif %}
                 {% include 'forums/thread/postblock.tpl' %}
             {% endfor %}
             {% autoescape false %}
                 <div style="margin:15px;">
-                    {{ page_iterator }}
+                    Pages: {{ page_iterator }}
                 </div>
             {% endautoescape %}
         {% endif %}

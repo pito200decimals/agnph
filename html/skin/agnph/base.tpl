@@ -26,7 +26,9 @@
         <hr />
         <div id="content">
             {% block content %}
-                {% if content %}
+                {% if error_msg %}
+                    {{ error_msg }}
+                {% elseif content %}
                     {{ content }}
                 {% else %}
                     No content here.

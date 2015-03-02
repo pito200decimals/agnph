@@ -73,8 +73,18 @@ function FormatDate($epoch) {
     return $dt->format('Y-m-d H:i:s');
 }
 
-// Creates a page iterator (e.g. 1 ... 5 6 [7] 8 9 ... 12), with the appropriate links).
-// $link_fn is function($index, $text) => $html. Text passed in will be either "#" or "[#]".
+// Modifies $items and $offset, returns the HTML for the page_iterator.
+function Paginate(&$items, &$offset, $items_per_page, $link_fn) {
+    $num_items = sizeof($items);
+    $curr_page = floor($offset / $items_per_page) + 1;
+    $offset = ($curr_page - 1) * $items_per_page;
+    $max_pages = ceil($num_items / $items_per_page);
+    $items = array_slice($items, $offset, $items_per_page);
+    return ConstructPageIterator($curr_page, $max_pages, DEFAULT_PAGE_ITERATOR_SIZE, $link_fn);
+}
+
+// Creates and returns the HTML for a page iterator (e.g. 1 ... 5 6 [7] 8 9 ... 12), with the appropriate links).
+// $link_fn is function($index, $text, $current_page) => $html. Text passed in will be either "#" or "[#]".
 function ConstructPageIterator($currpage, $maxpage, $iterator_size, $link_fn) {
     $min_val = $currpage - $iterator_size;
     $max_val = $currpage + $iterator_size;
@@ -89,16 +99,16 @@ function ConstructPageIterator($currpage, $maxpage, $iterator_size, $link_fn) {
     $ret = "";
     for ($i = $min_val; $i <= $max_val; $i++) {
         if ($i == $currpage) {
-            $ret .= $link_fn($i, "[$i]");
+            $ret .= $link_fn($i, "[$i]", $currpage);
         } else {
-            $ret .= $link_fn($i, $i);
+            $ret .= $link_fn($i, $i, $currpage);
         }
     }
     if ($min_val > 2) {
-        $ret = $link_fn(1, 1)."...$ret";
+        $ret = $link_fn(1, 1, $currpage)."...$ret";
     }
     if ($max_val < $maxpage - 1) {
-        $ret .= "...".$link_fn($maxpage, $maxpage);
+        $ret .= "...".$link_fn($maxpage, $maxpage, $currpage);
     }
     return $ret;
 }

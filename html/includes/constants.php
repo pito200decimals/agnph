@@ -18,7 +18,7 @@ define("FORUMS_USER_PREF_TABLE", "forums_user");
 
 // User Settings Defaults.
 define("DEFAULT_SKIN", "agnph");
-define("DEFAULT_THREADS_PER_PAGE", 10);
+define("DEFAULT_THREADS_PER_PAGE", 5);
 define("DEFAULT_POSTS_PER_PAGE", 10);
 define("DEFAULT_PAGE_ITERATOR_SIZE", 2);  // 2 => 1 ... 5 6 [7] 8 9 ... 12
 
