@@ -39,10 +39,18 @@ if ($board == -1) {
     if ($result && $result->num_rows > 0) {
         $lobby = $result->fetch_assoc();
         $vars['lobby']['title'] = $lobby['Name'];
-        $result = sql_query("SELECT * FROM ".FORUMS_THREAD_TABLE." WHERE ParentLobbyId=$board;");
+        $result = sql_query("SELECT * FROM ".FORUMS_THREAD_TABLE." WHERE ParentLobbyId=$board ORDER BY Sticky DESC, ThreadId;");
         if ($result) {
+            $user_ids = array();
             while ($row = $result->fetch_assoc()) {
-                $vars['lobby']['threads'][] = $row;
+                $tid = $row['ThreadId'];
+                $vars['lobby']['threads'][$tid] = $row;
+                $user_ids[] = $row['CreatorUserId'];
+            }
+            $users = array();
+            LoadUsers($user_ids, $users);
+            foreach ($vars['lobby']['threads'] as &$thread) {
+                $thread['creator'] = $users[$thread['CreatorUserId']];
             }
         } else {
             // TODO: Better error condition. Display informative message?

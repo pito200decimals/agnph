@@ -58,9 +58,11 @@ do_or_die(sql_query(
     (8, 3, 'Links', 'Links Description');"));
 do_or_die(sql_query(
     "INSERT INTO ".FORUMS_THREAD_TABLE."
-    (ThreadId, ParentLobbyId, Title, CreateDate, CreatorUserId)
+    (ThreadId, ParentLobbyId, Title, CreateDate, CreatorUserId, Sticky)
     VALUES
-    (1, 4, 'Title of thread 1', ".rand_date().", 1);"));
+    (1, 4, 'Title of thread 1', ".rand_date().", 1, 0),
+    (2, 4, 'Title of thread 2', ".rand_date().", 2, 0),
+    (3, 4, 'Title of thread 3', ".rand_date().", 3, 1);"));
 do_or_die(sql_query(
     "INSERT INTO ".FORUMS_POST_TABLE."
     (PostId, UserId, PostDate, EditDate, ParentThreadId, Content)

@@ -81,14 +81,14 @@ function GetAllPostsInThread($tid) {
     $users = array();
     LoadUsers($uids, $users, array(FORUMS_USER_PREF_TABLE));
     mt_srand(time());
-    foreach ($posts as $pid => $post) {
-        $posts[$pid]['poster'] = $users[$post['UserId']];
-        $posts[$pid]['PostDate'] = FormatDate($post['PostDate']);
-        if ($posts[$pid]['EditDate'] != 0) {
-            $posts[$pid]['EditDate'] = FormatDate($post['EditDate']);
+    foreach ($posts as &$post) {
+        $post['poster'] = $users[$post['UserId']];
+        $post['PostDate'] = FormatDate($post['PostDate']);
+        if ($post['EditDate'] != 0) {
+            $post['EditDate'] = FormatDate($post['EditDate']);
         } else {
             // Don't display EditDate.
-            unset($posts[$pid]['EditDate']);
+            unset($post['EditDate']);
         }
     }
     return $posts;

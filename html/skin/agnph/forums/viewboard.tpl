@@ -18,7 +18,12 @@
             <h3>{{ lobby.Name }}</h3>
             <ul>
             {% for thread in lobby.threads %}
-                <li><a href="/forums/thread/{{ thread.ThreadId }}/">{{ thread.Title }}</a></li>
+                <li>
+                {% if thread.Sticky %}
+                    [STICKY]
+                {% endif %}
+                <a href="/forums/thread/{{ thread.ThreadId }}/">{{ thread.Title }}</a><br />
+                Started by {{ thread.creator.DisplayName }}</li>
             {% endfor %}
             </ul>
         </div>

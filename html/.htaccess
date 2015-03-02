@@ -6,4 +6,4 @@ RewriteRule ^forums/thread/(\d+)/(\d+)/?$ /forums/thread/viewthread.php?t=$1&p=$
 
 # Rewrites for /forums/board/
 RewriteRule ^forums/board/(\d+)/?$ /forums/viewboard.php?b=$1
-#RewriteRule ^forums/?$ /forums/viewboard.php # TODO: Investigate why this doesn't work.
+RewriteRule ^forums/?$ /forums/viewboard.php
