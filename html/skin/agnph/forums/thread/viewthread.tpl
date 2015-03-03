@@ -12,10 +12,12 @@
                     Pages: {{ page_iterator }}
                 </div>
             {% endautoescape %}
+            <a href="/forums/reply/{{ thread.ThreadId }}/">Reply</a>
             {% for post in thread.Posts %}
                 {% if post.new %}<a name="new" />{% endif %}
                 {% include 'forums/thread/postblock.tpl' %}
             {% endfor %}
+            <a href="/forums/reply/{{ thread.ThreadId }}/">Reply</a>
             {% autoescape false %}
                 <div style="margin:15px;">
                     Pages: {{ page_iterator }}

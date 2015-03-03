@@ -113,6 +113,16 @@ function ConstructPageIterator($currpage, $maxpage, $iterator_size, $link_fn) {
     return $ret;
 }
 
+// Sanitizes input for the allowed html tags and attributes. Returns the sanitized result.
+// allowed_html_config is of the form "element1[attr1|attr2],element2", e.g. a[href],p
+function SanitizeHTMLTags($html, $allowed_html_config) {
+    include_once(SITE_ROOT."../lib/HTMLPurifier/HTMLPurifier.auto.php");
+    $config = HTMLPurifier_Config::createDefault();
+    $config->set('HTML.Allowed', $allowed_html_config);
+    $purifier = new HTMLPurifier($config);
+    return $purifier->purify($html);
+}
+
 function debug($message) {
     print("<strong>[DEBUG]</strong>: ");
     var_dump($message);
@@ -157,7 +167,6 @@ function TidyHTML($html) {
             return $html;
         }
         $match = array();
-        //print_r("($indent)-----------------------------------------------------------------------------\n$html\n$ret\n");
         if (preg_match("@^([^<]+)(<.*)@", $html, $match)) {
             // Text.
             $tabs = Tabs($indent);

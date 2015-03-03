@@ -14,4 +14,4 @@ RewriteRule ^forums/?$ /forums/viewboard.php
 
 # Rewrites for /forums/create/ and /forums/reply/
 RewriteRule ^forums/create/?$ /forums/compose.php?create=true
-RewriteRule ^forums/reply/(\d+)/?$ /forums/compose.php?create=false&post=$1
+RewriteRule ^forums/reply/(\d+)/?$ /forums/compose.php?create=false&thread=$1 [QSA]
