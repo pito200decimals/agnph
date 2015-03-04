@@ -8,13 +8,13 @@
             )</small>
     {% endif %}
     <div style="margin-left: 20px; margin-bottom: 20px;">
-        {% if post.quoteLink %}
-            <a href="{{ post.quoteLink }}" style="margin:5px;">Quote</a>
-        {% endif %}
-        <br />
-        {% autoescape false %}
-        {{ post.Content }}
-        {% endautoescape %}
+        {% if post.modifyLink %}<a href="{{ post.modifyLink }}">Modify</a>{% endif %}
+        {% if post.deleteLink %}<a href="{{ post.deleteLink }}">Delete</a>{% endif %}
+        <div id="p{{ post.PostId }}">
+            {% autoescape false %}
+            {{ post.Content }}
+            {% endautoescape %}
+        </div>
         <hr />
         {{ post.poster.Signature }}
     </div>

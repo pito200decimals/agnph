@@ -13,5 +13,6 @@ RewriteRule ^forums/board/(\d+)/(\d+)/?$ /forums/viewboard.php?b=$1&offset=$2
 RewriteRule ^forums/?$ /forums/viewboard.php
 
 # Rewrites for /forums/create/ and /forums/reply/
-RewriteRule ^forums/create/?$ /forums/compose.php?create=true
-RewriteRule ^forums/reply/(\d+)/?$ /forums/compose.php?create=false&thread=$1 [QSA]
+RewriteRule ^forums/create/(\d+)/?$ /forums/compose.php?action=create&board=$1
+RewriteRule ^forums/reply/(\d+)/?$ /forums/compose.php?action=reply&thread=$1
+RewriteRule ^forums/edit/(\d+)/?$ /forums/compose.php?action=edit&post=$1

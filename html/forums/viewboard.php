@@ -69,7 +69,7 @@ if ($board == -1) {
                 unset($vars['lobby']);
             }
         } else {
-            unset($vars['lobby']);
+            // In this case, this lobby is just devoid of threads.
         }
     } else {
         unset($vars['lobby']);

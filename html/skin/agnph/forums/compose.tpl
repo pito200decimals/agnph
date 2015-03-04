@@ -1,12 +1,22 @@
 {% extends 'base.tpl' %}
 
+{% block scripts %}
+    <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
+    <script>
+        tinymce.init({
+            selector: "textarea",
+            plugins: [ "paste", "link", "autoresize", "hr", "wordcount", "code", "contextmenu", "emoticons", "fullscreen", "preview", "image", "searchreplace", "textcolor" ],
+            target_list: [ {title: 'New page', value: '_blank'} ],
+            toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor | link | code fullscreen preview",
+            contextmenu: "image link | hr",
+            autoresize_max_height: 500
+        });
+    </script>
+{% endblock %}
+
 {% block content %}
     <h3>{{ title }}</h3>
     {% if editorForm %}
-        {% if previewBlock %}
-            {% set post = previewBlock %}
-            {% include 'forums/thread/postblock.tpl' %}
-        {% endif %}
         {% autoescape false %}
             {{ editorForm }}
         {% endautoescape %}

@@ -18,12 +18,17 @@
         {# Display threads in a board #}
         <div style="margin: 10px;">
             <h3>{{ lobby.Name }}</h3>
-            {% if lobby.threads|length > 0 %}
+            <a href="/forums/create/{{ lobby.LobbyId }}/">Create New Thread</a>
+            {% if page_iterator %}
                 {% autoescape false %}
                     <div style="margin:15px;">
                         Pages: {{ page_iterator }}
                     </div>
                 {% endautoescape %}
+            {% else %}
+                <br />
+            {% endif %}
+            {% if lobby.threads|length > 0 %}
                 {% for thread in lobby.threads %}
                     <p>
                     {% if thread.Sticky %}
@@ -33,14 +38,19 @@
                     Started by {{ thread.creator.DisplayName }}<br />
                     <small>Created {{ thread.CreateDate }}</small></p>
                 {% endfor %}
+            {% else %}
+                No threads to display.
+            {% endif %}
+            {% if page_iterator %}
                 {% autoescape false %}
                     <div style="margin:15px;">
                         Pages: {{ page_iterator }}
                     </div>
                 {% endautoescape %}
             {% else %}
-                No threads to display.
+                <br />
             {% endif %}
+            <a href="/forums/create/{{ lobby.LobbyId }}/">Create New Thread</a>
         </div>
     {% elseif content %}
         {{ content }}

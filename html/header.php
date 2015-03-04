@@ -14,6 +14,9 @@ if(!defined("SITE_ROOT")) {
 }
 unset($folder_level);
 
+// Set up charset.
+header('Content-type: text/html; charset=utf-8');
+
 // Include common headers.
 include_once(SITE_ROOT."includes/config.php");
 include_once(SITE_ROOT."includes/constants.php");
@@ -21,8 +24,6 @@ include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."includes/util/sql.php");
 // Authenticate logged-in user.
 include_once(SITE_ROOT."includes/auth/auth.php");
-
-// TODO: Set site charset. Unicode?
 
 // Set up site-wide vars for template.
 $vars = array();

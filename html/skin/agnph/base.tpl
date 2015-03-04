@@ -5,6 +5,8 @@
         {% block head %}
             <title>AGNPH</title>
         {% endblock %}
+        {% block scripts %}
+        {% endblock %}
     </head>
     <body>
         {% block welcome %}

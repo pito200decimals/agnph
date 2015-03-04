@@ -82,21 +82,22 @@ function SetPostLinks(&$post, $compose) {
         }
         return;
     }
+    // TODO: Add user actions like quote and delete.
     if ($user) {
         // All user actions.
         $pid = $post['PostId'];
         $tid = $post['ParentThreadId'];
         if ($compose) {
             // Run scripts to load the text into the compose box.
-            $post['quoteLink'] = "#quote";
+            //$post['quoteLink'] = "href='#quote' onclick='quote(\"p$pid\")'";
         } else {
-            $post['quoteLink'] = "/forums/reply/$tid/?quote=$pid";
+            //$post['quoteLink'] = "/forums/reply/$tid/?quote=$pid";
         }
         // TODO: Add more actions on forum posts.
         if ($user['UserId'] == $post['UserId']) {
             // Owner user actions.
-            //$post['modifyLink'] = "";
-            //$post['deleteLink'] = "";
+            $post['modifyLink'] = "/forums/edit/$pid/";
+            $post['deleteLink'] = "/forums/delete/$pid/";
         }
         if (strpos($user['Permissions'], "F")) {
             // Admin user actions.
