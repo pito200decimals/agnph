@@ -1,7 +1,8 @@
 {# Knows about variable named 'post' corresponding mostly to the database row for that post. #}
 <div style="border-color:black;border-width:1px;border-style:solid;margin:5px;padding:5px;">
     <a name="p{{ post.PostId }}" />
-    {{ post.poster.DisplayName }} writes:<br />
+    <strong>{{ post.poster.DisplayName }} writes:</strong><br />
+    <em>{{ post.Title }}</em><br />
     {% if post.PostDate %}
         <small>(Posted {{ post.PostDate }}
                 {% if post.EditDate %}, Edited {{ post.EditDate }}{% endif %}

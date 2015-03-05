@@ -29,15 +29,12 @@ if (isset($user)) {
 }
 // Query for thread data.
 $escaped_tid = sql_escape($tid);
-$result = sql_query("SELECT * FROM ".FORUMS_THREAD_TABLE." WHERE ThreadId='$escaped_tid';");
-if ($result && $result->num_rows > 0) {
+if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId='$escaped_tid';", 1)) {
     $thread = $result->fetch_assoc();
     // Load creator of thread.
-    if (!LoadUser($thread['CreatorUserId'], $thread['creator'])) {
-        unset($thread);
-    } else {
+    if (LoadUser($thread['UserId'], $thread['creator'])) {
         // Get all posts.
-        $posts = GetAllPostsInThread($thread['ThreadId']);
+        $posts = GetAllPostsInThread($thread['PostId']);
         if ($posts) {
             SetPostLinks($posts, false);
             $vars['page_iterator'] = Paginate($posts, $postoffset, $posts_per_page,
@@ -54,18 +51,23 @@ if ($result && $result->num_rows > 0) {
                 $thread['Posts'] = $posts;
                 $vars['thread'] = $thread;
             } else {
-                unset($thread);
+                // Can't load data for posts' user info.
+                $vars['content'] = "Thread not found";
             }
         } else {
-            unset($thread);
+            // Couldn't load posts in thread.
+            $vars['content'] = "Thread not found";
         }
+    } else {
+        // Can't load creator data.
+        $vars['content'] = "Thread not found";
     }
 } else {
-    unset($thread);
+    // Can't find thread.
+    $vars['content'] = "Thread not found";
 }
 
 // Default content.
-$vars['content'] = "Thread not found";
 
 // Render page template.
 RenderPage("forums/thread/viewthread.tpl");

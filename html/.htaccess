@@ -12,7 +12,8 @@ RewriteRule ^forums/board/(\d+)/?$ /forums/viewboard.php?b=$1
 RewriteRule ^forums/board/(\d+)/(\d+)/?$ /forums/viewboard.php?b=$1&offset=$2
 RewriteRule ^forums/?$ /forums/viewboard.php
 
-# Rewrites for /forums/create/ and /forums/reply/
+# Rewrites for create, reply, edit and delete
 RewriteRule ^forums/create/(\d+)/?$ /forums/compose.php?action=create&board=$1
 RewriteRule ^forums/reply/(\d+)/?$ /forums/compose.php?action=reply&thread=$1
 RewriteRule ^forums/edit/(\d+)/?$ /forums/compose.php?action=edit&post=$1
+RewriteRule ^forums/delete/(\d+)/?$ /forums/delete.php?post=$1

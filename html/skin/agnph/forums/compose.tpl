@@ -15,8 +15,8 @@
 {% endblock %}
 
 {% block content %}
-    <h3>{{ title }}</h3>
     {% if editorForm %}
+        <h3>{{ formTitle }}</h3>
         {% autoescape false %}
             {{ editorForm }}
         {% endautoescape %}

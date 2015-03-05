@@ -5,38 +5,44 @@
 include_once("../header.php");
 include_once(__DIR__."/includes/functions.php");
 
-if (isset($_GET['b'])) {
-    $board = $_GET['b'];
+if (isset($_GET['b']) && is_numeric($_GET['b'])) {
+    $board_id = (int)$_GET['b'];
 } else {
-    $board = -1;
+    $board_id = -1;
 }
-if (!isset($_GET['offset'])) {
+if (isset($_GET['offset']) && is_numeric($_GET['offset'])) {
+    $threadoffset = (int)$_GET['offset'];
+} else {
     // No offset set, just assume thread offset 0.
     $threadoffset = 0;
-} else {
-    $threadoffset = $_GET['offset'];
 }
 
-if ($board == -1) {
+if ($board_id == -1) {
     // Root lobby.
-    $vars['rootLobbies'] = array();
-    $result = sql_query("SELECT * FROM ".FORUMS_LOBBY_TABLE." WHERE ParentLobbyId=-1;");
-    $child_ids = array();
-    while ($row = $result->fetch_assoc()) {
-        $id = $row['LobbyId'];
-        $vars['rootLobbies'][$id] = $row;
-        $child_ids[] = $id;
-    }
-    $joined = implode(",", $child_ids);
-    $result = sql_query("SELECT * FROM ".FORUMS_LOBBY_TABLE." WHERE ParentLobbyId IN ($joined);");
-    if ($result && $result->num_rows > 0) {
+    if (sql_query_into($result, "SELECT * FROM ".FORUMS_LOBBY_TABLE." WHERE ParentLobbyId=-1;", 0)) {
+        $home = array();
+        // Fetch all child lobbies.
+        $child_ids = array();
         while ($row = $result->fetch_assoc()) {
             $id = $row['LobbyId'];
-            $pid = $row['ParentLobbyId'];
-            $vars['rootLobbies'][$pid]['lobbies'][$id] = $row;
+            $home[$id] = $row;
+            $child_ids[] = $id;
+        }
+        $joined = implode(",", $child_ids);
+        if (sql_query_into($result, "SELECT * FROM ".FORUMS_LOBBY_TABLE." WHERE ParentLobbyId IN ($joined);", 1)) {
+            // Init child lobby data.
+            while ($row = $result->fetch_assoc()) {
+                $id = $row['LobbyId'];
+                $pid = $row['ParentLobbyId'];
+                $home[$pid]['childBoards'][$id] = $row;
+            }
+            // Set output.
+            $vars['home'] = $home;
+        } else {
+            $vars['content'] = "No forum boards to display.";
         }
     } else {
-        unset($vars['rootLobbies']);
+        $vars['content'] = "No forum boards to display.";
     }
 } else {
     // Child lobby.
@@ -46,12 +52,11 @@ if ($board == -1) {
         $threads_per_page = DEFAULT_THREADS_PER_PAGE;
     }
     // Get lobby content.
-    $vars['lobby']['threads'] = array();
-    $escaped_board = sql_escape($board);
-    $result = sql_query("SELECT * FROM ".FORUMS_LOBBY_TABLE." WHERE LobbyId='$escaped_board';");
-    if ($result && $result->num_rows > 0) {
-        $vars['lobby'] = $result->fetch_assoc();
-        $threads = GetAllThreadsInLobby($board);
+    $escaped_board = sql_escape($board_id);
+    if (sql_query_into($result, "SELECT * FROM ".FORUMS_LOBBY_TABLE." WHERE LobbyId='$escaped_board';", 1)) {
+        $board = $result->fetch_assoc();
+        $board['threads'] = array();
+        $threads = GetAllThreadsInLobby($board_id);
         if ($threads) {
             $vars['page_iterator'] = Paginate($threads, $threadoffset, $threads_per_page,
                 function($i, $txt, $curr_page) use ($board, $threads_per_page) {
@@ -64,15 +69,20 @@ if ($board == -1) {
                 });
             // Get creator user data for each thread.
             if (GetAllThreadCreatorData($threads)) {
-                $vars['lobby']['threads'] = $threads;
+                $board['threads'] = $threads;
+                $vars['board'] = $board;
             } else {
-                unset($vars['lobby']);
+                // Error getting thread creator data.
+                $vars['content'] = "No forum boards to display.";
             }
         } else {
-            // In this case, this lobby is just devoid of threads.
+            // Board has no threads in it.
+            $threads = array();
+            $board['threads'] = array();
+            $vars['board'] = $board;
         }
     } else {
-        unset($vars['lobby']);
+        $vars['content'] = "No forum boards to display.";
     }
 }
 

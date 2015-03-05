@@ -1,9 +1,9 @@
 <?php
 // Page for composing a new forum post.
-// URL: /forums/create/
-// URL: /forums/reply/{thread-id}/
+// URL: /forums/create/{board-id}/
+// URL: /forums/reply/{post/thread-id}/
 // URL: /forums/edit/{post-id}/
-// URL: /forums/compose.php?action={create|reply|edit}&thread={thread-id}&post={post-id}
+// URL: /forums/compose.php?action={create|reply|edit}&thread={thread-id}&post={post-id}&board={board-id}
 
 // Site includes, including login authentication.
 include_once("../header.php");
@@ -34,67 +34,100 @@ if (($_GET['action'] == "create" && isset($_GET['board']) && is_numeric($_GET['b
 if ($_POST) {
     $form_values = array();
     // Try to submit user data. If invalid, fall back to the already-initialized compose form.
-    if ($_POST['submit'] == "Post") {
+    if (isset($_POST['submit'])
+        && isset($_POST['title'])
+        && isset($_POST['content'])
+        && $_POST['submit'] == "Post") {
         // Try to post to thread.
-        $content = $_POST['content'];
-        $content = SanitizeHTMLTags($content, DEFAULT_ALLOWED_TAGS);
+        
+        // Explicit input.
+        $title = $_POST['title'];
+        $escaped_title = sql_escape($title);
+        $content = SanitizeHTMLTags($_POST['content'], DEFAULT_ALLOWED_TAGS);
         $escaped_content = sql_escape($content);
+        
+        // Implicit input.
         $uid = $user['UserId'];
         $date = time();
+        
         if ($_GET['action'] == "create") {
             // Creating a new thread.
-            $bid = $_GET['board'];
-            if (isset($_POST['title']) && strlen($_POST['title']) > 0) {
-                $escaped_title = sql_escape($_POST['title']);
-                $result = sql_query("INSERT INTO ".FORUMS_THREAD_TABLE." (ParentLobbyId, Title, CreateDate, CreatorUserId) VALUES ($bid, '$escaped_title', $date, $uid);");
-                if ($result) {
-                    $tid = sql_last_id();
-                    $result = sql_query("INSERT INTO ".FORUMS_POST_TABLE." (UserId, PostDate, ParentThreadId, Content) VALUES ($uid, $date, $tid, '$escaped_content');");
-                    if ($result) {
+            $board_id = $_GET['board'];
+            $escaped_board_id = sql_escape($board_id);
+            if (CanUserPostToBoard($user, $board_id)) {
+                if (strlen($title) > 0) {
+                    if (sql_query_into($result,
+                        "INSERT INTO ".FORUMS_POST_TABLE."
+                        (ParentLobbyId, Title, PostDate, UserId, Content)
+                        VALUES
+                        ('$escaped_board_id', '$escaped_title', $date, $uid, '$escaped_content');", 0)) {
+                        // Success!
                         $pid = sql_last_id();
                     } else {
-                        // Error creating post, try and delete thread.
-                        $result = sql_query("DELETE FROM ".FORUMS_THREAD_TABLE." WHERE ThreadId=$tid;");
-                        if (!$result) {
-                            // ERROR.
-                            debug_die("ERROR, failed creating post under thread $tid, and failed deleting thread $tid.");
-                        }
+                        $form_values['error_msg'] = "Error creating thread.";
                     }
+                } else {
+                    $form_values['error_msg'] = "Cannot have empty thread title.";
+                    $result = false;
                 }
             } else {
-                $form_values['error_msg'] = "Cannot have empty thread title.";
+                $form_values['error_msg'] = "Not authorized to create a thread on this board.";
                 $result = false;
             }
         } else if ($_GET['action'] == "reply") {
             // Replying to an existing thread.
-            $tid = sql_escape($_GET['thread']);
-            $result = sql_query("INSERT INTO ".FORUMS_POST_TABLE." (UserId, PostDate, ParentThreadId, Content) VALUES ($uid, $date, $tid, '$escaped_content');");
-            $pid = sql_last_id();
+            $thread_id = $_GET['thread'];
+            $escaped_thread_id = sql_escape($thread_id);
+            if (CanUserPostToThread($user, $thread_id)) {
+                $result = sql_query("INSERT INTO ".FORUMS_POST_TABLE." (UserId, PostDate, ParentThreadId, Title, Content) VALUES ($uid, $date, '$escaped_thread_id', '$escaped_title', '$escaped_content');");
+                $pid = sql_last_id();
+            } else {
+                $form_values['error_msg'] = "Not authorized to reply to this thread.";
+                $result = false;
+            }
         } else if($_GET['action'] == "edit") {
             // Modifying an existing post.
-            $pid = sql_escape($_GET['post']);
-            $result = sql_query("UPDATE ".FORUMS_POST_TABLE." SET EditDate=$date,Content='$escaped_content' WHERE PostId=$pid;");
+            $post_id = $_GET['post'];
+            $escaped_post_id = sql_escape($post_id);
+            if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId='$escaped_post_id';", 1)) {
+                $post = $result->fetch_assoc();
+                if (CanUserEditPost($user, $post)) {
+                    $result = sql_query("UPDATE ".FORUMS_POST_TABLE." SET EditDate=$date, Title='$escaped_title', Content='$escaped_content' WHERE PostId='$escaped_post_id';");
+                    $pid = $post['PostId'];
+                } else {
+                    $form_values['error_msg'] = "Not authorized to edit this post.";
+                    $result = false;
+                }
+            } else {
+                // Can't find post to edit.
+                $form_values['error_msg'] = "Can't find post to edit.";
+                $result = false;
+            }
         }
         if ($result) {
             // On success, return to end of thread. Or at least try to. Upon error here, just revert to /forums/.
-            $result = sql_query("SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId=$pid");
-            if ($result && $result->num_rows > 0) {
+            if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId=$pid;", 1)) {
                 $post = $result->fetch_assoc();
                 $tid = $post['ParentThreadId'];
-                $result = sql_query("SELECT * FROM ".FORUMS_POST_TABLE." WHERE ParentThreadId=$tid ORDER BY PostId");
-                if ($result && $result->num_rows > 0) {
-                    $offset = $result->num_rows - 1;
-                    $post = $result->fetch_assoc();
-                    $tid = $post['ParentThreadId'];
+                if ($tid == -1) {
+                    // First post in a thread.
+                    $tid = $pid;
+                    $offset = 0;
+                    header("Location: /forums/thread/$tid/$offset/");
+                    return;
+                } else if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE ParentThreadId=$tid OR PostId=$tid ORDER BY PostId", 1)) {
+                    $num_posts = $result->num_rows;
+                    $offset = $num_posts - 1;  // Jump to page of last post.
                     header("Location: /forums/thread/$tid/$offset/");
                     return;
                 } else {
-                    debug_die("Died on second query");
+                    // Failed fetching thread info of post, just return to board.
+                    debug_die("Died after compose post on select thread_id.");
                     header("Location: /forums/");
                     return;
                 }
             } else {
-                debug_die("Died on first query");
+                debug_die("Died after compose post on select post_id.");
                 header("Location: /forums/");
                 return;
             }
@@ -104,12 +137,15 @@ if ($_POST) {
     $form_values['content'] = $_POST['content'];
 }
 
-// Post didn't exist or failed, load page normally.
+//////////////////////////////////////////////////////
+// Post didn't exist or failed, load page normally. //
+//////////////////////////////////////////////////////
 
 if ($_GET['action'] == "create") {
     // Create the form for composing a new message here.
-    $vars['title'] = "Create Thread:";
-    if (CreateEditorForm(true, $form_values)) {
+    $vars['formTitle'] = "Create Thread:";
+    $form_values['title'] = "";
+    if (CreateEditorForm($form_values)) {
         // Done building page!
     } else {
         $vars['content'] = "Unable to load compose page.";
@@ -117,38 +153,39 @@ if ($_GET['action'] == "create") {
 } else if ($_GET['action'] == "reply") {
     // Create the form for composing a reply to an existing post here.
     $thread_id = $_GET['thread'];
-    $vars['title'] = "Create Reply:";
-    $vars['postsTitle'] = "Thread:";
-    if (DisplayRecentPosts($thread_id)) {
-        $posts =&$vars['posts'];
-        SetPostLinks($posts, true);
-        if (!isset($form_values)) {
-            if (isset($quote_id) && isset($posts[$quote_id])) {
-                $form_values['content'] = $posts[$quote_id]['Content'];
+    $escaped_thread_id = sql_escape($_GET['thread']);
+    if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId='$escaped_thread_id';", 1)) {
+        $thread = $result->fetch_assoc();
+        $vars['formTitle'] = "Create Reply:";
+        $vars['postsTitle'] = "Thread:";
+        if (DisplayRecentPosts($thread_id)) {
+            $posts =&$vars['posts'];
+            SetPostLinks($posts, true);
+            $form_values['title'] = "RE: ".$thread['Title'];
+            if (CreateEditorForm($form_values)) {
+                // Done building page!
             } else {
-                $form_values['content'] = "";
+                $vars['content'] = "Unable to load compose page.";
             }
-        }
-        if (CreateEditorForm(false, $form_values)) {
-            // Done building page!
         } else {
             $vars['content'] = "Unable to load compose page.";
         }
     } else {
-        $vars['content'] = "Unable to load compose page.";
+        // Can't load thread.
+        $vars['content'] = "Post not found.";
     }
 } else if ($_GET['action'] == "edit") {
     // Create the form for editing a single forum post message.
-    $vars['title'] = "Edit Post:";
+    $vars['formTitle'] = "Edit Post:";
     $escaped_pid = sql_escape($_GET['post']);
-    $result = sql_query("SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId='$escaped_pid'");
-    if ($result && $result->num_rows > 0) {
+    if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId='$escaped_pid';", 1)) {
         $post = $result->fetch_assoc();
-        $uid = $post['UserId'];
         // TODO: Also allow admins?
-        if ($uid == $user['UserId']) {
+        if (CanUserEditPost($user, $post)) {
+            $tid = $post['ParentThreadId'];
             $form_values['content'] = $post['Content'];
-            if (CreateEditorForm(false, $form_values)) {
+            $form_values['title'] = $post['Title'];
+            if (CreateEditorForm($form_values)) {
                 // Done building page!
             } else {
                 $vars['content'] = "Unable to load compose page.";
@@ -156,6 +193,9 @@ if ($_GET['action'] == "create") {
         } else {
             $vars['content'] = "Not authorized to edit this post.";
         }
+    } else {
+        // Can't find post to modify.
+        $vars['content'] = "Post not found.";
     }
 }
 
@@ -187,20 +227,17 @@ function DisplayRecentPosts($thread_id) {
 }
 
 // Outputs to $vars['editorForm'], returns true on success, false on failure.
-function CreateEditorForm($include_title = false, $form_values = array('content' => "")) {
+function CreateEditorForm($form_values) {
     global $vars;
     $request_uri = $_SERVER['REQUEST_URI'];
-    $initial_text = $form_values['content'];
-    $title_box = $include_title ? "Thread Title: <input type='text' name='title' value=''/><br />" : "";
-    if (isset($form_values['error_msg'])) {
-        $error_msg = $form_values['error_msg']."<br />";
-    } else {
-        $error_msg = "";
-    }
+    $initial_text = GetWithDefault($form_values, 'content', "");
+    $title = GetWithDefault($form_values, 'title', "");
+    $error_msg = (isset($form_values) && isset($form_values['error_msg'])) ?
+        $form_values['error_msg']."<br />" : "";
     $editorForm = <<<EOD
 <form action="$request_uri" method="post">
     $error_msg
-    $title_box
+    Title: <input type='text' name='title' value='$title'/><br />
     <textarea name="content">$initial_text</textarea><br />
     <input name="submit" value="Post" type="submit" />
 </form>

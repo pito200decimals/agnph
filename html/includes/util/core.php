@@ -52,25 +52,36 @@ function LoadUsers($uids, &$userlist, $table_list = array(), $fresh = false) {
                 $sql_table_join .= " JOIN $table ON ".USER_TABLE.".UserId=$table.UserId";
             }
         }
-        $result = sql_query("SELECT * FROM $sql_table_join WHERE ".USER_TABLE.".UserId IN ($ids);");
-        if (!$result || $result->num_rows <= 0) {
+        if (sql_query_into($result, "SELECT * FROM $sql_table_join WHERE ".USER_TABLE.".UserId IN ($ids);", 1)) {
+            while ($row = $result->fetch_assoc()) {
+                $row['suspended'] = false;
+                $uid = $row['UserId'];
+                $cache[$table_list_key][$uid] = $row;
+                $userlist[$uid] = $row;
+            }
+            return true;
+        } else {
             debug("LoadUsers SQL failed!");
             debug("Tried to query for UserIds [$ids]");
             return false;
         }
-        while ($row = $result->fetch_assoc()) {
-            $row['suspended'] = false;
-            $uid = $row['UserId'];
-            $cache[$table_list_key][$uid] = $row;
-            $userlist[$uid] = $row;
-        }
+    } else {
+        // No users to query.
+        return true;
     }
-    return true;
 }
 
 function FormatDate($epoch) {
     $dt = new DateTime("@$epoch");
     return $dt->format('Y-m-d H:i:s');
+}
+
+function GetWithDefault($array, $key, $default) {
+    if (isset($array) && isset($array[$key])) {
+        return $array[$key];
+    } else {
+        return $default;
+    }
 }
 
 // Modifies $items and $offset, returns the HTML for the page_iterator.

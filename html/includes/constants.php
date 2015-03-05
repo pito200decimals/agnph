@@ -12,7 +12,6 @@ define("SITE_NAV_TABLE", "nav_links");
 // User content data tables.
 define("USER_TABLE", "user");
 define("FORUMS_LOBBY_TABLE", "forums_lobbies");
-define("FORUMS_THREAD_TABLE", "forums_threads");
 define("FORUMS_POST_TABLE", "forums_posts");
 define("FORUMS_USER_PREF_TABLE", "forums_user");
 

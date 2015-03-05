@@ -11,7 +11,6 @@ include_once("../includes/util/sql.php");
 sql_query("DROP TABLE ".USER_TABLE.";");
 sql_query("DROP TABLE ".SITE_NAV_TABLE.";");
 sql_query("DROP TABLE ".FORUMS_LOBBY_TABLE.";");
-sql_query("DROP TABLE ".FORUMS_THREAD_TABLE.";");
 sql_query("DROP TABLE ".FORUMS_POST_TABLE.";");
 sql_query("DROP TABLE ".FORUMS_USER_PREF_TABLE.";");
 
@@ -62,24 +61,16 @@ do_or_die(sql_query(
         PRIMARY KEY(LobbyId)
     );"));
 do_or_die(sql_query(
-    "CREATE TABLE ".FORUMS_THREAD_TABLE." (
-        ThreadId INT(11) UNSIGNED AUTO_INCREMENT,
-        ParentLobbyId INT(11) NOT NULL,
-        Title VARCHAR(256) NOT NULL,
-        CreateDate INT(11) NOT NULL,
-        CreatorUserId INT(11) NOT NULL,
-        Locked TINYINT(1) DEFAULT 0 NOT NULL,
-        Sticky TINYINT(1) DEFAULT 0 NOT NULL,
-        PRIMARY KEY(ThreadId)
-    );"));
-do_or_die(sql_query(
     "CREATE TABLE ".FORUMS_POST_TABLE." (
         PostId INT(11) UNSIGNED AUTO_INCREMENT,
         UserId INT(11) NOT NULL,
         PostDate INT(11) NOT NULL,
-        EditDate INT(11) NOT NULL,
-        ParentThreadId INT(11) NOT NULL,
+        EditDate INT(11) DEFAULT 0 NOT NULL,
+        Title VARCHAR(256) NOT NULL,
+        ParentThreadId INT(11) DEFAULT -1 NOT NULL,
+        ParentLobbyId INT(11) DEFAULT -1 NOT NULL,
         Content TEXT(131072),
+        Sticky TINYINT(1) DEFAULT 0 NOT NULL,
         PRIMARY KEY(PostId)
     );"));
 do_or_die(sql_query(

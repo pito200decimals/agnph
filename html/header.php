@@ -39,8 +39,7 @@ if (isset($user)) {
 // Set up site-wide defaults.
 // Navigation links.
 $vars['navigation'] = array();
-$result = sql_query("SELECT * FROM ".SITE_NAV_TABLE." ORDER BY ItemOrder;");
-if ($result) {
+if (sql_query_into($result, "SELECT * FROM ".SITE_NAV_TABLE." ORDER BY ItemOrder;", 0)) {
     while ($row = $result->fetch_assoc()) {
         $vars['navigation'][] = array('href' => $row['Link'], 'caption' => $row['Label']);
     }

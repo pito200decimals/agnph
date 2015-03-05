@@ -1,16 +1,33 @@
 <?php
 // General library of functions used in the forums section.
 
+// Permissions functions
+function CanUserEditPost($user, $post) {
+    return isset($user) && isset($post) &&
+        ($user['UserId'] == $post['UserId']);
+}
+function CanUserDeletePost($user, $post) {
+    return CanUserEditPost($user, $post);
+}
+function CanUserPostToBoard($user, $board_id) {
+    return true;
+}
+function CanUserPostToThread($user, $thread_post) {
+    return true;
+}
+
 // Gets all posts in the given thread id. Returns the array of posts.
 function GetAllPostsInThread($tid) {
     $escaped_tid = sql_escape($tid);
-    $result = sql_query("SELECT * FROM ".FORUMS_POST_TABLE." WHERE ParentThreadId='$escaped_tid' ORDER BY PostId;");
-    if (!$result) return null;
-    $posts = array();
-    while ($row = $result->fetch_assoc()) {
-        $posts[$row['PostId']] = $row;
+    if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE ParentThreadId='$escaped_tid' OR PostId='$escaped_tid' ORDER BY PostId;", 1)) {
+        $posts = array();
+        while ($row = $result->fetch_assoc()) {
+            $posts[$row['PostId']] = $row;
+        }
+        return $posts;
+    } else {
+        return null;
     }
-    return $posts;
 }
 
 // Gets all user data for the given list of posts. Updates the array of posts with poster data.
@@ -41,13 +58,12 @@ function GetAllPosterData(&$posts) {
 
 // Gets all threads in a lobby. Returns the list of threads, or null if there is an error.
 function GetAllThreadsInLobby($board) {
-    $result = sql_query("SELECT * FROM ".FORUMS_THREAD_TABLE." WHERE ParentLobbyId=$board ORDER BY Sticky DESC, ThreadId DESC;");
-    if ($result) {
+    if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE ParentLobbyId=$board ORDER BY Sticky DESC, PostId DESC;", 0)) {
         $threads = array();
         while ($row = $result->fetch_assoc()) {
             $thread = $row;
-            $tid = $thread['ThreadId'];
-            $thread['CreateDate'] = FormatDate($thread['CreateDate']);
+            $tid = $thread['PostId'];
+            $thread['PostDate'] = FormatDate($thread['PostDate']);
             $threads[$tid] = $thread;
         }
         return $threads;
@@ -60,12 +76,12 @@ function GetAllThreadsInLobby($board) {
 function GetAllThreadCreatorData(&$threads) {
     $user_ids = array();
     foreach ($threads as $thread) {
-        $user_ids[] = $thread['CreatorUserId'];
+        $user_ids[] = $thread['UserId'];
     }
     $users = array();
     if (LoadUsers($user_ids, $users)) {
         foreach ($threads as &$thread) {
-            $thread['creator'] = $users[$thread['CreatorUserId']];
+            $thread['creator'] = $users[$thread['UserId']];
         }
         return true;
     } else {

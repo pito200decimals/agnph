@@ -1,24 +1,28 @@
 {% extends 'base.tpl' %}
 
 {% block content %}
-    {% if rootLobbies %}
+{#
+    If main lobby page, will contain a variable called "home" = array of lobbies. Each lobby has a field called "childBoards", which is another array of lobbies.
+    If sublobby board, will contain a variable called "board". This will contain a field called "threads" which is an array of posts (threads) for the given page.
+#}
+    {% if home %}
         {# Display groups of boards #}
-        {% for root in rootLobbies %}
+        {% for lobby in home %}
             <div style="margin: 10px;">
-                <h3>{{ root.Name }}</h3>
-                {% for lobby in root.lobbies %}
+                <h3>{{ lobby.Name }}</h3>
+                {% for board in lobby.childBoards %}
                     <p>
-                    <a href="/forums/board/{{ lobby.LobbyId }}/">{{ lobby.Name }}</a><br />
-                    {{ lobby.Description }}
+                    <a href="/forums/board/{{ board.LobbyId }}/">{{ board.Name }}</a><br />
+                    {{ board.Description }}
                     </p>
                 {% endfor %}
             </div>
         {% endfor %}
-    {% elseif lobby %}
+    {% elseif board %}
         {# Display threads in a board #}
         <div style="margin: 10px;">
-            <h3>{{ lobby.Name }}</h3>
-            <a href="/forums/create/{{ lobby.LobbyId }}/">Create New Thread</a>
+            <h3>{{ board.Name }}</h3>
+            <a href="/forums/create/{{ board.LobbyId }}/">Create New Thread</a>
             {% if page_iterator %}
                 {% autoescape false %}
                     <div style="margin:15px;">
@@ -28,15 +32,15 @@
             {% else %}
                 <br />
             {% endif %}
-            {% if lobby.threads|length > 0 %}
-                {% for thread in lobby.threads %}
+            {% if board.threads|length > 0 %}
+                {% for thread in board.threads %}
                     <p>
                     {% if thread.Sticky %}
                         [STICKY]
                     {% endif %}
-                    <a href="/forums/thread/{{ thread.ThreadId }}/">{{ thread.Title }}</a><br />
+                    <a href="/forums/thread/{{ thread.PostId }}/">{{ thread.Title }}</a><br />
                     Started by {{ thread.creator.DisplayName }}<br />
-                    <small>Created {{ thread.CreateDate }}</small></p>
+                    <small>Created {{ thread.PostDate }}</small></p>
                 {% endfor %}
             {% else %}
                 No threads to display.
