@@ -2,6 +2,7 @@
 
 {% block content %}
     {% if thread %}
+        {% autoescape false %}{{ crumbs }}{% endautoescape %}
         <div style="margin: 10px;">
             <h3>Thread Title: {{ thread.Title }}</h3>
             <small>Thread posted by {{ thread.creator.DisplayName }}</small>
@@ -24,6 +25,7 @@
                 </div>
             {% endautoescape %}
         {% endif %}
+        {% autoescape false %}{{ crumbs }}{% endautoescape %}
     {% elseif content %}
         {{ content }}
     {% else %}

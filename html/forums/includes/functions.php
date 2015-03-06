@@ -124,4 +124,70 @@ function SetPostLinks(&$post, $compose) {
     }
 }
 
+function GetBreadcrumbsFromBoardId($board_id, &$names, &$links) {
+    $names = array();
+    $links = array();
+    while ($board_id != -1) {
+        if (sql_query_into($result, "SELECT * FROM ".FORUMS_LOBBY_TABLE." WHERE LobbyId='$board_id';", 1)) {
+            $lobby = $result->fetch_assoc();
+            $names[] = $lobby['Name'];
+            $links[] = "/forums/board/$board_id/";
+            $board_id = $lobby['ParentLobbyId'];
+        } else {
+            return false;
+        }
+    }
+    $names[] = "Forums";
+    $links[] = "/forums/";
+    $names = array_reverse($names);
+    $links = array_reverse($links);
+    return true;
+}
+
+// Same as GetBreadcrumbs, but takes a post id.
+function GetBreadcrumbsFromPostId($post_id, &$names, &$links) {
+    if (sql_query_into($result, "SELECT * FROM ".Forums_POST_TABLE." WHERE ParentThreadId='$post_id';", 1)) {
+        $post = $result->fetch_assoc();
+        return GetBreadcrumbsFromPost($post, $names, $links);
+    } else {
+        return false;
+    }
+}
+
+// Gets the list of breadcrumbs from the forums home to the post in question.
+// Home > Lobby Group > Board > Thread Name.
+// Returns true on success, false on failure.
+function GetBreadcrumbsFromPost($post, &$names, &$links) {
+    if ($post['ParentThreadId'] == -1) {
+        // Is a root post.
+        if ($post['ParentLobbyId'] != -1) {
+            if (GetBreadcrumbsFromBoardId($post['ParentLobbyId'], $names, $links)) {
+                $names[] = $post['Title'];
+                $pid = $post['PostId'];
+                $links[] = "/forums/thread/$pid/";
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            // This shouldn't happen!
+            debug("Found a post with ParentThreadId and ParentLobbyId as -1");
+            debug_die($post);
+            return false;
+        }
+    } else {
+        // Is not a root post. Search now for a root post.
+        // (Can only recurse 1 level deep).
+        return GetBreadcrumbsFromPostId($post['ParentThreadId'], $names, $links);
+    }
+}
+
+function CreateCrumbsHTML($names, $links) {
+    $html = array_map(
+        function($name, $link){
+            return "<a href='$link' style='margin:3px;'>$name</a>";
+        }, $names, $links);
+    return implode(" » ", $html);
+}
+
 ?>

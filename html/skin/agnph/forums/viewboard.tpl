@@ -7,19 +7,22 @@
 #}
     {% if home %}
         {# Display groups of boards #}
+        {% autoescape false %}{{ crumbs }}{% endautoescape %}
         {% for lobby in home %}
             <div style="margin: 10px;">
-                <h3>{{ lobby.Name }}</h3>
+                <h3><a name="b{{ lobby.LobbyId }}">{{ lobby.Name }}</a></h3>
                 {% for board in lobby.childBoards %}
                     <p>
-                    <a href="/forums/board/{{ board.LobbyId }}/">{{ board.Name }}</a><br />
+                    <a href="/forums/board/{{ board.LobbyId }}/" name="b{{ board.LobbyId }}">{{ board.Name }}</a><br />
                     {{ board.Description }}
                     </p>
                 {% endfor %}
             </div>
         {% endfor %}
+        {% autoescape false %}{{ crumbs }}{% endautoescape %}
     {% elseif board %}
         {# Display threads in a board #}
+        {% autoescape false %}{{ crumbs }}{% endautoescape %}
         <div style="margin: 10px;">
             <h3>{{ board.Name }}</h3>
             <a href="/forums/create/{{ board.LobbyId }}/">Create New Thread</a>
@@ -56,6 +59,7 @@
             {% endif %}
             <a href="/forums/create/{{ lobby.LobbyId }}/">Create New Thread</a>
         </div>
+        {% autoescape false %}{{ crumbs }}{% endautoescape %}
     {% elseif content %}
         {{ content }}
     {% else %}

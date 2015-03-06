@@ -48,8 +48,13 @@ if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId='$
                 });
             // Get poster user data for each post.
             if (GetAllPosterData($posts)) {
-                $thread['Posts'] = $posts;
-                $vars['thread'] = $thread;
+                if (GetBreadcrumbsFromPost($thread, $names, $links)) {
+                    $thread['Posts'] = $posts;
+                    $vars['thread'] = $thread;
+                    $vars['crumbs'] = CreateCrumbsHTML($names, $links);
+                } else {
+                    $vars['content'] = "Thread not found";
+                }
             } else {
                 // Can't load data for posts' user info.
                 $vars['content'] = "Thread not found";
