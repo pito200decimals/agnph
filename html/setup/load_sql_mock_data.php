@@ -66,6 +66,7 @@ do_or_die(sql_query(
     (7, 2, ".rand_date().", 1, -1, 'RE: Title of thread 1', 'Content of post 7'),
     (8, 3, ".rand_date().", 1, -1, 'RE: Title of thread 1', 'Content of post 8'),
     (9, 1, ".rand_date().", 1, -1, 'RE: Title of thread 1', 'Content of post 9'),
-    (10, 2, ".rand_date().", 1, -1, 'RE: Title of thread 1', 'Content of post 10');"));
+    (10, 2, ".rand_date().", 1, -1, 'RE: Title of thread 1', 'Content of post 10'),
+    (11, 3, ".rand_date().", -1, 4, 'Title of thread 2', 'Content of post 11');"));
 
 ?>

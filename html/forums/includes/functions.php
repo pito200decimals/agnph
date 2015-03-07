@@ -39,7 +39,7 @@ function GetAllPosterData(&$posts) {
         $uids[] = $post['UserId'];
     }
     $users = array();
-    if (LoadUsers($uids, $users, array(FORUMS_USER_PREF_TABLE))) {
+    if (LoadTableData(array(USER_TABLE, FORUMS_USER_PREF_TABLE), "UserId", $uids, $users)) {
         foreach ($posts as &$post) {
             $post['poster'] = $users[$post['UserId']];
             $post['PostDate'] = FormatDate($post['PostDate']);
@@ -79,7 +79,7 @@ function GetAllThreadCreatorData(&$threads) {
         $user_ids[] = $thread['UserId'];
     }
     $users = array();
-    if (LoadUsers($user_ids, $users)) {
+    if (LoadTableData(array(USER_TABLE), "UserId", $user_ids, $users)) {
         foreach ($threads as &$thread) {
             $thread['creator'] = $users[$thread['UserId']];
         }
@@ -187,7 +187,7 @@ function CreateCrumbsHTML($names, $links) {
         function($name, $link){
             return "<a href='$link' style='margin:3px;'>$name</a>";
         }, $names, $links);
-    return implode(" » ", $html);
+    return "<ul><li>".implode(" » </li><li>", $html)."</li></ul>";
 }
 
 ?>

@@ -1,0 +1,73 @@
+.crumbs {
+    display:block;
+}
+.crumbs > * {
+    display:block;
+    margin:0px;
+    padding:0px;
+}
+
+.crumbs li {
+    display:inline;
+}
+
+.allgroups {
+}
+
+.iterator {
+    display:block;
+    margin:10px;
+}
+
+.createdlabel {
+    float:right;
+}
+
+.thread {
+    margin:2px;
+}
+
+.threadlist {
+    margin:10px;
+    background-color:rgb(255,127,127);
+}
+.threadactions > *{
+    display:block;
+    margin:10px;
+    padding:0px;
+}
+
+.threadactions li {
+    margin:0px;
+    padding:0px;
+    display:inline;
+}
+
+.boardgroup {
+    margin:10px;
+    padding:10px;
+    background-color:rgb(255,127,63);
+}
+
+h1,h2,h3,h4,h5 {
+    margin:0px;
+    padding:0px;
+}
+
+.boardgrouptitle {
+    margin:2px;
+    background-color:rgb(200,127,63);
+}
+
+.board {
+    margin:2px;
+    padding:10px;
+    background-color:rgb(200,127,63);
+}
+
+.boarddesc {
+    display:block;
+    margin:10px;
+    padding:0px;
+    background-color:rgb(255,127,63);
+}

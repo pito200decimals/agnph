@@ -66,6 +66,8 @@ if (isset($user)) {
 } else {
     $skin = DEFAULT_SKIN;
 }
+$vars['skin'] = $skin;
+$vars['skinDir'] = "/skin/$skin";
 $loader = new Twig_Loader_Filesystem(__DIR__."/skin/$skin/");
 $twig = new Twig_Environment($loader);
 ?>

@@ -1,0 +1,36 @@
+/* Global site style CSS */
+
+div,span,li {
+    border-style: dotted;
+    border-width: 1px;
+}
+
+#mainbody {
+    background-color: white;
+    padding: 20px;
+}
+
+#footer {
+    margin:5px;
+    padding: 5px;
+    display:block;
+    text-align:center;
+}
+
+#footer span {
+    display:block;
+}
+
+body {
+    background-color:rgb(63,127,255);
+    margin: 0 auto;
+    min-width: 800px;
+    max-width:1600px;
+    width: 80%;
+}
+@media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
+    body {
+        width: 100%;
+        min-width: 100%;
+    }
+}

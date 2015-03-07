@@ -14,12 +14,14 @@ function AuthenticateUser($uid, $salt) {
     global $user;
     debug("Authenticating user with uid=$uid, salt=$salt");
     LoadAllUserPreferences($uid, $user);
+    /*
     if ($user['suspended']) {
         debug("User account was suspended.");
         UnsetCookies();
         unset($user);
         return false;
     }
+    */
     
     $targetSalt = md5($user['Email'].$user['Password']);
     if ($targetSalt !== $salt) {

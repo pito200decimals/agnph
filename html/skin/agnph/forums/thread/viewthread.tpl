@@ -1,31 +1,35 @@
 {% extends 'base.tpl' %}
 
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{{ skinDir }}/forums/style.css" />
+{% endblock %}
+
 {% block content %}
     {% if thread %}
-        {% autoescape false %}{{ crumbs }}{% endautoescape %}
+        <span class="crumbs">{% autoescape false %}{{ crumbs }}{% endautoescape %}</span><br />
         <div style="margin: 10px;">
             <h3>Thread Title: {{ thread.Title }}</h3>
             <small>Thread posted by {{ thread.creator.DisplayName }}</small>
         </div>
         {% if thread.Posts %}
             {% autoescape false %}
-                <div style="margin:15px;">
+                <span style="margin:15px;">
                     Pages: {{ page_iterator }}
-                </div>
-            {% endautoescape %}
+                </span>
+            {% endautoescape %}<br />
             <a href="/forums/reply/{{ thread.PostId }}/">Reply</a>
             {% for post in thread.Posts %}
                 {% if post.new %}<a name="new" />{% endif %}
                 {% include 'forums/thread/postblock.tpl' %}
             {% endfor %}
-            <a href="/forums/reply/{{ thread.PostId }}/">Reply</a>
+            <a href="/forums/reply/{{ thread.PostId }}/">Reply</a><br />
             {% autoescape false %}
-                <div style="margin:15px;">
+                <span style="margin:15px;">
                     Pages: {{ page_iterator }}
-                </div>
+                </span>
             {% endautoescape %}
         {% endif %}
-        {% autoescape false %}{{ crumbs }}{% endautoescape %}
+        <span class="crumbs">{% autoescape false %}{{ crumbs }}{% endautoescape %}</span><br />
     {% elseif content %}
         {{ content }}
     {% else %}

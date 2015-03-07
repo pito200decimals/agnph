@@ -11,14 +11,12 @@ include_once(__DIR__."/includes/functions.php");
 
 if (!isset($user)) {
     // User is not logged in.
-    $vars['error_msg'] = "Must be logged in to post.";
-    echo $twig->render("base.tpl", $vars);
+    RenderErrorPage("Must be logged in to post.");
     return;
 }
 if (!isset($_GET['action'])) {
     // Missing the type of edit action.
-    $vars['error_msg'] = "Invalid URL.";
-    echo $twig->render("base.tpl", $vars);
+    RenderErrorPage("Invalid URL.");
     return;
 }
 if (($_GET['action'] == "create" && isset($_GET['board']) && is_numeric($_GET['board']))
@@ -26,8 +24,7 @@ if (($_GET['action'] == "create" && isset($_GET['board']) && is_numeric($_GET['b
     || ($_GET['action'] == "edit" && isset($_GET['post']) && is_numeric($_GET['post']))) {
     // Good parameters.
 } else {
-    $vars['error_msg'] = "Invalid URL.";
-    echo $twig->render("base.tpl", $vars);
+    RenderErrorPage("Invalid URL.");
     return;
 }
 
@@ -199,7 +196,7 @@ if ($_GET['action'] == "create") {
     }
 }
 
-echo $twig->render("forums/compose.tpl", $vars);
+RenderPage("forums/compose.tpl");
 return;
 
 // Outputs to $vars['posts'] the most recent posts in the thread of the given id, in reverse-chronological order.
