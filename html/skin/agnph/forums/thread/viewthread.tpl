@@ -17,12 +17,18 @@
                     Pages: {{ page_iterator }}
                 </span>
             {% endautoescape %}<br />
-            <a href="/forums/reply/{{ thread.PostId }}/">Reply</a>
+            {% if user.canPostToThread %}
+                {% block threadactions %}
+                    <a href="/forums/reply/{{ thread.PostId }}/">Reply</a>
+                {% endblock %}
+            {% endif %}
             {% for post in thread.Posts %}
                 {% if post.new %}<a name="new" />{% endif %}
                 {% include 'forums/thread/postblock.tpl' %}
             {% endfor %}
-            <a href="/forums/reply/{{ thread.PostId }}/">Reply</a><br />
+            {% if user.canPostToThread %}
+                {{ block('threadactions') }}
+            {% endif %}
             {% autoescape false %}
                 <span style="margin:15px;">
                     Pages: {{ page_iterator }}

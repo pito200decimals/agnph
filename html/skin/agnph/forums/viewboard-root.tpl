@@ -14,7 +14,7 @@
                 </div>
             {% endfor %}
         </div>
-{% endfor %}
+    {% endfor %}
 </div>
 
 {# Breadcrumbs #}

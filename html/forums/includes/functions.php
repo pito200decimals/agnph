@@ -3,16 +3,20 @@
 
 // Permissions functions
 function CanUserEditPost($user, $post) {
+    if (!isset($user)) debug_die("Unexpected unset user var", __FILE__, __LINE__);
     return isset($user) && isset($post) &&
         ($user['UserId'] == $post['UserId']);
 }
 function CanUserDeletePost($user, $post) {
+    if (!isset($user)) debug_die("Unexpected unset user var");
     return CanUserEditPost($user, $post);
 }
 function CanUserPostToBoard($user, $board_id) {
+    if (!isset($user)) debug_die("Unexpected unset user var");
     return true;
 }
 function CanUserPostToThread($user, $thread_post) {
+    if (!isset($user)) debug_die("Unexpected unset user var");
     return true;
 }
 
@@ -99,7 +103,7 @@ function SetPostLinks(&$post, $compose) {
         return;
     }
     // TODO: Add user actions like quote and delete.
-    if ($user) {
+    if (isset($user)) {
         // All user actions.
         $pid = $post['PostId'];
         $tid = $post['ParentThreadId'];
@@ -110,17 +114,8 @@ function SetPostLinks(&$post, $compose) {
             //$post['quoteLink'] = "/forums/reply/$tid/?quote=$pid";
         }
         // TODO: Add more actions on forum posts.
-        if ($user['UserId'] == $post['UserId']) {
-            // Owner user actions.
-            $post['modifyLink'] = "/forums/edit/$pid/";
-            $post['deleteLink'] = "/forums/delete/$pid/";
-        }
-        if (strpos($user['Permissions'], "F")) {
-            // Admin user actions.
-            //$post['modifyLink'] = "";
-            //$post['deleteLink'] = "";
-            //$post['moveLink'] = "";
-        }
+        if (CanUserEditPost($user, $post)) $post['modifyLink'] = "/forums/edit/$pid/";
+        if (CanUserDeletePost($user, $post)) $post['deleteLink'] = "/forums/delete/$pid/";
     }
 }
 
@@ -146,7 +141,7 @@ function GetBreadcrumbsFromBoardId($board_id, &$names, &$links) {
 
 // Same as GetBreadcrumbs, but takes a post id.
 function GetBreadcrumbsFromPostId($post_id, &$names, &$links) {
-    if (sql_query_into($result, "SELECT * FROM ".Forums_POST_TABLE." WHERE ParentThreadId='$post_id';", 1)) {
+    if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId='$post_id';", 1)) {
         $post = $result->fetch_assoc();
         return GetBreadcrumbsFromPost($post, $names, $links);
     } else {

@@ -34,6 +34,8 @@ if ($post['ParentThreadId'] == -1) {
     $num_child_posts = $result->num_rows;
     ($num_child_posts == 0) or RenderErrorPage("Can't delete a thread with other posts in it. Ask an admin to delete the other posts first.");
     // Can delete.
+    // Delete from unread items first, that way if it fails, we won't get orphaned unread posts.
+    sql_query("DELETE FROM ".FORUMS_UNREAD_POST_TABLE." WHERE PostId='$escaped_post_id';") or RenderErrorPage("Unable to delete post.");
     sql_query("DELETE FROM ".FORUMS_POST_TABLE." WHERE PostId='$escaped_post_id';") or RenderErrorPage("Unable to delete post.");
     // Success!
     // Return to board lobby.

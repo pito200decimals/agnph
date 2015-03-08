@@ -2,14 +2,32 @@
 // Core utility functions for general php code.
 
 // Debugging print functions.
-function debug($message) {
-    print("<strong>[DEBUG]</strong>: ");
-    var_dump($message);
+function debug($message, $file = null, $line = null) {
+    $header = "[DEBUG]";
+    if (isset($file) && isset($line)) {
+        $file = basename($file);
+        $header .= "@[$file:$line]";
+    }
+    print("<strong>$header</strong>: ");
+    if (is_string($message)) {
+        print_r($message);
+    } else {
+        var_dump($message);
+    }
     print("\n<br />");
 }
-function debug_die($message) {
-    print("<strong>[FATAL]</strong>: ");
-    var_dump($message);
+function debug_die($message, $file = null, $line = null) {
+    $header = "[FATAL]";
+    if (isset($file) && isset($line)) {
+        $file = basename($file);
+        $header .= "@[$file:$line]";
+    }
+    print("<strong>$header</strong>: ");
+    if (is_string($message)) {
+        print_r($message);
+    } else {
+        var_dump($message);
+    }
     print("\n<br />");
     die();
 }
@@ -45,6 +63,12 @@ function GetWithDefault($array, $key, $default) {
     }
 }
 
-
+function DefaultUser() {
+    $user = array(
+        'DisplayName' => "Guest",
+        'UserId' => 0,
+        );
+    return $user;
+}
 
 ?>

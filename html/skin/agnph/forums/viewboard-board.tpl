@@ -5,11 +5,16 @@
 
 <div style="margin: 10px;">
     <h3>{{ board.Name }}</h3>
-    <div class="threadactions">
-        <ul>
-            <li><a href="/forums/create/{{ board.LobbyId }}/">Create New Thread</a></li>
-        </ul>
-    </div>
+    <a class="markasread" href="/forums/markallread/{{ board.LobbyId }}">Mark all as read</a>
+    {% if user.canPostToBoard %}
+        {% block threadactions %}
+            <div class="threadactions">
+                <ul>
+                    <li><a href="/forums/create/{{ board.LobbyId }}/">Create New Thread</a></li>
+                </ul>
+            </div>
+        {% endblock %}
+    {% endif %}
     {% if page_iterator %}{% autoescape false %}<span class="iterator">Pages: {{ page_iterator }}</span>{% endautoescape %}{% endif %}
     <div class="threadlist">
         {% if board.threads|length > 0 %}
@@ -33,11 +38,10 @@
         {% endif %}
     </div>
     {% if page_iterator %}{% autoescape false %}<span class="iterator">Pages: {{ page_iterator }}</span>{% endautoescape %}{% endif %}
-    <div class="threadactions">
-        <ul>
-            <li><a href="/forums/create/{{ board.LobbyId }}/">Create New Thread</a></li>
-        </ul>
-    </div>
+    <a class="markasread" href="/forums/markallread/{{ board.LobbyId }}">Mark all as read</a>
+    {% if user.canPostToBoard %}
+        {{ block('threadactions') }}
+    {% endif %}
 </div>
 
 {# Breadcrumbs #}

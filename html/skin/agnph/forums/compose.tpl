@@ -20,10 +20,12 @@
 
 {% block content %}
     {% if editorForm %}
+        {% if crumbs %}{% autoescape false %}{{ crumbs }}{% endautoescape %}{% endif %}
         <h3>{{ formTitle }}</h3>
         {% autoescape false %}
             {{ editorForm }}
         {% endautoescape %}
+        {% if crumbs %}{% autoescape false %}{{ crumbs }}{% endautoescape %}{% endif %}
         <h3>{{ postsTitle }}</h3>
         {% if posts %}
             {% for post in posts %}

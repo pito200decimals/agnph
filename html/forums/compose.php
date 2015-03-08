@@ -60,6 +60,8 @@ if ($_POST) {
                         ('$escaped_board_id', '$escaped_title', $date, $uid, '$escaped_content');", 0)) {
                         // Success!
                         $pid = sql_last_id();
+                        // Try to mark this post as read. Don't handle any sql errors.
+                        MarkPostsAsRead($user, array($pid));
                     } else {
                         $form_values['error_msg'] = "Error creating thread.";
                     }
@@ -78,6 +80,8 @@ if ($_POST) {
             if (CanUserPostToThread($user, $thread_id)) {
                 $result = sql_query("INSERT INTO ".FORUMS_POST_TABLE." (UserId, PostDate, ParentThreadId, Title, Content) VALUES ($uid, $date, '$escaped_thread_id', '$escaped_title', '$escaped_content');");
                 $pid = sql_last_id();
+                // Try to mark this post as read. Don't handle any sql errors.
+                MarkPostsAsRead($user, array($pid));
             } else {
                 $form_values['error_msg'] = "Not authorized to reply to this thread.";
                 $result = false;
@@ -142,58 +146,35 @@ if ($_GET['action'] == "create") {
     // Create the form for composing a new message here.
     $vars['formTitle'] = "Create Thread:";
     $form_values['title'] = "";
-    if (CreateEditorForm($form_values)) {
-        // Done building page!
-    } else {
-        $vars['content'] = "Unable to load compose page.";
-    }
+    CreateEditorForm($form_values) or RenderErrorPage("Unable to load compose page.");
 } else if ($_GET['action'] == "reply") {
     // Create the form for composing a reply to an existing post here.
     $thread_id = $_GET['thread'];
-    $escaped_thread_id = sql_escape($_GET['thread']);
-    if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId='$escaped_thread_id';", 1)) {
-        $thread = $result->fetch_assoc();
-        $vars['formTitle'] = "Create Reply:";
-        $vars['postsTitle'] = "Thread:";
-        if (DisplayRecentPosts($thread_id)) {
-            $posts =&$vars['posts'];
-            SetPostLinks($posts, true);
-            $form_values['title'] = "RE: ".$thread['Title'];
-            if (CreateEditorForm($form_values)) {
-                // Done building page!
-            } else {
-                $vars['content'] = "Unable to load compose page.";
-            }
-        } else {
-            $vars['content'] = "Unable to load compose page.";
-        }
-    } else {
-        // Can't load thread.
-        $vars['content'] = "Post not found.";
-    }
+    $escaped_thread_id = sql_escape($thread_id);
+    sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId='$escaped_thread_id';", 1) or RenderErrorPage("Post not found.");
+    $thread = $result->fetch_assoc();
+    $vars['formTitle'] = "Create Reply:";
+    $vars['postsTitle'] = "Thread:";
+    DisplayRecentPosts($thread_id) or RenderErrorPage("Unable to load compose page.");
+    $posts =&$vars['posts'];
+    SetPostLinks($posts, true);
+    $form_values['title'] = "RE: ".$thread['Title'];
+    CreateEditorForm($form_values) or RenderErrorPage("Unable to load compose page.");
+    GetBreadcrumbsFromPost($thread, $names, $links) or RenderErrorPage("Thread not found.");
+    $vars['crumbs'] = CreateCrumbsHTML($names, $links);
 } else if ($_GET['action'] == "edit") {
     // Create the form for editing a single forum post message.
     $vars['formTitle'] = "Edit Post:";
     $escaped_pid = sql_escape($_GET['post']);
-    if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId='$escaped_pid';", 1)) {
-        $post = $result->fetch_assoc();
-        // TODO: Also allow admins?
-        if (CanUserEditPost($user, $post)) {
-            $tid = $post['ParentThreadId'];
-            $form_values['content'] = $post['Content'];
-            $form_values['title'] = $post['Title'];
-            if (CreateEditorForm($form_values)) {
-                // Done building page!
-            } else {
-                $vars['content'] = "Unable to load compose page.";
-            }
-        } else {
-            $vars['content'] = "Not authorized to edit this post.";
-        }
-    } else {
-        // Can't find post to modify.
-        $vars['content'] = "Post not found.";
-    }
+    sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId='$escaped_pid';", 1) or RenderErrorPage("Post not found.");
+    $post = $result->fetch_assoc();
+    CanUserEditPost($user, $post) or RenderErrorPage("Not authorized to edit this post.");
+    $tid = $post['ParentThreadId'];
+    $form_values['content'] = $post['Content'];
+    $form_values['title'] = $post['Title'];
+    CreateEditorForm($form_values) or RenderErrorPage("Unable to load compose page.");
+    GetBreadcrumbsFromPost($post, $names, $links) or RenderErrorPage("Thread not found.");
+    $vars['crumbs'] = CreateCrumbsHTML($names, $links);
 }
 
 RenderPage("forums/compose.tpl");

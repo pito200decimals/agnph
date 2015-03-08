@@ -11,6 +11,11 @@
     display:inline;
 }
 
+.markasread {
+    float: right;
+    margin:10px;
+}
+
 .allgroups {
 }
 

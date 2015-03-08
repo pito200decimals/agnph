@@ -10,7 +10,7 @@
     {% endif %}
     <div style="margin-left: 20px; margin-bottom: 20px;">
         {% if post.modifyLink %}<a href="{{ post.modifyLink }}">Modify</a>{% endif %}
-        {% if post.deleteLink %}<a href="{{ post.deleteLink }}">Delete</a>{% endif %}
+        {% if post.deleteLink %}<a href="{{ post.deleteLink }}" onclick="return confirm('Are you sure you want to delete this post?')">Delete</a>{% endif %}
         <div id="p{{ post.PostId }}">
             {% autoescape false %}
             {{ post.Content }}

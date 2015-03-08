@@ -54,6 +54,7 @@ $vars['page_iterator'] = Paginate($posts, $postoffset, $posts_per_page,
 GetAllPosterData($posts) or RenderErrorPage("Thread not found.");
 $thread['Posts'] = $posts;
 $vars['thread'] = $thread;
+if (isset($user) && CanUserPostToThread($user, $thread)) $vars['user']['canPostToThread'] = true;
 
 // Construct breadcrumb trail for this thread.
 GetBreadcrumbsFromPost($thread, $names, $links) or RenderErrorPage("Thread not found.");
@@ -61,9 +62,11 @@ $vars['crumbs'] = CreateCrumbsHTML($names, $links);
 
 // Render page template.
 RenderPage("forums/thread/viewthread.tpl");
-// Mark visible posts as read (Only after rendering stuff.
-$read_post_ids = array_map(function($post){ return $post['PostId']; }, $posts);
-$read_post_ids = array_reverse($read_post_ids);
-MarkPostsAsRead($user, $read_post_ids);
+if (isset($user)) {
+    // Mark visible posts as read (Only after rendering stuff.
+    $read_post_ids = array_map(function($post){ return $post['PostId']; }, $posts);
+    $read_post_ids = array_reverse($read_post_ids);
+    MarkPostsAsRead($user, $read_post_ids);
+}
 return;
 ?>
