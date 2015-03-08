@@ -24,6 +24,7 @@ sql_query("DROP TABLE ".SITE_NAV_TABLE.";");
 sql_query("DROP TABLE ".FORUMS_LOBBY_TABLE.";");
 sql_query("DROP TABLE ".FORUMS_POST_TABLE.";");
 sql_query("DROP TABLE ".FORUMS_USER_PREF_TABLE.";");
+sql_query("DROP TABLE ".FORUMS_UNREAD_POST_TABLE.";");
 
 // Main user data table. General information that is shared between sections.
 do_or_die(sql_query(
@@ -97,10 +98,17 @@ do_or_die(sql_query(
     "CREATE TABLE ".FORUMS_USER_PREF_TABLE." (
         UserId INT(11) NOT NULL,
         Signature VARCHAR(256) NOT NULL,
-        SeenPostsUpToId INT(11) NOT NULL,
+        SeenPostsUpToId INT(11) DEFAULT 0 NOT NULL,
         ThreadsPerPage INT(11) DEFAULT ".DEFAULT_THREADS_PER_PAGE.",
         PostsPerPage INT(11) DEFAULT ".DEFAULT_POSTS_PER_PAGE.",
         PRIMARY KEY(UserId)
+    );"));
+// Table containing rows of tuples of (UserId, PostId).
+do_or_die(sql_query(
+    "CREATE TABLE ".FORUMS_UNREAD_POST_TABLE." (
+        UserId INT(11) NOT NULL,
+        PostId INT(11) NOT NULL,
+        PRIMARY KEY(UserId, PostId)
     );"));
 
 // TODO: Logging tables.

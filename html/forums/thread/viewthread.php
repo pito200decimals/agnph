@@ -49,6 +49,7 @@ $vars['page_iterator'] = Paginate($posts, $postoffset, $posts_per_page,
         }
     });
 
+
 // Get poster user data for each post.
 GetAllPosterData($posts) or RenderErrorPage("Thread not found.");
 $thread['Posts'] = $posts;
@@ -60,5 +61,9 @@ $vars['crumbs'] = CreateCrumbsHTML($names, $links);
 
 // Render page template.
 RenderPage("forums/thread/viewthread.tpl");
+// Mark visible posts as read (Only after rendering stuff.
+$read_post_ids = array_map(function($post){ return $post['PostId']; }, $posts);
+$read_post_ids = array_reverse($read_post_ids);
+MarkPostsAsRead($user, $read_post_ids);
 return;
 ?>

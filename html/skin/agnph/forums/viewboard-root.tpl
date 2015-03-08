@@ -9,7 +9,7 @@
             <h3 class="boardgrouptitle"><a name="b{{ lobby.LobbyId }}">{{ lobby.Name }}</a></h3>
             {% for board in lobby.childBoards %}
                 <div class="board">
-                <h4><a href="/forums/board/{{ board.LobbyId }}/" name="b{{ board.LobbyId }}">{{ board.Name }}</a></h4>
+                <h4>{% if board.unread %}[NEW]{% endif %}<a href="/forums/board/{{ board.LobbyId }}/" name="b{{ board.LobbyId }}">{{ board.Name }}</a></h4>
                 <span class="boarddesc">{{ board.Description }}</span>
                 </div>
             {% endfor %}

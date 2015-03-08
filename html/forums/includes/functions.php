@@ -190,4 +190,108 @@ function CreateCrumbsHTML($names, $links) {
     return "<ul><li>".implode(" » </li><li>", $html)."</li></ul>";
 }
 
+// Returns any unread items of the given user.
+// Returns true on success, false on failure.
+function GetUnreadPostIds($user, &$posts, &$threads, &$boards) {
+    $id_read_up_to = $user['SeenPostsUpToId'];
+    $extra_ids = array();
+    $uid = $user['UserId'];
+    if (!sql_query_into($result, "SELECT * FROM ".FORUMS_UNREAD_POST_TABLE." WHERE UserId=$uid;", 0)) return false;
+    while ($row = $result->fetch_assoc()) {
+        $extra_ids[] = $row['PostId'];
+    }
+    $extra_sql = "";
+    if (sizeof($extra_ids) > 0) {
+        $extra_sql = " OR PostId IN (".implode(",", $extra_ids).")";
+    }
+    if (!sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId>$id_read_up_to".$extra_sql.";", 0)) return false;
+    $thread_ids = array();
+    while ($row = $result->fetch_assoc()) {
+        $posts[] = $row['PostId'];
+        if ($row['ParentThreadId'] != -1) {
+            $thread_ids[] = $row['ParentThreadId'];
+        } else {
+            $thread_ids[] = $row['PostId'];
+        }
+    }
+    $thread_ids = array_unique($thread_ids);
+    if (sizeof($thread_ids) > 0) {
+        if (!sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId IN (".implode(",", $thread_ids).");", 0)) return false;
+        $board_ids = array();
+        while ($row = $result->fetch_assoc()) {
+            $threads[] = $row['PostId'];
+            if ($row['ParentLobbyId'] != -1) {
+                $board_ids[] = $row['ParentLobbyId'];
+            } else {
+                debug_die("Expected root post to have a ParentLobbyId");
+            }
+        }
+        $board_ids = array_unique($board_ids);
+        if (!sql_query_into($result, "SELECT * FROM ".FORUMS_LOBBY_TABLE." WHERE LobbyId IN (".implode(",", $board_ids).");", 0)) return false;
+        while ($row = $result->fetch_assoc()) {
+            $boards[] = $row['LobbyId'];
+        }
+    }
+    return true;
+}
+
+// Marks the given post id as read. Should be called in reverse-id order, if possible.
+// If this function fails, we can't really recover easily. Print debug info and do no error handling.
+function MarkPostsAsRead(&$user, $post_ids) {
+    $max_id = max($post_ids);
+    $ids_to_add_to_unread_table = array();
+    $ids_to_remove_from_unread_table = array();
+    $ids_in_unread_table = array();
+    $uid = $user['UserId'];
+    debug("Marking posts as read for user $uid:");
+    debug($post_ids);
+    if (!sql_query_into($result, "SELECT PostId FROM ".FORUMS_UNREAD_POST_TABLE." WHERE UserId=$uid;", 0)) {
+        debug_die("Error marking posts as read!");
+        return;
+    }
+    while ($row = $result->fetch_assoc()) {
+        $ids_in_unread_table[$row['PostId']] = $row['PostId'];
+    }
+    debug("Iterating from ".($user['SeenPostsUpToId'] + 1)." to $max_id");
+    for ($id = $user['SeenPostsUpToId'] + 1; $id <= $max_id; $id++) {
+        if (in_array($id, $ids_in_unread_table)) {
+            debug_die("Id in unread post table out of bounds!");
+            return;
+        }
+        $ids_to_add_to_unread_table[$id] = $id;
+    }
+    foreach ($post_ids as $id) {
+        if ($id > $user['SeenPostsUpToId']) {
+            // Don't add to table.
+            unset($ids_to_add_to_unread_table[$id]);
+        } else {
+            // Remove from table.
+            if (in_array($id, $ids_in_unread_table)) {
+                $ids_to_remove_from_unread_table[$id] = $id;
+            }
+        }
+    }
+    if ($user['SeenPostsUpToId'] < $max_id) {
+        $user['SeenPostsUpToId'] = $max_id;
+        if (!sql_query("UPDATE ".FORUMS_USER_PREF_TABLE." SET SeenPostsUpToId=$max_id WHERE UserId=$uid;")) {
+            debug_die("Error while updating max_read_id.");
+            return;
+        }
+    }
+    if (sizeof($ids_to_remove_from_unread_table) > 0) {
+        $joined = implode(",", $ids_to_remove_from_unread_table);
+        if (!sql_query("DELETE FROM ".FORUMS_UNREAD_POST_TABLE." WHERE UserId=$uid AND PostId IN ($joined);")) {
+            debug_die("Error while deleting ids from unread posts table.");
+            return;
+        }
+    }
+    if (sizeof($ids_to_add_to_unread_table) > 0) {
+        $joined = implode(",", array_map(function($id) use ($uid) { return "($uid, $id)"; }, $ids_to_add_to_unread_table));
+        if (!sql_query("INSERT INTO ".FORUMS_UNREAD_POST_TABLE." (UserId, PostId) VALUES $joined;")) {
+            debug_die("Error while deleting ids from unread posts table.");
+            return;
+        }
+    }
+}
+
 ?>

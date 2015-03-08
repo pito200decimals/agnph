@@ -14,11 +14,12 @@ define("USER_TABLE", "user");
 define("FORUMS_LOBBY_TABLE", "forums_lobbies");
 define("FORUMS_POST_TABLE", "forums_posts");
 define("FORUMS_USER_PREF_TABLE", "forums_user");
+define("FORUMS_UNREAD_POST_TABLE", "forums_unread_post");
 
 // User Settings Defaults.
 define("DEFAULT_SKIN", "agnph");
 define("DEFAULT_THREADS_PER_PAGE", 5);
-define("DEFAULT_POSTS_PER_PAGE", 10);
+define("DEFAULT_POSTS_PER_PAGE", 5);
 define("DEFAULT_PAGE_ITERATOR_SIZE", 2);  // 2 => 1 ... 5 6 [7] 8 9 ... 12
 define("DEFAULT_ALLOWED_TAGS", "a[href],p[style],span[style],b,u,center,hr,br,");
 

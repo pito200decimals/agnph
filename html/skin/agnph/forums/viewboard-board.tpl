@@ -20,6 +20,9 @@
                             {% if thread.Sticky %}
                                 [STICKY]
                             {% endif %}
+                            {% if thread.unread %}
+                                [<a href="{{ thread.unread_link }}">NEW</a>]
+                            {% endif %}
                             <a href="/forums/thread/{{ thread.PostId }}/">{{ thread.Title }}</a>
                         </h4>
                         <small class="startedlabel">Started by {{ thread.creator.DisplayName }}</small>
