@@ -32,6 +32,51 @@
     margin:2px;
 }
 
+.postblock {
+    border-color:black;
+    border-width:1px;
+    border-style:solid;
+    margin:10px;
+    overflow:hidden;
+}
+.postuserbox {
+    float:left;
+    display:block;
+    width:200px;
+}
+.postuser {
+}
+.postuser p {
+    margin:0px;
+    margin:5px;
+}
+.avatarimg {
+    max-width:175px;
+    max-height:175px;
+}
+.postcontentbox {
+    margin-left: 200px;
+    padding:5px;
+}
+.postheader {
+    background-color: rgb(255,200,200);
+    padding:5px;
+}
+.postactions {
+    float:right;
+    display:block;
+}
+.postmessage {
+    margin:5px;
+    margin-left: 20px;
+}
+.postsig {
+    padding:10px;
+}
+.editorblock {
+    padding:10px;
+}
+
 .threadlist {
     margin:10px;
     background-color:rgb(255,127,127);

@@ -53,20 +53,26 @@ if ($_POST) {
             $escaped_board_id = sql_escape($board_id);
             if (CanUserPostToBoard($user, $board_id)) {
                 if (strlen($title) > 0) {
-                    if (sql_query_into($result,
-                        "INSERT INTO ".FORUMS_POST_TABLE."
-                        (ParentLobbyId, Title, PostDate, UserId, Content)
-                        VALUES
-                        ('$escaped_board_id', '$escaped_title', $date, $uid, '$escaped_content');", 0)) {
-                        // Success!
-                        $pid = sql_last_id();
-                        // Try to mark this post as read. Don't handle any sql errors.
-                        MarkPostsAsRead($user, array($pid));
+                    if (strlen($content) > 0) {
+                        $escaped_ip_addr = sql_escape($_SERVER['REMOTE_ADDR']);
+                        if (sql_query_into($result,
+                            "INSERT INTO ".FORUMS_POST_TABLE."
+                            (ParentLobbyId, Title, PostDate, UserId, Content, PostIP)
+                            VALUES
+                            ('$escaped_board_id', '$escaped_title', $date, $uid, '$escaped_content', '$escaped_ip_addr');", 0)) {
+                            // Success!
+                            $pid = sql_last_id();
+                            // Try to mark this post as read. Don't handle any sql errors.
+                            MarkPostsAsRead($user, array($pid));
+                        } else {
+                            $form_values['error_msg'] = "Error creating thread.";
+                        }
                     } else {
-                        $form_values['error_msg'] = "Error creating thread.";
+                        $form_values['error_msg'] = "Can't create thread with empty message.";
+                        $result = false;
                     }
                 } else {
-                    $form_values['error_msg'] = "Cannot have empty thread title.";
+                    $form_values['error_msg'] = "Can't create thread with empty title.";
                     $result = false;
                 }
             } else {
@@ -78,10 +84,20 @@ if ($_POST) {
             $thread_id = $_GET['thread'];
             $escaped_thread_id = sql_escape($thread_id);
             if (CanUserPostToThread($user, $thread_id)) {
-                $result = sql_query("INSERT INTO ".FORUMS_POST_TABLE." (UserId, PostDate, ParentThreadId, Title, Content) VALUES ($uid, $date, '$escaped_thread_id', '$escaped_title', '$escaped_content');");
-                $pid = sql_last_id();
-                // Try to mark this post as read. Don't handle any sql errors.
-                MarkPostsAsRead($user, array($pid));
+                if (strlen($title) > 0) {
+                    if (strlen($content) > 0) {
+                        $result = sql_query("INSERT INTO ".FORUMS_POST_TABLE." (UserId, PostDate, ParentThreadId, Title, Content) VALUES ($uid, $date, '$escaped_thread_id', '$escaped_title', '$escaped_content');");
+                        $pid = sql_last_id();
+                        // Try to mark this post as read. Don't handle any sql errors.
+                        MarkPostsAsRead($user, array($pid));
+                    } else {
+                        $form_values['error_msg'] = "Can't reply to thread with empty message.";
+                        $result = false;
+                    }
+                } else {
+                    $form_values['error_msg'] = "Can't reply to thread with empty title.";
+                    $result = false;
+                }
             } else {
                 $form_values['error_msg'] = "Not authorized to reply to this thread.";
                 $result = false;
@@ -93,8 +109,18 @@ if ($_POST) {
             if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId='$escaped_post_id';", 1)) {
                 $post = $result->fetch_assoc();
                 if (CanUserEditPost($user, $post)) {
-                    $result = sql_query("UPDATE ".FORUMS_POST_TABLE." SET EditDate=$date, Title='$escaped_title', Content='$escaped_content' WHERE PostId='$escaped_post_id';");
-                    $pid = $post['PostId'];
+                    if (strlen($title) > 0) {
+                        if (strlen($content) > 0) {
+                            $result = sql_query("UPDATE ".FORUMS_POST_TABLE." SET EditDate=$date, Title='$escaped_title', Content='$escaped_content' WHERE PostId='$escaped_post_id';");
+                            $pid = $post['PostId'];
+                        } else {
+                            $form_values['error_msg'] = "Can't edit post with empty message.";
+                            $result = false;
+                        }
+                    } else {
+                        $form_values['error_msg'] = "Can't edit post with empty title.";
+                        $result = false;
+                    }
                 } else {
                     $form_values['error_msg'] = "Not authorized to edit this post.";
                     $result = false;
@@ -135,6 +161,7 @@ if ($_POST) {
         }
     }
     // Initialize with old data.
+    $form_values['title'] = $_POST['title'];
     $form_values['content'] = $_POST['content'];
 }
 
@@ -145,7 +172,9 @@ if ($_POST) {
 if ($_GET['action'] == "create") {
     // Create the form for composing a new message here.
     $vars['formTitle'] = "Create Thread:";
-    $form_values['title'] = "";
+    if (!isset($form_values['title'])) {
+        $form_values['title'] = "";
+    }
     CreateEditorForm($form_values) or RenderErrorPage("Unable to load compose page.");
 } else if ($_GET['action'] == "reply") {
     // Create the form for composing a reply to an existing post here.
@@ -158,7 +187,9 @@ if ($_GET['action'] == "create") {
     DisplayRecentPosts($thread_id) or RenderErrorPage("Unable to load compose page.");
     $posts =&$vars['posts'];
     SetPostLinks($posts, true);
-    $form_values['title'] = "RE: ".$thread['Title'];
+    if (!isset($form_values['title'])) {
+        $form_values['title'] = "RE: ".$thread['Title'];
+    }
     CreateEditorForm($form_values) or RenderErrorPage("Unable to load compose page.");
     GetBreadcrumbsFromPost($thread, $names, $links) or RenderErrorPage("Thread not found.");
     $vars['crumbs'] = CreateCrumbsHTML($names, $links);
@@ -171,7 +202,9 @@ if ($_GET['action'] == "create") {
     CanUserEditPost($user, $post) or RenderErrorPage("Not authorized to edit this post.");
     $tid = $post['ParentThreadId'];
     $form_values['content'] = $post['Content'];
-    $form_values['title'] = $post['Title'];
+    if (!isset($form_values['title'])) {
+        $form_values['title'] = $post['Title'];
+    }
     CreateEditorForm($form_values) or RenderErrorPage("Unable to load compose page.");
     GetBreadcrumbsFromPost($post, $names, $links) or RenderErrorPage("Thread not found.");
     $vars['crumbs'] = CreateCrumbsHTML($names, $links);

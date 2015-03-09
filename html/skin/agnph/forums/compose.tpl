@@ -1,7 +1,7 @@
 {% extends 'base.tpl' %}
 
 {% block styles %}
-<link rel="stylesheet" type="text/css" href="{{ skinDir }}/forums/style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/forums/style.css" />
 {% endblock %}
 
 {% block scripts %}
@@ -20,12 +20,16 @@
 
 {% block content %}
     {% if editorForm %}
-        {% if crumbs %}{% autoescape false %}{{ crumbs }}{% endautoescape %}{% endif %}
+        {# Breadcrumbs #}
+        <span class="crumbs">{% autoescape false %}{{ crumbs }}{% endautoescape %}</span>
         <h3>{{ formTitle }}</h3>
-        {% autoescape false %}
-            {{ editorForm }}
-        {% endautoescape %}
-        {% if crumbs %}{% autoescape false %}{{ crumbs }}{% endautoescape %}{% endif %}
+        <div class="editorblock">
+            {% autoescape false %}
+                {{ editorForm }}
+            {% endautoescape %}
+        </div>
+        {# Breadcrumbs #}
+        <span class="crumbs">{% autoescape false %}{{ crumbs }}{% endautoescape %}</span>
         <h3>{{ postsTitle }}</h3>
         {% if posts %}
             {% for post in posts %}

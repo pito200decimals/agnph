@@ -50,8 +50,8 @@ do_or_die(sql_query(
        "JoinTime INT(11) NOT NULL,
         LastVisitTime INT(11) NOT NULL,
         DisplayNameChangeTime INT(11) NOT NULL,
-        KnownIPs VARCHAR(256) NOT NULL,
-        PRIMARY KEY(UserId)
+        KnownIPs VARCHAR(512) NOT NULL,".  // Allocate 45 + 1 characters for each IP address. Store the past 10 addresses comma-separated.
+       "PRIMARY KEY(UserId)
     );"));
 
 // TODO: Do we want this in a table, or in the site template?
@@ -91,6 +91,7 @@ do_or_die(sql_query(
         ParentLobbyId INT(11) DEFAULT -1 NOT NULL,
         Content TEXT(131072),
         Sticky TINYINT(1) DEFAULT 0 NOT NULL,
+        PostIP VARCHAR(45) NOT NULL,
         PRIMARY KEY(PostId)
     );"));
 // User preferences specific to the forums section.

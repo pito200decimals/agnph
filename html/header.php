@@ -22,13 +22,14 @@ include_once(SITE_ROOT."includes/config.php");
 include_once(SITE_ROOT."includes/constants.php");
 include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."includes/util/sql.php");
+include_once(SITE_ROOT."includes/util/logging.php");
 // Authenticate logged-in user.
 include_once(SITE_ROOT."includes/auth/auth.php");
 
 // Set up site-wide vars for template.
 $vars = array();
 if (isset($user)) {
-    // TODO: Sort out if we want to use the same keys as $user.
+    RecordUserIP($user);
     $vars['user'] = $user;
 } else {
     // Set up defaults for a guest.

@@ -1,22 +1,58 @@
 {# Knows about variable named 'post' corresponding mostly to the database row for that post. #}
-<div style="border-color:black;border-width:1px;border-style:solid;margin:5px;padding:5px;">
+<div class="postblock">
     <a name="p{{ post.PostId }}" />
-    <strong>{{ post.poster.DisplayName }} writes:</strong><br />
-    <em>{{ post.Title }}</em><br />
-    {% if post.PostDate %}
-        <small>(Posted {{ post.PostDate }}
-                {% if post.EditDate %}, Edited {{ post.EditDate }}{% endif %}
-            )</small>
-    {% endif %}
-    <div style="margin-left: 20px; margin-bottom: 20px;">
-        {% if post.modifyLink %}<a href="{{ post.modifyLink }}">Modify</a>{% endif %}
-        {% if post.deleteLink %}<a href="{{ post.deleteLink }}" onclick="return confirm('Are you sure you want to delete this post?')">Delete</a>{% endif %}
-        <div id="p{{ post.PostId }}">
+    <div class="postuserbox">
+        <div class="postuser">
+            <p>
+                <a href="/account/{{ post.poster.UserId }}/"><strong>{{ post.poster.DisplayName }}</strong></a>
+            </p>
+            <p>
+                {# Admin titles & badges go here #}
+            </p>
+            <p>
+                <a href="/account/{{ post.poster.UserId }}/">
+                    {% if post.poster.Avatar|length > 0 %}
+                        {# avatar image #}
+                        <img class="avatarimg" src="{{ post.poster.Avatar }}" />
+                    {% else %}
+                        {# default avatar image #}
+                        <img class="avatarimg" src="http://i.imgur.com/CKd8AGC.png" />
+                    {% endif %}
+                </a>
+            </p>
+            <p>
+                {{ post.poster.Title }}
+            </p>
+            <p>
+                {# User statistics like post count go here #}
+            </p>
+        </div>
+    </div>
+    <div class="postcontentbox">
+        <div class="postheader">
+            <div class="postactions">
+                {% if post.modifyLink %}<a href="{{ post.modifyLink }}">Modify</a>{% endif %}
+                {% if post.deleteLink %}<a href="{{ post.deleteLink }}" onclick="return confirm('Are you sure you want to delete this post?')">Delete</a>{% endif %}
+            </div>
+            <em>{{ post.Title }}</em><br />
+            {% if post.PostDate %}
+                <small>(Posted {{ post.PostDate }}
+                        {% if post.EditDate %}, Edited {{ post.EditDate }}{% endif %}
+                    )</small>
+            {% endif %}
+        </div>
+        <div class="postmessage">
             {% autoescape false %}
             {{ post.Content }}
             {% endautoescape %}
         </div>
         <hr />
-        {{ post.poster.Signature }}
+        {% if post.PostIP %}
+            [ADMIN ONLY] Posted from: {{ post.PostIP }}
+            <hr />
+        {% endif %}
+        <div class="postsig">
+            {{ post.poster.Signature }}
+        </div>
     </div>
 </div>

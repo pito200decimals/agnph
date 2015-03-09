@@ -17,17 +17,20 @@ if (isset($_GET['offset']) && is_numeric($_GET['offset'])) {
     $threadoffset = 0;
 }
 
-if ($board_id == -1) {
-    include(__DIR__."/viewboard-root.php");
-} else {
-    include(__DIR__."/viewboard-board.php");
-}
-
 // Default content.
 $vars['content'] = "No forum boards to display.";
 
-// Render page template.
-RenderPage("forums/viewboard.tpl");
-return;
+if ($board_id == -1) {
+    include(__DIR__."/viewboard-root.php");
+    // Render page template.
+    RenderPage("forums/viewboard-root.tpl");
+    return;
+} else {
+    include(__DIR__."/viewboard-board.php");
+    // Render page template.
+    RenderPage("forums/viewboard-board.tpl");
+    return;
+}
+
 
 ?>
