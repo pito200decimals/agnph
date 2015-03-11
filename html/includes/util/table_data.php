@@ -5,6 +5,7 @@
 // (simple ID caching, won't handle more complicated queries).
 // Returns true on success, false on failure. $tables must be nonempty. Outputs entries to $dest[$id], but does not clear the array.
 // If false is returned, the data loaded into $dest is undefined.
+// NOTE: Assumes that the IDs are safe to search for.
 function LoadTableData($tables, $id_name, $ids, &$dest, $fresh = false) {
     static $cache = array();
     if (sizeof($tables) == 0) return false;

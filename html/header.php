@@ -50,8 +50,10 @@ if (sql_query_into($result, "SELECT * FROM ".SITE_NAV_TABLE." ORDER BY ItemOrder
 // Account management and login links.
 $vars['account_links'] = array();
 if (isset($user)) {
-    $vars['account_links'][] = array('href' => "/", 'caption' => "Account");
+    $uid = $user['UserId'];
+    $vars['account_links'][] = array('href' => "/user/$uid/", 'caption' => "Account");
     $vars['account_links'][] = array('href' => "/includes/auth/logout.php", 'caption' => "Log Out");
+    unset($uid);
 } else {
     $vars['account_links'][] = array('href' => "/includes/auth/login.php", 'caption' => "Login");
     $vars['account_links'][] = array('href' => "/", 'caption' => "Register");

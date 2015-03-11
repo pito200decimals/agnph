@@ -53,6 +53,7 @@ do_or_die(sql_query(
         KnownIPs VARCHAR(512) NOT NULL,".  // Allocate 45 + 1 characters for each IP address. Store the past 10 addresses comma-separated.
        "PRIMARY KEY(UserId)
     );"));
+// User biography is stored in text files at /user/bio/{UserId}.txt
 
 // TODO: Do we want this in a table, or in the site template?
 do_or_die(sql_query(

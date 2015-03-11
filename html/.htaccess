@@ -20,3 +20,6 @@ RewriteRule ^forums/delete/(\d+)/?$ /forums/delete.php?post=$1
 
 # Rewrites for marking posts as read
 RewriteRule ^forums/markallread/(\d+)/?$ /forums/mark_all_read.php?b=$1
+
+# Rewrites for accounts section
+RewriteRule ^user/(\d+)/?$ /user/profile.php?uid=$1
