@@ -5,6 +5,7 @@ define("UID_COOKIE", "agnph_uid");
 define("SALT_COOKIE", "agnph_salt");
 define("SECONDS_IN_DAY", 60 * 60 * 24);
 define("COOKIE_DURATION", 30 * SECONDS_IN_DAY);  // 30 days.
+define("MAX_FILE_SIZE", 50 * 1024 * 1024);  // 50 MB.
 
 // Site data tables.
 define("SITE_NAV_TABLE", "nav_links");

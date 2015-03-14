@@ -4,13 +4,13 @@
     <div class="postuserbox">
         <div class="postuser">
             <p>
-                <a href="/account/{{ post.poster.UserId }}/"><strong>{{ post.poster.DisplayName }}</strong></a>
+                <a href="/user/{{ post.poster.UserId }}/"><strong>{{ post.poster.DisplayName }}</strong></a>
             </p>
             <p>
                 {# Admin titles & badges go here #}
             </p>
             <p>
-                <a href="/account/{{ post.poster.UserId }}/">
+                <a href="/user/{{ post.poster.UserId }}/">
                     {% if post.poster.Avatar|length > 0 %}
                         {# avatar image #}
                         <img class="avatarimg" src="{{ post.poster.Avatar }}" />

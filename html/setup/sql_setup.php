@@ -114,7 +114,9 @@ do_or_die(sql_query(
     );"));
 
 // TODO: Logging tables.
-    
-include_once("load_sql_mock_data.php");
 
+// TODO: Initialize file directories.
+
+// TODO: Remove this call after testing is complete.
+include_once("load_sql_mock_data.php");
 ?>

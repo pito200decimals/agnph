@@ -22,6 +22,12 @@ do_or_die(sql_query(
     (1, 'Sig of User 1'),
     (2, 'Sig of User 2'),
     (3, 'Sig of User 3');"));
+delete_files("../user/bio/");
+mkdir("../user/bio/");
+WriteBio(1, "Bio of user 1!<br />TEST");
+WriteBio(2, "Bio of user 2!");
+WriteBio(3, "Bio of user 3!");
+
 
 // Populate site nav table.
 do_or_die(sql_query(
@@ -69,5 +75,25 @@ do_or_die(sql_query(
     (10, 2, ".rand_date().", 1, -1, 'RE: Title of thread 1', 'Content of post 10'),
     (11, 3, ".rand_date().", -1, 4, 'Title of thread 2', 'Content of post 11'),
     (12, 1, ".rand_date().", -1, 5, 'Title of thread 3', 'Content of post 12');"));
+
+function WriteBio($uid, $bio) {
+    $file = fopen("../user/bio/$uid.txt", "w");
+    fwrite($file, $bio);
+    fclose($file);
+}
+function delete_files($target) {
+    if(is_dir($target)){
+        $files = glob( $target . '*', GLOB_MARK ); //GLOB_MARK adds a slash to directories returned
+        
+        foreach( $files as $file )
+        {
+            delete_files( $file );      
+        }
+      
+        rmdir( $target );
+    } elseif(is_file($target)) {
+        unlink( $target );  
+    }
+}
 
 ?>
