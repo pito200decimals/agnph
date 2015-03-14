@@ -12,16 +12,29 @@ define("SITE_NAV_TABLE", "nav_links");
 
 // User content data tables.
 define("USER_TABLE", "user");
+define("FORUMS_USER_PREF_TABLE", "forums_user");
+define("GALLERY_USER_PREF_TABLE", "gallery_user");
+define("GALLERY_USER_FAVORITES_TABLE", "gallery_user_fav");
+
+// Forums tables.
 define("FORUMS_LOBBY_TABLE", "forums_lobbies");
 define("FORUMS_POST_TABLE", "forums_posts");
-define("FORUMS_USER_PREF_TABLE", "forums_user");
 define("FORUMS_UNREAD_POST_TABLE", "forums_unread_post");
+
+// Gallery tables.
+define("GALLERY_POST_TABLE", "gallery_posts");
+define("GALLERY_TAG_TABLE", "gallery_tags");
+define("GALLERY_POST_TAG_TABLE", "gallery_post_tag");
+define("GALLERY_TAG_HISTORY_TABLE", "gallery_tag_history");
+define("GALLERY_TAG_ALIAS_TABLE", "gallery_tag_alias");
+define("GALLERY_POOLS_TABLE", "gallery_pools");
+define("GALLERY_POOL_MAP_TABLE", "gallery_pool_map");
 
 // User Settings Defaults.
 define("DEFAULT_SKIN", "agnph");
 define("DEFAULT_THREADS_PER_PAGE", 5);
 define("DEFAULT_POSTS_PER_PAGE", 5);
 define("DEFAULT_PAGE_ITERATOR_SIZE", 2);  // 2 => 1 ... 5 6 [7] 8 9 ... 12
-define("DEFAULT_ALLOWED_TAGS", "a[href],p[style],span[style],b,u,center,hr,br,");
+define("DEFAULT_ALLOWED_TAGS", "a[href],p[style],span[style],b,u,i,strong,em,ol,ul,li,center,hr,br,div,pre");
 
 ?>

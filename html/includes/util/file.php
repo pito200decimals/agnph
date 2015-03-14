@@ -68,8 +68,8 @@ function accept_file_upload(&$tmp_path, $max_size = MAX_FILE_SIZE) {
             'gif' => 'image/gif',
         ), true))) return false;
 
-    $file_path = sprintf(SITE_ROOT.'uploads/%s.%s', md5_file($_FILES['upfile']['tmp_name']);
-    if (!move_uploaded_file($_FILES['upfile']['tmp_name'], $file_path, $ext))) return false;
+    $file_path = sprintf(SITE_ROOT.'uploads/%s.%s', md5_file($_FILES['upfile']['tmp_name']));
+    if (!move_uploaded_file($_FILES['upfile']['tmp_name'], $file_path, $ext)) return false;
     
     $tmp_path = $file_path;
     return true;
