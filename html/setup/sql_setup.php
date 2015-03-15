@@ -112,7 +112,8 @@ do_or_die(sql_query(
         SeenPostsUpToId INT(11) DEFAULT 0 NOT NULL,
         ThreadsPerPage INT(11) DEFAULT ".DEFAULT_THREADS_PER_PAGE.",
         PostsPerPage INT(11) DEFAULT ".DEFAULT_POSTS_PER_PAGE.",
-        PRIMARY KEY(UserId)
+        ForumsPermissions CHAR(1) NOT NULL,".  // A = Allowed to sticky posts.
+       "PRIMARY KEY(UserId)
     );"));
 // Table containing rows of tuples of (UserId, PostId).
 do_or_die(sql_query(
@@ -136,11 +137,11 @@ do_or_die(sql_query(
         UploaderId INT(11) NOT NULL,
         DateUploaded INT(11) NOT NULL,
         Source VARCHAR(256) NOT NULL,
-        Rating CHAR(1) NOT NULL,".  // s/q/e
+        Rating CHAR(1) DEFAULT 'q',".  // s/q/e
        "Description TEXT(512) NOT NULL,
-        ParentPostId INT(11) NOT NULL,
-        Score INT(11) NOT NULL,
-        Approval CHAR(1) NOT NULL,".  // P for pending, A for approved, F for flagged, D for deleted.
+        ParentPostId INT(11) DEFAULT -1,
+        Score INT(11) DEFAULT 0,
+        Approval CHAR(1) DEFAULT 'P',".  // P for pending, A for approved, F for flagged, D for deleted.
        "PRIMARY KEY(PostId)
     );"));
 // General information about a single tag
@@ -148,7 +149,8 @@ do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_TAG_TABLE." (
         TagId INT(11) UNSIGNED AUTO_INCREMENT,
         Name TEXT(32) NOT NULL,
-        Type CHAR(1) NOT NULL,
+        Type CHAR(1) NOT NULL,".  // A=Artist, C=Character, D=Copyright, G=General, S=Species (D is copyright for ordering reasons).
+       "Count INT(11) NOT NULL,
         PRIMARY KEY(TagId)
     );"));
 // Mapping of tag ids associated with each post.
@@ -194,7 +196,8 @@ do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_USER_PREF_TABLE." (
         UserId INT(11) NOT NULL,
         UploadLimit INT(11) NOT NULL,
-        Permissions CHAR(1) NOT NULL,
+        ArtistTagId INT(11) NOT NULL,
+        GalleryPermissions CHAR(1) NOT NULL,
         PRIMARY KEY(UserId)
     );"));
 // User favorites for gallery section.

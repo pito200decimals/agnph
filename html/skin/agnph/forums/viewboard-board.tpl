@@ -32,7 +32,7 @@
                                 {% endif %}
                                 <a href="/forums/thread/{{ thread.PostId }}/">{{ thread.Title }}</a>
                             </h4>
-                            <small class="startedlabel">Started by {{ thread.creator.DisplayName }}</small>
+                            <small class="startedlabel">Started by <a href="/user/{{ thread.creator.UserId }}/">{{ thread.creator.DisplayName }}</a></small>
                         </div>
                     {% endfor %}
             {% else %}

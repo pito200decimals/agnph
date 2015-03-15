@@ -4,20 +4,25 @@
 // Permissions functions
 function CanUserEditPost($user, $post) {
     if (!isset($user)) debug_die("Unexpected unset user var", __FILE__, __LINE__);
-    return isset($user) && isset($post) &&
-        ($user['UserId'] == $post['UserId']);
+    if (!isset($post)) debug_die("Unexpected unset post var", __FILE__, __LINE__);
+    return isset($post) && ($user['UserId'] == $post['UserId'] || $user['ForumsPermissions'] == "A");
 }
 function CanUserDeletePost($user, $post) {
-    if (!isset($user)) debug_die("Unexpected unset user var");
+    if (!isset($user)) debug_die("Unexpected unset user var", __FILE__, __LINE__);
+    if (!isset($post)) debug_die("Unexpected unset post var", __FILE__, __LINE__);
     return CanUserEditPost($user, $post);
 }
 function CanUserPostToBoard($user, $board_id) {
-    if (!isset($user)) debug_die("Unexpected unset user var");
+    if (!isset($user)) debug_die("Unexpected unset user var", __FILE__, __LINE__);
     return true;
 }
 function CanUserPostToThread($user, $thread_post) {
-    if (!isset($user)) debug_die("Unexpected unset user var");
+    if (!isset($user)) debug_die("Unexpected unset user var", __FILE__, __LINE__);
     return true;
+}
+function CanUserStickyThread($user, $board_id) {
+    if (!isset($user)) debug_die("Unexpected unset user var", __FILE__, __LINE__);
+    return $user['ForumsPermissions'] == "A";
 }
 
 // Gets all posts in the given thread id. Returns the array of posts.

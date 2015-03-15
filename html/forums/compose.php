@@ -27,7 +27,6 @@ if (($_GET['action'] == "create" && isset($_GET['board']) && is_numeric($_GET['b
     RenderErrorPage("Invalid URL.");
     return;
 }
-
 if ($_POST) {
     $form_values = array();
     // Try to submit user data. If invalid, fall back to the already-initialized compose form.
@@ -55,11 +54,12 @@ if ($_POST) {
                 if (strlen($title) > 0) {
                     if (strlen($content) > 0) {
                         $escaped_ip_addr = sql_escape($_SERVER['REMOTE_ADDR']);
+                        $sticky = isset($_POST['sticky']) && $_POST['sticky'] && CanUserStickyThread($user, $board_id);
                         if (sql_query_into($result,
                             "INSERT INTO ".FORUMS_POST_TABLE."
-                            (ParentLobbyId, Title, PostDate, UserId, Content, PostIP)
+                            (ParentLobbyId, Title, PostDate, UserId, Content, Sticky, PostIP)
                             VALUES
-                            ('$escaped_board_id', '$escaped_title', $date, $uid, '$escaped_content', '$escaped_ip_addr');", 0)) {
+                            ('$escaped_board_id', '$escaped_title', $date, $uid, '$escaped_content', '$sticky', '$escaped_ip_addr');", 0)) {
                             // Success!
                             $pid = sql_last_id();
                             // Try to mark this post as read. Don't handle any sql errors.
@@ -111,7 +111,8 @@ if ($_POST) {
                 if (CanUserEditPost($user, $post)) {
                     if (strlen($title) > 0) {
                         if (strlen($content) > 0) {
-                            $result = sql_query("UPDATE ".FORUMS_POST_TABLE." SET EditDate=$date, Title='$escaped_title', Content='$escaped_content' WHERE PostId='$escaped_post_id';");
+                            $sticky = $post['ParentThreadId'] == -1 && isset($_POST['sticky']) && $_POST['sticky'] && CanUserStickyThread($user, $post['ParentLobbyId']);
+                            $result = sql_query("UPDATE ".FORUMS_POST_TABLE." SET EditDate=$date, Title='$escaped_title', Content='$escaped_content', Sticky='$sticky' WHERE PostId='$escaped_post_id';");
                             $pid = $post['PostId'];
                         } else {
                             $form_values['error_msg'] = "Can't edit post with empty message.";
@@ -132,37 +133,56 @@ if ($_POST) {
             }
         }
         if ($result) {
-            // On success, return to end of thread. Or at least try to. Upon error here, just revert to /forums/.
-            if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId=$pid;", 1)) {
+            // On successful reply/create, return to end of thread. For edit, return to page that contains that post.
+            // Upon error here, just revert to /forums/.
+            function err_func($msg) {
+                debug_die($msg, __FILE__, __LINE__);
+                header("Location: /forums/");
+                exit();
+            }
+            if ($_GET['action'] == "create") {
+                // Jump to end of thread (which is also the begining).
+                $tid = $pid;
+                header("Location: /forums/thread/$tid/");
+                return;
+            } else if ($_GET['action'] == "reply") {
+                // Jump to end of thread.
+                sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId=$pid;", 1) or err_func("Failed to get edited post $pid.");
                 $post = $result->fetch_assoc();
                 $tid = $post['ParentThreadId'];
-                if ($tid == -1) {
-                    // First post in a thread.
-                    $tid = $pid;
-                    $offset = 0;
-                    header("Location: /forums/thread/$tid/$offset/");
-                    return;
-                } else if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE ParentThreadId=$tid OR PostId=$tid ORDER BY PostId", 1)) {
-                    $num_posts = $result->num_rows;
-                    $offset = $num_posts - 1;  // Jump to page of last post.
-                    header("Location: /forums/thread/$tid/$offset/");
-                    return;
-                } else {
-                    // Failed fetching thread info of post, just return to board.
-                    debug_die("Died after compose post on select thread_id.");
-                    header("Location: /forums/");
-                    return;
-                }
-            } else {
-                debug_die("Died after compose post on select post_id.");
-                header("Location: /forums/");
+                if ($tid == -1) $tid = $pid;
+                sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId=$tid OR ParentThreadId=$tid ORDER BY PostId;", 1) or err_func("Failed to get posts in thread $tid.");
+                $offset = $result->num_rows - 1;
+                header("Location: /forums/thread/$tid/$offset/");
                 return;
+            } else if ($_GET['action'] == "edit") {
+                // Return to page of the edited post.
+                sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId=$pid;", 1) or err_func("Failed to get edited post $pid.");
+                $post = $result->fetch_assoc();
+                $tid = $post['ParentThreadId'];
+                if ($tid == -1) $tid = $pid;
+                sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId=$tid OR ParentThreadId=$tid ORDER BY PostId;", 1) or err_func("Failed to get posts in thread $tid.");
+                $offset = 0;
+                while ($row = $result->fetch_assoc()) {
+                    if ($row['PostId'] == $pid) break;
+                    $offset++;
+                }
+                header("Location: /forums/thread/$tid/$offset/");
+                return;
+            } else {
+                err_func("Invalid GET action: ".$_GET['action']);
             }
         }
     }
     // Initialize with old data.
     $form_values['title'] = $_POST['title'];
     $form_values['content'] = $_POST['content'];
+}
+// Will be unset later if the user doesn't have perms.
+if (isset($_POST) && isset($_POST['sticky'])) {
+    $form_values['sticky'] = true;
+} else {
+    $form_values['sticky'] = false;
 }
 
 //////////////////////////////////////////////////////
@@ -174,6 +194,10 @@ if ($_GET['action'] == "create") {
     $vars['formTitle'] = "Create Thread:";
     if (!isset($form_values['title'])) {
         $form_values['title'] = "";
+    }
+    $board_id = $_GET['board'];
+    if (!CanUserStickyThread($user, $board_id)) {
+        unset($form_values['sticky']);
     }
     CreateEditorForm($form_values) or RenderErrorPage("Unable to load compose page.");
 } else if ($_GET['action'] == "reply") {
@@ -190,6 +214,7 @@ if ($_GET['action'] == "create") {
     if (!isset($form_values['title'])) {
         $form_values['title'] = "RE: ".$thread['Title'];
     }
+    unset($form_values['sticky']);  // Never can sticky replies.
     CreateEditorForm($form_values) or RenderErrorPage("Unable to load compose page.");
     GetBreadcrumbsFromPost($thread, $names, $links) or RenderErrorPage("Thread not found.");
     $vars['crumbs'] = CreateCrumbsHTML($names, $links);
@@ -200,10 +225,18 @@ if ($_GET['action'] == "create") {
     sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId='$escaped_pid';", 1) or RenderErrorPage("Post not found.");
     $post = $result->fetch_assoc();
     CanUserEditPost($user, $post) or RenderErrorPage("Not authorized to edit this post.");
-    $tid = $post['ParentThreadId'];
     $form_values['content'] = $post['Content'];
     if (!isset($form_values['title'])) {
         $form_values['title'] = $post['Title'];
+    }
+    $tid = $post['ParentThreadId'];
+    if ($tid != -1 || !CanUserStickyThread($user, $post['ParentLobbyId'])) {
+        // No sticky if not first post, or user can't sticky.
+        unset($form_values['sticky']);
+    } else if ($post['Sticky']) {
+        $form_values['sticky'] = true;
+    } else {
+        $form_values['sticky'] = false;
     }
     CreateEditorForm($form_values) or RenderErrorPage("Unable to load compose page.");
     GetBreadcrumbsFromPost($post, $names, $links) or RenderErrorPage("Thread not found.");
@@ -240,17 +273,26 @@ function DisplayRecentPosts($thread_id) {
 // Outputs to $vars['editorForm'], returns true on success, false on failure.
 function CreateEditorForm($form_values) {
     global $vars;
+    if (!isset($form_values)) debug_die("Unset form_values", __FILE__, __LINE__);
     $request_uri = $_SERVER['REQUEST_URI'];
     $initial_text = GetWithDefault($form_values, 'content', "");
     $title = GetWithDefault($form_values, 'title', "");
-    $error_msg = (isset($form_values) && isset($form_values['error_msg'])) ?
-        $form_values['error_msg']."<br />" : "";
+    $error_msg = (isset($form_values['error_msg'])) ?
+        "<p>".$form_values['error_msg']."</p>" : "";
+    if (isset($form_values['sticky'])) {
+        // Display checkbox.
+        $checked = $form_values['sticky'] ? "checked" : "";
+        $sticky_box = "<p><input name='sticky' value='true' type='checkbox' $checked /><label for='sticky'>Mark thread as sticky</label></p>";
+    } else {
+        $sticky_box = "";
+    }
     $editorForm = <<<EOD
 <form action="$request_uri" method="post">
     $error_msg
-    Title: <input type='text' name='title' value='$title'/><br />
-    <textarea name="content">$initial_text</textarea><br />
-    <input name="submit" value="Post" type="submit" />
+    <p>Title: <input type='text' name='title' value='$title'/></p>
+    <p><textarea name="content">$initial_text</textarea></p>
+    $sticky_box
+    <p><input name="submit" value="Post" type="submit" /></p>
 </form>
 EOD;
     $vars['editorForm'] = $editorForm;

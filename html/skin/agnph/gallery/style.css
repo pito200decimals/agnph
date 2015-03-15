@@ -1,0 +1,59 @@
+.sidepanel {
+    margin: 5px;
+    float: left;
+    min-width: 240px;
+}
+
+.mainpanel {
+    margin: 5px;
+    overflow: hidden;
+}
+
+.Clear {
+  clear: both;
+  height: 0;
+  overflow: hidden;
+}
+
+.taglist {
+    margin: 0px;
+    padding: 0px;
+}
+
+.tagcategory {
+    margin-top: 10px;
+    margin-left: 10px;
+    display: block;
+}
+
+.tag {
+    margin-left: 10px;
+    display: block;
+}
+
+.previewImg {
+    max-width: 100%;
+}
+
+.postsquare {
+    width: 175px;
+    height: 200px;
+    float: left;
+    margin: 10px;
+    border-radius: 5px;
+}
+
+.postsquarepreview {
+    max-width: 150px;
+    max-height: 150px;
+    display: block;
+    margin: 0 auto;
+    border-radius: 5px;
+}
+
+.postlabel {
+    display: block;
+    margin: 5px;
+    background-color: rgb(223,223,255);
+    border-radius: 5px;
+}

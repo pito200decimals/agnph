@@ -1,2 +1,5 @@
 lib/*
 html/user/bio/*
+html/gallery/data/*
+html/gallery/thumb/*
+html/gallery/preview/*

@@ -96,4 +96,94 @@ function delete_files($target) {
     }
 }
 
+// Populate some gallery entries.
+do_or_die(sql_query(
+    "INSERT INTO ".GALLERY_POST_TABLE."
+    (PostId, Md5, Extension, UploaderId, Source, Description)
+    VALUES
+    (1, 'c3024ba611837d85397d9661aec12840', 'jpg', 1, 'PostSource 1', 'PostDescription 1'),
+    (2, '16f7fdb2e63740e6dbf524e137899433', 'png', 1, 'PostSource 2', 'PostDescription 2'),
+    (3, '0f80621ad5be140be8e3077bea316b06', 'jpg', 1, 'PostSource 3', 'PostDescription 3'),
+    (4, '42dba250ce52c9bfcdb3f3f6d3a1ef85', 'jpg', 1, 'PostSource 4', 'PostDescription 4'),
+    (5, 'ff52157718c27a5bde447bbcba28fd85', 'png', 1, 'PostSource 5', 'PostDescription 5'),
+    (6, '8014cdf559ca76698f7c1a2fbcd154dc', 'png', 1, 'PostSource 6', 'PostDescription 6'),
+    (7, '3a4332624e0689785296c334cab2d5d8', 'jpg', 1, 'PostSource 7', 'PostDescription 7');"));
+
+include_once("../gallery/includes/image.php");
+
+delete_files("../gallery/data/");
+mkdir("../gallery/data/");
+mkdir("../gallery/data/thumb/");
+prep_file("c3024ba611837d85397d9661aec12840", "jpg");
+prep_file("16f7fdb2e63740e6dbf524e137899433", "png");
+prep_file("0f80621ad5be140be8e3077bea316b06", "jpg");
+prep_file("42dba250ce52c9bfcdb3f3f6d3a1ef85", "jpg");
+prep_file("ff52157718c27a5bde447bbcba28fd85", "png");
+prep_file("8014cdf559ca76698f7c1a2fbcd154dc", "png");
+prep_file("3a4332624e0689785296c334cab2d5d8", "jpg");
+
+
+function prep_file($md5, $ext) {
+    $path = "";
+    $path .= substr($md5, 0, 2)."/";
+    mkdir("../gallery/data/$path/");
+    mkdir("../gallery/data/thumb/$path/");
+    $path .= substr($md5, 2, 2)."/";
+    mkdir("../gallery/data/$path/");
+    mkdir("../gallery/data/thumb/$path/");
+    $path .= "$md5.$ext";
+    file_put_contents("../gallery/data/$path", fopen("http://gallery.agn.ph/data/$path", 'r'));
+    $image = new SimpleImage();
+    $image->load("../gallery/data/$path");
+    if ($image->getWidth() > $image->getHeight()) {
+        $image->resizeToWidth(150);
+    } else {
+        $image->resizeToHeight(150);
+    }
+    $image->save("../gallery/data/thumb/$path");
+    debug("Processed http://gallery.agn.ph/data/$path");
+}
+
+// Populate some tags.
+do_or_die(sql_query(
+    "INSERT INTO ".GALLERY_TAG_TABLE."
+    (TagId, Name, Type)
+    VALUES
+    (1, 'darkmirage', 'A'),
+    (2, 'jem', 'C'),
+    (3, 'male', 'G'),
+    (4, 'solo', 'G'),
+    (5, 'quilava', 'S'),
+    (6, 'typhlosion', 'S');"));
+
+do_or_die(sql_query(
+    "INSERT INTO ".GALLERY_POST_TAG_TABLE."
+    (PostId, TagId)
+    VALUES
+    (1, 2),
+    (1, 3),
+    (1, 4),
+    (1, 5),
+    (1, 6),
+    (2, 1),
+    (2, 3),
+    (2, 4),
+    (2, 5),
+    (2, 6),
+    (3, 1),
+    (3, 2),
+    (3, 4),
+    (3, 5),
+    (3, 6),
+    (4, 1),
+    (4, 2),
+    (4, 3),
+    (4, 5),
+    (4, 6),
+    (5, 1),
+    (5, 2),
+    (5, 3),
+    (5, 4),
+    (5, 6);"));
+
 ?>

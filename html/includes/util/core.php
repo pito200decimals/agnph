@@ -31,9 +31,9 @@ function debug_die($message, $file = null, $line = null) {
     print("\n<br />");
     die();
 }
-function do_or_die($result) {
+function do_or_die($result, $file = null, $line = null) {
     if (!$result) {
-        debug_die("FAILURE");
+        debug_die("FAILURE", $file, $line);
     }
 }
 

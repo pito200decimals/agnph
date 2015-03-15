@@ -55,7 +55,7 @@
     max-height:175px;
 }
 .postcontentbox {
-    margin-left: 200px;
+    overflow: hidden;
     padding:5px;
 }
 .postheader {
