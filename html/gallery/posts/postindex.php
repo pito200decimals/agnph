@@ -2,19 +2,23 @@
 // Page for viewing the search index of posts.
 
 include_once("../../header.php");
+include_once(SITE_ROOT."gallery/includes/functions.php");
 
-sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE.";", 0) or RenderErrorPage("No posts found");
 $posts = array();
+if (isset($_GET['search'])) {
+    debug("Searching for '".$_GET['search']."'");
+    $sql = CreatePostSearchSQL($_GET['search']);
+} else {
+    $sql = CreatePostSearchSQL("");
+}
+sql_query_into($result, $sql, 0) or RenderErrorPage("No posts found");
 while ($row = $result->fetch_assoc()) {
     $md5 = $row['Md5'];
     $ext = $row['Extension'];
-    $path = "";
-    $path .= substr($md5, 0, 2)."/";
-    $path .= substr($md5, 2, 2)."/";
-    $path .= "$md5.$ext";
-    $row['thumbnail'] = "/gallery/data/thumb/$path";
+    $row['thumbnail'] = GetSiteThumbPath($md5, $ext);
     $posts[] = $row;
 }
+
 $vars['posts'] = $posts;
 
 RenderPage("gallery/posts/postindex.tpl");

@@ -1,4 +1,6 @@
 <?php
+// General image utility classes and functions.
+
 class SimpleImage
 {
     var $image;
@@ -70,5 +72,64 @@ class SimpleImage
         imagecopyresampled($new_image, $this->image, 0, 0, 0, 0, $width, $height, $this->getWidth(), $this->getHeight());
         $this->image = $new_image;
     }
+}
+
+function GetImagePath($md5, $ext) {
+    $path = "gallery/data/";
+    $path .= substr($md5, 0, 2)."/";
+    $path .= substr($md5, 2, 2)."/";
+    $path .= "$md5.$ext";
+    return $path;
+}
+
+function GetThumbPath($md5, $ext) {
+    $path = "gallery/data/thumb/";
+    $path .= substr($md5, 0, 2)."/";
+    $path .= substr($md5, 2, 2)."/";
+    $path .= "$md5.jpg";
+    return $path;
+}
+
+function GetPreviewPath($md5, $ext) {
+    $path = "gallery/data/preview/";
+    $path .= substr($md5, 0, 2)."/";
+    $path .= substr($md5, 2, 2)."/";
+    $path .= "$md5.$ext";
+    return $path;
+}
+
+function CreateThumbnailFile($md5, $ext) {
+    $image_path = GetSystemImagePath($md5, $ext);
+    $thumb_path = GetSystemThumbPath($md5, $ext);
+    mkdirs(dirname(GetSiteThumbPath($md5, $ext)));
+    $image = new SimpleImage();
+    $image->load($image_path);
+    // Always create thumbnail file.
+    if ($image->getWidth() > $image->getHeight()) {
+        $image->resizeToWidth(MAX_IMAGE_THUMB_SIZE);
+    } else {
+        $image->resizeToHeight(MAX_IMAGE_THUMB_SIZE);
+    }
+    $image->save($thumb_path);
+    return $thumb_path;
+}
+
+function CreatePreviewFile($md5, $ext) {
+    $image_path = GetSystemImagePath($md5, $ext);
+    $preview_path = GetSystemPreviewPath($md5, $ext);
+    mkdirs(dirname(GetSitePreviewPath($md5, $ext)));
+    $image = new SimpleImage();
+    $image->load($image_path);
+    if (($image->getWidth() > MAX_IMAGE_PREVIEW_SIZE || $image->getHeight() > MAX_IMAGE_PREVIEW_SIZE)) {
+        if ($image->getWidth() > $image->getHeight()) {
+            $image->resizeToWidth(MAX_IMAGE_PREVIEW_SIZE);
+        } else {
+            $image->resizeToHeight(MAX_IMAGE_PREVIEW_SIZE);
+        }
+        $image->save($preview_path);
+    } else {
+        $preview_path = $image_path;
+    }
+    return $preview_path;
 }
 ?>

@@ -36,10 +36,11 @@ do_or_die(sql_query(
     VALUES
     ('Home', '/index.php', 0),
     ('Forums', '/forums/', 1),
-    ('Gallery', '/gallery/', 2),
+    ('Gallery', '/gallery/post/', 2),
     ('Fics', '/fics/', 3),
     ('Oekaki', '/oekaki/', 4),
-    ('About', '/about/', 5);"));
+    ('About', '/about/', 5),
+    ('Setup', '/setup/sql_setup.php', 6);"));
     
 function rand_date() {
     return mt_rand(0, 2147483647);
@@ -107,13 +108,14 @@ do_or_die(sql_query(
     (4, '42dba250ce52c9bfcdb3f3f6d3a1ef85', 'jpg', 1, 'PostSource 4', 'PostDescription 4'),
     (5, 'ff52157718c27a5bde447bbcba28fd85', 'png', 1, 'PostSource 5', 'PostDescription 5'),
     (6, '8014cdf559ca76698f7c1a2fbcd154dc', 'png', 1, 'PostSource 6', 'PostDescription 6'),
-    (7, '3a4332624e0689785296c334cab2d5d8', 'jpg', 1, 'PostSource 7', 'PostDescription 7');"));
+    (7, '3a4332624e0689785296c334cab2d5d8', 'jpg', 1, 'PostSource 7', 'PostDescription 7'),
+    (8, '2a9b345bc6db7cdc5dbbe6e4e13bb347', 'jpg', 1, 'PostSource 8', 'PostDescription 8');"));
 
 include_once("../gallery/includes/image.php");
+set_time_limit(90);
+ini_set('memory_limit', '-1');
 
 delete_files("../gallery/data/");
-mkdir("../gallery/data/");
-mkdir("../gallery/data/thumb/");
 prep_file("c3024ba611837d85397d9661aec12840", "jpg");
 prep_file("16f7fdb2e63740e6dbf524e137899433", "png");
 prep_file("0f80621ad5be140be8e3077bea316b06", "jpg");
@@ -121,27 +123,24 @@ prep_file("42dba250ce52c9bfcdb3f3f6d3a1ef85", "jpg");
 prep_file("ff52157718c27a5bde447bbcba28fd85", "png");
 prep_file("8014cdf559ca76698f7c1a2fbcd154dc", "png");
 prep_file("3a4332624e0689785296c334cab2d5d8", "jpg");
+prep_file("2a9b345bc6db7cdc5dbbe6e4e13bb347", "jpg");
 
 
 function prep_file($md5, $ext) {
-    $path = "";
-    $path .= substr($md5, 0, 2)."/";
-    mkdir("../gallery/data/$path/");
-    mkdir("../gallery/data/thumb/$path/");
-    $path .= substr($md5, 2, 2)."/";
-    mkdir("../gallery/data/$path/");
-    mkdir("../gallery/data/thumb/$path/");
-    $path .= "$md5.$ext";
-    file_put_contents("../gallery/data/$path", fopen("http://gallery.agn.ph/data/$path", 'r'));
-    $image = new SimpleImage();
-    $image->load("../gallery/data/$path");
-    if ($image->getWidth() > $image->getHeight()) {
-        $image->resizeToWidth(150);
+    $system_path = GetSystemImagePath($md5, $ext);
+    $site_path = GetSiteImagePath($md5, $ext);
+    $external_path = str_replace("/gallery/", "http://gallery.agn.ph/", $site_path);
+    mkdirs(dirname($site_path));
+    file_put_contents($system_path, fopen($external_path, 'r'));
+    CreateThumbnailFile($md5, $ext);
+    $preview_path = CreatePreviewFile($md5, $ext);
+    if ($preview_path == GetSystemPreviewPath($md5, $ext)) {
+        // Have a preview file.
+        do_or_die(sql_query("UPDATE ".GALLERY_POST_TABLE." SET HasPreview=1 WHERE Md5='$md5';"));
     } else {
-        $image->resizeToHeight(150);
+        // Used actual file, don't do any SQL.
     }
-    $image->save("../gallery/data/thumb/$path");
-    debug("Processed http://gallery.agn.ph/data/$path");
+    debug("Processed $external_path");
 }
 
 // Populate some tags.

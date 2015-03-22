@@ -4,6 +4,7 @@
 // URL: /gallery/posts/viewpost.php?post={post-id}
 
 include_once("../../header.php");
+include_once(SITE_ROOT."gallery/includes/functions.php");
 
 if (!isset($_GET['post'])) {
     RenderErrorPage("Invalid URL.");
@@ -19,12 +20,12 @@ $vars['post'] = $post;
 
 $md5 = $post['Md5'];
 $ext = $post['Extension'];
-$path = "";
-$path .= substr($md5, 0, 2)."/";
-$path .= substr($md5, 2, 2)."/";
-$path .= "$md5.$ext";
-$vars['previewUrl'] = "/gallery/data/$path";
-$vars['downloadUrl'] = "/gallery/data/$path";
+if ($post['HasPreview']) {
+    $vars['previewUrl'] = GetSitePreviewPath($md5, $ext);
+} else {
+    $vars['previewUrl'] = GetSiteImagePath($md5, $ext);
+}
+$vars['downloadUrl'] = GetSiteImagePath($md5, $ext);
 
 $allTagIds = array();
 sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TAG_TABLE." WHERE PostId=$pid;", 0) or RenderErrorPage("Post not found.");
@@ -46,6 +47,7 @@ foreach ($GALLERY_TAG_TYPES as $char => $name) {
     $category['tags'] = array();
     foreach ($allTags as $tag) {
         if ($tag['Type'] == $char) {
+            $tag['displayName'] = TagNameToDisplayName($tag['Name']);
             $category['tags'][] = $tag;
         }
     }

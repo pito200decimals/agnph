@@ -14,18 +14,24 @@
         </div>
     </div>
     <div class="mainpanel">
-        {% for post in posts %}
-            <a href="/gallery/post/show/{{ post.PostId }}/">
-                <div class="postsquare">
-                    <div class="postsquarepreview">
-                        <img class="postsquarepreview" src="{{ post.thumbnail }}" />
+        {% if posts|length > 0 %}
+            {# Display searc index. #}
+            {% for post in posts %}
+                <a href="/gallery/post/show/{{ post.PostId }}/">
+                    <div class="postsquare">
+                        <div class="postsquarepreview">
+                            <img class="postsquarepreview" src="{{ post.thumbnail }}" />
+                        </div>
+                        <div class="postlabel">
+                            &nbsp;
+                        </div>
                     </div>
-                    <div class="postlabel">
-                        &nbsp;
-                    </div>
-                </div>
-            </a>
-        {% endfor %}
+                </a>
+            {% endfor %}
+        {% else %}
+            {# No posts here. #}
+            No posts matched your search.
+        {% endif %}
     </div>
     <div class="Clear">&nbsp;</div>
 {% endblock %}

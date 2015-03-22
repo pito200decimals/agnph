@@ -3,10 +3,13 @@
 // Should include any SQL database commands that are needed to create the
 // site's database.
 
-include_once("../includes/config.php");
-include_once("../includes/constants.php");
-include_once("../includes/util/core.php");
-include_once("../includes/util/sql.php");
+define("SITE_ROOT", "../");
+include_once(SITE_ROOT."includes/config.php");
+include_once(SITE_ROOT."includes/constants.php");
+include_once(SITE_ROOT."includes/util/core.php");
+include_once(SITE_ROOT."includes/util/sql.php");
+include_once(SITE_ROOT."gallery/includes/functions.php");
+
 
 ////////////////////////////////
 // Guidelines on field naming //
@@ -134,6 +137,7 @@ do_or_die(sql_query(
         PostId INT(11) UNSIGNED AUTO_INCREMENT,
         Md5 CHAR(32) NOT NULL,
         Extension CHAR(4) NOT NULL,
+        HasPreview TINYINT(1) DEFAULT 0,
         UploaderId INT(11) NOT NULL,
         DateUploaded INT(11) NOT NULL,
         Source VARCHAR(256) NOT NULL,

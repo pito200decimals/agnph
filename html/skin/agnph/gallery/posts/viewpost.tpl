@@ -22,7 +22,7 @@
                         <ul class="taglist">
                             {% for tag in category.tags %}
                                 <li class="tag">
-                                    {{ tag.Name }}
+                                    <a href="/gallery/post/?search={{ tag.Name }}">{{ tag.displayName }}</a>
                                 </li>
                             {% endfor %}
                         </ul>
