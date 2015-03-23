@@ -8,8 +8,8 @@
     <div class="sidepanel">
         <h3>Search</h3>
         <div class="searchbox">
-            <form>
-                <input name="search" type="textfield" />
+            <form action="/gallery/post/">
+                <input name="search" value="{{ search }}" type="textfield" />
             </form>
         </div>
     </div>
@@ -20,14 +20,22 @@
                 <a href="/gallery/post/show/{{ post.PostId }}/">
                     <div class="postsquare">
                         <div class="postsquarepreview">
-                            <img class="postsquarepreview" src="{{ post.thumbnail }}" />
+                            <img class="postsquarepreview {{ post.outlineClass }}" src="{{ post.thumbnail }}" />
                         </div>
                         <div class="postlabel">
-                            &nbsp;
+                            {% autoescape false %}
+                            {{ post.scoreHtml }}{{ post.favHtml }}{{ post.commentsHtml }}{{ post.ratingHtml }}
+                            {% endautoescape %}
                         </div>
                     </div>
                 </a>
             {% endfor %}
+            <div class="Clear">&nbsp;</div>
+            <div class="indexIterator">
+                {% autoescape false %}
+                {{ postIterator }}
+                {% endautoescape %}
+            </div>
         {% else %}
             {# No posts here. #}
             No posts matched your search.

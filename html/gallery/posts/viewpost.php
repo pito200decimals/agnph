@@ -16,7 +16,7 @@ $escaped_post_id = sql_escape($pid);
 sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE PostId='$escaped_post_id';", 1) or RenderErrorPage("Post not found.");
 $post = $result->fetch_assoc();
 $pid = $post['PostId'];  // Get safe value, not user-generated.
-$vars['post'] = $post;
+$vars['post'] = &$post;
 
 $md5 = $post['Md5'];
 $ext = $post['Extension'];
@@ -57,6 +57,31 @@ foreach ($GALLERY_TAG_TYPES as $char => $name) {
 }
 $vars['post']['tagCategories'] = $tagCategories;
 
+PreparePostStatistics($post);
+
 RenderPage("gallery/posts/viewpost.tpl");
 return;
+
+function PreparePostStatistics(&$post) {
+    $postdate = $post['DateUploaded'];
+    $poster_id = $post['UploaderId'];
+    sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId=$poster_id;", 1) or RenderErrorPage("Post not found.");
+    $poster = $result->fetch_assoc();
+    $post['postedHtml'] = FormatDuration(time() - $postdate)." ago by <a href='/user/".$poster['UserId']."/'>".$poster['DisplayName']."</a>";
+    switch($post['Rating']) {
+      case "s":
+        $post['ratingHtml'] = "<span class='srating'>Safe</span>";
+        break;
+      case "q":
+        $post['ratingHtml'] = "<span class='qrating'>Questionable</span>";
+        break;
+      case "e":
+        $post['ratingHtml'] = "<span class='erating'>Explicit</span>";
+        break;
+    }
+    sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE ParentPostId=".$post['PostId'].";", 0) or RenderErrorPage("Post not found.");
+    if ($result->num_rows > 0) {
+        $post['hasChildren'] = true;
+    }
+}
 ?>

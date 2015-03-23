@@ -31,7 +31,7 @@ sql_query("DROP TABLE ".FORUMS_UNREAD_POST_TABLE.";");
 sql_query("DROP TABLE ".GALLERY_POST_TABLE.";");
 sql_query("DROP TABLE ".GALLERY_TAG_TABLE.";");
 sql_query("DROP TABLE ".GALLERY_POST_TAG_TABLE.";");
-sql_query("DROP TABLE ".GALLERY_TAG_HISTORY_TABLE.";");
+sql_query("DROP TABLE ".GALLERY_POST_TAG_HISTORY_TABLE.";");
 sql_query("DROP TABLE ".GALLERY_TAG_ALIAS_TABLE.";");
 sql_query("DROP TABLE ".GALLERY_USER_PREF_TABLE.";");
 sql_query("DROP TABLE ".GALLERY_USER_FAVORITES_TABLE.";");
@@ -62,6 +62,7 @@ do_or_die(sql_query(
        "JoinTime INT(11) NOT NULL,
         LastVisitTime INT(11) NOT NULL,
         DisplayNameChangeTime INT(11) NOT NULL,
+        RegisterIP VARCHAR(50) NOT NULL,
         KnownIPs VARCHAR(512) NOT NULL,".  // Allocate 45 + 1 characters for each IP address. Store the past 10 addresses comma-separated.
        "PRIMARY KEY(UserId)
     );"));
@@ -141,11 +142,16 @@ do_or_die(sql_query(
         UploaderId INT(11) NOT NULL,
         DateUploaded INT(11) NOT NULL,
         Source VARCHAR(256) NOT NULL,
-        Rating CHAR(1) DEFAULT 'q',".  // s/q/e
-       "Description TEXT(512) NOT NULL,
+        Rating CHAR(1) DEFAULT 'q',
+        Description TEXT(512) NOT NULL,
         ParentPostId INT(11) DEFAULT -1,
         Score INT(11) DEFAULT 0,
-        Approval CHAR(1) DEFAULT 'P',".  // P for pending, A for approved, F for flagged, D for deleted.
+        NumFavorites INT(11) DEFAULT 0,
+        NumComments INT(11) DEFAULT 0,
+        Width INT(11) NOT NULL,
+        Height INT(11) NOT NULL,
+        FileSize VARCHAR(8) NOT NULL,
+        Status CHAR(1) DEFAULT 'P',".  // P for pending, A for approved, F for flagged for deletion, D for deleted.
        "PRIMARY KEY(PostId)
     );"));
 // General information about a single tag
@@ -166,7 +172,7 @@ do_or_die(sql_query(
     );"));
 // History of tag edits for a given post.
 do_or_die(sql_query(
-    "CREATE TABLE ".GALLERY_TAG_HISTORY_TABLE." (
+    "CREATE TABLE ".GALLERY_POST_TAG_HISTORY_TABLE." (
         PostId INT(11) NOT NULL,
         Timestamp INT(11) NOT NULL,
         TagsAdded VARCHAR(512) NOT NULL,
@@ -202,6 +208,7 @@ do_or_die(sql_query(
         UploadLimit INT(11) NOT NULL,
         ArtistTagId INT(11) NOT NULL,
         GalleryPermissions CHAR(1) NOT NULL,
+        PostsPerPage INT(11) DEFAULT ".DEFAULT_GALLERY_POSTS_PER_PAGE.",
         PRIMARY KEY(UserId)
     );"));
 // User favorites for gallery section.

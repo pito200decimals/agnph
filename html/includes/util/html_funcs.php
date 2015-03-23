@@ -12,18 +12,18 @@ function SanitizeHTMLTags($html, $allowed_html_config) {
 }
 
 // Modifies $items and $offset, returns the HTML for the page_iterator.
-function Paginate(&$items, &$offset, $items_per_page, $link_fn) {
+function Paginate(&$items, &$offset, $items_per_page, $link_fn, $include_arrows = false) {
     $num_items = sizeof($items);
     $curr_page = floor($offset / $items_per_page) + 1;
     $offset = ($curr_page - 1) * $items_per_page;
     $max_pages = ceil($num_items / $items_per_page);
     $items = array_slice($items, $offset, $items_per_page);
-    return ConstructPageIterator($curr_page, $max_pages, DEFAULT_PAGE_ITERATOR_SIZE, $link_fn);
+    return ConstructPageIterator($curr_page, $max_pages, DEFAULT_PAGE_ITERATOR_SIZE, $link_fn, $include_arrows);
 }
 
 // Creates and returns the HTML for a page iterator (e.g. 1 ... 5 6 [7] 8 9 ... 12), with the appropriate links).
-// $link_fn is function($index, $text, $current_page) => $html. Text passed in will be either "#" or "[#]".
-function ConstructPageIterator($currpage, $maxpage, $iterator_size, $link_fn) {
+// $link_fn is function($index, $current_page) => $html. Text passed in will be either "#" or "[#]".
+function ConstructPageIterator($currpage, $maxpage, $iterator_size, $link_fn, $include_arrows = false) {
     $min_val = $currpage - $iterator_size;
     $max_val = $currpage + $iterator_size;
     if ($min_val <= 2) {
@@ -37,16 +37,19 @@ function ConstructPageIterator($currpage, $maxpage, $iterator_size, $link_fn) {
     $ret = "";
     for ($i = $min_val; $i <= $max_val; $i++) {
         if ($i == $currpage) {
-            $ret .= $link_fn($i, "[$i]", $currpage);
+            $ret .= $link_fn($i, $currpage);
         } else {
-            $ret .= $link_fn($i, $i, $currpage);
+            $ret .= $link_fn($i, $currpage);
         }
     }
     if ($min_val > 2) {
-        $ret = $link_fn(1, 1, $currpage)."...$ret";
+        $ret = $link_fn(1, $currpage)."...$ret";
     }
     if ($max_val < $maxpage - 1) {
-        $ret .= "...".$link_fn($maxpage, $maxpage, $currpage);
+        $ret .= "...".$link_fn($maxpage, $currpage);
+    }
+    if ($include_arrows) {
+        $ret = $link_fn(0, $currpage).$ret.$link_fn($maxpage + 1, $currpage);
     }
     return $ret;
 }

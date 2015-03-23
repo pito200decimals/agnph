@@ -98,33 +98,12 @@ function delete_files($target) {
 }
 
 // Populate some gallery entries.
-do_or_die(sql_query(
-    "INSERT INTO ".GALLERY_POST_TABLE."
-    (PostId, Md5, Extension, UploaderId, Source, Description)
-    VALUES
-    (1, 'c3024ba611837d85397d9661aec12840', 'jpg', 1, 'PostSource 1', 'PostDescription 1'),
-    (2, '16f7fdb2e63740e6dbf524e137899433', 'png', 1, 'PostSource 2', 'PostDescription 2'),
-    (3, '0f80621ad5be140be8e3077bea316b06', 'jpg', 1, 'PostSource 3', 'PostDescription 3'),
-    (4, '42dba250ce52c9bfcdb3f3f6d3a1ef85', 'jpg', 1, 'PostSource 4', 'PostDescription 4'),
-    (5, 'ff52157718c27a5bde447bbcba28fd85', 'png', 1, 'PostSource 5', 'PostDescription 5'),
-    (6, '8014cdf559ca76698f7c1a2fbcd154dc', 'png', 1, 'PostSource 6', 'PostDescription 6'),
-    (7, '3a4332624e0689785296c334cab2d5d8', 'jpg', 1, 'PostSource 7', 'PostDescription 7'),
-    (8, '2a9b345bc6db7cdc5dbbe6e4e13bb347', 'jpg', 1, 'PostSource 8', 'PostDescription 8');"));
 
 include_once("../gallery/includes/image.php");
 set_time_limit(90);
 ini_set('memory_limit', '-1');
 
 delete_files("../gallery/data/");
-prep_file("c3024ba611837d85397d9661aec12840", "jpg");
-prep_file("16f7fdb2e63740e6dbf524e137899433", "png");
-prep_file("0f80621ad5be140be8e3077bea316b06", "jpg");
-prep_file("42dba250ce52c9bfcdb3f3f6d3a1ef85", "jpg");
-prep_file("ff52157718c27a5bde447bbcba28fd85", "png");
-prep_file("8014cdf559ca76698f7c1a2fbcd154dc", "png");
-prep_file("3a4332624e0689785296c334cab2d5d8", "jpg");
-prep_file("2a9b345bc6db7cdc5dbbe6e4e13bb347", "jpg");
-
 
 function prep_file($md5, $ext) {
     $system_path = GetSystemImagePath($md5, $ext);
@@ -143,46 +122,81 @@ function prep_file($md5, $ext) {
     debug("Processed $external_path");
 }
 
-// Populate some tags.
-do_or_die(sql_query(
-    "INSERT INTO ".GALLERY_TAG_TABLE."
-    (TagId, Name, Type)
-    VALUES
-    (1, 'darkmirage', 'A'),
-    (2, 'jem', 'C'),
-    (3, 'male', 'G'),
-    (4, 'solo', 'G'),
-    (5, 'quilava', 'S'),
-    (6, 'typhlosion', 'S');"));
+function CreateTag($tag_name, $tag_type) {
+    static $index = 1;
+    do_or_die(sql_query(
+        "INSERT INTO ".GALLERY_TAG_TABLE."
+        (TagId, Name, Type)
+        VALUES
+        ($index, '$tag_name', '$tag_type');"));
+    $index++;
+}
 
-do_or_die(sql_query(
-    "INSERT INTO ".GALLERY_POST_TAG_TABLE."
-    (PostId, TagId)
-    VALUES
-    (1, 2),
-    (1, 3),
-    (1, 4),
-    (1, 5),
-    (1, 6),
-    (2, 1),
-    (2, 3),
-    (2, 4),
-    (2, 5),
-    (2, 6),
-    (3, 1),
-    (3, 2),
-    (3, 4),
-    (3, 5),
-    (3, 6),
-    (4, 1),
-    (4, 2),
-    (4, 3),
-    (4, 5),
-    (4, 6),
-    (5, 1),
-    (5, 2),
-    (5, 3),
-    (5, 4),
-    (5, 6);"));
+function CreateGalleryPost($md5, $ext, $tag_names, $rating="e", $parentPostId="-1", $status="A") {
+    static $index = 1;
+    $tag_ids = array();
+    $joined = implode(",", array_map(function($name) { return "'".sql_escape($name)."'"; }, $tag_names));
+    do_or_die(sql_query_into($result, "SELECT TagId FROM ".GALLERY_TAG_TABLE." WHERE Name in ($joined);"));
+    while ($row = $result->fetch_assoc()) {
+        $tag_ids[] = $row['TagId'];
+    }
+    $now = time();
+    do_or_die(sql_query(
+        "INSERT INTO ".GALLERY_POST_TABLE."
+        (PostId, Md5, Extension, UploaderId, Source, Rating, Description, Status, DateUploaded, ParentPostId)
+        VALUES
+        ($index, '$md5', '$ext', 1, 'PostSource $index', '$rating', 'PostDescription $index', '$status', $now, $parentPostId);"));
+    foreach ($tag_ids as $tag_id) {
+        do_or_die(sql_query(
+            "INSERT INTO ".GALLERY_POST_TAG_TABLE."
+            (PostId, TagId)
+            VALUES
+            ($index, $tag_id);"));
+    }
+    prep_file($md5, $ext);
+    $index++;
+}
+
+CreateTag("harlem", "A");
+CreateTag("umbreon", "S");
+CreateTag("quilava", "S");
+CreateTag("syntex", "A");
+CreateTag("raichu", "S");
+CreateTag("eroborus", "A");
+CreateTag("dewott", "S");
+CreateTag("typhlosion", "S");
+CreateTag("ahseo", "A");
+CreateTag("redraptor16", "A");
+CreateTag("charizard", "S");
+CreateTag("evalion", "A");
+CreateTag("doneru", "A");
+CreateTag("male", "G");
+CreateTag("female", "G");
+
+CreateGalleryPost("c3024ba611837d85397d9661aec12840", "jpg", array("harlem", "umbreon", "quilava", "male"), "e");
+CreateGalleryPost("16f7fdb2e63740e6dbf524e137899433", "png", array("syntex", "quilava", "raichu", "male"), "s");
+CreateGalleryPost("0f80621ad5be140be8e3077bea316b06", "jpg", array("eroborus", "quilava", "dewott", "male"), "q");
+CreateGalleryPost("42dba250ce52c9bfcdb3f3f6d3a1ef85", "jpg", array("harlem", "quilava", "typhlosion", "male"), "e", 1);
+CreateGalleryPost("ff52157718c27a5bde447bbcba28fd85", "png", array("ahseo", "quilava", "male"), "q", -1, "P");
+CreateGalleryPost("8014cdf559ca76698f7c1a2fbcd154dc", "png", array("redraptor16", "charizard", "female"), "s", -1, "F");
+CreateGalleryPost("3a4332624e0689785296c334cab2d5d8", "jpg", array("evalion", "charizard", "male"), "e", 1);
+CreateGalleryPost("2a9b345bc6db7cdc5dbbe6e4e13bb347", "jpg", array("doneru"));
+
+function CreateLotsOfFakeGallery($n) {
+    for ($p = 0; $p < $n; $p+=100) {
+        $sql = array();
+        $choices = array("8014cdf559ca76698f7c1a2fbcd154dc", "ff52157718c27a5bde447bbcba28fd85", "16f7fdb2e63740e6dbf524e137899433");
+        for ($i = $p; $i < $n && $i < $p + 100; $i++) {
+            $sql[] = "('".$choices[mt_rand(0, sizeof($choices) - 1)]."', 'png', 1)";
+        }
+        do_or_die(sql_query(
+            "INSERT INTO ".GALLERY_POST_TABLE."
+            (Md5, Extension, UploaderId)
+            VALUES
+            ".implode(",", $sql).";"));
+    }
+}
+
+// CreateLotsOfFakeGallery(120000);
 
 ?>

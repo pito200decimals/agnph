@@ -27,6 +27,7 @@ body {
     min-width: 800px;
     max-width:1600px;
     width: 80%;
+    font-family: verdana,sans-serif;
 }
 @media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
     body {

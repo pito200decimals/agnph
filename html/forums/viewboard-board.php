@@ -40,12 +40,12 @@ $threads = GetAllThreadsInLobby($board_id);
 if ($threads) {
     debug("Paginating");
     $vars['page_iterator'] = Paginate($threads, $threadoffset, $threads_per_page,
-        function($i, $txt, $curr_page) use ($board, $threads_per_page) {
+        function($i, $curr_page) use ($board, $threads_per_page) {
             if ($i == $curr_page) {
-                return "$txt";
+                return "[$i]";
             } else {
                 $offset = ($i - 1) * $threads_per_page;
-                return "<a href='/forums/board/$board/$offset/' style='margin-left:3px;margin-right:3px;text-decoration:none;'>$txt</a>";
+                return "<a href='/forums/board/$board/$offset/' style='margin-left:3px;margin-right:3px;text-decoration:none;'>$i</a>";
             }
         });
     // Get creator user data for each thread.

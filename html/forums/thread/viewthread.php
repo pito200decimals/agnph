@@ -40,12 +40,12 @@ SetPostLinks($posts, false);
 
 // Construct the thread page iterator. Also slices the posts to only the viewed page.
 $vars['page_iterator'] = Paginate($posts, $postoffset, $posts_per_page,
-    function($i, $txt, $curr_page) use ($tid, $posts_per_page) {
+    function($i, $curr_page) use ($tid, $posts_per_page) {
         if ($i == $curr_page) {
-            return "$txt";
+            return "[$i]";
         } else {
             $offset = ($i - 1) * $posts_per_page;
-            return "<a href='/forums/thread/$tid/$offset/' style='margin-left:3px;margin-right:3px;text-decoration:none;'>$txt</a>";
+            return "<a href='/forums/thread/$tid/$offset/' style='margin-left:3px;margin-right:3px;text-decoration:none;'>$i</a>";
         }
     });
 
