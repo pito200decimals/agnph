@@ -28,54 +28,58 @@ while ($row = $result->fetch_assoc()) {
 SetOutlineClasses($posts);
 
 // Construct page iterator.
-$total_num_posts = CountNumPosts(strtolower($searchterms));
-$num_max_pages = (int)(($total_num_posts + DEFAULT_GALLERY_POSTS_PER_PAGE - 1) / DEFAULT_GALLERY_POSTS_PER_PAGE);
-if ($num_max_pages > 1) {
-    $iterator_html = ConstructPageIterator($page, $num_max_pages, DEFAULT_GALLERY_PAGE_ITERATOR_SIZE,
-        function($i, $current_page) use ($searchterms, $num_max_pages) {
-            if ($i == 0) {
-                if ($current_page == 1) {
-                    return "<span class='currentpage'>&lt;&lt;</span>";
-                } else {
-                    $txt = "&lt;&lt;";
-                    $i = $current_page - 1;
-                }
-            } else if ($i == $num_max_pages + 1) {
-                if ($current_page == $num_max_pages) {
-                    return "<span class='currentpage'>&gt;&gt;</span>";
-                } else {
-                    $txt = "&gt;&gt;";
-                    $i = $current_page + 1;
-                }
-            } else if ($i == $current_page) {
-                return "<span class='currentpage'>$i</span>";
-            } else {
-                $txt = $i;
-            }
-            if (strlen($searchterms) > 0) {
-                if ($i != 1) {
-                    $url = "/gallery/post/?search=".urlencode($searchterms)."&page=$i";
-                } else {
-                    $url = "/gallery/post/?search=".urlencode($searchterms);
-                }
-            } else {
-                if ($i != 1) {
-                    $url = "/gallery/post/?page=$i";
-                } else {
-                    $url = "/gallery/post/";
-                }
-            }
-            return "<a href='$url'>$txt</a>";
-        }, true);
-    $vars['postIterator'] = $iterator_html;
-} else {
-    $vars['postIterator'] = "";
-}
+$vars['postIterator'] = CreatePageIterator($searchterms, $page);
 
 $vars['posts'] = $posts;
 
 RenderPage("gallery/posts/postindex.tpl");
 return;
+
+function CreatePageIterator($searchterms, $page) {
+    $total_num_posts = CountNumPosts(strtolower($searchterms));
+    $num_max_pages = (int)(($total_num_posts + DEFAULT_GALLERY_POSTS_PER_PAGE - 1) / DEFAULT_GALLERY_POSTS_PER_PAGE);
+    if ($num_max_pages > 1) {
+        $iterator_html = ConstructPageIterator($page, $num_max_pages, DEFAULT_GALLERY_PAGE_ITERATOR_SIZE,
+            function($i, $current_page) use ($searchterms, $num_max_pages) {
+                if ($i == 0) {
+                    if ($current_page == 1) {
+                        return "<span class='currentpage'>&lt;&lt;</span>";
+                    } else {
+                        $txt = "&lt;&lt;";
+                        $i = $current_page - 1;
+                    }
+                } else if ($i == $num_max_pages + 1) {
+                    if ($current_page == $num_max_pages) {
+                        return "<span class='currentpage'>&gt;&gt;</span>";
+                    } else {
+                        $txt = "&gt;&gt;";
+                        $i = $current_page + 1;
+                    }
+                } else if ($i == $current_page) {
+                    return "<span class='currentpage'>$i</span>";
+                } else {
+                    $txt = $i;
+                }
+                if (strlen($searchterms) > 0) {
+                    if ($i != 1) {
+                        $url = "/gallery/post/?search=".urlencode($searchterms)."&page=$i";
+                    } else {
+                        $url = "/gallery/post/?search=".urlencode($searchterms);
+                    }
+                } else {
+                    if ($i != 1) {
+                        $url = "/gallery/post/?page=$i";
+                    } else {
+                        $url = "/gallery/post/";
+                    }
+                }
+                return "<a href='$url'>$txt</a>";
+            }, true);
+        return $iterator_html;
+    } else {
+        return "";
+    }
+}
 
 function CreatePostLabel(&$post) {
     if ($post['Score'] > 0) {

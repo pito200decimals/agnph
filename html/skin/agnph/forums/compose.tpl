@@ -13,7 +13,8 @@
             target_list: [ {title: 'New page', value: '_blank'} ],
             toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor | link | code fullscreen preview",
             contextmenu: "image link | hr",
-            autoresize_max_height: 500
+            autoresize_max_height: 500,
+            resize: false
         });
     </script>
 {% endblock %}

@@ -1,0 +1,50 @@
+.formlabel {
+    vertical-align: top;
+    width: 100px;
+    display: inline-block;
+}
+
+.textbox {
+    width: 400px;
+}
+
+input {
+    margin: 5px;
+}
+
+textarea {
+    margin: 5px;
+    height: 150px;
+}
+
+#desc {
+    height: 75px;
+}
+
+#parent {
+    width: 100px;
+}
+
+.uploadpanel {
+    display: inline;
+    margin: 5px;
+    padding: 5px;
+    float: left;
+}
+.previewpanel {
+    display: inline;
+    margin: 5px;
+    padding: 5px;
+    float: left;
+    width: -moz-calc(100% - 575px);
+    width: -webkit-calc(100% - 575px);
+    width: calc(100% - 575px);
+}
+.previewpanel img {
+    max-width: 100%;
+}
+@media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
+    .previewpanel {
+        display: none;
+    }
+}

@@ -5,6 +5,8 @@ include_once("../includes/config.php");
 include_once("../includes/constants.php");
 include_once("../includes/util/core.php");
 include_once("../includes/util/sql.php");
+include_once("../gallery/includes/image.php");
+include_once("../includes/util/file.php");
 
 // Populate User table.
 do_or_die(sql_query(
@@ -82,24 +84,9 @@ function WriteBio($uid, $bio) {
     fwrite($file, $bio);
     fclose($file);
 }
-function delete_files($target) {
-    if(is_dir($target)){
-        $files = glob( $target . '*', GLOB_MARK ); //GLOB_MARK adds a slash to directories returned
-        
-        foreach( $files as $file )
-        {
-            delete_files( $file );      
-        }
-      
-        rmdir( $target );
-    } elseif(is_file($target)) {
-        unlink( $target );  
-    }
-}
 
 // Populate some gallery entries.
 
-include_once("../gallery/includes/image.php");
 set_time_limit(90);
 ini_set('memory_limit', '-1');
 

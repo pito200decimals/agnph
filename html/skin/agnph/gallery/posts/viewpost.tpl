@@ -1,10 +1,11 @@
-{% extends 'base.tpl' %}
+{% extends 'gallery/base.tpl' %}
 
 {% block styles %}
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/gallery/style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/gallery/viewpost-style.css" />
 {% endblock %}
 
-{% block content %}
+{% block gallerycontent %}
     <div class="sidepanel">
         {% if post.ParentPostId != -1 %}
             <div class="parentbox">
@@ -18,8 +19,8 @@
                 <p><a href="/gallery/post/?search=parent%3A{{ post.PostId }}">here</a></p>
             </div>
         {% endif %}
-        <h3>Search</h3>
         <div class="searchbox">
+            <h3>Search</h3>
             <form action="/gallery/post/">
                 <input name="search" type="textfield" />
             </form>
@@ -57,7 +58,11 @@
     </div>
     <div class="mainpanel">
         <p>
-            <img class="previewImg" src="{{ previewUrl }}" />
+            {% if previewUrl==downloadUrl %}
+                <img class="previewImg" src="{{ previewUrl }}" />
+            {% else %}
+                <a href="{{ downloadUrl }}"><img class="previewImg" src="{{ previewUrl }}" /></a>
+            {% endif %}
         </p>
         <p>
             <a href="/gallery/post/edit/{{ post.PostId }}/">Edit</a> | <a href="{{ downloadUrl }}">Download</a>

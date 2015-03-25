@@ -4,6 +4,10 @@
 include_once(SITE_ROOT."gallery/includes/image.php");
 include_once(SITE_ROOT."gallery/includes/search.php");
 
+function CanUserUploadPost($user) {
+    return true;
+}
+
 
 function GetSiteImagePath($md5, $ext) {
     return "/".GetImagePath($md5, $ext);
@@ -24,13 +28,6 @@ function GetSitePreviewPath($md5, $ext) {
 }
 function GetSystemPreviewPath($md5, $ext) {
     return SITE_ROOT.GetPreviewPath($md5, $ext);
-}
-
-function mkdirs($site_dir_path) {
-    if (substr($site_dir_path, 0, 1) == "/")
-        $site_dir_path = substr($site_dir_path, 1, strlen($site_dir_path) - 1);
-    debug("mkdir: $site_dir_path");
-    mkdir(SITE_ROOT.$site_dir_path, 0777, true);
 }
 
 function TagNameToDisplayName($tag_name) {

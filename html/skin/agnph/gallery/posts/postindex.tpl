@@ -1,10 +1,6 @@
-{% extends 'base.tpl' %}
+{% extends 'gallery/base.tpl' %}
 
-{% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/gallery/style.css" />
-{% endblock %}
-
-{% block content %}
+{% block gallerycontent %}
     <div class="sidepanel">
         <h3>Search</h3>
         <div class="searchbox">

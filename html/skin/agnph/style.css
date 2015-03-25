@@ -7,7 +7,7 @@ div,span,li {
 
 #mainbody {
     background-color: white;
-    padding: 20px;
+    padding: 10px;
 }
 
 #footer {
@@ -19,6 +19,26 @@ div,span,li {
 
 #footer span {
     display:block;
+}
+
+.navigation {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+}
+.navigation li {
+    display: inline;
+    float: none;
+}
+.navigation a {
+    color: rgb(255,255,255);
+    text-decoration: none;
+    padding: 5px 15px;
+    font-weight: bold;
+    background-color: rgb(63,127,255);
+}
+.navigation a:hover {
+    text-shadow: 0 0 3px rgb(255,255,255);
 }
 
 body {

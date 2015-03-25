@@ -1,5 +1,7 @@
 # Rewrites for the whole site. Will split into separate files later.
 
+# Needed so that we can name URL's with the same filename as php files (e.g. /gallery/upload/)
+Options -MultiViews
 
 # TODO: Add [QSA] to rewrites so that sorting/ordering can be passed via parameters for lists of things.
 
@@ -26,4 +28,5 @@ RewriteRule ^user/(\d+)/?$ /user/profile.php?uid=$1
 
 # Rewrites for raw gallery pages
 RewriteRule ^gallery/post/?$ /gallery/posts/postindex.php [QSA]
-RewriteRule ^gallery/post/show/(\d+)/? /gallery/posts/viewpost.php?post=$1
+RewriteRule ^gallery/post/show/(\d+)/?$ /gallery/posts/viewpost.php?post=$1
+RewriteRule ^gallery/upload/?$ /gallery/upload.php

@@ -19,14 +19,12 @@
                 {% endblock %}
                 <hr />
                 {% block navigation %}
-                    <ul id="navigation">
+                    <ul class="navigation">
                         {% for item in navigation %}
                             <li><a href="{{ item.href }}">{{ item.caption }}</a></li>
                         {% endfor %}
-                    </ul>
-                    <ul id="account_links">
                         {% for item in account_links %}
-                            <li><a href="{{ item.href }}">{{ item.caption }}</a></li>
+                           <li><a href="{{ item.href }}">{{ item.caption }}</a></li>
                         {% endfor %}
                     </ul>
                 {% endblock %}
@@ -52,7 +50,7 @@
         </div>
         <div id="footer">
             {% block footer %}
-                <span>Copyright AGNPH 2015</span>
+                <span><small>Copyright AGNPH 2015</small></span>
             {% endblock %}
         </div>
     </body>

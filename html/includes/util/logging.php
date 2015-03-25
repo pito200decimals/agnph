@@ -4,8 +4,12 @@
 function RecordUserIP(&$user) {
     $uid = $user['UserId'];
     $ip = $_SERVER['REMOTE_ADDR'];
-    sql_query_into($result, "SELECT KnownIPs FROM ".USER_TABLE." WHERE UserId=$uid;", 1);
-    $old_ips_string = $result->fetch_assoc()['KnownIPs'];
+    if (isset($user) && isset($user['KnownIPs'])) {
+        $old_ips_string = $user['KnownIPs'];
+    } else {
+        if (!sql_query_into($result, "SELECT KnownIPs FROM ".USER_TABLE." WHERE UserId=$uid;", 1)) return;
+        $old_ips_string = $result->fetch_assoc()['KnownIPs'];
+    }
     if (strlen($old_ips_string) == 0) {
         $prev_ips = array();
     } else {
