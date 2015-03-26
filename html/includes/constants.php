@@ -48,5 +48,6 @@ $GALLERY_TAG_TYPES = array(
     "S" => "Species");
 define("MAX_IMAGE_THUMB_SIZE", 150);
 define("MAX_IMAGE_PREVIEW_SIZE", 1200);
+define("MAX_TAG_NAME_LENGTH", 32);
 
 ?>

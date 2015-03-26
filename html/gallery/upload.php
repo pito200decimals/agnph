@@ -46,7 +46,6 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
     $dst_path = GetSystemImagePath($md5, $ext);
     if (file_exists($dst_path)) {
         unlink($tmp_path);
-        // TODO: Redirect to that post page.
         GoToExistingFile($md5);
         return;
     }
@@ -92,11 +91,7 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
         (Md5, Extension, HasPreview, UploaderId, Source, Rating, Description, ParentPostId, Width, Height, FileSize)
         VALUES
         ('$md5', '$ext', $has_preview, $uploader_id, '$escaped_source', '$rating', '$escaped_description', '$escaped_parent_post_id', $width, $height, '$filesize');");
-    if ($result) {
-        // Error uploading file.
-        $post_id = sql_last_id();
-    } else {
-        debug($result);
+    if (!$result) {
         // Error uploading file.
         if ($has_preview) {
             OnFileUploadError(array($dst_path, $thumb_path, $preview_path));
@@ -104,8 +99,8 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
             OnFileUploadError(array($dst_path, $thumb_path));
         }
     }
-    // Apply tags.
-    debug($tags);
+    $post_id = sql_last_id();
+    DoAllProcessTagString($_POST['tags'], $post_id, $user['UserId']);
     header("Location: /gallery/post/show/$post_id/");
 }
 

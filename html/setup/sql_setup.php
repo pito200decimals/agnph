@@ -158,9 +158,11 @@ do_or_die(sql_query(
 do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_TAG_TABLE." (
         TagId INT(11) UNSIGNED AUTO_INCREMENT,
-        Name TEXT(32) NOT NULL,
-        Type CHAR(1) NOT NULL,".  // A=Artist, C=Character, D=Copyright, G=General, S=Species (D is copyright for ordering reasons).
-       "Count INT(11) NOT NULL,
+        Name TEXT(".MAX_TAG_NAME_LENGTH.") NOT NULL,
+        Type CHAR(1) DEFAULT 'G',".  // A=Artist, C=Character, D=Copyright, G=General, S=Species (D is copyright for ordering reasons).
+       "CreatorUserId INT(11) NOT NULL,
+        ChangeTypeUserId INT(11) NOT NULL,
+        Count INT(11) NOT NULL,
         PRIMARY KEY(TagId)
     );"));
 // Mapping of tag ids associated with each post.
@@ -175,9 +177,12 @@ do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_POST_TAG_HISTORY_TABLE." (
         PostId INT(11) NOT NULL,
         Timestamp INT(11) NOT NULL,
-        TagsAdded VARCHAR(512) NOT NULL,
-        TagsRemoved VARCHAR(512) NOT NULL,
-        PRIMARY KEY(PostId, Timestamp)
+        MicroTimestamp INT(11) NOT NULL,
+        UserId INT(11) NOT NULL,
+        TagsAdded VARCHAR(512) DEFAULT '',
+        TagsRemoved VARCHAR(512) DEFAULT '',
+        PropertiesChanged VARCHAR(512) DEFAULT '',
+        PRIMARY KEY(PostId, Timestamp, MicroTimestamp)
     );"));
 // Tag aliasing.
 do_or_die(sql_query(

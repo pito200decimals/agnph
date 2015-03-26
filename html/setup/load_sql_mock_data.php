@@ -7,6 +7,7 @@ include_once("../includes/util/core.php");
 include_once("../includes/util/sql.php");
 include_once("../gallery/includes/image.php");
 include_once("../includes/util/file.php");
+include_once("../gallery/includes/functions.php");
 
 // Populate User table.
 do_or_die(sql_query(
@@ -168,6 +169,8 @@ CreateGalleryPost("ff52157718c27a5bde447bbcba28fd85", "png", array("ahseo", "qui
 CreateGalleryPost("8014cdf559ca76698f7c1a2fbcd154dc", "png", array("redraptor16", "charizard", "female"), "s", -1, "F");
 CreateGalleryPost("3a4332624e0689785296c334cab2d5d8", "jpg", array("evalion", "charizard", "male"), "e", 1);
 CreateGalleryPost("2a9b345bc6db7cdc5dbbe6e4e13bb347", "jpg", array("doneru"));
+
+DoAllProcessTagString("doneru cyndaquil charizard typhlosion flygon male rating:s parent:2 source:test_url", 8, 1);
 
 function CreateLotsOfFakeGallery($n) {
     for ($p = 0; $p < $n; $p+=100) {
