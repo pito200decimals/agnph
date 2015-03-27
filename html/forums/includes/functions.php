@@ -119,8 +119,8 @@ function SetPostLinks(&$post, $compose) {
             //$post['quoteLink'] = "/forums/reply/$tid/?quote=$pid";
         }
         // TODO: Add more actions on forum posts.
-        if (CanUserEditPost($user, $post)) $post['modifyLink'] = "/forums/edit/$pid/";
-        if (CanUserDeletePost($user, $post)) $post['deleteLink'] = "/forums/delete/$pid/";
+        if (CanUserEditPost($user, $post)) $post['modifyLink'] = true;
+        if (CanUserDeletePost($user, $post)) $post['deleteLink'] = true;
     }
 }
 

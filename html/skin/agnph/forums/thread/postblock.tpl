@@ -31,8 +31,8 @@
     <div class="postcontentbox">
         <div class="postheader">
             <div class="postactions">
-                {% if post.modifyLink %}<a href="{{ post.modifyLink }}">Modify</a>{% endif %}
-                {% if post.deleteLink %}<a href="{{ post.deleteLink }}" onclick="return confirm('Are you sure you want to delete this post?')">Delete</a>{% endif %}
+                {% if post.modifyLink %}<a href="/forums/edit/{{ post.PostId }}/">Modify</a>{% endif %}
+                {% if post.deleteLink %}<a href="#" onclick="return deletePost({{ post.PostId }})">Delete</a>{% endif %}
             </div>
             <em>{{ post.Title }}</em><br />
             {% if post.PostDate %}

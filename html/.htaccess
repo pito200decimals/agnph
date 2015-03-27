@@ -18,7 +18,7 @@ RewriteRule ^forums/?$ /forums/viewboard.php
 RewriteRule ^forums/create/(\d+)/?$ /forums/compose.php?action=create&board=$1
 RewriteRule ^forums/reply/(\d+)/?$ /forums/compose.php?action=reply&thread=$1
 RewriteRule ^forums/edit/(\d+)/?$ /forums/compose.php?action=edit&post=$1
-RewriteRule ^forums/delete/(\d+)/?$ /forums/delete.php?post=$1
+RewriteRule ^forums/delete/?$ /forums/delete.php
 
 # Rewrites for marking posts as read
 RewriteRule ^forums/markallread/(\d+)/?$ /forums/mark_all_read.php?b=$1

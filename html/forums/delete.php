@@ -13,17 +13,24 @@ if (!isset($user)) {
     RenderPage("base.tpl");
     return;
 }
-if (isset($_GET['post'])
-    && is_numeric($_GET['post'])
-    && isset($_POST)) {
-    // Good arguments.
+if (isset($_POST)
+    && isset($_POST['post'])
+    && is_numeric($_POST['post'])
+    && isset($_POST['hash'])) {
+    $hash = $_POST['hash'];
+    $secret = md5($user['UserId'].$user['Password']);
+    if ($hash != $secret) {
+        $vars['error_msg'] = "Invalid URL.";
+        RenderPage("base.tpl");
+        return;
+    }
 } else {
     $vars['error_msg'] = "Invalid URL.";
     RenderPage("base.tpl");
     return;
 }
 
-$post_id = $_GET['post'];
+$post_id = $_POST['post'];
 $escaped_post_id = sql_escape($post_id);
 sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId='$escaped_post_id';", 1) or RenderErrorPage("Unable to find post.");
 $post = $result->fetch_assoc();

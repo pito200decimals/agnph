@@ -60,6 +60,8 @@ if (isset($user) && CanUserPostToThread($user, $thread)) $vars['user']['canPostT
 GetBreadcrumbsFromPost($thread, $names, $links) or RenderErrorPage("Thread not found.");
 $vars['crumbs'] = CreateCrumbsHTML($names, $links);
 
+if (isset($user)) $vars['deletehash'] = md5($user['UserId'].$user['Password']);
+
 // Render page template.
 RenderPage("forums/thread/viewthread.tpl");
 if (isset($user)) {
