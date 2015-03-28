@@ -10,6 +10,7 @@ if (!isset($_GET['post'])) {
     RenderErrorPage("Invalid URL.");
     return;
 }
+// TODO: Show some sort of notification if this was resulting from a post edit.
 
 $pid = $_GET['post'];
 $escaped_post_id = sql_escape($pid);
@@ -39,6 +40,10 @@ if (sizeof($allTagIds) > 0) {
         $allTags[] = $row;
     }
 }
+
+$tagNames = array_map(function($tag) { return $tag['Name']; }, $allTags);
+sort($tagNames);
+$post['tagstring'] = implode(" ", $tagNames);
 
 $tagCategories = array();
 foreach ($GALLERY_TAG_TYPES as $char => $name) {

@@ -170,8 +170,6 @@ CreateGalleryPost("8014cdf559ca76698f7c1a2fbcd154dc", "png", array("redraptor16"
 CreateGalleryPost("3a4332624e0689785296c334cab2d5d8", "jpg", array("evalion", "charizard", "male"), "e", 1);
 CreateGalleryPost("2a9b345bc6db7cdc5dbbe6e4e13bb347", "jpg", array("doneru"));
 
-DoAllProcessTagString("doneru cyndaquil charizard typhlosion flygon male rating:s parent:2 source:test_url", 8, 1);
-
 function CreateLotsOfFakeGallery($n) {
     for ($p = 0; $p < $n; $p+=100) {
         $sql = array();

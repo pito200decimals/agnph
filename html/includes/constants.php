@@ -38,6 +38,7 @@ define("DEFAULT_PAGE_ITERATOR_SIZE", 2);  // 2 => 1 ... 5 6 [7] 8 9 ... 12
 define("DEFAULT_ALLOWED_TAGS", "a[href],p[style],span[style],b,u,i,strong,em,ol,ul,li,center,hr,br,div,pre,small");
 define("DEFAULT_GALLERY_POSTS_PER_PAGE", 45);
 define("DEFAULT_GALLERY_PAGE_ITERATOR_SIZE", 2);
+define("MAX_GALLERY_SEARCH_TERMS", 6);
 
 // General constants.
 $GALLERY_TAG_TYPES = array(

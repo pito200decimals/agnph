@@ -30,3 +30,4 @@ RewriteRule ^user/(\d+)/?$ /user/profile.php?uid=$1
 RewriteRule ^gallery/post/?$ /gallery/posts/postindex.php [QSA]
 RewriteRule ^gallery/post/show/(\d+)/?$ /gallery/posts/viewpost.php?post=$1
 RewriteRule ^gallery/upload/?$ /gallery/upload.php
+RewriteRule ^gallery/edit/?$ /gallery/posts/editpost.php

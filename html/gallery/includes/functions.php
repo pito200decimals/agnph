@@ -7,7 +7,9 @@ include_once(SITE_ROOT."gallery/includes/search.php");
 function CanUserUploadPost($user) {
     return true;
 }
-
+function CanUserEditPost($user) {
+    return true;
+}
 
 function GetSiteImagePath($md5, $ext) {
     return "/".GetImagePath($md5, $ext);
@@ -102,60 +104,68 @@ function SetPostRatingSourceParent($tag_names, $prefixes, $post_id, $user_id) {
     // Get the post.
     if (!sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE PostId=$post_id;", 1)) return false;
     $post = $result->fetch_assoc();
-    $sql_sets = implode(",", array_map(function($tuple) {
+    $sql_strs = array_filter(array_map(function($tuple) use ($post) {
         if ($tuple[0] == "rating") {
+            if ($post['Rating'] == $tuple[1]) return "";
             return "Rating='".sql_escape($tuple[1])."'";
         } else if ($tuple[0] == "parent") {
-            return "ParentPostId='".sql_escape($tuple[1])."'";
+            if ($post['ParentPostId'] == $tuple[1]) return "";
+            $parent_post_id = GetValidParentPostId($tuple[1], $post['PostId']);
+            return "ParentPostId='".sql_escape($parent_post_id)."'";
         } else if ($tuple[0] == "source") {
+            if ($post['Source'] == $tuple[1]) return "";
             return "Source='".sql_escape($tuple[1])."'";
         }
-    }, $prefix_name_tuple_list));
-    if (!sql_query("UPDATE ".GALLERY_POST_TABLE." SET $sql_sets WHERE PostId=$post_id;")) return false;
+    }, $prefix_name_tuple_list), function($str) { return strlen($str) > 0; });
+    if (sizeof($sql_strs) > 0) {
+        $sql_joined = implode(",", $sql_strs);
+        if (!sql_query("UPDATE ".GALLERY_POST_TABLE." SET $sql_joined WHERE PostId=$post_id;")) return false;
 
-    $new_properties_log_line = implode(" ", array_map(function($tuple) { return implode(":", $tuple); }, $prefix_name_tuple_list));
-    $now = time();
-    $micro = round(microtime(true) * 1000000) % 1000000;
-    sql_query("INSERT INTO ".GALLERY_POST_TAG_HISTORY_TABLE." (PostId, Timestamp, MicroTimestamp, UserId, PropertiesChanged) VALUES ($post_id, $now, $micro, $user_id, '$new_properties_log_line');");
+        $new_properties_log_line = implode(" ", array_map(function($tuple) { return implode(":", $tuple); }, $prefix_name_tuple_list));
+        $now = time();
+        $micro = round(microtime(true) * 1000000) % 1000000;
+        sql_query("INSERT INTO ".GALLERY_POST_TAG_HISTORY_TABLE." (PostId, Timestamp, MicroTimestamp, UserId, PropertiesChanged) VALUES ($post_id, $now, $micro, $user_id, '$new_properties_log_line');");
+    }
 }
 
 // Given a space-separated list of tag names, returns the filtered and sanitized list of names for tag lookups.
 // Strips away any prefixes and places them in the passed destination array.
 function TagNameListFromTagNameString($tag_name_string, &$prefixes = array(), $keep_only_actual_tags = true) {
     $list = explode(" ", $tag_name_string);
-    $list = array_map("SanitizeTagName", $list);
     $list = array_filter($list, function($name) {
         return strlen($name) > 0;
     });
     $prefix_name_tuple_list = array_map(function($name) use ($keep_only_actual_tags){
         if (($index = strpos($name, ":")) === FALSE) {
             // No label.
-            return array("", $name);
+            return array("", SanitizeTagName($name));
         }
         // Check against static labels.
-        $label = substr($name, 0, $index);
+        $label = strtolower(substr($name, 0, $index));
         $newname = substr($name, $index + 1);
         if (($label == "artist" || $label == "copyright" || $label == "character" || $label == "general" || $label == "species")
             && strlen($newname) > 0) {
-            return array($label, $newname);
+            return array($label, SanitizeTagName($newname));
         } else if (($label == "rating" || $label == "parent")
                     && strlen($newname) > 0) {
             // Only allow ratings and parents of nonzero length.
             if ($keep_only_actual_tags) {
                 return array();
             } else {
-                return array($label, $newname);
+                return array($label, SanitizeTagName($newname));
             }
         } else if ($label == "source") {
             // Allow source of zero length.
             if ($keep_only_actual_tags) {
                 return array();
             } else {
-                return array($label, $newname);
+                // Don't lowercase this, just remove spaces to prevent tag tokenization.
+                // Up to the user to encode URL properly.
+                return array($label, str_replace(" ", "%20", $newname));
             }
         } else {
             // No valid label prefixing a name.
-            return array("", $name);
+            return array("", SanitizeTagName($name));
         }
     }, $list);
     $prefix_name_tuple_list = array_filter($prefix_name_tuple_list, function($tuple) {
@@ -234,24 +244,30 @@ function SetTagsOnPost($tags, $post_id, $user_id) {
             unset($tags_to_add[$key]);
         }
     }
+    $error = false;
+    $tags_changed = false;
     if (sizeof($tags_to_remove) > 0) {
         $del_tag_ids_joined = implode(",", $tags_to_remove);
-        if (!sql_query("DELETE FROM ".GALLERY_POST_TAG_TABLE." WHERE PostId=$post_id AND TagId IN ($del_tag_ids_joined);")) return false;
+        if (!sql_query("DELETE FROM ".GALLERY_POST_TAG_TABLE." WHERE PostId=$post_id AND TagId IN ($del_tag_ids_joined);")) $error = true;
+        else $tags_changed = true;
     }
     if (sizeof($tags_to_add) > 0) {
         $post_tag_tuples = implode(",", array_map(function($tag_id) use ($post_id) {
             return "($post_id,$tag_id)";
         }, $tags_to_add));
-        if (!sql_query("INSERT INTO ".GALLERY_POST_TAG_TABLE." (PostId, TagId) VALUES $post_tag_tuples;")) return false;
+        if (!sql_query("INSERT INTO ".GALLERY_POST_TAG_TABLE." (PostId, TagId) VALUES $post_tag_tuples;")) $error = true;
+        else $tags_changed = true;
     }
-    // Success, just try to log regardless of failure.
-    // TODO: Log when delete is successful but add fails. This isn't a very common case though.
-    $now = time();
-    $micro = round(microtime(true) * 1000000) % 1000000;
-    $tags_to_add_joined = implode(",", $tags_to_add);
-    $tags_to_remove_joined = implode(",", $tags_to_remove);
-    sql_query("INSERT INTO ".GALLERY_POST_TAG_HISTORY_TABLE." (PostId, Timestamp, MicroTimestamp, UserId, TagsAdded, TagsRemoved) VALUES ($post_id, $now, $micro, $user_id, '$tags_to_add_joined', '$tags_to_remove_joined');");
-    return true;
+    if ($tags_changed) {
+        // Success, just try to log regardless of failure.
+        // TODO: Log when delete is successful but add fails. This isn't a very common case though.
+        $now = time();
+        $micro = round(microtime(true) * 1000000) % 1000000;
+        $tags_to_add_joined = implode(",", $tags_to_add);
+        $tags_to_remove_joined = implode(",", $tags_to_remove);
+        sql_query("INSERT INTO ".GALLERY_POST_TAG_HISTORY_TABLE." (PostId, Timestamp, MicroTimestamp, UserId, TagsAdded, TagsRemoved) VALUES ($post_id, $now, $micro, $user_id, '$tags_to_add_joined', '$tags_to_remove_joined');");
+    }
+    return !$error;
 }
 
 // Sets the given tag type and records the user id that set it last.
@@ -264,6 +280,19 @@ function SetTagTypeByName($tag_name, $type, $user_id) {
     if (!sql_query("UPDATE ".GALLERY_TAG_TABLE." SET Type='$type', ChangeTypeUserId=$user_id WHERE Name='$tag_name_escaped';")) return false;
     return true;
 }
-
+function GetValidParentPostId($parent_post_id, $post_id) {
+    if (is_numeric($parent_post_id) && $parent_post_id != $post_id) {
+        $escaped_parent_post_id = sql_escape($parent_post_id);
+        if (sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE PostId='$escaped_parent_post_id';", 1)) {
+            // Parent post id exists.
+        } else {
+            // Parent post id doesn't exist.
+            $parent_post_id = -1;
+        }
+    } else {
+        $parent_post_id = -1;
+    }
+    return $parent_post_id;
+}
 
 ?>

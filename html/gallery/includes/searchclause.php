@@ -18,7 +18,7 @@
 // comments:
 
 function CreateSQLClauses($search) {
-    return CreateSQLClausesFromTerms(explode(" ", $search));
+    return CreateSQLClausesFromTerms(array_slice(explode(" ", $search), 0, MAX_GALLERY_SEARCH_TERMS));
 }
 
 function CreateSQLClausesFromTerms($terms, $mode="AND") {

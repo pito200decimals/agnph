@@ -12,3 +12,39 @@
         display: block;
     }
 }
+
+.formlabel {
+    vertical-align: top;
+    width: 100px;
+    display: inline-block;
+}
+
+.textbox {
+    width: 400px;
+}
+
+input {
+    margin: 5px;
+}
+
+textarea {
+    margin: 5px;
+    height: 150px;
+}
+
+#desc {
+    height: 75px;
+}
+
+#parent {
+    width: 100px;
+}
+
+.posteditbox {
+    margin: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: rgb(170,200,255);
+    float: left;
+    display: none;
+}

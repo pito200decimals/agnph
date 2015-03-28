@@ -21,13 +21,10 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
     isset($_POST['parent']) &&
     isset($_POST['rating']) &&
     isset($_POST['submit'])) {
-    debug($_POST);
     if (!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) || empty($_FILES['file']['name']))) {
-        debug("1");
         // Try file download.
         accept_file_upload($tmp_path) or OnFileUploadError(null);
     } else if (isset($_POST['source'])) {
-        debug("2");
         // Get file from url.
         $url = $_POST['source'];
         $external_ext = GetFileExtension($url);
@@ -37,7 +34,6 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
         $tmp_path = time().".$external_ext";
         file_put_contents($tmp_path, fopen($url, 'r'));
     } else {
-        debug("3");
         RenderErrorPage("Error while uploading file3.");
     }
     $md5 = md5_file($tmp_path);
@@ -49,7 +45,6 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
         GoToExistingFile($md5);
         return;
     }
-    debug("Moving $tmp_path to $dst_path");
     mksysdirs(dirname($dst_path));
     rename($tmp_path, $dst_path);
     $meta = getimagesize($dst_path);
@@ -61,7 +56,7 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
     $has_preview = ($dst_path == $preview_path ? 0 : 1);
     $uploader_id = $user['UserId'];
     if (strlen($_POST['source']) > 0) {
-        $escaped_source = sql_escape(substr($_POST['source'], 0, 256));
+        $escaped_source = sql_escape(substr(str_replace(" ", "%20", $_POST['source']), 0, 256)));
     } else {
         $escaped_source = "";
     }
@@ -74,19 +69,9 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
     } else {
         $escaped_description = "";
     }
-    $parent_post_id = $_POST['parent'];
-    if (is_numeric($parent_post_id)) {
-        $escaped_parent_post_id = sql_escape($parent_post_id);
-        if (sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE PostId='$escaped_parent_post_id';", 0)) {
-            // Parent post id exists.
-        } else {
-            // Parent post id doesn't exist.
-            $parent_post_id = -1;
-        }
-    } else {
-        $parent_post_id = -1;
-    }
+    $parent_post_id = GetValidParentPostId($_POST['parent'], -1);
     $escaped_parent_post_id = sql_escape($parent_post_id);
+    // TODO: Have admins upload with non-pending status.
     $result = sql_query("INSERT INTO ".GALLERY_POST_TABLE."
         (Md5, Extension, HasPreview, UploaderId, Source, Rating, Description, ParentPostId, Width, Height, FileSize)
         VALUES
@@ -108,16 +93,12 @@ RenderPage("gallery/upload.tpl");
 return;
 
 function OnFileUploadError($tmp_paths, $msg = "Error while uploading file.") {
-    debug("OnFileUploadError, deleting file(s):");
-    debug($tmp_paths);
     if (isset($tmp_paths) && $tmp_paths !== null) {
         if (is_array($tmp_paths)) {
             foreach ($tmp_paths as $path) {
-                debug("Unlinking $path");
                 unlink($path);
             }
         } else {
-            debug("Unlinking $tmp_paths");
             unlink($tmp_paths);
         }
     }
