@@ -50,7 +50,7 @@ $(document).ready(function() {
                                                             <input name="rating" type="radio" checked value="q" /><label>Questionable</label>
                                                             <input name="rating" type="radio" value="s" /><label>Safe</label><br />
             <br />
-            <input type="submit" name="submit" value="Submit" />
+            <input type="submit" value="Upload" />
         </form>
     </div>
     <div class="previewpanel" id="previewpanel">

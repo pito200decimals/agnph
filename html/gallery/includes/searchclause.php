@@ -107,7 +107,7 @@ function CreateSQLClauseFromFilter($filter) {
             }
             return "ParentPostId='$escaped_rating'";
         } else {
-            return "TRUE";
+            return "FALSE";
         }
     }
 }

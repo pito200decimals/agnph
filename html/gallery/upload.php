@@ -19,8 +19,7 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
     isset($_POST['tags']) &&
     isset($_POST['description']) &&
     isset($_POST['parent']) &&
-    isset($_POST['rating']) &&
-    isset($_POST['submit'])) {
+    isset($_POST['rating'])) {
     if (!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) || empty($_FILES['file']['name']))) {
         // Try file download.
         accept_file_upload($tmp_path) or OnFileUploadError(null);
@@ -56,7 +55,7 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
     $has_preview = ($dst_path == $preview_path ? 0 : 1);
     $uploader_id = $user['UserId'];
     if (strlen($_POST['source']) > 0) {
-        $escaped_source = sql_escape(substr(str_replace(" ", "%20", $_POST['source']), 0, 256)));
+        $escaped_source = sql_escape(substr(str_replace(" ", "%20", $_POST['source']), 0, 256));
     } else {
         $escaped_source = "";
     }
@@ -85,7 +84,7 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
         }
     }
     $post_id = sql_last_id();
-    DoAllProcessTagString($_POST['tags'], $post_id, $user['UserId']);
+    DoAllProcessTagString(preg_replace("/\s+/", " ", $_POST['tags']), $post_id, $user['UserId']);
     header("Location: /gallery/post/show/$post_id/");
 }
 

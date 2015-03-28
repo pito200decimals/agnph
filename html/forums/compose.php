@@ -30,10 +30,8 @@ if (($_GET['action'] == "create" && isset($_GET['board']) && is_numeric($_GET['b
 if ($_POST) {
     $form_values = array();
     // Try to submit user data. If invalid, fall back to the already-initialized compose form.
-    if (isset($_POST['submit'])
-        && isset($_POST['title'])
-        && isset($_POST['content'])
-        && $_POST['submit'] == "Post") {
+    if (isset($_POST['title'])
+        && isset($_POST['content'])) {
         // Try to post to thread.
         
         // Explicit input.
@@ -292,7 +290,7 @@ function CreateEditorForm($form_values) {
     <p>Title: <input type='text' name='title' value='$title'/></p>
     <p><textarea name="content">$initial_text</textarea></p>
     $sticky_box
-    <p><input name="submit" value="Post" type="submit" /></p>
+    <p><input value="Post" type="submit" /></p>
 </form>
 EOD;
     $vars['editorForm'] = $editorForm;

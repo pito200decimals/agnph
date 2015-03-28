@@ -41,7 +41,7 @@ function TagDisplayNameToTagName($tag_name) {
 }
 
 function SanitizeTagName($name) {
-    return strtolower(str_replace(" ", "_", $name));
+    return preg_replace("/\s+/", "", strtolower(str_replace(" ", "_", $name)));
 }
 
 // Does all processing on tag string. Assigns metadata if needed.

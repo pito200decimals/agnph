@@ -29,7 +29,7 @@ $escaped_post_id = sql_escape($post_id);
 sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE PostId='$escaped_post_id';", 1) or RenderErrorPage("Post not found.");
 $post = $result->fetch_assoc();
 
-$tagstr = $_POST['tags'];
+$tagstr = preg_replace("/\s+/", " ", $_POST['tags']);
 $tagstrarray = explode(" ", $tagstr);
 $tagstrarray = array_filter($tagstrarray, function($str) { return strlen($str) > 0; });
 $tagstrarray[] = "rating:".$_POST['rating'];

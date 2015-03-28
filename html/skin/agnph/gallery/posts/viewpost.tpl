@@ -12,6 +12,14 @@
             $(".posteditbox").toggle()[0].scrollIntoView();
             return false;
         }
+        $(document).ready(function() {
+            $("#tags").keydown(function(e) {
+                if (e.keyCode == 13) {
+                    $(this.form).submit();
+                    return false;
+                }
+            });
+        });
     </script>
 {% endblock %}
 
@@ -45,7 +53,7 @@
                         <ul class="taglist">
                             {% for tag in category.tags %}
                                 <li class="tag">
-                                    <a href="/gallery/post/?search={{ tag.Name }}">{{ tag.displayName }}</a>
+                                    <a href="/gallery/post/?search={{ tag.Name|url_encode }}">{{ tag.displayName }}</a>
                                 </li>
                             {% endfor %}
                         </ul>
@@ -86,10 +94,10 @@
                                                                 <input name="rating" type="radio"{% if post.Rating=='s' %} checked{% endif %} value="s" /><label>Safe</label><br />
                 <label class="formlabel">Parent</label>         <input id="parent" class="textbox" type="textbox" name="parent" value="{% if post.ParentPostId!=-1 %}{{ post.ParentPostId }}{% endif %}" /><br />
                 <label class="formlabel">Source</label>         <input id="imgsource" class="textbox" type="textbox" size=35 name="source" value="{{ post.Source }}" /><br />
-                <label class="formlabel">Tags</label>           <textarea class="textbox" name="tags">{{ post.tagstring }}</textarea><br />
+                <label class="formlabel">Tags</label>           <textarea id="tags" class="textbox" name="tags">{{ post.tagstring }}</textarea><br />
                 <label class="formlabel">Description</label>    <textarea id="desc" class="textbox" name="description" value="{{ post.Description }}"></textarea><br />
                 <br />
-                <input type="submit" name="submit" value="Submit" />
+                <input type="submit" value="Save Changes" />
             </form>
         </div>
     </div>

@@ -59,7 +59,7 @@ function RenderPage($template) {
     global $twig, $vars;
     echo "\n\n\n\n\n";
     echo "----------------------------------------------------------------------------------------------\n";
-    echo TidyHTML($twig->render($template, $vars));
+    echo TidyHTML(preg_replace("/\s+/", " ", $twig->render($template, $vars)));
 }
 
 function RenderErrorPage($message = "Error") {
