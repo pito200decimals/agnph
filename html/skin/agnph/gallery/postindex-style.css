@@ -1,0 +1,86 @@
+.postsquare {
+    width: 175px;
+    height: 200px;
+    float: left;
+    margin: 5px;
+    border-radius: 5px;
+}
+
+.postsquarepreview {
+    max-width: 156px;
+    max-height: 156px;
+    display: block;
+    margin: 0 auto;
+    border-radius: 5px;
+}
+img.postsquarepreview {
+    box-shadow: 2px 2px 5px #07162D;
+}
+a:hover div.postsquarepreview img {
+    box-shadow: 5px 5px 8px #07162D;
+}
+a:hover div.postlabel {
+    box-shadow: 5px 5px 8px #07162D;
+}
+
+.postlabel {
+    display: block;
+    margin: 5px;
+    background-color: rgb(159,182,211);
+    border-radius: 5px;
+    text-align: center;
+    box-shadow: 2px 2px 5px #07162D;
+}
+
+.postlabel span {
+    font-size: 75%;
+}
+
+.childoutline {
+    border: 3px solid rgb(255,255,0);
+}
+
+.parentoutline {
+    border: 3px solid rgb(0,255,0);
+}
+
+.pendingoutline {
+    border: 3px solid rgb(0,0,255);
+}
+
+.flaggedoutline {
+    border: 3px solid rgb(255,0,0);
+}
+
+.indexIterator {
+    margin:5px;
+    padding: 5px;
+    display:block;
+    text-align:center;
+    font-weight: none;
+    text-decoration: none;
+}
+
+.indexIterator a {
+    border-radius: 5px;
+    border: 1px solid rgb(127,127,127);
+    box-shadow: 2px 2px 5px #07162D;
+    padding: 3px 8px;
+    margin: 5px;
+    text-decoration: none;
+    background-color: rgb(0,255,0);
+}
+.indexIterator a:hover {
+    border-radius: 5px;
+    border: 1px solid rgb(127,127,127);
+    padding: 3px 8px;
+    margin: 5px;
+    text-decoration: none;
+    background-color: rgb(127,255,127);
+}
+.indexIterator .currentpage {
+    border-radius: 5px;
+    padding: 3px 8px;
+    margin: 5px;
+    text-decoration: none;
+}

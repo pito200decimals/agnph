@@ -28,17 +28,17 @@ $post_id = $_POST['post'];
 $escaped_post_id = sql_escape($post_id);
 sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE PostId='$escaped_post_id';", 1) or RenderErrorPage("Post not found.");
 $post = $result->fetch_assoc();
+$parent_post_id = GetValidParentPostId($_POST['parent'], $post_id);
 
-$tagstr = preg_replace("/\s+/", " ", $_POST['tags']);
+// Append rating and stuff before tags, so that tags can override them.
+$tagstr = "rating:".$_POST['rating']." parent:$parent_post_id source:".substr(str_replace(" ", "%20", $_POST['source']), 0, 256)." ".$_POST['tags'];
+$tagstr = preg_replace("/\s+/", " ", $tagstr);
 $tagstrarray = explode(" ", $tagstr);
 $tagstrarray = array_filter($tagstrarray, function($str) { return strlen($str) > 0; });
-$tagstrarray[] = "rating:".$_POST['rating'];
-$parent_post_id = GetValidParentPostId($_POST['parent'], $post_id);
-$tagstrarray[] = "parent:$parent_post_id";
-$tagstrarray[] = "source:".substr(str_replace(" ", "%20", $_POST['source']), 0, 256);
 $tagstr = implode(" ", $tagstrarray);
 
-DoAllProcessTagString($tagstr, $post_id, $user['UserId']);
+UpdatePost($tagstr, $post_id, $user);
+// TODO: Update post description.
 
 header("Location: /gallery/post/show/$post_id/");
 ?>

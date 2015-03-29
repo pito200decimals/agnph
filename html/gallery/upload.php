@@ -11,7 +11,7 @@ if (!isset($user)) {
     return;
 }
 if (!CanUserUploadPost($user)) {
-    RenderErrorPage("You are not authorized to upload a post right now. Please try again later.");
+    RenderErrorPage("You are not authorized to upload a new posts.");
     return;
 }
 
@@ -28,12 +28,12 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
         $url = $_POST['source'];
         $external_ext = GetFileExtension($url);
         if ($external_ext == null) {
-            RenderErrorPage("Error while uploading file2.");
+            RenderErrorPage("Error while uploading file.");
         }
         $tmp_path = time().".$external_ext";
         file_put_contents($tmp_path, fopen($url, 'r'));
     } else {
-        RenderErrorPage("Error while uploading file3.");
+        RenderErrorPage("Error while uploading file.");
     }
     $md5 = md5_file($tmp_path);
     $ext = GetFileExtension($tmp_path);
@@ -54,10 +54,11 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
     $preview_path = CreatePreviewFile($md5, $ext);
     $has_preview = ($dst_path == $preview_path ? 0 : 1);
     $uploader_id = $user['UserId'];
+
     if (strlen($_POST['source']) > 0) {
-        $escaped_source = sql_escape(substr(str_replace(" ", "%20", $_POST['source']), 0, 256));
+        $source = substr(str_replace(" ", "%20", $_POST['source']), 0, 256);
     } else {
-        $escaped_source = "";
+        $source = "";
     }
     $rating = $_POST['rating'];
     if (!($rating == 's' || $rating == 'q' || $rating == 'e')) {
@@ -69,12 +70,12 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
         $escaped_description = "";
     }
     $parent_post_id = GetValidParentPostId($_POST['parent'], -1);
-    $escaped_parent_post_id = sql_escape($parent_post_id);
     // TODO: Have admins upload with non-pending status.
+    $status = CanUserUploadNonPending($user) ? "A" : "P";
     $result = sql_query("INSERT INTO ".GALLERY_POST_TABLE."
-        (Md5, Extension, HasPreview, UploaderId, Source, Rating, Description, ParentPostId, Width, Height, FileSize)
+        (Md5, Extension, HasPreview, UploaderId, Description, Width, Height, FileSize, Status)
         VALUES
-        ('$md5', '$ext', $has_preview, $uploader_id, '$escaped_source', '$rating', '$escaped_description', '$escaped_parent_post_id', $width, $height, '$filesize');");
+        ('$md5', '$ext', $has_preview, $uploader_id, '$escaped_description', $width, $height, '$filesize', '$status');");
     if (!$result) {
         // Error uploading file.
         if ($has_preview) {
@@ -84,8 +85,10 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
         }
     }
     $post_id = sql_last_id();
-    DoAllProcessTagString(preg_replace("/\s+/", " ", $_POST['tags']), $post_id, $user['UserId']);
-    header("Location: /gallery/post/show/$post_id/");
+    // Append rating and stuff before tags, so that tags can override the other fields.
+    UpdatePost("rating:$rating source:$source parent:$parent_post_id ".$_POST['tags'], $post_id, $user);
+    //header("Location: /gallery/post/show/$post_id/");
+    return;
 }
 
 RenderPage("gallery/upload.tpl");
@@ -105,7 +108,7 @@ function OnFileUploadError($tmp_paths, $msg = "Error while uploading file.") {
 }
 
 function GoToExistingFile($md5) {
-    sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE Md5='$md5';", 1) or RenderErrorPage("Error while uploading file4.");
+    sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE Md5='$md5';", 1) or RenderErrorPage("Error while uploading file.");
     $id = $result->fetch_assoc()['PostId'];
     header("Location: /gallery/post/show/$id/");
     return;

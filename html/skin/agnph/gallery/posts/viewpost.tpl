@@ -53,7 +53,7 @@
                         <ul class="taglist">
                             {% for tag in category.tags %}
                                 <li class="tag">
-                                    <a href="/gallery/post/?search={{ tag.Name|url_encode }}">{{ tag.displayName }}</a>
+                                    <a href="/gallery/post/?search={{ tag.Name|url_encode }}" class="{{ tag.Type|lower }}typetag">{{ tag.displayName }}</a>
                                 </li>
                             {% endfor %}
                         </ul>
@@ -65,12 +65,30 @@
         <div class="statbox">
             <ul class="statlist">
                 <li>ID: {{ post.PostId }}</li>
-                {% if post.Source != "" %}<li>Source: <a href="{{ post.Source }}">{{ post.Source }}</a></li>{% endif %}
+                {% if post.Source != "" %}
+                    <li>Source:
+                        {% if post.Source starts with "http://" or post.Source starts with "https://" %}
+                            <a href="{{ post.Source }}">{{ post.Source }}</a>
+                        {% else %}
+                            {{ post.Source }}
+                        {% endif %}
+                    </li>
+                {% endif %}
                 <li>Posted: {% autoescape false %}{{ post.postedHtml }}{% endautoescape %}</li>
                 <li>Rating: {% autoescape false %}{{ post.ratingHtml }}{% endautoescape %}</li>
                 <li>Score: {{ post.Score }}</li>
                 {% if post.FileSize != "" %}<li>Size: {{ post.FileSize }}</li>{% endif %}
                 <li>Views: 0</li>
+                <li>Tag History</li>
+            </ul>
+        </div>
+        <h3>Actions</h3>
+        <div class="actionbox">
+            <ul class="actionlist">
+                <li><a href="/gallery/post/edit/{{ post.PostId }}/" onclick="return toggleEdit();">Edit</a></li>
+                <li>Flag for deletion</li>
+                <li>Add to Favorites</li>
+                <li>Add to Pool</li>
             </ul>
         </div>
     </div>
@@ -95,7 +113,7 @@
                 <label class="formlabel">Parent</label>         <input id="parent" class="textbox" type="textbox" name="parent" value="{% if post.ParentPostId!=-1 %}{{ post.ParentPostId }}{% endif %}" /><br />
                 <label class="formlabel">Source</label>         <input id="imgsource" class="textbox" type="textbox" size=35 name="source" value="{{ post.Source }}" /><br />
                 <label class="formlabel">Tags</label>           <textarea id="tags" class="textbox" name="tags">{{ post.tagstring }}</textarea><br />
-                <label class="formlabel">Description</label>    <textarea id="desc" class="textbox" name="description" value="{{ post.Description }}"></textarea><br />
+                <label class="formlabel">Description</label>    <textarea id="desc" class="textbox" name="description">{{ post.Description }}</textarea><br />
                 <br />
                 <input type="submit" value="Save Changes" />
             </form>

@@ -175,14 +175,14 @@ do_or_die(sql_query(
 // History of tag edits for a given post.
 do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_POST_TAG_HISTORY_TABLE." (
+        Id INT(11) UNSIGNED AUTO_INCREMENT,
         PostId INT(11) NOT NULL,
         Timestamp INT(11) NOT NULL,
-        MicroTimestamp INT(11) NOT NULL,
         UserId INT(11) NOT NULL,
         TagsAdded VARCHAR(512) DEFAULT '',
         TagsRemoved VARCHAR(512) DEFAULT '',
         PropertiesChanged VARCHAR(512) DEFAULT '',
-        PRIMARY KEY(PostId, Timestamp, MicroTimestamp)
+        PRIMARY KEY(Id, PostId, Timestamp)
     );"));
 // Tag aliasing.
 do_or_die(sql_query(
@@ -212,8 +212,8 @@ do_or_die(sql_query(
         UserId INT(11) NOT NULL,
         UploadLimit INT(11) NOT NULL,
         ArtistTagId INT(11) NOT NULL,
-        GalleryPermissions CHAR(1) NOT NULL,
-        PostsPerPage INT(11) DEFAULT ".DEFAULT_GALLERY_POSTS_PER_PAGE.",
+        GalleryPermissions CHAR(1) DEFAULT 'N',".  // N - Normal user, C - Contributor, A - Admin
+       "PostsPerPage INT(11) DEFAULT ".DEFAULT_GALLERY_POSTS_PER_PAGE.",
         PRIMARY KEY(UserId)
     );"));
 // User favorites for gallery section.
