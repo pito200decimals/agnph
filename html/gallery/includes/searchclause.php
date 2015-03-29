@@ -14,12 +14,14 @@
 // pool:{PoolId}
 //
 // === Not implemented yet ===
-// order:
 // score:
 // comments:
 
 function CreateSQLClauses($search) {
-    return CreateSQLClausesFromTerms(array_slice(explode(" ", $search), 0, MAX_GALLERY_SEARCH_TERMS));
+    $terms = explode(" ", $search);
+    $terms = array_slice($terms, 0, MAX_GALLERY_SEARCH_TERMS);
+    $terms = array_filter($terms, "strlen");
+    return CreateSQLClausesFromTerms($terms);
 }
 
 function CreateSQLClausesFromTerms($terms, $mode="AND") {
@@ -42,6 +44,7 @@ function CreateSQLClausesFromTerms($terms, $mode="AND") {
         $sql[] = "(".CreateSQLClausesFromTerms($or_clauses, "OR").")";
     }
     if (sizeof($and_clauses) > 0) {
+        debug($and_clauses);
         foreach ($and_clauses as $term) {
             $sql[] = "(".CreateSQLClauseFromTerm($term).")";
         }
@@ -93,8 +96,8 @@ function CreateSQLClauseFromFilter($filter) {
             return "EXISTS(SELECT 1 FROM ".USER_TABLE." U JOIN ".GALLERY_USER_FAVORITES_TABLE." F ON U.UserId=F.UserId WHERE U.DisplayName='$escaped_name' AND T.PostId=F.PostId)";
         } else if (startsWith($filter, "parent:")) {
             $parent = substr($filter, 7);
-            if (strtolower($parent) == "none" || !is_numeric($parent) || $parent <= "0") return "FALSE";  // Don't let searching for all non-child posts.
-            $escaped_parent = sql_escape($escaped_parent);
+            if (strtolower($parent) == "none" || !is_numeric($parent) || $parent <= 0) return "FALSE";  // Don't let searching for all non-child posts.
+            $escaped_parent = sql_escape($parent);
             return "T.ParentPostId='$escaped_parent'";
         } else if (startsWith($filter, "status:")) {
             $status = substr($filter, 7);
@@ -111,8 +114,9 @@ function CreateSQLClauseFromFilter($filter) {
             }
         } else if (startsWith($filter, "pool:")) {
             $pool = substr($filter, 5);
+            if (strtolower($pool) == "none" || !is_numeric($pool) || $pool <= 0) return "FALSE";  // Don't let searching for all non-pool posts.
             $escaped_pool = sql_escape($pool);
-            return "EXISTS(SELECT 1 FROM ".GALLERY_POOL_MAP_TABLE." U WHERE U.PoolId='$escaped_pool' AND T.PostId=U.PostId)";
+            return "T.ParentPoolId='$escaped_pool'";
         } else {
             return "FALSE";
         }

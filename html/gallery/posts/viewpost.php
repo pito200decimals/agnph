@@ -57,6 +57,10 @@ foreach ($GALLERY_TAG_TYPES as $char => $name) {
         }
     }
     if (sizeof($category['tags']) > 0) {
+        usort($category['tags'], function($tag1, $tag2) {
+            if ($tag1['Name'] == $tag2['Name']) return 0;
+            return ($tag1['Name'] < $tag2['Name']) ? -1 : 1;
+        });
         $tagCategories[] = $category;
     }
 }

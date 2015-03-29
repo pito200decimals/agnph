@@ -72,10 +72,11 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
     $parent_post_id = GetValidParentPostId($_POST['parent'], -1);
     // TODO: Have admins upload with non-pending status.
     $status = CanUserUploadNonPending($user) ? "A" : "P";
+    $now = time();
     $result = sql_query("INSERT INTO ".GALLERY_POST_TABLE."
-        (Md5, Extension, HasPreview, UploaderId, Description, Width, Height, FileSize, Status)
+        (Md5, Extension, HasPreview, UploaderId, DateUploaded, Description, Width, Height, FileSize, Status)
         VALUES
-        ('$md5', '$ext', $has_preview, $uploader_id, '$escaped_description', $width, $height, '$filesize', '$status');");
+        ('$md5', '$ext', $has_preview, $uploader_id, $now, '$escaped_description', $width, $height, '$filesize', '$status');");
     if (!$result) {
         // Error uploading file.
         if ($has_preview) {

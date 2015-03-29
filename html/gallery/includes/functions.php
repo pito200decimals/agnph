@@ -17,6 +17,9 @@ function CanUserCreateTags($user) {
 function CanUserUploadNonPending($user) {
     return true;
 }
+function CanUserChangePoolOrdering($user) {
+    return true;
+}
 
 // General path functions.
 function GetSiteImagePath($md5, $ext) { return "/".GetImagePath($md5, $ext); }

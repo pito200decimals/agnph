@@ -4,7 +4,7 @@
 include_once("../../header.php");
 include_once(SITE_ROOT."gallery/includes/functions.php");
 
-if (isset($_GET['page']) && is_numeric($_GET['page'])) {
+if (isset($_GET['page']) && is_numeric($_GET['page']) && ((int)$_GET['page']) > 0) {
     $page = $_GET['page'];
 } else {
     $page = 1;
@@ -15,7 +15,7 @@ if (isset($_GET['search'])) {
     $searchterms = "";
 }
 $vars['search'] = $searchterms;
-$sql = CreatePostSearchSQL(strtolower($searchterms), DEFAULT_GALLERY_POSTS_PER_PAGE, $page);
+$sql = CreatePostSearchSQL(strtolower($searchterms), DEFAULT_GALLERY_POSTS_PER_PAGE, $page, $can_sort_pool, $pool_id);
 sql_query_into($result, $sql, 0) or RenderErrorPage("No posts found");
 $posts = array();
 while ($row = $result->fetch_assoc()) {
@@ -31,6 +31,10 @@ SetOutlineClasses($posts);
 $vars['postIterator'] = CreatePageIterator($searchterms, $page);
 
 $vars['posts'] = $posts;
+$vars['cansort'] = $can_sort_pool;
+if ($can_sort_pool) {
+    $vars['poolId'] = $pool_id;
+}
 
 RenderPage("gallery/posts/postindex.tpl");
 return;
@@ -83,14 +87,14 @@ function CreatePageIterator($searchterms, $page) {
 
 function CreatePostLabel(&$post) {
     if ($post['Score'] > 0) {
-        $post['scoreHtml'] = "";
+        $post['scoreHtml'] = "<span class='pscore'>&uarr;".$post['Score']."</span>";
     } else if ($post['Score'] < 0) {
-        $post['scoreHtml'] = "";
+        $post['scoreHtml'] = "<span class='nscore'>&darr;".$post['Score']."</span>";
     } else {
-        $post['scoreHtml'] = "";
+        $post['scoreHtml'] = "<span>&#x2195;0</span>";
     }
-    $post['favHtml'] = "<span>".$post['NumFavorites']." ♥</span>";
-    $post['commentsHtml'] = "<span>".$post['NumComments']." C</span>";
+    $post['favHtml'] = "<span>&hearts;".$post['NumFavorites']."</span>";
+    $post['commentsHtml'] = "<span>C".$post['NumComments']."</span>";
     switch($post['Rating']) {
       case "s":
         $post['ratingHtml'] = "<span class='srating'>S</span>";

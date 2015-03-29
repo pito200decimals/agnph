@@ -31,3 +31,5 @@ RewriteRule ^gallery/post/?$ /gallery/posts/postindex.php [QSA]
 RewriteRule ^gallery/post/show/(\d+)/?$ /gallery/posts/viewpost.php?post=$1
 RewriteRule ^gallery/upload/?$ /gallery/upload.php
 RewriteRule ^gallery/edit/?$ /gallery/posts/editpost.php
+RewriteRule ^gallery/pools/?$ /gallery/pools/poolindex.php [QSA]
+RewriteRule ^gallery/pools/reorder/(\d+)/?$ /gallery/pools/reorder_pool.php?pid=$1

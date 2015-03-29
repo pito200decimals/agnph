@@ -28,7 +28,6 @@ define("GALLERY_POST_TAG_TABLE", "gallery_post_tag");
 define("GALLERY_POST_TAG_HISTORY_TABLE", "gallery_tag_history");
 define("GALLERY_TAG_ALIAS_TABLE", "gallery_tag_alias");
 define("GALLERY_POOLS_TABLE", "gallery_pools");
-define("GALLERY_POOL_MAP_TABLE", "gallery_pool_map");
 
 // User Settings Defaults.
 define("DEFAULT_SKIN", "agnph");
@@ -39,6 +38,7 @@ define("DEFAULT_ALLOWED_TAGS", "a[href],p[style],span[style],b,u,i,strong,em,ol,
 define("DEFAULT_GALLERY_POSTS_PER_PAGE", 45);
 define("DEFAULT_GALLERY_PAGE_ITERATOR_SIZE", 2);
 define("MAX_GALLERY_SEARCH_TERMS", 6);
+define("GALLERY_LIST_ITEMS_PER_PAGE", 50);
 
 // General constants.
 $GALLERY_TAG_TYPES = array(
@@ -50,5 +50,6 @@ $GALLERY_TAG_TYPES = array(
 define("MAX_IMAGE_THUMB_SIZE", 150);
 define("MAX_IMAGE_PREVIEW_SIZE", 1200);
 define("MAX_TAG_NAME_LENGTH", 32);
+define("MAX_POOL_NAME_LENGTH", 32);
 
 ?>

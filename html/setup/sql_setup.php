@@ -36,7 +36,6 @@ sql_query("DROP TABLE ".GALLERY_TAG_ALIAS_TABLE.";");
 sql_query("DROP TABLE ".GALLERY_USER_PREF_TABLE.";");
 sql_query("DROP TABLE ".GALLERY_USER_FAVORITES_TABLE.";");
 sql_query("DROP TABLE ".GALLERY_POOLS_TABLE.";");
-sql_query("DROP TABLE ".GALLERY_POOL_MAP_TABLE.";");
 
 // Main user data table. General information that is shared between sections.
 do_or_die(sql_query(
@@ -145,6 +144,8 @@ do_or_die(sql_query(
         Rating CHAR(1) DEFAULT 'q',
         Description TEXT(512) NOT NULL,
         ParentPostId INT(11) DEFAULT -1,
+        ParentPoolId INT(11) DEFAULT -1,
+        PoolItemOrder INT(11) NOT NULL,
         Score INT(11) DEFAULT 0,
         NumFavorites INT(11) DEFAULT 0,
         NumComments INT(11) DEFAULT 0,
@@ -158,7 +159,7 @@ do_or_die(sql_query(
 do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_TAG_TABLE." (
         TagId INT(11) UNSIGNED AUTO_INCREMENT,
-        Name TEXT(".MAX_TAG_NAME_LENGTH.") NOT NULL,
+        Name VARCHAR(".MAX_TAG_NAME_LENGTH.") NOT NULL,
         Type CHAR(1) DEFAULT 'G',".  // A=Artist, C=Character, D=Copyright, G=General, S=Species (D is copyright for ordering reasons).
        "CreatorUserId INT(11) NOT NULL,
         ChangeTypeUserId INT(11) NOT NULL,
@@ -194,17 +195,10 @@ do_or_die(sql_query(
 // General information about pools.
 do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_POOLS_TABLE." (
-        PoolId INT(11) NOT NULL,
+        PoolId INT(11) AUTO_INCREMENT,
+        Name VARCHAR(".MAX_POOL_NAME_LENGTH.") NOT NULL,
         Description TEXT(512) NOT NULL,
         PRIMARY KEY(PoolId)
-    );"));
-// Mapping of pools to posts/ordering.
-do_or_die(sql_query(
-    "CREATE TABLE ".GALLERY_POOL_MAP_TABLE." (
-        PoolId INT(11) NOT NULL,
-        PostId INT(11) NOT NULL,
-        ItemOrder INT(11) NOT NULL,
-        PRIMARY KEY(PoolId, PostId)
     );"));
 // User preferences for gallery section.
 do_or_die(sql_query(

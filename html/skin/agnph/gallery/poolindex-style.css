@@ -1,0 +1,30 @@
+.pooltable {
+    border-radius: 15px;
+    background-color: rgb(170,200,255);
+    display: inline;
+    width: 100%;
+    border-style: none;
+    overflow: hidden;
+    -webkit-border-horizontal-spacing: 0px;
+    -webkit-border-vertical-spacing: 0px;
+}
+.pooltable td {
+    padding: 5px;
+}
+.pooltable tr:nth-child(even) {
+    background-color: rgb(150,180,235);
+}
+.pooltable tr:nth-child(odd) {
+    background-color: rgb(130,160,215);
+}
+.pooltable tr:nth-child(1) {
+    background-color: rgb(130,160,215);
+    border-color: rgb(170, 200, 255);
+    border-width: 0px 0px 1px 0px;
+    border-style: solid;
+}
+.mainpanel {
+    margin: 5px;
+    padding: 5px;
+    overflow: hidden;
+}

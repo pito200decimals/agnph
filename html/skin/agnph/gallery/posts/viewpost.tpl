@@ -24,6 +24,17 @@
 {% endblock %}
 
 {% block gallerycontent %}
+    <div class="headerbar">
+        {% if post.Status=="P" %}
+            <div class="pendingbox">
+                <p><strong>This post is pending moderator approval</strong></p>
+            </div>
+        {% elseif post.Status == "F" %}
+            <div class="flaggedbox">
+                <p><strong>This post has been flagged for deletion</strong></p>
+            </div>
+        {% endif %}
+    </div>
     <div class="sidepanel">
         {% if post.ParentPostId != -1 %}
             <div class="parentbox">

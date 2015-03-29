@@ -187,4 +187,21 @@ function CreateLotsOfFakeGallery($n) {
 
 // CreateLotsOfFakeGallery(120000);
 
+do_or_die(sql_query("INSERT INTO ".GALLERY_POOLS_TABLE."
+    (Name)
+    VALUES
+    ('Name of Pool 1'),
+    ('Name of Pool 2'),
+    ('Name of Pool 3'),
+    ('Name of Pool 4'),
+    ('Name of Pool 5')
+    ;"));
+function AddToPool($post_id, $pool_id, $order = 0) {
+    do_or_die(sql_query("UPDATE ".GALLERY_POST_TABLE." SET ParentPoolId=$pool_id,PoolItemOrder=$order WHERE PostId=$post_id;"));
+}
+AddToPool(1, 1, 1);
+AddToPool(2, 1, 3);
+AddToPool(3, 1, 2);
+AddToPool(4, 1, 4);
+
 ?>
