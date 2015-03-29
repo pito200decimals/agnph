@@ -28,6 +28,10 @@
     margin: 0px;
 }
 
+.previewImg {
+    max-width: 100%;
+}
+
 input {
     margin: 5px;
 }

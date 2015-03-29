@@ -87,7 +87,7 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
     $post_id = sql_last_id();
     // Append rating and stuff before tags, so that tags can override the other fields.
     UpdatePost("rating:$rating source:$source parent:$parent_post_id ".$_POST['tags'], $post_id, $user);
-    //header("Location: /gallery/post/show/$post_id/");
+    header("Location: /gallery/post/show/$post_id/");
     return;
 }
 
