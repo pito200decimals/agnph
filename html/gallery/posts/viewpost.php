@@ -65,6 +65,10 @@ foreach ($GALLERY_TAG_TYPES as $char => $name) {
     }
 }
 $vars['post']['tagCategories'] = $tagCategories;
+if ($post['ParentPoolId'] != -1) {
+    $iter = CreatePoolIterator($post);
+    if (strlen($iter) > 0) $vars['poolIterator'] = $iter;
+}
 
 PreparePostStatistics($post);
 
@@ -92,5 +96,26 @@ function PreparePostStatistics(&$post) {
     if ($result->num_rows > 0) {
         $post['hasChildren'] = true;
     }
+}
+
+function CreatePoolIterator($post) {
+    $pool_id = $post['ParentPoolId'];
+    if (!sql_query_into($result, "SELECT * FROM ".GALLERY_POOLS_TABLE." WHERE PoolId=$pool_id;", 1)) return "";
+    $pool = $result->fetch_assoc();
+    $index = $post['PoolItemOrder'];
+    $pool_url = "/gallery/post/?search=pool%3A".$pool['PoolId'];
+    if (!sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE ParentPoolId=$pool_id AND PoolItemOrder < $index ORDER BY PoolItemOrder DESC LIMIT 1;", 0)) return "";
+    if ($result->num_rows > 0) {
+        $prev_url = "/gallery/post/show/".$result->fetch_assoc()['PostId']."/";
+    }
+    if (!sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE ParentPoolId=$pool_id AND PoolItemOrder > $index ORDER BY PoolItemOrder ASC LIMIT 1;", 0)) return "";
+    if ($result->num_rows > 0) {
+        $next_url = "/gallery/post/show/".$result->fetch_assoc()['PostId']."/";
+    }
+
+    $prev_link = (isset($prev_url) ? "<a id='previnpool' href='$prev_url'>&lt;&lt;</a>" : "");
+    $curr_link = "<a href='$pool_url'>".$pool['Name']."</a>";
+    $next_link = (isset($next_url) ? "<a id='nextinpool' href='$next_url'>&gt;&gt;</a>" : "");
+    return $prev_link . $curr_link . $next_link;
 }
 ?>

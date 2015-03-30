@@ -7,114 +7,8 @@
 
 {% block scripts %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="{{ skinDir }}/gallery/posts/viewpost-script.php?pi={{ post.PostId }}&ppi={{ post.ParentPoolId }}"></script>
     <script type="text/javascript">
-        var in_flight = null;
-        function toggleEdit() {
-            $(".posteditbox").toggle()[0].scrollIntoView();
-            return false;
-        }
-        $(document).ready(function() {
-            $("#tags").keydown(function(e) {
-                if (e.keyCode == 13) {
-                    $(this.form).submit();
-                    return false;
-                }
-            });
-            $("#pooleditfield").keypress(function() {
-                PopulatePoolList(this.value);
-            });
-            {% if post.ParentPoolId==-1 %}
-                SetupAdd();
-            {% else %}
-                SetupRemove({{ post.ParentPoolId }});
-            {% endif %}
-        });
-        function SetupAdd() {
-            $("#poolaction").off("click").click(function() {
-                $(".pooleditbox").toggle();
-                return false;
-            }).text("Add to pool");
-        }
-        function SetupRemove(poolid) {
-            $("#poolaction").off("click").click(function() {
-                RemoveFromPool(poolid);
-                return false;
-            }).text("Remove from pool");
-        }
-        function PopulatePoolList(prefix) {
-            if (in_flight != null) {
-                in_flight.abort();
-                in_flight = null;
-            }
-            $("#poolactionworking").show();
-            in_flight = $.ajax("/gallery/pools/list/?prefix="+encodeURIComponent(prefix), {
-                success: function(pools) {
-                    var elements = $();
-                    for (i = 0; i < pools.length; i++) {
-                        (function(pool) {
-                            elem = $('<li><a href="">Add to <span>'+pool.name+'</span></a></li>').data("id", pool.id);
-                            elem.find("a").click(function(e) {
-                                e.preventDefault();
-                                AddToPool(pool.id);
-                                return false;
-                            });
-                            elements = elements.add(elem);
-                        })(pools[i]);
-                    }
-                    $("#poolautocomplete").empty().append(elements);
-                    $("#poolactionworking").hide();
-                },
-                error: function(e) {
-                    $("#poolactionworking").hide();
-                }
-            });
-        }
-        function AddToPool(poolid) {
-            if (in_flight != null) {
-                in_flight.abort();
-                in_flight = null;
-            }
-            $("#poolactionworking").show();
-            in_flight = $.ajax("/gallery/pools/modify/{{ post.PostId }}/"+poolid+"/", {
-                data: {
-                    action: "add"
-                },
-                method: "POST",
-                success: function(e) {
-                    SetupRemove(poolid);
-                    $(".pooleditbox").hide();
-                    $("#poolactionworking").hide();
-                },
-                error: function(x,s,t) {
-                    SetupAdd();
-                    $(".pooleditbox").hide();
-                    $("#poolactionworking").hide();
-                }
-            });
-        }
-        function RemoveFromPool(poolid) {
-            if (in_flight != null) {
-                in_flight.abort();
-                in_flight = null;
-            }
-            $("#poolactionworking").show();
-            in_flight = $.ajax("/gallery/pools/addremove_pool.php?post={{ post.PostId }}&pool="+poolid, {
-                data: {
-                    action: "remove"
-                },
-                method: "POST",
-                success: function(e) {
-                    SetupAdd();
-                    $(".pooleditbox").hide();
-                    $("#poolactionworking").hide();
-                },
-                error: function(x,s,t) {
-                    SetupRemove(poolid);
-                    $(".pooleditbox").hide();
-                    $("#poolactionworking").hide();
-                }
-            });
-        }
     </script>
 {% endblock %}
 
@@ -150,6 +44,14 @@
             </form>
         </div>
         <hr />
+        {% if poolIterator %}
+            <div class="poolbox">
+                <p><strong>Pool</strong></p>
+                {% autoescape false %}
+                <p>{{ poolIterator }}</p>
+                {% endautoescape %}
+            </div>
+        {% endif %}
         <h3>Tags:</h3>
         <div class="tagbox">
             <ul class="taglist">
@@ -194,7 +96,7 @@
                 <li><a href="/gallery/post/edit/{{ post.PostId }}/" onclick="return toggleEdit();">Edit</a></li>
                 <li>Flag for deletion</li>
                 <li>Add to Favorites</li>
-                <li><a id="poolaction" href="#"></a><span id="poolactionworking" hidden>Processing...</span></li>
+                <li><a id="poolaction" href="#"></a><span id="poolactionworking" hidden><small>Processing...</small></span></li>
             </ul>
         </div>
         <div class="pooleditbox">
