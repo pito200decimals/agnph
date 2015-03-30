@@ -8,8 +8,6 @@
 {% block scripts %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="{{ skinDir }}/gallery/posts/viewpost-script.php?pi={{ post.PostId }}&ppi={{ post.ParentPoolId }}"></script>
-    <script type="text/javascript">
-    </script>
 {% endblock %}
 
 {% block gallerycontent %}
@@ -90,6 +88,7 @@
                 <li>Tag History</li>
             </ul>
         </div>
+        {% if user.UserId > 0 %}
         <h3>Actions</h3>
         <div class="actionbox">
             <ul class="actionlist">
@@ -104,6 +103,7 @@
             <ul id="poolautocomplete">
             </ul>
         </div>
+        {% endif %}
     </div>
     <div class="mainpanel">
         <p>
@@ -114,7 +114,7 @@
             {% endif %}
         </p>
         <p>
-            <a href="/gallery/post/edit/{{ post.PostId }}/" onclick="return toggleEdit();">Edit</a> | <a href="{{ downloadUrl }}">Download</a>
+            {% if user.UserId > 0 %}<a href="/gallery/post/edit/{{ post.PostId }}/" onclick="return toggleEdit();">Edit</a> | {% endif %}<a href="{{ downloadUrl }}">Download</a>
         </p>
         <div class="posteditbox">
             <a id="editanchor" />

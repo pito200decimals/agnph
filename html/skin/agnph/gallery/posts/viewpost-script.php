@@ -23,22 +23,8 @@ $(document).ready(function() {
         SetupAdd();
     <?php } else { ?>
         SetupRemove(<?php echo $parentPoolId; ?>);
-        $(document).keydown(function(e) {
-            if (e.altKey || e.ctrlKey || e.shiftKey || e.metaKey) return;
-            if (e.target.tagName.toLowerCase() == "input") return;
-            switch(e.which) {
-                case 37:
-                    var link = $("#previnpool")[0];
-                    if (link) link.click();
-                break;
-                case 39:
-                    var link = $("#nextinpool")[0];
-                    if (link) link.click();
-                break;
-                default: return;
-            }
-            e.preventDefault();
-        });
+        // TODO: Conditionally set up keyboard nav based on use preferences.
+        InitKeynav();
     <?php } ?>
 });
 function SetupAdd() {
@@ -117,5 +103,25 @@ function RemoveFromPool(poolid) {
         error: function() {
             location.reload();
         }
+    });
+}
+function InitKeynav() {
+    $(document).keydown(function(e) {
+        if ($(document).width() > $(window).width()) return;
+        if (e.altKey || e.ctrlKey || e.shiftKey || e.metaKey) return;
+        if (e.target.tagName.toLowerCase() == "input") return;
+        if (e.target.tagName.toLowerCase() == "textarea") return;
+        switch(e.which) {
+            case 37:
+                var link = $("#previnpool")[0];
+                if (link) link.click();
+            break;
+            case 39:
+                var link = $("#nextinpool")[0];
+                if (link) link.click();
+            break;
+            default: return;
+        }
+        e.preventDefault();
     });
 }
