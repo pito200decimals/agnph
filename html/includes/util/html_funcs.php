@@ -57,8 +57,10 @@ function ConstructPageIterator($currpage, $maxpage, $iterator_size, $link_fn, $i
 // Renders the page to the given template.
 function RenderPage($template) {
     global $twig, $vars;
-    echo "\n\n\n\n\n";
-    echo "----------------------------------------------------------------------------------------------\n";
+    if (DEBUG) {
+        echo "\n\n\n\n\n";
+        echo "----------------------------------------------------------------------------------------------\n";
+    }
     echo TidyHTML(preg_replace("/\s+/", " ", $twig->render($template, $vars)));
 }
 
@@ -89,7 +91,12 @@ function TidyHTML($html) {
             return $html;
         }
         $match = array();
-        if (preg_match("@^(<([^/][^>]*[^/]|[^>/]+)>)([^<>]*)(</[^>]+>)(.*)$@", $html, $match)) {
+        if (preg_match("@(<script.*?</script>)(.*)@i", $html, $match)) {
+            // Script tag.
+            $tabs = Tabs($indent);
+            $ret .= $tabs.$match[1]."\n";
+            $html = $match[2];
+        } else if (preg_match("@^(<([^/][^>]*[^/]|[^>/]+)>)([^<>]*)(</[^>]+>)(.*)$@", $html, $match)) {
             // Tag with only text in it.
             $tabs = Tabs($indent);
             $ret .= $tabs.$match[1].trim($match[3]).$match[4]."\n";

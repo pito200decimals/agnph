@@ -17,6 +17,9 @@ function CanUserCreateTags($user) {
 function CanUserUploadNonPending($user) {
     return true;
 }
+function CanUserAddOrRemoveFromPools($user) {
+    return true;
+}
 function CanUserChangePoolOrdering($user) {
     return true;
 }

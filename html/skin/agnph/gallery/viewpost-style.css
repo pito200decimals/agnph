@@ -148,3 +148,12 @@ textarea {
     max-width: 275px;
     padding: 0px;
 }
+
+.pooleditbox {
+    display: none;
+}
+.pooleditbox ul li a span {
+    text-decoration: underline;
+}
+#poolactionworking {
+}

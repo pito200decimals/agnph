@@ -3,6 +3,7 @@
 
 // Debugging print functions.
 function debug($message, $file = null, $line = null) {
+    if (!DEBUG) return;
     $header = "[DEBUG]";
     if (isset($file) && isset($line)) {
         $file = basename($file);
@@ -17,6 +18,7 @@ function debug($message, $file = null, $line = null) {
     print("\n<br />");
 }
 function debug_die($message, $file = null, $line = null) {
+    if (!DEBUG) return;
     $header = "[FATAL]";
     if (isset($file) && isset($line)) {
         $file = basename($file);
