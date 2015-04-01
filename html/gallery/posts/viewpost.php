@@ -70,6 +70,30 @@ if ($post['ParentPoolId'] != -1) {
     if (strlen($iter) > 0) $vars['poolIterator'] = $iter;
 }
 
+if (isset($user)) {
+    // Settings for action perms flags.
+    if (CanUserEditPost($user)) {
+        $vars['canEdit'] = true;
+        if ($post['Status'] != 'F' && $post['Status'] != 'D') {
+            $vars['canFlag'] = true;
+        }
+    }
+    if (CanUserDeletePost($user)) {
+        if ($post['Status'] == 'F') {
+            // TODO: Decide if admins can delete post from any state.
+            $vars['canDelete'] = true;
+            $vars['canUnflag'] = true;
+        } else if ($post['Status'] == 'D') {
+            $vars['canUnDelete'] = true;
+        }
+    }
+    if (CanUserApprovePost($user)) {
+        if ($post['Status'] == 'P') {
+            $vars['canApprove'] = true;
+        }
+    }
+}
+
 PreparePostStatistics($post);
 
 RenderPage("gallery/posts/viewpost.tpl");

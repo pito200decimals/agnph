@@ -33,6 +33,14 @@ define("GALLERY_POST_TAG_HISTORY_TABLE", "gallery_tag_history");
 define("GALLERY_TAG_ALIAS_TABLE", "gallery_tag_alias");
 define("GALLERY_POOLS_TABLE", "gallery_pools");
 
+// Fics tables.
+define("FICS_STORY_TABLE", "fics_stories");
+define("FICS_CHAPTER_TABLE", "fics_chapters");
+define("FICS_STORY_TAG_TABLE", "fics_story_tag");
+define("FICS_TAG_TABLE", "fics_tags");
+define("FICS_REVIEW_TABLE", "fics_reviews");
+define("FICS_SERIES_TABLE", "fics_series");
+
 // User Settings Defaults.
 define("DEFAULT_SKIN", "agnph");
 define("DEFAULT_THREADS_PER_PAGE", 5);
@@ -56,5 +64,6 @@ define("MAX_IMAGE_PREVIEW_SIZE", 1200);
 define("MAX_TAG_NAME_LENGTH", 32);
 define("MAX_POOL_NAME_LENGTH", 32);
 define("MIN_POOL_PREFIX_LENGTH", 3);
+define("MAX_GALLERY_POST_FLAG_REASON_LENGTH", 64);
 
 ?>

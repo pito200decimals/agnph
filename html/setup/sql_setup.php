@@ -36,6 +36,12 @@ sql_query("DROP TABLE ".GALLERY_TAG_ALIAS_TABLE.";");
 sql_query("DROP TABLE ".GALLERY_USER_PREF_TABLE.";");
 sql_query("DROP TABLE ".GALLERY_USER_FAVORITES_TABLE.";");
 sql_query("DROP TABLE ".GALLERY_POOLS_TABLE.";");
+sql_query("DROP TABLE ".FICS_STORY_TABLE.";");
+sql_query("DROP TABLE ".FICS_CHAPTER_TABLE.";");
+sql_query("DROP TABLE ".FICS_STORY_TAG_TABLE.";");
+sql_query("DROP TABLE ".FICS_TAG_TABLE.";");
+sql_query("DROP TABLE ".FICS_REVIEW_TABLE.";");
+sql_query("DROP TABLE ".FICS_SERIES_TABLE.";");
 
 // Main user data table. General information that is shared between sections.
 do_or_die(sql_query(
@@ -153,7 +159,9 @@ do_or_die(sql_query(
         Height INT(11) NOT NULL,
         FileSize VARCHAR(8) NOT NULL,
         Status CHAR(1) DEFAULT 'P',".  // P for pending, A for approved, F for flagged for deletion, D for deleted.
-       "PRIMARY KEY(PostId)
+       "FlaggerUserId INT(11) NOT NULL,
+        FlagReason VARCHAR(".MAX_GALLERY_POST_FLAG_REASON_LENGTH.") NOT NULL,
+        PRIMARY KEY(PostId)
     );"));
 // General information about a single tag
 do_or_die(sql_query(
@@ -219,6 +227,43 @@ do_or_die(sql_query(
         Timestamp INT(11) NOT NULL,
         PRIMARY KEY(UserId, PostId)
     );"));
+
+
+/////////////////
+// Fics tables //
+/////////////////
+
+do_or_die(sql_query(
+    "CREATE TABLE ".FICS_STORY_TABLE." (
+        StoryId INT(11) NOT NULL,
+        AuthorUserId INT(11) NOT NULL,
+        CoAuthors VARCHAR(24) NOT NULL,
+        DateCreated INT(11) NOT NULL,
+        DateUpdated INT(11) NOT NULL,
+        Rating CHAR(11) NOT NULL,".  // G - G, P - PG, T - PG-13, R - R, X - XXX
+       "ApprovalStatus CHAR(1) NOT NULL,".  // P - Pending, A - Approved, F - Flagged, D - Deleted
+       "Completed TINYINT(1) NOT NULL,
+        ParentSeriesId INT(11) NOT NULL,
+        SeriesItemOrder INT(11) NOT NULL,
+        WordCount INT(11) NOT NULL,
+        Views INT(11) NOT NULL,
+        AverageStars INT(11) NOT NULL,
+        PRIMARY KEY(StoryId)
+    );"));
+do_or_die(sql_query(
+    "CREATE TABLE ".FICS_CHAPTER_TABLE." (
+        ChapterId INT(11) NOT NULL,
+        ParentStoryId INT(11) NOT NULL,
+        AuthorUserId INT(11) NOT NULL,
+        DateCreated INT(11) NOT NULL,
+        ApprovalStatus CHAR(1) NOT NULL,".  // P - Pending, A - Approved, F - Flagged, D - Deleted
+       "ChapterItemOrder INT(11) NOT NULL,
+        WordCount INT(11) NOT NULL,
+        Views INT(11) NOT NULL,
+        AverageStars INT(11) NOT NULL,
+        PRIMARY KEY(ChapterId)
+    );"));
+
 
 // TODO: Logging tables.
 

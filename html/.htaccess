@@ -37,3 +37,7 @@ RewriteRule ^gallery/pools/list/$ /gallery/pools/pool_list.php [QSA]
 RewriteRule ^gallery/pools/modify/(\d+)/(\d+)/?$ /gallery/pools/addremove_pool.php?post=$1&pool=$2
 RewriteRule ^gallery/pools/create/$ /gallery/pools/create.php
 RewriteRule ^gallery/pools/delete/$ /gallery/pools/delete.php
+RewriteRule ^gallery/post/status/$ /gallery/posts/changestatus.php
+
+#Rewrites for the fics pages
+RewriteRule ^fics/$ /fics/index.php

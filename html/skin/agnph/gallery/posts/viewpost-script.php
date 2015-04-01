@@ -26,7 +26,14 @@ $(document).ready(function() {
         // TODO: Conditionally set up keyboard nav based on use preferences.
         InitKeynav();
     <?php } ?>
+    SetupFlag();
 });
+function SetupFlag() {
+    $("#flagaction").click(function() {
+        $(".flageditbox").toggle();
+        return false;
+    }).text("Flag for Deletion");
+}
 function SetupAdd() {
     $("#poolaction").off("click").click(function() {
         $(".pooleditbox").toggle();

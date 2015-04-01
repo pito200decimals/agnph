@@ -6,8 +6,10 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="{{ skinDir }}/gallery/posts/viewpost-script.php?pi={{ post.PostId }}&ppi={{ post.ParentPoolId }}"></script>
+    {% if canEdit %}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="{{ skinDir }}/gallery/posts/viewpost-script.php?pi={{ post.PostId }}&ppi={{ post.ParentPoolId }}"></script>
+    {% endif %}
 {% endblock %}
 
 {% block gallerycontent %}
@@ -19,6 +21,11 @@
         {% elseif post.Status == "F" %}
             <div class="flaggedbox">
                 <p><strong>This post has been flagged for deletion</strong></p>
+                {% if post.FlagReason|length > 0 %}<p><strong>Reason:</strong>{{ post.FlagReason }}</p>{% endif %}
+            </div>
+        {% elseif post.Status == "D" %}
+            <div class="flaggedbox">
+                <p><strong>This post has been deleted</strong></p>
             </div>
         {% endif %}
     </div>
@@ -88,24 +95,78 @@
                 <li>Tag History</li>
             </ul>
         </div>
-        {% if user.UserId > 0 %}
+        {% if canEdit %}
         <h3>Actions</h3>
         <div class="actionbox">
             <ul class="actionlist">
                 <li><a href="/gallery/post/edit/{{ post.PostId }}/" onclick="return toggleEdit();">Edit</a></li>
-                <li>Flag for deletion</li>
+                {% if canFlag %}
+                    <li>
+                        <a id="flagaction" href="#">{# No text for no javascript #}</a>
+                    </li>
+                {% endif %}
+                {% if canDelete %}
+                    <li>
+                        <form hidden id="deleteform" action="/gallery/post/status/" method="POST">
+                            <input name="post" type="hidden" value="{{ post.PostId }}" />
+                            <input name="reason" type="hidden" value="" />
+                            <input name="action" type="hidden" value="delete" />
+                        </form>
+                        <a href="#" onclick="$('#deleteform')[0].submit();return false;">Delete Post</a>
+                    </li>
+                {% endif %}
+                {% if canUnDelete %}
+                    <li>
+                        <form hidden id="undeleteform" action="/gallery/post/status/" method="POST">
+                            <input name="post" type="hidden" value="{{ post.PostId }}" />
+                            <input name="action" type="hidden" value="undelete" />
+                        </form>
+                        <a href="#" onclick="$('#undeleteform')[0].submit();return false;">Undelete Post</a>
+                    </li>
+                {% endif %}
+                {% if canApprove %}
+                    <li>
+                        <form hidden id="approveform" action="/gallery/post/status/" method="POST">
+                            <input name="post" type="hidden" value="{{ post.PostId }}" />
+                            <input name="action" type="hidden" value="approve" />
+                        </form>
+                        <a href="#" onclick="$('#approveform')[0].submit();return false;">Approve Post</a>
+                    </li>
+                {% endif %}
+                {% if canUnflag %}
+                    <li>
+                        <form hidden id="unflagform" action="/gallery/post/status/" method="POST">
+                            <input name="post" type="hidden" value="{{ post.PostId }}" />
+                            <input name="action" type="hidden" value="unflag" />
+                        </form>
+                        <a href="#" onclick="$('#unflagform')[0].submit();return false;">Unflag Post</a>
+                    </li>
+                {% endif %}
                 <li>Add to Favorites</li>
                 <li><a id="poolaction" href="#"></a><span id="poolactionworking" hidden><small>Processing...</small></span></li>
             </ul>
         </div>
         <div class="pooleditbox">
+            <label>Search for Pool:</label><br />
             <input id="pooleditfield" type="textfield" />
             <ul id="poolautocomplete">
             </ul>
         </div>
+        {% if canFlag %}
+            <div class="flageditbox">
+                <form action="/gallery/post/status/" method="POST">
+                    <label>Reason:</label><br />
+                    <input name="post" type="hidden" value="{{ post.PostId }}" />
+                    <input name="reason" type="textfield" />
+                    <input name="action" type="hidden" value="flag" />
+                    <input type="submit" value="Flag" />
+                </form>
+            </div>
         {% endif %}
+        {% endif %}  {# canEdit #}
     </div>
     <div class="mainpanel">
+        {% if post.Status!="D" %}
         <p>
             {% if previewUrl==downloadUrl %}
                 <img class="previewImg" src="{{ previewUrl }}" />
@@ -131,6 +192,7 @@
                 <input type="submit" value="Save Changes" />
             </form>
         </div>
+        {% endif %}
     </div>
     <div class="Clear">&nbsp;</div>
 {% endblock %}
