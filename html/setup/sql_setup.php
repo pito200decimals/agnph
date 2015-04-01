@@ -196,6 +196,7 @@ do_or_die(sql_query(
 do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_POOLS_TABLE." (
         PoolId INT(11) AUTO_INCREMENT,
+        CreatorUserId INT(11) NOT NULL,
         Name VARCHAR(".MAX_POOL_NAME_LENGTH.") NOT NULL,
         Description TEXT(512) NOT NULL,
         PRIMARY KEY(PoolId)

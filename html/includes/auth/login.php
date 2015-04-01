@@ -11,7 +11,6 @@ function Login($username, $password) {
     $username = "User 1";
     $password = "Password 1";
     
-    // TODO: Look up only uid, email and password from user db (enough to compute the cookies).
     $escapedName = sql_escape($username);
     if (!sql_query_into($result, "SELECT UserID,Email,Password FROM ".USER_TABLE." WHERE UserName='$escapedName' LIMIT 1;", 1)) {
         return false;

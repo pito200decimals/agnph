@@ -70,7 +70,6 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
         $escaped_description = "";
     }
     $parent_post_id = GetValidParentPostId($_POST['parent'], -1);
-    // TODO: Have admins upload with non-pending status.
     $status = CanUserUploadNonPending($user) ? "A" : "P";
     $now = time();
     $result = sql_query("INSERT INTO ".GALLERY_POST_TABLE."

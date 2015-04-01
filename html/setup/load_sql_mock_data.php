@@ -160,6 +160,15 @@ CreateTag("evalion", "A");
 CreateTag("doneru", "A");
 CreateTag("male", "G");
 CreateTag("female", "G");
+CreateTag("lucario", "S");
+CreateTag("human", "S");
+CreateTag("animated", "G");
+CreateTag("koba", "A");
+CreateTag("umbreon", "S");
+CreateTag("flareon", "S");
+CreateTag("flygon", "S");
+CreateTag("solo", "G");
+CreateTag("floatzel", "S");
 
 CreateGalleryPost("c3024ba611837d85397d9661aec12840", "jpg", array("harlem", "umbreon", "quilava", "male"), "e");
 CreateGalleryPost("16f7fdb2e63740e6dbf524e137899433", "png", array("syntex", "quilava", "raichu", "male"), "s");
@@ -169,6 +178,13 @@ CreateGalleryPost("ff52157718c27a5bde447bbcba28fd85", "png", array("ahseo", "qui
 CreateGalleryPost("8014cdf559ca76698f7c1a2fbcd154dc", "png", array("redraptor16", "charizard", "female"), "s", -1, "F");
 CreateGalleryPost("3a4332624e0689785296c334cab2d5d8", "jpg", array("evalion", "charizard", "male"), "e", 1);
 CreateGalleryPost("2a9b345bc6db7cdc5dbbe6e4e13bb347", "jpg", array("doneru"));
+CreateGalleryPost("84bb92189453fd60059f214e1902117c", "gif", array("lucario","human","male","female","animated"));
+CreateGalleryPost("7f83ceaea3a928a72a5ef44ca28905a8", "jpg", array("quilava","human","male","female"));
+CreateGalleryPost("ab907b0d22fdcba201a4fba3d20aef5b", "jpg", array("umbreon","flareon","male","female"));
+CreateGalleryPost("85bb9ecdbbdbbbde574a5a8ae6798329", "jpg", array("umbreon","flareon","male","female"), "e", 11);
+CreateGalleryPost("ba395299b5abdaaabb99938ab249283c", "jpg", array("umbreon","flareon","male","female"), "e", 11);
+CreateGalleryPost("a096c523ac2044bc6ed13f069f474bf9", "jpg", array("flygon","male", "solo"));
+CreateGalleryPost("b4778c99464f01b56d8c3611143aad6f", "jpg", array("typhlosion","floatzel","male", "female"));
 
 function CreateLotsOfFakeGallery($n) {
     for ($p = 0; $p < $n; $p+=100) {
@@ -188,13 +204,9 @@ function CreateLotsOfFakeGallery($n) {
 // CreateLotsOfFakeGallery(120000);
 
 do_or_die(sql_query("INSERT INTO ".GALLERY_POOLS_TABLE."
-    (Name)
+    (Name, CreatorUserId)
     VALUES
-    ('Name of Pool 1'),
-    ('Name of Pool 2'),
-    ('Name of Pool 3'),
-    ('Name of Pool 4'),
-    ('Name of Pool 5')
+    ('Test Pool 1', 1)
     ;"));
 function AddToPool($post_id, $pool_id, $order = 0) {
     do_or_die(sql_query("UPDATE ".GALLERY_POST_TABLE." SET ParentPoolId=$pool_id,PoolItemOrder=$order WHERE PostId=$post_id;"));

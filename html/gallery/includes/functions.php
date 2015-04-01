@@ -23,6 +23,9 @@ function CanUserAddOrRemoveFromPools($user) {
 function CanUserChangePoolOrdering($user) {
     return true;
 }
+function CanUserCreateOrDeletePools($user) {
+    return true;
+}
 
 // General path functions.
 function GetSiteImagePath($md5, $ext) { return "/".GetImagePath($md5, $ext); }

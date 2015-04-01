@@ -13,6 +13,7 @@ CollectItems(GALLERY_POOLS_TABLE, "ORDER BY Name ASC", $pools, GALLERY_LIST_ITEM
 }, "No pools found.");
 
 if (sizeof($pools) > 0) {
+    // Compute counts.
     foreach ($pools as &$pool) { $pool['count'] = 0; }
     $pool_ids = array_map(function($pool) {
         return $pool['PoolId'];
@@ -28,10 +29,27 @@ if (sizeof($pools) > 0) {
             }
         }
     }
+    // Compute creators.
+    $creator_ids = array_map(function($pool) {
+        return $pool['CreatorUserId'];
+    }, $pools);
+    $joined = implode(",", $creator_ids);
+    sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId IN ($joined);", 0) or RenderErrorPage("No pools found.");
+    while ($row = $result->fetch_assoc()) {
+        $user_id = $row['UserId'];
+        foreach ($pools as &$pool) {
+            if ($pool['CreatorUserId'] == $user_id) {
+                $pool['creator'] = $row;
+            }
+        }
+    }
 }
 
 $vars['pools'] = $pools;
 $vars['postIterator'] = $iterator;
+if (isset($user) && CanUserCreateOrDeletePools($user)) {
+    $vars['canEditPools'] = true;
+}
 RenderPage("gallery/pools/poolindex.tpl");
 return;
 

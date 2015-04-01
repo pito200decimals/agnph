@@ -1,4 +1,5 @@
 .pooltable {
+    margin: 5px;
     border-radius: 15px;
     background-color: rgb(170,200,255);
     display: inline;
@@ -25,6 +26,26 @@
 }
 .mainpanel {
     margin: 5px;
-    padding: 5px;
     overflow: hidden;
+}
+#actionbar {
+    margin: 5px;
+}
+#newpanel {
+    padding: 5px;
+    display: block;
+}
+.floatactionpanel {
+    position: absolute;
+    border: 1px solid rgb(0,0,0);
+    background-color: rgb(63, 127, 255);
+    box-shadow: 5px 5px 8px #07162D;
+}
+#content h3 {
+    margin: 5px;
+}
+.actionset {
+    font-size: 0px;
+}
+.pooltable input {
 }
