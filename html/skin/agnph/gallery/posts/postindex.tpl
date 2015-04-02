@@ -11,45 +11,51 @@
         <script src="{{ skinDir }}/gallery/posts/jquery.sortable.js"></script>
         <script type="text/javascript">
             $(document).ready(function() {
-                $('.sortable').sortable().bind('sortupdate', function() {
-                    var index = 1;
-                    var changed = [];
-                    $('.dragitem').each(function() {
-                        var id = $('.postid', this)[0].value;
-                        var oldindex = $('.postorder', this)[0].value;
-                        var myindex = index++;
-                        if (oldindex != myindex) {
-                            changed.push({
-                                postid: id,
-                                oldindex: oldindex,
-                                newindex: myindex
-                            });
-                        }
-                    });
-                    if (changed.length > 0) {
-                        $.ajax("/gallery/pools/reorder/{{ poolId }}/", {
-                            data: {
-                                values: changed
-                            },
-                            method: "POST",
-                            success: function(e) {
-                                $(changed).each(function() {
-                                    var id = this.postid;
-                                    var newindex = this.newindex;
-                                    $('.dragitem').each(function() {
-                                        if ($('.postid', this)[0].value == id) {
-                                            $('.postorder', this)[0].value = newindex;
-                                        }
-                                    });
-                                });
-                            },
-                            error: function(e) {
-                                $('.sortable').sortable('destroy');
-                            }
+                $('.sortable').sortable().bind('sortupdate', Update);
+            });
+            function Update() {
+                $('.sortable').sortable('destroy');
+                $('.sortable').css("opacity", "0.5");
+                var index = 1;
+                var changed = [];
+                $('.dragitem').each(function() {
+                    var id = $('.postid', this)[0].value;
+                    var oldindex = $('.postorder', this)[0].value;
+                    var myindex = index++;
+                    if (oldindex != myindex) {
+                        changed.push({
+                            postid: id,
+                            oldindex: oldindex,
+                            newindex: myindex
                         });
                     }
                 });
-            });
+                if (changed.length > 0) {
+                    $.ajax("/gallery/pools/reorder/{{ poolId }}/", {
+                        data: {
+                            values: changed
+                        },
+                        method: "POST",
+                        success: function(e) {
+                            $(changed).each(function() {
+                                var id = this.postid;
+                                var newindex = this.newindex;
+                                $('.dragitem').each(function() {
+                                    if ($('.postid', this)[0].value == id) {
+                                        $('.postorder', this)[0].value = newindex;
+                                    }
+                                });
+                            });
+                            $('.sortable').sortable();
+                            $('.sortable').removeAttr("style");
+                        },
+                        error: function(e) {
+                            $('.sortable').sortable('destroy');
+                            location.reload();
+                        }
+                    });
+                }
+            }
         </script>
     {% endif %}
 {% endblock %}
@@ -71,7 +77,7 @@
                     <li class="dragitem">
                         <input class="postid" type="hidden" value="{{ post.PostId }}" />
                         <input class="postorder" type="hidden" value="{{ post.PoolItemOrder }}" />
-                        <a href="/gallery/post/show/{{ post.PostId }}/">
+                        <a class="postlink" href="/gallery/post/show/{{ post.PostId }}/">
                             <div class="postsquare">
                                 <div class="postsquarepreview">
                                     <img class="postsquarepreview {{ post.outlineClass }}" src="{{ post.thumbnail }}" />

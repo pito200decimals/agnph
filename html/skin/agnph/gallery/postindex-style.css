@@ -1,3 +1,6 @@
+.postlink {
+    text-decoration: none;
+}
 .postsquare {
     width: 175px;
     height: 200px;
@@ -36,6 +39,7 @@ a:hover div.postlabel {
 .postlabel span {
     font-size: 75%;
     font-weight: bold;
+    margin: 0px 2px;
 }
 
 .pscore {

@@ -51,7 +51,7 @@ if ($_POST['action'] == "flag" && CanUserEditPost($user) && ($post['Status'] != 
         header('HTTP/1.1 403 Permission Denied');
         die();
     }
-    //header("Location: /gallery/post/show/$post_id/");
+    header("Location: /gallery/post/show/$post_id/");
     return;
 }
 if ($_POST['action'] == "unflag" && CanUserDeletePost($user) && $post['Status'] == 'F') {

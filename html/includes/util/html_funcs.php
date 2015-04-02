@@ -60,8 +60,10 @@ function RenderPage($template) {
     if (DEBUG) {
         echo "\n\n\n\n\n";
         echo "----------------------------------------------------------------------------------------------\n";
+        echo TidyHTML(preg_replace("/\s+/", " ", $twig->render($template, $vars)));
+    } else {
+        echo (preg_replace("/\s+/", " ", $twig->render($template, $vars)));
     }
-    echo TidyHTML(preg_replace("/\s+/", " ", $twig->render($template, $vars)));
 }
 
 function RenderErrorPage($message = "Error") {

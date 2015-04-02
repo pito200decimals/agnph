@@ -2,7 +2,7 @@
 // PHP file defining a bunch of global constants.
 
 if (!defined("DEBUG")) {
-    define("DEBUG", true);
+    define("DEBUG", false);
 }
 
 define("UID_COOKIE", "agnph_uid");
