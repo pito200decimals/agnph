@@ -9,7 +9,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            return;
             $("#actionbar ul").show();
             $("#newpanel").hide().addClass("floatactionpanel");
             var actionbar = $("#actionbar");

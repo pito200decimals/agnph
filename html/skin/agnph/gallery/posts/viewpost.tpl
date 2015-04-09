@@ -91,7 +91,7 @@
                 <li>Rating: {% autoescape false %}{{ post.ratingHtml }}{% endautoescape %}</li>
                 <li>Score: {{ post.Score }}</li>
                 {% if post.FileSize != "" %}<li>Size: {{ post.FileSize }}</li>{% endif %}
-                <li>Views: 0</li>
+                <li>Views: {{ post.NumViews }}</li>
                 <li>Tag History</li>
             </ul>
         </div>
@@ -167,31 +167,32 @@
     </div>
     <div class="mainpanel">
         {% if post.Status!="D" %}
-        <p>
-            {% if previewUrl==downloadUrl %}
-                <img class="previewImg" src="{{ previewUrl }}" />
-            {% else %}
-                <a href="{{ downloadUrl }}"><img class="previewImg" src="{{ previewUrl }}" /></a>
-            {% endif %}
-        </p>
-        <p>
-            {% if user.UserId > 0 %}<a href="/gallery/post/edit/{{ post.PostId }}/" onclick="return toggleEdit();">Edit</a> | {% endif %}<a href="{{ downloadUrl }}">Download</a>
-        </p>
-        <div class="posteditbox">
-            <a id="editanchor" />
-            <form action="/gallery/edit/" method="POST">
-                <input type="hidden" name="post" value="{{ post.PostId }}" />
-                <label class="formlabel">Rating</label>         <input name="rating" type="radio"{% if post.Rating=='e' %} checked{% endif %} value="e" /><label>Explicit</label>
-                                                                <input name="rating" type="radio"{% if post.Rating=='q' %} checked{% endif %} value="q" /><label>Questionable</label>
-                                                                <input name="rating" type="radio"{% if post.Rating=='s' %} checked{% endif %} value="s" /><label>Safe</label><br />
-                <label class="formlabel">Parent</label>         <input id="parent" class="textbox" type="textbox" name="parent" value="{% if post.ParentPostId!=-1 %}{{ post.ParentPostId }}{% endif %}" /><br />
-                <label class="formlabel">Source</label>         <input id="imgsource" class="textbox" type="textbox" size=35 name="source" value="{{ post.Source }}" /><br />
-                <label class="formlabel">Tags</label>           <textarea id="tags" class="textbox" name="tags">{{ post.tagstring }}</textarea><br />
-                <label class="formlabel">Description</label>    <textarea id="desc" class="textbox" name="description">{{ post.Description }}</textarea><br />
-                <br />
-                <input type="submit" value="Save Changes" />
-            </form>
-        </div>
+        {# Only render image if status is not deleted #}
+            <p>
+                {% if previewUrl==downloadUrl %}
+                    <img class="previewImg" src="{{ previewUrl }}" />
+                {% else %}
+                    <a href="{{ downloadUrl }}"><img class="previewImg" src="{{ previewUrl }}" /></a>
+                {% endif %}
+            </p>
+            <p>
+                {% if user.UserId > 0 %}<a href="/gallery/post/edit/{{ post.PostId }}/" onclick="return toggleEdit();">Edit</a> | {% endif %}<a href="{{ downloadUrl }}">Download</a>
+            </p>
+            <div class="posteditbox">
+                <a id="editanchor" />
+                <form action="/gallery/edit/" method="POST">
+                    <input type="hidden" name="post" value="{{ post.PostId }}" />
+                    <label class="formlabel">Rating</label>         <input name="rating" type="radio"{% if post.Rating=='e' %} checked{% endif %} value="e" /><label>Explicit</label>
+                                                                    <input name="rating" type="radio"{% if post.Rating=='q' %} checked{% endif %} value="q" /><label>Questionable</label>
+                                                                    <input name="rating" type="radio"{% if post.Rating=='s' %} checked{% endif %} value="s" /><label>Safe</label><br />
+                    <label class="formlabel">Parent</label>         <input id="parent" class="textbox" type="textbox" name="parent" value="{% if post.ParentPostId!=-1 %}{{ post.ParentPostId }}{% endif %}" /><br />
+                    <label class="formlabel">Source</label>         <input id="imgsource" class="textbox" type="textbox" size=35 name="source" value="{{ post.Source }}" /><br />
+                    <label class="formlabel">Tags</label>           <textarea id="tags" class="textbox" name="tags">{{ post.tagstring }}</textarea><br />
+                    <label class="formlabel">Description</label>    <textarea id="desc" class="textbox" name="description">{{ post.Description }}</textarea><br />
+                    <br />
+                    <input type="submit" value="Save Changes" />
+                </form>
+            </div>
         {% endif %}
     </div>
     <div class="Clear">&nbsp;</div>

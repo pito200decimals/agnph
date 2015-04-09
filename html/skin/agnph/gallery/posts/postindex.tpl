@@ -80,6 +80,7 @@
                         <a class="postlink" href="/gallery/post/show/{{ post.PostId }}/">
                             <div class="postsquare">
                                 <div class="postsquarepreview">
+                                    {# TODO: Deleted thumbnail instead of preview #}
                                     <img class="postsquarepreview {{ post.outlineClass }}" src="{{ post.thumbnail }}" />
                                 </div>
                                 <div class="postlabel">

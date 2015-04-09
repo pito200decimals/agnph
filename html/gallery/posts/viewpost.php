@@ -96,7 +96,10 @@ if (isset($user)) {
 
 PreparePostStatistics($post);
 
+// Increment view count, and do SQL after page is rendered.
+$post['NumViews']++;
 RenderPage("gallery/posts/viewpost.tpl");
+sql_query("UPDATE ".GALLERY_POST_TABLE." SET NumViews = NumViews + 1 WHERE PostId=$pid;");
 return;
 
 function PreparePostStatistics(&$post) {

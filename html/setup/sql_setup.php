@@ -3,6 +3,7 @@
 // Should include any SQL database commands that are needed to create the
 // site's database.
 
+define("DEBUG", true);
 define("SITE_ROOT", "../");
 include_once(SITE_ROOT."includes/config.php");
 include_once(SITE_ROOT."includes/constants.php");
@@ -155,10 +156,11 @@ do_or_die(sql_query(
         Score INT(11) DEFAULT 0,
         NumFavorites INT(11) DEFAULT 0,
         NumComments INT(11) DEFAULT 0,
+        NumViews INT(11) DEFAULT 0,
         Width INT(11) NOT NULL,
         Height INT(11) NOT NULL,
         FileSize VARCHAR(8) NOT NULL,
-        Status CHAR(1) DEFAULT 'P',".  // P for pending, A for approved, F for flagged for deletion, D for deleted.
+        Status CHAR(1) DEFAULT 'P',".  // P for pending, A for approved, F for flagged for deletion, D for deleted (L for linked to source?)
        "FlaggerUserId INT(11) NOT NULL,
         FlagReason VARCHAR(".MAX_GALLERY_POST_FLAG_REASON_LENGTH.") NOT NULL,
         PRIMARY KEY(PostId)

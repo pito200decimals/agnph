@@ -25,12 +25,7 @@ function CreatePostSearchSQL($search_string, $posts_per_page, $page, &$can_sort_
     }
     // If order specified, use new order.
     if (strpos(strtolower($search_string), "order:") !== FALSE) {
-        // Check for various orderings.
-        if (strpos(strtolower($search_string), "order:score") !== FALSE) {
-            $search_string = preg_replace("/order:score/i", "", $search_string);
-            $sortOrder = "T.Score DESC, ".$sortOrder;
-            $can_sort_pool = false;
-        }
+        // Check for various orderings (with this priority lowest to highest).
         if (strpos(strtolower($search_string), "order:date") !== FALSE) {
             $search_string = preg_replace("/order:date/i", "", $search_string);
             $sortOrder = "T.DateUploaded DESC, ".$sortOrder;
@@ -39,6 +34,16 @@ function CreatePostSearchSQL($search_string, $posts_per_page, $page, &$can_sort_
         if (strpos(strtolower($search_string), "order:age") !== FALSE) {
             $search_string = preg_replace("/order:age/i", "", $search_string);
             $sortOrder = "T.DateUploaded ASC, ".$sortOrder;
+            $can_sort_pool = false;
+        }
+        if (strpos(strtolower($search_string), "order:score") !== FALSE) {
+            $search_string = preg_replace("/order:score/i", "", $search_string);
+            $sortOrder = "T.Score DESC, ".$sortOrder;
+            $can_sort_pool = false;
+        }
+        if (strpos(strtolower($search_string), "order:views") !== FALSE) {
+            $search_string = preg_replace("/order:views/i", "", $search_string);
+            $sortOrder = "T.NumViews DESC, ".$sortOrder;
             $can_sort_pool = false;
         }
     }
