@@ -39,10 +39,10 @@ sql_query("DROP TABLE ".GALLERY_USER_FAVORITES_TABLE.";");
 sql_query("DROP TABLE ".GALLERY_POOLS_TABLE.";");
 sql_query("DROP TABLE ".FICS_STORY_TABLE.";");
 sql_query("DROP TABLE ".FICS_CHAPTER_TABLE.";");
-sql_query("DROP TABLE ".FICS_STORY_TAG_TABLE.";");
-sql_query("DROP TABLE ".FICS_TAG_TABLE.";");
-sql_query("DROP TABLE ".FICS_REVIEW_TABLE.";");
-sql_query("DROP TABLE ".FICS_SERIES_TABLE.";");
+//sql_query("DROP TABLE ".FICS_STORY_TAG_TABLE.";");
+//sql_query("DROP TABLE ".FICS_TAG_TABLE.";");
+//sql_query("DROP TABLE ".FICS_REVIEW_TABLE.";");
+//sql_query("DROP TABLE ".FICS_SERIES_TABLE.";");
 
 // Main user data table. General information that is shared between sections.
 do_or_die(sql_query(
@@ -237,24 +237,27 @@ do_or_die(sql_query(
 
 do_or_die(sql_query(
     "CREATE TABLE ".FICS_STORY_TABLE." (
-        StoryId INT(11) NOT NULL,
+        StoryId INT(11) UNSIGNED AUTO_INCREMENT,
         AuthorUserId INT(11) NOT NULL,
-        CoAuthors VARCHAR(24) NOT NULL,
-        DateCreated INT(11) NOT NULL,
+        CoAuthors VARCHAR(24) NOT NULL,".  // Comma-separated ids. Limit 3 co-authors (+ 1 author).
+       "DateCreated INT(11) NOT NULL,
         DateUpdated INT(11) NOT NULL,
+        Title VARCHAR(256) NOT NULL,
+        Summary TEXT(4096) NOT NULL,
         Rating CHAR(11) NOT NULL,".  // G - G, P - PG, T - PG-13, R - R, X - XXX
-       "ApprovalStatus CHAR(1) NOT NULL,".  // P - Pending, A - Approved, F - Flagged, D - Deleted
-       "Completed TINYINT(1) NOT NULL,
-        ParentSeriesId INT(11) NOT NULL,
+       "ApprovalStatus CHAR(1) DEFAULT 'A',".  // P - Pending, A - Approved, F - Flagged, D - Deleted
+       "Completed TINYINT(1) DEFAULT FALSE,
+        ParentSeriesId INT(11) DEFAULT -1,
         SeriesItemOrder INT(11) NOT NULL,
         WordCount INT(11) NOT NULL,
         Views INT(11) NOT NULL,
-        AverageStars INT(11) NOT NULL,
+        TotalStars INT(11) NOT NULL,
+        TotalRatings INT(11) NOT NULL,
         PRIMARY KEY(StoryId)
     );"));
 do_or_die(sql_query(
     "CREATE TABLE ".FICS_CHAPTER_TABLE." (
-        ChapterId INT(11) NOT NULL,
+        ChapterId INT(11) UNSIGNED AUTO_INCREMENT,
         ParentStoryId INT(11) NOT NULL,
         AuthorUserId INT(11) NOT NULL,
         DateCreated INT(11) NOT NULL,
@@ -262,7 +265,8 @@ do_or_die(sql_query(
        "ChapterItemOrder INT(11) NOT NULL,
         WordCount INT(11) NOT NULL,
         Views INT(11) NOT NULL,
-        AverageStars INT(11) NOT NULL,
+        TotalStars INT(11) NOT NULL,
+        TotalRatings INT(11) NOT NULL,
         PRIMARY KEY(ChapterId)
     );"));
 

@@ -40,6 +40,7 @@ define("FICS_STORY_TAG_TABLE", "fics_story_tag");
 define("FICS_TAG_TABLE", "fics_tags");
 define("FICS_REVIEW_TABLE", "fics_reviews");
 define("FICS_SERIES_TABLE", "fics_series");
+define("FICS_STORIES_PER_PAGE", 15);
 
 // User Settings Defaults.
 define("DEFAULT_SKIN", "agnph");
@@ -65,5 +66,7 @@ define("MAX_TAG_NAME_LENGTH", 32);
 define("MAX_POOL_NAME_LENGTH", 32);
 define("MIN_POOL_PREFIX_LENGTH", 3);
 define("MAX_GALLERY_POST_FLAG_REASON_LENGTH", 64);
+define("FORUMS_DATE_FORMAT", "Y-m-d H:i:s");
+define("FICS_DATE_FORMAT", "Y-m-d");
 
 ?>

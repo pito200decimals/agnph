@@ -1,10 +1,5 @@
 /* Global site style CSS */
 
-div,span,li {
-    border-style: dotted;
-    border-width: 1px;
-}
-
 #mainbody {
     background-color: white;
     padding: 10px;
@@ -39,6 +34,12 @@ div,span,li {
 }
 .navigation a:hover {
     text-shadow: 0 0 3px rgb(255,255,255);
+}
+
+.Clear {
+  clear: both;
+  height: 0;
+  overflow: hidden;
 }
 
 body {

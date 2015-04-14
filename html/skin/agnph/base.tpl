@@ -10,12 +10,20 @@
         <link rel="stylesheet" type="text/css" href="{{ skinDir }}/style.css" />
         {% block styles %}
         {% endblock %}
+        {% if debug %}
+            <style type="text/css">
+                div,span,li {
+                    border-style: dotted;
+                    border-width: 1px;
+                }
+            </style>
+        {% endif %}
     </head>
     <body>
         <div id="mainbody">
             <div id="header">
                 {% block welcome %}
-                    <h1>Welcome, {{ user.DisplayName }}!</h1>
+                    <h1>Welcome, {% if user %}{{ user.DisplayName }}{% else %}Guest{% endif %}!</h1>
                 {% endblock %}
                 <hr />
                 {% block navigation %}
@@ -47,6 +55,7 @@
                     {% endblock %}
                 {% endif %}
             </div>
+            <div class="Clear" style="display: block">&nbsp;</div>
         </div>
         <div id="footer">
             {% block footer %}

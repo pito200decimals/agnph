@@ -41,3 +41,5 @@ RewriteRule ^gallery/post/status/$ /gallery/posts/changestatus.php
 
 #Rewrites for the fics pages
 RewriteRule ^fics/$ /fics/index.php
+RewriteRule ^fics/browse/?$ /fics/storyindex.php [QSA]
+RewriteRule ^fics/story/(\d+)/?$ /fics/story/story.php?sid=$1

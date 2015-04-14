@@ -91,15 +91,15 @@ function WriteBio($uid, $bio) {
 set_time_limit(90);
 ini_set('memory_limit', '-1');
 
-delete_files("../gallery/data/");
+//delete_files("../gallery/data/");
 
 function prep_file($md5, $ext) {
     $system_path = GetSystemImagePath($md5, $ext);
     $site_path = GetSiteImagePath($md5, $ext);
     $external_path = str_replace("/gallery/", "http://gallery.agn.ph/", $site_path);
     mkdirs(dirname($site_path));
-    file_put_contents($system_path, fopen($external_path, 'r'));
-    CreateThumbnailFile($md5, $ext);
+    //file_put_contents($system_path, fopen($external_path, 'r'));
+    //CreateThumbnailFile($md5, $ext);
     $preview_path = CreatePreviewFile($md5, $ext);
     if ($preview_path == GetSystemPreviewPath($md5, $ext)) {
         // Have a preview file.
@@ -215,5 +215,22 @@ AddToPool(1, 1, 1);
 AddToPool(2, 1, 3);
 AddToPool(3, 1, 2);
 AddToPool(4, 1, 4);
+
+
+// Populate some fics entries.
+
+function CreateStory($author_id, $title, $summary, $rating = "X") {
+    $now = time();
+    do_or_die(sql_query("INSERT INTO ".FICS_STORY_TABLE."
+        (AuthorUserId, DateCreated, DateUpdated, Title, Summary, Rating)
+        VALUES
+        ($author_id, $now, $now, '$title', '$summary', '$rating');"));
+}
+
+CreateStory(1, "Title of story 1", "Test summary 1. This is a really long summary that probably cannot fit into the small mobile layout summary window, but will try nonetheless.");
+CreateStory(1, "Quite a long title for a single story", "Test summary 2");
+CreateStory(1, "Title of story 3", "Test summary 3");
+CreateStory(1, "Title of story 4", "Test summary 4");
+CreateStory(1, "Title of story 5", "Test summary 5");
 
 ?>

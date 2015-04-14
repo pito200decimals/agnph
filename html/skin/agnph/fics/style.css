@@ -18,3 +18,53 @@
 .ficsnav a:hover {
     text-shadow: 0 0 3px rgb(0,0,255);
 }
+
+.storyblock {
+    margin: 5px;
+    padding: 5px;
+    background-color: rgb(63,127,255);
+    display: block;
+}
+.storyblockcontainer {
+    background-color: rgb(255,255,255);
+}
+.storyblockheader {
+    padding: 5px;
+    background-color: rgb(191,223,255);
+}
+.storyblockheader p {
+    margin: 5px;
+}
+.storyblockheader .title {
+    font-size: 150%;
+}
+.storyblockinfo {
+    padding: 5px;
+    background-color: rgb(255,255,255);
+}
+.storyblockinfo ul {
+    margin: 0px;
+    padding: 0px;
+    padding: 0px;
+    list-style-type: none;
+}
+.storyblockinfo li {
+    margin: 5px;
+}
+.storyblockinfo .metalabel {
+    font-weight: bold;
+    margin-right: 5px;
+}
+.mininfo .stars {
+    display: none;
+}
+.storyblockinfo > ul > li > p {
+    margin: 0px;
+}
+.storyblockfooter {
+    padding: 5px;
+    background-color: rgb(255,255,255);
+}
+.stars {
+    padding: 5px;
+}

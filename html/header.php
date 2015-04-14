@@ -31,10 +31,9 @@ $vars = array();
 if (isset($user)) {
     RecordUserIP($user);
     $vars['user'] = $user;
-} else {
-    // Set up defaults for a guest.
-    $vars['user'] = DefaultUser();
 }
+
+$vars['debug'] = DEBUG;
 
 // Set up site-wide defaults.
 // Navigation links.

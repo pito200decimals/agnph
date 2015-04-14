@@ -61,9 +61,11 @@ function UnsetCookies() {
     setcookie(SALT_COOKIE, "", time() - 3600, "/");
 }
 
-function FormatDate($epoch) {
+
+function FormatDate($epoch, $format = FORUMS_DATE_FORMAT) {
+    // TODO: Take into account user timezone.
     $dt = new DateTime("@$epoch");
-    return $dt->format('Y-m-d H:i:s');
+    return $dt->format($format);
 }
 function FormatDuration($seconds) {
     if ($seconds < 60) {

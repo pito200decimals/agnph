@@ -195,5 +195,4 @@
             </div>
         {% endif %}
     </div>
-    <div class="Clear">&nbsp;</div>
 {% endblock %}

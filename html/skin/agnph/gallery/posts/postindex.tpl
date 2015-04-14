@@ -104,5 +104,4 @@
             No posts matched your search.
         {% endif %}
     </div>
-    <div class="Clear">&nbsp;</div>
 {% endblock %}

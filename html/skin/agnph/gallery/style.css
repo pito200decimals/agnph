@@ -38,12 +38,6 @@
     }
 }
 
-.Clear {
-  clear: both;
-  height: 0;
-  overflow: hidden;
-}
-
 .formlabel {
     vertical-align: top;
     width: 100px;
