@@ -59,8 +59,6 @@ function FillStoryInfo(&$story) {
     // TODO
     $story['reviewCount'] = 0;
 
-    $story['TotalStars'] = 13;
-    $story['TotalRatings'] = 2;
     $averageStars = round($story['TotalStars'] / $story['TotalRatings']);
     $stars = "";
     for ($i = 1; $i < $averageStars; $i += 2) {

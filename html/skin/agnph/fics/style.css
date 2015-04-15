@@ -19,6 +19,8 @@
     text-shadow: 0 0 3px rgb(0,0,255);
 }
 
+/* Storyblock CSS */
+
 .storyblock {
     margin: 5px;
     padding: 5px;
@@ -28,6 +30,7 @@
 .storyblockcontainer {
     background-color: rgb(255,255,255);
 }
+/*header*/
 .storyblockheader {
     padding: 5px;
     background-color: rgb(191,223,255);
@@ -38,33 +41,38 @@
 .storyblockheader .title {
     font-size: 150%;
 }
+.stars {
+    padding: 5px;
+}
+.storyblockheader .mininfo .stars {
+    display: none;
+}
+/*info*/
 .storyblockinfo {
     padding: 5px;
     background-color: rgb(255,255,255);
 }
-.storyblockinfo ul {
+.storyblockinfo p,ul,li {
     margin: 0px;
-    padding: 0px;
-    padding: 0px;
-    list-style-type: none;
 }
-.storyblockinfo li {
-    margin: 5px;
+.storyblockinfo ul {
+    list-style: none;
+    padding: 0px;
 }
-.storyblockinfo .metalabel {
+.infoscrollcontainer {
+    height: 100%;
+    background-color: rgb(255,191,191);
+}
+.storyblockinfocontainer {
+    padding: 5px;
+    overflow: auto;
+}
+.metalabel {
     font-weight: bold;
     margin-right: 5px;
 }
-.mininfo .stars {
-    display: none;
-}
-.storyblockinfo > ul > li > p {
-    margin: 0px;
-}
+/*footer*/
 .storyblockfooter {
     padding: 5px;
-    background-color: rgb(255,255,255);
-}
-.stars {
-    padding: 5px;
+    background-color: rgb(191,223,255);
 }
