@@ -13,7 +13,7 @@ $sid = $_GET['sid'];
 $story = GetStory($sid) or RenderErrorPage("Story not found.");
 $vars['story'] = $story;
 
-$chapters = GetChaptersInfo($sid);// or RenderErrorPage("Story not found.");
+$chapters = GetChaptersInfo($sid) or RenderErrorPage("Story not found.");
 $vars['chapters'] = $chapters;
 
 RenderPage("fics/story/story.tpl");

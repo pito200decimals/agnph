@@ -67,7 +67,7 @@ function LoadSingleTableEntry($tables, $id_name, $id, &$dest, $fresh = false) {
 // Loads all user settings. Should be for the currently logged-in user. Called from the authentication header code.
 // Code should be updated to include all user data tables.
 function LoadAllUserPreferences($uid, &$user, $fresh = false) {
-    $table_list = array(USER_TABLE, FORUMS_USER_PREF_TABLE);
+    $table_list = array(USER_TABLE, FORUMS_USER_PREF_TABLE, GALLERY_USER_PREF_TABLE, FICS_USER_PREF_TABLE);
     return LoadSingleTableEntry($table_list, "UserId", $uid, $user, $fresh);
 }
 ?>

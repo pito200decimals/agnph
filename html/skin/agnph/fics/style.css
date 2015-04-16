@@ -59,14 +59,6 @@
     list-style: none;
     padding: 0px;
 }
-.infoscrollcontainer {
-    height: 100%;
-    background-color: rgb(255,191,191);
-}
-.storyblockinfocontainer {
-    padding: 5px;
-    overflow: auto;
-}
 .metalabel {
     font-weight: bold;
     margin-right: 5px;

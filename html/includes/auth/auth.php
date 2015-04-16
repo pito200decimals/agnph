@@ -13,6 +13,7 @@ if (isset($user)) {
 function AuthenticateUser($uid, $salt) {
     global $user;
     debug("Authenticating user with uid=$uid, salt=$salt");
+    // TODO: Load only main user table?
     LoadAllUserPreferences($uid, $user);
     /*
     if ($user['suspended']) {

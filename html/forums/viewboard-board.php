@@ -1,9 +1,9 @@
 <?php
 // Views a forum board. Included from viewboard.php.
 if (isset($user)) {
-    $threads_per_page = $user['ThreadsPerPage'];
+    $threads_per_page = $user['ForumThreadsPerPage'];
 } else {
-    $threads_per_page = DEFAULT_THREADS_PER_PAGE;
+    $threads_per_page = DEFAULT_FORUM_THREADS_PER_PAGE;
 }
 $unread_posts = array();
 $unread_threads = array();

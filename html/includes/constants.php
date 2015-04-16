@@ -19,6 +19,7 @@ define("USER_TABLE", "user");
 define("FORUMS_USER_PREF_TABLE", "forums_user");
 define("GALLERY_USER_PREF_TABLE", "gallery_user");
 define("GALLERY_USER_FAVORITES_TABLE", "gallery_user_fav");
+define("FICS_USER_PREF_TABLE", "fics_user");
 
 // Forums tables.
 define("FORUMS_LOBBY_TABLE", "forums_lobbies");
@@ -44,14 +45,15 @@ define("FICS_STORIES_PER_PAGE", 15);
 
 // User Settings Defaults.
 define("DEFAULT_SKIN", "agnph");
-define("DEFAULT_THREADS_PER_PAGE", 5);
-define("DEFAULT_POSTS_PER_PAGE", 5);
+define("DEFAULT_FORUM_THREADS_PER_PAGE", 5);
+define("DEFAULT_FORUM_POSTS_PER_PAGE", 5);
 define("DEFAULT_PAGE_ITERATOR_SIZE", 2);  // 2 => 1 ... 5 6 [7] 8 9 ... 12
 define("DEFAULT_ALLOWED_TAGS", "a[href],p[style],span[style],b,u,i,strong,em,ol,ul,li,center,hr,br,div,pre,small");
 define("DEFAULT_GALLERY_POSTS_PER_PAGE", 45);
 define("DEFAULT_GALLERY_PAGE_ITERATOR_SIZE", 2);
 define("MAX_GALLERY_SEARCH_TERMS", 6);
 define("GALLERY_LIST_ITEMS_PER_PAGE", 50);
+define("DEFAULT_FICS_STORIES_PER_PAGE", 15);
 
 // General constants.
 $GALLERY_TAG_TYPES = array(

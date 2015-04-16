@@ -8,6 +8,18 @@ include_once("../includes/util/sql.php");
 include_once("../gallery/includes/image.php");
 include_once("../includes/util/file.php");
 include_once("../gallery/includes/functions.php");
+include_once("../fics/includes/functions.php");
+
+delete_files("../user/bio/");
+delete_files("../gallery/data/");
+delete_files("../uploads/");
+delete_files("../fics/data/");
+mkdir("../user/bio/");
+mkdir("../gallery/data/");
+mkdir("../uploads/");
+mkdir("../fics/data/");
+mkdir("../fics/data/chapters/");
+
 
 // Populate User table.
 do_or_die(sql_query(
@@ -25,8 +37,21 @@ do_or_die(sql_query(
     (1, 'Sig of User 1'),
     (2, 'Sig of User 2'),
     (3, 'Sig of User 3');"));
-delete_files("../user/bio/");
-mkdir("../user/bio/");
+do_or_die(sql_query(
+   "INSERT INTO ".GALLERY_USER_PREF_TABLE."
+    (UserId)
+    VALUES
+    (1),
+    (2),
+    (3);"));
+do_or_die(sql_query(
+   "INSERT INTO ".FICS_USER_PREF_TABLE."
+    (UserId)
+    VALUES
+    (1),
+    (2),
+    (3);"));
+
 WriteBio(1, "Bio of user 1!<br />TEST");
 WriteBio(2, "Bio of user 2!");
 WriteBio(3, "Bio of user 3!");
@@ -90,8 +115,6 @@ function WriteBio($uid, $bio) {
 
 set_time_limit(90);
 ini_set('memory_limit', '-1');
-
-delete_files("../gallery/data/");
 
 function prep_file($md5, $ext) {
     $system_path = GetSystemImagePath($md5, $ext);
@@ -219,18 +242,46 @@ AddToPool(4, 1, 4);
 
 // Populate some fics entries.
 
-function CreateStory($author_id, $title, $summary, $rating = "X") {
+function CreateStory($author_id, $title, $summary, $story_notes, $rating = "X") {
     $now = time();
     do_or_die(sql_query("INSERT INTO ".FICS_STORY_TABLE."
-        (AuthorUserId, DateCreated, DateUpdated, Title, Summary, Rating, TotalStars, TotalRatings)
+        (AuthorUserId, DateCreated, DateUpdated, Title, Summary, StoryNotes, Rating, TotalStars, TotalRatings)
         VALUES
-        ($author_id, $now, $now, '$title', '$summary', '$rating', 13, 2);"));
+        ($author_id, $now, $now, '$title', '$summary', '$story_notes', '$rating', 13, 2);"));
 }
 
-CreateStory(1, "Title of story 1", "Test summary 1. This is a really long summary that probably cannot fit into the small mobile layout summary window, but will try nonetheless.");
-CreateStory(1, "Quite a long title for a single story", "Test summary 2");
-CreateStory(1, "Title of story 3", "Test summary 3");
-CreateStory(1, "Title of story 4", "Test summary 4");
-CreateStory(1, "Title of story 5", "Test summary 5");
+CreateStory(1, "Title of story 1", "Test summary 1. This is a really long summary that probably cannot fit into the small mobile layout summary window, but will try nonetheless.", "Story notes");
+CreateStory(1, "Quite a long title for a single story", "Test summary 2", "Story notes");
+CreateStory(1, "Title of story 3", "Test summary 3", "Story notes");
+CreateStory(1, "Title of story 4", "Test summary 4", "Story notes");
+CreateStory(1, "Title of story 5", "Test summary 5", "Story notes");
+
+function AddChapter($sid, $author_id, $title, $begin_notes, $content, $end_notes) {
+    $result = false;
+    sql_query_into($result, "SELECT count(*) FROM ".FICS_CHAPTER_TABLE." WHERE ParentStoryId=$sid;", 0);
+    if (!$result) $count = 0;
+    else $count = $result->fetch_assoc()['count(*)'];
+    do_or_die(sql_query("INSERT INTO ".FICS_CHAPTER_TABLE."
+        (ParentStoryId, AuthorUserId, Title, ChapterItemOrder, ChapterNotes, ChapterEndNotes, TotalStars, TotalRatings)
+        VALUES
+        ($sid, $author_id, '$title', $count, '$begin_notes', '$end_notes', 13, 2);"));
+    // TODO: Write story content to file.
+    $cid = sql_last_id();
+    $chapter_path = GetChapterPath($cid);
+    write_file($chapter_path, $content);
+    // Update some story stats.
+    $word_count = ChapterWordCount($content);
+    $chapter_count = $count + 1;
+    do_or_die(sql_query("UPDATE ".FICS_STORY_TABLE." SET ChapterCount=$chapter_count, WordCount=WordCount+$word_count WHERE StoryId=$sid;"));
+}
+
+AddChapter(1, 1, "Chapter 1 title", "BEGIN", "CONTENT 1", "END");
+AddChapter(1, 1, "Chapter 2 title", "BEGIN", "CONTENT 2", "END");
+AddChapter(1, 1, "Chapter 3 title", "BEGIN", "CONTENT 3", "END");
+
+AddChapter(2, 1, "Chapter 1 title", "BEGIN", "CONTENT 1", "END");
+AddChapter(3, 1, "Chapter 1 title", "BEGIN", "CONTENT 1", "END");
+AddChapter(4, 1, "Chapter 1 title", "BEGIN", "CONTENT 1", "END");
+AddChapter(5, 1, "Chapter 1 title", "BEGIN", "CONTENT 1", "END");
 
 ?>

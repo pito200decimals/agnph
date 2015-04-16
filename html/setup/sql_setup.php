@@ -43,6 +43,7 @@ sql_query("DROP TABLE ".FICS_CHAPTER_TABLE.";");
 //sql_query("DROP TABLE ".FICS_TAG_TABLE.";");
 //sql_query("DROP TABLE ".FICS_REVIEW_TABLE.";");
 //sql_query("DROP TABLE ".FICS_SERIES_TABLE.";");
+sql_query("DROP TABLE ".FICS_USER_PREF_TABLE.";");
 
 // Main user data table. General information that is shared between sections.
 do_or_die(sql_query(
@@ -120,8 +121,8 @@ do_or_die(sql_query(
         UserId INT(11) NOT NULL,
         Signature VARCHAR(256) NOT NULL,
         SeenPostsUpToId INT(11) DEFAULT 0 NOT NULL,
-        ThreadsPerPage INT(11) DEFAULT ".DEFAULT_THREADS_PER_PAGE.",
-        PostsPerPage INT(11) DEFAULT ".DEFAULT_POSTS_PER_PAGE.",
+        ForumThreadsPerPage INT(11) DEFAULT ".DEFAULT_FORUM_THREADS_PER_PAGE.",
+        ForumPostsPerPage INT(11) DEFAULT ".DEFAULT_FORUM_POSTS_PER_PAGE.",
         ForumsPermissions CHAR(1) NOT NULL,".  // A = Allowed to sticky posts.
        "PRIMARY KEY(UserId)
     );"));
@@ -218,7 +219,7 @@ do_or_die(sql_query(
         UploadLimit INT(11) NOT NULL,
         ArtistTagId INT(11) NOT NULL,
         GalleryPermissions CHAR(1) DEFAULT 'N',".  // N - Normal user, C - Contributor, A - Admin
-       "PostsPerPage INT(11) DEFAULT ".DEFAULT_GALLERY_POSTS_PER_PAGE.",
+       "GalleryPostsPerPage INT(11) DEFAULT ".DEFAULT_GALLERY_POSTS_PER_PAGE.",
         PRIMARY KEY(UserId)
     );"));
 // User favorites for gallery section.
@@ -249,6 +250,8 @@ do_or_die(sql_query(
        "Completed TINYINT(1) DEFAULT FALSE,
         ParentSeriesId INT(11) DEFAULT -1,
         SeriesItemOrder INT(11) NOT NULL,
+        StoryNotes TEXT(1024) NOT NULL,
+        ChapterCount INT(11) NOT NULL,
         WordCount INT(11) NOT NULL,
         Views INT(11) NOT NULL,
         TotalStars INT(11) NOT NULL,
@@ -260,14 +263,24 @@ do_or_die(sql_query(
         ChapterId INT(11) UNSIGNED AUTO_INCREMENT,
         ParentStoryId INT(11) NOT NULL,
         AuthorUserId INT(11) NOT NULL,
-        DateCreated INT(11) NOT NULL,
-        ApprovalStatus CHAR(1) NOT NULL,".  // P - Pending, A - Approved, F - Flagged, D - Deleted
+        Title VARCHAR(256) NOT NULL,
+        ApprovalStatus CHAR(1) DEFAULT 'A',".  // P - Pending, A - Approved, F - Flagged, D - Deleted
        "ChapterItemOrder INT(11) NOT NULL,
+        ChapterNotes TEXT(1024) NOT NULL,
+        ChapterEndNotes TEXT(1024) NOT NULL,
         WordCount INT(11) NOT NULL,
         Views INT(11) NOT NULL,
         TotalStars INT(11) NOT NULL,
         TotalRatings INT(11) NOT NULL,
         PRIMARY KEY(ChapterId)
+    );"));
+do_or_die(sql_query(
+   "CREATE TABLE ".FICS_USER_PREF_TABLE." (
+        UserId INT(11) NOT NULL,
+        AuthorTagId INT(11) NOT NULL,
+        FicsPermissions CHAR(1) DEFAULT 'N',".  // N - Normal user, C - Contributor, A - Admin
+       "FicsStoriesPerPage INT(11) DEFAULT ".DEFAULT_FICS_STORIES_PER_PAGE.",
+        PRIMARY KEY(UserId)
     );"));
 
 

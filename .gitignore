@@ -1,5 +1,6 @@
 lib/*
+html/uploads/*
 html/user/bio/*
 html/gallery/data/*
-html/gallery/thumb/*
-html/gallery/preview/*
+html/fics/data/*
+html/user/data/*

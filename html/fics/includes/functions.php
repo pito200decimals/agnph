@@ -4,6 +4,10 @@
 include_once(SITE_ROOT."fics/includes/file.php");
 include_once(SITE_ROOT."includes/util/table_data.php");
 include_once(SITE_ROOT."includes/util/core.php");
+include_once(SITE_ROOT."includes/util/html_funcs.php");
+
+// General path functions.
+function GetChapterPath($cid) { return SITE_ROOT."fics/data/chapters/$cid.txt"; }
 
 // Returns all info about a story, including its 'author' (and 'coauthors')
 // Returns null on error.
@@ -75,7 +79,7 @@ function FillStoryInfo(&$story) {
 // Returns null on error.
 function GetChaptersInfo($sid) {
     $escaped_sid = sql_escape($sid);
-    if (!sql_query_into($result, "SELECT * FROM ".FICS_CHAPTER_TABLE." WHERE ParentStoryId='$escaped_sid' ORDER BY ChapterItemOrder ASC;", 1)) return null;
+    if (!sql_query_into($result, "SELECT * FROM ".FICS_CHAPTER_TABLE." WHERE ParentStoryId='$escaped_sid' ORDER BY ChapterItemOrder ASC, ChapterId DESC;", 1)) return null;
     $chapters = array();
     while ($row = $result->fetch_assoc()) {
         $chapters[] = $row;
@@ -104,6 +108,12 @@ function GetTagsInfo($tag_id_array) {
 
 function UpdateStoryStats($sid) {
     // TODO
+}
+
+function ChapterWordCount($content) {
+    $stripped = SanitizeHTMLTags($content, "");
+    debug($stripped);
+    return sizeof(explode(" ", $stripped));
 }
 
 ?>

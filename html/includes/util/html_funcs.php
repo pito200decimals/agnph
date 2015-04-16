@@ -11,14 +11,19 @@ function SanitizeHTMLTags($html, $allowed_html_config) {
     return $purifier->purify($html);
 }
 
+// TODO: Consolidate pagination more.
 // Modifies $items and $offset, returns the HTML for the page_iterator.
+// $link_fn is function($page_index, $current_page, $max_pages) => HTML.
 function Paginate(&$items, &$offset, $items_per_page, $link_fn, $include_arrows = false) {
     $num_items = sizeof($items);
     $curr_page = floor($offset / $items_per_page) + 1;
     $offset = ($curr_page - 1) * $items_per_page;
     $max_pages = ceil($num_items / $items_per_page);
     $items = array_slice($items, $offset, $items_per_page);
-    return ConstructPageIterator($curr_page, $max_pages, DEFAULT_PAGE_ITERATOR_SIZE, $link_fn, $include_arrows);
+    $new_link_fn = function($page_index, $current_page) use ($link_fn, $max_pages) {
+        return $link_fn($page_index, $current_page, $max_pages);
+    };
+    return ConstructPageIterator($curr_page, $max_pages, DEFAULT_PAGE_ITERATOR_SIZE, $new_link_fn, $include_arrows);
 }
 
 // Creates and returns the HTML for a page iterator (e.g. 1 ... 5 6 [7] 8 9 ... 12), with the appropriate links).

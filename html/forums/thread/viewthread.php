@@ -22,9 +22,9 @@ if (!isset($_GET['offset'])) {
 
 // Get thread content.
 if (isset($user)) {
-    $posts_per_page = $user['PostsPerPage'];
+    $posts_per_page = $user['ForumPostsPerPage'];
 } else {
-    $posts_per_page = DEFAULT_POSTS_PER_PAGE;
+    $posts_per_page = DEFAULT_FORUM_POSTS_PER_PAGE;
 }
 // Query for thread data.
 $escaped_tid = sql_escape($tid);
@@ -40,7 +40,7 @@ SetPostLinks($posts, false);
 
 // Construct the thread page iterator. Also slices the posts to only the viewed page.
 $vars['page_iterator'] = Paginate($posts, $postoffset, $posts_per_page,
-    function($i, $curr_page) use ($tid, $posts_per_page) {
+    function($i, $curr_page, $max_page) use ($tid, $posts_per_page) {
         if ($i == $curr_page) {
             return "[$i]";
         } else {

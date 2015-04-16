@@ -14,8 +14,13 @@ if (isset($_GET['search'])) {
 } else {
     $searchterms = "";
 }
+if (isset($user)) {
+    $posts_per_page = $user['GalleryPostsPerPage'];
+} else {
+    $posts_per_page = DEFAULT_GALLERY_POSTS_PER_PAGE;
+}
 $vars['search'] = $searchterms;
-$sql = CreatePostSearchSQL(strtolower($searchterms), DEFAULT_GALLERY_POSTS_PER_PAGE, $page, $can_sort_pool, $pool_id);
+$sql = CreatePostSearchSQL(strtolower($searchterms), $posts_per_page, $page, $can_sort_pool, $pool_id);
 sql_query_into($result, $sql, 0) or RenderErrorPage("No posts found");
 $posts = array();
 while ($row = $result->fetch_assoc()) {
@@ -28,7 +33,7 @@ while ($row = $result->fetch_assoc()) {
 SetOutlineClasses($posts);
 
 // Construct page iterator.
-$vars['postIterator'] = CreatePageIterator($searchterms, $page);
+$vars['postIterator'] = CreatePageIterator($searchterms, $page, $posts_per_page);
 
 $vars['posts'] = $posts;
 $vars['cansort'] = $can_sort_pool;
@@ -39,9 +44,9 @@ if ($can_sort_pool) {
 RenderPage("gallery/posts/postindex.tpl");
 return;
 
-function CreatePageIterator($searchterms, $page) {
+function CreatePageIterator($searchterms, $page, $posts_per_page) {
     $total_num_posts = CountNumPosts(strtolower($searchterms));
-    $num_max_pages = (int)(($total_num_posts + DEFAULT_GALLERY_POSTS_PER_PAGE - 1) / DEFAULT_GALLERY_POSTS_PER_PAGE);
+    $num_max_pages = (int)(($total_num_posts + $posts_per_page - 1) / $posts_per_page);
     if ($num_max_pages > 1) {
         $iterator_html = ConstructPageIterator($page, $num_max_pages, DEFAULT_GALLERY_PAGE_ITERATOR_SIZE,
             function($i, $current_page) use ($searchterms, $num_max_pages) {
