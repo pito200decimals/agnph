@@ -1,6 +1,9 @@
 <?php
 // Standard header that includes all the important files. Will reside in the site root.
 
+// Hatch Edit!!!
+// We'll also test merges
+
 // Find the site root directory.
 $folder_level = "";
 while (!file_exists($folder_level.__FILE__)) {
