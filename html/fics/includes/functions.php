@@ -71,14 +71,16 @@ function FillStoryInfo(&$story) {
     // TODO
     $story['reviewCount'] = 0;
 
-    $averageStars = round($story['TotalStars'] / $story['TotalRatings']);
     $stars = "";
-    for ($i = 1; $i < $averageStars; $i += 2) {
-        $stars .= "<img src='/images/star.gif' />";
-    }
-    if ($i == $averageStars) {
-        // Also add a half-star.
-        $stars .= "<img src='/images/starhalf.gif' />";
+    if ($story['TotalRatings'] > 0) {
+        $averageStars = round($story['TotalStars'] / $story['TotalRatings']);
+        for ($i = 1; $i < $averageStars; $i += 2) {
+            $stars .= "<img src='/images/star.gif' />";
+        }
+        if ($i == $averageStars) {
+            // Also add a half-star.
+            $stars .= "<img src='/images/starhalf.gif' />";
+        }
     }
     $story['stars'] = $stars;
 }
