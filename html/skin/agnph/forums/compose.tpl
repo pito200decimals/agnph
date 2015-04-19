@@ -6,7 +6,7 @@
 
 {% block scripts %}
     <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
-    <script>
+    <script type="text/javascript">
         tinymce.init({
             selector: "textarea",
             plugins: [ "paste", "link", "autoresize", "hr", "wordcount", "code", "contextmenu", "emoticons", "fullscreen", "preview", "image", "searchreplace", "textcolor" ],

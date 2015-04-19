@@ -278,7 +278,7 @@ do_or_die(sql_query(
    "CREATE TABLE ".FICS_USER_PREF_TABLE." (
         UserId INT(11) NOT NULL,
         AuthorTagId INT(11) NOT NULL,
-        FicsPermissions CHAR(1) DEFAULT 'N',".  // N - Normal user, C - Contributor, A - Admin
+        FicsPermissions CHAR(1) DEFAULT 'N',".  // N - Normal user, A - Admin
        "FicsStoriesPerPage INT(11) DEFAULT ".DEFAULT_FICS_STORIES_PER_PAGE.",
         PRIMARY KEY(UserId)
     );"));

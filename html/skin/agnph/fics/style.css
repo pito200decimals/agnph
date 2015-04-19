@@ -63,6 +63,10 @@
     font-weight: bold;
     margin-right: 5px;
 }
+.summary-box {
+    max-height: 300px;
+    overflow: auto;
+}
 /*footer*/
 .storyblockfooter {
     padding: 5px;

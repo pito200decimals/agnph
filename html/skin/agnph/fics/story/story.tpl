@@ -9,26 +9,24 @@
 
 {% block ficscontent %}
     {{ block('storyblock') }}
-    <div>
-        {% if story.StoryNotes|length > 0 %}
-            <div class="storynotes">
-                <p><strong>Story Notes</strong></p>
-                <p>
-                    {{ story.StoryNotes }}
+    {% if story.StoryNotes|length > 0 %}
+        <div class="storynotes">
+            <p><strong>Story Notes</strong></p>
+            <p>
+                {% autoescape false %}{{ story.StoryNotes }}{% endautoescape %}
+            </p>
+        </div>
+    {% endif %}
+    <ol>
+        {% for chapter in chapters %}
+            <li>
+                <p class="chaptertitle">
+                    <a href="/fics/story/{{ story.StoryId }}/{{ loop.index }}/">
+                        <strong>{{ chapter.Title }}</strong>
+                    </a>
                 </p>
-            </div>
-        {% endif %}
-        <ol>
-            {% for chapter in chapters %}
-                <li>
-                    <p class="chaptertitle">
-                        <a href="/fics/story/{{ story.StoryId }}/{{ loop.index }}/">
-                            <strong>{{ chapter.Title }}</strong>
-                        </a>
-                    </p>
-                    <p class="chapternotes">{{ chapter.ChapterNotes }}</p>
-                </li>
-            {% endfor %}
-        </ol>
-    </div>
+                <p class="chapternotes">{% autoescape false %}{{ chapter.ChapterNotes }}{% endautoescape %}</p>
+            </li>
+        {% endfor %}
+    </ol>
 {% endblock %}

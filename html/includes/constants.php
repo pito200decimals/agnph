@@ -41,14 +41,13 @@ define("FICS_STORY_TAG_TABLE", "fics_story_tag");
 define("FICS_TAG_TABLE", "fics_tags");
 define("FICS_REVIEW_TABLE", "fics_reviews");
 define("FICS_SERIES_TABLE", "fics_series");
-define("FICS_STORIES_PER_PAGE", 15);
 
 // User Settings Defaults.
 define("DEFAULT_SKIN", "agnph");
-define("DEFAULT_FORUM_THREADS_PER_PAGE", 5);
-define("DEFAULT_FORUM_POSTS_PER_PAGE", 5);
+define("DEFAULT_FORUM_THREADS_PER_PAGE", 25);
+define("DEFAULT_FORUM_POSTS_PER_PAGE", 10);
 define("DEFAULT_PAGE_ITERATOR_SIZE", 2);  // 2 => 1 ... 5 6 [7] 8 9 ... 12
-define("DEFAULT_ALLOWED_TAGS", "a[href],p[style],span[style],b,u,i,strong,em,ol,ul,li,center,hr,br,div,pre,small");
+define("DEFAULT_ALLOWED_TAGS", "a[href],p[style],span[style],b,u,i,strong,em,ol,ul,li,center,hr,br,div,pre,small");  // For Forums and Fics.
 define("DEFAULT_GALLERY_POSTS_PER_PAGE", 45);
 define("DEFAULT_GALLERY_PAGE_ITERATOR_SIZE", 2);
 define("MAX_GALLERY_SEARCH_TERMS", 6);
@@ -65,8 +64,8 @@ $GALLERY_TAG_TYPES = array(
 define("MAX_IMAGE_THUMB_SIZE", 150);
 define("MAX_IMAGE_PREVIEW_SIZE", 1200);
 define("MAX_TAG_NAME_LENGTH", 32);
-define("MAX_POOL_NAME_LENGTH", 32);
-define("MIN_POOL_PREFIX_LENGTH", 3);
+define("MAX_POOL_NAME_LENGTH", 128);
+define("MIN_POOL_PREFIX_LENGTH", 3);  // For ajax add-to-pool search.
 define("MAX_GALLERY_POST_FLAG_REASON_LENGTH", 64);
 define("FORUMS_DATE_FORMAT", "Y-m-d H:i:s");
 define("FICS_DATE_FORMAT", "Y-m-d");

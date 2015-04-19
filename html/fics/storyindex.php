@@ -17,7 +17,7 @@ $escaped_offset = sql_escape($offset);
 if (isset($user)) {
     $stories_per_page = $user['FicsStoriesPerPage'];
 } else {
-    $stories_per_page = FICS_STORIES_PER_PAGE;
+    $stories_per_page = DEFAULT_FICS_STORIES_PER_PAGE;
 }
 
 // TODO: Get search filters.

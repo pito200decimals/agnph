@@ -19,8 +19,8 @@
             </p>
         </div>
         <div class="storyblockinfo">
-            <div class="summary">
-                <p class="metalabel">Summary:</p><p>{{ story.Summary }}</p>
+            <div class="summary{% if restrictSummaryHeight %} summary-box{% endif %}">
+                <p class="metalabel">Summary:</p><p>{% autoescape false %}{{ story.Summary }}{% endautoescape %}</p>
             </div>
             <ul>
                 <li><span class="metalabel">Tags:</span>N/A</li>
@@ -37,8 +37,8 @@
             </ul>
         </div>
         <div class="storyblockfooter">
-            {% if canEdit %}
-                <a href="/fics/story/{{ story.StoryId }}/">{{ story.Title }}</a> by <a href="/user/{{ story.author.UserId }}/fics/">{{ story.author.DisplayName }}</a>
+            {% if canEdit or true %}
+                [<a href="/fics/edit_story.php?action=edit&sid={{ story.StoryId }}">Edit</a>]
             {% endif %}
         </div>
     </div>

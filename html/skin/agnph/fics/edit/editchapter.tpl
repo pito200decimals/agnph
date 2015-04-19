@@ -49,8 +49,6 @@
 {% use 'fics/storyblock.tpl' %}
 
 {% block ficscontent %}
-    {# Avoid taking up too much vertical space in the story index #}
-    {% set restrictSummaryHeight=true %}
     <div style="padding: 5px;">
         {% for story in stories %}
             {{ block('storyblock') }}

@@ -8,7 +8,7 @@
 {% block scripts %}
     {% if cansort %}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-        <script src="{{ skinDir }}/gallery/posts/jquery.sortable.js"></script>
+        <script src="{{ skinDir }}/scripts/jquery.sortable.js"></script>
         <script type="text/javascript">
             $(document).ready(function() {
                 $('.sortable').sortable().bind('sortupdate', Update);

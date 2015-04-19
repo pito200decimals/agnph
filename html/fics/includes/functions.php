@@ -4,7 +4,15 @@
 include_once(SITE_ROOT."fics/includes/file.php");
 include_once(SITE_ROOT."includes/util/table_data.php");
 include_once(SITE_ROOT."includes/util/core.php");
+include_once(SITE_ROOT."includes/util/sql.php");
 include_once(SITE_ROOT."includes/util/html_funcs.php");
+
+function CanUserEditStory($story, $user) {
+    return $user['UserId'] == $story['AuthorUserId'] || $user['FicsPermissions'] == 'A';
+}
+function CanUserDeleteStory($story, $user) {
+    return $user['UserId'] == $story['AuthorUserId'] || $user['FicsPermissions'] == 'A';
+}
 
 // General path functions.
 function GetChapterPath($cid) { return SITE_ROOT."fics/data/chapters/$cid.txt"; }
@@ -87,7 +95,7 @@ function GetChaptersInfo($sid) {
     return $chapters;
 }
 
-// Gets the chapter content for a story.
+// Gets the chapter content for a story. Fills in ['title'], ['notes'], ['text'] and ['endnotes']
 // Returns null on error.
 function GetChapterContent($cid) {
     // TODO
