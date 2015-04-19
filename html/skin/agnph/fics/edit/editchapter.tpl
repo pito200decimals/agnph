@@ -2,59 +2,38 @@
 
 {% block styles %}
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/fics/style.css" />
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/fics/storyindex-style.css" />
-{% endblock %}
-
-{% block scripts %}
-    {#
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script type="text/javascript">
-        function is_touch_device() {
-            try {
-                document.createEvent("TouchEvent");
-                return true;
-            } catch (e) {
-                return false;
-            }
-        }
-        $(document).ready(function() {
-            $(".scroll_on_hover").mouseover(function() {
-                $(this).stop();
-                var parentHeight = $(this).parent().height();
-                var height = $(this).height();
-                if (parentHeight < height) {
-                    var scroll = height - parentHeight;
-                    var speed = scroll * 25;
-                    $(this).animate({
-                        top: -scroll
-                    }, speed, "linear");
-                }
-            });
-            $(".scroll_on_hover").mouseout(function() {
-                $(this).stop();
-                $(this).animate({
-                    top: 0
-                }, 'slow');
-            });
-            /*
-            if (!is_touch_device()) {
-                $(".storyblockinfo").css("overflow", "hidden");
-            }
-            */
-        });
-    </script>
-    #}
+    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/fics/edit-style.css" />
 {% endblock %}
 
 {% use 'fics/storyblock.tpl' %}
+{% use 'fics/edit/editchapterblock.tpl' %}
+
+{% block scripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
+    <script type="text/javascript">
+        {{ block('chapterMCESetup') }}
+    </script>
+{% endblock %}
+
 
 {% block ficscontent %}
-    <div style="padding: 5px;">
-        {% for story in stories %}
-            {{ block('storyblock') }}
-        {% endfor %}
-    </div>
+    <a href="{{ backlink }}">Back</a>
+    {% if create %}
+        <h3>Create Chapter</h3>
+    {% else %}
+        <h3>Edit Chapter</h3>
+    {% endif %}
     <div>
-        {% autoescape false %}{{ iterator }}{% endautoescape %}
+        {% if errmsg and errmsg|length > 0 %}
+            <div class="errormsg">
+                Error: {{ errmsg }}
+            </div>
+        {% endif %}
+        <form action="" method="POST">
+            <input type="hidden" name="sid" value="{{ storyid }}" />
+            {{ block('editchapter') }}
+            <input type="submit" name="save" value="Save Changes" />
+        </form>
     </div>
 {% endblock %}

@@ -5,6 +5,9 @@
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/fics/edit-style.css" />
 {% endblock %}
 
+{% use 'fics/storyblock.tpl' %}
+{% use 'fics/edit/editchapterblock.tpl' %}
+
 {% block scripts %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
@@ -90,9 +93,6 @@
     </script>
 {% endblock %}
 
-{% use 'fics/storyblock.tpl' %}
-{% use 'fics/edit/editchapterblock.tpl' %}
-
 {% block ficscontent %}
     {% if not create %}
         {{ block('storyblock') }}
@@ -130,7 +130,7 @@
             </select></p>
             {# TODO: Admin Approval #}
             {# TODO: Series selection #}
-            <p><label>formstory Notes:</label>
+            <p><label>Story Notes:</label>
             <textarea id="notes" name="notes">
                 {% autoescape false %}
                     {{ formstory.StoryNotes }}
@@ -154,12 +154,12 @@
                                 {# TODO: Add non-JS support (Copy fields on submit) #}
                                 <li>
                                     <input class="chapterindex" type="hidden" value="{{ chapter.ChapterItemOrder }}" />
-                                    {{ chapter.Title }} <a href="/fics/edit_chapter.php?sid={{ formstory.StoryId }}&index={{ chapter.ChapterItemOrder }}">Edit</a> <a href="/fics/edit_chapter.php?action=delete&sid={{ formstory.StoryId }}&index={{ chapter.ChapterItemOrder }}">Delete</a>
+                                    {{ chapter.Title }} <a href="/fics/edit/{{ formstory.StoryId }}/{{ chapter.ChapterItemOrder+1 }}/">Edit</a><!-- <a href="/fics/delete/{{ formstory.StoryId }}/{{ chapter.ChapterItemOrder }}/">Delete</a>-->
                                 </li>
                             {% endfor %}
                         </ol>
                         <div class="newchapter">
-                            <a href="">Add new Chapter</a>
+                            <a href="/fics/create/{{ formstory.StoryId }}/{{ chapters|length + 1 }}/">Add new Chapter</a>
                         </div>
                 {% endif %}
             </div>

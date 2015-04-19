@@ -38,7 +38,7 @@
         </div>
         <div class="storyblockfooter">
             {% if canEdit or true %}
-                [<a href="/fics/edit_story.php?action=edit&sid={{ story.StoryId }}">Edit</a>]
+                [<a href="/fics/edit/{{ story.StoryId }}/">Edit</a>]
             {% endif %}
         </div>
     </div>

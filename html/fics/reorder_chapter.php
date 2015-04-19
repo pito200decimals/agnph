@@ -120,6 +120,7 @@ if ($sid > 0) {
     $sid = sql_last_id();
     $escaped_chap_title = sql_escape($chaptertitle);
     $escaped_chap_notes = sql_escape($chapternotes);
+    $escaped_chap_text = sql_escape($chaptertext);
     $escaped_chap_endnotes = sql_escape($chapterendnotes);
     $success = sql_query("INSERT INTO ".FICS_CHAPTER_TABLE."
         (ParentStoryId, AuthorUserId, Title, ChapterItemOrder, ChapterNotes, ChapterEndNotes)
@@ -132,12 +133,18 @@ if ($sid > 0) {
     }
     $cid = sql_last_id();
     // Write chapter contents to file.
-    $success = SetChapterText($cid, $chaptertext);
+    $chapter_path = GetChapterPath($cid);
+    $success = write_file($chapter_path, $chaptertext);
     if (!$success) {
         // Delete story.
         sql_query("DELETE FROM ".FICS_CHAPTER_TABLE." WHERE StoryId=$cid;");
         sql_query("DELETE FROM ".FICS_STORY_TABLE." WHERE StoryId=$sid;");
         return;
     }
+}
+
+function PostError($msg) {
+    global $errmsg;
+    $errmsg = $msg;
 }
 ?>

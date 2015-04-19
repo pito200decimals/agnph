@@ -273,7 +273,7 @@ do_or_die(sql_query(
         TotalStars INT(11) NOT NULL,
         TotalRatings INT(11) NOT NULL,
         PRIMARY KEY(ChapterId)
-    );"));
+    );"));  // NOTE: WordCount, TotalStars and TotalRatings not implemented yet.
 do_or_die(sql_query(
    "CREATE TABLE ".FICS_USER_PREF_TABLE." (
         UserId INT(11) NOT NULL,

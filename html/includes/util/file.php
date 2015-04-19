@@ -39,9 +39,9 @@ function read_file($file_path, &$dest) {
 // Writes to a file. Creates it if it doesn't exist. Fails if the parent directory doesn't exist.
 // Returns true on success, false on failure.
 function write_file($file_path, $contents, $append = false) {
-    $mode = "w";
+    $mode = "w+";
     if ($append) {
-        $mode = "a";
+        $mode = "a+";
     }
     $handle = fopen($file_path, $mode);
     if (!$handle) return false;

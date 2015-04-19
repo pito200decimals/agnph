@@ -59,11 +59,11 @@ if (isset($fill_from_post) && $fill_from_post) {
     if (isset($rating)) $story['Rating'] = $rating;
     if (isset($completed)) $story['Completed'] = $completed;
     if (isset($storynotes)) $story['StoryNotes'] = $storynotes;
-    // TODO: Fill chapter fields.
-    if (isset($chaptertitle)) $chapter['title'] = $chaptertitle;
-    if (isset($chapternotes)) $chapter['notes'] = $chapternotes;
-    if (isset($chaptertext)) $chapter['text'] = $chaptertext;
-    if (isset($chapterendnotes)) $chapter['endnotes'] = $chapterendnotes;
+    // Fill chapter fields.
+    if (isset($chaptertitle)) $vars['chaptertitle'] = $chaptertitle;
+    if (isset($chapternotes)) $vars['chapternotes'] = $chapternotes;
+    if (isset($chaptertext)) $vars['chaptertext'] = $chaptertext;
+    if (isset($chapterendnotes)) $vars['chapterendnotes'] = $chapterendnotes;
 }
 $vars['formstory'] = $story;
 

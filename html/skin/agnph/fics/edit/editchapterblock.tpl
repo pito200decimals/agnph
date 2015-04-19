@@ -34,24 +34,25 @@
 {% endblock %}
 
 {% block editchapter %}
-    <input type="hidden" name="chapterindex" value="{{ chapterindex }}" />
-    <p><label>Chapter Title:</label><input type="textfield" name="chaptertitle" value="{{ chapter.Title }}" /></p>
+    <input type="hidden" name="chapternum" value="{{ chapternum }}" />
+    <input type="hidden" name="chapterid" value="{{ chapterid }}" />
+    <p><label>Chapter Title:</label><input type="textfield" name="chaptertitle" value="{{ chaptertitle }}" /></p>
     <p><label>Chapter Notes:</label>
     <textarea id="chapnotes" name="chapternotes">
         {% autoescape false %}
-            {{ chapter.notes }}
+            {{ chapternotes }}
         {% endautoescape %}
     </textarea></p>
     <p><a id="chaptertextanchor" /><label>Chapter Text:</label>
     <textarea id="chaptext" name="chaptertext">
         {% autoescape false %}
-            {{ chapter.text}}
+            {{ chaptertext}}
         {% endautoescape %}
     </textarea></p>
     <p><label>Chapter End Notes:</label>
     <textarea id="chapendnotes" name="chapterendnotes">
         {% autoescape false %}
-            {{ chapter.endnotes}}
+            {{ chapterendnotes}}
         {% endautoescape %}
     </textarea></p>
 {% endblock %}

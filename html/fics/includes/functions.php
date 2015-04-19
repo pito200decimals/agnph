@@ -6,6 +6,7 @@ include_once(SITE_ROOT."includes/util/table_data.php");
 include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."includes/util/sql.php");
 include_once(SITE_ROOT."includes/util/html_funcs.php");
+include_once(SITE_ROOT."includes/util/file.php");
 
 function CanUserEditStory($story, $user) {
     return $user['UserId'] == $story['AuthorUserId'] || $user['FicsPermissions'] == 'A';
@@ -20,6 +21,7 @@ function GetChapterPath($cid) { return SITE_ROOT."fics/data/chapters/$cid.txt"; 
 // Returns all info about a story, including its 'author' (and 'coauthors')
 // Returns null on error.
 function GetStory($sid) {
+    if ($sid <= 0) return null;
     $escaped_sid = sql_escape($sid);
     if (!sql_query_into($result, "SELECT * FROM ".FICS_STORY_TABLE." WHERE StoryId='$escaped_sid';", 1)) return null;
     $story = $result->fetch_assoc();
@@ -92,16 +94,25 @@ function GetChaptersInfo($sid) {
     if (!sql_query_into($result, "SELECT * FROM ".FICS_CHAPTER_TABLE." WHERE ParentStoryId='$escaped_sid' ORDER BY ChapterItemOrder ASC, ChapterId DESC;", 1)) return null;
     $chapters = array();
     while ($row = $result->fetch_assoc()) {
+        $cid = $row['ChapterId'];
+        $hash = GetHashForChapter($sid, $cid);
+        $row['hash'] = $hash;
         $chapters[] = $row;
     }
     return $chapters;
 }
 
-// Gets the chapter content for a story. Fills in ['title'], ['notes'], ['text'] and ['endnotes']
+// Gets the chapter content for a story. Returns the chapter text.
 // Returns null on error.
-function GetChapterContent($cid) {
-    // TODO
-    return array();
+function GetChapterText($cid) {
+    $retval = "";
+    if (!read_file(GetChapterPath($cid), $retval)) return null;
+    return $retval;
+}
+
+// Sets the chapter's text. Returns true on success.
+function SetChapterText($cid, $text) {
+    return write_file(GetChapterPath($cid), $text);
 }
 
 // Gets tag ids for story, and tag info.
@@ -116,14 +127,34 @@ function GetTagsInfo($tag_id_array) {
     return array();
 }
 
+// Does a full refresh on story stats. Updates ChapterCount, WordCount, TotalReviewStars, TotalReviews
 function UpdateStoryStats($sid) {
-    // TODO
+    $escaped_sid = sql_escape($sid);
+    $chapters = GetChaptersInfo($sid);
+    $chapcount = 0;
+    $wordcount = 0;
+    foreach ($chapters as $chapter) {
+        $cid = $chapter['ChapterId'];
+        $text = GetChapterText($cid);
+        if ($text == null) continue;
+        $chapcount++;
+        $wordcount += ChapterWordCount($text);
+    }
+    // TODO: Also count reviews.
+    sql_query("UPDATE ".FICS_STORY_TABLE." SET ChapterCount=$chapcount, WordCount=$wordcount WHERE StoryId='$escaped_sid';");
 }
 
 function ChapterWordCount($content) {
     $stripped = SanitizeHTMLTags($content, "");
-    debug($stripped);
-    return sizeof(explode(" ", $stripped));
+    $words = explode(" ", $stripped);
+    $words = array_filter($words, function($word) {
+        return strlen($word) > 0;
+    });
+    return sizeof($words);
+}
+
+function GetHashForChapter($sid, $cid) {
+    return md5("$sid.$cid");
 }
 
 ?>
