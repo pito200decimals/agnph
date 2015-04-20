@@ -20,7 +20,7 @@
 {% block content %}
     {% if thread %}
         {% if user.UserId > 0 %}
-            <form id="deleteform" method="POST" action="/forums/delete/">
+            <form id="deleteform" method="POST" action="/forums/delete/" accept-charset="UTF-8">
                 <input id="postfield" type="hidden" name="post" value="-1" />
                 <input type="hidden" name="hash" value="{{ deletehash }}" />
             </form>

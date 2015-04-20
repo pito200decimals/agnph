@@ -31,7 +31,7 @@ $parent_post_id = GetValidParentPostId($_POST['parent'], $post_id);
 
 // Append rating and stuff before tags, so that tags can override them.
 $tagstr = "rating:".$_POST['rating']." parent:$parent_post_id source:".substr(str_replace(" ", "%20", $_POST['source']), 0, 256)." ".$_POST['tags'];
-$tagstr = preg_replace("/\s+/", " ", $tagstr);
+$tagstr = mb_ereg_replace("/\s+/", " ", $tagstr);
 $tagstrarray = explode(" ", $tagstr);
 $tagstrarray = array_filter($tagstrarray, function($str) { return strlen($str) > 0; });
 $tagstr = implode(" ", $tagstrarray);

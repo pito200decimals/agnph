@@ -64,7 +64,7 @@
     <div class="sidepanel">
         <h3>Search</h3>
         <div class="searchbox">
-            <form action="/gallery/post/">
+            <form action="/gallery/post/" accept-charset="UTF-8">
                 <input name="search" value="{{ search }}" type="textfield" />
             </form>
         </div>

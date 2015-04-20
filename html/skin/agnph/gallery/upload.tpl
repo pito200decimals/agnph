@@ -40,7 +40,7 @@ $(document).ready(function() {
 {% block gallerycontent %}
     <div class="uploadpanel">
         <h3>Upload</h3>
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" accept-charset="UTF-8">
             <label class="formlabel">File</label>           <input id="imgbrowse" class="textbox" type="file" name="file" accept="image/*" /><br />
             <label class="formlabel">Source</label>         <input id="imgsource" class="textbox" type="textbox" size=35 name="source" /><br />
             <label class="formlabel">Tags</label>           <textarea class="textbox" name="tags"></textarea><br />

@@ -34,7 +34,12 @@ $sqlconn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
 
 // Check connection
 if ($sqlconn->connect_error || mysqli_connect_error()) {
-    debug_die("Connection failed: " . $conn->connect_error);
+    debug_die("Connection failed: " . $sqlconn->connect_error);
+}
+if (!$sqlconn->set_charset("utf8")) {
+    debug_die("Connection failed: " . $sqlconn->error);
+} else {
+    debug("Current character set: ".$sqlconn->character_set_name());
 }
 
 ?>

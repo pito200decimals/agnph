@@ -282,7 +282,7 @@ function CreateEditorForm($form_values) {
         $sticky_box = "";
     }
     $editorForm = <<<EOD
-<form action="$request_uri" method="post">
+<form action="$request_uri" method="post" accept-charset="UTF-8">
     $error_msg
     <p>Title: <input type='text' name='title' value='$title'/></p>
     <p><textarea name="content">$initial_text</textarea></p>

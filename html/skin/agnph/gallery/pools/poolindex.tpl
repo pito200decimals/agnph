@@ -31,7 +31,7 @@
                 <li><a href="">New</a></li>
             </ul>
             <div id="newpanel">
-                <form action="/gallery/pools/create/" method="POST">
+                <form action="/gallery/pools/create/" method="POST" accept-charset="UTF-8">
                     <input name="name" type="textfield" />
                     <input type="submit" value="Create New" />
                 </form>
@@ -53,7 +53,7 @@
                         <td>{{ pool.count }}</td>
                         <td><a href="/user/{{ pool.creator.UserId }}/">{{ pool.creator.DisplayName }}</a></td>
                         {% if canEditPools %}<td>
-                            <form action="/gallery/pools/delete/" method="POST">
+                            <form action="/gallery/pools/delete/" method="POST" accept-charset="UTF-8">
                                 <input type="hidden" name="pool" value="{{ pool.PoolId }}" />
                                 <a href="#"><input type="submit" value="Delete" /></a>
                             </form>

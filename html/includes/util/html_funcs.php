@@ -62,13 +62,13 @@ function ConstructPageIterator($currpage, $maxpage, $iterator_size, $link_fn, $i
 // Renders the page to the given template.
 function RenderPage($template) {
     global $twig, $vars;
+    $text = mb_ereg_replace("/\s+/", " ", $twig->render($template, $vars));
     if (DEBUG) {
         echo "\n\n\n\n\n";
         echo "----------------------------------------------------------------------------------------------\n";
-        echo TidyHTML(preg_replace("/\s+/", " ", $twig->render($template, $vars)));
-    } else {
-        echo (preg_replace("/\s+/", " ", $twig->render($template, $vars)));
+        $text = TidyHTML($text);
     }
+    echo ($text);
 }
 
 function RenderErrorPage($message = "Error") {
@@ -116,6 +116,12 @@ function TidyHTML($html) {
         } elseif (preg_match("@^([^<]*)(</[^>]+>)(.*)@", $html, $match)) {
             // Close tag.
             $indent--;
+            $tabs = Tabs($indent);
+            if (strlen($match[1]) > 0) $ret .= $tabs.$match[1]."\n";
+            $ret .= $tabs.$match[2]."\n";
+            $html = $match[3];
+        } elseif (preg_match("@^([^<]*)(<?[^>]+>)(.*)@", $html, $match)) {
+            // xml
             $tabs = Tabs($indent);
             if (strlen($match[1]) > 0) $ret .= $tabs.$match[1]."\n";
             $ret .= $tabs.$match[2]."\n";

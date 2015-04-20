@@ -10,7 +10,7 @@ if (isset($_GET['page']) && is_numeric($_GET['page']) && ((int)$_GET['page']) > 
     $page = 1;
 }
 if (isset($_GET['search'])) {
-    $searchterms = preg_replace('!\s+!', ' ', trim($_GET['search']));
+    $searchterms = mb_ereg_replace('!\s+!', ' ', trim($_GET['search']));
 } else {
     $searchterms = "";
 }

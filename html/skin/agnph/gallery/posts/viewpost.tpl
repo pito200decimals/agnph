@@ -44,7 +44,7 @@
         {% endif %}
         <div class="searchbox">
             <h3>Search</h3>
-            <form action="/gallery/post/">
+            <form action="/gallery/post/" accept-charset="UTF-8">
                 <input name="search" type="textfield" />
             </form>
         </div>
@@ -107,7 +107,7 @@
                 {% endif %}
                 {% if canDelete %}
                     <li>
-                        <form hidden id="deleteform" action="/gallery/post/status/" method="POST">
+                        <form hidden id="deleteform" action="/gallery/post/status/" method="POST" accept-charset="UTF-8">
                             <input name="post" type="hidden" value="{{ post.PostId }}" />
                             <input name="reason" type="hidden" value="" />
                             <input name="action" type="hidden" value="delete" />
@@ -117,7 +117,7 @@
                 {% endif %}
                 {% if canUnDelete %}
                     <li>
-                        <form hidden id="undeleteform" action="/gallery/post/status/" method="POST">
+                        <form hidden id="undeleteform" action="/gallery/post/status/" method="POST" accept-charset="UTF-8">
                             <input name="post" type="hidden" value="{{ post.PostId }}" />
                             <input name="action" type="hidden" value="undelete" />
                         </form>
@@ -126,7 +126,7 @@
                 {% endif %}
                 {% if canApprove %}
                     <li>
-                        <form hidden id="approveform" action="/gallery/post/status/" method="POST">
+                        <form hidden id="approveform" action="/gallery/post/status/" method="POST" accept-charset="UTF-8">
                             <input name="post" type="hidden" value="{{ post.PostId }}" />
                             <input name="action" type="hidden" value="approve" />
                         </form>
@@ -135,7 +135,7 @@
                 {% endif %}
                 {% if canUnflag %}
                     <li>
-                        <form hidden id="unflagform" action="/gallery/post/status/" method="POST">
+                        <form hidden id="unflagform" action="/gallery/post/status/" method="POST" accept-charset="UTF-8">
                             <input name="post" type="hidden" value="{{ post.PostId }}" />
                             <input name="action" type="hidden" value="unflag" />
                         </form>
@@ -154,7 +154,7 @@
         </div>
         {% if canFlag %}
             <div class="flageditbox">
-                <form action="/gallery/post/status/" method="POST">
+                <form action="/gallery/post/status/" method="POST" accept-charset="UTF-8">
                     <label>Reason:</label><br />
                     <input name="post" type="hidden" value="{{ post.PostId }}" />
                     <input name="reason" type="textfield" />
@@ -180,7 +180,7 @@
             </p>
             <div class="posteditbox">
                 <a id="editanchor" />
-                <form action="/gallery/edit/" method="POST">
+                <form action="/gallery/edit/" method="POST" accept-charset="UTF-8">
                     <input type="hidden" name="post" value="{{ post.PostId }}" />
                     <label class="formlabel">Rating</label>         <input name="rating" type="radio"{% if post.Rating=='e' %} checked{% endif %} value="e" /><label>Explicit</label>
                                                                     <input name="rating" type="radio"{% if post.Rating=='q' %} checked{% endif %} value="q" /><label>Questionable</label>

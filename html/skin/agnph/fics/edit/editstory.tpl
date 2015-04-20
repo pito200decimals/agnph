@@ -118,7 +118,7 @@
             </div>
         {% endif %}
         {# Autocomplete off so that hidden inputs in the chapter section don't autofill with previous values #}
-        <form action="" method="POST" autocomplete="off">
+        <form action="" method="POST" autocomplete="off" accept-charset="UTF-8">
             <input type="hidden" name="sid" value="{% if create %}-1{% else %}{{ formstory.StoryId }}{% endif %}" />
             <p><label>Title:</label><input type="textfield" name="title" value="{{ formstory.Title }}" /></p>
             {# TODO: Coauthors #}

@@ -136,15 +136,17 @@ function UpdateStoryStats($sid) {
     $chapters = GetChaptersInfo($sid);
     $chapcount = 0;
     $wordcount = 0;
+    $viewcount = 0;
     foreach ($chapters as $chapter) {
         $cid = $chapter['ChapterId'];
         $text = GetChapterText($cid);
         if ($text == null) continue;
         $chapcount++;
         $wordcount += ChapterWordCount($text);
+        $viewcount += $chapter['Views'];
     }
     // TODO: Also count reviews.
-    sql_query("UPDATE ".FICS_STORY_TABLE." SET ChapterCount=$chapcount, WordCount=$wordcount WHERE StoryId='$escaped_sid';");
+    sql_query("UPDATE ".FICS_STORY_TABLE." SET ChapterCount=$chapcount, WordCount=$wordcount, Views=$viewcount WHERE StoryId='$escaped_sid';");
 }
 
 function ChapterWordCount($content) {

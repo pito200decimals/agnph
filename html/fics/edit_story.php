@@ -56,6 +56,7 @@ if ($action == "edit") {
     );
     $chapter = array();
     $vars['chapter'] = &$chapter;
+    $vars['chaptertitle'] = "Chapter 1";
 }
 
 if (isset($fill_from_post) && $fill_from_post) {

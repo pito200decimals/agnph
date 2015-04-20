@@ -1,0 +1,9 @@
+.content h3 {
+    text-align: center;
+}
+#prev {
+    float: left;
+}
+#next {
+    float: right;
+}

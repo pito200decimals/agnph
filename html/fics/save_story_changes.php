@@ -11,15 +11,15 @@ if (!isset($user)) {
 if (!isset($_POST['sid'])) return;
 $sid = $_POST['sid'];
 if (!isset($_POST['title'])) return;
-$title = $_POST['title'];
+$title = SanitizeHTMLTags($_POST['title'], DEFAULT_ALLOWED_TAGS);
 if (!isset($_POST['summary'])) return;
-$summary = $_POST['summary'];
+$summary = SanitizeHTMLTags($_POST['summary'], DEFAULT_ALLOWED_TAGS);
 if (!isset($_POST['rating'])) return;
 $rating = $_POST['rating'];
 if (!isset($_POST['completed'])) return;
 $completed = $_POST['completed'];
 if (!isset($_POST['notes'])) return;
-$storynotes = $_POST['notes'];
+$storynotes = SanitizeHTMLTags($_POST['notes'], DEFAULT_ALLOWED_TAGS);
 
 // Check for valid input.
 if (!is_numeric($sid)) return;
@@ -50,13 +50,13 @@ if ($completed == '1') {
 // Check chapter 1 input, if applicable.
 if ($sid <= 0) {
     if (!isset($_POST['chaptertitle'])) return;
-    $chaptertitle = $_POST['chaptertitle'];
+    $chaptertitle = SanitizeHTMLTags($_POST['chaptertitle'], DEFAULT_ALLOWED_TAGS);
     if (!isset($_POST['chapternotes'])) return;
-    $chapternotes = $_POST['chapternotes'];
+    $chapternotes = SanitizeHTMLTags($_POST['chapternotes'], DEFAULT_ALLOWED_TAGS);
     if (!isset($_POST['chaptertext'])) return;
     $chaptertext = SanitizeHTMLTags($_POST['chaptertext'], DEFAULT_ALLOWED_TAGS);
     if (!isset($_POST['chapterendnotes'])) return;
-    $chapterendnotes = $_POST['chapterendnotes'];
+    $chapterendnotes = SanitizeHTMLTags($_POST['chapterendnotes'], DEFAULT_ALLOWED_TAGS);
     if (strlen($chaptertitle) == 0) {
         $errmsg = "Invalid Chapter Title";
     }

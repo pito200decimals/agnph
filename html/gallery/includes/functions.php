@@ -55,7 +55,7 @@ function TagDisplayNameToTagName($tag_name) {
 
 // Replaces spaces with _, and removes all other whitespace.
 function SanitizeTagName($name) {
-    return preg_replace("/\s+/", "", strtolower(str_replace(" ", "_", $name)));
+    return mb_ereg_replace("/\s+/", "", strtolower(str_replace(" ", "_", $name)));
 }
 
 // Gets a parent post id for a given post. If the parent doesn't exist, returns -1.
@@ -86,7 +86,7 @@ function UpdatePost($tag_string, $post_id, $user) {
 }
 
 function CleanTagString($tag_string) {
-    return preg_replace("/[\t\r\n\v\f]+/", "", $tag_string);
+    return mb_ereg_replace("/[\t\r\n\v\f]+/", "", $tag_string);
 }
 
 function GetTagStringTokens($tag_string, $post_id) {
@@ -264,6 +264,7 @@ function GetTagsByName($tag_names, $create_new = false, $user_id) {
     $tag_names = array_map("SanitizeTagName", $tag_names);
     if ($create_new) {
         $ret = GetTagsByName($tag_names, false, $user_id);
+        if ($ret == null) $ret = array();
         $found_tags = array_map(function($val) { return $val['Name']; }, $ret);
         $missing_tags = array_diff($tag_names, $found_tags);
         $new_tags = CreateTagsByName($missing_tags, $user_id);

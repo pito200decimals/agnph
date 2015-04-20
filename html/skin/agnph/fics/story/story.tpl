@@ -10,9 +10,9 @@
 {% block ficscontent %}
     {{ block('storyblock') }}
     {% if story.StoryNotes|length > 0 %}
-        <div class="storynotes">
-            <p><strong>Story Notes</strong></p>
-            <p>
+        <div class="notesbox">
+            <p><strong>Story Notes:</strong></p>
+            <p id="storynotes">
                 {% autoescape false %}{{ story.StoryNotes }}{% endautoescape %}
             </p>
         </div>
@@ -20,12 +20,12 @@
     <ol>
         {% for chapter in chapters %}
             <li>
-                <p class="chaptertitle">
+                <p class="chapterlisttitle">
                     <a href="/fics/story/{{ story.StoryId }}/{{ loop.index }}/">
                         <strong>{{ chapter.Title }}</strong>
                     </a>
                 </p>
-                <p class="chapternotes">{% autoescape false %}{{ chapter.ChapterNotes }}{% endautoescape %}</p>
+                <p class="chapterlistnotes">{% autoescape false %}{{ chapter.ChapterNotes }}{% endautoescape %}</p>
             </li>
         {% endfor %}
     </ol>

@@ -72,7 +72,7 @@ do_or_die(sql_query(
         RegisterIP VARCHAR(50) NOT NULL,
         KnownIPs VARCHAR(512) NOT NULL,".  // Allocate 45 + 1 characters for each IP address. Store the past 10 addresses comma-separated.
        "PRIMARY KEY(UserId)
-    );"));
+    ) DEFAULT CHARSET=utf8;"));
 // User biography is stored in text files at /user/bio/{UserId}.txt
 
 // TODO: Do we want this in a table, or in the site template?
@@ -82,7 +82,7 @@ do_or_die(sql_query(
         Link VARCHAR(64) NOT NULL,
         ItemOrder INT(11) NOT NULL,
         PRIMARY KEY(Label, Link)
-    );"));
+    ) DEFAULT CHARSET=utf8;"));
 
 ///////////////////
 // Forums tables //
@@ -97,7 +97,7 @@ do_or_die(sql_query(
         Description VARCHAR(512) NOT NULL,
         AccessPermissions VARCHAR(8) NOT NULL,
         PRIMARY KEY(LobbyId)
-    );"));
+    ) DEFAULT CHARSET=utf8;"));
 // Post table. ParentThreadId and ParentLobbyId are mutually exclusive.
 // A Forum Thread is just the post id of the first post in the thread. This 
 // first post cannot be deleted unless the whole thread's posts are deleted (or bulk en-masse by admins).
@@ -114,7 +114,7 @@ do_or_die(sql_query(
         Sticky TINYINT(1) DEFAULT 0 NOT NULL,
         PostIP VARCHAR(45) NOT NULL,
         PRIMARY KEY(PostId)
-    );"));
+    ) DEFAULT CHARSET=utf8;"));
 // User preferences specific to the forums section.
 do_or_die(sql_query(
     "CREATE TABLE ".FORUMS_USER_PREF_TABLE." (
@@ -125,14 +125,14 @@ do_or_die(sql_query(
         ForumPostsPerPage INT(11) DEFAULT ".DEFAULT_FORUM_POSTS_PER_PAGE.",
         ForumsPermissions CHAR(1) NOT NULL,".  // A = Allowed to sticky posts.
        "PRIMARY KEY(UserId)
-    );"));
+    ) DEFAULT CHARSET=utf8;"));
 // Table containing rows of tuples of (UserId, PostId).
 do_or_die(sql_query(
     "CREATE TABLE ".FORUMS_UNREAD_POST_TABLE." (
         UserId INT(11) NOT NULL,
         PostId INT(11) NOT NULL,
         PRIMARY KEY(UserId, PostId)
-    );"));
+    ) DEFAULT CHARSET=utf8;"));
 
 
 ////////////////////
@@ -165,7 +165,7 @@ do_or_die(sql_query(
        "FlaggerUserId INT(11) NOT NULL,
         FlagReason VARCHAR(".MAX_GALLERY_POST_FLAG_REASON_LENGTH.") NOT NULL,
         PRIMARY KEY(PostId)
-    );"));
+    ) DEFAULT CHARSET=utf8;"));
 // General information about a single tag
 do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_TAG_TABLE." (
@@ -176,14 +176,14 @@ do_or_die(sql_query(
         ChangeTypeUserId INT(11) NOT NULL,
         Count INT(11) NOT NULL,
         PRIMARY KEY(TagId)
-    );"));
+    ) DEFAULT CHARSET=utf8;"));
 // Mapping of tag ids associated with each post.
 do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_POST_TAG_TABLE." (
         PostId INT(11) NOT NULL,
         TagId INT(11) NOT NULL,
         PRIMARY KEY(PostId, TagId)
-    );"));
+    ) DEFAULT CHARSET=utf8;"));
 // History of tag edits for a given post.
 do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_POST_TAG_HISTORY_TABLE." (
@@ -195,14 +195,14 @@ do_or_die(sql_query(
         TagsRemoved VARCHAR(512) DEFAULT '',
         PropertiesChanged VARCHAR(512) DEFAULT '',
         PRIMARY KEY(Id, PostId, Timestamp)
-    );"));
+    ) DEFAULT CHARSET=utf8;"));
 // Tag aliasing.
 do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_TAG_ALIAS_TABLE." (
         TagId INT(11) NOT NULL,
         NewTagId INT(11) NOT NULL,
         PRIMARY KEY(TagId, NewTagId)
-    );"));
+    ) DEFAULT CHARSET=utf8;"));
 // General information about pools.
 do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_POOLS_TABLE." (
@@ -211,7 +211,7 @@ do_or_die(sql_query(
         Name VARCHAR(".MAX_POOL_NAME_LENGTH.") NOT NULL,
         Description TEXT(512) NOT NULL,
         PRIMARY KEY(PoolId)
-    );"));
+    ) DEFAULT CHARSET=utf8;"));
 // User preferences for gallery section.
 do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_USER_PREF_TABLE." (
@@ -221,7 +221,7 @@ do_or_die(sql_query(
         GalleryPermissions CHAR(1) DEFAULT 'N',".  // N - Normal user, C - Contributor, A - Admin
        "GalleryPostsPerPage INT(11) DEFAULT ".DEFAULT_GALLERY_POSTS_PER_PAGE.",
         PRIMARY KEY(UserId)
-    );"));
+    ) DEFAULT CHARSET=utf8;"));
 // User favorites for gallery section.
 do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_USER_FAVORITES_TABLE." (
@@ -229,7 +229,7 @@ do_or_die(sql_query(
         PostId INT(11) NOT NULL,
         Timestamp INT(11) NOT NULL,
         PRIMARY KEY(UserId, PostId)
-    );"));
+    ) DEFAULT CHARSET=utf8;"));
 
 
 /////////////////
@@ -257,7 +257,7 @@ do_or_die(sql_query(
         TotalStars INT(11) NOT NULL,
         TotalRatings INT(11) NOT NULL,
         PRIMARY KEY(StoryId)
-    );"));
+    ) DEFAULT CHARSET=utf8;"));
 do_or_die(sql_query(
     "CREATE TABLE ".FICS_CHAPTER_TABLE." (
         ChapterId INT(11) UNSIGNED AUTO_INCREMENT,
@@ -273,7 +273,7 @@ do_or_die(sql_query(
         TotalStars INT(11) NOT NULL,
         TotalRatings INT(11) NOT NULL,
         PRIMARY KEY(ChapterId)
-    );"));  // NOTE: WordCount, TotalStars and TotalRatings not implemented yet.
+    ) DEFAULT CHARSET=utf8;"));  // NOTE: WordCount, TotalStars and TotalRatings not implemented yet.
 do_or_die(sql_query(
    "CREATE TABLE ".FICS_USER_PREF_TABLE." (
         UserId INT(11) NOT NULL,
@@ -281,7 +281,7 @@ do_or_die(sql_query(
         FicsPermissions CHAR(1) DEFAULT 'N',".  // N - Normal user, A - Admin
        "FicsStoriesPerPage INT(11) DEFAULT ".DEFAULT_FICS_STORIES_PER_PAGE.",
         PRIMARY KEY(UserId)
-    );"));
+    ) DEFAULT CHARSET=utf8;"));
 
 
 // TODO: Logging tables.

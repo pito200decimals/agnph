@@ -13,13 +13,13 @@ $sid = $_POST['sid'];
 if (!isset($_POST['chapternum'])) return;
 $chapternum = $_POST['chapternum'];
 if (!isset($_POST['chaptertitle'])) return;
-$chaptertitle = $_POST['chaptertitle'];
+$chaptertitle = SanitizeHTMLTags($_POST['chaptertitle'], DEFAULT_ALLOWED_TAGS);
 if (!isset($_POST['chapternotes'])) return;
-$chapternotes = $_POST['chapternotes'];
+$chapternotes = SanitizeHTMLTags($_POST['chapternotes'], DEFAULT_ALLOWED_TAGS);
 if (!isset($_POST['chaptertext'])) return;
-$chaptertext = $_POST['chaptertext'];
+$chaptertext = SanitizeHTMLTags($_POST['chaptertext'], DEFAULT_ALLOWED_TAGS);
 if (!isset($_POST['chapterendnotes'])) return;
-$chapterendnotes = $_POST['chapterendnotes'];
+$chapterendnotes = SanitizeHTMLTags($_POST['chapterendnotes'], DEFAULT_ALLOWED_TAGS);
 if (!isset($_POST['chapterid'])) return;
 $chapterid = $_POST['chapterid'];
 

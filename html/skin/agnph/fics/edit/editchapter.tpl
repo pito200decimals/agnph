@@ -30,7 +30,7 @@
                 Error: {{ errmsg }}
             </div>
         {% endif %}
-        <form action="" method="POST">
+        <form action="" method="POST" accept-charset="UTF-8">
             <input type="hidden" name="sid" value="{{ storyid }}" />
             {{ block('editchapter') }}
             <input type="submit" name="save" value="Save Changes" />
