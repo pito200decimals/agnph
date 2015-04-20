@@ -12,13 +12,12 @@ header('Content-type: application/json; charset=utf-8');
 
 if (!isset($_GET['prefix']) || strlen($_GET['prefix']) < MIN_POOL_PREFIX_LENGTH) {
     echo json_encode(array());
-    die();
+    return;
 }
 
 $escaped_prefix = sql_escape($_GET['prefix']);
 if (!sql_query_into($result, "SELECT * FROM ".GALLERY_POOLS_TABLE." WHERE UPPER(Name) LIKE UPPER('$escaped_prefix%') ORDER BY Name LIMIT 5;", 0)) {
-    header('HTTP/1.1 403 Permission Denied');
-    die();
+    AJAXErr();
 }
 $elems = array();
 while ($row = $result->fetch_assoc()) {

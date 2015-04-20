@@ -7,7 +7,7 @@ include_once("../../header.php");
 include_once(SITE_ROOT."fics/includes/functions.php");
 include_once(SITE_ROOT."fics/includes/file.php");
 
-if (!isset($_GET['sid']) || !is_numeric($_GET['sid'])) RenderErrorPage("Invalid URL.");
+if (!isset($_GET['sid']) || !is_numeric($_GET['sid'])) InvalidURL();
 
 $sid = $_GET['sid'];
 $story = GetStory($sid) or RenderErrorPage("Story not found.");

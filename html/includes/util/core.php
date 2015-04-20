@@ -107,4 +107,16 @@ function DefaultUser() {
     return $user;
 }
 
+// Error to be returned on all AJAX failures.
+function AJAXErr() {
+    header("HTTP/1.0 403 Forbidden");
+    exit();
+}
+
+// Error to be returned on malformed URL arguments (when not in AJAX scripts).
+function InvalidURL() {
+    header("HTTP/1.0 404 Not Found");
+    exit();
+}
+
 ?>

@@ -5,7 +5,8 @@
 
 // Site includes, including login authentication.
 include_once("../header.php");
-include_once(__DIR__."/includes/functions.php");
+include_once(SITE_ROOT."includes/util/core.php");
+include_once(SITE_ROOT."forums/includes/functions.php");
 
 if (!isset($user)) {
     // User is not logged in.
@@ -19,15 +20,9 @@ if (isset($_POST)
     && isset($_POST['hash'])) {
     $hash = $_POST['hash'];
     $secret = md5($user['UserId'].$user['Password']);
-    if ($hash != $secret) {
-        $vars['error_msg'] = "Invalid URL.";
-        RenderPage("base.tpl");
-        return;
-    }
+    if ($hash != $secret) RenderErrorPage("Not authroized to delete post");
 } else {
-    $vars['error_msg'] = "Invalid URL.";
-    RenderPage("base.tpl");
-    return;
+    InvalidURL();  // Missing delete forum post $_POST parameters.
 }
 
 $post_id = $_POST['post'];

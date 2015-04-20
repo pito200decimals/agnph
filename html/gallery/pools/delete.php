@@ -5,13 +5,9 @@ include_once("../../header.php");
 include_once(SITE_ROOT."gallery/includes/functions.php");
 
 if (!isset($user) || !CanUserCreateOrDeletePools($user)) {
-    header('HTTP/1.1 403 Permission Denied');
-    die();
+    RenderErrorPage("Not authroized to delete image pools");
 }
-if (!isset($_POST['pool'])) {
-    header('HTTP/1.1 403 Permission Denied');
-    die();
-}
+if (!isset($_POST['pool'])) InvalidURL();
 
 $pool_id = $_POST['pool'];
 $escaped_pool_id = $pool_id;

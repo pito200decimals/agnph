@@ -17,54 +17,64 @@
             $(document).ready(function() {
                 $('.sortable').sortable().bind('sortupdate', Update);
                 $(".reorder_hint").removeClass("hidden");
-                $(".mce-i-fullscreen").parent().onClick(function() {
-                    alert("TEST");
-                    ScrollToChapter();
-                });
+                $('.sortable').removeAttr("style");
+                $('.sortable').css("cursor", "ns-resize");
             });
             function Update() {
-            /*
                 $('.sortable').sortable('destroy');
+                $('.sortable').removeAttr("style");
                 $('.sortable').css("opacity", "0.5");
                 var index = 1;
-                var changed = [];
-                $('.dragitem').each(function() {
-                    var id = $('.postid', this)[0].value;
-                    var oldindex = $('.postorder', this)[0].value;
-                    var myindex = index++;
-                    if (oldindex != myindex) {
-                        changed.push({
-                            postid: id,
-                            oldindex: oldindex,
-                            newindex: myindex
-                        });
+                var bestOldIndex = 1;
+                var bestNewIndex = 1;
+                var bestId = "";
+                $(this).children().each(function() {
+                    var oldindex = $(this).children(".chapternum")[0].value;
+                    var id = $(this).children(".chapterid")[0].value;
+                    if (oldindex != index) {
+                        var diff = Math.abs(oldindex - index);
+                        if (diff > Math.abs(bestOldIndex - bestNewIndex)) {
+                            bestOldIndex = oldindex;
+                            bestNewIndex = index;
+                            bestId = id;
+                        }
                     }
+                    index++;
                 });
-                if (changed.length > 0) {
-                    $.ajax("/gallery/pools/reorder/{{ poolId }}/", {
+                if (bestOldIndex != bestNewIndex && bestId != "") {
+                    {# Perform AJAX request #}
+                    $.ajax("/fics/story/chapter/order/", {
                         data: {
-                            values: changed
+                            sid: {{ formstory.StoryId }},
+                            oldnum: bestOldIndex,
+                            newnum: bestNewIndex,
+                            id: bestId
                         },
                         method: "POST",
                         success: function(e) {
-                            $(changed).each(function() {
-                                var id = this.postid;
-                                var newindex = this.newindex;
-                                $('.dragitem').each(function() {
-                                    if ($('.postid', this)[0].value == id) {
-                                        $('.postorder', this)[0].value = newindex;
-                                    }
-                                });
+                            var index = 1;
+                            $('.sortable').children().each(function() {
+                                {# Update input index, and edit/delete links #}
+                                $(this).children(".chapternum").val(index);
+                                $(this).find(".chaptereditlink").attr("href", "/fics/edit/{{ formstory.StoryId }}/" + index + "/");
+                                {# $(this).find(".chapterdeletelink").attr("href", ""); #}
+                                index++;
                             });
                             $('.sortable').sortable();
                             $('.sortable').removeAttr("style");
+                            $('.sortable').css("cursor", "ns-resize");
                         },
                         error: function(e) {
                             $('.sortable').sortable('destroy');
-                            location.reload();
+                            alert("Error updating chapter order. Please save story changes and refresh the page.");
                         }
                     });
-                }*/
+                } else {
+                    {# Nothing changed! #}
+                    $('.sortable').sortable();
+                    $('.sortable').removeAttr("style");
+                    $('.sortable').css("cursor", "ns-resize");
+                }
             }
         </script>
     {% endif %}
@@ -107,7 +117,8 @@
                 Error: {{ errmsg }}
             </div>
         {% endif %}
-        <form action="" method="POST">
+        {# Autocomplete off so that hidden inputs in the chapter section don't autofill with previous values #}
+        <form action="" method="POST" autocomplete="off">
             <input type="hidden" name="sid" value="{% if create %}-1{% else %}{{ formstory.StoryId }}{% endif %}" />
             <p><label>Title:</label><input type="textfield" name="title" value="{{ formstory.Title }}" /></p>
             {# TODO: Coauthors #}
@@ -153,8 +164,14 @@
                             {% for chapter in chapters %}
                                 {# TODO: Add non-JS support (Copy fields on submit) #}
                                 <li>
-                                    <input class="chapterindex" type="hidden" value="{{ chapter.ChapterItemOrder }}" />
-                                    {{ chapter.Title }} <a href="/fics/edit/{{ formstory.StoryId }}/{{ chapter.ChapterItemOrder+1 }}/">Edit</a><!-- <a href="/fics/delete/{{ formstory.StoryId }}/{{ chapter.ChapterItemOrder }}/">Delete</a>-->
+                                    <input class="chapternum" type="hidden" value="{{ chapter.ChapterItemOrder + 1 }}" id="{{ chapter.ChapterItemOrder + 1 }}" />
+                                    <input class="chapterid" type="hidden" value="{{ chapter.hash }}" />
+                                    {{ chapter.Title }}
+                                    <span><a class="chaptereditlink" href="/fics/edit/{{ formstory.StoryId }}/{{ chapter.ChapterItemOrder + 1 }}/">Edit</a></span>
+                                    {% if chapters|length > 1 %}
+                                        {# TODO: Delete chapter link #}
+                                        <span>Delete</span>
+                                    {% endif %}
                                 </li>
                             {% endfor %}
                         </ol>

@@ -42,7 +42,7 @@ if ($story == null) {
     $errmsg = "Story not found";
     return;
 }
-if (!CanUserEditStory($story, $user)) RenderErrorPage("Not authorized to edit story.");
+if (!CanUserEditStory($story, $user)) RenderErrorPage("Not authorized to edit story");
 $sid = $story['StoryId'];  // Get proper $sid, in case of user mangling.
 
 // Get chapters by index.
@@ -104,10 +104,7 @@ if ($action == "edit") {
     debug($chapternum);
     debug(sizeof($chapters));
     debug($chapters);
-    if ($chapternum != sizeof($chapters) + 1) {
-        $errmsg = "Invalid URL";
-        return;
-    }
+    if ($chapternum != sizeof($chapters) + 1) InvalidURL();
     $escaped_title = sql_escape($chaptertitle);
     $escaped_notes = sql_escape($chapternotes);
     $escaped_endnotes = sql_escape($chapterendnotes);

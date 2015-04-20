@@ -2,6 +2,7 @@
 // Page for composing new stories and editing existing stories.
 
 include_once("../header.php");
+include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."fics/includes/functions.php");
 
 if (isset($_POST) && isset($_POST['sid'])) {
@@ -16,7 +17,7 @@ if (isset($_POST) && isset($_POST['sid'])) {
     }
 }
 
-if (!isset($_GET['action'])) RenderErrorPage("Invalid URL");
+if (!isset($_GET['action'])) InvalidURL();
 $action = $_GET['action'];
 $vars['action'] = $action;
 
@@ -24,27 +25,32 @@ if ($action == "create") {
     // No $sid.
     $vars['create'] = true;
 } else if ($action == "edit") {
-    if (!isset($_GET['sid']) || !is_numeric($_GET['sid'])) RenderErrorPage("Invalid URL");
+    if (!isset($_GET['sid']) || !is_numeric($_GET['sid'])) InvalidURL();
     $sid = $_GET['sid'];
     $vars['edit'] = true;
 } else {
-    RenderErrorPage("Invalid URL");
+    InvalidURL();
 }
 if (!isset($user)) {
     if ($action == "create") {
-        RenderErrorPage("Must be logged in to create stories.");
+        RenderErrorPage("Must be logged in to create stories");
     } else {
-        RenderErrorPage("Must be logged in to edit stories.");
+        RenderErrorPage("Must be logged in to edit stories");
     }
 }
 
 if ($action == "edit") {
-    $story = GetStory($sid) or RenderErrorPage("Story not found.");;
-    if (!CanUserEditStory($story, $user)) RenderErrorPage("Not authorized to edit story.");
-    $chapters = GetChaptersInfo($sid) or RenderErrorPage("Story not found.");
+    $story = GetStory($sid) or RenderErrorPage("Story not found");;
+    if (!CanUserEditStory($story, $user)) RenderErrorPage("Not authorized to edit story");
+    $chapters = GetChaptersInfo($sid) or RenderErrorPage("Story not found");
     $vars['story'] = $story;
     $vars['chapters'] = &$chapters;
+    // Assign chapter hashes.
+    foreach ($chapters as &$chapter) {
+        $chapter['hash'] = GetHashForChapter($sid, $chapter['ChapterId']);
+    }
 } else {
+    if (!CanUserCreateStory($user)) RenderErrorPage("Not authorized to create a story");
     $story = array(
         "StoryId" => -1
     );

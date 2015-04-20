@@ -5,19 +5,14 @@ include_once("../../header.php");
 include_once(SITE_ROOT."gallery/includes/functions.php");
 
 if (!isset($user) || !CanUserCreateOrDeletePools($user)) {
-    header('HTTP/1.1 403 Permission Denied');
-    die();
+    RenderErrorPage("Not authroized to create image pools");
 }
-if (!isset($_POST['name'])) {
-    header('HTTP/1.1 403 Permission Denied');
-    die();
-}
+if (!isset($_POST['name'])) InvalidURL();
 
 $name = $_POST['name'];
 $name = substr($name, 0, MAX_POOL_NAME_LENGTH);
 if (strlen($name) < MIN_POOL_PREFIX_LENGTH) {
-    header('HTTP/1.1 403 Permission Denied');
-    die();
+    RenderErrorPage("Invalid pool name");
 }
 $escaped_name = sql_escape($name);
 // If there's a duplicate name, go to that page.

@@ -2,6 +2,7 @@
 // Page for composing or editing chapters.
 
 include_once("../header.php");
+include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."fics/includes/functions.php");
 
 if (isset($_POST) && isset($_POST['sid']) && isset($_POST['chapternum'])) {
@@ -17,11 +18,11 @@ if (isset($_POST) && isset($_POST['sid']) && isset($_POST['chapternum'])) {
     }
 }
 
-if (!isset($_GET['action'])) RenderErrorPage("Invalid URL");
+if (!isset($_GET['action'])) InvalidURL();
 $action = $_GET['action'];
 $vars['action'] = $action;
 
-if (!isset($_GET['sid']) || !is_numeric($_GET['sid'])) RenderErrorPage("Invalid URL");
+if (!isset($_GET['sid']) || !is_numeric($_GET['sid'])) InvalidURL();
 $sid = $_GET['sid'];
 $story = GetStory($sid);
 if ($story == null) {
@@ -35,7 +36,7 @@ if ($action == "create") {
     $vars['create'] = true;
     $chapternum = sizeof($chapters) + 1;
 } else if ($action == "edit") {
-    if (!isset($_GET['chapternum']) || !is_numeric($_GET['chapternum'])) RenderErrorPage("Invalid URL");
+    if (!isset($_GET['chapternum']) || !is_numeric($_GET['chapternum'])) InvalidURL();
     $chapternum = $_GET['chapternum'];
     if ($chapternum <= 0 || $chapternum > sizeof($chapters)) RenderErrorPage("Chapter not found.");
     $chapter = $chapters[$chapternum - 1];
@@ -52,16 +53,14 @@ if ($action == "create") {
     $vars['chapterid'] = GetHashForChapter($sid, $cid);
     $vars['edit'] = true;
 } else {
-    RenderErrorPage("Invalid URL");
+    InvalidURL();
 }
 $vars['chapternum'] = $chapternum;
 
 if (!isset($user)) {
-    if ($action == "create") {
-        RenderErrorPage("Must be logged in to create stories.");
-    } else {
-        RenderErrorPage("Must be logged in to edit stories.");
-    }
+    RenderErrorPage("Must be logged in to edit stories");
+} else if (!CanUserEditStory($story, $user)) {
+    RenderErrorPage("Not authroized to edit story");
 }
 
 if (isset($fill_from_post) && $fill_from_post) {

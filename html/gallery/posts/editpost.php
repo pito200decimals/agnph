@@ -20,8 +20,7 @@ if (!isset($_POST) ||
     !isset($_POST['source']) ||
     !isset($_POST['tags']) ||
     !isset($_POST['description'])) {
-    RenderErrorPage("Invalid URL.");
-    return;
+    InvalidURL();  // Missing gallery editpost $_POST parameters.
 }
 
 $post_id = $_POST['post'];

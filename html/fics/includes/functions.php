@@ -8,6 +8,9 @@ include_once(SITE_ROOT."includes/util/sql.php");
 include_once(SITE_ROOT."includes/util/html_funcs.php");
 include_once(SITE_ROOT."includes/util/file.php");
 
+function CanUserCreateStory($user) {
+    return true;
+}
 function CanUserEditStory($story, $user) {
     return $user['UserId'] == $story['AuthorUserId'] || $user['FicsPermissions'] == 'A';
 }

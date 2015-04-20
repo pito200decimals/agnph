@@ -60,9 +60,6 @@ if ($sid <= 0) {
     if (strlen($chaptertitle) == 0) {
         $errmsg = "Invalid Chapter Title";
     }
-    $new = true;
-} else {
-    $new = false;
 }
 
 if (isset($errmsg) && strlen($errmsg) > 0) return;
@@ -71,7 +68,7 @@ if ($sid > 0) {
     // Edit existing story.
     $story = GetStory($sid);
     if ($story == null) return;
-    if (!CanUserEditStory($story, $user)) RenderErrorPage("Not authorized to edit story.");
+    if (!CanUserEditStory($story, $user)) RenderErrorPage("Not authorized to edit story");
     $sid = $story['StoryId'];
     $sets = array();
     if ($title != $story['Title']) {
@@ -102,6 +99,7 @@ if ($sid > 0) {
     }
     return;
 } else {
+    if (!CanUserCreateStory($user)) RenderErrorPage("Not authorized to create a story");
     // Create new story.
     $escaped_title = sql_escape($title);
     $escaped_summary = sql_escape($summary);

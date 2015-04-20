@@ -11,10 +11,7 @@ if (!isset($user)) {
     header("Location: /forums/");
     return;
 }
-if (!isset($_GET['b']) || !is_numeric($_GET['b'])) {
-    RenderErrorPage("Invalid URL.");
-    return;
-}
+if (!isset($_GET['b']) || !is_numeric($_GET['b'])) InvalidURL();
 
 $board_id = $_GET['b'];
 $escaped_board_id = sql_escape($board_id);

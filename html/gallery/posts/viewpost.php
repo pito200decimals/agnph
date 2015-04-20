@@ -7,8 +7,7 @@ include_once("../../header.php");
 include_once(SITE_ROOT."gallery/includes/functions.php");
 
 if (!isset($_GET['post'])) {
-    RenderErrorPage("Invalid URL.");
-    return;
+    InvalidURL();
 }
 // TODO: Show some sort of notification if this was resulting from a post edit.
 

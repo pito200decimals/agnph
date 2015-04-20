@@ -15,17 +15,14 @@ if (!isset($user)) {
     return;
 }
 if (!isset($_GET['action'])) {
-    // Missing the type of edit action.
-    RenderErrorPage("Invalid URL.");
-    return;
+    InvalidURL();  // Missing the type of edit action.
 }
 if (($_GET['action'] == "create" && isset($_GET['board']) && is_numeric($_GET['board']))
     || ($_GET['action'] == "reply" && isset($_GET['thread']) && is_numeric($_GET['thread']))
     || ($_GET['action'] == "edit" && isset($_GET['post']) && is_numeric($_GET['post']))) {
     // Good parameters.
 } else {
-    RenderErrorPage("Invalid URL.");
-    return;
+    InvalidURL();  // Bad forums compose parameter tuples.
 }
 if ($_POST) {
     $form_values = array();
