@@ -72,22 +72,8 @@ function FillStoryInfo(&$story) {
 
     $story['DateCreated'] = FormatDate($story['DateCreated'], FICS_DATE_FORMAT);
     $story['DateUpdated'] = FormatDate($story['DateUpdated'], FICS_DATE_FORMAT);
-
-    // TODO
-    $story['reviewCount'] = 0;
-
-    $stars = "";
-    if ($story['TotalRatings'] > 0) {
-        $averageStars = round($story['TotalStars'] / $story['TotalRatings']);
-        for ($i = 1; $i < $averageStars; $i += 2) {
-            $stars .= "<img src='/images/star.gif' />";
-        }
-        if ($i == $averageStars) {
-            // Also add a half-star.
-            $stars .= "<img src='/images/starhalf.gif' />";
-        }
-    }
-    $story['stars'] = $stars;
+    $story['reviewCount'] = $story['NumReviews'];
+    $story['stars'] = GetStarsHTML($story['TotalStars'], $story['TotalRatings']);
 }
 
 // Gets all chapter metadata for a story (everything except chapter content).
@@ -100,6 +86,7 @@ function GetChaptersInfo($sid) {
         $cid = $row['ChapterId'];
         $hash = GetHashForChapter($sid, $cid);
         $row['hash'] = $hash;
+        $row['stars'] = GetStarsHTML($row['TotalStars'], $row['TotalRatings']);
         $chapters[] = $row;
     }
     return $chapters;
@@ -130,6 +117,20 @@ function GetTagsInfo($tag_id_array) {
     return array();
 }
 
+// Gets the array of reviews, or null if an error occurs.
+function GetReviews($sid) {
+    $escaped_sid = sql_escape($sid);
+    $reviews = array();
+    if (!sql_query_into($result, "SELECT * FROM ".FICS_REVIEW_TABLE." WHERE StoryId='$escaped_sid';", 0)) return null;
+    while ($row = $result->fetch_assoc()) {
+        $reviews[] = $row;
+    }
+    return $reviews;
+}
+
+define("SCORES_THAT_COUNT", "SUM(CASE WHEN ReviewScore>0 THEN ReviewScore ELSE 0 END)");
+define("NUM_SCORES_THAT_COUNT", "SUM(CASE WHEN ReviewScore>0 THEN 1 ELSE 0 END)");
+
 // Does a full refresh on story stats. Updates ChapterCount, WordCount, TotalReviewStars, TotalReviews
 function UpdateStoryStats($sid) {
     $escaped_sid = sql_escape($sid);
@@ -142,11 +143,31 @@ function UpdateStoryStats($sid) {
         $text = GetChapterText($cid);
         if ($text == null) continue;
         $chapcount++;
-        $wordcount += ChapterWordCount($text);
+        $chapterWordCount = ChapterWordCount($text);
+        $wordcount += $chapterWordCount;
         $viewcount += $chapter['Views'];
+        // Also get chapter reviews.
+        if (sql_query_into($result, "SELECT ".SCORES_THAT_COUNT.", ".NUM_SCORES_THAT_COUNT.", sum(IsReview) FROM ".FICS_REVIEW_TABLE." WHERE ChapterId=$cid;", 0)) {
+            $row = $result->fetch_assoc();
+            $totalStars = $row[SCORES_THAT_COUNT];
+            $totalRatings = $row[NUM_SCORES_THAT_COUNT];
+            $numReviews = $row['sum(IsReview)'];
+            sql_query("UPDATE ".FICS_CHAPTER_TABLE." SET WordCount=$wordcount, TotalStars=$totalStars, TotalRatings=$totalRatings, NumReviews=$numReviews WHERE ChapterId=$cid;");
+        } else {
+            sql_query("UPDATE ".FICS_CHAPTER_TABLE." SET WordCount=$wordcount WHERE ChapterId=$cid;");
+        }
     }
-    // TODO: Also count reviews.
-    sql_query("UPDATE ".FICS_STORY_TABLE." SET ChapterCount=$chapcount, WordCount=$wordcount, Views=$viewcount WHERE StoryId='$escaped_sid';");
+
+    // Also get story reviews.
+    if (sql_query_into($result, "SELECT ".SCORES_THAT_COUNT.", ".NUM_SCORES_THAT_COUNT.", sum(IsReview) FROM ".FICS_REVIEW_TABLE." WHERE StoryId='$escaped_sid';", 0)) {
+        $row = $result->fetch_assoc();
+        $totalStars = $row[SCORES_THAT_COUNT];
+        $totalRatings = $row[NUM_SCORES_THAT_COUNT];
+        $numReviews = $row['sum(IsReview)'];
+        sql_query("UPDATE ".FICS_STORY_TABLE." SET ChapterCount=$chapcount, WordCount=$wordcount, Views=$viewcount, TotalStars=$totalStars, TotalRatings=$totalRatings, NumReviews=$numReviews WHERE StoryId='$escaped_sid';");
+    } else {
+        sql_query("UPDATE ".FICS_STORY_TABLE." SET ChapterCount=$chapcount, WordCount=$wordcount, Views=$viewcount WHERE StoryId='$escaped_sid';");
+    }
 }
 
 function ChapterWordCount($content) {
@@ -162,4 +183,18 @@ function GetHashForChapter($sid, $cid) {
     return md5("$sid.$cid");
 }
 
+function GetStarsHTML($totalStars, $numReviews) {
+    $stars = "";
+    if ($numReviews > 0) {
+        $averageStars = round($totalStars / $numReviews);
+        for ($i = 1; $i < $averageStars; $i += 2) {
+            $stars .= "<img src='/images/star.gif' />";
+        }
+        if ($i == $averageStars) {
+            // Also add a half-star.
+            $stars .= "<img src='/images/starhalf.gif' />";
+        }
+    }
+    return $stars;
+}
 ?>

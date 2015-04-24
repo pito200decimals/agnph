@@ -67,6 +67,9 @@
     max-height: 300px;
     overflow: auto;
 }
+.summary p:not(.metalabel) {
+    margin-left: 15px;
+}
 /*footer*/
 .storyblockfooter {
     padding: 5px;

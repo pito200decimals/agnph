@@ -6,6 +6,17 @@
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/fics/story/chapter-style.css" />
 {% endblock %}
 
+{% use 'fics/reviewblock.tpl' %}
+
+{% block scripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            {{ block('reviewready') }}
+        });
+    </script>
+{% endblock %}
+
 {% block prevnext %}
     <div>&nbsp;
         {% if chapter.ChapterItemOrder > 0 %}
@@ -59,5 +70,6 @@
             </div>
         {% endif %}
         {{ block('prevnext') }}
+        {{ block('reviewblock') }}
     </div>
 {% endblock %}

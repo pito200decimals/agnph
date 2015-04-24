@@ -101,7 +101,9 @@
             </div>
         {% else %}
             {# No posts here. #}
-            No posts matched your search.
+            <p>
+                No posts matched your search.
+            <p>
         {% endif %}
     </div>
 {% endblock %}

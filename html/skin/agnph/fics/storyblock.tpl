@@ -15,7 +15,7 @@
             <p>
                 <span class="rating">Rated: {{ story.rating }}</span>
                 <span class="stars">{% autoescape false %}{{ story.stars }}{% endautoescape %}</span>
-                <span class="reviews">[Reviews: {{ story.reviewCount }}]</span>
+                <span class="reviews">[Reviews: {{ story.NumReviews }}]</span>
             </p>
         </div>
         <div class="storyblockinfo">
@@ -37,7 +37,7 @@
             </ul>
         </div>
         <div class="storyblockfooter">
-            {% if canEdit or true %}
+            {% if canEdit or user.UserId == story.AuthorUserId %}
                 [<a href="/fics/edit/{{ story.StoryId }}/">Edit</a>]
             {% endif %}
         </div>

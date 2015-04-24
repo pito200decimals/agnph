@@ -10,11 +10,19 @@ include_once(SITE_ROOT."fics/includes/file.php");
 if (!isset($_GET['sid']) || !is_numeric($_GET['sid'])) InvalidURL();
 
 $sid = $_GET['sid'];
-$story = GetStory($sid) or RenderErrorPage("Story not found.");
+$story = GetStory($sid) or RenderErrorPage("Story not found");
 $vars['story'] = $story;
 
-$chapters = GetChaptersInfo($sid) or RenderErrorPage("Story not found.");
+$chapters = GetChaptersInfo($sid) or RenderErrorPage("Story not found");
 $vars['chapters'] = $chapters;
+
+$storyReviews = GetReviews($sid);
+$vars['reviews'] = array_filter($storyReviews, function($review) {
+    return $review['IsReview'] && $review['ChapterId'] == -1;
+});
+$vars['comments'] = array_filter($storyReviews, function($review) {
+    return $review['IsComment'] && $review['ChapterId'] == -1;
+});
 
 RenderPage("fics/story/story.tpl");
 return;

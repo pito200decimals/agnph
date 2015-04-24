@@ -28,6 +28,15 @@ $vars['story'] = $story;
 $vars['chapter'] = $chapter;
 $vars['numchapters'] = sizeof($chapters);
 
+// Also fetch comments/reviews.
+$chapterReviews = GetReviews($sid);
+$vars['reviews'] = array_filter($chapterReviews, function($review) use ($chapter) {
+    return $review['IsReview'] && $review['ChapterId'] == $chapter['ChapterId'];
+});
+$vars['comments'] = array_filter($chapterReviews, function($review) use ($chapter) {
+    return $review['IsComment'] && $review['ChapterId'] == $chapter['ChapterId'];
+});
+
 // Increment view count.
 $cid = $chapter['ChapterId'];
 sql_query("UPDATE ".FICS_CHAPTER_TABLE." SET Views=Views+1 WHERE ChapterId=$cid;");

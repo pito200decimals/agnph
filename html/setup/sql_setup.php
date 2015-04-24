@@ -41,7 +41,7 @@ sql_query("DROP TABLE ".FICS_STORY_TABLE.";");
 sql_query("DROP TABLE ".FICS_CHAPTER_TABLE.";");
 //sql_query("DROP TABLE ".FICS_STORY_TAG_TABLE.";");
 //sql_query("DROP TABLE ".FICS_TAG_TABLE.";");
-//sql_query("DROP TABLE ".FICS_REVIEW_TABLE.";");
+sql_query("DROP TABLE ".FICS_REVIEW_TABLE.";");
 //sql_query("DROP TABLE ".FICS_SERIES_TABLE.";");
 sql_query("DROP TABLE ".FICS_USER_PREF_TABLE.";");
 
@@ -256,6 +256,7 @@ do_or_die(sql_query(
         Views INT(11) NOT NULL,
         TotalStars INT(11) NOT NULL,
         TotalRatings INT(11) NOT NULL,
+        NumReviews INT(11) NOT NULL,
         PRIMARY KEY(StoryId)
     ) DEFAULT CHARSET=utf8;"));
 do_or_die(sql_query(
@@ -272,8 +273,21 @@ do_or_die(sql_query(
         Views INT(11) NOT NULL,
         TotalStars INT(11) NOT NULL,
         TotalRatings INT(11) NOT NULL,
+        NumReviews INT(11) NOT NULL,
         PRIMARY KEY(ChapterId)
     ) DEFAULT CHARSET=utf8;"));  // NOTE: WordCount, TotalStars and TotalRatings not implemented yet.
+do_or_die(sql_query(
+    "CREATE TABLE ".FICS_REVIEW_TABLE." (
+        ReviewId INT(11) UNSIGNED AUTO_INCREMENT,
+        StoryId INT(11) NOT NULL,
+        ChapterId INT(11) NOT NULL,
+        ReviewerUserId INT(11) NOT NULL,
+        ReviewText TEXT(4096) NOT NULL,
+        ReviewScore INT(11) NOT NULL,
+        IsReview TINYINT(1) NOT NULL,
+        IsComment TINYINT(1) NOT NULL,
+        PRIMARY KEY(ReviewId)
+    ) DEFAULT CHARSET=utf8;"));
 do_or_die(sql_query(
    "CREATE TABLE ".FICS_USER_PREF_TABLE." (
         UserId INT(11) NOT NULL,
