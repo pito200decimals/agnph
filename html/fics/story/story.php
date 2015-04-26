@@ -12,7 +12,7 @@ if (!isset($_GET['sid']) || !is_numeric($_GET['sid'])) InvalidURL();
 $sid = $_GET['sid'];
 $story = GetStory($sid) or RenderErrorPage("Story not found");
 
-include_once(SITE_ROOT."FICS/submit_comments_or_reviews.php");
+include_once(SITE_ROOT."fics/submit_comments_or_reviews.php");
 
 $chapters = GetChaptersInfo($sid) or RenderErrorPage("Story not found");
 $vars['story'] = &$story;

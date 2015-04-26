@@ -18,7 +18,7 @@ if ($chapternum <= 0 || $chapternum > sizeof($chapters)) RenderErrorPage("Chapte
 $chapter = $chapters[$chapternum - 1];
 $chapter['text'] = GetChapterText($chapter['ChapterId']) or RenderErrorPage("Chapter not found");
 
-include_once(SITE_ROOT."FICS/submit_comments_or_reviews.php");
+include_once(SITE_ROOT."fics/submit_comments_or_reviews.php");
 
 // Get chapter author(s).
 $chapter_author_ids = array($chapter['AuthorUserId']);
