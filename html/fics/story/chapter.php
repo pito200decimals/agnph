@@ -18,6 +18,8 @@ if ($chapternum <= 0 || $chapternum > sizeof($chapters)) RenderErrorPage("Chapte
 $chapter = $chapters[$chapternum - 1];
 $chapter['text'] = GetChapterText($chapter['ChapterId']) or RenderErrorPage("Chapter not found");
 
+include_once(SITE_ROOT."FICS/submit_comments_or_reviews.php");
+
 // Get chapter author(s).
 $chapter_author_ids = array($chapter['AuthorUserId']);
 $authors = array();
@@ -36,6 +38,18 @@ $vars['reviews'] = array_filter($chapterReviews, function($review) use ($chapter
 $vars['comments'] = array_filter($chapterReviews, function($review) use ($chapter) {
     return $review['IsComment'] && $review['ChapterId'] == $chapter['ChapterId'];
 });
+
+if (isset($_GET['reviews'])) $vars['defaultreviews'] = true;
+else $vars['defaultcomments'] = true;
+
+if (isset($user) && CanUserComment($user)) {
+    $vars['canComment'] = true;
+}
+if (isset($user) && CanUserReview($user)) {
+    $vars['canReview'] = true;
+}
+
+// TODO: Comment/reviews pagination
 
 // Increment view count.
 $cid = $chapter['ChapterId'];

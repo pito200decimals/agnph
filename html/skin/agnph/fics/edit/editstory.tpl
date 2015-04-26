@@ -86,7 +86,8 @@
             toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor | link | code",
             contextmenu: "image link | hr",
             autoresize_max_height: 200,
-            resize: false
+            resize: false,
+            menubar: false
         });
         tinymce.init({
             selector: "textarea#notes",
@@ -95,7 +96,8 @@
             toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor | link | code",
             contextmenu: "image link | hr",
             autoresize_max_height: 150,
-            resize: false
+            resize: false,
+            menubar: false
         });
         {% if create or not chapters %}
             {{ block('chapterMCESetup') }}

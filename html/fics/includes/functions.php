@@ -17,6 +17,12 @@ function CanUserEditStory($story, $user) {
 function CanUserDeleteStory($story, $user) {
     return $user['UserId'] == $story['AuthorUserId'] || $user['FicsPermissions'] == 'A';
 }
+function CanUserComment($user) {
+    return true;
+}
+function CanUserReview($user) {
+    return true;
+}
 
 // General path functions.
 function GetChapterPath($cid) { return SITE_ROOT."fics/data/chapters/$cid.txt"; }
@@ -72,7 +78,6 @@ function FillStoryInfo(&$story) {
 
     $story['DateCreated'] = FormatDate($story['DateCreated'], FICS_DATE_FORMAT);
     $story['DateUpdated'] = FormatDate($story['DateUpdated'], FICS_DATE_FORMAT);
-    $story['reviewCount'] = $story['NumReviews'];
     $story['stars'] = GetStarsHTML($story['TotalStars'], $story['TotalRatings']);
 }
 
@@ -121,11 +126,32 @@ function GetTagsInfo($tag_id_array) {
 function GetReviews($sid) {
     $escaped_sid = sql_escape($sid);
     $reviews = array();
-    if (!sql_query_into($result, "SELECT * FROM ".FICS_REVIEW_TABLE." WHERE StoryId='$escaped_sid';", 0)) return null;
+    if (!sql_query_into($result, "SELECT * FROM ".FICS_REVIEW_TABLE." WHERE StoryId='$escaped_sid' ORDER BY ReviewDate ASC, ReviewId ASC;", 0)) return null;
+    $ids = array();
     while ($row = $result->fetch_assoc()) {
+        $ids[] = $row['ReviewerUserId'];
+        $row['date'] = FormatDate($row['ReviewDate'], FICS_DATE_FORMAT);
+        if ($row['IsReview'] && $row['ReviewScore'] > 0) {
+            $row['stars'] = GetStarsHTML($row['ReviewScore'], 1);
+        }
         $reviews[] = $row;
     }
+    $ids = array_unique($ids);
+    $users = GetUsers($ids);
+    if ($users != null) {
+        foreach ($reviews as &$review) {
+            $uid = $review['ReviewerUserId'];
+            $review['reviewer'] = $users[$uid];
+        }
+    }
     return $reviews;
+}
+
+function GetUsers($uids) {
+    $ret = array();
+    $tables = array(USER_TABLE);
+    if (!LoadTableData($tables, "UserId", $uids, $ret)) return null;
+    return $ret;
 }
 
 define("SCORES_THAT_COUNT", "SUM(CASE WHEN ReviewScore>0 THEN ReviewScore ELSE 0 END)");

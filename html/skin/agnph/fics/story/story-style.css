@@ -44,3 +44,56 @@
 .comments .tab-content.current{
     display: inherit;
 }
+
+.comments .tab-content ul {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+}
+.comments .tab-content ul li {
+    border: 1px solid black;
+    padding: 5px;
+    margin: 5px;
+    min-height: 100px;
+    background-color: white;
+}
+.commentheader {
+    margin: 5px;
+    margin-top: 0px;
+    margin-left: 105px;
+    padding: 5px;
+    background-color: rgb(191,223,255);
+}
+.commentheader span {
+    font-size: 75%;
+}
+.commenttext {
+    margin: 5px;
+    margin-left: 105px;
+    padding: 5px;
+}
+.commentresponse {
+    margin: 5px;
+    margin-left: 105px;
+    padding: 5px;
+    font-style: italic;
+}
+.avatarimg {
+    width: 100px;
+    height: 100px;
+    float: left;
+}
+
+#commentform {
+    display: none;
+}
+#reviewform {
+    display: none;
+}
+#responseform {
+    display: none;
+}
+#responseformblock {
+    display: inline-block;
+    width: 100%;
+}

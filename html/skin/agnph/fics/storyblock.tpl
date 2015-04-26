@@ -15,7 +15,7 @@
             <p>
                 <span class="rating">Rated: {{ story.rating }}</span>
                 <span class="stars">{% autoescape false %}{{ story.stars }}{% endautoescape %}</span>
-                <span class="reviews">[Reviews: {{ story.NumReviews }}]</span>
+                {% if story.NumReviews > 0 %}<span class="reviews">[<a href="/fics/story/{{ story.StoryId }}/?reviews#reviews">Reviews: {{ story.NumReviews }}</a>]</span>{% endif %}
             </p>
         </div>
         <div class="storyblockinfo">

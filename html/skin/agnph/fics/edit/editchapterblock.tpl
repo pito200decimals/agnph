@@ -6,7 +6,8 @@
         toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor | link | code",
         contextmenu: "image link | hr",
         autoresize_max_height: 200,
-        resize: false
+        resize: false,
+        menubar: false
     });
     tinymce.init({
         selector: "textarea#chaptext",
@@ -16,11 +17,11 @@
         contextmenu: "image link | hr",
         autoresize_max_height: 500,
         resize: false,
-          setup: function(editor) {
-              editor.on('FullscreenStateChanged', function(e) {
-                $(document).scrollTop($("#chaptertextanchor").offset().top);
-              });
-          }
+        setup: function(editor) {
+          editor.on('FullscreenStateChanged', function(e) {
+            $(document).scrollTop($("#chaptertextanchor").offset().top);
+          });
+        }
     });
     tinymce.init({
         selector: "textarea#chapendnotes",
@@ -29,7 +30,8 @@
         toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor | link | code",
         contextmenu: "image link | hr",
         autoresize_max_height: 200,
-        resize: false
+        resize: false,
+        menubar: false
     });
 {% endblock %}
 
