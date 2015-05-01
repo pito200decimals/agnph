@@ -31,13 +31,27 @@ foreach ($storyReviews as &$review) {
     }
     $review['chapterTitle'] = $title;
 }
-$vars['reviews'] = array_filter($storyReviews, function($review) {
+$comments = array_filter($storyReviews, function($review) {
+    return $review['IsComment'] && $review['ChapterId'] == -1;
+});
+$reviews = array_filter($storyReviews, function($review) {
     // Get reviews for story as well as all chapters.
     return $review['IsReview'];
 });
-$vars['comments'] = array_filter($storyReviews, function($review) {
-    return $review['IsComment'] && $review['ChapterId'] == -1;
-});
+ConstructReviewBlockIterator($comments, $vars['commentIterator'], !isset($_GET['reviews']),
+    function($index) use ($sid) {
+        $offset = ($index - 1) * DEFAULT_FICS_COMMENTS_PER_PAGE;
+        $url = "/fics/story/$sid/?offset=$offset";
+        return $url;
+    });
+ConstructReviewBlockIterator($reviews, $vars['reviewIterator'], isset($_GET['reviews']),
+    function($index) use ($sid) {
+        $offset = ($index - 1) * DEFAULT_FICS_COMMENTS_PER_PAGE;
+        $url = "/fics/story/$sid/?reviews&offset=$offset#reviews";
+        return $url;
+    });
+$vars['comments'] = $comments;
+$vars['reviews'] = $reviews;
 
 if (isset($_GET['reviews'])) $vars['defaultreviews'] = true;
 else $vars['defaultcomments'] = true;
@@ -49,8 +63,8 @@ if (isset($user) && CanUserReview($user)) {
     $vars['canReview'] = true;
 }
 
-// TODO: Comment/reviews pagination
-
 RenderPage("fics/story/story.tpl");
 return;
+
+
 ?>

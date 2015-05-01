@@ -32,12 +32,26 @@ $vars['numchapters'] = sizeof($chapters);
 
 // Also fetch comments/reviews.
 $chapterReviews = GetReviews($sid);
-$vars['reviews'] = array_filter($chapterReviews, function($review) use ($chapter) {
-    return $review['IsReview'] && $review['ChapterId'] == $chapter['ChapterId'];
-});
-$vars['comments'] = array_filter($chapterReviews, function($review) use ($chapter) {
+$comments = array_filter($chapterReviews, function($review) use ($chapter) {
     return $review['IsComment'] && $review['ChapterId'] == $chapter['ChapterId'];
 });
+$reviews = array_filter($chapterReviews, function($review) use ($chapter) {
+    return $review['IsReview'] && $review['ChapterId'] == $chapter['ChapterId'];
+});
+ConstructReviewBlockIterator($comments, $vars['commentIterator'], !isset($_GET['reviews']),
+    function($index) use ($sid, $chapternum) {
+        $offset = ($index - 1) * DEFAULT_FICS_COMMENTS_PER_PAGE;
+        $url = "/fics/story/$sid/$chapternum/?offset=$offset";
+        return $url;
+    });
+ConstructReviewBlockIterator($reviews, $vars['reviewIterator'], isset($_GET['reviews']),
+    function($index) use ($sid, $chapternum) {
+        $offset = ($index - 1) * DEFAULT_FICS_COMMENTS_PER_PAGE;
+        $url = "/fics/story/$sid/$chapternum/?reviews&offset=$offset#reviews";
+        return $url;
+    });
+$vars['comments'] = $comments;
+$vars['reviews'] = $reviews;
 
 if (isset($_GET['reviews'])) $vars['defaultreviews'] = true;
 else $vars['defaultcomments'] = true;
@@ -49,12 +63,12 @@ if (isset($user) && CanUserReview($user)) {
     $vars['canReview'] = true;
 }
 
-// TODO: Comment/reviews pagination
-
-// Increment view count.
-$cid = $chapter['ChapterId'];
-sql_query("UPDATE ".FICS_CHAPTER_TABLE." SET Views=Views+1 WHERE ChapterId=$cid;");
-sql_query("UPDATE ".FICS_STORY_TABLE." SET Views=Views+1 WHERE StoryId=$sid;");
+// Increment view count only if not explicitly viewing comments/reviews.
+if (!(isset($_GET['reviews']) || isset($_GET['offset']))) {
+    $cid = $chapter['ChapterId'];
+    sql_query("UPDATE ".FICS_CHAPTER_TABLE." SET Views=Views+1 WHERE ChapterId=$cid;");
+    sql_query("UPDATE ".FICS_STORY_TABLE." SET Views=Views+1 WHERE StoryId=$sid;");
+}
 
 RenderPage("fics/story/chapter.tpl");
 return;

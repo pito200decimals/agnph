@@ -111,6 +111,7 @@
                     </li>
                 {% endfor %}
             </ul>
+            <span class="comment-iterator">{% autoescape false %}{{ commentIterator }}{% endautoescape %}</span>
         {% endif %}
     </div>
     <div id="tab-reviews" class="tab-content{% if defaultreviews %} current{% endif %}">
@@ -135,17 +136,6 @@
                 <input type="hidden" name="type" value="review" />
                 <input type="submit" value="Add Review" />
             </form action="#" method="POST">
-            {% if story.AuthorUserId == user.UserId %}
-                <div id="responseformblock">
-                    <form id="responseform" action="#" method="POST">
-                        <textarea id="responsetextbox" name="text" class="commenttextbox">
-                        </textarea>
-                        <input type="hidden" name="type" value="response" />
-                        <input id="reviewid" type="hidden" name="reviewId" value="" />
-                        <input type="submit" value="Add Response" />
-                    </form>
-                </div>
-            {% endif %}
         {% endif %}
         {% if reviews|length > 0 %}
             <ul>
@@ -177,7 +167,19 @@
                     </li>
                 {% endfor %}
             </ul>
+            <span class="comment-iterator">{% autoescape false %}{{ reviewIterator }}{% endautoescape %}</span>
         {% endif %}
     </div>
+    {% if story.AuthorUserId == user.UserId %}
+        <div id="responseformblock">
+            <form id="responseform" action="#" method="POST">
+                <textarea id="responsetextbox" name="text" class="commenttextbox">
+                </textarea>
+                <input type="hidden" name="type" value="response" />
+                <input id="reviewid" type="hidden" name="reviewId" value="" />
+                <input type="submit" value="Add Response" />
+            </form>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

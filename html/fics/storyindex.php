@@ -67,7 +67,7 @@ function CreatePostIterator(&$stories, $offset, $stories_per_page) {
                     return "<a href='$url'>&gt;&gt;</a>";
                 }
             } else if ($index == $current_page) {
-                return "[$index]";  // No link.
+                return "<a>[$index]</a>";  // No link.
             } else {
                     $url = $url_from_page($index);
                 return "<a href='$url'>$index</a>";
