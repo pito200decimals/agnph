@@ -43,7 +43,7 @@ function FillStoryInfo(&$story) {
     $author_ids[] = $story['AuthorUserId'];
     $coauthor_ids = explode(",", $story['CoAuthors']);
     foreach ($coauthor_ids as $coauthor_id) {
-        if (strlen($coauthor_id) > 0) $author_ids[] = $coauthor_id;
+        if (mb_strlen($coauthor_id) > 0) $author_ids[] = $coauthor_id;
     }
 
     $authors = array();
@@ -200,7 +200,7 @@ function ChapterWordCount($content) {
     $stripped = SanitizeHTMLTags($content, "");
     $words = explode(" ", $stripped);
     $words = array_filter($words, function($word) {
-        return strlen($word) > 0;
+        return mb_strlen($word) > 0;
     });
     return sizeof($words);
 }

@@ -39,7 +39,7 @@ if ($_POST['action'] == "undelete" && CanUserDeletePost($user) && ($post['Status
 if ($_POST['action'] == "flag" && CanUserEditPost($user) && ($post['Status'] != 'F' && $post['Status'] != 'D') && isset($_POST['reason'])) {
     // Flag post and return.
     $reason = $_POST['reason'];
-    $reason = substr($reason, 0, MAX_GALLERY_POST_FLAG_REASON_LENGTH);
+    $reason = mb_substr($reason, 0, MAX_GALLERY_POST_FLAG_REASON_LENGTH);
     $escaped_reason = sql_escape($reason);
     debug($reason);
     if (!sql_query("UPDATE ".GALLERY_POST_TABLE." SET Status='F', FlagReason='$escaped_reason', FlaggerUserId='$user_id' WHERE PostId='$escaped_post_id';")) {

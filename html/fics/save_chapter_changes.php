@@ -31,7 +31,7 @@ debug("SAVING CHAPTER $chapternum");
 
 // Check for valid input.
 if (!is_numeric($sid)) return;
-if (strlen($chaptertitle) == 0) {
+if (mb_strlen($chaptertitle) == 0) {
     $errmsg = "Invalid Chapter Title";
     return;
 }

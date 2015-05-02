@@ -2,6 +2,8 @@
 // Page for receiving POSTS to edit a gallery post.
 // URL: /gallery/post/edit/
 
+define("DEBUG", true);
+
 include_once("../../header.php");
 include_once(SITE_ROOT."gallery/includes/functions.php");
 
@@ -14,9 +16,9 @@ if (!isset($_POST) ||
     !isset($_POST['post']) ||
     !is_numeric($_POST['post']) ||
     !isset($_POST['rating']) ||
-    strlen($_POST['rating']) != 1 ||
+    mb_strlen($_POST['rating']) != 1 ||
     !isset($_POST['parent']) ||
-    !(strlen($_POST['parent']) == 0 || is_numeric($_POST['parent'])) ||
+    !(mb_strlen($_POST['parent']) == 0 || is_numeric($_POST['parent'])) ||
     !isset($_POST['source']) ||
     !isset($_POST['tags']) ||
     !isset($_POST['description'])) {
@@ -30,10 +32,10 @@ $post = $result->fetch_assoc();
 $parent_post_id = GetValidParentPostId($_POST['parent'], $post_id);
 
 // Append rating and stuff before tags, so that tags can override them.
-$tagstr = "rating:".$_POST['rating']." parent:$parent_post_id source:".substr(str_replace(" ", "%20", $_POST['source']), 0, 256)." ".$_POST['tags'];
-$tagstr = mb_ereg_replace("/\s+/", " ", $tagstr);
+$tagstr = "rating:".$_POST['rating']." parent:$parent_post_id source:".mb_substr(str_replace(" ", "%20", $_POST['source']), 0, 256)." ".$_POST['tags'];
+$tagstr = mb_ereg_replace("\s+", " ", $tagstr);
 $tagstrarray = explode(" ", $tagstr);
-$tagstrarray = array_filter($tagstrarray, function($str) { return strlen($str) > 0; });
+$tagstrarray = array_filter($tagstrarray, function($str) { return mb_strlen($str) > 0; });
 $tagstr = implode(" ", $tagstrarray);
 
 UpdatePost($tagstr, $post_id, $user);

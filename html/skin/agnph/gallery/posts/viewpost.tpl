@@ -92,7 +92,7 @@
                 <li>Score: {{ post.Score }}</li>
                 {% if post.FileSize != "" %}<li>Size: {{ post.FileSize }}</li>{% endif %}
                 <li>Views: {{ post.NumViews }}</li>
-                <li>Tag History</li>
+                <li><a href="/gallery/post/show/{{ post.PostId }}/history/">Tag History</a></li>
             </ul>
         </div>
         {% if canEdit %}

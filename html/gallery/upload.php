@@ -55,8 +55,8 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
     $has_preview = ($dst_path == $preview_path ? 0 : 1);
     $uploader_id = $user['UserId'];
 
-    if (strlen($_POST['source']) > 0) {
-        $source = substr(str_replace(" ", "%20", $_POST['source']), 0, 256);
+    if (mb_strlen($_POST['source']) > 0) {
+        $source = mb_substr(str_replace(" ", "%20", $_POST['source']), 0, 256);
     } else {
         $source = "";
     }
@@ -64,8 +64,8 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
     if (!($rating == 's' || $rating == 'q' || $rating == 'e')) {
         $rating = 'q';
     }
-    if (strlen($_POST['description']) > 0) {
-        $escaped_description = sql_escape(substr($_POST['description'], 0, 512));
+    if (mb_strlen($_POST['description']) > 0) {
+        $escaped_description = sql_escape(mb_substr($_POST['description'], 0, 512));
     } else {
         $escaped_description = "";
     }

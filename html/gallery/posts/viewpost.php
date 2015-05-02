@@ -66,7 +66,7 @@ foreach ($GALLERY_TAG_TYPES as $char => $name) {
 $vars['post']['tagCategories'] = $tagCategories;
 if ($post['ParentPoolId'] != -1) {
     $iter = CreatePoolIterator($post);
-    if (strlen($iter) > 0) $vars['poolIterator'] = $iter;
+    if (mb_strlen($iter) > 0) $vars['poolIterator'] = $iter;
 }
 
 if (isset($user)) {
@@ -118,7 +118,7 @@ function PreparePostStatistics(&$post) {
         $post['ratingHtml'] = "<span class='erating'>Explicit</span>";
         break;
     }
-    sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE ParentPostId=".$post['PostId'].";", 0) or RenderErrorPage("Post not found.");
+    sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE ParentPostId=".$post['PostId']." AND Status!='D';", 0) or RenderErrorPage("Post not found.");
     if ($result->num_rows > 0) {
         $post['hasChildren'] = true;
     }

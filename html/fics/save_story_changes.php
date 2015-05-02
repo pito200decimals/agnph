@@ -23,7 +23,7 @@ $storynotes = SanitizeHTMLTags($_POST['notes'], DEFAULT_ALLOWED_TAGS);
 
 // Check for valid input.
 if (!is_numeric($sid)) return;
-if (strlen($title) == 0) {
+if (mb_strlen($title) == 0) {
     $errmsg = "Invalid Story Title";
 }
 if ($rating == '1') {
@@ -57,12 +57,12 @@ if ($sid <= 0) {
     $chaptertext = SanitizeHTMLTags($_POST['chaptertext'], DEFAULT_ALLOWED_TAGS);
     if (!isset($_POST['chapterendnotes'])) return;
     $chapterendnotes = SanitizeHTMLTags($_POST['chapterendnotes'], DEFAULT_ALLOWED_TAGS);
-    if (strlen($chaptertitle) == 0) {
+    if (mb_strlen($chaptertitle) == 0) {
         $errmsg = "Invalid Chapter Title";
     }
 }
 
-if (isset($errmsg) && strlen($errmsg) > 0) return;
+if (isset($errmsg) && mb_strlen($errmsg) > 0) return;
 
 if ($sid > 0) {
     // Edit existing story.

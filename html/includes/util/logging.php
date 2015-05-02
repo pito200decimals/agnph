@@ -10,7 +10,7 @@ function RecordUserIP(&$user) {
         if (!sql_query_into($result, "SELECT KnownIPs FROM ".USER_TABLE." WHERE UserId=$uid;", 1)) return;
         $old_ips_string = $result->fetch_assoc()['KnownIPs'];
     }
-    if (strlen($old_ips_string) == 0) {
+    if (mb_strlen($old_ips_string) == 0) {
         $prev_ips = array();
     } else {
         $prev_ips = explode(",", $old_ips_string);

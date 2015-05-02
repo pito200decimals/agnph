@@ -17,32 +17,33 @@ function CreatePostSearchSQL($search_string, $posts_per_page, $page, &$can_sort_
     $sortOrder = "T.PostId DESC";
     $can_sort_pool = false;
     $matches = array();
-    if (preg_match("/.*pool:(\d+)($|[^\d].*)/i", $search_string, $matches)) {
+    // Safe to use preg_match here.
+    if (preg_match("/^.*pool:(\d+)($|[^\d].*$)/i", $search_string, $matches)) {
         // Pool search, use this as default (with old default as tiebreaker).
         $sortOrder = "T.PoolItemOrder ASC, ".$sortOrder;
         $can_sort_pool = true;
         $pool_sort_id = $matches[1];
     }
     // If order specified, use new order.
-    if (strpos(strtolower($search_string), "order:") !== FALSE) {
+    if (mb_strpos(mb_strtolower($search_string), "order:") !== FALSE) {
         // Check for various orderings (with this priority lowest to highest).
-        if (strpos(strtolower($search_string), "order:date") !== FALSE) {
-            $search_string = mb_ereg_replace("/order:date/i", "", $search_string);
+        if (mb_strpos(mb_strtolower($search_string), "order:date") !== FALSE) {
+            $search_string = mb_eregi_replace("order:date", "", $search_string);
             $sortOrder = "T.DateUploaded DESC, ".$sortOrder;
             $can_sort_pool = false;
         }
-        if (strpos(strtolower($search_string), "order:age") !== FALSE) {
-            $search_string = mb_ereg_replace("/order:age/i", "", $search_string);
+        if (mb_strpos(mb_strtolower($search_string), "order:age") !== FALSE) {
+            $search_string = mb_eregi_replace("order:age", "", $search_string);
             $sortOrder = "T.DateUploaded ASC, ".$sortOrder;
             $can_sort_pool = false;
         }
-        if (strpos(strtolower($search_string), "order:score") !== FALSE) {
-            $search_string = mb_ereg_replace("/order:score/i", "", $search_string);
+        if (mb_strpos(mb_strtolower($search_string), "order:score") !== FALSE) {
+            $search_string = mb_eregi_replace("order:score", "", $search_string);
             $sortOrder = "T.Score DESC, ".$sortOrder;
             $can_sort_pool = false;
         }
-        if (strpos(strtolower($search_string), "order:views") !== FALSE) {
-            $search_string = mb_ereg_replace("/order:views/i", "", $search_string);
+        if (mb_strpos(mb_strtolower($search_string), "order:views") !== FALSE) {
+            $search_string = mb_eregi_replace("order:views", "", $search_string);
             $sortOrder = "T.NumViews DESC, ".$sortOrder;
             $can_sort_pool = false;
         }

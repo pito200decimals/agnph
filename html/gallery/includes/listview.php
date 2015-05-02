@@ -26,7 +26,7 @@ function CollectItems($table_name, $sql_order, &$items, $items_per_page, &$itera
     }
 
     // Get total number, and construct iterator.
-    sql_query_into($result, "SELECT count(*) FROM $table_name;", 1) or RenderErrorPage($error_msg);
+    sql_query_into($result, "SELECT count(*) FROM $table_name $sql_order;", 1) or RenderErrorPage($error_msg);
     $total_num_items = $result->fetch_assoc()['count(*)'];
     $num_max_pages = (int)(($total_num_items + $items_per_page - 1) / $items_per_page);
     if ($num_max_pages > 1) {

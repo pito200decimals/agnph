@@ -5,7 +5,7 @@
 $folder_level = "";
 while (!file_exists($folder_level.__FILE__)) {
     $folder_level .= "../";
-    if (strlen($folder_level) > 20) {
+    if (mb_strlen($folder_level) > 20) {
         die("Could not find site root!");
     }
 }

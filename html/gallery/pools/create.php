@@ -10,8 +10,8 @@ if (!isset($user) || !CanUserCreateOrDeletePools($user)) {
 if (!isset($_POST['name'])) InvalidURL();
 
 $name = $_POST['name'];
-$name = substr($name, 0, MAX_POOL_NAME_LENGTH);
-if (strlen($name) < MIN_POOL_PREFIX_LENGTH) {
+$name = mb_substr($name, 0, MAX_POOL_NAME_LENGTH);
+if (mb_strlen($name) < MIN_POOL_PREFIX_LENGTH) {
     RenderErrorPage("Invalid pool name");
 }
 $escaped_name = sql_escape($name);

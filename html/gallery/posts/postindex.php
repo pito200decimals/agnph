@@ -10,7 +10,7 @@ if (isset($_GET['page']) && is_numeric($_GET['page']) && ((int)$_GET['page']) > 
     $page = 1;
 }
 if (isset($_GET['search'])) {
-    $searchterms = mb_ereg_replace('!\s+!', ' ', trim($_GET['search']));
+    $searchterms = mb_ereg_replace('\s+', ' ', trim($_GET['search']));
 } else {
     $searchterms = "";
 }
@@ -20,7 +20,7 @@ if (isset($user)) {
     $posts_per_page = DEFAULT_GALLERY_POSTS_PER_PAGE;
 }
 $vars['search'] = $searchterms;
-$sql = CreatePostSearchSQL(strtolower($searchterms), $posts_per_page, $page, $can_sort_pool, $pool_id);
+$sql = CreatePostSearchSQL(mb_strtolower($searchterms), $posts_per_page, $page, $can_sort_pool, $pool_id);
 sql_query_into($result, $sql, 0) or RenderErrorPage("No posts found");
 $posts = array();
 while ($row = $result->fetch_assoc()) {
@@ -45,7 +45,7 @@ RenderPage("gallery/posts/postindex.tpl");
 return;
 
 function CreatePageIterator($searchterms, $page, $posts_per_page) {
-    $total_num_posts = CountNumPosts(strtolower($searchterms));
+    $total_num_posts = CountNumPosts(mb_strtolower($searchterms));
     $num_max_pages = (int)(($total_num_posts + $posts_per_page - 1) / $posts_per_page);
     if ($num_max_pages > 1) {
         $iterator_html = ConstructPageIterator($page, $num_max_pages, DEFAULT_GALLERY_PAGE_ITERATOR_SIZE,
@@ -69,7 +69,7 @@ function CreatePageIterator($searchterms, $page, $posts_per_page) {
                 } else {
                     $txt = $i;
                 }
-                if (strlen($searchterms) > 0) {
+                if (mb_strlen($searchterms) > 0) {
                     if ($i != 1) {
                         $url = "/gallery/post/?search=".urlencode($searchterms)."&page=$i";
                     } else {
@@ -137,7 +137,9 @@ function SetOutlineClasses(&$posts) {
     $joined = implode(",", $ids);
     sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE ParentPostId IN ($joined);", 0) or RenderErrorPage("No posts found");
     while ($row = $result->fetch_assoc()) {
-        $postsToCheckChild[$row['ParentPostId']]['outlineClass'] = "parentoutline";
+        if ($row['Status'] != 'D') {  // Only set parents if the child isn't deleted.
+            $postsToCheckChild[$row['ParentPostId']]['outlineClass'] = "parentoutline";
+        }
     }
 }
 ?>

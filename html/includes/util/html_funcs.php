@@ -62,11 +62,13 @@ function ConstructPageIterator($currpage, $maxpage, $iterator_size, $link_fn, $i
 // Renders the page to the given template.
 function RenderPage($template) {
     global $twig, $vars;
-    $text = mb_ereg_replace("/\s+/", " ", $twig->render($template, $vars));
+    $text = mb_ereg_replace("\s+", " ", $twig->render($template, $vars));
     if (DEBUG) {
         echo "\n\n\n\n\n";
         echo "----------------------------------------------------------------------------------------------\n";
         $text = TidyHTML($text);
+    } else {
+        $text = ($text);
     }
     echo ($text);
 }
@@ -92,56 +94,56 @@ function TidyHTML($html) {
     $ret = "";
     $indent = 0;
     $iter = 0;
-    while (strlen($html) > 0) {
+    while (mb_strlen($html) > 0) {
         $iter++;
         if ($iter > 1000) {
             return $html;
         }
         $match = array();
-        if (mb_ereg("@^(<script.*?</script>)(.*)$@i", $html, $match)) {
+        if (mb_eregi("^(<script.*?</script>)(.*)$", $html, $match)) {
             // Script tag.
             $tabs = Tabs($indent);
             $ret .= $tabs.$match[1]."\n";
             $html = $match[2];
-        } else if (mb_ereg("@^(<([^/][^>]*[^/]|[^>/]+)>)([^<>]*)(</[^>]+>)(.*)$@", $html, $match)) {
+        } else if (mb_ereg("^(<([^/][^>]*[^/]|[^>/]+)>)([^<>]*)(</[^>]+>)(.*)$", $html, $match)) {
             // Tag with only text in it.
             $tabs = Tabs($indent);
             $ret .= $tabs.$match[1].trim($match[3]).$match[4]."\n";
             $html = $match[5];
-        } else if (mb_ereg("@^([^<]+)(<.*)@", $html, $match)) {
+        } else if (mb_ereg("^([^<]+)(<.*)$", $html, $match)) {
             // Text.
             $tabs = Tabs($indent);
             $ret .= $tabs.trim($match[1])."\n";
             $html = $match[2];
-        } elseif (mb_ereg("@^([^<]*)(</[^>]+>)(.*)@", $html, $match)) {
+        } elseif (mb_ereg("^([^<]*)(</[^>]+>)(.*)$", $html, $match)) {
             // Close tag.
             $indent--;
             $tabs = Tabs($indent);
-            if (strlen($match[1]) > 0) $ret .= $tabs.$match[1]."\n";
+            if (mb_strlen($match[1]) > 0) $ret .= $tabs.$match[1]."\n";
             $ret .= $tabs.$match[2]."\n";
             $html = $match[3];
-        } elseif (mb_ereg("@^([^<]*)(<?[^>]+>)(.*)@", $html, $match)) {
+        } elseif (mb_ereg("^([^<]*)(<?[^>]+>)(.*)$", $html, $match)) {
             // xml
             $tabs = Tabs($indent);
-            if (strlen($match[1]) > 0) $ret .= $tabs.$match[1]."\n";
+            if (mb_strlen($match[1]) > 0) $ret .= $tabs.$match[1]."\n";
             $ret .= $tabs.$match[2]."\n";
             $html = $match[3];
-        } elseif (mb_ereg("@^([^<]*)(<![^>]+>)(.*)@", $html, $match)) {
+        } elseif (mb_ereg("^([^<]*)(<![^>]+>)(.*)$", $html, $match)) {
             // DOCTYPE
             $tabs = Tabs($indent);
-            if (strlen($match[1]) > 0) $ret .= $tabs.$match[1]."\n";
+            if (mb_strlen($match[1]) > 0) $ret .= $tabs.$match[1]."\n";
             $ret .= $tabs.$match[2]."\n";
             $html = $match[3];
-        } elseif (mb_ereg("@^([^<]*)(<[^>]+/>)(.*)@", $html, $match)) {
+        } elseif (mb_ereg("^([^<]*)(<[^>]+/>)(.*)$", $html, $match)) {
             // OpenClose tag.
             $tabs = Tabs($indent);
-            if (strlen($match[1]) > 0) $ret .= $tabs.$match[1]."\n";
+            if (mb_strlen($match[1]) > 0) $ret .= $tabs.$match[1]."\n";
             $ret .= $tabs.$match[2]."\n";
             $html = $match[3];
-        } elseif (mb_ereg("@^([^<]*)(<[^>]+>)(.*)@", $html, $match)) {
+        } elseif (mb_ereg("^([^<]*)(<[^>]+>)(.*)$", $html, $match)) {
             // Open tag.
             $tabs = Tabs($indent);
-            if (strlen($match[1]) > 0) $ret .= $tabs.$match[1]."\n";
+            if (mb_strlen($match[1]) > 0) $ret .= $tabs.$match[1]."\n";
             $ret .= $tabs.$match[2]."\n";
             $html = $match[3];
             $indent++;

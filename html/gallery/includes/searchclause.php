@@ -20,7 +20,7 @@
 function CreateSQLClauses($search) {
     $terms = explode(" ", $search);
     $terms = array_slice($terms, 0, MAX_GALLERY_SEARCH_TERMS);
-    $terms = array_filter($terms, "strlen");
+    $terms = array_filter($terms, "mb_strlen");
     return CreateSQLClausesFromTerms($terms);
 }
 
@@ -31,8 +31,8 @@ function CreateSQLClausesFromTerms($terms, $mode="AND") {
     if ($terms != array("")) {
         foreach ($terms as $term) {
             if (startsWith($term, "~")) {
-                $or_clauses[] = substr($term, 1);
-            } else if (strpos($term, ":") !== FALSE) {
+                $or_clauses[] = mb_substr($term, 1);
+            } else if (mb_strpos($term, ":") !== FALSE) {
                 $filter_clauses[] = $term;
             } else {
                 $and_clauses[] = $term;
@@ -50,7 +50,7 @@ function CreateSQLClausesFromTerms($terms, $mode="AND") {
         }
     }
     if (sizeof(array_filter($filter_clauses, function($str) {
-        return preg_match("/-*status:deleted/", $str) == 1;
+        return mb_ereg_match("-*status:deleted", $str) == 1;
     })) == 0) {
         $filter_clauses[] = "-status:deleted";
     }
@@ -64,7 +64,7 @@ function CreateSQLClausesFromTerms($terms, $mode="AND") {
 
 function CreateSQLClauseFromTerm($term) {
     if (startsWith($term, "-")) {
-        return "NOT(".CreateSQLClauseFromTerm(substr($term, 1)).")";
+        return "NOT(".CreateSQLClauseFromTerm(mb_substr($term, 1)).")";
     } else {
         return "EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." PT JOIN ".GALLERY_TAG_TABLE." TG ON PT.TagId=TG.TagId WHERE T.PostId=PostId AND TG.Name='".sql_escape($term)."')";
     }
@@ -72,35 +72,35 @@ function CreateSQLClauseFromTerm($term) {
 
 function CreateSQLClauseFromFilter($filter) {
     if (startsWith($filter, "-")) {
-        return "NOT(".CreateSQLClauseFromFilter(substr($filter, 1)).")";
+        return "NOT(".CreateSQLClauseFromFilter(mb_substr($filter, 1)).")";
     } else {
         if (startsWith($filter, "id:")) {
-            $id = substr($filter, 3);
+            $id = mb_substr($filter, 3);
             $escaped_id = sql_escape($id);
             return "T.PostId='$escaped_id'";
         } else if (startsWith($filter, "md5:")) {
-            $md5 = substr($filter, 4);
+            $md5 = mb_substr($filter, 4);
             $escaped_md5 = sql_escape($md5);
             return "T.Md5='$escaped_md5'";
         } else if (startsWith($filter, "rating:")) {
-            $rating = substr($filter, 7);
-            $escaped_rating = sql_escape(substr($rating, 0, 1));
+            $rating = mb_substr($filter, 7);
+            $escaped_rating = sql_escape(mb_substr($rating, 0, 1));
             return "T.Rating='$escaped_rating'";
         } else if (startsWith($filter, "user:")) {
-            $name = substr($filter, 5);
+            $name = mb_substr($filter, 5);
             $escaped_name = sql_escape($name);
             return "EXISTS(SELECT 1 FROM ".USER_TABLE." U WHERE U.DisplayName='$escaped_name' AND T.UploaderId=U.UserId)";
         } else if (startsWith($filter, "fav:")) {
-            $name = substr($filter, 4);
+            $name = mb_substr($filter, 4);
             $escaped_name = sql_escape($name);
             return "EXISTS(SELECT 1 FROM ".USER_TABLE." U JOIN ".GALLERY_USER_FAVORITES_TABLE." F ON U.UserId=F.UserId WHERE U.DisplayName='$escaped_name' AND T.PostId=F.PostId)";
         } else if (startsWith($filter, "parent:")) {
-            $parent = substr($filter, 7);
-            if (strtolower($parent) == "none" || !is_numeric($parent) || $parent <= 0) return "FALSE";  // Don't let searching for all non-child posts.
+            $parent = mb_substr($filter, 7);
+            if (mb_strtolower($parent) == "none" || !is_numeric($parent) || $parent <= 0) return "FALSE";  // Don't let searching for all non-child posts.
             $escaped_parent = sql_escape($parent);
             return "T.ParentPostId='$escaped_parent'";
         } else if (startsWith($filter, "status:")) {
-            $status = substr($filter, 7);
+            $status = mb_substr($filter, 7);
             if ($status == "none") {
                 return "T.Status='A'";
             } else if ($status == "pending") {
@@ -113,8 +113,8 @@ function CreateSQLClauseFromFilter($filter) {
                 return "FALSE";
             }
         } else if (startsWith($filter, "pool:")) {
-            $pool = substr($filter, 5);
-            if (strtolower($pool) == "none" || !is_numeric($pool) || $pool <= 0) return "FALSE";  // Don't let searching for all non-pool posts.
+            $pool = mb_substr($filter, 5);
+            if (mb_strtolower($pool) == "none" || !is_numeric($pool) || $pool <= 0) return "FALSE";  // Don't let searching for all non-pool posts.
             $escaped_pool = sql_escape($pool);
             return "T.ParentPoolId='$escaped_pool'";
         } else {

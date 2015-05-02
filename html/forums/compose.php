@@ -46,8 +46,8 @@ if ($_POST) {
             $board_id = $_GET['board'];
             $escaped_board_id = sql_escape($board_id);
             if (CanUserPostToBoard($user, $board_id)) {
-                if (strlen($title) > 0) {
-                    if (strlen($content) > 0) {
+                if (mb_strlen($title) > 0) {
+                    if (mb_strlen($content) > 0) {
                         $escaped_ip_addr = sql_escape($_SERVER['REMOTE_ADDR']);
                         $sticky = isset($_POST['sticky']) && $_POST['sticky'] && CanUserStickyThread($user, $board_id);
                         if (sql_query_into($result,
@@ -79,8 +79,8 @@ if ($_POST) {
             $thread_id = $_GET['thread'];
             $escaped_thread_id = sql_escape($thread_id);
             if (CanUserPostToThread($user, $thread_id)) {
-                if (strlen($title) > 0) {
-                    if (strlen($content) > 0) {
+                if (mb_strlen($title) > 0) {
+                    if (mb_strlen($content) > 0) {
                         $result = sql_query("INSERT INTO ".FORUMS_POST_TABLE." (UserId, PostDate, ParentThreadId, Title, Content) VALUES ($uid, $date, '$escaped_thread_id', '$escaped_title', '$escaped_content');");
                         $pid = sql_last_id();
                         // Try to mark this post as read. Don't handle any sql errors.
@@ -104,8 +104,8 @@ if ($_POST) {
             if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId='$escaped_post_id';", 1)) {
                 $post = $result->fetch_assoc();
                 if (CanUserEditPost($user, $post)) {
-                    if (strlen($title) > 0) {
-                        if (strlen($content) > 0) {
+                    if (mb_strlen($title) > 0) {
+                        if (mb_strlen($content) > 0) {
                             $sticky = $post['ParentThreadId'] == -1 && isset($_POST['sticky']) && $_POST['sticky'] && CanUserStickyThread($user, $post['ParentLobbyId']);
                             $result = sql_query("UPDATE ".FORUMS_POST_TABLE." SET EditDate=$date, Title='$escaped_title', Content='$escaped_content', Sticky='$sticky' WHERE PostId='$escaped_post_id';");
                             $pid = $post['PostId'];
@@ -248,7 +248,7 @@ function DisplayRecentPosts($thread_id) {
     $posts = GetAllPostsInThread($thread_id);
     $posts = array_reverse($posts);
     if (isset($user)) {
-        $posts_per_page = $user['PostsPerPage'];
+        $posts_per_page = $user['ForumPostsPerPage'];
     } else {
         $posts_per_page = DEFAULT_POSTS_PER_PAGE;
     }

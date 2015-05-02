@@ -44,11 +44,11 @@ include_once(__DIR__."/table_data.php");
 
 function startsWith($haystack, $needle) {
     // search backwards starting from haystack length characters from the end
-    return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== FALSE;
+    return $needle === "" || strrpos($haystack, $needle, -mb_strlen($haystack)) !== FALSE;
 }
 function endsWith($haystack, $needle) {
     // search forward starting from end minus needle length characters
-    return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== FALSE);
+    return $needle === "" || (($temp = mb_strlen($haystack) - mb_strlen($needle)) >= 0 && mb_strpos($haystack, $needle, $temp) !== FALSE);
 }
 
 // Cookie processing functions.

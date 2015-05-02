@@ -17,7 +17,7 @@ if ($postType == "comment") {
     $score = 0;  // Comments can't have a score.
     // Also, unset $_GET['reviews'] since we want to redirect to comments.
     unset($_GET['reviews']);
-    if (strlen($text) < MIN_COMMENT_STRING_SIZE) RenderErrorPage("Comment length is too short");
+    if (mb_strlen($text) < MIN_COMMENT_STRING_SIZE) RenderErrorPage("Comment length is too short");
 } else if ($postType == "review") {
     // Expect textbox "text", select "score".
     if (!isset($_POST['text'])) InvalidURL();
@@ -27,7 +27,7 @@ if ($postType == "comment") {
     if (!is_numeric($score)) InvalidURL();
     if ($score < 0 || $score > 10) InvalidURL();
     if (!CanUserReview($user)) RenderErrorPage("You are not authorized to review");
-    if (strlen($text) < MIN_COMMENT_STRING_SIZE) RenderErrorPage("Review length is too short");
+    if (mb_strlen($text) < MIN_COMMENT_STRING_SIZE) RenderErrorPage("Review length is too short");
     // Also, set $_GET['reviews'] since we want to redirect to reviews.
     $_GET['reviews'] = true;
 } else if ($postType == "response") {
@@ -96,7 +96,7 @@ if ($postType == "comment" || $postType == "review") {
     $escaped_review_id = sql_escape($reviewId);
     if (!sql_query_into($result, "SELECT * FROM ".FICS_REVIEW_TABLE." WHERE ReviewId='$escaped_review_id';", 1)) RenderErrorPage("Unable to post response 1");
     $review = $result->fetch_assoc();
-    if (strlen($review['AuthorResponseText']) > 0) RenderErrorPage("Cannot respond to review twice");
+    if (mb_strlen($review['AuthorResponseText']) > 0) RenderErrorPage("Cannot respond to review twice");
     $escaped_text = sql_escape($text);
     $success = sql_query("UPDATE ".FICS_REVIEW_TABLE." SET AuthorResponseText='$escaped_text' WHERE ReviewId='$escaped_review_id';");
     if (!$success) RenderErrorPage("Unable to post response 2");

@@ -76,24 +76,24 @@ class SimpleImage
 
 function GetImagePath($md5, $ext) {
     $path = "gallery/data/";
-    $path .= substr($md5, 0, 2)."/";
-    $path .= substr($md5, 2, 2)."/";
+    $path .= mb_substr($md5, 0, 2)."/";
+    $path .= mb_substr($md5, 2, 2)."/";
     $path .= "$md5.$ext";
     return $path;
 }
 
 function GetThumbPath($md5, $ext) {
     $path = "gallery/data/thumb/";
-    $path .= substr($md5, 0, 2)."/";
-    $path .= substr($md5, 2, 2)."/";
+    $path .= mb_substr($md5, 0, 2)."/";
+    $path .= mb_substr($md5, 2, 2)."/";
     $path .= "$md5.jpg";
     return $path;
 }
 
 function GetPreviewPath($md5, $ext) {
     $path = "gallery/data/preview/";
-    $path .= substr($md5, 0, 2)."/";
-    $path .= substr($md5, 2, 2)."/";
+    $path .= mb_substr($md5, 0, 2)."/";
+    $path .= mb_substr($md5, 2, 2)."/";
     $path .= "$md5.$ext";
     return $path;
 }

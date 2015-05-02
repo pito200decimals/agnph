@@ -193,7 +193,7 @@ CreateTag("flygon", "S");
 CreateTag("solo", "G");
 CreateTag("floatzel", "S");
 
-/*
+//*
 CreateGalleryPost("c3024ba611837d85397d9661aec12840", "jpg", array("harlem", "umbreon", "quilava", "male"), "e");
 CreateGalleryPost("16f7fdb2e63740e6dbf524e137899433", "png", array("syntex", "quilava", "raichu", "male"), "s");
 CreateGalleryPost("0f80621ad5be140be8e3077bea316b06", "jpg", array("eroborus", "quilava", "dewott", "male"), "q");
@@ -209,7 +209,7 @@ CreateGalleryPost("85bb9ecdbbdbbbde574a5a8ae6798329", "jpg", array("umbreon","fl
 CreateGalleryPost("ba395299b5abdaaabb99938ab249283c", "jpg", array("umbreon","flareon","male","female"), "e", 11);
 CreateGalleryPost("a096c523ac2044bc6ed13f069f474bf9", "jpg", array("flygon","male", "solo"));
 CreateGalleryPost("b4778c99464f01b56d8c3611143aad6f", "jpg", array("typhlosion","floatzel","male", "female"));
-*/
+// */
 
 function CreateLotsOfFakeGallery($n) {
     for ($p = 0; $p < $n; $p+=100) {

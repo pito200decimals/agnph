@@ -3,8 +3,8 @@
 
 // Creates the directory containing the given path, and all parent directories as needed.
 function mkdirs($site_dir_path) {
-    if (substr($site_dir_path, 0, 1) == "/")
-        $site_dir_path = substr($site_dir_path, 1, strlen($site_dir_path) - 1);
+    if (mb_substr($site_dir_path, 0, 1) == "/")
+        $site_dir_path = mb_substr($site_dir_path, 1, mb_strlen($site_dir_path) - 1);
      if (file_exists(SITE_ROOT.$site_dir_path)) return;
     mkdir(SITE_ROOT.$site_dir_path, 0777, true);
 }

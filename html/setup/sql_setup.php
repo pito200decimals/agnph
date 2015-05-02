@@ -39,10 +39,9 @@ sql_query("DROP TABLE ".GALLERY_USER_FAVORITES_TABLE.";");
 sql_query("DROP TABLE ".GALLERY_POOLS_TABLE.";");
 sql_query("DROP TABLE ".FICS_STORY_TABLE.";");
 sql_query("DROP TABLE ".FICS_CHAPTER_TABLE.";");
-//sql_query("DROP TABLE ".FICS_STORY_TAG_TABLE.";");
-//sql_query("DROP TABLE ".FICS_TAG_TABLE.";");
+sql_query("DROP TABLE ".FICS_TAG_TABLE.";");
+sql_query("DROP TABLE ".FICS_STORY_TAG_TABLE.";");
 sql_query("DROP TABLE ".FICS_REVIEW_TABLE.";");
-//sql_query("DROP TABLE ".FICS_SERIES_TABLE.";");
 sql_query("DROP TABLE ".FICS_USER_PREF_TABLE.";");
 
 // Main user data table. General information that is shared between sections.
@@ -166,24 +165,8 @@ do_or_die(sql_query(
         FlagReason VARCHAR(".MAX_GALLERY_POST_FLAG_REASON_LENGTH.") NOT NULL,
         PRIMARY KEY(PostId)
     ) DEFAULT CHARSET=utf8;"));
-// General information about a single tag
-do_or_die(sql_query(
-    "CREATE TABLE ".GALLERY_TAG_TABLE." (
-        TagId INT(11) UNSIGNED AUTO_INCREMENT,
-        Name VARCHAR(".MAX_TAG_NAME_LENGTH.") NOT NULL,
-        Type CHAR(1) DEFAULT 'G',".  // A=Artist, C=Character, D=Copyright, G=General, S=Species (D is copyright for ordering reasons).
-       "CreatorUserId INT(11) NOT NULL,
-        ChangeTypeUserId INT(11) NOT NULL,
-        Count INT(11) NOT NULL,
-        PRIMARY KEY(TagId)
-    ) DEFAULT CHARSET=utf8;"));
-// Mapping of tag ids associated with each post.
-do_or_die(sql_query(
-    "CREATE TABLE ".GALLERY_POST_TAG_TABLE." (
-        PostId INT(11) NOT NULL,
-        TagId INT(11) NOT NULL,
-        PRIMARY KEY(PostId, TagId)
-    ) DEFAULT CHARSET=utf8;"));
+// Tag Types: A=Artist, C=Character, D=Copyright, G=General, S=Species (D is copyright for ordering reasons).
+CreateItemTagTables(GALLERY_TAG_TABLE, GALLERY_POST_TAG_TABLE, "PostId");
 // History of tag edits for a given post.
 do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_POST_TAG_HISTORY_TABLE." (
@@ -290,6 +273,8 @@ do_or_die(sql_query(
         IsComment TINYINT(1) NOT NULL,
         PRIMARY KEY(ReviewId)
     ) DEFAULT CHARSET=utf8;"));
+// Tag Types: C - Category, S - Species, W - Warning, H - Character, R - Series, G - General
+CreateItemTagTables(FICS_TAG_TABLE, FICS_STORY_TAG_TABLE, "StoryId");
 do_or_die(sql_query(
    "CREATE TABLE ".FICS_USER_PREF_TABLE." (
         UserId INT(11) NOT NULL,
@@ -306,4 +291,27 @@ do_or_die(sql_query(
 
 // TODO: Remove this call after testing is complete.
 include_once("load_sql_mock_data.php");
+
+// Creates the tag table and a item-tag map table. Default tag type is 'G'.
+function CreateItemTagTables($tag_table_name, $item_tag_table_name, $item_id) {
+    do_or_die(sql_query(
+        "CREATE TABLE $tag_table_name (
+            TagId INT(11) UNSIGNED AUTO_INCREMENT,
+            Name VARCHAR(".MAX_TAG_NAME_LENGTH.") NOT NULL,
+            Type CHAR(1) DEFAULT 'G',".
+           "EditLocked TINYINT(1) NOT NULL,
+            AddLocked TINYINT(1) NOT NULL,
+            CreatorUserId INT(11) NOT NULL,
+            ChangeTypeUserId INT(11) NOT NULL,
+            ChangeTypeTimestamp INT(11) NOT NULL,
+            Count INT(11) NOT NULL,
+            PRIMARY KEY(TagId)
+        ) DEFAULT CHARSET=utf8;"));
+    do_or_die(sql_query(
+        "CREATE TABLE $item_tag_table_name (
+            $item_id INT(11) NOT NULL,
+            TagId INT(11) NOT NULL,
+            PRIMARY KEY($item_id, TagId)
+        ) DEFAULT CHARSET=utf8;"));
+}
 ?>

@@ -10,6 +10,7 @@
         <li><a href="/fics/browse/">Stories</a></li>
         <li><a href="/fics/authors/">Authors</a></li>
         <li><a href="/fics/tags/">Tags</a></li>
+        <li><a href="/fics/search/">Search</a></li>
         {% if user %}<li><a href="/fics/user/{{ user.UserId }}/">My Stories</a></li>{% endif %}
         {% if user %}<li><a href="/fics/edit_story.php?action=create">Upload New Story</a></li>{% endif %}
     </ul>

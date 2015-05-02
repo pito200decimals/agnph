@@ -40,7 +40,6 @@ define("FICS_CHAPTER_TABLE", "fics_chapters");
 define("FICS_STORY_TAG_TABLE", "fics_story_tag");
 define("FICS_TAG_TABLE", "fics_tags");
 define("FICS_REVIEW_TABLE", "fics_reviews");
-define("FICS_SERIES_TABLE", "fics_series");
 
 // User Settings Defaults.
 define("DEFAULT_SKIN", "agnph");
@@ -62,6 +61,13 @@ $GALLERY_TAG_TYPES = array(
     "D" => "Copyright",
     "G" => "General",
     "S" => "Species");
+$FICS_TAG_TYPES = array(
+    "C" => "Category",
+    "S" => "Species",
+    "W" => "Warning",
+    "H" => "Character",
+    "R" => "Series",
+    "G" => "General");
 define("MAX_IMAGE_THUMB_SIZE", 150);
 define("MAX_IMAGE_PREVIEW_SIZE", 1200);
 define("MAX_TAG_NAME_LENGTH", 32);

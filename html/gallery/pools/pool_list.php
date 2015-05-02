@@ -10,7 +10,7 @@ include_once("../../includes/util/sql.php");
 
 header('Content-type: application/json; charset=utf-8');
 
-if (!isset($_GET['prefix']) || strlen($_GET['prefix']) < MIN_POOL_PREFIX_LENGTH) {
+if (!isset($_GET['prefix']) || mb_strlen($_GET['prefix']) < MIN_POOL_PREFIX_LENGTH) {
     echo json_encode(array());
     return;
 }
