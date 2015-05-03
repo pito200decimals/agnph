@@ -78,3 +78,41 @@
 .reviews {
     font-size: 75%;
 }
+
+.ctypetag {
+    color: rgb(221,0,204);
+}
+.wtypetag {
+    color: rgb(225,95,95);
+}
+.rtypetag {
+    color: rgb(221,0,204);
+}
+.htypetag {
+    color: rgb(0,170,188);
+}
+.gtypetag {
+    color: rgb(0,0,102);
+}
+.stypetag {
+    color: rgb(237,93,31);
+}
+
+.taglist {
+    margin: 0px;
+    padding: 0px;
+    margin-left: 15px;
+    list-style: none;
+}
+.taglist li {
+    display: inline;
+    text-decoration: none;
+    margin: 5px;
+}
+.taglist a {
+    text-decoration: none;
+    font-weight: bold;
+}
+.taglist a:hover span {
+    color: rgb(144,147,255);
+}

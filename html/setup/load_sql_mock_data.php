@@ -327,4 +327,23 @@ AddComment(1, 1, 1, "Comment text on chapter 1", 8);
 AddComment(1, 2, 1, "Comment text on chapter 2", 6);
 AddComment(1, 3, 1, "Comment text on chapter 3", 7);
 
+function AddTagsToStory($sid, $tagNames) {
+    if (is_array($tagNames)) {
+        $tags = GetTagsByName(FICS_TAG_TABLE, $tagNames, true, 1);
+        $list = array_map(function($tag) use ($sid) {
+            return "($sid, ".$tag['TagId'].")";
+        }, $tags);
+        $list = implode(",", $list);
+        do_or_die(sql_query("INSERT INTO ".FICS_STORY_TAG_TABLE." (StoryId, TagId) VALUES $list;"));
+    } else {
+        AddTagsToStory($sid, array($tagNames));
+    }
+}
+
+AddTagsToStory(1, array("Quilava", "Typhlosion", "Cyndaquil"));
+AddTagsToStory(2, array("Typhlosion", "Cyndaquil"));
+AddTagsToStory(3, array("Quilava", "Eevee", "Cyndaquil"));
+AddTagsToStory(4, array("straight"));
+AddTagsToStory(5, array("Quilava", "Typhlosion", "Cyndaquil"));
+
 ?>

@@ -14,7 +14,7 @@ function CanUserUploadPost($user) {
 function CanUserEditPost($user) {
     return true;
 }
-function CanUserCreateTags($user) {
+function CanUserCreateGalleryTags($user) {
     return true;
 }
 function CanUserUploadNonPending($user) {
@@ -67,11 +67,8 @@ function GetValidParentPostId($parent_post_id, $post_id) {
 // Updates a post with the new tags/properties.
 function UpdatePost($tag_string, $post_id, $user) {
     global $GALLERY_TAG_TYPES;
-    debug($tag_string);
     $tag_string = CleanTagString($tag_string);
-    debug($tag_string);
     $tokens = GetTagStringTokens($tag_string);
-    debug($tokens);
     $descriptors = GetTagDescriptors($tokens, $post_id, "GalleryTagDescriptorFilterFn");
     UpdatePostWithDescriptors($descriptors, $post_id, $user);
     UpdateTagTypes(GALLERY_TAG_TABLE, $GALLERY_TAG_TYPES, $descriptors, $user);  // Do after creating tags above when setting post tags.
@@ -84,36 +81,36 @@ function UpdatePostWithDescriptors($descriptors, $post_id, $user) {
     $tag_names = array_map(function($desc) { return $desc->tag; }, $tag_descriptors);
     $properties = array_filter($descriptors, function($desc) { return !$desc->isTag; });
     $log_fields = array();
-    if (sizeof($tag_descriptors) > 0) {
-        $tags = GetTagsByName(GALLERY_TAG_TABLE, $tag_names, CanUserCreateTags($user), $user['UserId']);
-        $tag_ids = array_map(function($tag) { return $tag['TagId']; }, $tags);
-        $tag_ids_joined = implode(",", $tag_ids);
-        if (sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TAG_TABLE." WHERE PostId=$post_id;", 0)) {
-            $tags_to_add = $tag_ids;
-            $tags_to_remove = array();
-            while ($row = $result->fetch_assoc()) {
-                if (($key = array_search($row['TagId'], $tags_to_add)) === FALSE) {
-                    // Tag to delete.
-                    $tags_to_remove[] = $row['TagId'];
-                } else {
-                    unset($tags_to_add[$key]);
-                }
+
+    // Update tags.
+    $tags = GetTagsByName(GALLERY_TAG_TABLE, $tag_names, CanUserCreateGalleryTags($user), $user['UserId']);
+    $tag_ids = array_map(function($tag) { return $tag['TagId']; }, $tags);
+    $tag_ids_joined = implode(",", $tag_ids);
+    if (sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TAG_TABLE." WHERE PostId=$post_id;", 0)) {
+        $tags_to_add = $tag_ids;
+        $tags_to_remove = array();
+        while ($row = $result->fetch_assoc()) {
+            if (($key = array_search($row['TagId'], $tags_to_add)) === FALSE) {
+                // Tag to delete.
+                $tags_to_remove[] = $row['TagId'];
+            } else {
+                unset($tags_to_add[$key]);
             }
-            $error = false;
-            $tags_changed = false;
-            if (sizeof($tags_to_remove) > 0) {
-                $del_tag_ids_joined = implode(",", $tags_to_remove);
-                if (sql_query("DELETE FROM ".GALLERY_POST_TAG_TABLE." WHERE PostId=$post_id AND TagId IN ($del_tag_ids_joined);")) {
-                    $log_fields['TagsRemoved'] = implode(",", $tags_to_remove);
-                }
+        }
+        $error = false;
+        $tags_changed = false;
+        if (sizeof($tags_to_remove) > 0) {
+            $del_tag_ids_joined = implode(",", $tags_to_remove);
+            if (sql_query("DELETE FROM ".GALLERY_POST_TAG_TABLE." WHERE PostId=$post_id AND TagId IN ($del_tag_ids_joined);")) {
+                $log_fields['TagsRemoved'] = implode(",", $tags_to_remove);
             }
-            if (sizeof($tags_to_add) > 0) {
-                $post_tag_tuples = implode(",", array_map(function($tag_id) use ($post_id) {
-                    return "($post_id,$tag_id)";
-                }, $tags_to_add));
-                if (sql_query("INSERT INTO ".GALLERY_POST_TAG_TABLE." (PostId, TagId) VALUES $post_tag_tuples;")) {
-                    $log_fields['TagsAdded'] = implode(",", $tags_to_add);
-                }
+        }
+        if (sizeof($tags_to_add) > 0) {
+            $post_tag_tuples = implode(",", array_map(function($tag_id) use ($post_id) {
+                return "($post_id,$tag_id)";
+            }, $tags_to_add));
+            if (sql_query("INSERT INTO ".GALLERY_POST_TAG_TABLE." (PostId, TagId) VALUES $post_tag_tuples;")) {
+                $log_fields['TagsAdded'] = implode(",", $tags_to_add);
             }
         }
     }

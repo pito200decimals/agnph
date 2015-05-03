@@ -304,7 +304,6 @@ function CreateItemTagTables($tag_table_name, $item_tag_table_name, $item_id) {
             CreatorUserId INT(11) NOT NULL,
             ChangeTypeUserId INT(11) NOT NULL,
             ChangeTypeTimestamp INT(11) NOT NULL,
-            Count INT(11) NOT NULL,
             PRIMARY KEY(TagId)
         ) DEFAULT CHARSET=utf8;"));
     do_or_die(sql_query(

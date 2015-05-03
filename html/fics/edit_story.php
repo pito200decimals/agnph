@@ -43,6 +43,8 @@ if ($action == "edit") {
     $story = GetStory($sid) or RenderErrorPage("Story not found");;
     if (!CanUserEditStory($story, $user)) RenderErrorPage("Not authorized to edit story");
     $chapters = GetChaptersInfo($sid) or RenderErrorPage("Story not found");
+    debug($story['tags']);
+    $story['tagstring'] = implode(" ", array_map(function($tag) { return $tag['Name']; }, $story['tags']));
     $vars['story'] = $story;
     $vars['chapters'] = &$chapters;
     // Assign chapter hashes.
@@ -66,6 +68,7 @@ if (isset($fill_from_post) && $fill_from_post) {
     if (isset($rating)) $story['Rating'] = $rating;
     if (isset($completed)) $story['Completed'] = $completed;
     if (isset($storynotes)) $story['StoryNotes'] = $storynotes;
+    if (isset($tagstring)) $story['tagstring'] = $tagstring;
     // Fill chapter fields.
     if (isset($chaptertitle)) $vars['chaptertitle'] = $chaptertitle;
     if (isset($chapternotes)) $vars['chapternotes'] = $chapternotes;

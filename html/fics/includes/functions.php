@@ -23,6 +23,9 @@ function CanUserComment($user) {
 function CanUserReview($user) {
     return true;
 }
+function CanUserCreateFicsTags($user) {
+    return true;
+}
 
 // General path functions.
 function GetChapterPath($cid) { return SITE_ROOT."fics/data/chapters/$cid.txt"; }
@@ -74,7 +77,7 @@ function FillStoryInfo(&$story) {
     }
 
     // TODO
-    $story['tags'] = GetTagsForStory($story['StoryId']);
+    $story['tags'] = GetTagsInfo(GetTagsIdsForStory($story['StoryId']));
 
     $story['DateCreated'] = FormatDate($story['DateCreated'], FICS_DATE_FORMAT);
     $story['DateUpdated'] = FormatDate($story['DateUpdated'], FICS_DATE_FORMAT);
@@ -111,15 +114,27 @@ function SetChapterText($cid, $text) {
 }
 
 // Gets tag ids for story, and tag info.
-function GetTagsForStory($sid) {
-    // TODO
-    return array();
+function GetTagsIdsForStory($sid) {
+    $escaped_sid = sql_escape($sid);
+    if (!sql_query_into($result, "SELECT * FROM ".FICS_STORY_TAG_TABLE." WHERE StoryId=$escaped_sid;")) return array();
+    $ret = array();
+    while ($row = $result->fetch_assoc()) {
+        $ret[] = $row['TagId'];
+    }
+    return $ret;
 }
 
-// Gets info about tags.
+// Gets info about tags, indexed by tag id.
 function GetTagsInfo($tag_id_array) {
-    // TODO
-    return array();
+    if (sizeof($tag_id_array) == 0) return array();
+    $joined = implode(",", $tag_id_array);
+    if (!sql_query_into($result, "SELECT * FROM ".FICS_TAG_TABLE." WHERE TagId IN ($joined) ORDER BY Name;", 1)) return array();
+    $ret = array();
+    while ($row = $result->fetch_assoc()) {
+        $row['class'] = mb_strtolower($row['Type'])."typetag";
+        $ret[$row['TagId']] = $row;
+    }
+    return $ret;
 }
 
 // Gets the array of reviews, or null if an error occurs.

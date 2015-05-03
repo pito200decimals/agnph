@@ -23,7 +23,21 @@
                 <p class="metalabel">Summary:</p><p>{% autoescape false %}{{ story.Summary }}{% endautoescape %}</p>
             </div>
             <ul>
-                <li><span class="metalabel">Tags:</span>N/A</li>
+                <li>
+                    <span class="metalabel">Tags:</span>
+                    {% if story.tags|length > 0 %}
+                        <ul class="taglist">
+                            {% for tag in story.tags %}
+                                <li>
+                                    {# TODO: Link to search page #}
+                                    <a href=""><span class="{{ tag.class }}">{{ tag.Name }}</span></a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        None
+                    {% endif %}
+                </li>
                 <li><span class="metalabel">Chapters:</span>{{ story.ChapterCount }}</li>
                 <li>
                     <span class="metalabel">Completed:</span>{% if story.Completed %}Yes{% else %}No{% endif %}

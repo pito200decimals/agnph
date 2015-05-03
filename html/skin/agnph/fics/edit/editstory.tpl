@@ -19,6 +19,12 @@
                 $(".reorder_hint").removeClass("hidden");
                 $('.sortable').removeAttr("style");
                 $('.sortable').css("cursor", "ns-resize");
+                $("#tagbox").keydown(function(e) {
+                    if (e.keyCode == 13) {
+                        $(this.form).submit();
+                        return false;
+                    }
+                });
             });
             function Update() {
                 $('.sortable').sortable('destroy');
@@ -149,6 +155,8 @@
                     {{ formstory.StoryNotes }}
                 {% endautoescape %}
             </textarea></p>
+            <p><label>Story Tags:</label><br />
+            <textarea id="tagbox" class="tagbox" name="tags">{{ formstory.tagstring }}</textarea></p>
 
             {% if edit and chapters %}
                 <input type="submit" name="save" value="Save Changes" />

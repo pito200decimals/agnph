@@ -32,3 +32,7 @@ form hr {
 .newchapter {
     text-align: center;
 }
+.tagbox {
+    min-width: 500px;
+    min-height: 100px;
+}
