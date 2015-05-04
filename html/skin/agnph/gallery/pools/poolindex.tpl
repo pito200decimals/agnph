@@ -41,25 +41,29 @@
         {% if pools|length > 0 %}
             {# Display search index. #}
             <table class="pooltable">
-                <tr>
-                    <td><strong>Name</strong></td>
-                    <td><strong>Number of Posts</strong></td>
-                    <td><strong>Created By</strong></td>
-                    {% if canEditPools %}<td><strong>Actions</strong></td>{% endif %}
-                </tr>
-                {% for pool in pools %}
+                <thead>
                     <tr>
-                        <td><a href="/gallery/post/?search=pool%3A{{ pool.PoolId }}">{{ pool.Name }}</a></td>
-                        <td>{{ pool.count }}</td>
-                        <td><a href="/user/{{ pool.creator.UserId }}/">{{ pool.creator.DisplayName }}</a></td>
-                        {% if canEditPools %}<td>
-                            <form action="/gallery/pools/delete/" method="POST" accept-charset="UTF-8">
-                                <input type="hidden" name="pool" value="{{ pool.PoolId }}" />
-                                <a href="#"><input type="submit" value="Delete" /></a>
-                            </form>
-                        </td>{% endif %}
+                        <td><div><strong>Name</strong></div></td>
+                        <td><div><strong>Number of Posts</strong></div></td>
+                        <td><div><strong>Created By</strong></div></td>
+                        {% if canEditPools %}<td><div><strong>Actions</strong></div></td>{% endif %}
                     </tr>
-                {% endfor %}
+                </thead>
+                <tbody>
+                    {% for pool in pools %}
+                        <tr>
+                            <td><div><a href="/gallery/post/?search=pool%3A{{ pool.PoolId }}">{{ pool.Name }}</a></div></td>
+                            <td><div>{{ pool.count }}</div></td>
+                            <td><div><a href="/user/{{ pool.creator.UserId }}/">{{ pool.creator.DisplayName }}</a></div></td>
+                            {% if canEditPools %}<td><div>
+                                <form action="/gallery/pools/delete/" method="POST" accept-charset="UTF-8">
+                                    <input type="hidden" name="pool" value="{{ pool.PoolId }}" />
+                                    <a href="#"><input type="submit" value="Delete" /></a>
+                                </form>
+                            </div></td>{% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
             </table>
             <div class="Clear">&nbsp;</div>
             <div class="indexIterator">

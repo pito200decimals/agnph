@@ -2,28 +2,29 @@
     margin: 5px;
     border-radius: 15px;
     background-color: rgb(170,200,255);
-    display: inline;
     width: 100%;
     border-style: none;
     overflow: hidden;
     -webkit-border-horizontal-spacing: 0px;
     -webkit-border-vertical-spacing: 0px;
+    border-collapse: collapse;
 }
 .tagtable td {
+    padding: 0px;
+}
+.tagtable div {
     padding: 5px;
 }
-.tagtable tr:nth-child(even) {
+.tagtable thead tr div {
+    background-color: rgb(100,130,185);
+}
+.tagtable tbody tr:nth-child(odd) div {
     background-color: rgb(150,180,235);
 }
-.tagtable tr:nth-child(odd) {
+.tagtable tbody tr:nth-child(even) div {
     background-color: rgb(130,160,215);
 }
-.tagtable tr:nth-child(1) {
-    background-color: rgb(130,160,215);
-    border-color: rgb(170, 200, 255);
-    border-width: 0px 0px 1px 0px;
-    border-style: solid;
-}
+
 .mainpanel {
     margin: 5px;
     overflow: hidden;

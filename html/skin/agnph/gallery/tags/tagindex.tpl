@@ -11,16 +11,20 @@
         {% if tags|length > 0 %}
             {# Display search index. #}
             <table class="tagtable">
-                <tr>
-                    <td><strong>Name</strong></td>
-                    <td><strong>Type</strong></td>
-                </tr>
-                {% for tag in tags %}
+                <thead>
                     <tr>
-                        <td><a class="{{ tag.typeClass }}" href="/gallery/post/?search={{ tag.Name }}">{{ tag.Name }}</a></td>
-                        <td>{{ tag.typeName }}</td>
+                        <td><div><strong>Name</strong></div></td>
+                        <td><div><strong>Type</strong></div></td>
                     </tr>
-                {% endfor %}
+                </thead>
+                <tbody>
+                    {% for tag in tags %}
+                        <tr>
+                            <td><div><a class="{{ tag.typeClass }}" href="/gallery/post/?search={{ tag.Name }}">{{ tag.Name }}</a></div></td>
+                            <td><div>{{ tag.typeName }}</div></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
             </table>
             <div class="Clear">&nbsp;</div>
             <div class="indexIterator">
