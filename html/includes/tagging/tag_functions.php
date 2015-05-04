@@ -61,7 +61,7 @@ function GetTagsByName($tag_table_name, $tag_names, $create_new = false, $user_i
         $joined = implode(",", array_map(function($name) use ($user_id) {
             $name = sql_escape($name);
             return "('$name', $user_id, $user_id)";
-        }, $tag_names));
+        }, array_filter($tag_names, "mb_strlen")));
         if (!sql_query("INSERT INTO $tag_table_name (Name, CreatorUserId, ChangeTypeUserId) VALUES $joined;")) return null;
         return GetTagsByName($tag_table_name, $tag_names, false, $user_id);
     };

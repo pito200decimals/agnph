@@ -4,7 +4,7 @@
 
 include_once("../../header.php");
 include_once(SITE_ROOT."gallery/includes/functions.php");
-include_once(SITE_ROOT."gallery/includes/listview.php");
+include_once(SITE_ROOT."includes/util/listview.php");
 
 
 $pools = array();

@@ -35,10 +35,11 @@ RewriteRule ^gallery/pools/?$ /gallery/pools/poolindex.php [QSA]
 RewriteRule ^gallery/pools/reorder/(\d+)/?$ /gallery/pools/reorder_pool.php?pid=$1
 RewriteRule ^gallery/pools/list/$ /gallery/pools/pool_list.php [QSA]
 RewriteRule ^gallery/pools/modify/(\d+)/(\d+)/?$ /gallery/pools/addremove_pool.php?post=$1&pool=$2
-RewriteRule ^gallery/pools/create/$ /gallery/pools/create.php
-RewriteRule ^gallery/pools/delete/$ /gallery/pools/delete.php
-RewriteRule ^gallery/post/status/$ /gallery/posts/changestatus.php
+RewriteRule ^gallery/pools/create/?$ /gallery/pools/create.php
+RewriteRule ^gallery/pools/delete/?$ /gallery/pools/delete.php
+RewriteRule ^gallery/post/status/?$ /gallery/posts/changestatus.php
 RewriteRule ^gallery/post/show/(\d+)/history/?$ /gallery/posts/tag_history.php?post=$1 [QSA]
+RewriteRule ^gallery/tags/?$ /gallery/tags/tags.php [QSA]
 
 #Rewrites for the fics pages
 RewriteRule ^fics/$ /fics/index.php
@@ -50,3 +51,4 @@ RewriteRule ^fics/edit/(\d+)/?$ /fics/edit_story.php?action=edit&sid=$1
 RewriteRule ^fics/create/(\d+)/(\d+)/?$ /fics/edit_chapter.php?action=create&sid=$1&chapternum=$2
 RewriteRule ^fics/edit/(\d+)/(\d+)/?$ /fics/edit_chapter.php?action=edit&sid=$1&chapternum=$2
 RewriteRule ^fics/story/chapter/order/?$ /fics/reorder_chapter.php
+RewriteRule ^fics/tags/?$ /fics/tags.php [QSA]

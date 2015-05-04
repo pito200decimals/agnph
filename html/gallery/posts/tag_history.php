@@ -6,7 +6,7 @@ include_once("../../header.php");
 include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."includes/util/html_funcs.php");
 include_once(SITE_ROOT."gallery/includes/functions.php");
-include_once(SITE_ROOT."gallery/includes/listview.php");
+include_once(SITE_ROOT."includes/util/listview.php");
 
 if (!isset($_GET['post']) || !is_numeric($_GET['post'])) {
     InvalidURL();

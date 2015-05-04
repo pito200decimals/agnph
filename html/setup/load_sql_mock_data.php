@@ -62,7 +62,7 @@ do_or_die(sql_query(
     "INSERT INTO ".SITE_NAV_TABLE."
     (Label, Link, ItemOrder)
     VALUES
-    ('Home', '/index.php', 0),
+    ('News', '/index.php', 0),
     ('Forums', '/forums/', 1),
     ('Gallery', '/gallery/post/', 2),
     ('Fics', '/fics/', 3),
@@ -187,7 +187,6 @@ CreateTag("lucario", "S");
 CreateTag("human", "S");
 CreateTag("animated", "G");
 CreateTag("koba", "A");
-CreateTag("umbreon", "S");
 CreateTag("flareon", "S");
 CreateTag("flygon", "S");
 CreateTag("solo", "G");

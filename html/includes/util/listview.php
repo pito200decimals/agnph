@@ -1,7 +1,6 @@
 <?php
 // General setup for viewing a list of items.
 
-include_once("../../header.php");
 include_once(SITE_ROOT."gallery/includes/functions.php");
 
 // Table name is the name of the table to select from. Can optionally append a WHERE, since $sql_order follows directly after.
