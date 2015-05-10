@@ -13,6 +13,7 @@ define("MAX_FILE_SIZE", 50 * 1024 * 1024);  // 50 MB.
 
 // Site data tables.
 define("SITE_NAV_TABLE", "nav_links");
+define("SITE_TAG_ALIAS_TABLE", "tag_aliases");
 
 // User content data tables.
 define("USER_TABLE", "user");

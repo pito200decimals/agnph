@@ -20,8 +20,8 @@
                 <tbody>
                     {% for tag in tags %}
                         <tr>
-                            <td><a class="{{ tag.typeClass }}" href="/fics/search/?tags={{ tag.Name }}">{{ tag.Name }}</a></td>
-                            <td>{{ tag.typeName }}</td>
+                            <td><div><a class="{{ tag.typeClass }}" href="/fics/search/?tags={{ tag.Name }}">{{ tag.Name }}</a></div></td>
+                            <td><div>{{ tag.typeName }}</div></td>
                         </tr>
                     {% endfor %}
                 </tbody>

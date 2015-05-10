@@ -97,8 +97,11 @@ function UpdatePostWithDescriptors($descriptors, $post_id, $user) {
                 unset($tags_to_add[$key]);
             }
         }
+        $tags = $tags + GetTagsById(GALLERY_TAG_TABLE, $tags_to_remove);
         $error = false;
         $tags_changed = false;
+        $tags_to_remove = array_filter($tags_to_remove, function($tag_id) use ($tags) { return !$tags[$tag_id]['AddLocked']; });
+        $tags_to_add = array_filter($tags_to_add , function($tag_id) use ($tags) { return !$tags[$tag_id]['AddLocked']; });
         if (sizeof($tags_to_remove) > 0) {
             $del_tag_ids_joined = implode(",", $tags_to_remove);
             if (sql_query("DELETE FROM ".GALLERY_POST_TAG_TABLE." WHERE PostId=$post_id AND TagId IN ($del_tag_ids_joined);")) {

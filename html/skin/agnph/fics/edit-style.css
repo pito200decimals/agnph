@@ -36,3 +36,8 @@ form hr {
     min-width: 500px;
     min-height: 100px;
 }
+.tag-warning {
+    color: rgb(255,0,0);
+    font-size: 75%;
+    display: none;
+}

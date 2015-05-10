@@ -52,6 +52,9 @@
     {# Avoid taking up too much vertical space in the story index #}
     {% set restrictSummaryHeight=true %}
     <div style="padding: 5px;">
+        {% if searchTerms %}
+            <h3>Search Results: {{ searchTerms }}</h3>
+        {% endif %}
         {% for story in stories %}
             {{ block('storyblock') }}
         {% endfor %}

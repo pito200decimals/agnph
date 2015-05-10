@@ -13,7 +13,12 @@ function TagNameToDisplayName($tag_name) {
 
 // Gets tag name of display name, using underscores.
 function TagDisplayNameToTagName($tag_name) {
-    return mb_strtolower(str_replace(" ", "_", $tag_name));
+    $ret = mb_strtolower(str_replace(" ", "_", $tag_name));
+    $escaped_tag_name = sql_escape($ret);
+    if (sql_query_into($result, "SELECT * FROM ".SITE_TAG_ALIAS_TABLE." WHERE Name='$escaped_tag_name';", 1)) {
+        $ret = $result->fetch_assoc();
+    }
+    return $ret;
 }
 
 // Replaces spaces with _, and removes all other whitespace.
@@ -119,7 +124,7 @@ function UpdateTagTypes($tag_table_name, $char_to_tag_type_map, $descriptors, $u
             $type = $mapping[$desc->label];
             $user_id = $user['UserId'];
             $now = time();
-            sql_query("UPDATE $tag_table_name SET Type='$type', ChangeTypeUserId=$user_id, ChangeTypeTimestamp=$now WHERE Name='$tag_name_escaped';");
+            sql_query("UPDATE $tag_table_name SET Type='$type', ChangeTypeUserId=$user_id, ChangeTypeTimestamp=$now WHERE Name='$tag_name_escaped' AND EditLocked=FALSE;");
         }
     }, $tag_descriptors);
 }

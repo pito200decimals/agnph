@@ -45,7 +45,7 @@
         <div class="searchbox">
             <h3>Search</h3>
             <form action="/gallery/post/" accept-charset="UTF-8">
-                <input name="search" type="textfield" />
+                <input id="search" name="search" type="textfield" required />
             </form>
         </div>
         <hr />
@@ -175,6 +175,9 @@
                     <a href="{{ downloadUrl }}"><img class="previewImg" src="{{ previewUrl }}" /></a>
                 {% endif %}
             </p>
+            {#<p>
+                {{ post.Description }}
+            </p>#}
             <p>
                 {% if user.UserId > 0 %}<a href="/gallery/post/edit/{{ post.PostId }}/" onclick="return toggleEdit();">Edit</a> | {% endif %}<a href="{{ downloadUrl }}">Download</a>
             </p>
@@ -188,7 +191,8 @@
                     <label class="formlabel">Parent</label>         <input id="parent" class="textbox" type="textbox" name="parent" value="{% if post.ParentPostId!=-1 %}{{ post.ParentPostId }}{% endif %}" /><br />
                     <label class="formlabel">Source</label>         <input id="imgsource" class="textbox" type="textbox" size=35 name="source" value="{{ post.Source }}" /><br />
                     <label class="formlabel">Tags</label>           <textarea id="tags" class="textbox" name="tags">{{ post.tagstring }}</textarea><br />
-                    <label class="formlabel">Description</label>    <textarea id="desc" class="textbox" name="description">{{ post.Description }}</textarea><br />
+                    {# TODO: Add description support #}
+                    {# <label class="formlabel">Description</label>    <textarea id="desc" class="textbox" name="description">{{ post.Description }}</textarea><br /> #}<input type="hidden" name="description" value="" />
                     <br />
                     <input type="submit" value="Save Changes" />
                 </form>

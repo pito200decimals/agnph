@@ -2,8 +2,6 @@
 // Page for displaying a list of fics tags.
 // URL: /fics/tags/?page={page}
 
-define("DEBUG", true);
-
 include_once("../header.php");
 include_once(SITE_ROOT."includes/constants.php");
 include_once(SITE_ROOT."includes/util/core.php");

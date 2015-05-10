@@ -25,6 +25,7 @@ include_once(SITE_ROOT."gallery/includes/functions.php");
 // If doesn't exist, is a no-op.
 sql_query("DROP TABLE ".USER_TABLE.";");
 sql_query("DROP TABLE ".SITE_NAV_TABLE.";");
+sql_query("DROP TABLE ".SITE_TAG_ALIAS_TABLE.";");
 sql_query("DROP TABLE ".FORUMS_LOBBY_TABLE.";");
 sql_query("DROP TABLE ".FORUMS_POST_TABLE.";");
 sql_query("DROP TABLE ".FORUMS_USER_PREF_TABLE.";");
@@ -81,6 +82,13 @@ do_or_die(sql_query(
         Link VARCHAR(64) NOT NULL,
         ItemOrder INT(11) NOT NULL,
         PRIMARY KEY(Label, Link)
+    ) DEFAULT CHARSET=utf8;"));
+
+do_or_die(sql_query(
+    "CREATE TABLE ".SITE_TAG_ALIAS_TABLE." (
+        Name VARCHAR(".MAX_TAG_NAME_LENGTH.") NOT NULL,
+        Alias VARCHAR(".MAX_TAG_NAME_LENGTH.") NOT NULL,
+        PRIMARY KEY(Name, Alias)
     ) DEFAULT CHARSET=utf8;"));
 
 ///////////////////
@@ -299,8 +307,8 @@ function CreateItemTagTables($tag_table_name, $item_tag_table_name, $item_id) {
             TagId INT(11) UNSIGNED AUTO_INCREMENT,
             Name VARCHAR(".MAX_TAG_NAME_LENGTH.") NOT NULL,
             Type CHAR(1) DEFAULT 'G',".
-           "EditLocked TINYINT(1) NOT NULL,
-            AddLocked TINYINT(1) NOT NULL,
+           "EditLocked TINYINT(1) DEFAULT FALSE,
+            AddLocked TINYINT(1) DEFAULT FALSE,
             CreatorUserId INT(11) NOT NULL,
             ChangeTypeUserId INT(11) NOT NULL,
             ChangeTypeTimestamp INT(11) NOT NULL,

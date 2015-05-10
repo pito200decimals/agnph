@@ -11,6 +11,26 @@
 {% block scripts %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
+    {% if create or chapters %}
+        <script type="text/javascript">
+            $(document).ready(function() {
+                {##### This and CheckTags are duplicated below #####}
+                $("#tagbox").keyup(function() {
+                    CheckTags(this.value);
+                });
+                CheckTags($("#tagbox").val());
+            });
+            function CheckTags(value) {
+                if (!(value.toLowerCase().indexOf("{# fe #}male") > -1 ||
+                      value.toLowerCase().indexOf("herm") > -1 ||
+                      value.toLowerCase().indexOf("sexless") > -1)) {
+                    $("#gender-warning").show();
+                } else {
+                    $("#gender-warning").hide()
+                }
+            }
+        </script>
+    {% endif %}
     {% if not create and chapters %}
         <script src="{{ skinDir }}/scripts/jquery.sortable.js"></script>
         <script type="text/javascript">
@@ -25,7 +45,21 @@
                         return false;
                     }
                 });
+                {##### This and CheckTags are duplicated above #####}
+                $("#tagbox").keyup(function() {
+                    CheckTags(this.value);
+                });
+                CheckTags($("#tagbox").val());
             });
+            function CheckTags(value) {
+                if (!(value.toLowerCase().indexOf("{# fe #}male") > -1 ||
+                      value.toLowerCase().indexOf("herm") > -1 ||
+                      value.toLowerCase().indexOf("sexless") > -1)) {
+                    $("#gender-warning").show();
+                } else {
+                    $("#gender-warning").hide()
+                }
+            }
             function Update() {
                 $('.sortable').sortable('destroy');
                 $('.sortable').removeAttr("style");
@@ -156,7 +190,9 @@
                 {% endautoescape %}
             </textarea></p>
             <p><label>Story Tags:</label><br />
-            <textarea id="tagbox" class="tagbox" name="tags">{{ formstory.tagstring }}</textarea></p>
+            <textarea id="tagbox" class="tagbox" name="tags">{{ formstory.tagstring }}</textarea>
+            <span id="gender-warning" class="tag-warning"><br />Tags should include the character's gender or pairing (e.g. Female, Male/Female, Sexless)</span>
+            </p>
 
             {% if edit and chapters %}
                 <input type="submit" name="save" value="Save Changes" />
