@@ -45,7 +45,7 @@
         <div class="searchbox">
             <h3>Search</h3>
             <form action="/gallery/post/" accept-charset="UTF-8">
-                <input class="search" name="search" type="textfield" required />
+                <input class="search" name="search" type="text" required />
             </form>
         </div>
         <hr />
@@ -148,7 +148,7 @@
         </div>
         <div class="pooleditbox">
             <label>Search for Pool:</label><br />
-            <input id="pooleditfield" type="textfield" />
+            <input id="pooleditfield" type="text" />
             <ul id="poolautocomplete">
             </ul>
         </div>
@@ -157,7 +157,7 @@
                 <form action="/gallery/post/status/" method="POST" accept-charset="UTF-8">
                     <label>Reason:</label><br />
                     <input name="post" type="hidden" value="{{ post.PostId }}" />
-                    <input name="reason" type="textfield" />
+                    <input name="reason" type="text" />
                     <input name="action" type="hidden" value="flag" />
                     <input type="submit" value="Flag" />
                 </form>

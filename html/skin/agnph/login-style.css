@@ -1,0 +1,24 @@
+#content {
+}
+
+.loginbox {
+    margin: 10px auto;
+    padding: 15px;
+    width: 320px;
+    background-color: rgb(191,191,255);
+    text-align: center;
+}
+
+.loginbox div {
+    margin: 10px auto;
+    display: inline-block;
+    text-align: left;
+}
+
+.loginbox tbody tr td:first-child {
+    text-align: right;
+}
+
+.error {
+    color: rgb(255,0,0);
+}

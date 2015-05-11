@@ -32,7 +32,7 @@
             </ul>
             <div id="newpanel">
                 <form action="/gallery/pools/create/" method="POST" accept-charset="UTF-8">
-                    <input name="name" type="textfield" />
+                    <input name="name" type="text" />
                     <input type="submit" value="Create New" />
                 </form>
             </div>

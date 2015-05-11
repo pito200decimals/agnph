@@ -11,7 +11,7 @@
 {% block scripts %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
-    {% if create or chapters %}
+    {% if create or not chapters %}
         <script type="text/javascript">
             $(document).ready(function() {
                 {##### This and CheckTags are duplicated below #####}
@@ -162,7 +162,7 @@
         {# Autocomplete off so that hidden inputs in the chapter section don't autofill with previous values #}
         <form action="" method="POST" autocomplete="off" accept-charset="UTF-8">
             <input type="hidden" name="sid" value="{% if create %}-1{% else %}{{ formstory.StoryId }}{% endif %}" />
-            <p><label>Title:</label><input type="textfield" name="title" value="{{ formstory.Title }}" /></p>
+            <p><label>Title:</label><input type="text" name="title" value="{{ formstory.Title }}" /></p>
             {# TODO: Coauthors #}
             <p><label>Summary:</label>
             <textarea id="summary" name="summary">

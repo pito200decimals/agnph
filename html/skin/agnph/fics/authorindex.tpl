@@ -9,7 +9,7 @@
     <div class="mainpanel">
         <h3>Authors</h3>
         <form action="/fics/authors/" accept-charset="UTF-8">
-            <label>Search for Authors:</label><input class="search" name="prefix" type="textfield" value="{{ searchPrefix }}" required/>
+            <label>Search for Authors:</label><input class="search" name="prefix" type="text" value="{{ searchPrefix }}" required/>
         </form>
         {% if authors|length > 0 %}
             {# Display search index. #}
@@ -23,7 +23,7 @@
                 <tbody>
                     {% for author in authors %}
                         <tr>
-                            <td><div><a href="/users/{{ author.UserId }}/fics/">{{ author.DisplayName }}</a></div></td>
+                            <td><div><a href="/user/{{ author.UserId }}/fics/">{{ author.DisplayName }}</a></div></td>
                             <td><div>{{ author.storyCount }}</div></td>
                         </tr>
                     {% endfor %}

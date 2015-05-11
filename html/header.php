@@ -51,11 +51,13 @@ $vars['account_links'] = array();
 if (isset($user)) {
     $uid = $user['UserId'];
     $vars['account_links'][] = array('href' => "/user/$uid/", 'caption' => "Account");
-    $vars['account_links'][] = array('href' => "/includes/auth/logout.php", 'caption' => "Log Out");
+    $vars['account_links'][] = array('href' => "/logout/", 'caption' => "Log Out");
+    $vars['account_links'][] = array('href' => "/includes/auth/logout.php", 'caption' => "DEBUG Logout");
     unset($uid);
 } else {
-    $vars['account_links'][] = array('href' => "/includes/auth/login.php", 'caption' => "Login");
-    $vars['account_links'][] = array('href' => "/", 'caption' => "Register");
+    $vars['account_links'][] = array('href' => "/login/", 'caption' => "Login");
+    $vars['account_links'][] = array('href' => "/register/", 'caption' => "Register");
+    $vars['account_links'][] = array('href' => "/login/?debug=true", 'caption' => "DEBUG Login");
 }
 
 // Template engine includes.

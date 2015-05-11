@@ -38,7 +38,7 @@
 {% block editchapter %}
     <input type="hidden" name="chapternum" value="{{ chapternum }}" />
     <input type="hidden" name="chapterid" value="{{ chapterid }}" />
-    <p><label>Chapter Title:</label><input type="textfield" name="chaptertitle" value="{{ chaptertitle }}" /></p>
+    <p><label>Chapter Title:</label><input type="text" name="chaptertitle" value="{{ chaptertitle }}" /></p>
     <p><label>Chapter Notes:</label>
     <textarea id="chapnotes" name="chapternotes">
         {% autoescape false %}

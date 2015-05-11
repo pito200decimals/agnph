@@ -7,12 +7,8 @@ include_once(__DIR__."/../../header.php");
 // Returns false and unsets global $user if login unsuccessful. Also unsets cookies.
 // Either way, cookies are set/unset in some way.
 function Login($username, $password) {
-    // Mocked data.
-    $username = "User 1";
-    $password = "Password 1";
-    
     $escapedName = sql_escape($username);
-    if (!sql_query_into($result, "SELECT UserID,Email,Password FROM ".USER_TABLE." WHERE UserName='$escapedName' LIMIT 1;", 1)) {
+    if (!sql_query_into($result, "SELECT UserID,UserName,Email,Password FROM ".USER_TABLE." WHERE UserName='$escapedName' LIMIT 1;", 1)) {
         return false;
     }
     $user = $result->fetch_assoc();
@@ -39,7 +35,7 @@ function Login($username, $password) {
 
 if (!isset($user)) {
     // auth.php did not find a user logged in. We can safely perform the login now.
-    Login($_POST['username'], $_POST['password']);
+    Login(mb_strtolower($_POST['username']), $_POST['password']);
 }
 
 ?>

@@ -9,7 +9,7 @@
     <div class="mainpanel">
         <h3>Tags</h3>
         <form action="/fics/tags/" accept-charset="UTF-8">
-            <label>Search for Tags:</label><input class="search" name="prefix" type="textfield" value="{{ searchPrefix }}" required/>
+            <label>Search for Tags:</label><input class="search" name="prefix" type="text" value="{{ searchPrefix }}" required/>
         </form>
         {% if tags|length > 0 %}
             {# Display search index. #}
