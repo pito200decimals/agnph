@@ -57,7 +57,7 @@ function GetTagsById($tag_table_name, $tag_ids) {
 
 // Gets and returns an array of tag objects specified by the tag name array. Creates them if the flag is set, with the associated creator user id.
 // All created tags will have the 'General' type.
-function GetTagsByName($tag_table_name, $tag_names, $create_new = false, $user_id) {
+function GetTagsByName($tag_table_name, $tag_names, $create_new = false, $user_id = -1) {
     // Internal helper function.
     // Creates the array of tag names. Assumes that none of them exist yet.
     $CreateTagsByName = function($tag_table_name, $tag_names, $user_id) {

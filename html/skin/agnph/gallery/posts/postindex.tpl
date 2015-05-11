@@ -65,7 +65,7 @@
         <div class="searchbox">
             <h3>Search</h3>
             <form action="/gallery/post/" accept-charset="UTF-8">
-                <input id="search" name="search" value="{{ search }}" type="textfield" required />
+                <input class="search" name="search" value="{{ search }}" type="textfield" required />
             </form>
         </div>
     </div>

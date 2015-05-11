@@ -14,7 +14,7 @@
         {% if user %}<li><a href="/fics/edit_story.php?action=create">Upload</a></li>{% endif %}
         <li>
             <form action="/fics/search/" accept-charset="UTF-8">
-                <input id="search" name="search" value="{{ searchTerms }}" type="textfield" required />
+                <input class="search" name="search" value="{{ searchTerms }}" type="textfield" required />
             </form>
         </li>
     </ul>

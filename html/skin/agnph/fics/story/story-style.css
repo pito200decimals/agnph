@@ -83,6 +83,11 @@
     height: 100px;
     float: left;
 }
+.no-comments {
+    display: block;
+    text-align: center;
+    padding: 5px;
+}
 
 #commentform {
     display: none;

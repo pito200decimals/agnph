@@ -2,29 +2,29 @@
 
 {% block styles %}
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/fics/style.css" />
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/fics/tagindex-style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/fics/authorindex-style.css" />
 {% endblock %}
 
 {% block ficscontent %}
     <div class="mainpanel">
-        <h3>Tags</h3>
-        <form action="/fics/tags/" accept-charset="UTF-8">
-            <label>Search for Tags:</label><input class="search" name="prefix" type="textfield" value="{{ searchPrefix }}" required/>
+        <h3>Authors</h3>
+        <form action="/fics/authors/" accept-charset="UTF-8">
+            <label>Search for Authors:</label><input class="search" name="prefix" type="textfield" value="{{ searchPrefix }}" required/>
         </form>
-        {% if tags|length > 0 %}
+        {% if authors|length > 0 %}
             {# Display search index. #}
-            <table class="tagtable">
+            <table class="authortable">
                 <thead>
                     <tr>
                         <td><div><strong>Name</strong></div></td>
-                        <td><div><strong>Type</strong></div></td>
+                        <td><div><strong>Number of Stories</strong></div></td>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for tag in tags %}
+                    {% for author in authors %}
                         <tr>
-                            <td><div><a class="{{ tag.typeClass }}" href="/fics/search/?search={{ tag.Name }}">{{ tag.Name }}</a></div></td>
-                            <td><div>{{ tag.typeName }}</div></td>
+                            <td><div><a href="/users/{{ author.UserId }}/fics/">{{ author.DisplayName }}</a></div></td>
+                            <td><div>{{ author.storyCount }}</div></td>
                         </tr>
                     {% endfor %}
                 </tbody>

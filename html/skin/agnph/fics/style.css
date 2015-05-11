@@ -24,15 +24,15 @@
     right: 0px;
 }
 
-#search {
+.search {
     outline: none;
     background-color: rgb(255,255,255);
-	border: 1px solid rgba(0,0,0,0.2);
+	border: 1px solid rgba(0,0,0,0.8);
     border-radius: 10px;
     padding: 5px;
 }
 
-#search:invalid {
+.search:invalid {
 	outline: none;
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAMAAABhq6zVAAAAIVBMVEW/v7+/v78AAAC/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v79QUkolAAAAC3RSTlOLYAAJeoMjRhpOcbsbtd4AAABJSURBVHjaVc1JDsAgDATB9uAF8v8Hx0QcSN9KssZI5eClDj18PRsFlmlQDcfUGd6A3EgYP1xncQ+sa5qYOk9jRQt1Y0izhU5bL2o2AW3ZQKeJAAAAAElFTkSuQmCC);
     background-repeat: no-repeat;

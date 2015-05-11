@@ -8,6 +8,9 @@
 {% block gallerycontent %}
     <div class="mainpanel">
         <h3>Tags</h3>
+        <form action="/gallery/tags/" accept-charset="UTF-8">
+            <label>Search for Tags:</label><input class="search" name="prefix" type="textfield" value="{{ searchPrefix }}" required/>
+        </form>
         {% if tags|length > 0 %}
             {# Display search index. #}
             <table class="tagtable">
@@ -33,7 +36,7 @@
                 {% endautoescape %}
             </div>
         {% else %}
-            {# No posts here. #}
+            {# No tags here. #}
             No tags found.
         {% endif %}
     </div>

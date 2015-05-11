@@ -21,6 +21,7 @@ define("FORUMS_USER_PREF_TABLE", "forums_user");
 define("GALLERY_USER_PREF_TABLE", "gallery_user");
 define("GALLERY_USER_FAVORITES_TABLE", "gallery_user_fav");
 define("FICS_USER_PREF_TABLE", "fics_user");
+// define("FICS_USER_FAVORITES_TABLE", "gallery_user_fav");
 
 // Forums tables.
 define("FORUMS_LOBBY_TABLE", "forums_lobbies");
@@ -51,6 +52,7 @@ define("DEFAULT_ALLOWED_TAGS", "a[href],p[style],span[style],b,u,i,strong,em,ol,
 define("DEFAULT_GALLERY_POSTS_PER_PAGE", 45);
 define("DEFAULT_GALLERY_PAGE_ITERATOR_SIZE", 2);
 define("MAX_GALLERY_SEARCH_TERMS", 6);
+define("MAX_FICS_SEARCH_TERMS", 6);
 define("GALLERY_LIST_ITEMS_PER_PAGE", 50);
 define("DEFAULT_FICS_STORIES_PER_PAGE", 15);
 define("DEFAULT_FICS_COMMENTS_PER_PAGE", 10);
@@ -79,5 +81,6 @@ define("MAX_GALLERY_POST_FLAG_REASON_LENGTH", 64);
 define("FORUMS_DATE_FORMAT", "Y-m-d H:i:s");
 define("FICS_DATE_FORMAT", "Y-m-d");
 define("MIN_COMMENT_STRING_SIZE", 10);
+define("MIN_FICS_TITLE_SUMMARY_SEARCH_STRING_SIZE", 3);
 
 ?>

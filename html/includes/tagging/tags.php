@@ -9,9 +9,15 @@
 include_once(SITE_ROOT."includes/util/listview.php");
 
 if (!isset($search_clause)) $search_clause = "";
+if (!isset($prefix)) $prefix = "";
 $tags = array();
-CollectItems(TABLE, "$search_clause ORDER BY Name ASC", $tags, TAGS_PER_PAGE, $iterator, function($i) {
-    return strtok($_SERVER["REQUEST_URI"],'?')."?page=$i";
+CollectItems(TABLE, "$search_clause ORDER BY Name ASC", $tags, TAGS_PER_PAGE, $iterator, function($i) use ($prefix) {
+    if (mb_strlen($prefix) > 0) {
+        $escaped_prefix = urlencode($prefix);
+        return strtok($_SERVER["REQUEST_URI"],'?')."?prefix=$escaped_prefix&page=$i";
+    } else {
+        return strtok($_SERVER["REQUEST_URI"],'?')."?page=$i";
+    }
 }, "No tags found.");
 
 if (sizeof($tags) > 0) {
@@ -22,6 +28,7 @@ if (sizeof($tags) > 0) {
 }
 
 $vars['tags'] = $tags;
+$vars['searchPrefix'] = $prefix;
 $vars['iterator'] = $iterator;
 
 ?>

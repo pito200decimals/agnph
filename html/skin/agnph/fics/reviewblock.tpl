@@ -77,19 +77,10 @@
 <div class="comments">
     <a id="reviews"></a>
 	<ul class="tabs">
-        <li class="tab-link{% if defaultcomments %} current{% endif %}" data-tab="tab-comments">Comments</li>
-        <li class="tab-link{% if defaultreviews %} current{% endif %}" data-tab="tab-reviews">Reviews</li>
+        <li class="tab-link{% if defaultcomments %} current{% endif %}" data-tab="tab-comments">Comments ({{ comments|length }})</li>
+        <li class="tab-link{% if defaultreviews %} current{% endif %}" data-tab="tab-reviews">Reviews ({{ reviews|length }})</li>
 	</ul>
     <div id="tab-comments" class="tab-content{% if defaultcomments %}  current{% endif %}">
-        {% if user and canComment%}
-            <input id="commentbutton" type="button" value="Add Comment"/>
-            <form id="commentform" action="#" method="POST">
-                <textarea id="commenttextbox" name="text" class="commenttextbox">
-                </textarea>
-                <input type="hidden" name="type" value="comment" />
-                <input type="submit" value="Add Comment" />
-            </form>
-        {% endif %}
         {% if comments|length > 0 %}
             <ul>
                 {% for comment in comments %}
@@ -112,31 +103,20 @@
                 {% endfor %}
             </ul>
             <span class="comment-iterator">{% autoescape false %}{{ commentIterator }}{% endautoescape %}</span>
+        {% else %}
+            <span class="no-comments">No comments posted</span>
+        {% endif %}
+        {% if user and canComment%}
+            <input id="commentbutton" type="button" value="Add Comment"/>
+            <form id="commentform" action="#" method="POST">
+                <textarea id="commenttextbox" name="text" class="commenttextbox">
+                </textarea>
+                <input type="hidden" name="type" value="comment" />
+                <input type="submit" value="Add Comment" />
+            </form>
         {% endif %}
     </div>
     <div id="tab-reviews" class="tab-content{% if defaultreviews %} current{% endif %}">
-        {% if user and canReview %}
-            <input id="reviewbutton" type="button" value="Add Review" />
-            <form id="reviewform" action="#" method="POST">
-                <textarea id="reviewtextbox" name="text" class="commenttextbox">
-                </textarea>
-                <label class="metalabel">Stars:</label><select name="score">
-                    <option value="0">- - -</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                </select>/10<br />
-                <input type="hidden" name="type" value="review" />
-                <input type="submit" value="Add Review" />
-            </form action="#" method="POST">
-        {% endif %}
         {% if reviews|length > 0 %}
             <ul>
                 {% for review in reviews %}
@@ -168,6 +148,30 @@
                 {% endfor %}
             </ul>
             <span class="comment-iterator">{% autoescape false %}{{ reviewIterator }}{% endautoescape %}</span>
+        {% else %}
+            <span class="no-comments">No reviews posted</span>
+        {% endif %}
+        {% if user and canReview %}
+            <input id="reviewbutton" type="button" value="Add Review" />
+            <form id="reviewform" action="#" method="POST">
+                <textarea id="reviewtextbox" name="text" class="commenttextbox">
+                </textarea>
+                <label class="metalabel">Stars:</label><select name="score">
+                    <option value="0">- - -</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>/10<br />
+                <input type="hidden" name="type" value="review" />
+                <input type="submit" value="Add Review" />
+            </form action="#" method="POST">
         {% endif %}
     </div>
     {% if story.AuthorUserId == user.UserId %}

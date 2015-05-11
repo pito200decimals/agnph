@@ -55,9 +55,13 @@
         {% if searchTerms %}
             <h3>Search Results: {{ searchTerms }}</h3>
         {% endif %}
-        {% for story in stories %}
-            {{ block('storyblock') }}
-        {% endfor %}
+        {% if stories|length > 0 %}
+            {% for story in stories %}
+                {{ block('storyblock') }}
+            {% endfor %}
+        {% else %}
+            No stories found
+        {% endif %}
     </div>
     <div>
         {% autoescape false %}{{ iterator }}{% endautoescape %}

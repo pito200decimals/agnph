@@ -7,6 +7,7 @@ include_once("../header.php");
 include_once(SITE_ROOT."fics/includes/functions.php");
 include_once(SITE_ROOT."fics/includes/file.php");
 include_once(SITE_ROOT."includes/util/html_funcs.php");
+include_once(SITE_ROOT."fics/includes/search.php");
 
 if (!isset($_GET['offset']) || !is_numeric($_GET['offset'])) {
     $offset = 0;
@@ -20,11 +21,17 @@ if (isset($user)) {
     $stories_per_page = DEFAULT_FICS_STORIES_PER_PAGE;
 }
 
-// TODO: Get search filters.
+// Get search filters.
 $search_clauses = "TRUE";
+if (isset($_GET['search'])) {
+    $search_terms = $_GET['search'];
+    $vars['searchTerms'] = $search_terms;
+    $search_clauses = GetSearchClauses(array_map("trim", explode(" ", $search_terms)));
+    if (mb_strlen($search_clauses) == 0) $search_clauses = "TRUE";
+}
 
 if (!sql_query_into($result,
-   "SELECT * FROM ".FICS_STORY_TABLE."
+   "SELECT * FROM ".FICS_STORY_TABLE." T
     WHERE
     $search_clauses
     ORDER BY DateUpdated DESC, StoryId DESC;", 0)) RenderErrorPage("No stories found.");
@@ -36,7 +43,11 @@ while ($row = $result->fetch_assoc()) {
 if (sizeof($stories) <= $stories_per_page) {
     $iterator = "";
 } else {
-    $iterator = CreatePostIterator($stories, $offset, $stories_per_page);
+    if (isset($search_terms)) {
+        $iterator = CreatePostIterator($stories, $offset, $stories_per_page, $search_terms);
+    } else {
+        $iterator = CreatePostIterator($stories, $offset, $stories_per_page, null);
+    }
 }
 $vars['stories'] = $stories;
 $vars['iterator'] = $iterator;
@@ -44,12 +55,17 @@ $vars['iterator'] = $iterator;
 RenderPage("fics/storyindex.tpl");
 return;
 
-function CreatePostIterator(&$stories, $offset, $stories_per_page) {
+function CreatePostIterator(&$stories, $offset, $stories_per_page, $search_terms) {
     $iterator = Paginate($stories, $offset, $stories_per_page,
-        function($index, $current_page, $max_page) use ($stories_per_page) {
-            $url_from_page = function ($index) use ($stories_per_page) {
+        function($index, $current_page, $max_page) use ($stories_per_page, $search_terms) {
+            $url_from_page = function ($index) use ($stories_per_page, $search_terms) {
                 $offset = ($index - 1) * $stories_per_page;
                 $url = "/fics/browse/?offset=$offset";
+                if ($search_terms != null) {
+                    $url = "/fics/search/?search=".urlencode($search_terms)."&offset=$offset";  // Safe with UTF-8.
+                } else {
+                    $url = "/fics/browse/?offset=$offset";
+                }
                 return $url;
             };
             if ($index == 0) {
