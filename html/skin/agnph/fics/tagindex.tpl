@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/fics/tagindex-style.css" />
 {% endblock %}
 
-{% block ficscontent %}
+{% block content %}
     <div class="mainpanel">
         <h3>Tags</h3>
         <form action="/fics/tags/" accept-charset="UTF-8">

@@ -17,7 +17,7 @@
 {% endblock %}
 
 
-{% block ficscontent %}
+{% block content %}
     <a href="{{ backlink }}">Back</a>
     {% if create %}
         <h3>Create Chapter</h3>

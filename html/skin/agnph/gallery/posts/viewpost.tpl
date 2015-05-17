@@ -12,7 +12,7 @@
     {% endif %}
 {% endblock %}
 
-{% block gallerycontent %}
+{% block content %}
     <div class="headerbar">
         {% if post.Status=="P" %}
             <div class="pendingbox">

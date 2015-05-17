@@ -7,16 +7,7 @@
 include_once("../header.php");
 include_once(SITE_ROOT."includes/util/file.php");
 
-if (!isset($_GET['uid']) || !is_numeric($_GET['uid'])) {
-    RenderErrorPage("Profile not found.");
-    return;
-}
-$profile_id = (int)$_GET['uid'];
-
-$profile_users = array();
-LoadTableData(array(USER_TABLE), "UserId", array($profile_id), $profile_users) or RenderErrorPage("Profile not found.");
-$profile_user = $profile_users[$profile_id];
-$vars['profile']['user'] = $profile_user;
+include_once(SITE_ROOT."user/includes/profile_setup.php");
 
 // Read in bio text file.
 $uid = $profile_user['UserId'];

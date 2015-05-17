@@ -29,6 +29,7 @@ include_once(SITE_ROOT."includes/auth/auth.php");
 // Set up site-wide vars for template.
 $vars = array();
 if (isset($user)) {
+    // TODO: Record page viewed, for both users and guests.
     RecordUserIP($user);
     $vars['user'] = $user;
 }
@@ -40,7 +41,14 @@ $vars['debug'] = DEBUG;
 $vars['navigation'] = array();
 if (sql_query_into($result, "SELECT * FROM ".SITE_NAV_TABLE." ORDER BY ItemOrder;", 0)) {
     while ($row = $result->fetch_assoc()) {
-        $vars['navigation'][] = array('href' => $row['Link'], 'caption' => $row['Label']);
+        $nav = array('href' => $row['Link'], 'caption' => $row['Label']);
+        // Highlight current section.
+        $prefix = mb_substr($_SERVER['REQUEST_URI'], 0, 5);
+        $link_url = mb_substr($nav['href'], 0, 5);
+        if (mb_strlen($prefix) == 5 && mb_strpos($link_url, $prefix) !== FALSE) {
+            $nav['highlight'] = true;
+        }
+        $vars['navigation'][] = $nav;
     }
 } else {
     $vars['navigation'][] = array('href' => "/", 'caption' => "Home");

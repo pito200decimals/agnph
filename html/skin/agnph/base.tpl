@@ -1,4 +1,5 @@
 {% spaceless %}
+{# Main site base template #}
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html>
@@ -28,22 +29,27 @@
                     <h1>Welcome, {% if user %}{{ user.DisplayName }}{% else %}Guest{% endif %}!</h1>
                 {% endblock %}
                 <hr />
-                {% block navigation %}
+                {% block main_navigation %}
                     <ul class="navigation">
                         {% for item in navigation %}
-                            <li><a href="{{ item.href }}">{{ item.caption }}</a></li>
+                            <li{% if item.highlight %} class="selected-nav"{% endif %}><a href="{{ item.href }}">{{ item.caption }}</a></li>
                         {% endfor %}
                         {% for item in account_links %}
-                           <li><a href="{{ item.href }}">{{ item.caption }}</a></li>
+                           <li{% if item.highlight %} class="selected-nav"{% endif %}><a href="{{ item.href }}">{{ item.caption }}</a></li>
                         {% endfor %}
                     </ul>
                 {% endblock %}
+                <hr />
+                {% block section_navigation %}
+                {% endblock %}
             </div>
-            <hr />
+            <div class="Clear">&nbsp;</div>
             <div id="content">
                 {% if error_msg %}
-                    <div class="error">
-                        <p>{{ error_msg }}</p>
+                    <div class="error-box">
+                        <p class="error-msg">
+                            {{ error_msg }}
+                        </div>
                     </div>
                 {% else %}
                     {% block content %}

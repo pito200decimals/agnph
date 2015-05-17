@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/gallery/tagindex-style.css" />
 {% endblock %}
 
-{% block gallerycontent %}
+{% block content %}
     <div class="mainpanel">
         <h3>Tags</h3>
         <form action="/gallery/tags/" accept-charset="UTF-8">

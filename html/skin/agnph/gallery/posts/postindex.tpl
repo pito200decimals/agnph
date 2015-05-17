@@ -60,7 +60,7 @@
     {% endif %}
 {% endblock %}
 
-{% block gallerycontent %}
+{% block content %}
     <div class="sidepanel">
         <div class="searchbox">
             <h3>Search</h3>

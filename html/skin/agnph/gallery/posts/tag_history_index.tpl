@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/gallery/taghistory-style.css" />
 {% endblock %}
 
-{% block gallerycontent %}
+{% block content %}
     <div class="mainpanel">
         <h3>Tag History</h3>
         {% if tagHistoryItems|length > 0 %}

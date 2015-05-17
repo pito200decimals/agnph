@@ -145,7 +145,7 @@
     </script>
 {% endblock %}
 
-{% block ficscontent %}
+{% block content %}
     {% if not create %}
         {{ block('storyblock') }}
         <hr />

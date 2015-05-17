@@ -1,3 +1,43 @@
-.bioblock {
-    margin:5px;
+.userpage {
+    display: table;
+    height: 100%;
+    width: 100%;
+}
+
+.userpage-container {
+    display: table-row;
+}
+
+.profile-sidepanel {
+    vertical-align: top;
+    text-align: center;
+    display: table-cell;
+    background-color: rgb(233,233,233);
+    width: 160px;
+}
+
+.sidepanel-section {
+    background-color: rgb(233,195,195);
+    margin: 5px;
+}
+
+.sidepanel-section ul {
+    list-style: none;
+    padding: 0px;
+}
+
+.avatarimg {
+    max-width: 150px;
+    max-height: 150px;
+}
+
+.profile-content {
+    vertical-align: top;
+    display: table-cell;
+    background-color: rgb(195,233,195);
+    padding: 5px;
+}
+
+.infoblock {
+    background-color: rgb(195,195,223);
 }

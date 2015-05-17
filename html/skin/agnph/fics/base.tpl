@@ -4,8 +4,8 @@
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/fics/style.css" />
 {% endblock %}
 
-{% block content %}
-    <ul class="ficsnav">
+{% block section_navigation %}
+    <ul class="section-nav">
         <li><a href="/fics/">Index</a></li>
         <li><a href="/fics/browse/">Stories</a></li>
         <li><a href="/fics/authors/">Authors</a></li>
@@ -18,6 +18,9 @@
             </form>
         </li>
     </ul>
+{% endblock %}
+
+{% block content %}
     {% block ficscontent %}
     {% endblock %}
 {% endblock %}

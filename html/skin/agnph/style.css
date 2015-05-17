@@ -1,21 +1,43 @@
 /* Global site style CSS */
-
+body {
+    background-color:rgb(63,127,255);
+    margin: 0 auto;
+    min-width: 800px;
+    max-width:1600px;
+    width: 80%;
+    font-family: verdana,sans-serif;
+}
+@media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
+    body {
+        width: 100%;
+        min-width: 100%;
+    }
+}
 #mainbody {
     background-color: white;
     padding: 10px;
+    min-height: 400px;
 }
-
 #footer {
     margin:5px;
     padding: 5px;
     display:block;
     text-align:center;
 }
-
 #footer span {
     display:block;
 }
+#content {
+    margin-top: 5px;
+}
 
+.Clear {
+  clear: both;
+  height: 0;
+  overflow: hidden;
+}
+
+/* Main section navigation */
 .navigation {
     list-style-type: none;
     margin: 0px;
@@ -35,24 +57,48 @@
 .navigation a:hover {
     text-shadow: 0 0 3px rgb(255,255,255);
 }
-
-.Clear {
-  clear: both;
-  height: 0;
-  overflow: hidden;
+.navigation li.selected-nav a {
+    background-color: rgb(63,127,63);
 }
 
-body {
-    background-color:rgb(63,127,255);
-    margin: 0 auto;
-    min-width: 800px;
-    max-width:1600px;
-    width: 80%;
-    font-family: verdana,sans-serif;
+/* Within section navigation */
+.section-nav {
+    list-style-type: none;
+    margin: 5px 0px;
+    padding: 0px;
+    position: relative;
 }
-@media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
-    body {
-        width: 100%;
-        min-width: 100%;
-    }
+.section-nav li {
+    display: inline;
+}
+.section-nav a {
+    color: rgb(0,0,0);
+    text-decoration: none;
+    padding: 5px 15px;
+    font-weight: bold;
+    border: 1px solid rgb(0,0,0);
+    background-color: rgb(255,255,255);
+}
+.section-nav a:hover {
+    text-shadow: 0 0 3px rgb(0,0,255);
+}
+.section-nav li input.search {
+    position: absolute;
+    top: -3px;
+    right: 0px;
+}
+
+#content > .error-box {
+    margin: 10px auto;
+    padding: 15px;
+    max-width: 600px;
+    background-color: rgb(191,191,255);
+    text-align: center;
+}
+
+#content > .error-box > .error-msg {
+    display: block;
+    text-align: center;
+    background-color: rgb(191,191,255);
+    padding: 15px;
 }

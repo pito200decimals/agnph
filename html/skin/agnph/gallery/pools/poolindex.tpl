@@ -22,7 +22,7 @@
     </script>
 {% endblock %}
 
-{% block gallerycontent %}
+{% block content %}
     <div class="mainpanel">
         <h3>Pools</h3>
         {% if canEditPools %}

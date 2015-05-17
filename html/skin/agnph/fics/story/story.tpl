@@ -19,7 +19,7 @@
     </script>
 {% endblock %}
 
-{% block ficscontent %}
+{% block content %}
     <div style="padding: 5px">
         {{ block('storyblock') }}
         {% if story.StoryNotes|length > 0 %}

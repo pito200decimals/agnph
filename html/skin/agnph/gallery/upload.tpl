@@ -37,7 +37,7 @@ $(document).ready(function() {
 </script>
 {% endblock %}
 
-{% block gallerycontent %}
+{% block content %}
     <div class="uploadpanel">
         <h3>Upload</h3>
         <form method="post" enctype="multipart/form-data" accept-charset="UTF-8">
