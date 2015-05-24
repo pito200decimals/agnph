@@ -7,23 +7,32 @@ include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."includes/util/sql.php");
 include_once(SITE_ROOT."includes/util/html_funcs.php");
 include_once(SITE_ROOT."includes/util/file.php");
+include_once(SITE_ROOT."includes/util/user.php");
 
 function CanUserCreateStory($user) {
+    // Only registered users.
+    if (!IsUserActivated($user)) return false;
     return true;
 }
 function CanUserEditStory($story, $user) {
+    // Only author and admins.
+    if (!IsUserActivated($user)) return false;
     return $user['UserId'] == $story['AuthorUserId'] || $user['FicsPermissions'] == 'A';
 }
 function CanUserDeleteStory($story, $user) {
+    if (!IsUserActivated($user)) return false;
     return $user['UserId'] == $story['AuthorUserId'] || $user['FicsPermissions'] == 'A';
 }
 function CanUserComment($user) {
+    if (!IsUserActivated($user)) return false;
     return true;
 }
 function CanUserReview($user) {
+    if (!IsUserActivated($user)) return false;
     return true;
 }
 function CanUserCreateFicsTags($user) {
+    if (!IsUserActivated($user)) return false;
     return true;
 }
 

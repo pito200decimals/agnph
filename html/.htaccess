@@ -21,6 +21,7 @@ RewriteRule ^forums/markallread/(\d+)/?$ /forums/mark_all_read.php?b=$1
 
 # Rewrites for accounts section
 RewriteRule ^user/(\d+)/?$ /user/profile.php?uid=$1
+RewriteRule ^user/(\d+)/preferences/bio/save/?$ /user/savebio.php?uid=$1
 
 # Rewrites for gallery pages
 RewriteRule ^gallery/post/?$ /gallery/posts/postindex.php [QSA]

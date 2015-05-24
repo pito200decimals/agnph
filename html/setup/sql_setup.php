@@ -57,12 +57,13 @@ do_or_die(sql_query(
         SecretQuestion VARCHAR(256) NOT NULL,
         SecretAnswer CHAR(32) NOT NULL,
         Timezone FLOAT NOT NULL,
-        Usermode INT(11) DEFAULT 1 NOT NULL,
-        Permissions VARCHAR(8) NOT NULL,
-        BanReason VARCHAR(256) NOT NULL,
+        Usermode INT(11) DEFAULT 0 NOT NULL,".  // -1=Banned, 0=Unactivated, 1=User
+       "Permissions VARCHAR(8) NOT NULL,".  // String of characters, A=Super Admin, R=Forums, G=Gallery, F=Fics, O=Oekaki, I=IRC, M=Minecraft
+       "BanReason VARCHAR(256) NOT NULL,
         Title VARCHAR(64) NOT NULL,
-        DOB CHAR(10) NOT NULL,
-        ShowDOB TINYINT(1) DEFAULT 0 NOT NULL,
+        Species VARCHAR(32) NOT NULL,
+        DOB CHAR(10) NOT NULL,".  // Format: MM/DD/YYYY
+       "ShowDOB TINYINT(1) DEFAULT 0,
         Avatar VARCHAR(256) NOT NULL,
         Skin VARCHAR(16) DEFAULT 'agnph' NOT NULL,".
         // Code-assigned values.
@@ -102,8 +103,8 @@ do_or_die(sql_query(
         ParentLobbyId INT(11) NOT NULL,
         Name VARCHAR(64) NOT NULL,
         Description VARCHAR(512) NOT NULL,
-        AccessPermissions VARCHAR(8) NOT NULL,
-        PRIMARY KEY(LobbyId)
+        AccessRestrictions VARCHAR(8) NOT NULL,".  // List of allowed admin flags (OR'd). Empty to allow everyone. TODO: Enforce.
+       "PRIMARY KEY(LobbyId)
     ) DEFAULT CHARSET=utf8;"));
 // Post table. ParentThreadId and ParentLobbyId are mutually exclusive.
 // A Forum Thread is just the post id of the first post in the thread. This 
@@ -130,7 +131,7 @@ do_or_die(sql_query(
         SeenPostsUpToId INT(11) DEFAULT 0 NOT NULL,
         ForumThreadsPerPage INT(11) DEFAULT ".DEFAULT_FORUM_THREADS_PER_PAGE.",
         ForumPostsPerPage INT(11) DEFAULT ".DEFAULT_FORUM_POSTS_PER_PAGE.",
-        ForumsPermissions CHAR(1) NOT NULL,".  // A = Allowed to sticky posts.
+        ForumsPermissions CHAR(1) NOT NULL,".  // A = Allowed to sticky posts. TODO: Enforce.
        "PRIMARY KEY(UserId)
     ) DEFAULT CHARSET=utf8;"));
 // Table containing rows of tuples of (UserId, PostId).
@@ -209,7 +210,7 @@ do_or_die(sql_query(
         UserId INT(11) NOT NULL,
         UploadLimit INT(11) NOT NULL,
         ArtistTagId INT(11) NOT NULL,
-        GalleryPermissions CHAR(1) DEFAULT 'N',".  // N - Normal user, C - Contributor, A - Admin
+        GalleryPermissions CHAR(1) DEFAULT 'N',".  // N - Normal user, C - Contributor, A - Admin TODO: Enforce.
        "GalleryPostsPerPage INT(11) DEFAULT ".DEFAULT_GALLERY_POSTS_PER_PAGE.",
         PRIMARY KEY(UserId)
     ) DEFAULT CHARSET=utf8;"));
@@ -288,7 +289,7 @@ do_or_die(sql_query(
    "CREATE TABLE ".FICS_USER_PREF_TABLE." (
         UserId INT(11) NOT NULL,
         AuthorTagId INT(11) NOT NULL,
-        FicsPermissions CHAR(1) DEFAULT 'N',".  // N - Normal user, A - Admin
+        FicsPermissions CHAR(1) DEFAULT 'N',".  // N - Normal user, A - Admin TODO: Enforce.
        "FicsStoriesPerPage INT(11) DEFAULT ".DEFAULT_FICS_STORIES_PER_PAGE.",
         PRIMARY KEY(UserId)
     ) DEFAULT CHARSET=utf8;"));

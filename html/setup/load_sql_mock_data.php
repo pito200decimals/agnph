@@ -10,25 +10,27 @@ include_once("../includes/util/file.php");
 include_once("../gallery/includes/functions.php");
 include_once("../fics/includes/functions.php");
 
-delete_files("../user/bio/");
+delete_files("../user/data/bio/");
 delete_files("../gallery/data/");
 delete_files("../uploads/");
 delete_files("../fics/data/");
-mkdir("../user/bio/");
+mkdir("../user/data/");
+mkdir("../user/data/bio/");
 mkdir("../gallery/data/");
 mkdir("../uploads/");
 mkdir("../fics/data/");
 mkdir("../fics/data/chapters/");
 
 
+$now = time();
 // Populate User table.
 do_or_die(sql_query(
     "INSERT INTO ".USER_TABLE."
-    (UserID, UserName, DisplayName, Email, Password)
+    (UserID, UserName, DisplayName, Email, Password, Usermode, DOB, Permissions, Title, Species, JoinTime, LastVisitTime)
     VALUES
-    (1, 'User 1', 'User 1', 'Email 1', '".md5("Password 1")."'),
-    (2, 'User 2', 'User 2', 'Email 2', '".md5("Password 2")."'),
-    (3, 'User 3', 'User 3', 'Email 3', '".md5("Password 3")."');"));
+    (1, 'User 1', 'User 1', 'user1@example.com', '".md5("Password 1")."', 1, '01/02/2003', 'A', 'Most Awesome Cyndaquil', 'Cyndaquil', $now, $now),
+    (2, 'User 2', 'User 2', 'user2@example.com', '".md5("Password 2")."', 1, '04/05/2006', '', 'Hungry Resident', 'Totodile', $now, $now),
+    (3, 'User 3', 'User 3', 'user3@example.com', '".md5("Password 3")."', 1, '07/08/2009', '', 'Generic Title', 'Chikorita', $now, $now);"));
 // Forums settings.
 do_or_die(sql_query(
     "INSERT INTO ".FORUMS_USER_PREF_TABLE."
@@ -106,7 +108,7 @@ do_or_die(sql_query(
     (12, 1, ".rand_date().", -1, 5, 'Title of thread 3', 'Content of post 12');"));
 
 function WriteBio($uid, $bio) {
-    $file = fopen("../user/bio/$uid.txt", "w");
+    $file = fopen("../user/data/bio/$uid.txt", "w");
     fwrite($file, $bio);
     fclose($file);
 }

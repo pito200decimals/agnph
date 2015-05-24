@@ -3,6 +3,7 @@
 // Include after header is included.
 
 include_once(SITE_ROOT."includes/util/table_data.php");
+include_once(SITE_ROOT."includes/util/user.php");
 
 if (!isset($_GET['uid']) || !is_numeric($_GET['uid'])) {
     RenderErrorPage("Profile not found");

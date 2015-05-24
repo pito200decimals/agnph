@@ -11,6 +11,9 @@
         <li><a href="/user/{{ profile.user.UserId }}/gallery/">Gallery</a></li>
         <li><a href="/user/{{ profile.user.UserId }}/fics/">Fics</a></li>
         <li><a href="/user/{{ profile.user.UserId }}/oekaki/">Oekaki</a></li>
+        {% if user and profile.user.UserId == user.UserId %}
+        <li><a href="/user/{{ user.UserId }}/preferences/">Preferences</a></li>
+        {% endif %}
     </ul>
 {% endblock %}
 
@@ -30,12 +33,16 @@
                 {# Other actions to perform on this user #}
                 <div class="sidepanel-section">
                     <h4>Actions</h4>
-                    <ul>
-                        <li>Send a Message</li>
-                    </ul>
+                    {% block sidebar %}
+                        <ul>
+                            <li>Send a Message</li>
+                        </ul>
+                    {% endblock %}
                 </div>
             </div>
             <div class="profile-content">
+                <h2>{{ profile.user.DisplayName }}</h2>
+                {% if profile.user.admin|length > 0 %}<div>{{ profile.user.admin }}</div>{% endif %}
                 {% block usercontent %}
                 {% endblock %}
             </div>

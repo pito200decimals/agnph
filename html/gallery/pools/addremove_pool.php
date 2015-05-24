@@ -5,8 +5,6 @@ include_once("../../includes/auth/auth.php");
 include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."gallery/includes/functions.php");
 
-debug($_GET);
-
 if (!isset($user) || !CanUserAddOrRemoveFromPools($user)) {
     AJAXErr();
 }

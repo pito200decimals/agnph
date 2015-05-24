@@ -9,6 +9,7 @@ function SanitizeHTMLTags($html, $allowed_html_config) {
     $config->set('HTML.Allowed', $allowed_html_config);
     $purifier = new HTMLPurifier($config);
     return $purifier->purify($html);
+    // TODO: Remove XSS injection attacks (e.g. style background image urls).
 }
 
 // TODO: Consolidate pagination more.

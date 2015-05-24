@@ -31,7 +31,7 @@ $vars = array();
 if (isset($user)) {
     // TODO: Record page viewed, for both users and guests.
     RecordUserIP($user);
-    $vars['user'] = $user;
+    $vars['user'] = &$user;
 }
 
 $vars['debug'] = DEBUG;

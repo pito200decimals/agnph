@@ -9,30 +9,39 @@ include_once(SITE_ROOT."includes/util/core.php");
 
 // Permissions functions.
 function CanUserUploadPost($user) {
+    if (!IsUserActivated($user)) return false;
     return true;
 }
 function CanUserEditPost($user) {
+    if (!IsUserActivated($user)) return false;
     return true;
 }
 function CanUserCreateGalleryTags($user) {
+    if (!IsUserActivated($user)) return false;
     return true;
 }
 function CanUserUploadNonPending($user) {
+    if (!IsUserActivated($user)) return false;
     return true;
 }
 function CanUserAddOrRemoveFromPools($user) {
+    if (!IsUserActivated($user)) return false;
     return true;
 }
 function CanUserChangePoolOrdering($user) {
+    if (!IsUserActivated($user)) return false;
     return true;
 }
 function CanUserCreateOrDeletePools($user) {
+    if (!IsUserActivated($user)) return false;
     return true;
 }
 function CanUserDeletePost($user) {
+    if (!IsUserActivated($user)) return false;
     return true;
 }
 function CanUserApprovePost($user) {
+    if (!IsUserActivated($user)) return false;
     return true;
 }
 
