@@ -6,6 +6,7 @@ include_once(SITE_ROOT."gallery/includes/search.php");
 include_once(SITE_ROOT."includes/tagging/tag_functions.php");
 include_once(SITE_ROOT."includes/constants.php");
 include_once(SITE_ROOT."includes/util/core.php");
+include_once(SITE_ROOT."includes/util/user.php");
 
 // Permissions functions.
 function CanUserUploadPost($user) {

@@ -1,6 +1,8 @@
 <?php
 // General library of functions used in the forums section.
 
+include_once(SITE_ROOT."includes/util/user.php");
+
 // Permissions functions
 function CanUserEditPost($user, $post) {
     if (!isset($user)) debug_die("Unexpected unset user var", __FILE__, __LINE__);
