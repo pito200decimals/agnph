@@ -61,6 +61,7 @@ do_or_die(sql_query(
        "Permissions VARCHAR(8) NOT NULL,".  // String of characters, A=Super Admin, R=Forums, G=Gallery, F=Fics, O=Oekaki, I=IRC, M=Minecraft
        "BanReason VARCHAR(256) NOT NULL,
         Title VARCHAR(64) NOT NULL,
+        Location VARCHAR(64) NOT NULL,
         Species VARCHAR(32) NOT NULL,
         DOB CHAR(10) NOT NULL,".  // Format: MM/DD/YYYY
        "ShowDOB TINYINT(1) DEFAULT 0,
@@ -127,7 +128,7 @@ do_or_die(sql_query(
 do_or_die(sql_query(
     "CREATE TABLE ".FORUMS_USER_PREF_TABLE." (
         UserId INT(11) NOT NULL,
-        Signature VARCHAR(256) NOT NULL,
+        Signature VARCHAR(".MAX_FORUMS_SIGNATURE_LENGTH.") NOT NULL,
         SeenPostsUpToId INT(11) DEFAULT 0 NOT NULL,
         ForumThreadsPerPage INT(11) DEFAULT ".DEFAULT_FORUM_THREADS_PER_PAGE.",
         ForumPostsPerPage INT(11) DEFAULT ".DEFAULT_FORUM_POSTS_PER_PAGE.",
@@ -212,6 +213,7 @@ do_or_die(sql_query(
         ArtistTagId INT(11) NOT NULL,
         GalleryPermissions CHAR(1) DEFAULT 'N',".  // N - Normal user, C - Contributor, A - Admin TODO: Enforce.
        "GalleryPostsPerPage INT(11) DEFAULT ".DEFAULT_GALLERY_POSTS_PER_PAGE.",
+        GalleryTagBlacklist TEXT(512) NOT NULL,
         PRIMARY KEY(UserId)
     ) DEFAULT CHARSET=utf8;"));
 // User favorites for gallery section.
@@ -291,6 +293,7 @@ do_or_die(sql_query(
         AuthorTagId INT(11) NOT NULL,
         FicsPermissions CHAR(1) DEFAULT 'N',".  // N - Normal user, A - Admin TODO: Enforce.
        "FicsStoriesPerPage INT(11) DEFAULT ".DEFAULT_FICS_STORIES_PER_PAGE.",
+        FicsTagBlacklist TEXT(512) NOT NULL,
         PRIMARY KEY(UserId)
     ) DEFAULT CHARSET=utf8;"));
 

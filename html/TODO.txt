@@ -5,3 +5,4 @@ TODOs
 - Gallery upload limits
 - Check for vuln's for style background-image URL's.
 - Splash for Disclaimer/Warning/Age gate.
+- Tag blacklists

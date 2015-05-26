@@ -23,10 +23,38 @@ function CanUserEditBio($user, $profile_user) {
     return false;
 }
 
+function CanUserEditSignature($user, $profile_user) {
+    if (!IsUserActivated($user)) return false;
+    if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
+    if ($user['UserId'] == $profile_user['UserId']) return true;
+    return false;
+}
+
 function CanUserEditBasicInfo($user, $profile_user) {
     if (!IsUserActivated($user)) return false;
     if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
     if ($user['UserId'] == $profile_user['UserId']) return true;
     return false;
+}
+
+
+function DateStringToReadableString($datestr) {
+    // $datestr is in the database format "MM/DD/YYYY"
+    // TODO: Account properly for time zone conversion. Probably just parse it manually.
+    $datetime = strtotime($datestr);
+    return FormatDate($datetime, PROFILE_DOB_FORMAT);
+}
+
+function GetAdminBadge($profile_user) {
+    $ret = array();
+    if (mb_strpos($profile_user['Permissions'], 'A') !== FALSE) $ret[] = "Administrator";
+    if (mb_strpos($profile_user['Permissions'], 'R') !== FALSE) $ret[] = "Forums Moderator";
+    if (mb_strpos($profile_user['Permissions'], 'G') !== FALSE) $ret[] = "Gallery Moderator";
+    if (mb_strpos($profile_user['Permissions'], 'F') !== FALSE) $ret[] = "Fics Moderator";
+    if (mb_strpos($profile_user['Permissions'], 'O') !== FALSE) $ret[] = "Oekaki Moderator";
+    if (mb_strpos($profile_user['Permissions'], 'I') !== FALSE) $ret[] = "IRC Moderator";
+    if (mb_strpos($profile_user['Permissions'], 'M') !== FALSE) $ret[] = "Minecraft Moderator";
+    if (sizeof($ret) == 0) return "";
+    return implode(",", $ret);
 }
 ?>

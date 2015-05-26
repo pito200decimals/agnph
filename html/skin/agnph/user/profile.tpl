@@ -76,13 +76,10 @@
     </script>
 {% endblock %}
 
+{#
 {% block sidebar %}
-    <ul>
-        <li>Send a Message</li>
-        <li>Make Administrator</li>
-        <li>Revoke Administrator</li>
-    </ul>
 {% endblock %}
+#}
 
 {% block usercontent %}
     <div class="infoblock">
