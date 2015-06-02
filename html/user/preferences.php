@@ -112,7 +112,10 @@ if (isset($_POST['dob']) &&
         $posts = $_POST['gallery-posts-per-page'];
         if (is_numeric($posts)) {
             $posts = (int)$posts;
-            if ($posts > 0 && $posts < MAX_GALLERY_POSTS_PER_PAGE) {
+            if ($posts > 0) {
+                if ($posts > MAX_GALLERY_POSTS_PER_PAGE) {
+                    $posts = MAX_GALLERY_POSTS_PER_PAGE;
+                }
                 $gallery_table_sets[] = "GalleryPostsPerPage=$posts";
             }
         }
@@ -132,7 +135,10 @@ if (isset($_POST['dob']) &&
         $posts = $_POST['fics-stories-per-page'];
         if (is_numeric($posts)) {
             $posts = (int)$posts;
-            if ($posts > 0 && $posts < MAX_FICS_POSTS_PER_PAGE) {
+            if ($posts > 0) {
+                if ($posts > MAX_FICS_POSTS_PER_PAGE) {
+                    $posts = MAX_FICS_POSTS_PER_PAGE;
+                }
                 $fics_table_sets[] = "FicsStoriesPerPage=$posts";
             }
         }

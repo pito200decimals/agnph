@@ -7,13 +7,38 @@ include_once(SITE_ROOT."includes/util/sql.php");
 include_once(SITE_ROOT."includes/util/table_data.php");
 include_once(SITE_ROOT."includes/tagging/tag_functions.php");
 
-function GetSearchClauses($search_term_array) {
-    if (sizeof($search_term_array) > MAX_FICS_SEARCH_TERMS) $search_term_array = array_slice($search_term_array, 0, MAX_FICS_SEARCH_TERMS);
+// TODO: Ordering.
+
+function GetSearchClauses($search_term_string) {
+    $search_term_array = explode(" ", $search_term_string);
+    $search_term_array = array_map("trim", $search_term_array);
+    $search_term_array = array_filter($search_term_array, "mb_strlen");
+    $search_term_array = array_slice($search_term_array, 0, MAX_FICS_SEARCH_TERMS);
+    $search_term_array = array_merge($search_term_array, GetBlacklistClauses($search_term_array));
     $clauses = array_filter(array_map("GetClause", $search_term_array), "mb_strlen");
     return implode(" AND ", array_map(function($clause) { return "($clause)"; }, $clauses));
 }
 
+function GetBlacklistClauses($terms) {
+    global $user;
+    if (!isset($user)) return array();
+    $blacklist_terms = explode(" ", $user['FicsTagBlacklist']);
+    $blacklist_terms = array_filter($blacklist_terms, "mb_strlen");
+    $blacklist_terms = array_slice($blacklist_terms, 0, MAX_FICS_BLACKLIST_TAGS);
+    $blacklist_terms = array_filter($blacklist_terms, function($term) use ($terms) {
+        return !in_array($term, $terms);
+    });
+    $blacklist_terms = array_map(function($term) { return "-$term"; }, $blacklist_terms);
+    return $blacklist_terms;
+}
+
 function GetClause($search_term) {
+    if (mb_substr($search_term, 0, 1) == "-") {
+        while (mb_substr($search_term, 0, 1) == "-") {
+            $search_term = mb_substr($search_term, 1);
+        }
+        return "NOT(".GetClause($search_term).")";
+    }
     if (mb_strlen($search_term) == 0) return "";
     if (mb_strtolower($search_term) == "completed" ||
         mb_strtolower($search_term) == "complete" ||

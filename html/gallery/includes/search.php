@@ -4,9 +4,9 @@
 include_once(SITE_ROOT."gallery/includes/searchclause.php");
 
 // Search orderings implemented:
-// order:score
-// order:date
-// order:age
+// order:score (Highest to Lowest)
+// order:date (Recent to Past)
+// order:age (Oldest to Newest)
 //
 // === Not implemented yet ===
 // order:favorites

@@ -1,8 +1,13 @@
 TODOs
 
-- Gallery blacklists
+- Gallery/Tag blacklists
 - Gallery linking to source on delete
 - Gallery upload limits
 - Check for vuln's for style background-image URL's.
 - Splash for Disclaimer/Warning/Age gate.
-- Tag blacklists
+- Link news from forums to each section/home page?
+- Mailbox/PM system
+- Admin site management
+- Gallery/Fics mass tag edits?
+- Search string length attacks
+- Fics search ordering

@@ -1,9 +1,9 @@
 <?php
 // Class for specifying a search tree.
 // Search terms can include the following modifiers:
-// {tag}
-// ~{tag}
-// -{clause}
+// {tag}            (and tag)
+// ~{tag}           (or tag)
+// -{clause}        (and not tag)
 // rating:{s,q,e} (first letter considered only)
 // user:{uploader-display-name}
 // fav:{user-display-name}
@@ -16,36 +16,39 @@
 // === Not implemented yet ===
 // score:
 // comments:
+// width/height/aspect-ratio:
+// Has artist, etc?
 
 function CreateSQLClauses($search) {
     $terms = explode(" ", $search);
-    $terms = array_slice($terms, 0, MAX_GALLERY_SEARCH_TERMS);
+    $terms = array_map("trim", $terms);
     $terms = array_filter($terms, "mb_strlen");
+    $terms = array_slice($terms, 0, MAX_GALLERY_SEARCH_TERMS);
     return CreateSQLClausesFromTerms($terms);
 }
 
 function CreateSQLClausesFromTerms($terms, $mode="AND") {
-    $or_clauses = array();
-    $and_clauses = array();
+    $or_terms = array();
+    $and_terms = array();
     $filter_clauses = array();
     if ($terms != array("")) {
         foreach ($terms as $term) {
             if (startsWith($term, "~")) {
-                $or_clauses[] = mb_substr($term, 1);
+                $or_terms[] = mb_substr($term, 1);
             } else if (mb_strpos($term, ":") !== FALSE) {
                 $filter_clauses[] = $term;
             } else {
-                $and_clauses[] = $term;
+                $and_terms[] = $term;
             }
         }
     }
+    $and_terms = array_merge($and_terms, GetBlacklistClauses($and_terms, $or_terms));
     $sql = array();
-    if (sizeof($or_clauses) > 0) {
-        $sql[] = "(".CreateSQLClausesFromTerms($or_clauses, "OR").")";
+    if (sizeof($or_terms) > 0) {
+        $sql[] = "(".CreateSQLClausesFromTerms($or_terms, "OR").")";
     }
-    if (sizeof($and_clauses) > 0) {
-        debug($and_clauses);
-        foreach ($and_clauses as $term) {
+    if (sizeof($and_terms) > 0) {
+        foreach ($and_terms as $term) {
             $sql[] = "(".CreateSQLClauseFromTerm($term).")";
         }
     }
@@ -121,5 +124,19 @@ function CreateSQLClauseFromFilter($filter) {
             return "FALSE";
         }
     }
+}
+
+function GetBlacklistClauses($and_terms, $or_terms) {
+    global $user;
+    if (!isset($user)) return array();
+    $terms = array_merge($and_terms, $or_terms);
+    $blacklist_terms = explode(" ", $user['GalleryTagBlacklist']);
+    $blacklist_terms = array_filter($blacklist_terms, "mb_strlen");
+    $blacklist_terms = array_slice($blacklist_terms, 0, MAX_GALLERY_BLACKLIST_TAGS);
+    $blacklist_terms = array_filter($blacklist_terms, function($term) use ($terms) {
+        return !in_array($term, $terms);
+    });
+    $blacklist_terms = array_map(function($term) { return "-$term"; }, $blacklist_terms);
+    return $blacklist_terms;
 }
 ?>

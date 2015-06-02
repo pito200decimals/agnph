@@ -26,8 +26,11 @@ $search_clauses = "TRUE";
 if (isset($_GET['search'])) {
     $search_terms = $_GET['search'];
     $vars['searchTerms'] = $search_terms;
-    $search_clauses = GetSearchClauses(array_map("trim", explode(" ", $search_terms)));
+    $search_clauses = GetSearchClauses($search_terms);
     if (mb_strlen($search_clauses) == 0) $search_clauses = "TRUE";
+} else {
+    $blacklist_clauses = GetSearchClauses("");
+    if (mb_strlen($blacklist_clauses) > 0) $search_clauses = $blacklist_clauses;
 }
 
 if (!sql_query_into($result,
