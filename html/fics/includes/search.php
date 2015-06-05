@@ -53,6 +53,12 @@ function GetClause($search_term) {
     if (mb_strtolower($search_term) == "rating:pg-13") return "Rating='T'";
     if (mb_strtolower($search_term) == "rating:r") return "Rating='R'";
     if (mb_strtolower($search_term) == "rating:xxx") return "Rating='X'";
+    if (mb_strtolower($search_term) == "featured" ||
+        mb_strtolower($search_term) == "featured:yes" ||
+        mb_strtolower($search_term) == "featured:true") return "Featured<>'N'";
+    if (mb_strtolower($search_term) == "not_featured" ||
+        mb_strtolower($search_term) == "featured:no" ||
+        mb_strtolower($search_term) == "featured:false") return "Featured='N'";
     $tag = ClauseForTag($search_term);
     $title = ClauseForTitle($search_term);
     $author = ClauseForAuthor($search_term);

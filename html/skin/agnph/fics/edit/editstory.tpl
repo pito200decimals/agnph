@@ -170,17 +170,36 @@
                     {{ formstory.Summary }}
                 {% endautoescape %}
             </textarea></p>
-            <p><label>Rating: </label><select name="rating">
-                {# Obfuscate database values #}
-                <option value="1"{% if not formstory or formstory.Rating == 'G' %} selected{% endif %}>G</option>
-                <option value="2"{% if formstory.Rating == 'P' %} selected{% endif %}>PG</option>
-                <option value="3"{% if formstory.Rating == 'T' %} selected{% endif %}>PG-13</option>
-                <option value="4"{% if formstory.Rating == 'R' %} selected{% endif %}>R</option>
-                <option value="5"{% if formstory.Rating == 'X' %} selected{% endif %}>XXX</option>
-            </select><label>Completed:</label><select name="completed">
-                <option value="1"{% if not formstory or not formstory.Completed %} selected{% endif %}>No</option>
-                <option value="2"{% if formstory.Completed %} selected{% endif %}>Yes</option>
-            </select></p>
+            <p>
+                <label>Rating: </label>
+                <select name="rating">
+                    {# Obfuscate database values #}
+                    <option value="1"{% if not formstory or formstory.Rating == 'G' %} selected{% endif %}>G</option>
+                    <option value="2"{% if formstory.Rating == 'P' %} selected{% endif %}>PG</option>
+                    <option value="3"{% if formstory.Rating == 'T' %} selected{% endif %}>PG-13</option>
+                    <option value="4"{% if formstory.Rating == 'R' %} selected{% endif %}>R</option>
+                    <option value="5"{% if formstory.Rating == 'X' %} selected{% endif %}>XXX</option>
+                </select>
+                <label>Completed:</label>
+                <select name="completed">
+                    <option value="1"{% if not formstory or not formstory.Completed %} selected{% endif %}>No</option>
+                    <option value="2"{% if formstory.Completed %} selected{% endif %}>Yes</option>
+                </select>
+                {% if formstory.canFeature %}
+                    <label>Featured:</label>
+                    <select name="featured">
+                        <option value="N"{% if formstory.Featured=="N" %} selected{% endif %}>None</option>
+                        <option value="F"{% if formstory.Featured=="F" %} selected{% endif %}>Featured</option>
+                        <option value="G"{% if formstory.Featured=="G" %} selected{% endif %}>Gold</option>
+                        <option value="S"{% if formstory.Featured=="S" %} selected{% endif %}>Silver</option>
+                        <option value="Z"{% if formstory.Featured=="Z" %} selected{% endif %}>Bronze</option>
+                        <option value="f"{% if formstory.Featured=="f" %} selected{% endif %}>Retired</option>
+                        <option value="g"{% if formstory.Featured=="g" %} selected{% endif %}>Retired Gold</option>
+                        <option value="s"{% if formstory.Featured=="s" %} selected{% endif %}>Retired Silver</option>
+                        <option value="z"{% if formstory.Featured=="z" %} selected{% endif %}>Retired Bronze</option>
+                    </select>
+                {% endif %}
+            </p>
             {# TODO: Admin Approval #}
             {# TODO: Series selection #}
             <p><label>Story Notes:</label>

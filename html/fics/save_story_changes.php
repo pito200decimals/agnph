@@ -88,6 +88,15 @@ if ($sid > 0) {
     if ($completed != $story['Completed']) {
         $sets[] = "Completed=$completed";
     }
+    if (CanUserFeatureStory($story, $user)) {
+        $feature = $_POST['featured'];
+        // Strlen and strpos because we store CHAR(1).
+        if (strlen($feature) == 1 && strpos(FICS_NOT_FEATURED."FGSZfgsz", $feature) !== FALSE) {
+            // Valid char.
+            $escaped_feature = sql_escape($feature);
+            $sets[] = "Featured='$escaped_feature'";
+        }
+    }
     if ($storynotes != $story['StoryNotes']) {
         $escaped_story_notes = sql_escape($storynotes);
         $sets[] = "StoryNotes='$escaped_story_notes'";

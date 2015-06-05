@@ -48,11 +48,11 @@ do_or_die(sql_query(
     (3);"));
 do_or_die(sql_query(
    "INSERT INTO ".FICS_USER_PREF_TABLE."
-    (UserId)
+    (UserId, FicsPermissions)
     VALUES
-    (1),
-    (2),
-    (3);"));
+    (1, 'A'),
+    (2, 'N'),
+    (3, 'N');"));
 
 WriteBio(1, "Bio of user 1!<br />TEST");
 WriteBio(2, "Bio of user 2!");

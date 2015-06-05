@@ -242,7 +242,7 @@ do_or_die(sql_query(
         Rating CHAR(11) NOT NULL,".  // G - G, P - PG, T - PG-13, R - R, X - XXX
        "ApprovalStatus CHAR(1) DEFAULT 'A',".  // P - Pending, A - Approved, F - Flagged, D - Deleted
        "Completed TINYINT(1) DEFAULT FALSE,
-        Featured CHAR(1) NOT NULL,".  // F/f/G/g/S/s/B/b (upper-case current, lower-case retired).
+        Featured CHAR(1) DEFAULT '".FICS_NOT_FEATURED."',".  // F/f/G/g/S/s/Z/z (upper-case current, lower-case retired).
        "ParentSeriesId INT(11) DEFAULT -1,
         SeriesItemOrder INT(11) NOT NULL,
         StoryNotes TEXT(1024) NOT NULL,

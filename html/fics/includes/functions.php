@@ -35,6 +35,10 @@ function CanUserCreateFicsTags($user) {
     if (!IsUserActivated($user)) return false;
     return true;
 }
+function CanUserFeatureStory($story, $user) {
+    if (!IsUserActivated($user)) return false;
+    return $user['FicsPermissions'] == 'A';
+}
 
 // General path functions.
 function GetChapterPath($cid) { return SITE_ROOT."fics/data/chapters/$cid.txt"; }
@@ -85,12 +89,20 @@ function FillStoryInfo(&$story) {
         break;
     }
 
-    // TODO
     $story['tags'] = GetTagsInfo(GetTagsIdsForStory($story['StoryId']));
 
     $story['DateCreated'] = FormatDate($story['DateCreated'], FICS_DATE_FORMAT);
     $story['DateUpdated'] = FormatDate($story['DateUpdated'], FICS_DATE_FORMAT);
     $story['stars'] = GetStarsHTML($story['TotalStars'], $story['TotalRatings']);
+
+    global $user;
+    // Set up permissions.
+    if (isset($user) && CanUserEditStory($story, $user)) {
+        $story['canEdit'] = true;
+    }
+    if (isset($user) && CanUserFeatureStory($story, $user)) {
+        $story['canFeature'] = true;
+    }
 }
 
 // Gets all chapter metadata for a story (everything except chapter content).

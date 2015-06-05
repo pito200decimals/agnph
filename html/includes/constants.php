@@ -92,5 +92,6 @@ define("MAX_GALLERY_POSTS_PER_PAGE", 100);
 define("MAX_FICS_POSTS_PER_PAGE", 100);
 define("MAX_GALLERY_BLACKLIST_TAGS", 50);
 define("MAX_FICS_BLACKLIST_TAGS", 50);
+define("FICS_NOT_FEATURED", "N");  // Also present in templates.
 
 ?>

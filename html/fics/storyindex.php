@@ -39,9 +39,9 @@ if (!sql_query_into($result,
     $search_clauses
     ORDER BY DateUpdated DESC, StoryId DESC;", 0)) RenderErrorPage("No stories found.");
 $stories = array();
-while ($row = $result->fetch_assoc()) {
-    FillStoryInfo($row);
-    $stories[] = $row;
+while ($story = $result->fetch_assoc()) {
+    FillStoryInfo($story);
+    $stories[] = $story;
 }
 if (sizeof($stories) <= $stories_per_page) {
     $iterator = "";

@@ -136,3 +136,6 @@
 .taglist a:hover span {
     color: rgb(144,147,255);
 }
+.ribbon {
+    float: left;
+}
