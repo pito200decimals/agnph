@@ -14,7 +14,7 @@ $chapternum = $_GET['chapter'];
 
 $story = GetStory($sid) or RenderErrorPage("Story not found");
 if ($story['ApprovalStatus'] == 'D') {
-    InvalidURL();
+    RenderErrorPage("Story not found");
     return;
 }
 $chapters = GetChaptersInfo($sid);

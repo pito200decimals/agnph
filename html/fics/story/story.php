@@ -12,7 +12,7 @@ if (!isset($_GET['sid']) || !is_numeric($_GET['sid'])) InvalidURL();
 $sid = $_GET['sid'];
 $story = GetStory($sid) or RenderErrorPage("Story not found");
 if ($story['ApprovalStatus'] == 'D') {
-    InvalidURL();
+    RenderErrorPage("Story not found");
     return;
 }
 

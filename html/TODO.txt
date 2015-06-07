@@ -16,7 +16,7 @@ TODOs
 - Link to posts on delete banner
 
 == FICS ==
-- Fics search ordering
+- Fics search ordering?
 - More complex search queries (OR, more metadata filters like ordering?)
 - Index page, including news and featured stories, perhaps random selection
 
