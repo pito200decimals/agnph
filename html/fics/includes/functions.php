@@ -23,6 +23,14 @@ function CanUserDeleteStory($story, $user) {
     if (!IsUserActivated($user)) return false;
     return $user['UserId'] == $story['AuthorUserId'] || $user['FicsPermissions'] == 'A';
 }
+function CanUserUndeleteStory($story, $user) {
+    if (!IsUserActivated($user)) return false;
+    return $user['FicsPermissions'] == 'A';
+}
+function CanUserSearchDeletedStories($user) {
+    if (!IsUserActivated($user)) return false;
+    return $user['FicsPermissions'] == 'A';
+}
 function CanUserComment($user) {
     if (!IsUserActivated($user)) return false;
     return true;
@@ -102,6 +110,12 @@ function FillStoryInfo(&$story) {
     }
     if (isset($user) && CanUserFeatureStory($story, $user)) {
         $story['canFeature'] = true;
+    }
+    if (isset($user) && CanUserDeleteStory($story, $user)) {
+        $story['canDelete'] = true;
+    }
+    if (isset($user) && CanUserUndeleteStory($story, $user)) {
+        $story['canUnDelete'] = true;
     }
 }
 

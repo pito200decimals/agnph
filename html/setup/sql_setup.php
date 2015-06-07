@@ -240,7 +240,7 @@ do_or_die(sql_query(
         Title VARCHAR(256) NOT NULL,
         Summary TEXT(4096) NOT NULL,
         Rating CHAR(11) NOT NULL,".  // G - G, P - PG, T - PG-13, R - R, X - XXX
-       "ApprovalStatus CHAR(1) DEFAULT 'A',".  // P - Pending, A - Approved, F - Flagged, D - Deleted
+       "ApprovalStatus CHAR(1) DEFAULT 'A',".  // P - Pending, A - Approved, D - Deleted (Pending not used).
        "Completed TINYINT(1) DEFAULT FALSE,
         Featured CHAR(1) DEFAULT '".FICS_NOT_FEATURED."',".  // F/f/G/g/S/s/Z/z (upper-case current, lower-case retired).
        "ParentSeriesId INT(11) DEFAULT -1,
@@ -260,8 +260,7 @@ do_or_die(sql_query(
         ParentStoryId INT(11) NOT NULL,
         AuthorUserId INT(11) NOT NULL,
         Title VARCHAR(256) NOT NULL,
-        ApprovalStatus CHAR(1) DEFAULT 'A',".  // P - Pending, A - Approved, F - Flagged, D - Deleted
-       "ChapterItemOrder INT(11) NOT NULL,
+        ChapterItemOrder INT(11) NOT NULL,
         ChapterNotes TEXT(1024) NOT NULL,
         ChapterEndNotes TEXT(1024) NOT NULL,
         WordCount INT(11) NOT NULL,

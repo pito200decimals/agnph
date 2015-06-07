@@ -50,6 +50,9 @@ function endsWith($haystack, $needle) {
     // search forward starting from end minus needle length characters
     return $needle === "" || (($temp = mb_strlen($haystack) - mb_strlen($needle)) >= 0 && mb_strpos($haystack, $needle, $temp) !== FALSE);
 }
+function contains($haystack, $needle) {
+    return mb_strpos($haystack, $needle) !== FALSE;
+}
 
 // Cookie processing functions.
 function CookiesExist() {

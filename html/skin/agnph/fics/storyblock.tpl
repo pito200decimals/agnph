@@ -72,6 +72,11 @@
                 {# canFeature will always have canEdit #}
                 [<a href="/fics/edit/{{ story.StoryId }}/">Edit</a>]
             {% endif %}
+            {% if story.canDelete and story.ApprovalStatus=='A' %}
+                [<a href="/fics/delete/{{ story.StoryId }}/">Delete</a>]
+            {% elseif story.canUnDelete and story.ApprovalStatus=="D" %}
+                [<a href="/fics/undelete/{{ story.StoryId }}/">Un-Delete</a>]
+            {% endif %}
         </div>
     </div>
 </div>

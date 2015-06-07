@@ -27,12 +27,12 @@ if (sql_query_into($result, "SELECT count(*) FROM ".FORUMS_POST_TABLE." WHERE Us
 } else {
     $profile_user['numForumPosts'] = 0;
 }
-if (sql_query_into($result, "SELECT count(*) FROM ".GALLERY_POST_TABLE." WHERE UploaderId=$uid;", 0)) {
+if (sql_query_into($result, "SELECT count(*) FROM ".GALLERY_POST_TABLE." WHERE UploaderId=$uid AND Status<>'D';", 0)) {
     $profile_user['numGalleryUploads'] = $result->fetch_assoc()['count(*)'];
 } else {
     $profile_user['numGalleryUploads'] = 0;
 }
-if (sql_query_into($result, "SELECT count(*) FROM ".FICS_STORY_TABLE." WHERE AuthorUserId=$uid;", 0)) {
+if (sql_query_into($result, "SELECT count(*) FROM ".FICS_STORY_TABLE." WHERE AuthorUserId=$uid AND ApprovalStatus<>'D';", 0)) {
     $profile_user['numFicsStories'] = $result->fetch_assoc()['count(*)'];
 } else {
     $profile_user['numFicsStories'] = 0;

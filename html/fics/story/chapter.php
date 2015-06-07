@@ -13,6 +13,10 @@ if (!isset($_GET['chapter']) || !is_numeric($_GET['chapter'])) InvalidURL();
 $chapternum = $_GET['chapter'];
 
 $story = GetStory($sid) or RenderErrorPage("Story not found");
+if ($story['ApprovalStatus'] == 'D') {
+    InvalidURL();
+    return;
+}
 $chapters = GetChaptersInfo($sid);
 if ($chapternum <= 0 || $chapternum > sizeof($chapters)) RenderErrorPage("Chapter not found");
 $chapter = $chapters[$chapternum - 1];
