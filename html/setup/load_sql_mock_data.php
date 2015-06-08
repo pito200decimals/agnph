@@ -28,17 +28,17 @@ do_or_die(sql_query(
     "INSERT INTO ".USER_TABLE."
     (UserID, UserName, DisplayName, Email, Password, Usermode, DOB, Permissions, Title, Species, JoinTime, LastVisitTime)
     VALUES
-    (1, 'User 1', 'User 1', 'user1@example.com', '".md5("Password 1")."', 1, '01/02/2003', 'A', 'Most Awesome Cyndaquil', 'Cyndaquil', $now, $now),
-    (2, 'User 2', 'User 2', 'user2@example.com', '".md5("Password 2")."', 1, '04/05/2006', '', 'Hungry Resident', 'Totodile', $now, $now),
-    (3, 'User 3', 'User 3', 'user3@example.com', '".md5("Password 3")."', 1, '07/08/2009', '', 'Generic Title', 'Chikorita', $now, $now);"));
+    (1, 'User1', 'User1', 'user1@example.com', '".md5("Password 1")."', 1, '01/02/2003', 'A', 'Most Awesome Cyndaquil', 'Cyndaquil', $now, $now),
+    (2, 'User2', 'User2', 'user2@example.com', '".md5("Password 2")."', 1, '04/05/2006', '', 'Hungry Resident', 'Totodile', $now, $now),
+    (3, 'User3', 'User3', 'user3@example.com', '".md5("Password 3")."', 1, '07/08/2009', '', 'Generic Title', 'Chikorita', $now, $now);"));
 // Forums settings.
 do_or_die(sql_query(
     "INSERT INTO ".FORUMS_USER_PREF_TABLE."
     (UserId, Signature)
     VALUES
-    (1, 'Sig of User 1'),
-    (2, 'Sig of User 2'),
-    (3, 'Sig of User 3');"));
+    (1, 'Sig of User1'),
+    (2, 'Sig of User2'),
+    (3, 'Sig of User3');"));
 do_or_die(sql_query(
    "INSERT INTO ".GALLERY_USER_PREF_TABLE."
     (UserId)
@@ -54,9 +54,9 @@ do_or_die(sql_query(
     (2, 'N'),
     (3, 'N');"));
 
-WriteBio(1, "Bio of user 1!<br />TEST");
-WriteBio(2, "Bio of user 2!");
-WriteBio(3, "Bio of user 3!");
+WriteBio(1, "Bio of User1!<br />TEST");
+WriteBio(2, "Bio of User2!");
+WriteBio(3, "Bio of User3!");
 
 
 // Populate site nav table.

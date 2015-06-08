@@ -14,6 +14,7 @@ define("MAX_FILE_SIZE", 50 * 1024 * 1024);  // 50 MB.
 // Site data tables.
 define("SITE_NAV_TABLE", "nav_links");
 define("SITE_TAG_ALIAS_TABLE", "tag_aliases");
+define("SITE_LOGGING_TABLE", "action_log");
 
 // User content data tables.
 define("USER_TABLE", "user");
@@ -33,7 +34,6 @@ define("GALLERY_POST_TABLE", "gallery_posts");
 define("GALLERY_TAG_TABLE", "gallery_tags");
 define("GALLERY_POST_TAG_TABLE", "gallery_post_tag");
 define("GALLERY_POST_TAG_HISTORY_TABLE", "gallery_tag_history");
-define("GALLERY_TAG_ALIAS_TABLE", "gallery_tag_alias");
 define("GALLERY_POOLS_TABLE", "gallery_pools");
 
 // Fics tables.
@@ -92,6 +92,6 @@ define("MAX_GALLERY_POSTS_PER_PAGE", 100);
 define("MAX_FICS_POSTS_PER_PAGE", 100);
 define("MAX_GALLERY_BLACKLIST_TAGS", 50);
 define("MAX_FICS_BLACKLIST_TAGS", 50);
-define("FICS_NOT_FEATURED", "N");  // Also present in templates.
+define("FICS_NOT_FEATURED", "D");  // Also present in templates: editstory.tpl
 
 ?>

@@ -188,7 +188,7 @@
                 {% if formstory.canFeature %}
                     <label>Featured:</label>
                     <select name="featured">
-                        <option value="N"{% if formstory.Featured=="N" %} selected{% endif %}>None</option>
+                        <option value="D"{% if formstory.Featured=="D" %} selected{% endif %}>None</option>
                         <option value="F"{% if formstory.Featured=="F" %} selected{% endif %}>Featured</option>
                         <option value="G"{% if formstory.Featured=="G" %} selected{% endif %}>Gold</option>
                         <option value="S"{% if formstory.Featured=="S" %} selected{% endif %}>Silver</option>

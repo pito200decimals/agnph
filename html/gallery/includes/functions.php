@@ -84,6 +84,21 @@ function UpdatePost($tag_string, $post_id, $user) {
     UpdateTagTypes(GALLERY_TAG_TABLE, $GALLERY_TAG_TYPES, $descriptors, $user);  // Do after creating tags above when setting post tags.
 }
 
+// Writes post statistics to database.
+function UpdatePostStatistics($post_id) {
+    // Score?
+    // NumFavorites
+    // NumComments?
+    if (sql_query_into($result, "SELECT count(*) FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE PostId=$post_id;", 0)) {
+        $num_favorites = $result->fetch_assoc()['count(*)'];
+    } else {
+        $num_favorites = 0;
+    }
+
+    // Update all fields.
+    sql_query("UPDATE ".GALLERY_POST_TABLE." SET NumFavorites=$num_favorites;");
+}
+
 
 
 function UpdatePostWithDescriptors($descriptors, $post_id, $user) {

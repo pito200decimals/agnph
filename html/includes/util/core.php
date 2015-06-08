@@ -42,6 +42,7 @@ function do_or_die($result, $file = null, $line = null) {
 include_once(__DIR__."/html_funcs.php");
 include_once(__DIR__."/table_data.php");
 
+// Source for startsWith and endsWith: http://stackoverflow.com/questions/834303/startswith-and-endswith-functions-in-php
 function startsWith($haystack, $needle) {
     // search backwards starting from haystack length characters from the end
     return $needle === "" || strrpos($haystack, $needle, -mb_strlen($haystack)) !== FALSE;

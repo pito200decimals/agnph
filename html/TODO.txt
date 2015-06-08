@@ -14,11 +14,16 @@ TODOs
 - Verify tag aliasing works once admin support for that is added
 - IP address tracking for uploads
 - Link to posts on delete banner
+- Image formats other than png, jpg, gif (swf, webm?)
+- Comments?
+- Upvote/Downvote?
 
 == FICS ==
 - Fics search ordering?
 - More complex search queries (OR, more metadata filters like ordering?)
 - Index page, including news and featured stories, perhaps random selection
+- User favorites
+- Author following
 
 == SITE ==
 - Check for vuln's for style background-image URL's.
@@ -27,8 +32,11 @@ TODOs
 - Search string length attacks
 - Oekaki section
 - Admin site management
-- Global site statistics (including user actions?)
+- Global site statistics (including user action logging?)
 - Polls?
+- Timezone/date management
+- General help pages
+- General about section, admin bios, etc.
 
 == ACCOUNT ==
 - Mailbox/PM system

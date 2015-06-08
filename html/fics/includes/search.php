@@ -78,6 +78,10 @@ function GetClause($search_term) {
             return "ApprovalStatus='D'";
         }
     }
+    // Strip "", if it exists. No multi-byte needed.
+    // Allows for searching for terms that are also filters.
+    $search_term = str_replace("\"", "", $search_term);
+
     $tag = ClauseForTag($search_term);
     $title = ClauseForTitle($search_term);
     $author = ClauseForAuthor($search_term);

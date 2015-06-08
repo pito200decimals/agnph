@@ -26,6 +26,7 @@ include_once(SITE_ROOT."gallery/includes/functions.php");
 sql_query("DROP TABLE ".USER_TABLE.";");
 sql_query("DROP TABLE ".SITE_NAV_TABLE.";");
 sql_query("DROP TABLE ".SITE_TAG_ALIAS_TABLE.";");
+sql_query("DROP TABLE ".SITE_LOGGING_TABLE.";");
 sql_query("DROP TABLE ".FORUMS_LOBBY_TABLE.";");
 sql_query("DROP TABLE ".FORUMS_POST_TABLE.";");
 sql_query("DROP TABLE ".FORUMS_USER_PREF_TABLE.";");
@@ -34,7 +35,6 @@ sql_query("DROP TABLE ".GALLERY_POST_TABLE.";");
 sql_query("DROP TABLE ".GALLERY_TAG_TABLE.";");
 sql_query("DROP TABLE ".GALLERY_POST_TAG_TABLE.";");
 sql_query("DROP TABLE ".GALLERY_POST_TAG_HISTORY_TABLE.";");
-sql_query("DROP TABLE ".GALLERY_TAG_ALIAS_TABLE.";");
 sql_query("DROP TABLE ".GALLERY_USER_PREF_TABLE.";");
 sql_query("DROP TABLE ".GALLERY_USER_FAVORITES_TABLE.";");
 sql_query("DROP TABLE ".GALLERY_POOLS_TABLE.";");
@@ -180,21 +180,14 @@ CreateItemTagTables(GALLERY_TAG_TABLE, GALLERY_POST_TAG_TABLE, "PostId");
 // History of tag edits for a given post.
 do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_POST_TAG_HISTORY_TABLE." (
-        Id INT(11) UNSIGNED AUTO_INCREMENT,
-        PostId INT(11) NOT NULL,
+        Id INT(11) UNSIGNED AUTO_INCREMENT,".  // Just a unique ID, even though Timestamp should make it unique.
+       "PostId INT(11) NOT NULL,
         Timestamp INT(11) NOT NULL,
         UserId INT(11) NOT NULL,
         TagsAdded VARCHAR(512) DEFAULT '',
         TagsRemoved VARCHAR(512) DEFAULT '',
         PropertiesChanged VARCHAR(512) DEFAULT '',
         PRIMARY KEY(Id, PostId, Timestamp)
-    ) DEFAULT CHARSET=utf8;"));
-// Tag aliasing.
-do_or_die(sql_query(
-    "CREATE TABLE ".GALLERY_TAG_ALIAS_TABLE." (
-        TagId INT(11) NOT NULL,
-        NewTagId INT(11) NOT NULL,
-        PRIMARY KEY(TagId, NewTagId)
     ) DEFAULT CHARSET=utf8;"));
 // General information about pools.
 do_or_die(sql_query(
@@ -230,6 +223,7 @@ do_or_die(sql_query(
 // Fics tables //
 /////////////////
 
+// Fics table that contains all the story metadata.
 do_or_die(sql_query(
     "CREATE TABLE ".FICS_STORY_TABLE." (
         StoryId INT(11) UNSIGNED AUTO_INCREMENT,
@@ -239,10 +233,10 @@ do_or_die(sql_query(
         DateUpdated INT(11) NOT NULL,
         Title VARCHAR(256) NOT NULL,
         Summary TEXT(4096) NOT NULL,
-        Rating CHAR(11) NOT NULL,".  // G - G, P - PG, T - PG-13, R - R, X - XXX
+        Rating CHAR(11) NOT NULL,".  // G - G, P - PG, T - PG-13, R - R, X - XXX TODO: Ordering
        "ApprovalStatus CHAR(1) DEFAULT 'A',".  // P - Pending, A - Approved, D - Deleted (Pending not used).
        "Completed TINYINT(1) DEFAULT FALSE,
-        Featured CHAR(1) DEFAULT '".FICS_NOT_FEATURED."',".  // F/f/G/g/S/s/Z/z (upper-case current, lower-case retired).
+        Featured CHAR(1) DEFAULT '".FICS_NOT_FEATURED."',".  // D/F/f/G/g/S/s/Z/z (upper-case current, lower-case retired).
        "ParentSeriesId INT(11) DEFAULT -1,
         SeriesItemOrder INT(11) NOT NULL,
         StoryNotes TEXT(1024) NOT NULL,
@@ -254,6 +248,7 @@ do_or_die(sql_query(
         NumReviews INT(11) NOT NULL,
         PRIMARY KEY(StoryId)
     ) DEFAULT CHARSET=utf8;"));
+// Fics table that stores all the chapter metadata.
 do_or_die(sql_query(
     "CREATE TABLE ".FICS_CHAPTER_TABLE." (
         ChapterId INT(11) UNSIGNED AUTO_INCREMENT,
@@ -270,6 +265,7 @@ do_or_die(sql_query(
         NumReviews INT(11) NOT NULL,
         PRIMARY KEY(ChapterId)
     ) DEFAULT CHARSET=utf8;"));  // NOTE: WordCount, TotalStars and TotalRatings not implemented yet.
+// Fics table that stores comments and reviews.
 do_or_die(sql_query(
     "CREATE TABLE ".FICS_REVIEW_TABLE." (
         ReviewId INT(11) UNSIGNED AUTO_INCREMENT,
@@ -298,6 +294,15 @@ do_or_die(sql_query(
 
 
 // TODO: Logging tables.
+do_or_die(sql_query(
+    "CREATE TABLE ".SITE_LOGGING_TABLE." (
+        Id INT(11) UNSIGNED AUTO_INCREMENT,".  // Just a unique ID, even though Timestamp should make it unique.
+       "UserId INT(11) NOT NULL,
+        Timestamp INT(11) NOT NULL,
+        Action TEXT(256) NOT NULL,
+        PRIMARY KEY(Id, UserId, Timestamp)
+    ) DEFAULT CHARSET=utf8;"));
+
 
 // TODO: Initialize file directories.
 
@@ -306,6 +311,7 @@ include_once("load_sql_mock_data.php");
 
 // Creates the tag table and a item-tag map table. Default tag type is 'G'.
 function CreateItemTagTables($tag_table_name, $item_tag_table_name, $item_id) {
+    // Table for tags.
     do_or_die(sql_query(
         "CREATE TABLE $tag_table_name (
             TagId INT(11) UNSIGNED AUTO_INCREMENT,
@@ -318,6 +324,7 @@ function CreateItemTagTables($tag_table_name, $item_tag_table_name, $item_id) {
             ChangeTypeTimestamp INT(11) NOT NULL,
             PRIMARY KEY(TagId, Name)
         ) DEFAULT CHARSET=utf8;"));
+    // Table for item-tag mapping.
     do_or_die(sql_query(
         "CREATE TABLE $item_tag_table_name (
             $item_id INT(11) NOT NULL,

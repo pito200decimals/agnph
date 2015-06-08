@@ -142,7 +142,19 @@
                         <a href="#" onclick="$('#unflagform')[0].submit();return false;">Unflag Post</a>
                     </li>
                 {% endif %}
-                <li>Add to Favorites</li>
+                <li>
+                    {% if isFavorited %}
+                        <form id="favorite-form" action="" method="POST">
+                            <input type="hidden" name="favorite-action" value="remove" />
+                            <a href="#" onclick="document.getElementById('favorite-form').submit();return false;">Remove from Favorites</a>
+                        </form>
+                    {% else %}
+                        <form id="favorite-form" action="" method="POST">
+                            <input type="hidden" name="favorite-action" value="add" />
+                            <a href="#" onclick="document.getElementById('favorite-form').submit();return false;">Add to Favorites</a>
+                        </form>
+                    {% endif %}
+                </li>
                 <li><a id="poolaction" href="#"></a><span id="poolactionworking" hidden><small>Processing...</small></span></li>
             </ul>
         </div>

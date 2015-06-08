@@ -70,6 +70,20 @@ if ($post['ParentPoolId'] != -1) {
 }
 
 if (isset($user)) {
+    $uid = $user['UserId'];
+    if (isset($_POST['favorite-action'])) {
+        // Update favorite status.
+        if ($_POST['favorite-action'] == "add") {
+            $now = time();
+            sql_query("INSERT INTO ".GALLERY_USER_FAVORITES_TABLE." (UserId, PostId, Timestamp) VALUES ($uid, $pid, $now);");
+            UpdatePostStatistics($pid);
+        } else if ($_POST['favorite-action'] == "remove") {
+            sql_query("DELETE FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE UserId=$uid AND PostId=$pid;");
+            UpdatePostStatistics($pid);
+        }
+    }
+    // Check for user favorite.
+    $vars['isFavorited'] = sql_query_into($result, "SELECT * FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE UserId=$uid AND PostId=$pid;", 1);
     // Settings for action perms flags.
     if (CanUserEditPost($user)) {
         $vars['canEdit'] = true;
