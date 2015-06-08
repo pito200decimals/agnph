@@ -96,7 +96,7 @@ function UpdatePostStatistics($post_id) {
     }
 
     // Update all fields.
-    sql_query("UPDATE ".GALLERY_POST_TABLE." SET NumFavorites=$num_favorites;");
+    sql_query("UPDATE ".GALLERY_POST_TABLE." SET NumFavorites=$num_favorites WHERE PostId=$post_id;");
 }
 
 
