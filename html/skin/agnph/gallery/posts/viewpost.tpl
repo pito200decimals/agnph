@@ -28,6 +28,14 @@
                 <p><strong>This post has been deleted</strong></p>
             </div>
         {% endif %}
+        {% if action %}
+            <div class="completed-action-box">
+                <p>
+                    <strong>{{ action }}</strong>
+                    <input type="button"onclick="$('.completed-action-box').hide();" value="X" />
+                </p>
+            </div>
+        {% endif %}
     </div>
     <div class="sidepanel">
         {% if post.ParentPostId != -1 %}
@@ -89,7 +97,7 @@
                 {% endif %}
                 <li>Posted: {% autoescape false %}{{ post.postedHtml }}{% endautoescape %}</li>
                 <li>Rating: {% autoescape false %}{{ post.ratingHtml }}{% endautoescape %}</li>
-                <li>Score: {{ post.Score }}</li>
+                <li>Favorites: {{ post.NumFavorites }}</li>
                 {% if post.FileSize != "" %}<li>Size: {{ post.FileSize }}</li>{% endif %}
                 <li>Views: {{ post.NumViews }}</li>
                 <li><a href="/gallery/post/show/{{ post.PostId }}/history/">Tag History</a></li>

@@ -1,6 +1,8 @@
 <?php
 // Standard header that includes all the important files. Will reside in the site root.
 
+session_start();
+
 // Find the site root directory.
 $folder_level = "";
 while (!file_exists($folder_level.__FILE__)) {

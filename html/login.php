@@ -7,7 +7,7 @@ define("DEBUG", true);
 
 // TODO: Remove after site testing is complete.
 if (isset($_GET['debug']) && $_GET['debug'] == true) {
-    $_POST['username'] = "User 1";
+    $_POST['username'] = "User1";
     $_POST['password'] = "Password 1";
 }
 

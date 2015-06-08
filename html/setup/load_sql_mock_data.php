@@ -10,10 +10,12 @@ include_once("../includes/util/file.php");
 include_once("../gallery/includes/functions.php");
 include_once("../fics/includes/functions.php");
 
+delete_files("../user/data/");
 delete_files("../user/data/bio/");
 delete_files("../gallery/data/");
 delete_files("../uploads/");
 delete_files("../fics/data/");
+delete_files("../fics/data/chapters/");
 mkdir("../user/data/");
 mkdir("../user/data/bio/");
 mkdir("../gallery/data/");

@@ -77,9 +77,11 @@ if (isset($user)) {
             $now = time();
             sql_query("INSERT INTO ".GALLERY_USER_FAVORITES_TABLE." (UserId, PostId, Timestamp) VALUES ($uid, $pid, $now);");
             UpdatePostStatistics($pid);
+            $_SESSION['gallery_action_message'] = "Added to Favorites";
         } else if ($_POST['favorite-action'] == "remove") {
             sql_query("DELETE FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE UserId=$uid AND PostId=$pid;");
             UpdatePostStatistics($pid);
+            $_SESSION['gallery_action_message'] = "Removed from Favorites";
         }
     }
     // Check for user favorite.
@@ -108,6 +110,10 @@ if (isset($user)) {
 }
 
 PreparePostStatistics($post);
+if (isset($_SESSION['gallery_action_message'])) {
+    $vars['action'] = $_SESSION['gallery_action_message'];
+    unset($_SESSION['gallery_action_message']);
+}
 
 // Increment view count, and do SQL after page is rendered.
 $post['NumViews']++;

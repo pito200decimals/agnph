@@ -23,8 +23,8 @@ $(document).ready(function() {
         SetupAdd();
     <?php } else { ?>
         SetupRemove(<?php echo $parentPoolId; ?>);
-        // TODO: Conditionally set up keyboard nav based on use preferences.
-        InitKeynav();
+        <?php /* TODO: Conditionally set up keyboard nav based on use preferences. */
+        /* InitKeynav(); */ ?>
     <?php } ?>
     SetupFlag();
 });
@@ -112,6 +112,7 @@ function RemoveFromPool(poolid) {
         }
     });
 }
+<?php /*
 function InitKeynav() {
     $(document).keydown(function(e) {
         if ($(document).width() > $(window).width()) return;
@@ -132,3 +133,4 @@ function InitKeynav() {
         e.preventDefault();
     });
 }
+*/ ?>

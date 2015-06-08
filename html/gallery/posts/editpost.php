@@ -2,8 +2,6 @@
 // Page for receiving POSTS to edit a gallery post.
 // URL: /gallery/post/edit/
 
-define("DEBUG", true);
-
 include_once("../../header.php");
 include_once(SITE_ROOT."gallery/includes/functions.php");
 
@@ -41,5 +39,6 @@ $tagstr = implode(" ", $tagstrarray);
 UpdatePost($tagstr, $post_id, $user);
 // TODO: Update post description.
 
+$_SESSION['gallery_action_message'] = "Post updated";
 header("Location: /gallery/post/show/$post_id/");
 ?>
