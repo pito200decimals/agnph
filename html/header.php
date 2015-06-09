@@ -1,4 +1,5 @@
 <?php
+// Hatch: Comment for Testing GIT...
 // Standard header that includes all the important files. Will reside in the site root.
 
 // Find the site root directory.
