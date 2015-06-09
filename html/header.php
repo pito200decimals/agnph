@@ -2,6 +2,8 @@
 // Hatch: Comment for Testing GIT...
 // Standard header that includes all the important files. Will reside in the site root.
 
+session_start();
+
 // Find the site root directory.
 $folder_level = "";
 while (!file_exists($folder_level.__FILE__)) {
@@ -49,6 +51,7 @@ if (sql_query_into($result, "SELECT * FROM ".SITE_NAV_TABLE." ORDER BY ItemOrder
         if (mb_strlen($prefix) == 5 && mb_strpos($link_url, $prefix) !== FALSE) {
             $nav['highlight'] = true;
         }
+        unset($prefix);
         $vars['navigation'][] = $nav;
     }
 } else {

@@ -3,14 +3,18 @@
 {% block styles %}
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/gallery/style.css" />
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/gallery/viewpost-style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/comments-style.css" />
 {% endblock %}
 
 {% block scripts %}
     {% if canEdit %}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
         <script src="{{ skinDir }}/gallery/posts/viewpost-script.php?pi={{ post.PostId }}&ppi={{ post.ParentPoolId }}"></script>
     {% endif %}
 {% endblock %}
+
+{% use 'includes/comment-block.tpl' %}
 
 {% block content %}
     <div class="headerbar">
@@ -26,6 +30,14 @@
         {% elseif post.Status == "D" %}
             <div class="flaggedbox">
                 <p><strong>This post has been deleted</strong></p>
+            </div>
+        {% endif %}
+        {% if action %}
+            <div class="completed-action-box">
+                <p>
+                    <strong>{{ action }}</strong>
+                    <input type="button"onclick="$('.completed-action-box').hide();" value="X" />
+                </p>
             </div>
         {% endif %}
     </div>
@@ -89,7 +101,7 @@
                 {% endif %}
                 <li>Posted: {% autoescape false %}{{ post.postedHtml }}{% endautoescape %}</li>
                 <li>Rating: {% autoescape false %}{{ post.ratingHtml }}{% endautoescape %}</li>
-                <li>Score: {{ post.Score }}</li>
+                <li>Favorites: {{ post.NumFavorites }}</li>
                 {% if post.FileSize != "" %}<li>Size: {{ post.FileSize }}</li>{% endif %}
                 <li>Views: {{ post.NumViews }}</li>
                 <li><a href="/gallery/post/show/{{ post.PostId }}/history/">Tag History</a></li>
@@ -142,7 +154,19 @@
                         <a href="#" onclick="$('#unflagform')[0].submit();return false;">Unflag Post</a>
                     </li>
                 {% endif %}
-                <li>Add to Favorites</li>
+                <li>
+                    {% if isFavorited %}
+                        <form id="favorite-form" action="" method="POST">
+                            <input type="hidden" name="favorite-action" value="remove" />
+                            <a href="#" onclick="document.getElementById('favorite-form').submit();return false;">Remove from Favorites</a>
+                        </form>
+                    {% else %}
+                        <form id="favorite-form" action="" method="POST">
+                            <input type="hidden" name="favorite-action" value="add" />
+                            <a href="#" onclick="document.getElementById('favorite-form').submit();return false;">Add to Favorites</a>
+                        </form>
+                    {% endif %}
+                </li>
                 <li><a id="poolaction" href="#"></a><span id="poolactionworking" hidden><small>Processing...</small></span></li>
             </ul>
         </div>
@@ -167,7 +191,7 @@
     </div>
     <div class="mainpanel">
         {% if post.Status!="D" %}
-        {# Only render image if status is not deleted #}
+            {# Only render image if status is not deleted #}
             <p>
                 {% if previewUrl==downloadUrl %}
                     <img class="previewImg" src="{{ previewUrl }}" />
@@ -196,6 +220,26 @@
                     <br />
                     <input type="submit" value="Save Changes" />
                 </form>
+            </div>
+            <div class="comment-section">
+                {% if comments|length > 0 %}
+                    <ul class="comment-list">
+                        {% for comment in comments %}
+                            {{ block('comment') }}
+                        {% endfor %}
+                    </ul>
+                    <span class="comment-iterator">{% autoescape false %}{{ commentIterator }}{% endautoescape %}</span>
+                {% else %}
+                    <span class="no-comments">No comments posted</span>
+                {% endif %}
+                {% if user and canComment%}
+                    <input id="commentbutton" type="button" value="Add Comment"/>
+                    <form id="commentform" action="#" method="POST">
+                        <textarea id="commenttextbox" name="text" class="commenttextbox">
+                        </textarea>
+                        <input type="submit" value="Add Comment" />
+                    </form>
+                {% endif %}
             </div>
         {% endif %}
     </div>

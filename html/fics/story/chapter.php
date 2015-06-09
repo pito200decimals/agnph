@@ -13,6 +13,10 @@ if (!isset($_GET['chapter']) || !is_numeric($_GET['chapter'])) InvalidURL();
 $chapternum = $_GET['chapter'];
 
 $story = GetStory($sid) or RenderErrorPage("Story not found");
+if ($story['ApprovalStatus'] == 'D') {
+    RenderErrorPage("Story not found");
+    return;
+}
 $chapters = GetChaptersInfo($sid);
 if ($chapternum <= 0 || $chapternum > sizeof($chapters)) RenderErrorPage("Chapter not found");
 $chapter = $chapters[$chapternum - 1];
@@ -38,18 +42,18 @@ $comments = array_filter($chapterReviews, function($review) use ($chapter) {
 $reviews = array_filter($chapterReviews, function($review) use ($chapter) {
     return $review['IsReview'] && $review['ChapterId'] == $chapter['ChapterId'];
 });
-ConstructReviewBlockIterator($comments, $vars['commentIterator'], !isset($_GET['reviews']),
+ConstructCommentBlockIterator($comments, $vars['commentIterator'], !isset($_GET['reviews']),
     function($index) use ($sid, $chapternum) {
         $offset = ($index - 1) * DEFAULT_FICS_COMMENTS_PER_PAGE;
         $url = "/fics/story/$sid/$chapternum/?offset=$offset";
         return $url;
-    });
-ConstructReviewBlockIterator($reviews, $vars['reviewIterator'], isset($_GET['reviews']),
+    }, DEFAULT_FICS_COMMENTS_PER_PAGE);
+ConstructCommentBlockIterator($reviews, $vars['reviewIterator'], isset($_GET['reviews']),
     function($index) use ($sid, $chapternum) {
         $offset = ($index - 1) * DEFAULT_FICS_COMMENTS_PER_PAGE;
         $url = "/fics/story/$sid/$chapternum/?reviews&offset=$offset#reviews";
         return $url;
-    });
+    }, DEFAULT_FICS_COMMENTS_PER_PAGE);
 $vars['comments'] = $comments;
 $vars['reviews'] = $reviews;
 

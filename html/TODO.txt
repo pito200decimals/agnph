@@ -1,7 +1,48 @@
 TODOs
 
-- Gallery blacklists
+== FORUMS ==
+- Re-check forums functionality
+- Admin lock/move posts
+- Reply-to
+- Spoiler tags
+
+== GALLERY ==
 - Gallery linking to source on delete
 - Gallery upload limits
+- Gallery/Fics mass tag edits?
+- Slideshow view?
+- Verify tag aliasing works once admin support for that is added
+- IP address tracking for uploads
+- Link to posts on delete banner
+- Image formats other than png, jpg, gif (swf, webm?)
+- Upvote/Downvote (On hold for now. Don't know where to put buttons. Feature not used in Ouroboros gallery)
+- Comment deletion
+
+== FICS ==
+- Fics search ordering?
+- More complex search queries ("OR", more metadata filters like ordering?)
+- Index page, including news and featured stories, perhaps random selection
+- User favorites
+- Author following
+- Comment deletion
+
+== SITE ==
 - Check for vuln's for style background-image URL's.
 - Splash for Disclaimer/Warning/Age gate.
+- Link news from forums to each section/home page?
+- Search string length attacks
+- Oekaki section
+- Admin site management
+    - Global tag aliasing support
+- Global site statistics (including user action logging?)
+- Polls?
+- Timezone/date management
+- General help pages
+- General about section, admin bios, etc.
+
+== ACCOUNT ==
+- Mailbox/PM system
+- User ban system
+- Global user action logging
+- Non-user IP tracking (DoS investigating, user demographic statistics, etc?)
+- Admin management of user permissions

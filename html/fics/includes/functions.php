@@ -8,6 +8,7 @@ include_once(SITE_ROOT."includes/util/sql.php");
 include_once(SITE_ROOT."includes/util/html_funcs.php");
 include_once(SITE_ROOT."includes/util/file.php");
 include_once(SITE_ROOT."includes/util/user.php");
+include_once(SITE_ROOT."includes/comments/comments_functions.php");
 
 function CanUserCreateStory($user) {
     // Only registered users.
@@ -23,6 +24,14 @@ function CanUserDeleteStory($story, $user) {
     if (!IsUserActivated($user)) return false;
     return $user['UserId'] == $story['AuthorUserId'] || $user['FicsPermissions'] == 'A';
 }
+function CanUserUndeleteStory($story, $user) {
+    if (!IsUserActivated($user)) return false;
+    return $user['FicsPermissions'] == 'A';
+}
+function CanUserSearchDeletedStories($user) {
+    if (!IsUserActivated($user)) return false;
+    return $user['FicsPermissions'] == 'A';
+}
 function CanUserComment($user) {
     if (!IsUserActivated($user)) return false;
     return true;
@@ -34,6 +43,10 @@ function CanUserReview($user) {
 function CanUserCreateFicsTags($user) {
     if (!IsUserActivated($user)) return false;
     return true;
+}
+function CanUserFeatureStory($story, $user) {
+    if (!IsUserActivated($user)) return false;
+    return $user['FicsPermissions'] == 'A';
 }
 
 // General path functions.
@@ -85,12 +98,26 @@ function FillStoryInfo(&$story) {
         break;
     }
 
-    // TODO
     $story['tags'] = GetTagsInfo(GetTagsIdsForStory($story['StoryId']));
 
     $story['DateCreated'] = FormatDate($story['DateCreated'], FICS_DATE_FORMAT);
     $story['DateUpdated'] = FormatDate($story['DateUpdated'], FICS_DATE_FORMAT);
     $story['stars'] = GetStarsHTML($story['TotalStars'], $story['TotalRatings']);
+
+    global $user;
+    // Set up permissions.
+    if (isset($user) && CanUserEditStory($story, $user)) {
+        $story['canEdit'] = true;
+    }
+    if (isset($user) && CanUserFeatureStory($story, $user)) {
+        $story['canFeature'] = true;
+    }
+    if (isset($user) && CanUserDeleteStory($story, $user)) {
+        $story['canDelete'] = true;
+    }
+    if (isset($user) && CanUserUndeleteStory($story, $user)) {
+        $story['canUnDelete'] = true;
+    }
 }
 
 // Gets all chapter metadata for a story (everything except chapter content).
@@ -165,7 +192,7 @@ function GetReviews($sid) {
     if ($users != null) {
         foreach ($reviews as &$review) {
             $uid = $review['ReviewerUserId'];
-            $review['reviewer'] = $users[$uid];
+            $review['commenter'] = $users[$uid];
         }
     }
     return $reviews;
@@ -248,33 +275,4 @@ function GetStarsHTML($totalStars, $numReviews) {
     return $stars;
 }
 
-function ConstructReviewBlockIterator(&$items, &$iterator, $is_offset, $url_fn) {
-    if (sizeof($items) > DEFAULT_FICS_COMMENTS_PER_PAGE) {
-        if ($is_offset && isset($_GET['offset'])) $offset = $_GET['offset'];
-        else $offset = 0;
-        $iterator = Paginate($items, $offset, DEFAULT_FICS_COMMENTS_PER_PAGE,
-            function($index, $current_page, $max_page) use ($url_fn) {
-                if ($index == 0) {
-                    if ($current_page == 1) {
-                        return "";  // No link.
-                    } else {
-                        $url = $url_fn($current_page - 1);
-                        return "<a href='$url'>&lt;&lt;</a>";
-                    }
-                } else if ($index == $max_page + 1) {
-                    if ($current_page == $max_page) {
-                        return "";  // No link.
-                    } else {
-                        $url = $url_fn($current_page + 1);
-                        return "<a href='$url'>&gt;&gt;</a>";
-                    }
-                } else if ($index == $current_page) {
-                    return "<a>[$index]</a>";  // No link.
-                } else {
-                        $url = $url_fn($index);
-                    return "<a href='$url'>$index</a>";
-                }
-            }, true);
-    }
-}
 ?>

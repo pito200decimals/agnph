@@ -10,9 +10,6 @@ if (!isset($_GET['uid']) || !is_numeric($_GET['uid'])) {
     return;
 }
 $profile_id = (int)$_GET['uid'];
-
-$profile_users = array();
-LoadTableData(array(USER_TABLE), "UserId", array($profile_id), $profile_users) or RenderErrorPage("Profile not found.");
-$profile_user = $profile_users[$profile_id];
+LoadAllUserPreferences($profile_id, $profile_user, true);
 $vars['profile']['user'] = $profile_user;
 ?>

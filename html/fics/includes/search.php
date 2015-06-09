@@ -6,28 +6,82 @@ include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."includes/util/sql.php");
 include_once(SITE_ROOT."includes/util/table_data.php");
 include_once(SITE_ROOT."includes/tagging/tag_functions.php");
+include_once(SITE_ROOT."fics/includes/functions.php");
 
-function GetSearchClauses($search_term_array) {
-    if (sizeof($search_term_array) > MAX_FICS_SEARCH_TERMS) $search_term_array = array_slice($search_term_array, 0, MAX_FICS_SEARCH_TERMS);
+// TODO: Ordering.
+
+function GetSearchClauses($search_term_string) {
+    $search_term_array = explode(" ", $search_term_string);
+    $search_term_array = array_map("trim", $search_term_array);
+    $search_term_array = array_filter($search_term_array, "mb_strlen");
+    $search_term_array = array_slice($search_term_array, 0, MAX_FICS_SEARCH_TERMS);
+    $search_term_array = array_merge($search_term_array, GetBlacklistClauses($search_term_array));
     $clauses = array_filter(array_map("GetClause", $search_term_array), "mb_strlen");
-    return implode(" AND ", array_map(function($clause) { return "($clause)"; }, $clauses));
+    $clause_string = implode(" AND ", array_map(function($clause) { return "($clause)"; }, $clauses));
+    // If no status:, omit pending and deleted by default.
+    if (!contains($clause_string, "ApprovalStatus")) {
+        $clauses[] = "(ApprovalStatus<>'P' AND ApprovalStatus<>'D')";
+        $clause_string = implode(" AND ", array_map(function($clause) { return "($clause)"; }, $clauses));
+    }
+    return $clause_string;
+}
+
+function GetBlacklistClauses($terms) {
+    global $user;
+    if (!isset($user)) return array();
+    $blacklist_terms = explode(" ", $user['FicsTagBlacklist']);
+    $blacklist_terms = array_filter($blacklist_terms, "mb_strlen");
+    $blacklist_terms = array_slice($blacklist_terms, 0, MAX_FICS_BLACKLIST_TAGS);
+    $blacklist_terms = array_filter($blacklist_terms, function($term) use ($terms) {
+        return !in_array($term, $terms);
+    });
+    $blacklist_terms = array_map(function($term) { return "-$term"; }, $blacklist_terms);
+    return $blacklist_terms;
 }
 
 function GetClause($search_term) {
+    global $user;
+    if (mb_substr($search_term, 0, 1) == "-") {
+        while (mb_substr($search_term, 0, 1) == "-") {
+            $search_term = mb_substr($search_term, 1);
+        }
+        return "NOT(".GetClause($search_term).")";
+    }
     if (mb_strlen($search_term) == 0) return "";
-    if (mb_strtolower($search_term) == "completed" ||
-        mb_strtolower($search_term) == "complete" ||
-        mb_strtolower($search_term) == "completed:yes" ||
-        mb_strtolower($search_term) == "completed:true") return "Completed=TRUE";
-    if (mb_strtolower($search_term) == "not_completed" ||
-        mb_strtolower($search_term) == "incomplete" ||
-        mb_strtolower($search_term) == "completed:no" ||
-        mb_strtolower($search_term) == "completed:false") return "Completed=FALSE";
-    if (mb_strtolower($search_term) == "rating:g") return "Rating='G'";
-    if (mb_strtolower($search_term) == "rating:pg") return "Rating='P'";
-    if (mb_strtolower($search_term) == "rating:pg-13") return "Rating='T'";
-    if (mb_strtolower($search_term) == "rating:r") return "Rating='R'";
-    if (mb_strtolower($search_term) == "rating:xxx") return "Rating='X'";
+    $lower_term = mb_strtolower($search_term);
+    if ($lower_term == "completed" ||
+        $lower_term == "complete" ||
+        $lower_term == "completed:yes" ||
+        $lower_term == "completed:true") return "Completed=TRUE";
+    if ($lower_term == "not_completed" ||
+        $lower_term == "incomplete" ||
+        $lower_term == "completed:no" ||
+        $lower_term == "completed:false") return "Completed=FALSE";
+    if ($lower_term == "rating:g") return "Rating='G'";
+    if ($lower_term == "rating:pg") return "Rating='P'";
+    if ($lower_term == "rating:pg-13") return "Rating='T'";
+    if ($lower_term == "rating:r") return "Rating='R'";
+    if ($lower_term == "rating:xxx") return "Rating='X'";
+    if ($lower_term == "featured" ||
+        $lower_term == "featured:yes" ||
+        $lower_term == "featured:true") return "Featured<>'N'";
+    if ($lower_term == "not_featured" ||
+        $lower_term == "featured:no" ||
+        $lower_term == "featured:false") return "Featured='N'";
+    if (startsWith($lower_term, "status:p")) {
+        return "ApprovalStatus='P'";
+    } else if (startsWith($lower_term, "status:a")) {
+        return "ApprovalStatus='A'";
+    } else if (startsWith($lower_term, "status:d")) {
+        // Don't allow searches for deleted fics.
+        if (isset($user) && CanUserSearchDeletedStories($user)) {
+            return "ApprovalStatus='D'";
+        }
+    }
+    // Strip "", if it exists. No multi-byte needed.
+    // Allows for searching for terms that are also filters.
+    $search_term = str_replace("\"", "", $search_term);
+
     $tag = ClauseForTag($search_term);
     $title = ClauseForTitle($search_term);
     $author = ClauseForAuthor($search_term);

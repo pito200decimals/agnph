@@ -73,6 +73,8 @@
     });
 {% endblock %}
 
+{% use 'includes/comment-block.tpl' %}
+
 {% block reviewblock %}
 <div class="comments">
     <a id="reviews"></a>
@@ -82,24 +84,9 @@
 	</ul>
     <div id="tab-comments" class="tab-content{% if defaultcomments %}  current{% endif %}">
         {% if comments|length > 0 %}
-            <ul>
+            <ul class="comment-list">
                 {% for comment in comments %}
-                    <li class="comment">
-                        {% if comment.reviewer.Avatar|length > 0 %}
-                            {# avatar image #}
-                            <img class="avatarimg" src="{{ comment.reviewer.Avatar }}" />
-                        {% else %}
-                            {# default avatar image #}
-                            <img class="avatarimg" src="http://i.imgur.com/CKd8AGC.png" />
-                        {% endif %}
-                        <p class="commentheader">
-                            <a href="/user/{{ comment.reviewer.UserId }}/">{{ comment.reviewer.DisplayName }}</a><br />
-                            <span>Date: {{ comment.date }}</span>
-                        </p>
-                        <p class="commenttext">
-                        {% autoescape false %}{{ comment.ReviewText }}{% endautoescape %}
-                        </p>
-                    </li>
+                    {{ block('comment') }}
                 {% endfor %}
             </ul>
             <span class="comment-iterator">{% autoescape false %}{{ commentIterator }}{% endautoescape %}</span>
@@ -118,23 +105,23 @@
     </div>
     <div id="tab-reviews" class="tab-content{% if defaultreviews %} current{% endif %}">
         {% if reviews|length > 0 %}
-            <ul>
+            <ul class="comment-list">
                 {% for review in reviews %}
                     <li class="comment">
-                        {% if review.reviewer.Avatar|length > 0 %}
+                        {% if review.commenter.Avatar|length > 0 %}
                             {# avatar image #}
-                            <img class="avatarimg" src="{{ review.reviewer.Avatar }}" />
+                            <img class="avatarimg" src="{{ review.commenter.Avatar }}" />
                         {% else %}
                             {# default avatar image #}
                             <img class="avatarimg" src="http://i.imgur.com/CKd8AGC.png" />
                         {% endif %}
                         <p class="commentheader">
-                            <strong>Reviewer:</strong> <a href="/user/{{ review.reviewer.UserId }}/">{{ review.reviewer.DisplayName }}</a>{% autoescape false %}{{ review.stars }}{% endautoescape %}<br />
+                            <strong>Reviewer:</strong> <a href="/user/{{ review.commenter.UserId }}/">{{ review.commenter.DisplayName }}</a>{% autoescape false %}{{ review.stars }}{% endautoescape %}<br />
                             <strong>Date:</strong> {{ review.date }}{% if review.ChapterId > 0 %} <strong>Chapter:</strong> {{ review.chapterTitle }}{% endif %}
                         </p>
-                        <p class="commenttext">
+                        <div class="commenttext">
                         {% autoescape false %}{{ review.ReviewText }}{% endautoescape %}
-                        </p>
+                        </div>
                         {% if review.AuthorResponseText|length > 0 %}
                             <div class="commentresponse">
                                 Author's Response:<br />

@@ -2,6 +2,23 @@
 <div class="storyblock">
     <div class="storyblockcontainer">
         <div class="storyblockheader">
+            {% if story.Featured=="F" %}
+                <img class="ribbon" src="/images/blueribbon.gif" />
+            {% elseif story.Featured=="G" %}
+                <img class="ribbon" src="/images/goldribbon.gif" />
+            {% elseif story.Featured=="S" %}
+                <img class="ribbon" src="/images/silverribbon.gif" />
+            {% elseif story.Featured=="Z" %}
+                <img class="ribbon" src="/images/bronzeribbon.gif" />
+            {% elseif story.Featured=="f" %}
+                <img class="ribbon" src="/images/redribbon.gif" />
+            {% elseif story.Featured=="g" %}
+                <img class="ribbon" src="/images/goldribbon_old.gif" />
+            {% elseif story.Featured=="s" %}
+                <img class="ribbon" src="/images/silverribbon_old.gif" />
+            {% elseif story.Featured=="z" %}
+                <img class="ribbon" src="/images/bronzeribbon_old.gif" />
+            {% endif %}
             <p class="mininfo">
                 <span class="title">
                     <a href="/fics/story/{{ story.StoryId }}/">{{ story.Title }}</a>
@@ -51,8 +68,14 @@
             </ul>
         </div>
         <div class="storyblockfooter">
-            {% if canEdit or user.UserId == story.AuthorUserId %}
+            {% if story.canEdit %}
+                {# canFeature will always have canEdit #}
                 [<a href="/fics/edit/{{ story.StoryId }}/">Edit</a>]
+            {% endif %}
+            {% if story.canDelete and story.ApprovalStatus=='A' %}
+                [<a href="/fics/delete/{{ story.StoryId }}/">Delete</a>]
+            {% elseif story.canUnDelete and story.ApprovalStatus=="D" %}
+                [<a href="/fics/undelete/{{ story.StoryId }}/">Un-Delete</a>]
             {% endif %}
         </div>
     </div>

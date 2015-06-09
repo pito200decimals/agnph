@@ -40,7 +40,11 @@ if (!isset($user)) {
 }
 
 if ($action == "edit") {
-    $story = GetStory($sid) or RenderErrorPage("Story not found");;
+    $story = GetStory($sid) or RenderErrorPage("Story not found");
+    if ($story['ApprovalStatus'] == 'D') {
+        RenderErrorPage("Story not found");
+        return;
+    }
     if (!CanUserEditStory($story, $user)) RenderErrorPage("Not authorized to edit story");
     $chapters = GetChaptersInfo($sid) or RenderErrorPage("Story not found");
     debug($story['tags']);

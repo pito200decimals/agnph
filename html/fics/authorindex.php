@@ -32,7 +32,7 @@ $author_ids = array_map(function($author) {
 }, $authors);
 $joined_ids = implode(",", $author_ids);
 
-if (sql_query_into($result, "SELECT * FROM ".FICS_STORY_TABLE." WHERE AuthorUserId IN ($joined_ids);", 0)) {
+if (sql_query_into($result, "SELECT * FROM ".FICS_STORY_TABLE." WHERE AuthorUserId IN ($joined_ids) AND ApprovalStatus<>'D';", 0)) {
     $author_id_map = array();
     foreach ($authors as &$author) {
         $author['storyCount'] = 0;

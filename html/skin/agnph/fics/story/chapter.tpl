@@ -4,6 +4,7 @@
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/fics/style.css" />
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/fics/story/story-style.css" />
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/fics/story/chapter-style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/comments-style.css" />
 {% endblock %}
 
 {% use 'fics/reviewblock.tpl' %}

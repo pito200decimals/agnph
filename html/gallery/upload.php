@@ -26,6 +26,10 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
     } else if (isset($_POST['source'])) {
         // Get file from url.
         $url = $_POST['source'];
+        if (startsWith($url, "https://")) {
+            // Replace with non-https.
+            $url = "http://".mb_substr($url, 8);
+        }
         $external_ext = GetFileExtension($url);
         if ($external_ext == null) {
             RenderErrorPage("Error while uploading file.");

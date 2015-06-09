@@ -13,9 +13,7 @@ if (!isset($_GET['uid']) || !is_numeric($_GET['uid'])) {
 
 // Note: This is duplicated from profile_setup.php, but throwing AJAXErr instead of normal errors.
 $profile_id = (int)$_GET['uid'];
-$profile_users = array();
-LoadTableData(array(USER_TABLE), "UserId", array($profile_id), $profile_users) or AJAXErr();
-$profile_user = $profile_users[$profile_id];
+LoadAllUserPreferences($profile_id, $profile_user);
 $uid = $profile_user['UserId'];  // Get database value, not user input value.
 
 if (!isset($user) || !CanUserEditBio($user, $profile_user)) {

@@ -24,9 +24,10 @@ $vars['action'] = $action;
 
 if (!isset($_GET['sid']) || !is_numeric($_GET['sid'])) InvalidURL();
 $sid = $_GET['sid'];
-$story = GetStory($sid);
-if ($story == null) {
+$story = GetStory($sid) or RenderErrorPage("Story not found");
+if ($story['ApprovalStatus'] == 'D') {
     RenderErrorPage("Story not found");
+    return;
 }
 $vars['storyid'] = $story['StoryId'];
 $chapters = GetChaptersInfo($sid);

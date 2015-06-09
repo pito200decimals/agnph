@@ -14,6 +14,7 @@ define("MAX_FILE_SIZE", 50 * 1024 * 1024);  // 50 MB.
 // Site data tables.
 define("SITE_NAV_TABLE", "nav_links");
 define("SITE_TAG_ALIAS_TABLE", "tag_aliases");
+define("SITE_LOGGING_TABLE", "action_log");
 
 // User content data tables.
 define("USER_TABLE", "user");
@@ -33,8 +34,8 @@ define("GALLERY_POST_TABLE", "gallery_posts");
 define("GALLERY_TAG_TABLE", "gallery_tags");
 define("GALLERY_POST_TAG_TABLE", "gallery_post_tag");
 define("GALLERY_POST_TAG_HISTORY_TABLE", "gallery_tag_history");
-define("GALLERY_TAG_ALIAS_TABLE", "gallery_tag_alias");
 define("GALLERY_POOLS_TABLE", "gallery_pools");
+define("GALLERY_COMMENT_TABLE", "gallery_comments");
 
 // Fics tables.
 define("FICS_STORY_TABLE", "fics_stories");
@@ -49,12 +50,13 @@ define("DEFAULT_FORUM_THREADS_PER_PAGE", 25);
 define("DEFAULT_FORUM_POSTS_PER_PAGE", 10);
 define("DEFAULT_PAGE_ITERATOR_SIZE", 2);  // 2 => 1 ... 5 6 [7] 8 9 ... 12
 define("DEFAULT_ALLOWED_TAGS", "a[href],p[style],span[style],b,u,i,strong,em,ol,ul,li,center,hr,br,div,pre,small");  // For Forums, Fics and Bios.
-define("DEFAULT_GALLERY_POSTS_PER_PAGE", 45);
+define("DEFAULT_GALLERY_POSTS_PER_PAGE", 45);  // Customizable.
 define("DEFAULT_GALLERY_PAGE_ITERATOR_SIZE", 2);
 define("MAX_GALLERY_SEARCH_TERMS", 6);
 define("MAX_FICS_SEARCH_TERMS", 6);
 define("GALLERY_LIST_ITEMS_PER_PAGE", 50);
-define("DEFAULT_FICS_STORIES_PER_PAGE", 15);
+define("DEFAULT_GALLERY_COMMENTS_PER_PAGE", 10);
+define("DEFAULT_FICS_STORIES_PER_PAGE", 15);  // Customizable.
 define("DEFAULT_FICS_COMMENTS_PER_PAGE", 10);
 define("FICS_LIST_ITEMS_PER_PAGE", 50);
 
@@ -85,5 +87,13 @@ define("PROFILE_DATE_TIME_FORMAT", "Y-m-d H:i:s");
 define("PROFILE_DOB_FORMAT", "F d");
 define("MIN_COMMENT_STRING_SIZE", 10);
 define("MIN_FICS_TITLE_SUMMARY_SEARCH_STRING_SIZE", 3);
+define("MAX_FORUMS_SIGNATURE_LENGTH", 256);
+define("MAX_FORUMS_THREADS_PER_PAGE", 100);
+define("MAX_FORUMS_POSTS_PER_PAGE", 50);
+define("MAX_GALLERY_POSTS_PER_PAGE", 100);
+define("MAX_FICS_POSTS_PER_PAGE", 100);
+define("MAX_GALLERY_BLACKLIST_TAGS", 50);
+define("MAX_FICS_BLACKLIST_TAGS", 50);
+define("FICS_NOT_FEATURED", "D");  // Also present in templates: editstory.tpl
 
 ?>

@@ -70,6 +70,22 @@ if ($post['ParentPoolId'] != -1) {
 }
 
 if (isset($user)) {
+    $uid = $user['UserId'];
+    if (isset($_POST['favorite-action'])) {
+        // Update favorite status.
+        if ($_POST['favorite-action'] == "add") {
+            $now = time();
+            sql_query("INSERT INTO ".GALLERY_USER_FAVORITES_TABLE." (UserId, PostId, Timestamp) VALUES ($uid, $pid, $now);");
+            UpdatePostStatistics($pid);
+            $_SESSION['gallery_action_message'] = "Added to Favorites";
+        } else if ($_POST['favorite-action'] == "remove") {
+            sql_query("DELETE FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE UserId=$uid AND PostId=$pid;");
+            UpdatePostStatistics($pid);
+            $_SESSION['gallery_action_message'] = "Removed from Favorites";
+        }
+    }
+    // Check for user favorite.
+    $vars['isFavorited'] = sql_query_into($result, "SELECT * FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE UserId=$uid AND PostId=$pid;", 1);
     // Settings for action perms flags.
     if (CanUserEditPost($user)) {
         $vars['canEdit'] = true;
@@ -91,9 +107,37 @@ if (isset($user)) {
             $vars['canApprove'] = true;
         }
     }
+    if (CanUserCommentOnPost($user)) {
+        $vars['canComment'] = true;
+    }
 }
+// Init comments.
+// First, do a POST if we were previously posting a comment.
+if (isset($_POST['text'])) {
+    HandleCommentPOST($pid);
+}
+if (isset($_GET['offset']) && is_numeric($_GET['offset'])) {
+    $comment_offset = (int)($_GET['offset']);
+    if ($comment_offset < 0) $comment_offset = 0;
+} else {
+    $comment_offset = 0;
+}
+$comments = GetComments($pid);
+debug(sizeof($comments));
+ConstructCommentBlockIterator($comments, $vars['commentIterator'], true /* allow_offset */,
+    function($index) use ($pid) {
+        $offset = ($index - 1) * DEFAULT_GALLERY_COMMENTS_PER_PAGE;
+        $url = "/gallery/post/show/$pid/?offset=$offset";
+        return $url;
+    }, DEFAULT_GALLERY_COMMENTS_PER_PAGE);
+debug(sizeof($comments));
+$vars['comments'] = $comments;
 
 PreparePostStatistics($post);
+if (isset($_SESSION['gallery_action_message'])) {
+    $vars['action'] = $_SESSION['gallery_action_message'];
+    unset($_SESSION['gallery_action_message']);
+}
 
 // Increment view count, and do SQL after page is rendered.
 $post['NumViews']++;
@@ -143,5 +187,44 @@ function CreatePoolIterator($post) {
     $curr_link = "<a href='$pool_url'>".$pool['Name']."</a>";
     $next_link = (isset($next_url) ? "<a id='nextinpool' href='$next_url'>&gt;&gt;</a>" : "");
     return $prev_link . $curr_link . $next_link;
+}
+function GetComments($pid) {
+    $escaped_pid = sql_escape($pid);
+    $comments = array();
+    if (!sql_query_into($result, "SELECT * FROM ".GALLERY_COMMENT_TABLE." WHERE PostId='$escaped_pid' ORDER BY CommentDate ASC, CommentId ASC;", 0)) return null;
+    $ids = array();
+    while ($row = $result->fetch_assoc()) {
+        $ids[] = $row['UserId'];
+        $row['date'] = FormatDate($row['CommentDate'], FICS_DATE_FORMAT);
+        $comments[] = $row;
+    }
+    $ids = array_unique($ids);
+    $users = GetUsers($ids);
+    if ($users != null) {
+        foreach ($comments as &$comment) {
+            $uid = $comment['UserId'];
+            $comment['commenter'] = $users[$uid];
+        }
+    }
+    return $comments;
+}
+function GetUsers($uids) {
+    $ret = array();
+    $tables = array(USER_TABLE);
+    if (!LoadTableData($tables, "UserId", $uids, $ret)) return null;
+    return $ret;
+}
+function HandleCommentPOST($pid) {
+    global $user;
+    if (!isset($user)) RenderErrorPage("You must be logged in to comment");
+    if (!CanUserCommentOnPost($user)) RenderErrorPage("You are not authorized to comment");
+    $text = SanitizeHTMLTags($_POST['text'], DEFAULT_ALLOWED_TAGS);
+    if (mb_strlen($text) < MIN_COMMENT_STRING_SIZE) RenderErrorPage("Review length is too short");
+    $escaped_text = sql_escape($text);
+    $uid = $user['UserId'];
+    $now = time();
+    sql_query("INSERT INTO ".GALLERY_COMMENT_TABLE." (PostId, UserId, CommentDate, CommentText) VALUES ($pid, $uid, $now, '$escaped_text');");
+    header("Location: /gallery/post/show/$pid/");
+    exit();
 }
 ?>

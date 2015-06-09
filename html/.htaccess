@@ -21,11 +21,16 @@ RewriteRule ^forums/markallread/(\d+)/?$ /forums/mark_all_read.php?b=$1
 
 # Rewrites for accounts section
 RewriteRule ^user/(\d+)/?$ /user/profile.php?uid=$1
+#RewriteRule ^user/(\d+)/forums/?$ /user/profile.php?uid=$1
+#RewriteRule ^user/(\d+)/gallery/?$ /user/profile.php?uid=$1
+#RewriteRule ^user/(\d+)/fics/?$ /user/profile.php?uid=$1
+#RewriteRule ^user/(\d+)/oekaki/?$ /user/profile.php?uid=$1
+RewriteRule ^user/(\d+)/preferences/?$ /user/preferences.php?uid=$1
 RewriteRule ^user/(\d+)/preferences/bio/save/?$ /user/savebio.php?uid=$1
 
 # Rewrites for gallery pages
 RewriteRule ^gallery/post/?$ /gallery/posts/postindex.php [QSA]
-RewriteRule ^gallery/post/show/(\d+)/?$ /gallery/posts/viewpost.php?post=$1
+RewriteRule ^gallery/post/show/(\d+)/?$ /gallery/posts/viewpost.php?post=$1 [QSA]
 RewriteRule ^gallery/upload/?$ /gallery/upload.php
 RewriteRule ^gallery/edit/?$ /gallery/posts/editpost.php
 RewriteRule ^gallery/pools/?$ /gallery/pools/poolindex.php [QSA]
@@ -51,3 +56,5 @@ RewriteRule ^fics/story/chapter/order/?$ /fics/reorder_chapter.php
 RewriteRule ^fics/tags/?$ /fics/tags.php [QSA]
 RewriteRule ^fics/search/?$ /fics/storyindex.php [QSA]
 RewriteRule ^fics/authors/?$ /fics/authorindex.php [QSA]
+RewriteRule ^fics/delete/(\d+)/?$ /fics/delete_story.php?sid=$1&action=delete
+RewriteRule ^fics/undelete/(\d+)/?$ /fics/delete_story.php?sid=$1&action=undelete
