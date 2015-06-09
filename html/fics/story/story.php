@@ -42,18 +42,18 @@ $reviews = array_filter($storyReviews, function($review) {
     // Get reviews for story as well as all chapters.
     return $review['IsReview'];
 });
-ConstructReviewBlockIterator($comments, $vars['commentIterator'], !isset($_GET['reviews']),
+ConstructCommentBlockIterator($comments, $vars['commentIterator'], !isset($_GET['reviews']),
     function($index) use ($sid) {
         $offset = ($index - 1) * DEFAULT_FICS_COMMENTS_PER_PAGE;
         $url = "/fics/story/$sid/?offset=$offset";
         return $url;
-    });
-ConstructReviewBlockIterator($reviews, $vars['reviewIterator'], isset($_GET['reviews']),
+    }, DEFAULT_FICS_COMMENTS_PER_PAGE);
+ConstructCommentBlockIterator($reviews, $vars['reviewIterator'], isset($_GET['reviews']),
     function($index) use ($sid) {
         $offset = ($index - 1) * DEFAULT_FICS_COMMENTS_PER_PAGE;
         $url = "/fics/story/$sid/?reviews&offset=$offset#reviews";
         return $url;
-    });
+    }, DEFAULT_FICS_COMMENTS_PER_PAGE);
 $vars['comments'] = $comments;
 $vars['reviews'] = $reviews;
 

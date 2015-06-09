@@ -30,7 +30,7 @@ RewriteRule ^user/(\d+)/preferences/bio/save/?$ /user/savebio.php?uid=$1
 
 # Rewrites for gallery pages
 RewriteRule ^gallery/post/?$ /gallery/posts/postindex.php [QSA]
-RewriteRule ^gallery/post/show/(\d+)/?$ /gallery/posts/viewpost.php?post=$1
+RewriteRule ^gallery/post/show/(\d+)/?$ /gallery/posts/viewpost.php?post=$1 [QSA]
 RewriteRule ^gallery/upload/?$ /gallery/upload.php
 RewriteRule ^gallery/edit/?$ /gallery/posts/editpost.php
 RewriteRule ^gallery/pools/?$ /gallery/pools/poolindex.php [QSA]

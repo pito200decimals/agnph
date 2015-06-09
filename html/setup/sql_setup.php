@@ -198,6 +198,16 @@ do_or_die(sql_query(
         Description TEXT(512) NOT NULL,
         PRIMARY KEY(PoolId)
     ) DEFAULT CHARSET=utf8;"));
+// Table containing comments on posts. TODO: Score?
+do_or_die(sql_query(
+    "CREATE TABLE ".GALLERY_COMMENT_TABLE." (
+        CommentId INT(11) UNSIGNED AUTO_INCREMENT,
+        PostId INT(11) NOT NULL,
+        UserId INT(11) NOT NULL,
+        CommentDate INT(11) NOT NULL,
+        CommentText TEXT(4096) NOT NULL,
+        PRIMARY KEY(CommentId)
+    ) DEFAULT CHARSET=utf8;"));
 // User preferences for gallery section.
 do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_USER_PREF_TABLE." (

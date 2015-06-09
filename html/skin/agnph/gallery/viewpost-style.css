@@ -186,3 +186,11 @@ textarea {
 .flageditbox {
     display: none;
 }
+
+#commentform {
+    display: none;
+}
+.comment-section {
+    background-color: white;
+    padding: 10px;
+}

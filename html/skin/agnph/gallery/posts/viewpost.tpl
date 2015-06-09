@@ -3,14 +3,18 @@
 {% block styles %}
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/gallery/style.css" />
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/gallery/viewpost-style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/comments-style.css" />
 {% endblock %}
 
 {% block scripts %}
     {% if canEdit %}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
         <script src="{{ skinDir }}/gallery/posts/viewpost-script.php?pi={{ post.PostId }}&ppi={{ post.ParentPoolId }}"></script>
     {% endif %}
 {% endblock %}
+
+{% use 'includes/comment-block.tpl' %}
 
 {% block content %}
     <div class="headerbar">
@@ -187,7 +191,7 @@
     </div>
     <div class="mainpanel">
         {% if post.Status!="D" %}
-        {# Only render image if status is not deleted #}
+            {# Only render image if status is not deleted #}
             <p>
                 {% if previewUrl==downloadUrl %}
                     <img class="previewImg" src="{{ previewUrl }}" />
@@ -216,6 +220,26 @@
                     <br />
                     <input type="submit" value="Save Changes" />
                 </form>
+            </div>
+            <div class="comment-section">
+                {% if comments|length > 0 %}
+                    <ul class="comment-list">
+                        {% for comment in comments %}
+                            {{ block('comment') }}
+                        {% endfor %}
+                    </ul>
+                    <span class="comment-iterator">{% autoescape false %}{{ commentIterator }}{% endautoescape %}</span>
+                {% else %}
+                    <span class="no-comments">No comments posted</span>
+                {% endif %}
+                {% if user and canComment%}
+                    <input id="commentbutton" type="button" value="Add Comment"/>
+                    <form id="commentform" action="#" method="POST">
+                        <textarea id="commenttextbox" name="text" class="commenttextbox">
+                        </textarea>
+                        <input type="submit" value="Add Comment" />
+                    </form>
+                {% endif %}
             </div>
         {% endif %}
     </div>

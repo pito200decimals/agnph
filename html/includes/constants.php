@@ -35,6 +35,7 @@ define("GALLERY_TAG_TABLE", "gallery_tags");
 define("GALLERY_POST_TAG_TABLE", "gallery_post_tag");
 define("GALLERY_POST_TAG_HISTORY_TABLE", "gallery_tag_history");
 define("GALLERY_POOLS_TABLE", "gallery_pools");
+define("GALLERY_COMMENT_TABLE", "gallery_comments");
 
 // Fics tables.
 define("FICS_STORY_TABLE", "fics_stories");
@@ -49,12 +50,13 @@ define("DEFAULT_FORUM_THREADS_PER_PAGE", 25);
 define("DEFAULT_FORUM_POSTS_PER_PAGE", 10);
 define("DEFAULT_PAGE_ITERATOR_SIZE", 2);  // 2 => 1 ... 5 6 [7] 8 9 ... 12
 define("DEFAULT_ALLOWED_TAGS", "a[href],p[style],span[style],b,u,i,strong,em,ol,ul,li,center,hr,br,div,pre,small");  // For Forums, Fics and Bios.
-define("DEFAULT_GALLERY_POSTS_PER_PAGE", 45);
+define("DEFAULT_GALLERY_POSTS_PER_PAGE", 45);  // Customizable.
 define("DEFAULT_GALLERY_PAGE_ITERATOR_SIZE", 2);
 define("MAX_GALLERY_SEARCH_TERMS", 6);
 define("MAX_FICS_SEARCH_TERMS", 6);
 define("GALLERY_LIST_ITEMS_PER_PAGE", 50);
-define("DEFAULT_FICS_STORIES_PER_PAGE", 15);
+define("DEFAULT_GALLERY_COMMENTS_PER_PAGE", 10);
+define("DEFAULT_FICS_STORIES_PER_PAGE", 15);  // Customizable.
 define("DEFAULT_FICS_COMMENTS_PER_PAGE", 10);
 define("FICS_LIST_ITEMS_PER_PAGE", 50);
 

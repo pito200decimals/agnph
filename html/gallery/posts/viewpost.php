@@ -107,7 +107,31 @@ if (isset($user)) {
             $vars['canApprove'] = true;
         }
     }
+    if (CanUserCommentOnPost($user)) {
+        $vars['canComment'] = true;
+    }
 }
+// Init comments.
+// First, do a POST if we were previously posting a comment.
+if (isset($_POST['text'])) {
+    HandleCommentPOST($pid);
+}
+if (isset($_GET['offset']) && is_numeric($_GET['offset'])) {
+    $comment_offset = (int)($_GET['offset']);
+    if ($comment_offset < 0) $comment_offset = 0;
+} else {
+    $comment_offset = 0;
+}
+$comments = GetComments($pid);
+debug(sizeof($comments));
+ConstructCommentBlockIterator($comments, $vars['commentIterator'], true /* allow_offset */,
+    function($index) use ($pid) {
+        $offset = ($index - 1) * DEFAULT_GALLERY_COMMENTS_PER_PAGE;
+        $url = "/gallery/post/show/$pid/?offset=$offset";
+        return $url;
+    }, DEFAULT_GALLERY_COMMENTS_PER_PAGE);
+debug(sizeof($comments));
+$vars['comments'] = $comments;
 
 PreparePostStatistics($post);
 if (isset($_SESSION['gallery_action_message'])) {
@@ -163,5 +187,44 @@ function CreatePoolIterator($post) {
     $curr_link = "<a href='$pool_url'>".$pool['Name']."</a>";
     $next_link = (isset($next_url) ? "<a id='nextinpool' href='$next_url'>&gt;&gt;</a>" : "");
     return $prev_link . $curr_link . $next_link;
+}
+function GetComments($pid) {
+    $escaped_pid = sql_escape($pid);
+    $comments = array();
+    if (!sql_query_into($result, "SELECT * FROM ".GALLERY_COMMENT_TABLE." WHERE PostId='$escaped_pid' ORDER BY CommentDate ASC, CommentId ASC;", 0)) return null;
+    $ids = array();
+    while ($row = $result->fetch_assoc()) {
+        $ids[] = $row['UserId'];
+        $row['date'] = FormatDate($row['CommentDate'], FICS_DATE_FORMAT);
+        $comments[] = $row;
+    }
+    $ids = array_unique($ids);
+    $users = GetUsers($ids);
+    if ($users != null) {
+        foreach ($comments as &$comment) {
+            $uid = $comment['UserId'];
+            $comment['commenter'] = $users[$uid];
+        }
+    }
+    return $comments;
+}
+function GetUsers($uids) {
+    $ret = array();
+    $tables = array(USER_TABLE);
+    if (!LoadTableData($tables, "UserId", $uids, $ret)) return null;
+    return $ret;
+}
+function HandleCommentPOST($pid) {
+    global $user;
+    if (!isset($user)) RenderErrorPage("You must be logged in to comment");
+    if (!CanUserCommentOnPost($user)) RenderErrorPage("You are not authorized to comment");
+    $text = SanitizeHTMLTags($_POST['text'], DEFAULT_ALLOWED_TAGS);
+    if (mb_strlen($text) < MIN_COMMENT_STRING_SIZE) RenderErrorPage("Review length is too short");
+    $escaped_text = sql_escape($text);
+    $uid = $user['UserId'];
+    $now = time();
+    sql_query("INSERT INTO ".GALLERY_COMMENT_TABLE." (PostId, UserId, CommentDate, CommentText) VALUES ($pid, $uid, $now, '$escaped_text');");
+    header("Location: /gallery/post/show/$pid/");
+    exit();
 }
 ?>

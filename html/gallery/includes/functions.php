@@ -7,6 +7,7 @@ include_once(SITE_ROOT."includes/tagging/tag_functions.php");
 include_once(SITE_ROOT."includes/constants.php");
 include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."includes/util/user.php");
+include_once(SITE_ROOT."includes/comments/comments_functions.php");
 
 // Permissions functions.
 function CanUserUploadPost($user) {
@@ -42,6 +43,10 @@ function CanUserDeletePost($user) {
     return true;
 }
 function CanUserApprovePost($user) {
+    if (!IsUserActivated($user)) return false;
+    return true;
+}
+function CanUserCommentOnPost($user) {
     if (!IsUserActivated($user)) return false;
     return true;
 }
