@@ -15,8 +15,8 @@ TODOs
 - IP address tracking for uploads
 - Link to posts on delete banner
 - Image formats other than png, jpg, gif (swf, webm?)
-- Comments?
 - Upvote/Downvote (On hold for now. Don't know where to put buttons. Feature not used in Ouroboros gallery)
+- Comment deletion
 
 == FICS ==
 - Fics search ordering?
@@ -24,6 +24,7 @@ TODOs
 - Index page, including news and featured stories, perhaps random selection
 - User favorites
 - Author following
+- Comment deletion
 
 == SITE ==
 - Check for vuln's for style background-image URL's.
