@@ -33,7 +33,10 @@ sql_query_into($result, "SELECT count(*) FROM ".GALLERY_COMMENT_TABLE." WHERE Us
 $profile_user['numGalleryPostComments'] = $result->fetch_assoc()['count(*)'];
 
 // Get some recent uploaded posts. Include flagged posts.
-if (sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE UploaderId=$profile_uid AND (Status='P' OR Status='A' OR Status='F') LIMIT ".GALLERY_PROFILE_SHOW_NUM_UPLOADS.";", 0)) {
+if (sql_query_into($result,
+    "SELECT * FROM ".GALLERY_POST_TABLE."
+    WHERE UploaderId=$profile_uid AND (Status='P' OR Status='A' OR Status='F')
+    ORDER BY DateUploaded DESC, PostId DESC LIMIT ".GALLERY_PROFILE_SHOW_NUM_UPLOADS.";", 0)) {
     $profile_user['uploads'] = array();
     while ($row = $result->fetch_assoc()) {
         debug($row);
@@ -43,11 +46,15 @@ if (sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE Uploader
         CreatePostLabel($row);
         $profile_user['uploads'][] = $row;
     }
+    SetOutlineClasses($profile_user['uploads']);
 } else {
     $profile_user['uploads'] = array();
 }
-// Get some favorited posts.
-if (sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." P JOIN ".GALLERY_USER_FAVORITES_TABLE." F ON P.PostId=F.PostId WHERE F.UserId=$profile_uid LIMIT ".GALLERY_PROFILE_SHOW_NUM_UPLOADS.";", 0)) {
+// Get some favorited posts. Deleted posts can't be favorites, so don't worry about status.
+if (sql_query_into($result,
+    "SELECT * FROM ".GALLERY_POST_TABLE." P JOIN ".GALLERY_USER_FAVORITES_TABLE." F ON P.PostId=F.PostId
+    WHERE F.UserId=$profile_uid
+    ORDER BY P.DateUploaded DESC, P.PostId DESC LIMIT ".GALLERY_PROFILE_SHOW_NUM_FAVORITES.";", 0)) {
     $profile_user['favorites'] = array();
     while ($row = $result->fetch_assoc()) {
         debug($row);
@@ -57,6 +64,7 @@ if (sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." P JOIN ".GALLE
         CreatePostLabel($row);
         $profile_user['favorites'][] = $row;
     }
+    SetOutlineClasses($profile_user['favorites']);
 } else {
     $profile_user['favorites'] = array();
 }

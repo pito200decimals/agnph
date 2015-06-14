@@ -90,33 +90,4 @@ function CreatePageIterator($searchterms, $page, $posts_per_page) {
     }
 }
 
-function SetOutlineClasses(&$posts) {
-    $postsToCheckChild = array();
-    foreach ($posts as &$post) {
-        if ($post['Status'] == "P") {
-            $post['outlineClass'] = "pendingoutline";
-            continue;
-        } else if ($post['Status'] == "F") {
-            $post['outlineClass'] = "flaggedoutline";
-            continue;
-        }
-        if ($post['ParentPostId'] != -1) {
-            // Is a child.
-            $post['outlineClass'] = "childoutline";
-            continue;
-        } else {
-            $postsToCheckChild[$post['PostId']] = &$post;
-            continue;
-        }
-    }
-    $ids = array_unique(array_keys($postsToCheckChild));
-    if (sizeof($ids) == 0) return;
-    $joined = implode(",", $ids);
-    sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE ParentPostId IN ($joined);", 0) or RenderErrorPage("No posts found");
-    while ($row = $result->fetch_assoc()) {
-        if ($row['Status'] != 'D') {  // Only set parents if the child isn't deleted.
-            $postsToCheckChild[$row['ParentPostId']]['outlineClass'] = "parentoutline";
-        }
-    }
-}
 ?>
