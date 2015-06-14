@@ -22,7 +22,7 @@ RewriteRule ^forums/markallread/(\d+)/?$ /forums/mark_all_read.php?b=$1
 # Rewrites for accounts section
 RewriteRule ^user/(\d+)/?$ /user/profile.php?uid=$1
 #RewriteRule ^user/(\d+)/forums/?$ /user/profile.php?uid=$1
-#RewriteRule ^user/(\d+)/gallery/?$ /user/profile.php?uid=$1
+RewriteRule ^user/(\d+)/gallery/?$ /gallery/user.php?uid=$1
 #RewriteRule ^user/(\d+)/fics/?$ /user/profile.php?uid=$1
 #RewriteRule ^user/(\d+)/oekaki/?$ /user/profile.php?uid=$1
 RewriteRule ^user/(\d+)/preferences/?$ /user/preferences.php?uid=$1
@@ -44,7 +44,7 @@ RewriteRule ^gallery/post/show/(\d+)/history/?$ /gallery/posts/tag_history.php?p
 RewriteRule ^gallery/tags/?$ /gallery/tags/tags.php [QSA]
 
 #Rewrites for fics pages
-RewriteRule ^fics/$ /fics/index.php
+RewriteRule ^fics/?$ /fics/index.php
 RewriteRule ^fics/browse/?$ /fics/storyindex.php [QSA]
 RewriteRule ^fics/story/(\d+)/?$ /fics/story/story.php?sid=$1 [QSA]
 RewriteRule ^fics/story/(\d+)/(\d+)/?$ /fics/story/chapter.php?sid=$1&chapter=$2 [QSA]

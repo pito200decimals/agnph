@@ -229,5 +229,28 @@ function GalleryTagDescriptorFilterFn($token, $label, $tag, $post_id) {
     return $obj;
 }
 
+// Creates label that floats under a post thumbnail.
+function CreatePostLabel(&$post) {
+    if ($post['Score'] > 0) {
+        $post['scoreHtml'] = "<span class='pscore'>&uarr;".$post['Score']."</span>";
+    } else if ($post['Score'] < 0) {
+        $post['scoreHtml'] = "<span class='nscore'>&darr;".$post['Score']."</span>";
+    } else {
+        $post['scoreHtml'] = "<span>&#x2195;0</span>";
+    }
+    $post['favHtml'] = "<span>&hearts;".$post['NumFavorites']."</span>";
+    $post['commentsHtml'] = "<span>C".$post['NumComments']."</span>";
+    switch($post['Rating']) {
+      case "s":
+        $post['ratingHtml'] = "<span class='srating'>S</span>";
+        break;
+      case "q":
+        $post['ratingHtml'] = "<span class='qrating'>Q</span>";
+        break;
+      case "e":
+        $post['ratingHtml'] = "<span class='erating'>E</span>";
+        break;
+    }
+}
 
 ?>

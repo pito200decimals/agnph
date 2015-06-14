@@ -17,6 +17,7 @@ TODOs
 - Image formats other than png, jpg, gif (swf, webm?)
 - Upvote/Downvote (On hold for now. Don't know where to put buttons. Feature not used in Ouroboros gallery)
 - Comment deletion
+- Show user who flagged post
 
 == FICS ==
 - Fics search ordering?

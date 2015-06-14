@@ -72,11 +72,13 @@
     <div class="mainpanel">
         {% if posts|length > 0 %}
             {# Display search index. #}
-            <ul class="sortable list">
+            <ul class="sortable list post-list">
                 {% for post in posts %}
                     <li class="dragitem">
-                        <input class="postid" type="hidden" value="{{ post.PostId }}" />
-                        <input class="postorder" type="hidden" value="{{ post.PoolItemOrder }}" />
+                        {% if cansort %}
+                            <input class="postid" type="hidden" value="{{ post.PostId }}" />
+                            <input class="postorder" type="hidden" value="{{ post.PoolItemOrder }}" />
+                        {% endif %}
                         <a class="postlink" href="/gallery/post/show/{{ post.PostId }}/">
                             <div class="postsquare">
                                 <div class="postsquarepreview">

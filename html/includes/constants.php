@@ -95,5 +95,7 @@ define("MAX_FICS_POSTS_PER_PAGE", 100);
 define("MAX_GALLERY_BLACKLIST_TAGS", 50);
 define("MAX_FICS_BLACKLIST_TAGS", 50);
 define("FICS_NOT_FEATURED", "D");  // Also present in templates: editstory.tpl
+define("GALLERY_PROFILE_SHOW_NUM_UPLOADS", 6);
+define("GALLERY_PROFILE_SHOW_NUM_FAVORITES", 6);
 
 ?>

@@ -77,6 +77,7 @@
 {% endblock %}
 
 {#
+TODO: Sidebar for main profile actions.
 {% block sidebar %}
 {% endblock %}
 #}

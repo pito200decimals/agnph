@@ -91,11 +91,11 @@ a:hover div.postlabel {
     text-decoration: none;
 }
 
-.mainpanel ul {
+.post-list {
     padding: 0px;
     display: inline;
 }
-.mainpanel ul li {
+.post-list li {
     vertical-align: top;
     padding: 0px;
     width: 180px;

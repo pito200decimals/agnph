@@ -22,21 +22,12 @@ $profile_user['birthday'] = DateStringToReadableString($profile_user['DOB']);
 // TODO: Show timezone?
 $profile_user['registerDate'] = FormatDate($profile_user['JoinTime'], PROFILE_DATE_FORMAT);
 $profile_user['lastVisitDate'] = FormatDate($profile_user['LastVisitTime'], PROFILE_DATE_TIME_FORMAT);
-if (sql_query_into($result, "SELECT count(*) FROM ".FORUMS_POST_TABLE." WHERE UserId=$uid;", 0)) {
-    $profile_user['numForumPosts'] = $result->fetch_assoc()['count(*)'];
-} else {
-    $profile_user['numForumPosts'] = 0;
-}
-if (sql_query_into($result, "SELECT count(*) FROM ".GALLERY_POST_TABLE." WHERE UploaderId=$uid AND Status<>'D';", 0)) {
-    $profile_user['numGalleryUploads'] = $result->fetch_assoc()['count(*)'];
-} else {
-    $profile_user['numGalleryUploads'] = 0;
-}
-if (sql_query_into($result, "SELECT count(*) FROM ".FICS_STORY_TABLE." WHERE AuthorUserId=$uid AND ApprovalStatus<>'D';", 0)) {
-    $profile_user['numFicsStories'] = $result->fetch_assoc()['count(*)'];
-} else {
-    $profile_user['numFicsStories'] = 0;
-}
+sql_query_into($result, "SELECT count(*) FROM ".FORUMS_POST_TABLE." WHERE UserId=$uid;", 0) or RenderErrorPage("Failed to fetch user profile");
+$profile_user['numForumPosts'] = $result->fetch_assoc()['count(*)'];
+sql_query_into($result, "SELECT count(*) FROM ".GALLERY_POST_TABLE." WHERE UploaderId=$uid AND Status<>'D';", 0) or RenderErrorPage("Failed to fetch user profile");
+$profile_user['numGalleryUploads'] = $result->fetch_assoc()['count(*)'];
+sql_query_into($result, "SELECT count(*) FROM ".FICS_STORY_TABLE." WHERE AuthorUserId=$uid AND ApprovalStatus<>'D';", 0) or RenderErrorPage("Failed to fetch user profile");
+$profile_user['numFicsStories'] = $result->fetch_assoc()['count(*)'];
 // TODO: Oekaki data.
 $profile_user['numOekakiDrawn'] = 0;
 
