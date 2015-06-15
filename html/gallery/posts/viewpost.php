@@ -123,14 +123,12 @@ if (isset($_GET['offset']) && is_numeric($_GET['offset'])) {
     $comment_offset = 0;
 }
 $comments = GetComments($pid);
-debug(sizeof($comments));
 ConstructCommentBlockIterator($comments, $vars['commentIterator'], true /* allow_offset */,
     function($index) use ($pid) {
         $offset = ($index - 1) * DEFAULT_GALLERY_COMMENTS_PER_PAGE;
         $url = "/gallery/post/show/$pid/?offset=$offset";
         return $url;
     }, DEFAULT_GALLERY_COMMENTS_PER_PAGE);
-debug(sizeof($comments));
 $vars['comments'] = $comments;
 
 PreparePostStatistics($post);
@@ -138,6 +136,8 @@ if (isset($_SESSION['gallery_action_message'])) {
     $vars['action'] = $_SESSION['gallery_action_message'];
     unset($_SESSION['gallery_action_message']);
 }
+
+PrepPostNotificationBanner($post);
 
 // Increment view count, and do SQL after page is rendered.
 $post['NumViews']++;
@@ -224,7 +224,33 @@ function HandleCommentPOST($pid) {
     $uid = $user['UserId'];
     $now = time();
     sql_query("INSERT INTO ".GALLERY_COMMENT_TABLE." (PostId, UserId, CommentDate, CommentText) VALUES ($pid, $uid, $now, '$escaped_text');");
+    UpdatePostStatistics($pid);
     header("Location: /gallery/post/show/$pid/");
     exit();
+}
+
+// Links post and expands user for notification banners.
+function PrepPostNotificationBanner(&$post) {
+    // Get display name for flagger.
+    if ($post['Status'] == 'F') {
+        $uid = $post['FlaggerUserId'];
+        if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId=$uid;", 1)) {
+            $post['flagger'] = $result->fetch_assoc();
+        }
+    }
+    // Find and link posts.
+    if ($post['Status'] == 'F' || $post['Status'] == 'D') {
+        $pattern = "(post (\d+))";
+        $groups = array();
+        // When adding link to reason, escape characters. Not needed normally since template won't allow html.
+        $reason = htmlspecialchars ($post['FlagReason']);
+        if (mb_eregi(".*$pattern.*", $reason, $groups) !== FALSE) {
+            if (is_numeric($groups[2])) {
+                $pid = (int)($groups[2]);
+                $replacement = "<a href='/gallery/post/show/$pid/'>".$groups[1]."</a>";
+                $post['flagReasonWithLink'] = mb_eregi_replace($pattern, $replacement, $reason);
+            }
+        }
+    }
 }
 ?>

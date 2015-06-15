@@ -93,15 +93,20 @@ function UpdatePost($tag_string, $post_id, $user) {
 function UpdatePostStatistics($post_id) {
     // Score?
     // NumFavorites
-    // NumComments?
-    if (sql_query_into($result, "SELECT count(*) FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE PostId=$post_id;", 0)) {
+    // NumComments
+    if (sql_query_into($result, "SELECT count(*) FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE PostId=$post_id;", 1)) {
         $num_favorites = $result->fetch_assoc()['count(*)'];
     } else {
         $num_favorites = 0;
     }
+    if (sql_query_into($result, "SELECT count(*) FROM ".GALLERY_COMMENT_TABLE." WHERE PostId=$post_id;", 1)) {
+        $num_comments = $result->fetch_assoc()['count(*)'];
+    } else {
+        $num_comments = 0;
+    }
 
     // Update all fields.
-    sql_query("UPDATE ".GALLERY_POST_TABLE." SET NumFavorites=$num_favorites WHERE PostId=$post_id;");
+    sql_query("UPDATE ".GALLERY_POST_TABLE." SET NumFavorites=$num_favorites, NumComments=$num_comments WHERE PostId=$post_id;");
 }
 
 

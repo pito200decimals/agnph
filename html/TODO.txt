@@ -12,8 +12,7 @@ TODOs
 - Gallery/Fics mass tag edits?
 - Slideshow view?
 - Verify tag aliasing works once admin support for that is added
-- IP address tracking for uploads
-- Link to posts on delete banner
+- IP address tracking for uploads (Do we need this, since user is tracked?)
 - Image formats other than png, jpg, gif (swf, webm?)
 - Upvote/Downvote (On hold for now. Don't know where to put buttons. Feature not used in Ouroboros gallery)
 - Comment deletion
@@ -23,7 +22,7 @@ TODOs
 - Fics search ordering?
 - More complex search queries ("OR", more metadata filters like ordering?)
 - Index page, including news and featured stories, perhaps random selection
-- User favorites
+- User favorites (story, author)
 - Author following
 - Comment deletion
 
@@ -47,3 +46,4 @@ TODOs
 - Global user action logging
 - Non-user IP tracking (DoS investigating, user demographic statistics, etc?)
 - Admin management of user permissions
+- Support avatar changing/uploads

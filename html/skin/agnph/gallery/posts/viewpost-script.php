@@ -3,6 +3,7 @@
 if (!isset($_GET['pi']) || !isset($_GET['ppi'])) die();
 $postId = $_GET['pi'];
 $parentPoolId = $_GET['ppi'];
+$enable_keys = isset($_GET['keynav']);
 ?>
 var in_flight = null;
 function toggleEdit() {
@@ -23,8 +24,9 @@ $(document).ready(function() {
         SetupAdd();
     <?php } else { ?>
         SetupRemove(<?php echo $parentPoolId; ?>);
-        <?php /* TODO: Conditionally set up keyboard nav based on use preferences. */
-        /* InitKeynav(); */ ?>
+        <?php if ($enable_keys) { ?>
+        InitKeynav();
+        <?php } ?>
     <?php } ?>
     SetupFlag();
     SetupComments();
@@ -32,12 +34,14 @@ $(document).ready(function() {
 function SetupFlag() {
     $("#flagaction").click(function() {
         $(".flageditbox").toggle();
+        $("#flag-edit-text").focus();
         return false;
     }).text("Flag for Deletion");
 }
 function SetupAdd() {
     $("#poolaction").off("click").click(function() {
         $(".pooleditbox").toggle();
+        $("#pooleditfield").focus();
         return false;
     }).text("Add to pool");
 }
@@ -135,7 +139,7 @@ function SetupComments() {
             }});
     });
 }
-<?php /*
+<?php if ($enable_keys) { ?>
 function InitKeynav() {
     $(document).keydown(function(e) {
         if ($(document).width() > $(window).width()) return;
@@ -156,4 +160,4 @@ function InitKeynav() {
         e.preventDefault();
     });
 }
-*/ ?>
+<?php } ?>

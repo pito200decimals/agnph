@@ -218,6 +218,7 @@ do_or_die(sql_query(
         GalleryPermissions CHAR(1) DEFAULT 'N',".  // N - Normal user, C - Contributor, A - Admin TODO: Enforce.
        "GalleryPostsPerPage INT(11) DEFAULT ".DEFAULT_GALLERY_POSTS_PER_PAGE.",
         GalleryTagBlacklist TEXT(512) NOT NULL,
+        NavigateGalleryPoolsWithKeyboard TINYINT(1) DEFAULT 0,
         PRIMARY KEY(UserId)
     ) DEFAULT CHARSET=utf8;"));
 // User favorites for gallery section.

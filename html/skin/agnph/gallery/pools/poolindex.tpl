@@ -54,7 +54,7 @@
                         <tr>
                             <td><div><a href="/gallery/post/?search=pool%3A{{ pool.PoolId }}">{{ pool.Name }}</a></div></td>
                             <td><div>{{ pool.count }}</div></td>
-                            <td><div><a href="/user/{{ pool.creator.UserId }}/">{{ pool.creator.DisplayName }}</a></div></td>
+                            <td><div><a href="/user/{{ pool.creator.UserId }}/gallery/">{{ pool.creator.DisplayName }}</a></div></td>
                             {% if canEditPools %}<td><div>
                                 <form action="/gallery/pools/delete/" method="POST" accept-charset="UTF-8">
                                     <input type="hidden" name="pool" value="{{ pool.PoolId }}" />

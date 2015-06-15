@@ -13,6 +13,8 @@ include_once(SITE_ROOT."gallery/includes/searchclause.php");
 // === Not implemented yet ===
 // order:favorites
 // order:date
+
+// TODO: Unimportant bug fix: Can't search for ~status:deleted
 function CreatePostSearchSQL($search_string, $posts_per_page, $page, &$can_sort_pool, &$pool_sort_id) {
     $offset = ($page - 1) * $posts_per_page;
     $page_size = $posts_per_page;

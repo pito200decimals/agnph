@@ -10,7 +10,7 @@
     {% if canEdit %}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
-        <script src="{{ skinDir }}/gallery/posts/viewpost-script.php?pi={{ post.PostId }}&ppi={{ post.ParentPoolId }}"></script>
+        <script src="{{ skinDir }}/gallery/posts/viewpost-script.php?pi={{ post.PostId }}&ppi={{ post.ParentPoolId }}{% if user and user.NavigateGalleryPoolsWithKeyboard %}&keynav=1{% endif %}"></script>
     {% endif %}
 {% endblock %}
 
@@ -24,8 +24,12 @@
             </div>
         {% elseif post.Status == "F" %}
             <div class="flaggedbox">
-                <p><strong>This post has been flagged for deletion</strong></p>
-                {% if post.FlagReason|length > 0 %}<p><strong>Reason:</strong>{{ post.FlagReason }}</p>{% endif %}
+                <p><strong>This post has been flagged for deletion{% if post.flagger %} by <a href="/user/{{ post.flagger.UserId }}/gallery/">{{ post.flagger.DisplayName }}</a>{% endif %}</strong></p>
+                {% if post.flagReasonWithLink|length > 0 %}
+                    {% autoescape false %}<p><strong>Reason:</strong>{{ post.flagReasonWithLink }}</p>{% endautoescape %}
+                {% elseif post.FlagReason|length > 0 %}
+                    <p><strong>Reason:</strong>{{ post.flagReasonWithLink }}</p>
+                {% endif %}
             </div>
         {% elseif post.Status == "D" %}
             <div class="flaggedbox">
@@ -181,7 +185,7 @@
                 <form action="/gallery/post/status/" method="POST" accept-charset="UTF-8">
                     <label>Reason:</label><br />
                     <input name="post" type="hidden" value="{{ post.PostId }}" />
-                    <input name="reason" type="text" />
+                    <input id="flag-edit-text" name="reason" type="text" />
                     <input name="action" type="hidden" value="flag" />
                     <input type="submit" value="Flag" />
                 </form>

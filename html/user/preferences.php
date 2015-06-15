@@ -125,9 +125,19 @@ if (isset($_POST['dob']) &&
         $escaped_blacklist = sql_escape($_POST['gallery-tag-blacklist']);
         $gallery_table_sets[] = "GalleryTagBlacklist='$escaped_blacklist'";
     }
+    if (isset($_POST['gallery-enable-keyboard'])) {
+        if (!$profile_user['NavigateGalleryPoolsWithKeyboard']) {
+            $gallery_table_sets[] = "NavigateGalleryPoolsWithKeyboard=TRUE";
+        }
+    } else {
+        if ($profile_user['NavigateGalleryPoolsWithKeyboard']) {
+            $gallery_table_sets[] = "NavigateGalleryPoolsWithKeyboard=FALSE";
+        }
+    }
     if (sizeof($gallery_table_sets) > 0) {
         sql_query("UPDATE ".GALLERY_USER_PREF_TABLE." SET ".implode(", ", $gallery_table_sets)." WHERE UserId=".$profile_user['UserId'].";");
     }
+
 
     $fics_table_sets = array();
     // FicsStoriesPerPage
