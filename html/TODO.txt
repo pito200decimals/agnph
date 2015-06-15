@@ -18,6 +18,7 @@ TODOs
 - IP address tracking for uploads (Do we need this, since user is tracked?)
 - Upvote/Downvote (On hold for now. Don't know where to put buttons. Feature not used in Ouroboros gallery)
 - Gallery notes?
+- Custom swf/webm thumbs when parent is set?
 
 == FICS ==
 * User favorites (story, author)

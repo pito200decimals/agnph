@@ -52,7 +52,8 @@ function CreateSQLClausesFromTerms($terms, $mode="AND") {
             $sql[] = "(".CreateSQLClauseFromTerm($term).")";
         }
     }
-    if (sizeof(array_filter($filter_clauses, function($str) {
+    if ($mode == "AND" &&
+        sizeof(array_filter($filter_clauses, function($str) {
         return mb_ereg_match("-*status:deleted", $str) == 1;
     })) == 0) {
         $filter_clauses[] = "-status:deleted";
