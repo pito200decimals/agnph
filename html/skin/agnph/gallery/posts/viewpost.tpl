@@ -197,10 +197,19 @@
         {% if post.Status!="D" %}
             {# Only render image if status is not deleted #}
             <p>
-                {% if previewUrl==downloadUrl %}
-                    <img class="previewImg" src="{{ previewUrl }}" />
+                {% if post.Extension == "swf" %}
+                    <object width="{{ post.Width }}" height="{{ post.Height }}" data="{{ downloadUrl }}"></object>
+                {% elseif post.Extension == "webm" %}
+                    <video width="{{ post.Width }}" height="{{ post.Height }}" preload controls>
+                        <source src="{{ downloadUrl }}" type="video/webm" />
+                        Your browser does not support the video tag.
+                    </video>
                 {% else %}
-                    <a href="{{ downloadUrl }}"><img class="previewImg" src="{{ previewUrl }}" /></a>
+                    {% if previewUrl==downloadUrl %}
+                        <img class="previewImg" src="{{ previewUrl }}" />
+                    {% else %}
+                        <a href="{{ downloadUrl }}"><img class="previewImg" src="{{ previewUrl }}" /></a>
+                    {% endif %}
                 {% endif %}
             </p>
             {#<p>

@@ -1,6 +1,8 @@
 <?php
 // General image utility classes and functions.
 
+include_once(SITE_ROOT."../lib/getid3/getid3.php");
+
 class SimpleImage
 {
     var $image;
@@ -83,6 +85,16 @@ function GetImagePath($md5, $ext) {
 }
 
 function GetThumbPath($md5, $ext) {
+    switch ($ext) {
+        case 'jpg':
+        case 'png':
+        case 'gif':
+            break;
+        case 'swf':
+            return "images/swf-preview.png";
+        case 'webm':
+            return "images/webm-preview.png";
+    }
     $path = "gallery/data/thumb/";
     $path .= mb_substr($md5, 0, 2)."/";
     $path .= mb_substr($md5, 2, 2)."/";

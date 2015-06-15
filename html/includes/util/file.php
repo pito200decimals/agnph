@@ -69,12 +69,11 @@ function delete_files($target) {
 }
 
 // Accepts a file upload. Returns true on success, false on failure (or no upload).
-// Only accepts jpg, png and gif (for now).
+// Only accepts jpg, png, gif, swf and webm (for now).
 // NOTE: Caller is responsible for deleting the temp file!
 function accept_file_upload(&$tmp_path, $max_size = MAX_FILE_SIZE) {
     // NOTE: Code modelled after http://php.net/manual/en/features.file-upload.php
     if (!isset($_FILES['file']['error']) || is_array($_FILES['file']['error'])) {
-        debug("1");
         return false;
     }
     switch ($_FILES['file']['error']) {
@@ -87,16 +86,20 @@ function accept_file_upload(&$tmp_path, $max_size = MAX_FILE_SIZE) {
             return false;
     }
     if ($_FILES['file']['size'] > $max_size) {
-        debug("2");
         return false;
     }
     $finfo = new finfo(FILEINFO_MIME_TYPE);
-    if (false === ($ext = array_search($finfo->file($_FILES['file']['tmp_name']), array(
+    $ext = array_search(
+        $finfo->file($_FILES['file']['tmp_name']),
+        array(
             'jpg' => 'image/jpeg',
             'png' => 'image/png',
             'gif' => 'image/gif',
-        ), true))) {
-        debug("3");
+            'swf' => 'application/x-shockwave-flash',
+            'webm' => 'video/webm',
+        ),
+        true);
+    if ($ext === FALSE) {
         return false;
     }
     mkdirs("/uploads/temp/");

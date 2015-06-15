@@ -50,13 +50,36 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
     }
     mksysdirs(dirname($dst_path));
     rename($tmp_path, $dst_path);
-    $meta = getimagesize($dst_path);
-    $width = $meta[0];
-    $height = $meta[1];
     $filesize = GetHumanReadableFileSize(filesize($dst_path));
-    $thumb_path = CreateThumbnailFile($md5, $ext);
-    $preview_path = CreatePreviewFile($md5, $ext);
-    $has_preview = ($dst_path == $preview_path ? 0 : 1);
+    switch ($ext) {
+        case 'jpg':
+        case 'png':
+        case 'gif':
+            $meta = getimagesize($dst_path);
+            $width = $meta[0];
+            $height = $meta[1];
+            $thumb_path = CreateThumbnailFile($md5, $ext);
+            $preview_path = CreatePreviewFile($md5, $ext);
+            $has_preview = ($dst_path == $preview_path ? 0 : 1);
+            break;
+        case 'swf':
+            $meta = getimagesize($dst_path);
+            $width = $meta[0];
+            $height = $meta[1];
+            $thumb_path = "";
+            $preview_path = "";
+            $has_preview = 0;
+            break;
+        case 'webm':
+            $getID3 = new getID3();
+            $file = $getID3->analyze($dst_path);
+            $width = $file['video']['resolution_x'];
+            $height = $file['video']['resolution_y'];
+            $thumb_path = "";
+            $preview_path = "";
+            $has_preview = 0;
+            break;
+    }
     $uploader_id = $user['UserId'];
 
     if (mb_strlen($_POST['source']) > 0) {
@@ -81,7 +104,8 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
         VALUES
         ('$md5', '$ext', $has_preview, $uploader_id, $now, '$escaped_description', $width, $height, '$filesize', '$status');");
     if (!$result) {
-        // Error uploading file.
+        // Error uploading file. Clean up final data file and thumbnail/preview files.
+        // Thumbs won't exist for video/flash, but these are "".
         if ($has_preview) {
             OnFileUploadError(array($dst_path, $thumb_path, $preview_path));
         } else {
@@ -98,11 +122,15 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
 RenderPage("gallery/upload.tpl");
 return;
 
+// Renders the appropriate error message, and deletes the temporary file.
 function OnFileUploadError($tmp_paths, $msg = "Error while uploading file.") {
     if (isset($tmp_paths) && $tmp_paths !== null) {
         if (is_array($tmp_paths)) {
             foreach ($tmp_paths as $path) {
-                unlink($path);
+                // The path could be "" if the file is not supposed to exist (e.g. video thumb).
+                if (strlen($path) > 0) {
+                    unlink($path);
+                }
             }
         } else {
             unlink($tmp_paths);
