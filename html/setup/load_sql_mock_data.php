@@ -196,7 +196,7 @@ CreateTag("flygon", "S");
 CreateTag("solo", "G");
 CreateTag("floatzel", "S");
 
-//*
+/*
 CreateGalleryPost("c3024ba611837d85397d9661aec12840", "jpg", array("harlem", "umbreon", "quilava", "male"), "e");
 CreateGalleryPost("16f7fdb2e63740e6dbf524e137899433", "png", array("syntex", "quilava", "raichu", "male"), "s");
 CreateGalleryPost("0f80621ad5be140be8e3077bea316b06", "jpg", array("eroborus", "quilava", "dewott", "male"), "q");
@@ -348,5 +348,18 @@ AddTagsToStory(2, array("Typhlosion", "Cyndaquil"));
 AddTagsToStory(3, array("Quilava", "Eevee", "Cyndaquil"));
 AddTagsToStory(4, array("straight"));
 AddTagsToStory(5, array("Quilava", "Typhlosion", "Cyndaquil"));
+
+function CreatePM($sender_id, $recipient_id, $subject, $text, $parent = -1) {
+    $now = time();
+    do_or_die(sql_query("INSERT INTO ".USER_MAILBOX_TABLE."
+        (SenderUserId, RecipientUserId, ParentMessageId, Timestamp, Title, Content)
+        VALUES
+        ($sender_id, $recipient_id, $parent, $now, '$subject', '$text');"));
+}
+
+CreatePM(1, 2, "TEST 1 to 2", "TEXT1");
+CreatePM(3, 1, "TEST 3 to 1", "TEXT2");
+CreatePM(2, 1, "RE: TEST 1 to 2", "TEXT3", 1);
+CreatePM(2, 3, "TEST 2 to 3", "TEXT4");
 
 ?>

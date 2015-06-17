@@ -26,6 +26,7 @@ include_once(SITE_ROOT."gallery/includes/functions.php");
 sql_query("DROP TABLE ".USER_TABLE.";");
 sql_query("DROP TABLE ".SITE_NAV_TABLE.";");
 sql_query("DROP TABLE ".SITE_TAG_ALIAS_TABLE.";");
+sql_query("DROP TABLE ".USER_MAILBOX_TABLE.";");
 sql_query("DROP TABLE ".SITE_LOGGING_TABLE.";");
 sql_query("DROP TABLE ".FORUMS_LOBBY_TABLE.";");
 sql_query("DROP TABLE ".FORUMS_POST_TABLE.";");
@@ -302,6 +303,20 @@ do_or_die(sql_query(
        "FicsStoriesPerPage INT(11) DEFAULT ".DEFAULT_FICS_STORIES_PER_PAGE.",
         FicsTagBlacklist TEXT(512) NOT NULL,
         PRIMARY KEY(UserId)
+    ) DEFAULT CHARSET=utf8;"));
+
+// Table holding all user PM's.
+do_or_die(sql_query(
+    "CREATE TABLE ".USER_MAILBOX_TABLE." (
+        Id INT(11) UNSIGNED AUTO_INCREMENT,
+        SenderUserId INT(11) NOT NULL,
+        RecipientUserId INT(11) NOT NULL,
+        ParentMessageId INT(11) NOT NULL,
+        Timestamp INT(11) NOT NULL,
+        Status CHAR(1) DEFAULT 'U',".  // U - Unread, R - Read, D - Deleted
+       "Title VARCHAR(256) NOT NULL,
+        Content TEXT(".MAX_PM_LENGTH.") NOT NULL,
+        PRIMARY KEY(Id)
     ) DEFAULT CHARSET=utf8;"));
 
 

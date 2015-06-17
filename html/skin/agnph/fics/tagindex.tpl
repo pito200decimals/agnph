@@ -12,7 +12,7 @@
             <label>Search for Tags:</label><input class="search" name="prefix" type="text" value="{{ searchPrefix }}" required/>
         </form>
         {% if tags|length > 0 %}
-            {# Display search index. #}
+            {# Display tag index. #}
             <table class="tagtable">
                 <thead>
                     <tr>

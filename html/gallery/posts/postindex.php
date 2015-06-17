@@ -3,6 +3,7 @@
 
 include_once("../../header.php");
 include_once(SITE_ROOT."gallery/includes/functions.php");
+include_once(SITE_ROOT."includes/util/html_funcs.php");
 
 if (isset($_GET['page']) && is_numeric($_GET['page']) && ((int)$_GET['page']) > 0) {
     $page = $_GET['page'];

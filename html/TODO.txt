@@ -47,6 +47,7 @@ TODOs
 * Mailbox/PM system
 * User ban system
 * Admin management of user permissions
+* Support more restrictions on display name changing
 - Global user action logging
 - Non-user IP tracking (DoS investigating, user demographic statistics, etc?)
 

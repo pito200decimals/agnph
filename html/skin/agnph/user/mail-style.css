@@ -1,0 +1,40 @@
+.message-table {
+    border-radius: 15px;
+    background-color: rgb(170,200,255);
+    width: 100%;
+    border-style: none;
+    overflow: hidden;
+    -webkit-border-horizontal-spacing: 0px;
+    -webkit-border-vertical-spacing: 0px;
+    border-collapse: collapse;
+}
+.message-table td {
+    padding: 0px;
+}
+.message-table div {
+    padding: 5px;
+}
+.message-table thead tr div {
+    background-color: rgb(100,130,185);
+    border-left: 1px solid black;
+}
+.message-table thead tr td:nth-child(1) div {
+    border: none;
+}
+
+.message-table tbody tr:nth-child(odd) div {
+    background-color: rgb(150,180,235);
+}
+.message-table tbody tr:nth-child(even) div {
+    background-color: rgb(130,160,215);
+}
+.message-table tbody tr td:nth-child(1) div {
+    text-align: center;
+}
+.no-messages td div {
+    text-align: center;
+    padding: 15px;
+}
+.unread {
+    font-weight: bold;
+}

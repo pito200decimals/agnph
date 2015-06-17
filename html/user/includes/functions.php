@@ -37,6 +37,14 @@ function CanUserEditBasicInfo($user, $profile_user) {
     return false;
 }
 
+function CanUserViewPMs($user, $profile_user) {
+    if (!IsUserActivated($user)) return false;
+    // TODO: Do we want to allow admins to view messages?
+    // if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
+    if ($user['UserId'] == $profile_user['UserId']) return true;
+    return false;
+}
+
 
 function DateStringToReadableString($datestr) {
     // $datestr is in the database format "MM/DD/YYYY"

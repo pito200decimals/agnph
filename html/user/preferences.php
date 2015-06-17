@@ -20,7 +20,8 @@ if (!CanUserEditBasicInfo($user, $profile_user)) {
     return;
 }
 
-if (isset($_POST['dob']) &&
+if (isset($_POST['display-name']) &&
+    isset($_POST['dob']) &&
     isset($_POST['species']) &&
     isset($_POST['title']) &&
     isset($_POST['location']) &&
@@ -36,6 +37,26 @@ if (isset($_POST['dob']) &&
     isset($_POST['oekaki-posts-per-page'])) {
     // Handle post submit.
     $user_table_sets = array();
+    // DisplayName
+    if ($_POST['display-name'] != $profile_user['DisplayName']) {
+        $uid = $profile_user['UserId'];
+        $display_name = $_POST['display-name'];
+        $display_name = mb_ereg_replace("[^a-zA-Z0-9_.-]", "", $display_name);
+        $escaped_display_name = sql_escape($display_name);
+        // Check for duplicates.
+        // Search for display name, and current user (so that at least one result is returned).
+        if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE DisplayName='$escaped_display_name' OR UserId='$uid';", 1)) {
+            if ($result->num_rows == 1) {
+                // TODO: Check for too many changes.
+                // TODO: Log change.
+                $user_table_sets[] = "DisplayName='$escaped_display_name'";
+            } else {
+                $vars['error'] = "Name already taken!";
+            }
+        } else {
+            $vars['error'] = "Failed to change Name.";
+        }
+    }
     // DOB
     if ($_POST['dob'] != $profile_user['DOB']) {
         $dob = ValidateDateString($_POST['dob']);

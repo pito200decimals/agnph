@@ -39,7 +39,7 @@
         </div>
         {% endif %}
         {% if pools|length > 0 %}
-            {# Display search index. #}
+            {# Display pool index. #}
             <table class="pooltable">
                 <thead>
                     <tr>
@@ -72,7 +72,7 @@
                 {% endautoescape %}
             </div>
         {% else %}
-            {# No posts here. #}
+            {# No pools here. #}
             No pools found.
         {% endif %}
     </div>

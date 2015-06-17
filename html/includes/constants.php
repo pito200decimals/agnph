@@ -23,6 +23,7 @@ define("GALLERY_USER_PREF_TABLE", "gallery_user");
 define("GALLERY_USER_FAVORITES_TABLE", "gallery_user_fav");
 define("FICS_USER_PREF_TABLE", "fics_user");
 // define("FICS_USER_FAVORITES_TABLE", "gallery_user_fav");
+define("USER_MAILBOX_TABLE", "user_mail");
 
 // Forums tables.
 define("FORUMS_LOBBY_TABLE", "forums_lobbies");
@@ -97,5 +98,7 @@ define("MAX_FICS_BLACKLIST_TAGS", 50);
 define("FICS_NOT_FEATURED", "D");  // Also present in templates: editstory.tpl
 define("GALLERY_PROFILE_SHOW_NUM_UPLOADS", 6);
 define("GALLERY_PROFILE_SHOW_NUM_FAVORITES", 6);
+define("MAX_PM_LENGTH", 4096);
+define("MIN_DISPLAY_NAME_LENGTH", 3);
 
 ?>
