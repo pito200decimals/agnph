@@ -67,6 +67,7 @@ do_or_die(sql_query(
         Species VARCHAR(32) NOT NULL,
         DOB CHAR(10) NOT NULL,".  // Format: MM/DD/YYYY
        "ShowDOB TINYINT(1) DEFAULT 0,
+        GroupMailboxThreads TINYINT(1) DEFAULT 1,
         Avatar VARCHAR(256) NOT NULL,
         Skin VARCHAR(16) DEFAULT 'agnph' NOT NULL,".
         // Code-assigned values.

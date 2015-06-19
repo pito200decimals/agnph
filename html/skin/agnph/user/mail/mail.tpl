@@ -32,7 +32,7 @@ TODO: Sidebar for user gallery actions.
                 {% if messages|length > 0 %}
                     {% for message in messages %}
                         <tr class="{% if message.Status == 'U' %}unread{% endif %}">
-                            <td><div>{% if message.inbox %}INBOX{% elseif message.outbox %}OUTBOX{% endif %}</div></td>
+                            <td><div>{% if message.inbox %}INBOX_ICON{% elseif message.outbox %}OUTBOX_ICON{% endif %} {% if message.count > 1 %}({{ message.count }}){% endif %}</div></td>
                             <td><div>{{ message.date }}</div></td>
                             <td><div><a href="/mail/message/{{ message.Id }}/">{{ message.Title }}</a></div></td>
                             <td><div><a href="/user/{{ message.toFromUser.UserId }}/">{{ message.toFromUser.DisplayName }}</a></div></td>
@@ -52,10 +52,12 @@ TODO: Sidebar for user gallery actions.
             </tbody>
         </table>
         <div class="Clear">&nbsp;</div>
-        <div class="indexIterator">
-            {% autoescape false %}
-            {{ postIterator }}
-            {% endautoescape %}
-        </div>
+        {% if iterator %}
+            <div class="indexIterator">
+                {% autoescape false %}
+                {{ iterator }}
+                {% endautoescape %}
+            </div>
+        {% endif %}
     </div>
 {% endblock %}

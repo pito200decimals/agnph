@@ -4,11 +4,10 @@
 include_once(SITE_ROOT."includes/util/core.php");
 
 // Gets messages to or from a given user. Returns null on failure.
-function GetMessages($user, $get_unread_only = false) {
+function GetMessages($user) {
     $uid = $user['UserId'];
     $messages = array();
-    $unread_clause = $get_unread_only ? " AND Status='U'" : "";
-    $sql = "SELECT * FROM ".USER_MAILBOX_TABLE." WHERE SenderUserId=$uid OR (RecipientUserId=$uid$unread_clause);";
+    $sql = "SELECT * FROM ".USER_MAILBOX_TABLE." WHERE (SenderUserId=$uid OR RecipientUserId=$uid) AND Status<>'D' ORDER BY Timestamp DESC, Id DESC;";
     if (sql_query_into($result, $sql, 0)) {
         while ($row = $result->fetch_assoc()) {
             $messages[] = $row;
@@ -38,9 +37,71 @@ function AddMessageMetadata(&$messages, $user) {
         } else {
             $message['toFromUser'] = $all_users[$message['RecipientUserId']];
             $message['outbox'] = true;
+            // Outbox messages can't be seen as unread.
+            $message['Status'] = 'R';
         }
         $message['date'] = FormatDate($message['Timestamp'], PROFILE_DATE_TIME_FORMAT);
     }
     return true;
+}
+
+// Removes messages that are part of the same conversation, leaving only the latest one.
+function BundleMessageThreads(&$messages) {
+    // Construct convenient map.
+    $msg_by_id = array();
+    foreach ($messages as &$msg) {
+        $msg_by_id[$msg['Id']] = &$msg;
+    }
+    ksort($msg_by_id);
+
+    // Construct message forest.
+    $forest = array();
+    foreach ($msg_by_id as &$msg) {  // Iterate in ID order.
+        $id = $msg['Id'];
+        $pid = $msg['ParentMessageId'];
+        if ($pid == -1) {
+            $forest[$id] = $id;
+        } else {
+            while ($pid != $forest[$pid]) {  // While has a parent message.
+                $pid = $forest[$pid];
+            }
+            $forest[$id] = $pid;
+        }
+    }
+    ksort($forest);
+
+    // Compute latest message in each forest in the forest.
+    $latest_id = array();
+    $counts = array();
+    foreach ($forest as $id => $pid) {
+        if (isset($latest_id[$pid])) {
+            $counts[$pid]++;
+            if ($msg_by_id[$latest_id[$pid]]['Timestamp'] < $msg_by_id[$id]['Timestamp']) {
+                $latest_id[$pid] = $id;
+            }
+        } else {
+            $latest_id[$pid] = $id;
+            $counts[$pid] = 1;
+        }
+    }
+
+    // Erase messages that aren't the latest.
+    $messages_size = sizeof($messages);
+    for ($i = 0; $i < $messages_size; $i++) {
+        $msg = &$messages[$i];
+        $id = $msg['Id'];
+        $root = $forest[$id];
+        $msg['count'] = $counts[$root];
+        if ($latest_id[$root] != $id) {
+            unset($messages[$i]);
+        }
+    }
+}
+
+function FilterOnlyUnreadMessages(&$messages) {
+    $messages = array_filter($messages, function($msg) {
+        return $msg['Status'] == 'U';
+    });
+    return $messages;
 }
 ?>

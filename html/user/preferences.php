@@ -91,6 +91,11 @@ if (isset($_POST['display-name']) &&
     if ($timezone != null && $timezone != $profile_user['Timezone']) {
         $user_table_sets[] = "Timezone=$timezone";
     }
+    // GroupMailboxThreads
+    $group_mailbox = isset($_POST['group-pm']);
+    if ($group_mailbox != $profile_user['GroupMailboxThreads']) {
+        $user_table_sets[] = "GroupMailboxThreads=".($group_mailbox ? "TRUE" : "FALSE");
+    }
     if (sizeof($user_table_sets) > 0) {
         sql_query("UPDATE ".USER_TABLE." SET ".implode(", ", $user_table_sets)." WHERE UserId=".$profile_user['UserId'].";");
     }

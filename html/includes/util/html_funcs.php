@@ -97,7 +97,7 @@ function TidyHTML($html) {
     $iter = 0;
     while (mb_strlen($html) > 0) {
         $iter++;
-        if ($iter > 1000) {
+        if ($iter > 10000) {
             return $html;
         }
         $match = array();

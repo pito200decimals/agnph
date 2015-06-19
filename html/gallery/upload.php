@@ -20,6 +20,7 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
     isset($_POST['description']) &&
     isset($_POST['parent']) &&
     isset($_POST['rating'])) {
+    ignore_user_abort(true);  // Prevent user closing the page from stopping the upload (so as to not corrupt SQL state).
     if (!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) || empty($_FILES['file']['name']))) {
         // Try file download.
         accept_file_upload($tmp_path) or OnFileUploadError(null);

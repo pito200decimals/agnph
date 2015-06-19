@@ -45,6 +45,7 @@ TODOs
 == ACCOUNT ==
 * Support avatar changing/uploads
 * Mailbox/PM system
+    - Add unread-message notification to both account tab and inbox tab.
 * User ban system
 * Admin management of user permissions
 * Support more restrictions on display name changing

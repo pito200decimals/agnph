@@ -355,11 +355,17 @@ function CreatePM($sender_id, $recipient_id, $subject, $text, $parent = -1) {
         (SenderUserId, RecipientUserId, ParentMessageId, Timestamp, Title, Content)
         VALUES
         ($sender_id, $recipient_id, $parent, $now, '$subject', '$text');"));
+    sleep(1);
 }
 
 CreatePM(1, 2, "TEST 1 to 2", "TEXT1");
 CreatePM(3, 1, "TEST 3 to 1", "TEXT2");
 CreatePM(2, 1, "RE: TEST 1 to 2", "TEXT3", 1);
 CreatePM(2, 3, "TEST 2 to 3", "TEXT4");
+CreatePM(2, 1, "RE: TEST 1 to 2", "TEXT5", 1);
+CreatePM(1, 2, "RE: RE: TEST 1 to 2", "TEXT6", 5);
+for ($i = 0; $i < 3; $i++) {
+    CreatePM(2, 1, "TEST #$i", "TEXT".(7 + $i));
+}
 
 ?>
