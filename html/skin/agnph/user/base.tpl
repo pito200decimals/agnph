@@ -25,10 +25,10 @@
                 <div class="sidepanel-section">
                     {% if profile.user.Avatar|length > 0 %}
                         {# avatar image #}
-                        <img class="avatarimg" src="{{ profile.user.Avatar }}" />
+                        <img class="profile-avatarimg" src="{{ profile.user.Avatar }}" />
                     {% else %}
                         {# default avatar image #}
-                        <img class="avatarimg" src="http://i.imgur.com/CKd8AGC.png" />
+                        <img class="profile-avatarimg" src="http://i.imgur.com/CKd8AGC.png" />
                     {% endif %}
                 </div>
                 {# Other actions to perform on this user #}

@@ -141,6 +141,7 @@ function OnFileUploadError($tmp_paths, $msg = "Error while uploading file.") {
 }
 
 function GoToExistingFile($md5) {
+    // TODO: Add new properties to existing file.
     sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE Md5='$md5';", 1) or RenderErrorPage("Error while uploading file.");
     $id = $result->fetch_assoc()['PostId'];
     header("Location: /gallery/post/show/$id/");

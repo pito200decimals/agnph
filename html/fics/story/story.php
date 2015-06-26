@@ -54,7 +54,16 @@ ConstructCommentBlockIterator($reviews, $vars['reviewIterator'], isset($_GET['re
         $url = "/fics/story/$sid/?reviews&offset=$offset#reviews";
         return $url;
     }, DEFAULT_FICS_COMMENTS_PER_PAGE);
-$vars['comments'] = $comments;
+
+// Format comments for template.
+$vars['comments'] = array_map(function($comment) {
+        return array(
+            'user' => $comment['commenter'],
+            'date' => $comment['date'],
+            'title' => "",
+            'text' => $comment['ReviewText']
+            );
+    }, $comments);
 $vars['reviews'] = $reviews;
 
 if (isset($_GET['reviews'])) $vars['defaultreviews'] = true;

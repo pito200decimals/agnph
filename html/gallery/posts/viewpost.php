@@ -195,7 +195,6 @@ function GetComments($pid) {
     $ids = array();
     while ($row = $result->fetch_assoc()) {
         $ids[] = $row['UserId'];
-        $row['date'] = FormatDate($row['CommentDate'], FICS_DATE_FORMAT);
         $comments[] = $row;
     }
     $ids = array_unique($ids);
@@ -203,7 +202,11 @@ function GetComments($pid) {
     if ($users != null) {
         foreach ($comments as &$comment) {
             $uid = $comment['UserId'];
-            $comment['commenter'] = $users[$uid];
+            // Set parameters that template expects.
+            $comment['user'] = $users[$uid];
+            $comment['date'] = FormatDate($comment['CommentDate'], GALLERY_DATE_FORMAT);
+            $comment['title'] = "";
+            $comment['text'] = $comment['CommentText'];
         }
     }
     return $comments;

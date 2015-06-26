@@ -82,6 +82,7 @@ define("MAX_POOL_NAME_LENGTH", 128);
 define("MIN_POOL_PREFIX_LENGTH", 3);  // For ajax add-to-pool search.
 define("MAX_GALLERY_POST_FLAG_REASON_LENGTH", 64);
 define("FORUMS_DATE_FORMAT", "Y-m-d H:i:s");
+define("GALLERY_DATE_FORMAT", "Y-m-d");
 define("FICS_DATE_FORMAT", "Y-m-d");
 define("PROFILE_DATE_FORMAT", "Y-m-d");
 define("PROFILE_DATE_TIME_FORMAT", "Y-m-d H:i:s");

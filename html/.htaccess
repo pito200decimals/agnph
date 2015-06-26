@@ -29,7 +29,7 @@ RewriteRule ^user/(\d+)/preferences/?$ /user/preferences.php?uid=$1
 RewriteRule ^user/(\d+)/preferences/bio/save/?$ /user/savebio.php?uid=$1
 RewriteRule ^user/(\d+)/mail/?$ /user/mail/mail.php?uid=$1 [QSA]
 RewriteRule ^user/(\d+)/mail/unread/?$ /user/mail/mail.php?uid=$1&unread=1 [QSA]
-RewriteRule ^user/(\d+)/mail/message/(\d+)/?$ /user/mail/view_message.php?uid=$1&id=$2
+RewriteRule ^user/(\d+)/mail/message/(\d+)/?$ /user/mail/view_message.php?uid=$1&mid=$2
 RewriteRule ^user/(\d+)/mail/compose/?$ /user/mail/compose_message.php?uid=$1 [QSA]
 RewriteRule ^user/(\d+)/mail/send/?$ /user/mail/mail_action.php?uid=$1&action=send
 

@@ -41,6 +41,7 @@ TODOs
 - Link news from forums to each section/home page?
 - Global site statistics (including user action logging?)
 - Polls?
+- Maintenance mode (no edits)
 
 == ACCOUNT ==
 * Support avatar changing/uploads
