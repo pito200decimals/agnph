@@ -58,6 +58,10 @@ if (sizeof($messages) > INBOX_ITEMS_PER_PAGE) {
     $vars['iterator'] = $iterator;
 }
 $vars['messages'] = $messages;
+if (isset($_SESSION['mail_send_message'])) {
+    $vars['action'] = $_SESSION['mail_send_message'];
+    unset($_SESSION['mail_send_message']);
+}
 
 // This is how to output the template.
 RenderPage("user/mail/mail.tpl");

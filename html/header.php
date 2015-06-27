@@ -1,7 +1,5 @@
 <?php
-// Hatch: Comment for Testing GIT... (Manually Merged!)
 // Standard header that includes all the important files. Will reside in the site root.
-// BLARGH
 
 session_start();
 

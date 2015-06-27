@@ -6,6 +6,7 @@
 {% endblock %}
 
 {% block scripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 {% endblock %}
 
 {#
@@ -17,6 +18,14 @@ TODO: Sidebar for user gallery actions.
 {% block usercontent %}
     <div>
         <h3>Messages</h3>
+        {% if action %}
+            <div class="completed-action-box">
+                <p>
+                    <strong>{{ action }}</strong>
+                    <input type="button"onclick="$('.completed-action-box').hide();" value="X" />
+                </p>
+            </div>
+        {% endif %}
         {# Display message list. #}
         <table class="message-table">
             <thead>

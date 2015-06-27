@@ -102,3 +102,21 @@ body {
     background-color: rgb(191,191,255);
     padding: 15px;
 }
+
+.completed-action-box {
+    margin: 5px;
+    border-radius: 5px;
+    background-color: rgb(85,153,85);
+    padding: 5px;
+    box-shadow: 2px 2px 5px #07162D;
+}
+.completed-action-box input {
+    float:right;
+    background-color:rgba(0,0,0,0);
+    border:none;
+    cursor:pointer;
+    font-weight:bold;
+}
+.completed-action-box p{
+    margin: 0px;
+}

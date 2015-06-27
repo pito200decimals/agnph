@@ -45,6 +45,13 @@ function CanUserViewPMs($user, $profile_user) {
     return false;
 }
 
+function CanUserSendPMsForUser($user, $profile_user) {
+    if (!IsUserActivated($user)) return false;
+    // Only users can send messages as themselves (no admin spoofing).
+    if ($user['UserId'] == $profile_user['UserId']) return true;
+    return false;
+}
+
 
 function DateStringToReadableString($datestr) {
     // $datestr is in the database format "MM/DD/YYYY"

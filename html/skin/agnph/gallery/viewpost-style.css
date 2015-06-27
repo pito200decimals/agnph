@@ -38,17 +38,8 @@
     padding: 5px;
     box-shadow: 2px 2px 5px #07162D;
 }
-
 .poolbox p {
     margin: 0px 5px;
-}
-
-.headerbar {
-    display: block;
-}
-
-.headerbar p {
-    margin: 0px;
 }
 
 .pendingbox {
@@ -58,6 +49,9 @@
     padding: 5px;
     box-shadow: 2px 2px 5px #07162D;
 }
+.pendingbox p {
+    margin: 0px;
+}
 
 .flaggedbox {
     margin: 5px;
@@ -66,20 +60,8 @@
     padding: 5px;
     box-shadow: 2px 2px 5px #07162D;
 }
-
-.completed-action-box {
-    margin: 5px;
-    border-radius: 5px;
-    background-color: rgb(85,153,85);
-    padding: 5px;
-    box-shadow: 2px 2px 5px #07162D;
-}
-.completed-action-box input {
-    float:right;
-    background-color:rgba(0,0,0,0);
-    border:none;
-    cursor:pointer;
-    font-weight:bold;
+.flaggedbox p {
+    margin: 0px;
 }
 
 .previewImg {
