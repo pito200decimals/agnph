@@ -58,8 +58,15 @@ if (sizeof($messages) > INBOX_ITEMS_PER_PAGE) {
     $vars['iterator'] = $iterator;
 }
 $vars['messages'] = $messages;
+
+// Set up banners.
+$vars['banner_nofications'] = array();
 if (isset($_SESSION['mail_send_message'])) {
-    $vars['action'] = $_SESSION['mail_send_message'];
+    $vars['banner_nofications'][] = array(
+        "classes" => array("green-banner"),
+        "text" => $_SESSION['mail_send_message'],
+        "dismissable" => true,
+        "strong" => true);
     unset($_SESSION['mail_send_message']);
 }
 

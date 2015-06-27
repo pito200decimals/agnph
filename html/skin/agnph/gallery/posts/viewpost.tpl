@@ -17,34 +17,7 @@
 {% use 'includes/comment-block.tpl' %}
 
 {% block content %}
-    <div class="headerbar">
-        {% if post.Status=="P" %}
-            <div class="pendingbox">
-                <p><strong>This post is pending moderator approval</strong></p>
-            </div>
-        {% elseif post.Status == "F" %}
-            <div class="flaggedbox">
-                <p><strong>This post has been flagged for deletion{% if post.flagger %} by <a href="/user/{{ post.flagger.UserId }}/gallery/">{{ post.flagger.DisplayName }}</a>{% endif %}</strong></p>
-                {% if post.flagReasonWithLink|length > 0 %}
-                    {% autoescape false %}<p><strong>Reason:</strong>{{ post.flagReasonWithLink }}</p>{% endautoescape %}
-                {% elseif post.FlagReason|length > 0 %}
-                    <p><strong>Reason:</strong>{{ post.flagReasonWithLink }}</p>
-                {% endif %}
-            </div>
-        {% elseif post.Status == "D" %}
-            <div class="flaggedbox">
-                <p><strong>This post has been deleted</strong></p>
-            </div>
-        {% endif %}
-        {% if action %}
-            <div class="completed-action-box">
-                <p>
-                    <strong>{{ action }}</strong>
-                    <input type="button"onclick="$('.completed-action-box').hide();" value="X" />
-                </p>
-            </div>
-        {% endif %}
-    </div>
+    {{ block('banner') }}
     <div class="sidepanel">
         {% if post.ParentPostId != -1 %}
             <div class="parentbox">

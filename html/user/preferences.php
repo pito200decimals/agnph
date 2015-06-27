@@ -197,6 +197,18 @@ if (isset($_POST['display-name']) &&
     $vars['confirm'] = "Settings saved";
 }
 
+$vars['banner_nofications'] = array();
+if (isset($vars['error'])) $vars['banner_nofications'][] = array(
+        "classes" => array("red-banner"),
+        "text" => $vars['error'],
+        "dismissable" => true,
+        "strong" => true);
+if (isset($vars['confirm'])) $vars['banner_nofications'][] = array(
+        "classes" => array("green-banner"),
+        "text" => $vars['confirm'],
+        "dismissable" => true,
+        "strong" => true);
+
 /////////////////////////////////////////
 // Initialize normal preferences page. //
 /////////////////////////////////////////

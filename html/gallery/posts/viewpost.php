@@ -132,12 +132,8 @@ ConstructCommentBlockIterator($comments, $vars['commentIterator'], true /* allow
 $vars['comments'] = $comments;
 
 PreparePostStatistics($post);
-if (isset($_SESSION['gallery_action_message'])) {
-    $vars['action'] = $_SESSION['gallery_action_message'];
-    unset($_SESSION['gallery_action_message']);
-}
-
 PrepPostNotificationBanner($post);
+HandleCreatingAllBanners($post);
 
 // Increment view count, and do SQL after page is rendered.
 $post['NumViews']++;
@@ -250,10 +246,53 @@ function PrepPostNotificationBanner(&$post) {
         if (mb_eregi(".*$pattern.*", $reason, $groups) !== FALSE) {
             if (is_numeric($groups[2])) {
                 $pid = (int)($groups[2]);
-                $replacement = "<a href='/gallery/post/show/$pid/'>".$groups[1]."</a>";
+                $replacement = "<a href='/gallery/post/show/$pid/'>post #$pid</a>";
                 $post['flagReasonWithLink'] = mb_eregi_replace($pattern, $replacement, $reason);
             }
         }
+    }
+}
+
+function HandleCreatingAllBanners($post) {
+    global $vars;
+    $vars['banner_nofications'] = array();
+    if ($post['Status'] == 'P') {
+        $vars['banner_nofications'][] = array(
+            "classes" => array("blue-banner"),
+            "text" => "This post is pending moderator approval",
+            "dismissable" => false,
+            "strong" => true);
+    } else if ($post['Status'] == 'F') {
+        if (isset($post['flagger'])) {
+            $msg = "This post has been flagged for deletion by <a href='/user/".$post['flagger']['UserId']."/gallery/'>".$post['flagger']['DisplayName']."</a>";
+        } else {
+            $msg = "This post has been flagged for deletion";
+        }
+        if (isset($post['flagReasonWithLink']) && strlen($post['flagReasonWithLink'])) {
+            $msg .= ". Reason: ".$post['flagReasonWithLink'];
+        } else if (isset($post['FlagReason']) && strlen($post['FlagReason'])) {
+            $msg .= ". Reason: ".SanitizeHTMLTags($post['FlagReason'], "" /*no tags*/);
+        }
+        $vars['banner_nofications'][] = array(
+            "classes" => array("red-banner"),
+            "text" => $msg,
+            "dismissable" => false,
+            "strong" => true,
+            "noescape" => true);
+    } else if ($post['Status'] == 'D') {
+        $vars['banner_nofications'][] = array(
+            "classes" => array("red-banner"),
+            "text" => "This post has been deleted",
+            "dismissable" => false,
+            "strong" => true);
+    }
+    if (isset($_SESSION['gallery_action_message'])) {
+        $vars['banner_nofications'][] = array(
+            "classes" => array("green-banner"),
+            "text" => $_SESSION['gallery_action_message'],
+            "dismissable" => true,
+            "strong" => true);
+        unset($_SESSION['gallery_action_message']);
     }
 }
 ?>

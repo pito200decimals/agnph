@@ -18,14 +18,7 @@ TODO: Sidebar for user gallery actions.
 {% block usercontent %}
     <div>
         <h3>Messages</h3>
-        {% if action %}
-            <div class="completed-action-box">
-                <p>
-                    <strong>{{ action }}</strong>
-                    <input type="button"onclick="$('.completed-action-box').hide();" value="X" />
-                </p>
-            </div>
-        {% endif %}
+        {{ block('banner') }}
         {# Display message list. #}
         <table class="message-table">
             <thead>

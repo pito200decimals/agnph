@@ -1,4 +1,27 @@
 {% spaceless %}
+{# Define blocks to be used elsewhere #}
+{% if false %}
+    {# Notification banners #}
+    {% block banner %}
+        {% for notification in banner_nofications %}
+            <div class="banner-nofication{% for class in notification.classes %} {{ class }}{% endfor %}">
+                <p>
+                    {% if notification.strong %}<strong>{% endif %}
+                        {% if notification.noescape %}
+                            {% autoescape false %}{{ notification.text }}{% endautoescape %}
+                        {% else %}
+                            {{ notification.text }}
+                        {% endif %}
+                    {% if notification.strong %}</strong>{% endif %}
+                    {% if notification.dismissable %}
+                        <input type="button"onclick="$(this).parent().parent().hide();" value="X" />
+                    {% endif %}
+                </p>
+            </div>
+        {% endfor %}
+    {% endblock %}
+{% endif %}
+
 {# Main site base template #}
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
@@ -13,7 +36,7 @@
         <link rel="stylesheet" type="text/css" href="{{ skinDir }}/style.css" />
         {% block styles %}
         {% endblock %}
-        {% if debug %}
+        {% if debug %}{# TODO: Remove #}
             <style type="text/css">
                 div,span,li {
                     border-style: dotted;
@@ -24,7 +47,7 @@
     </head>
     <body>
         <div id="mainbody">
-            <div id="header">
+            <div id="header">{# TODO: Replace with actual site banner #}
                 {% block welcome %}
                     <h1>Welcome, {% if user %}{{ user.DisplayName }}{% else %}Guest{% endif %}!</h1>
                 {% endblock %}
