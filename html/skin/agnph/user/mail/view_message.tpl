@@ -24,27 +24,7 @@
     {% endif %}
 {% endblock %}
 
-{#
-TODO: Sidebar for user gallery actions.
-{% block sidebar %}
-{% endblock %}
-#}
-
 {% use 'includes/comment-block.tpl' %}
-
-{% block message_block %}
-    <div class="pm-block">
-        <div>
-            <strong>{{ message.Title }}</strong>
-            {{ message.date }}
-        </div>
-        <div>
-            {% autoescape false %}
-                {{ message.Content }}
-            {% endautoescape %}
-        </div>
-    </div>
-{% endblock %}
 
 {% block usercontent %}
     <div>
@@ -59,9 +39,6 @@ TODO: Sidebar for user gallery actions.
             <form action="/user/{{ profile.user.UserId }}/mail/send/" method="POST" accept-charset="UTF-8">
                 <input type="hidden" name="rid" value="{{ rid }}" />
                 <textarea id="reply-to" name="message">
-                    {% autoescape false %}
-                        {{ profile.user.bio }}
-                    {% endautoescape %}
                 </textarea>
                 <input type="submit" value="Reply" />
             </form>
@@ -69,7 +46,6 @@ TODO: Sidebar for user gallery actions.
         <ul class="comment-list">
             {% for comment in messages %}
                 {{ block('comment') }}
-                {#{{ block('message_block') }}#}
             {% endfor %}
         </ul>
     </div>

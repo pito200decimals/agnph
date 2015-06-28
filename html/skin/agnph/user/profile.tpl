@@ -76,11 +76,14 @@
     </script>
 {% endblock %}
 
-{#
-TODO: Sidebar for main profile actions.
 {% block sidebar %}
+        <h4>Actions</h4>
+        <ul>
+            <li><a href="/user/{{ user.UserId }}/mail/compose/?to={{ profile.user.DisplayName|url_encode }}">Send a Message</a></li>
+            <li>Make Administrator</li>
+            <li>Revoke Administrator</li>
+        </ul>
 {% endblock %}
-#}
 
 {% block usercontent %}
     <div class="infoblock">
@@ -110,7 +113,9 @@ TODO: Sidebar for main profile actions.
             {% if profile.user.Title|length > 0 %}      <li><span class="basic-info-label">Title:</span><span>{{ profile.user.Title }}</span></li>{% endif %}
             {% if profile.user.Location|length > 0 %}   <li><span class="basic-info-label">Location:</span><span>{{ profile.user.Location }}</span></li>{% endif %}
             {% if canSeePrivateInfo %}
-                <hr />
+        </ul>
+        <h3>Private Info</h3>
+        <ul id="basic-info">
             {% if not profile.user.ShowDOB %}           <li><span class="basic-info-label">Birthday:</span><span>{{ profile.user.birthday }}</span></li>{% endif %}
                                                         <li><span class="basic-info-label">Username:</span><span>{{ profile.user.UserName }}</span></li>
                                                         <li><span class="basic-info-label">Email:</span><span>{{ profile.user.Email }}</span></li>
@@ -131,7 +136,9 @@ TODO: Sidebar for main profile actions.
                                                         <li><span class="basic-info-label">Last Active:</span><span>{{ profile.user.lastVisitDate }}</span></li>
                                                         <li><span class="basic-info-label">Date Registered:</span>{{ profile.user.registerDate }}<span></span></li>
             {% if canSeeAdminInfo %}
-                <hr />
+        </ul>
+        <h3>Admin Info</h3>
+        <ul id="basic-info">
                                                         <li><span class="basic-info-label">IP Addresses:</span><span>{{ profile.user.ips }}</span></li>
             {% endif %}
         </ul>

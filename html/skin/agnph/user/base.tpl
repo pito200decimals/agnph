@@ -33,13 +33,7 @@
                 </div>
                 {# Other actions to perform on this user #}
                 <div class="sidepanel-section">
-                    <h4>Actions</h4>
                     {% block sidebar %}
-                        <ul>
-                            <li>Send a Message</li>
-                            <li>Make Administrator</li>
-                            <li>Revoke Administrator</li>
-                        </ul>
                     {% endblock %}
                 </div>
             </div>

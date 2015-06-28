@@ -1,5 +1,5 @@
 TODOs
-(* = Required for launch)
+(* = Required for launch, - = Normal priority, X = Scrapped)
 
 == FORUMS ==
 - Re-check forums functionality (Might need a complete re-do)
@@ -15,7 +15,7 @@ TODOs
 - Gallery linking to source on delete
 - Gallery/Fics mass tag edits?
 - Slideshow view?
-- IP address tracking for uploads (Do we need this, since user is tracked?)
+X IP address tracking for uploads (Do we need this, since user is tracked?)
 - Upvote/Downvote (On hold for now. Don't know where to put buttons. Feature not used in Ouroboros gallery)
 - Gallery notes?
 - Custom swf/webm thumbs when parent is set?
@@ -30,7 +30,7 @@ TODOs
 
 == SITE ==
 * Check for vuln's for style background-image URL
-* Search string length attackss.
+* Search string length attacks.
 * Splash for Disclaimer/Warning/Age gate.
 * Oekaki section
 * Admin site management
@@ -45,8 +45,11 @@ TODOs
 
 == ACCOUNT ==
 * Support avatar changing/uploads
+* Support email/password changing
 * Mailbox/PM system
     - Add unread-message notification to both account tab and inbox tab.
+    X Support message deletion? For now, no.
+    - Should add user blacklisting?
 * User ban system
 * Admin management of user permissions
 * Support more restrictions on display name changing

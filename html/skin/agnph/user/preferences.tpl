@@ -44,11 +44,6 @@
     </script>
 {% endblock %}
 
-{#
-{% block sidebar %}
-{% endblock %}
-#}
-
 {% block usercontent %}
     <form action="" method="POST" accept-charset="UTF=8">
         {{ block('banner') }}

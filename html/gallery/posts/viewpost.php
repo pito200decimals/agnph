@@ -268,9 +268,9 @@ function HandleCreatingAllBanners($post) {
         } else {
             $msg = "This post has been flagged for deletion";
         }
-        if (isset($post['flagReasonWithLink']) && strlen($post['flagReasonWithLink'])) {
+        if (isset($post['flagReasonWithLink']) && mb_strlen($post['flagReasonWithLink'])) {
             $msg .= ". Reason: ".$post['flagReasonWithLink'];
-        } else if (isset($post['FlagReason']) && strlen($post['FlagReason'])) {
+        } else if (isset($post['FlagReason']) && mb_strlen($post['FlagReason'])) {
             $msg .= ". Reason: ".SanitizeHTMLTags($post['FlagReason'], "" /*no tags*/);
         }
         $vars['banner_nofications'][] = array(

@@ -9,11 +9,9 @@
 {% block scripts %}
 {% endblock %}
 
-{#
-TODO: Sidebar for user gallery actions.
+{# TODO: Sidebar for user gallery actions. #}
 {% block sidebar %}
 {% endblock %}
-#}
 
 {% block usercontent %}
     <div class="infoblock">

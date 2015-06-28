@@ -2,7 +2,6 @@
 // Page for receiving ajax requests to fetch list of pools matching a string.
 
 // Don't include headers, we only care about sql since this does not modify stuff.
-define("DEBUG", false);
 include_once("../../includes/config.php");
 include_once("../../includes/constants.php");
 include_once("../../includes/util/core.php");

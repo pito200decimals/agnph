@@ -44,7 +44,18 @@ $vars['message'] = end($messages);
 $vars['canSendPM'] = CanUserSendPMsForUser($user, $profile_user);
 $vars['rid'] = $selected_msg['Id'];
 
-// TODO: Mark message(s) as read.
+// Mark message(s) as read.
+$mark_read = array();
+foreach ($messages as $msg) {
+    if ($msg['Status'] == "U" && $user['UserId'] == $msg['RecipientUserId']) {
+        $mark_read[] = $msg['Id'];
+    }
+}
+if (sizeof($mark_read) > 0) {
+    $joined = implode(",", $mark_read);
+    sql_query("UPDATE ".USER_MAILBOX_TABLE." SET Status='R' WHERE Id in ($joined);");
+}
+
 // Don't bother paginating PM conversations. Hopefully users will compose new conversations if needed.
 
 // This is how to output the template.

@@ -63,11 +63,12 @@ function GetClause($search_term) {
     if ($lower_term == "rating:r") return "Rating='R'";
     if ($lower_term == "rating:xxx") return "Rating='X'";
     if ($lower_term == "featured" ||
+        $lower_term == "is_featured" ||
         $lower_term == "featured:yes" ||
-        $lower_term == "featured:true") return "Featured<>'N'";
+        $lower_term == "featured:true") return "Featured<>'".FICS_NOT_FEATURED."'";
     if ($lower_term == "not_featured" ||
         $lower_term == "featured:no" ||
-        $lower_term == "featured:false") return "Featured='N'";
+        $lower_term == "featured:false") return "Featured='".FICS_NOT_FEATURED."'";
     if (startsWith($lower_term, "status:p")) {
         return "ApprovalStatus='P'";
     } else if (startsWith($lower_term, "status:a")) {

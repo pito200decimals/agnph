@@ -21,6 +21,10 @@
     margin: 5px;
 }
 
+.sidepanel-section h4 {
+    margin: 0px;
+}
+
 .sidepanel-section ul {
     list-style: none;
     padding: 0px;

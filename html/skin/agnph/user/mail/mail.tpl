@@ -9,11 +9,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 {% endblock %}
 
-{#
-TODO: Sidebar for user gallery actions.
 {% block sidebar %}
+    <h4>Actions</h4>
+    <ul>
+        <li><a href="/user/{{ profile.user.UserId }}/mail/compose/">Compose Message</a></li>
+    </ul>
 {% endblock %}
-#}
 
 {% block usercontent %}
     <div>
@@ -36,7 +37,7 @@ TODO: Sidebar for user gallery actions.
                         <tr class="{% if message.Status == 'U' %}unread{% endif %}">
                             <td><div>{% if message.inbox %}INBOX_ICON{% elseif message.outbox %}OUTBOX_ICON{% endif %} {% if message.count > 1 %}({{ message.count }}){% endif %}</div></td>
                             <td><div>{{ message.date }}</div></td>
-                            <td><div><a href="/user/{{ user.UserId }}/mail/message/{{ message.Id }}/">{{ message.Title }}</a></div></td>
+                            <td><div><a href="/user/{{ profile.user.UserId }}/mail/message/{{ message.Id }}/">{{ message.Title }}</a></div></td>
                             <td><div><a href="/user/{{ message.toFromUser.UserId }}/">{{ message.toFromUser.DisplayName }}</a></div></td>
                             <td><div><input type="checkbox" name="" /></div></td>
                         </tr>

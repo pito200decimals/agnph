@@ -86,7 +86,7 @@ define("GALLERY_DATE_FORMAT", "Y-m-d");
 define("FICS_DATE_FORMAT", "Y-m-d");
 define("PROFILE_DATE_FORMAT", "Y-m-d");
 define("PROFILE_DATE_TIME_FORMAT", "Y-m-d H:i:s");
-define("PROFILE_DOB_FORMAT", "F d");
+define("PROFILE_DOB_FORMAT", "F d Y");
 define("MIN_COMMENT_STRING_SIZE", 10);
 define("MIN_FICS_TITLE_SUMMARY_SEARCH_STRING_SIZE", 3);
 define("MAX_FORUMS_SIGNATURE_LENGTH", 256);
@@ -102,5 +102,6 @@ define("GALLERY_PROFILE_SHOW_NUM_FAVORITES", 6);
 define("MAX_PM_LENGTH", 4096);
 define("MIN_DISPLAY_NAME_LENGTH", 3);
 define("INBOX_ITEMS_PER_PAGE", 50);
+define("MIN_USER_LOOKUP_PREFIX_LENGTH", 1);  // For ajax PM user lookup.
 
 ?>
