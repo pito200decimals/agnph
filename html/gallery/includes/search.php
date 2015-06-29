@@ -5,7 +5,6 @@ include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."gallery/includes/searchclause.php");
 
 // Search orderings implemented:
-// order:score (Highest to Lowest)
 // order:date (Recent to Past)
 // order:age (Oldest to Newest)
 // order:fav (Most to Least favorites)
@@ -42,18 +41,13 @@ function CreatePostSearchSQL($search_string, $posts_per_page, $page, &$can_sort_
             $sortOrder = "T.DateUploaded ASC, ".$sortOrder;
             $can_sort_pool = false;
         }
-        if (contains($lower_search_string, "order:score") !== FALSE) {
-            $search_string = mb_eregi_replace("order:score", "", $search_string);
-            $sortOrder = "T.Score DESC, ".$sortOrder;
-            $can_sort_pool = false;
-        }
         if (contains($lower_search_string, "order:views") !== FALSE) {
             $search_string = mb_eregi_replace("order:views", "", $search_string);
             $sortOrder = "T.NumViews DESC, ".$sortOrder;
             $can_sort_pool = false;
         }
         if (contains($lower_search_string, "order:fav") !== FALSE) {
-            $search_string = mb_eregi_replace("order:fav(orites?)?", "", $search_string);
+            $search_string = mb_eregi_replace("order:fav(es?|ou?rites?)?", "", $search_string);
             $sortOrder = "T.NumFavorites DESC, ".$sortOrder;
             $can_sort_pool = false;
         }

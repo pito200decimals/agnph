@@ -51,7 +51,7 @@
             <h3>Basic Info</h3>
             <ul id="basic-info">
                 <li><span class="basic-info-label">Displayed Name:</span>         <span><input type="text" name="display-name" value="{{ profile.user.DisplayName }}" /></span></li>
-                <li><span class="basic-info-label">Birthday:</span>         <span><input type="text" name="dob" value="{{ profile.user.DOB }}" /></span></li>
+                <li><span class="basic-info-label">Birthday:</span>         <span><input type="date" name="dob" value="{{ profile.user.DOB }}" /></span></li>
                 <li><span class="basic-info-label">Show Birthday:</span>    <span><input type="checkbox" name="show-dob" value="show"{% if profile.user.ShowDOB %} checked{% endif%} /></span></li>
                 <li><span class="basic-info-label">Species:</span>          <span><input type="text" name="species" value="{{ profile.user.Species }}" /></span></li>
                 <li><span class="basic-info-label">Title:</span>            <span><input type="text" name="title" value="{{ profile.user.Title }}" /></span></li>

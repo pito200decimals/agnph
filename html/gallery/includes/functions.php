@@ -91,7 +91,6 @@ function UpdatePost($tag_string, $post_id, $user) {
 
 // Writes post statistics to database.
 function UpdatePostStatistics($post_id) {
-    // Score?
     // NumFavorites
     // NumComments
     if (sql_query_into($result, "SELECT count(*) FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE PostId=$post_id;", 1)) {
@@ -236,13 +235,6 @@ function GalleryTagDescriptorFilterFn($token, $label, $tag, $post_id) {
 
 // Creates label that floats under a post thumbnail.
 function CreatePostLabel(&$post) {
-    if ($post['Score'] > 0) {
-        $post['scoreHtml'] = "<span class='pscore'>&uarr;".$post['Score']."</span>";
-    } else if ($post['Score'] < 0) {
-        $post['scoreHtml'] = "<span class='nscore'>&darr;".$post['Score']."</span>";
-    } else {
-        $post['scoreHtml'] = "<span>&#x2195;0</span>";
-    }
     $post['favHtml'] = "<span>&hearts;".$post['NumFavorites']."</span>";
     $post['commentsHtml'] = "<span>C".$post['NumComments']."</span>";
     switch($post['Rating']) {

@@ -33,6 +33,27 @@ function Login($username, $password) {
     }
 }
 
+function ForceLogin($uid) {
+    $escaped_uid = sql_escape($uid);
+    if (!sql_query_into($result, "SELECT UserID,UserName,Email,Password FROM ".USER_TABLE." WHERE UserId='$escaped_uid' LIMIT 1;", 1)) {
+        return false;
+    }
+    $user = $result->fetch_assoc();
+    $uid = $user['UserID'];
+    $email = $user['Email'];
+    $encryptedPassword = $user['Password'];
+
+    $salt = md5($email.$encryptedPassword);
+    if (AuthenticateUser($uid, $salt)) {
+        setcookie(UID_COOKIE, $uid, time() + COOKIE_DURATION, "/");
+        setcookie(SALT_COOKIE, $salt, time() + COOKIE_DURATION, "/");
+        return true;
+    } else {
+        // Cookies are unset by AuthenticateUser().
+        return false;
+    }
+}
+
 if (!isset($user)) {
     // auth.php did not find a user logged in. We can safely perform the login now.
     Login(mb_strtolower($_POST['username']), $_POST['password']);

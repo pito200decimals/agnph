@@ -14,7 +14,6 @@
 // pool:{PoolId}
 //
 // === Not implemented yet ===
-// score:
 // comments:
 // width/height/aspect-ratio:
 // Has artist, etc?
@@ -122,7 +121,8 @@ function CreateSQLClauseFromFilter($filter) {
             $escaped_pool = sql_escape($pool);
             return "T.ParentPoolId='$escaped_pool'";
         } else {
-            return "FALSE";
+            // Fallback on normal search clauses.
+            return CreateSQLClauseFromTerm($filter);
         }
     }
 }

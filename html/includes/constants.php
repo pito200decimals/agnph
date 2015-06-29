@@ -15,6 +15,7 @@ define("MAX_FILE_SIZE", 50 * 1024 * 1024);  // 50 MB.
 define("SITE_NAV_TABLE", "nav_links");
 define("SITE_TAG_ALIAS_TABLE", "tag_aliases");
 define("SITE_LOGGING_TABLE", "action_log");
+define("SITE_TEXT_TABLE", "site_text");
 
 // User content data tables.
 define("USER_TABLE", "user");
@@ -103,5 +104,12 @@ define("MAX_PM_LENGTH", 4096);
 define("MIN_DISPLAY_NAME_LENGTH", 3);
 define("INBOX_ITEMS_PER_PAGE", 50);
 define("MIN_USER_LOOKUP_PREFIX_LENGTH", 1);  // For ajax PM user lookup.
+
+define("MIN_USERNAME_LENGTH", 3);  // Also present in register.tpl
+define("MAX_USERNAME_LENGTH", 24);  // Also present in register.tpl
+define("MIN_PASSWORD_LENGTH", 4);  // Also present in register.tpl
+
+define("REGISTER_ACCOUNT_EXPIRE_TIME_READABLE_STRING", "24 hours");
+define("REGISTER_ACCOUNT_EXPIRE_TIME", "24 HOUR");  // Time after registration that email link expires.
 
 ?>

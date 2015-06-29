@@ -19,6 +19,8 @@ X IP address tracking for uploads (Do we need this, since user is tracked?)
 - Upvote/Downvote (On hold for now. Don't know where to put buttons. Feature not used in Ouroboros gallery)
 - Gallery notes?
 - Custom swf/webm thumbs when parent is set?
+- Tag implications
+- Some sort of tag exploration feature, perhaps tag cloud?
 
 == FICS ==
 * User favorites (story, author)
@@ -42,8 +44,10 @@ X IP address tracking for uploads (Do we need this, since user is tracked?)
 - Global site statistics (including user action logging?)
 - Polls?
 - Maintenance mode (no edits)
+- Multiple themes?
 
 == ACCOUNT ==
+* Add gender
 * Support avatar changing/uploads
 * Support email/password changing
 * Mailbox/PM system
@@ -62,3 +66,4 @@ X IP address tracking for uploads (Do we need this, since user is tracked?)
 - max_upload_filesize in php.ini
 - enable mod_rewrite in httpd.conf
 - enable module gd (for swf size info)
+- Install sendmail

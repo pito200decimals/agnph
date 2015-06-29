@@ -9,6 +9,7 @@ include_once(SITE_ROOT."includes/util/file.php");
 include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."includes/util/user.php");
 include_once(SITE_ROOT."includes/util/html_funcs.php");
+include_once(SITE_ROOT."includes/util/date.php");
 include_once(SITE_ROOT."user/includes/functions.php");
 
 include(SITE_ROOT."user/includes/profile_setup.php");
@@ -59,7 +60,7 @@ if (isset($_POST['display-name']) &&
     }
     // DOB
     if ($_POST['dob'] != $profile_user['DOB']) {
-        $dob = ValidateDateString($_POST['dob']);
+        $dob = ParseDate($_POST['dob']);
         if ($dob) {
             $user_table_sets[] = "DOB='".sql_escape($dob)."'";
         }

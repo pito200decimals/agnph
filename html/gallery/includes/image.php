@@ -113,7 +113,9 @@ function GetPreviewPath($md5, $ext) {
 function CreateThumbnailFile($md5, $ext) {
     $image_path = GetSystemImagePath($md5, $ext);
     $thumb_path = GetSystemThumbPath($md5, $ext);
+    $oldmask = umask(0);
     mkdirs(dirname(GetSiteThumbPath($md5, $ext)));
+    umask($oldmask);
     $image = new SimpleImage();
     $image->load($image_path);
     // Always create thumbnail file.
@@ -129,7 +131,9 @@ function CreateThumbnailFile($md5, $ext) {
 function CreatePreviewFile($md5, $ext) {
     $image_path = GetSystemImagePath($md5, $ext);
     $preview_path = GetSystemPreviewPath($md5, $ext);
+    $oldmask = umask(0);
     mkdirs(dirname(GetSitePreviewPath($md5, $ext)));
+    umask($oldmask);
     $image = new SimpleImage();
     $image->load($image_path);
     if (($image->getWidth() > MAX_IMAGE_PREVIEW_SIZE || $image->getHeight() > MAX_IMAGE_PREVIEW_SIZE)) {

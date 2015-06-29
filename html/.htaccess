@@ -6,6 +6,9 @@ Options -MultiViews
 # Rewrites for Sitewide pages
 RewriteRule ^login/?$ /login.php
 RewriteRule ^logout/?$ /logout.php
+RewriteRule ^register/?$ /user/register.php
+RewriteRule ^register/captcha/?$ /user/captcha/captcha.php [QSA]
+RewriteRule ^register/success/?$ /user/register_success.php [QSA]
 
 # Rewrites for forums pages
 RewriteRule ^forums/thread/(\d+)/?$ /forums/thread/viewthread.php?t=$1

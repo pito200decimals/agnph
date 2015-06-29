@@ -87,7 +87,7 @@
                                 </div>
                                 <div class="postlabel">
                                     {% autoescape false %}
-                                    {{ post.scoreHtml }}{{ post.favHtml }}{{ post.commentsHtml }}{{ post.ratingHtml }}
+                                    {{ post.favHtml }}{{ post.commentsHtml }}{{ post.ratingHtml }}
                                     {% endautoescape %}
                                 </div>
                             </div>

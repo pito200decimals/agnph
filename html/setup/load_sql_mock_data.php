@@ -16,12 +16,14 @@ delete_files("../gallery/data/");
 delete_files("../uploads/");
 delete_files("../fics/data/");
 delete_files("../fics/data/chapters/");
-mkdir("../user/data/");
-mkdir("../user/data/bio/");
-mkdir("../gallery/data/");
-mkdir("../uploads/");
-mkdir("../fics/data/");
-mkdir("../fics/data/chapters/");
+$oldmask = umask(0);
+mkdir("../user/data/", 0777, true);
+mkdir("../user/data/bio/", 0777, true);
+mkdir("../gallery/data/", 0777, true);
+mkdir("../uploads/", 0777, true);
+mkdir("../fics/data/", 0777, true);
+mkdir("../fics/data/chapters/", 0777, true);
+umask($oldmask);
 
 
 $now = time();
@@ -73,6 +75,12 @@ do_or_die(sql_query(
     ('Oekaki', '/oekaki/', 4),
     ('About', '/about/', 5),
     ('Setup', '/setup/sql_setup.php', 6);"));
+
+do_or_die(sql_query(
+    "INSERT INTO ".SITE_TEXT_TABLE."
+    (Name, Text)
+    VALUES
+    ('RegisterDisclaimer', 'By clicking \'Register\', you agree that you are above 18 years of age. A verification email will be sent to the provided email address.');"));
     
 function rand_date() {
     return mt_rand(0, 2147483647);

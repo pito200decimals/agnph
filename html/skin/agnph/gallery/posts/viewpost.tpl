@@ -207,6 +207,7 @@
                     <input type="submit" value="Save Changes" />
                 </form>
             </div>
+            <div class="Clear">&nbsp;</div>
             <div class="comment-section">
                 {% if comments|length > 0 %}
                     <ul class="comment-list">

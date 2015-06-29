@@ -6,19 +6,24 @@ function mkdirs($site_dir_path) {
     if (mb_substr($site_dir_path, 0, 1) == "/")
         $site_dir_path = mb_substr($site_dir_path, 1, mb_strlen($site_dir_path) - 1);
      if (file_exists(SITE_ROOT.$site_dir_path)) return;
+    $oldmask = umask(0);
     mkdir(SITE_ROOT.$site_dir_path, 0777, true);
+    umask($oldmask);
 }
 
 function mksysdirs($sys_dir_path) {
      if (file_exists($sys_dir_path)) return;
+    $oldmask = umask(0);
     mkdir($sys_dir_path, 0777, true);
+    umask($oldmask);
 }
 
 // Gets the file extension of the given path, or null if it doesn't have an extension.
 function GetFileExtension($fname) {
     $path_parts = pathinfo($fname);
     if (isset($path_parts['extension']) && $path_parts['extension'] !== NULL) {
-        return $path_parts['extension'];
+        $ext = $path_parts['extension'];
+        return $ext;
     } else {
         return null;
     }
@@ -30,9 +35,14 @@ function read_file($file_path, &$dest) {
     $handle = fopen($file_path, "r");
     if (!$handle) return false;
     $success = true;
-    $dest = fread($handle, filesize($file_path));
-    if (!$dest) $success = false;
+    if (filesize($file_path) > 0) {
+        $bytes_read = fread($handle, filesize($file_path));
+        if ($bytes_read === FALSE) $success = false;
+    } else {
+        $bytes_read = "";
+    }
     if (!fclose($handle)) $success = false;
+    if ($success) $dest = $bytes_read;
     return $success;
 }
 
@@ -46,7 +56,8 @@ function write_file($file_path, $contents, $append = false) {
     $handle = fopen($file_path, $mode);
     if (!$handle) return false;
     $success = true;
-    if (!fwrite($handle, $contents))  $success = false;
+    $bytes_written = fwrite($handle, $contents);
+    if ($bytes_written === FALSE || $bytes_written < strlen($contents)) $success = false;
     if (!fclose($handle)) $success = false;
     return $success;
 }

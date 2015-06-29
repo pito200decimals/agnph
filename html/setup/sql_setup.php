@@ -28,6 +28,7 @@ sql_query("DROP TABLE ".SITE_NAV_TABLE.";");
 sql_query("DROP TABLE ".SITE_TAG_ALIAS_TABLE.";");
 sql_query("DROP TABLE ".USER_MAILBOX_TABLE.";");
 sql_query("DROP TABLE ".SITE_LOGGING_TABLE.";");
+sql_query("DROP TABLE ".SITE_TEXT_TABLE.";");
 sql_query("DROP TABLE ".FORUMS_LOBBY_TABLE.";");
 sql_query("DROP TABLE ".FORUMS_POST_TABLE.";");
 sql_query("DROP TABLE ".FORUMS_USER_PREF_TABLE.";");
@@ -46,6 +47,7 @@ sql_query("DROP TABLE ".FICS_TAG_TABLE.";");
 sql_query("DROP TABLE ".FICS_STORY_TAG_TABLE.";");
 sql_query("DROP TABLE ".FICS_REVIEW_TABLE.";");
 sql_query("DROP TABLE ".FICS_USER_PREF_TABLE.";");
+sql_query("DELETE FROM mysql.event");
 
 // Main user data table. General information that is shared between sections.
 do_or_die(sql_query(
@@ -55,11 +57,11 @@ do_or_die(sql_query(
        "UserName VARCHAR(24) UNIQUE NOT NULL,
         DisplayName VARCHAR(24) NOT NULL,
         Email VARCHAR(64) NOT NULL,
-        Password CHAR(32) NOT NULL,
-        SecretQuestion VARCHAR(256) NOT NULL,
-        SecretAnswer CHAR(32) NOT NULL,
-        Timezone FLOAT NOT NULL,
-        Usermode INT(11) DEFAULT 0 NOT NULL,".  // -1=Banned, 0=Unactivated, 1=User
+        Password CHAR(32) NOT NULL,".
+        //SecretQuestion VARCHAR(256) NOT NULL,
+        //SecretAnswer CHAR(32) NOT NULL,
+       "Timezone FLOAT DEFAULT 0 NOT NULL,
+        Usermode INT(11) DEFAULT 0 NOT NULL,".  // -1=Banned, 0=Unactivated, 1=User. Unactivated users do not have anything besides this table entry.
        "Permissions VARCHAR(8) NOT NULL,".  // String of characters, A=Super Admin, R=Forums, G=Gallery, F=Fics, O=Oekaki, I=IRC, M=Minecraft
        "BanReason VARCHAR(256) NOT NULL,
         Title VARCHAR(64) NOT NULL,
@@ -74,10 +76,11 @@ do_or_die(sql_query(
        "JoinTime INT(11) NOT NULL,
         LastVisitTime INT(11) NOT NULL,
         DisplayNameChangeTime INT(11) NOT NULL,
-        RegisterIP VARCHAR(50) NOT NULL,
-        KnownIPs VARCHAR(512) NOT NULL,".  // Allocate 45 + 1 characters for each IP address. Store the past 10 addresses comma-separated.
+        RegisterIP VARCHAR(50) NOT NULL,".  // RegisterIP will be empty-string if the user was imported from the old site software.
+       "KnownIPs VARCHAR(512) NOT NULL,".  // Allocate 45 + 1 characters for each IP address. Store the past 10 addresses comma-separated.
        "PRIMARY KEY(UserId)
     ) DEFAULT CHARSET=utf8;"));
+do_or_die(sql_query("SET GLOBAL event_scheduler = ON;"));  // Turn on cleanup scheduler.
 // User biography is stored in text files at /user/bio/{UserId}.txt
 
 // TODO: Do we want this in a table, or in the site template?
@@ -87,6 +90,13 @@ do_or_die(sql_query(
         Link VARCHAR(64) NOT NULL,
         ItemOrder INT(11) NOT NULL,
         PRIMARY KEY(Label, Link)
+    ) DEFAULT CHARSET=utf8;"));
+
+do_or_die(sql_query(
+    "CREATE TABLE ".SITE_TEXT_TABLE." (
+        Name VARCHAR(24) NOT NULL,
+        Text TEXT(4096) NOT NULL,
+        PRIMARY KEY(Name)
     ) DEFAULT CHARSET=utf8;"));
 
 do_or_die(sql_query(
@@ -131,7 +141,7 @@ do_or_die(sql_query(
 do_or_die(sql_query(
     "CREATE TABLE ".FORUMS_USER_PREF_TABLE." (
         UserId INT(11) NOT NULL,
-        Signature VARCHAR(".MAX_FORUMS_SIGNATURE_LENGTH.") NOT NULL,
+        Signature VARCHAR(".MAX_FORUMS_SIGNATURE_LENGTH.") DEFAULT '' NOT NULL,
         SeenPostsUpToId INT(11) DEFAULT 0 NOT NULL,
         ForumThreadsPerPage INT(11) DEFAULT ".DEFAULT_FORUM_THREADS_PER_PAGE.",
         ForumPostsPerPage INT(11) DEFAULT ".DEFAULT_FORUM_POSTS_PER_PAGE.",

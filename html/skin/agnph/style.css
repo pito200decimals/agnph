@@ -92,14 +92,14 @@ body {
     margin: 10px auto;
     padding: 15px;
     max-width: 600px;
-    background-color: rgb(191,191,255);
+    border-radius: 15px;
+    background-color: rgb(223,223,255);
     text-align: center;
 }
 
 #content > .error-box > .error-msg {
     display: block;
     text-align: center;
-    background-color: rgb(191,191,255);
     padding: 15px;
 }
 

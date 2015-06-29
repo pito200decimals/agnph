@@ -7,11 +7,11 @@ include_once(SITE_ROOT."includes/util/file.php");
 include_once(SITE_ROOT."gallery/includes/functions.php");
 
 if (!isset($user)) {
-    RenderErrorPage("You must be logged in to upload a post.");
+    RenderErrorPage("You must be logged in to upload a post");
     return;
 }
 if (!CanUserUploadPost($user)) {
-    RenderErrorPage("You are not authorized to upload a new posts.");
+    RenderErrorPage("You are not authorized to upload a new posts");
     return;
 }
 
@@ -31,14 +31,14 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
             // Replace with non-https.
             $url = "http://".mb_substr($url, 8);
         }
-        $external_ext = GetFileExtension($url);
+        $external_ext = GetExtensionFromURL($url);
         if ($external_ext == null) {
-            RenderErrorPage("Error while uploading file.");
+            RenderErrorPage("Error while uploading file: Invalid file extensions");
         }
         $tmp_path = time().".$external_ext";
         file_put_contents($tmp_path, fopen($url, 'r'));
     } else {
-        RenderErrorPage("Error while uploading file.");
+        RenderErrorPage("Error while uploading file: No file provided");
     }
     $md5 = md5_file($tmp_path);
     $ext = GetFileExtension($tmp_path);
@@ -79,6 +79,9 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
             $thumb_path = "";
             $preview_path = "";
             $has_preview = 0;
+            break;
+        default:
+            RenderErrorPage("Error while uploading file: Invalid file extension");
             break;
     }
     $uploader_id = $user['UserId'];
@@ -124,7 +127,7 @@ RenderPage("gallery/upload.tpl");
 return;
 
 // Renders the appropriate error message, and deletes the temporary file.
-function OnFileUploadError($tmp_paths, $msg = "Error while uploading file.") {
+function OnFileUploadError($tmp_paths, $msg = "Error while uploading file") {
     if (isset($tmp_paths) && $tmp_paths !== null) {
         if (is_array($tmp_paths)) {
             foreach ($tmp_paths as $path) {
@@ -146,5 +149,16 @@ function GoToExistingFile($md5) {
     $id = $result->fetch_assoc()['PostId'];
     header("Location: /gallery/post/show/$id/");
     return;
+}
+
+function GetExtensionFromURL($url) {
+    $url_path = $url;
+    if (contains($url_path, "?")) {
+        $url_path = substr($url_path, 0, strpos($url_path, "?"));
+    }
+    if (contains($url_path, "#")) {
+        $url_path = substr($url_path, 0, strpos($url_path, "?"));
+    }
+    return GetFileExtension($url_path);
 }
 ?>
