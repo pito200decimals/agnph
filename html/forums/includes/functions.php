@@ -4,15 +4,15 @@
 include_once(SITE_ROOT."includes/util/user.php");
 
 // Permissions functions
-function CanUserEditPost($user, $post) {
+function CanUserEditForumsPost($user, $post) {
     if (!isset($user)) debug_die("Unexpected unset user var", __FILE__, __LINE__);
     if (!isset($post)) debug_die("Unexpected unset post var", __FILE__, __LINE__);
     return isset($post) && ($user['UserId'] == $post['UserId'] || $user['ForumsPermissions'] == "A");
 }
-function CanUserDeletePost($user, $post) {
+function CanUserDeleteForumsPost($user, $post) {
     if (!isset($user)) debug_die("Unexpected unset user var", __FILE__, __LINE__);
     if (!isset($post)) debug_die("Unexpected unset post var", __FILE__, __LINE__);
-    return CanUserEditPost($user, $post);
+    return CanUserEditForumsPost($user, $post);
 }
 function CanUserPostToBoard($user, $board_id) {
     if (!isset($user)) debug_die("Unexpected unset user var", __FILE__, __LINE__);
@@ -51,6 +51,9 @@ function GetAllPosterData(&$posts) {
     }
     $users = array();
     if (LoadTableData(array(USER_TABLE, FORUMS_USER_PREF_TABLE), "UserId", $uids, $users)) {
+        foreach ($users as &$usr) {
+            $usr['avatarURL'] = GetAvatarURL($usr);
+        }
         foreach ($posts as &$post) {
             $post['poster'] = $users[$post['UserId']];
             $post['PostDate'] = FormatDate($post['PostDate']);
@@ -121,8 +124,8 @@ function SetPostLinks(&$post, $compose) {
             //$post['quoteLink'] = "/forums/reply/$tid/?quote=$pid";
         }
         // TODO: Add more actions on forum posts.
-        if (CanUserEditPost($user, $post)) $post['modifyLink'] = true;
-        if (CanUserDeletePost($user, $post)) $post['deleteLink'] = true;
+        if (CanUserEditForumsPost($user, $post)) $post['modifyLink'] = true;
+        if (CanUserDeleteForumsPost($user, $post)) $post['deleteLink'] = true;
     }
 }
 

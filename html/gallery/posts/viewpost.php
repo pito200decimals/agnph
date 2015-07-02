@@ -5,6 +5,8 @@
 
 include_once("../../header.php");
 include_once(SITE_ROOT."gallery/includes/functions.php");
+include_once(SITE_ROOT."includes/util/user.php");
+include_once(SITE_ROOT."user/includes/functions.php");  // For avatar perms.
 
 if (!isset($_GET['post'])) {
     InvalidURL();
@@ -84,16 +86,29 @@ if (isset($user)) {
             $_SESSION['gallery_action_message'] = "Removed from Favorites";
         }
     }
+    if (isset($_POST['set-avatar-action'])) {
+        // Set this post as our avatar.
+        if (sql_query("UPDATE ".USER_TABLE." SET AvatarPostId=$pid, AvatarFname='' WHERE UserId=$uid;")) {
+            $fname = $user['AvatarFname'];
+            if (strlen($fname)) {
+                $path = SITE_ROOT."images/uploads/avatars/$fname";
+                unlink($path);
+            }
+            $user['AvatarPostId'] = $pid;
+            $user['AvatarFname'] = "";
+            $_SESSION['gallery_action_message'] = "Set as Avatar";
+        }
+    }
     // Check for user favorite.
     $vars['isFavorited'] = sql_query_into($result, "SELECT * FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE UserId=$uid AND PostId=$pid;", 1);
     // Settings for action perms flags.
-    if (CanUserEditPost($user)) {
+    if (CanUserEditGalleryPost($user)) {
         $vars['canEdit'] = true;
         if ($post['Status'] != 'F' && $post['Status'] != 'D') {
             $vars['canFlag'] = true;
         }
     }
-    if (CanUserDeletePost($user)) {
+    if (CanUserDeleteGalleryPost($user)) {
         if ($post['Status'] == 'F') {
             // TODO: Decide if admins can delete post from any state.
             $vars['canDelete'] = true;
@@ -109,6 +124,9 @@ if (isset($user)) {
     }
     if (CanUserCommentOnPost($user)) {
         $vars['canComment'] = true;
+    }
+    if (CanUserEditBasicInfo($user, $user) && $user['AvatarPostId'] != $pid) {
+        $vars['canSetAvatar'] = true;
     }
 }
 // Init comments.
@@ -196,6 +214,9 @@ function GetComments($pid) {
     $ids = array_unique($ids);
     $users = GetUsers($ids);
     if ($users != null) {
+        foreach ($users as &$usr) {
+            $usr['avatarURL'] = GetAvatarURL($usr);
+        }
         foreach ($comments as &$comment) {
             $uid = $comment['UserId'];
             // Set parameters that template expects.

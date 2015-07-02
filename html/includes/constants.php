@@ -76,6 +76,8 @@ $FICS_TAG_TYPES = array(
     "H" => "Character",
     "R" => "Series",
     "G" => "General");
+define("GALLERY_THUMB_FILE_EXTENSION", "jpg");  // Don't change once gallery starts indexing.
+define("AVATAR_UPLOAD_EXTENSION", "jpg");
 define("MAX_IMAGE_THUMB_SIZE", 150);
 define("MAX_IMAGE_PREVIEW_SIZE", 1200);
 define("MAX_TAG_NAME_LENGTH", 32);
@@ -111,5 +113,7 @@ define("MIN_PASSWORD_LENGTH", 4);  // Also present in register.tpl
 
 define("REGISTER_ACCOUNT_EXPIRE_TIME_READABLE_STRING", "24 hours");
 define("REGISTER_ACCOUNT_EXPIRE_TIME", "24 HOUR");  // Time after registration that email link expires.
+define("DEFAULT_AVATAR_PATH", "/images/default-avatar.png");
+define("MAX_AVATAR_UPLOAD_DIMENSIONS", 200);
 
 ?>

@@ -132,6 +132,16 @@
                     </li>
                 {% endif %}
                 <li>
+                    <a id="poolaction" href="#"></a><span id="poolactionworking" hidden>
+                    <small>Processing...</small></span>
+                    <div class="pooleditbox">
+                        <label>Search for Pool:</label><br />
+                        <input id="pooleditfield" type="text" />
+                        <ul id="poolautocomplete">
+                        </ul>
+                    </div>
+                </li>
+                <li>
                     {% if isFavorited %}
                         <form id="favorite-form" action="" method="POST">
                             <input type="hidden" name="favorite-action" value="remove" />
@@ -144,13 +154,14 @@
                         </form>
                     {% endif %}
                 </li>
-                <li><a id="poolaction" href="#"></a><span id="poolactionworking" hidden><small>Processing...</small></span></li>
-            </ul>
-        </div>
-        <div class="pooleditbox">
-            <label>Search for Pool:</label><br />
-            <input id="pooleditfield" type="text" />
-            <ul id="poolautocomplete">
+                {% if canSetAvatar %}
+                    <li>
+                        <form id="set-avatar-form" action="" method="POST">
+                            <input type="hidden" name="set-avatar-action" value="set" />
+                            <a href="#" onclick="document.getElementById('set-avatar-form').submit();return false;">Set as Avatar</a>
+                        </form>
+                    </li>
+                {% endif %}
             </ul>
         </div>
         {% if canFlag %}
@@ -221,7 +232,7 @@
                 {% endif %}
                 {% if user and canComment%}
                     <input id="commentbutton" type="button" value="Add Comment"/>
-                    <form id="commentform" action="#" method="POST">
+                    <form id="commentform" action="" method="POST">
                         <textarea id="commenttextbox" name="text" class="commenttextbox">
                         </textarea>
                         <input type="submit" value="Add Comment" />

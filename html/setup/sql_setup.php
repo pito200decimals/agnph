@@ -70,8 +70,9 @@ do_or_die(sql_query(
         DOB CHAR(10) NOT NULL,".  // Format: MM/DD/YYYY
        "ShowDOB TINYINT(1) DEFAULT 0,
         GroupMailboxThreads TINYINT(1) DEFAULT 1,
-        Avatar VARCHAR(256) NOT NULL,
-        Skin VARCHAR(16) DEFAULT 'agnph' NOT NULL,".
+        AvatarPostId INT(11) DEFAULT -1,".  // Format: Post ID in gallery.
+       "AvatarFname VARCHAR(256) DEFAULT '',".  // Format: Base filename in "/images/uploads/avatars/" folder.
+       "Skin VARCHAR(16) DEFAULT 'agnph' NOT NULL,".
         // Code-assigned values.
        "JoinTime INT(11) NOT NULL,
         LastVisitTime INT(11) NOT NULL,

@@ -16,6 +16,7 @@ delete_files("../gallery/data/");
 delete_files("../uploads/");
 delete_files("../fics/data/");
 delete_files("../fics/data/chapters/");
+delete_files("../images/uploads/avatars/");
 $oldmask = umask(0);
 mkdir("../user/data/", 0777, true);
 mkdir("../user/data/bio/", 0777, true);
@@ -23,6 +24,7 @@ mkdir("../gallery/data/", 0777, true);
 mkdir("../uploads/", 0777, true);
 mkdir("../fics/data/", 0777, true);
 mkdir("../fics/data/chapters/", 0777, true);
+mkdir("../images/uploads/avatars/", 0777, true);
 umask($oldmask);
 
 
@@ -32,9 +34,9 @@ do_or_die(sql_query(
     "INSERT INTO ".USER_TABLE."
     (UserID, UserName, DisplayName, Email, Password, Usermode, DOB, Permissions, Title, Species, JoinTime, LastVisitTime)
     VALUES
-    (1, 'User1', 'User1', 'user1@example.com', '".md5("Password 1")."', 1, '01/02/2003', 'A', 'Most Awesome Cyndaquil', 'Cyndaquil', $now, $now),
-    (2, 'User2', 'User2', 'user2@example.com', '".md5("Password 2")."', 1, '04/05/2006', '', 'Hungry Resident', 'Totodile', $now, $now),
-    (3, 'User3', 'User3', 'user3@example.com', '".md5("Password 3")."', 1, '07/08/2009', '', 'Generic Title', 'Chikorita', $now, $now);"));
+    (1, 'User1', 'User1', 'user1@example.com', '".md5("Password 1")."', 1, '2003-02-01', 'A', 'Most Awesome Cyndaquil', 'Cyndaquil', $now, $now),
+    (2, 'User2', 'User2', 'user2@example.com', '".md5("Password 2")."', 1, '2006-05-04', '', 'Hungry Resident', 'Totodile', $now, $now),
+    (3, 'User3', 'User3', 'user3@example.com', '".md5("Password 3")."', 1, '2009-08-07', '', 'Generic Title', 'Chikorita', $now, $now);"));
 // Forums settings.
 do_or_die(sql_query(
     "INSERT INTO ".FORUMS_USER_PREF_TABLE."

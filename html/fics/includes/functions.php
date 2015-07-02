@@ -202,6 +202,10 @@ function GetUsers($uids) {
     $ret = array();
     $tables = array(USER_TABLE);
     if (!LoadTableData($tables, "UserId", $uids, $ret)) return null;
+    // Also initialize profile URLs.
+    foreach ($ret as &$usr) {
+        $usr['avatarURL'] = GetAvatarURL($usr);
+    }
     return $ret;
 }
 

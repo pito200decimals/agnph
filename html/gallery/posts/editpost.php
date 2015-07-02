@@ -5,7 +5,7 @@
 include_once("../../header.php");
 include_once(SITE_ROOT."gallery/includes/functions.php");
 
-if (!isset($user) || !CanUserEditPost($user)) {
+if (!isset($user) || !CanUserEditGalleryPost($user)) {
     RenderErrorPage("Not authorized to edit posts.");
     return;
 }

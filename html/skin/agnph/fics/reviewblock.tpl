@@ -108,13 +108,7 @@
             <ul class="comment-list">
                 {% for review in reviews %}
                     <li class="comment">
-                        {% if review.commenter.Avatar|length > 0 %}
-                            {# avatar image #}
-                            <img class="avatarimg" src="{{ review.commenter.Avatar }}" />
-                        {% else %}
-                            {# default avatar image #}
-                            <img class="avatarimg" src="http://i.imgur.com/CKd8AGC.png" />
-                        {% endif %}
+                        <img class="comment-avatarimg" src="{{ review.commenter.avatarURL }}" />
                         <p class="commentheader">
                             <strong>Reviewer:</strong> <a href="/user/{{ review.commenter.UserId }}/">{{ review.commenter.DisplayName }}</a>{% autoescape false %}{{ review.stars }}{% endautoescape %}<br />
                             <strong>Date:</strong> {{ review.date }}{% if review.ChapterId > 0 %} <strong>Chapter:</strong> {{ review.chapterTitle }}{% endif %}

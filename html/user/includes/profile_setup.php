@@ -11,5 +11,6 @@ if (!isset($_GET['uid']) || !is_numeric($_GET['uid'])) {
 }
 $profile_id = (int)$_GET['uid'];
 LoadAllUserPreferences($profile_id, $profile_user, true);
+$profile_user['avatarURL'] = GetAvatarURL($profile_user);
 $vars['profile']['user'] = $profile_user;
 ?>

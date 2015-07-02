@@ -41,7 +41,7 @@ function CreateSQLClausesFromTerms($terms, $mode="AND") {
             }
         }
     }
-    $and_terms = array_merge($and_terms, GetBlacklistClauses($and_terms, $or_terms));
+    $and_terms = array_merge($and_terms, GetGalleryBlacklistClauses($and_terms, $or_terms));
     $sql = array();
     if (sizeof($or_terms) > 0) {
         $sql[] = "(".CreateSQLClausesFromTerms($or_terms, "OR").")";
@@ -127,7 +127,7 @@ function CreateSQLClauseFromFilter($filter) {
     }
 }
 
-function GetBlacklistClauses($and_terms, $or_terms) {
+function GetGalleryBlacklistClauses($and_terms, $or_terms) {
     global $user;
     if (!isset($user)) return array();
     $terms = array_merge($and_terms, $or_terms);

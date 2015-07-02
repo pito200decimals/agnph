@@ -103,7 +103,7 @@ if ($_POST) {
             $escaped_post_id = sql_escape($post_id);
             if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId='$escaped_post_id';", 1)) {
                 $post = $result->fetch_assoc();
-                if (CanUserEditPost($user, $post)) {
+                if (CanUserEditForumsPost($user, $post)) {
                     if (mb_strlen($title) > 0) {
                         if (mb_strlen($content) > 0) {
                             $sticky = $post['ParentThreadId'] == -1 && isset($_POST['sticky']) && $_POST['sticky'] && CanUserStickyThread($user, $post['ParentLobbyId']);
@@ -219,7 +219,7 @@ if ($_GET['action'] == "create") {
     $escaped_pid = sql_escape($_GET['post']);
     sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId='$escaped_pid';", 1) or RenderErrorPage("Post not found.");
     $post = $result->fetch_assoc();
-    CanUserEditPost($user, $post) or RenderErrorPage("Not authorized to edit this post.");
+    CanUserEditForumsPost($user, $post) or RenderErrorPage("Not authorized to edit this post.");
     $form_values['content'] = $post['Content'];
     if (!isset($form_values['title'])) {
         $form_values['title'] = $post['Title'];

@@ -11,15 +11,12 @@ include_once(SITE_ROOT."includes/util/user.php");
 include_once(SITE_ROOT."includes/util/html_funcs.php");
 include_once(SITE_ROOT."includes/util/date.php");
 include_once(SITE_ROOT."user/includes/functions.php");
+include_once(SITE_ROOT."../lib/getid3/getid3.php");
 
 include(SITE_ROOT."user/includes/profile_setup.php");
-
 $profile_user = &$vars['profile']['user'];
 
-if (!CanUserEditBasicInfo($user, $profile_user)) {
-    RenderErrorPage("Not authorized to edit this profile");
-    return;
-}
+$vars['banner_nofications'] = array();
 
 if (isset($_POST['display-name']) &&
     isset($_POST['dob']) &&
@@ -36,6 +33,10 @@ if (isset($_POST['display-name']) &&
     isset($_POST['fics-stories-per-page']) &&
     isset($_POST['fics-tag-blacklist']) &&
     isset($_POST['oekaki-posts-per-page'])) {
+    if (!isset($user) || !CanUserEditBasicInfo($user, $profile_user)) {
+        RenderErrorPage("Not authorized to edit this profile");
+        return;
+    }
     // Handle post submit.
     $user_table_sets = array();
     // DisplayName
@@ -52,10 +53,10 @@ if (isset($_POST['display-name']) &&
                 // TODO: Log change.
                 $user_table_sets[] = "DisplayName='$escaped_display_name'";
             } else {
-                $vars['error'] = "Name already taken!";
+                PostErrorMessage("Name already taken!");
             }
         } else {
-            $vars['error'] = "Failed to change Name.";
+            PostErrorMessage("Failed to change Name");
         }
     }
     // DOB
@@ -97,6 +98,8 @@ if (isset($_POST['display-name']) &&
     if ($group_mailbox != $profile_user['GroupMailboxThreads']) {
         $user_table_sets[] = "GroupMailboxThreads=".($group_mailbox ? "TRUE" : "FALSE");
     }
+    // Handle avatar.
+    ProcessAvatarUpload($user_table_sets);
     if (sizeof($user_table_sets) > 0) {
         sql_query("UPDATE ".USER_TABLE." SET ".implode(", ", $user_table_sets)." WHERE UserId=".$profile_user['UserId'].";");
     }
@@ -194,21 +197,12 @@ if (isset($_POST['display-name']) &&
     // Resend cookie set.
     // Reload profile with new settings.
     include(SITE_ROOT."user/includes/profile_setup.php");
+    // Also grab $user again, since $user may not be equal to $profile_user.
+    LoadAllUserPreferences($user['UserId'], $user, true/*fresh*/);
+    
     // Show error/confirmation banner.
-    $vars['confirm'] = "Settings saved";
+    PostConfirmMessage("Settings saved");
 }
-
-$vars['banner_nofications'] = array();
-if (isset($vars['error'])) $vars['banner_nofications'][] = array(
-        "classes" => array("red-banner"),
-        "text" => $vars['error'],
-        "dismissable" => true,
-        "strong" => true);
-if (isset($vars['confirm'])) $vars['banner_nofications'][] = array(
-        "classes" => array("green-banner"),
-        "text" => $vars['confirm'],
-        "dismissable" => true,
-        "strong" => true);
 
 /////////////////////////////////////////
 // Initialize normal preferences page. //
@@ -233,6 +227,24 @@ if (isset($user)) {
 // This is how to output the template.
 RenderPage("user/preferences.tpl");
 return;
+
+function PostErrorMessage($msg) {
+    global $vars;
+    $vars['banner_nofications'][] = array(
+        "classes" => array("red-banner"),
+        "text" => $msg,
+        "dismissable" => true,
+        "strong" => true);
+}
+
+function PostConfirmMessage($msg) {
+    global $vars;
+    $vars['banner_nofications'][] = array(
+        "classes" => array("green-banner"),
+        "text" => $msg,
+        "dismissable" => true,
+        "strong" => true);
+}
 
 // Returns the valid date string, or false on parse error.
 function ValidateDateString($date_str) {
@@ -284,5 +296,63 @@ function ParseGMTTimeZoneToFloat($gmt) {
     if (!is_numeric($hours) || !is_numeric($minutes)) return null;
     $offset = $hours + ((float)$minutes) / 60;
     return $sign * $offset;
+}
+
+function ProcessAvatarUpload(&$user_table_sets) {
+    global $vars, $profile_user;
+    if (isset($_POST['reset-avatar'])) {
+        // Reset to default.
+        if ($profile_user['AvatarPostId'] != -1)
+            $user_table_sets[] = "AvatarPostId=-1";
+        if ($profile_user['AvatarFname'] != "")
+            $user_table_sets[] = "AvatarFname=''";
+        // Delete old file, if it existed.
+        $fname = $profile_user['AvatarFname'];
+        if (strlen($fname)) {
+            $path = SITE_ROOT."images/uploads/avatars/$fname";
+            unlink($path);
+        }
+    } else if (!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) || empty($_FILES['file']['name']))) {
+        if (!accept_file_upload($tmp_path)) {
+            PostErrorMessage("Failed to upload avatar");
+            return;
+        }
+        $md5 = md5_file($tmp_path);
+        $ext = GetFileExtension($tmp_path);
+        if ($ext == null) {
+            PostErrorMessage("Failed to upload avatar");
+            unlink($tmp_path);
+            return;
+        }
+        if (!($ext == "jpg" || $ext == "png" || $ext == "gif")) {
+            PostErrorMessage("Uploaded avatar must be .jpg, .png or .gif");
+            unlink($tmp_path);
+            return;
+        }
+        $uid = $profile_user['UserId'];
+        $fname = "user$uid.".AVATAR_UPLOAD_EXTENSION;
+        $dst_path = SITE_ROOT."images/uploads/avatars/$fname";
+        // Check file properties.
+        $meta = getimagesize($tmp_path);
+        $width = $meta[0];
+        $height = $meta[1];
+        // Resize down to thumb size, and/or change file extension to jpg.
+        $image = new SimpleImage();
+        $image->load($tmp_path);
+        // Always create thumbnail file.
+        if ($image->getWidth() > $image->getHeight()) {
+            if ($image->getWidth() > MAX_AVATAR_UPLOAD_DIMENSIONS)
+                $image->resizeToWidth(MAX_AVATAR_UPLOAD_DIMENSIONS);
+        } else {
+            if ($image->getHeight() > MAX_AVATAR_UPLOAD_DIMENSIONS)
+                $image->resizeToHeight(MAX_AVATAR_UPLOAD_DIMENSIONS);
+        }
+        $image->save($dst_path);
+        unlink($tmp_path);
+
+        $user_table_sets[] = "AvatarPostId=-1";
+        $escaped_fname = sql_escape($fname);
+        $user_table_sets[] = "AvatarFname='$escaped_fname'";
+    }
 }
 ?>

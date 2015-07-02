@@ -11,13 +11,7 @@
             </p>
             <p>
                 <a href="/user/{{ post.poster.UserId }}/">
-                    {% if post.poster.Avatar|length > 0 %}
-                        {# avatar image #}
-                        <img class="avatarimg" src="{{ post.poster.Avatar }}" />
-                    {% else %}
-                        {# default avatar image #}
-                        <img class="avatarimg" src="http://i.imgur.com/CKd8AGC.png" />
-                    {% endif %}
+                    <img class="avatarimg" src="{{ post.poster.avatarURL }}" />
                 </a>
             </p>
             <p>

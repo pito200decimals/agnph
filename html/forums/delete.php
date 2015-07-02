@@ -29,7 +29,7 @@ $post_id = $_POST['post'];
 $escaped_post_id = sql_escape($post_id);
 sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId='$escaped_post_id';", 1) or RenderErrorPage("Unable to find post.");
 $post = $result->fetch_assoc();
-CanUserDeletePost($user, $post) or RenderErrorPage("Not authorized to modify post.");
+CanUserDeleteForumsPost($user, $post) or RenderErrorPage("Not authorized to modify post.");
 if ($post['ParentThreadId'] == -1) {
     // Is a root post of a thread. Only delete if there are no posts in that thread.
     sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE ParentThreadId='$escaped_post_id';", 0) or RenderErrorPage("Unable to find post.");

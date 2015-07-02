@@ -14,7 +14,7 @@ function CanUserUploadPost($user) {
     if (!IsUserActivated($user)) return false;
     return true;
 }
-function CanUserEditPost($user) {
+function CanUserEditGalleryPost($user) {
     if (!IsUserActivated($user)) return false;
     return true;
 }
@@ -38,7 +38,7 @@ function CanUserCreateOrDeletePools($user) {
     if (!IsUserActivated($user)) return false;
     return true;
 }
-function CanUserDeletePost($user) {
+function CanUserDeleteGalleryPost($user) {
     if (!IsUserActivated($user)) return false;
     return true;
 }

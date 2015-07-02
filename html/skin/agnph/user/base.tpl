@@ -23,13 +23,7 @@
         <div class="userpage-container">
             <div class="profile-sidepanel">
                 <div class="sidepanel-section">
-                    {% if profile.user.Avatar|length > 0 %}
-                        {# avatar image #}
-                        <img class="profile-avatarimg" src="{{ profile.user.Avatar }}" />
-                    {% else %}
-                        {# default avatar image #}
-                        <img class="profile-avatarimg" src="http://i.imgur.com/CKd8AGC.png" />
-                    {% endif %}
+                    <img class="profile-avatarimg" src="{{ profile.user.avatarURL }}" />
                 </div>
                 {# Other actions to perform on this user #}
                 <div class="sidepanel-section">

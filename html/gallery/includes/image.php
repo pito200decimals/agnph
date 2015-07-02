@@ -98,7 +98,7 @@ function GetThumbPath($md5, $ext) {
     $path = "gallery/data/thumb/";
     $path .= mb_substr($md5, 0, 2)."/";
     $path .= mb_substr($md5, 2, 2)."/";
-    $path .= "$md5.jpg";
+    $path .= "$md5.".GALLERY_THUMB_FILE_EXTENSION;
     return $path;
 }
 

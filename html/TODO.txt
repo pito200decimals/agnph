@@ -29,6 +29,8 @@ X IP address tracking for uploads (Do we need this, since user is tracked?)
 - Fics search ordering?
 - More complex search queries ("OR", more metadata filters like ordering?)
 - Index page, including news and featured stories, perhaps random selection
+- Ability to subscribe for email/PM notifications (for your stories and watching others)
+- Breakdown of views per-chapter?
 
 == SITE ==
 * Check for vuln's for style background-image URL
@@ -45,10 +47,14 @@ X IP address tracking for uploads (Do we need this, since user is tracked?)
 - Polls?
 - Maintenance mode (no edits)
 - Multiple themes?
+- Way to push notifications and site updates to users (via PM system?)
+    - Include welcome message, and account migration message on registration.
+- Show who's online, and viewing what page?
+- API, at least for gallery similar to Ouroboros?
+- All comment user links should go to respective sections.
 
 == ACCOUNT ==
 * Add gender
-* Support avatar changing/uploads
 * Support email/password changing
 * Mailbox/PM system
     - Add unread-message notification to both account tab and inbox tab.
@@ -60,6 +66,8 @@ X IP address tracking for uploads (Do we need this, since user is tracked?)
 - Global user action logging
 - Non-user IP tracking (DoS investigating, user demographic statistics, etc?)
 - Allow user account deletion
+- Password recovery via email
+    X Secret questions scrapped for now
 
 
 == Things to remember when setting up site ==
@@ -67,3 +75,4 @@ X IP address tracking for uploads (Do we need this, since user is tracked?)
 - enable mod_rewrite in httpd.conf
 - enable module gd (for swf size info)
 - Install sendmail
+- Suppress PHP logging on errors.

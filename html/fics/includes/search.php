@@ -15,7 +15,7 @@ function GetSearchClauses($search_term_string) {
     $search_term_array = array_map("trim", $search_term_array);
     $search_term_array = array_filter($search_term_array, "mb_strlen");
     $search_term_array = array_slice($search_term_array, 0, MAX_FICS_SEARCH_TERMS);
-    $search_term_array = array_merge($search_term_array, GetBlacklistClauses($search_term_array));
+    $search_term_array = array_merge($search_term_array, GetFicsBlacklistClauses($search_term_array));
     $clauses = array_filter(array_map("GetClause", $search_term_array), "mb_strlen");
     $clause_string = implode(" AND ", array_map(function($clause) { return "($clause)"; }, $clauses));
     // If no status:, omit pending and deleted by default.
@@ -26,7 +26,7 @@ function GetSearchClauses($search_term_string) {
     return $clause_string;
 }
 
-function GetBlacklistClauses($terms) {
+function GetFicsBlacklistClauses($terms) {
     global $user;
     if (!isset($user)) return array();
     $blacklist_terms = explode(" ", $user['FicsTagBlacklist']);

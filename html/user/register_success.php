@@ -33,8 +33,7 @@ if (isset($_GET['key'])) {
         $user = array();
         include(SITE_ROOT."includes/auth/login.php");
         ForceLogin($registered_user['UserId']);
-        //header("Location: /");
-        debug("SUCCESS!");
+        header("Location: /");
         return;
     }
 }
