@@ -29,6 +29,7 @@ sql_query("DROP TABLE ".SITE_TAG_ALIAS_TABLE.";");
 sql_query("DROP TABLE ".USER_MAILBOX_TABLE.";");
 sql_query("DROP TABLE ".SITE_LOGGING_TABLE.";");
 sql_query("DROP TABLE ".SITE_TEXT_TABLE.";");
+sql_query("DROP TABLE ".SECURITY_EMAIL_TABLE.";");
 sql_query("DROP TABLE ".FORUMS_LOBBY_TABLE.";");
 sql_query("DROP TABLE ".FORUMS_POST_TABLE.";");
 sql_query("DROP TABLE ".FORUMS_USER_PREF_TABLE.";");
@@ -54,13 +55,11 @@ do_or_die(sql_query(
     "CREATE TABLE ".USER_TABLE." (
         UserId INT(11) UNSIGNED AUTO_INCREMENT,".  // User's ID.
         // User/admin/signup-assigned values.
-       "UserName VARCHAR(24) UNIQUE NOT NULL,
-        DisplayName VARCHAR(24) NOT NULL,
+       "UserName VARCHAR(".MAX_USER_NAME_LENGTH.") UNIQUE NOT NULL,
+        DisplayName VARCHAR(".MAX_DISPLAY_NAME_LENGTH.") NOT NULL,
         Email VARCHAR(64) NOT NULL,
-        Password CHAR(32) NOT NULL,".
-        //SecretQuestion VARCHAR(256) NOT NULL,
-        //SecretAnswer CHAR(32) NOT NULL,
-       "Timezone FLOAT DEFAULT 0 NOT NULL,
+        Password CHAR(32) NOT NULL,
+        Timezone FLOAT DEFAULT 0 NOT NULL,
         Usermode INT(11) DEFAULT 0 NOT NULL,".  // -1=Banned, 0=Unactivated, 1=User. Unactivated users do not have anything besides this table entry.
        "Permissions VARCHAR(8) NOT NULL,".  // String of characters, A=Super Admin, R=Forums, G=Gallery, F=Fics, O=Oekaki, I=IRC, M=Minecraft
        "BanReason VARCHAR(256) NOT NULL,
@@ -69,14 +68,15 @@ do_or_die(sql_query(
         Species VARCHAR(32) NOT NULL,
         DOB CHAR(10) NOT NULL,".  // Format: MM/DD/YYYY
        "ShowDOB TINYINT(1) DEFAULT 0,
-        GroupMailboxThreads TINYINT(1) DEFAULT 1,
+        Gender CHAR(1) DEFAULT 'U',".  // U=Unspecified, M=Male, F=Female, O=Other
+       "GroupMailboxThreads TINYINT(1) DEFAULT 1,
         AvatarPostId INT(11) DEFAULT -1,".  // Format: Post ID in gallery.
        "AvatarFname VARCHAR(256) DEFAULT '',".  // Format: Base filename in "/images/uploads/avatars/" folder.
        "Skin VARCHAR(16) DEFAULT 'agnph' NOT NULL,".
         // Code-assigned values.
        "JoinTime INT(11) NOT NULL,
         LastVisitTime INT(11) NOT NULL,
-        DisplayNameChangeTime INT(11) NOT NULL,
+        DisplayNameChangeTime INT(11) DEFAULT 0 NOT NULL,
         RegisterIP VARCHAR(50) NOT NULL,".  // RegisterIP will be empty-string if the user was imported from the old site software.
        "KnownIPs VARCHAR(512) NOT NULL,".  // Allocate 45 + 1 characters for each IP address. Store the past 10 addresses comma-separated.
        "PRIMARY KEY(UserId)
@@ -331,6 +331,20 @@ do_or_die(sql_query(
         PRIMARY KEY(Id)
     ) DEFAULT CHARSET=utf8;"));
 
+// Table for handling account recovery/resets. Also used for tracking security emails when dealing with email/password changes.
+do_or_die(sql_query(
+    "CREATE TABLE ".SECURITY_EMAIL_TABLE." (
+        Email VARCHAR(64) NOT NULL,
+        Timestamp INT(11) NOT NULL,
+        MaxTimestamp INT(11) NOT NULL,
+        Code VARCHAR(256) NOT NULL,
+        Type VARCHAR(64) NOT NULL,".  // For other application uses.
+       "Data VARCHAR(256) NOT NULL,".  // For other application uses.
+       "Redirect VARCHAR(256) NOT NULL,
+        PRIMARY KEY(Email)
+    ) DEFAULT CHARSET=utf8;"));
+
+
 
 // TODO: Logging tables.
 do_or_die(sql_query(
@@ -341,6 +355,10 @@ do_or_die(sql_query(
         Action TEXT(256) NOT NULL,
         PRIMARY KEY(Id, UserId, Timestamp)
     ) DEFAULT CHARSET=utf8;"));
+
+
+// Table cleanup events.
+sql_query("CREATE EVENT delete_security_email_entries ON SCHEDULE EVERY 0:15 HOUR_MINUTE DO DELETE FROM ".SECURITY_EMAIL_TABLE." WHERE CURRENT_TIMESTAMP > MaxTimestamp;");
 
 
 // TODO: Initialize file directories.

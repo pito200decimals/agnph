@@ -1,4 +1,5 @@
-#content {
+h4 {
+    text-align: center;
 }
 
 .loginbox {
@@ -15,8 +16,11 @@
     text-align: left;
 }
 
-.loginbox tbody tr td:first-child {
+.loginbox .label {
     text-align: right;
+}
+.loginbox .forgot {
+    font-size: 75%;
 }
 
 .error {

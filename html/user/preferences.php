@@ -12,9 +12,15 @@ include_once(SITE_ROOT."includes/util/html_funcs.php");
 include_once(SITE_ROOT."includes/util/date.php");
 include_once(SITE_ROOT."user/includes/functions.php");
 include_once(SITE_ROOT."../lib/getid3/getid3.php");
+include_once(SITE_ROOT."includes/auth/email_auth.php");
 
 include(SITE_ROOT."user/includes/profile_setup.php");
 $profile_user = &$vars['profile']['user'];
+
+if (!isset($user) || !CanUserEditBasicInfo($user, $profile_user)) {
+    RenderErrorPage("Not authorized to edit this profile");
+    return;
+}
 
 $vars['banner_nofications'] = array();
 
@@ -25,7 +31,7 @@ if (isset($_POST['display-name']) &&
     isset($_POST['location']) &&
     isset($_POST['email']) &&
     isset($_POST['password']) &&
-    isset($_POST['passwordconfirm']) &&
+    isset($_POST['password-confirm']) &&
     isset($_POST['timezone']) &&
     isset($_POST['signature']) &&
     isset($_POST['gallery-posts-per-page']) &&
@@ -33,31 +39,53 @@ if (isset($_POST['display-name']) &&
     isset($_POST['fics-stories-per-page']) &&
     isset($_POST['fics-tag-blacklist']) &&
     isset($_POST['oekaki-posts-per-page'])) {
-    if (!isset($user) || !CanUserEditBasicInfo($user, $profile_user)) {
-        RenderErrorPage("Not authorized to edit this profile");
-        return;
-    }
+    $settings_changed = false;
     // Handle post submit.
     $user_table_sets = array();
     // DisplayName
     if ($_POST['display-name'] != $profile_user['DisplayName']) {
         $uid = $profile_user['UserId'];
         $display_name = $_POST['display-name'];
-        $display_name = mb_ereg_replace("[^a-zA-Z0-9_.-]", "", $display_name);
-        $escaped_display_name = sql_escape($display_name);
-        // Check for duplicates.
-        // Search for display name, and current user (so that at least one result is returned).
-        if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE DisplayName='$escaped_display_name' OR UserId='$uid';", 1)) {
-            if ($result->num_rows == 1) {
-                // TODO: Check for too many changes.
-                // TODO: Log change.
-                $user_table_sets[] = "DisplayName='$escaped_display_name'";
+        if (MIN_DISPLAY_NAME_LENGTH <= strlen($display_name) && strlen($display_name) <= MAX_DISPLAY_NAME_LENGTH) {
+            $display_name = mb_ereg_replace("[^a-zA-Z0-9_.-]", "", $display_name);
+            $escaped_display_name = sql_escape($display_name);
+            // Check for duplicates.
+            // Search for display name, and current user (so that at least one result is returned).
+            if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UPPER(DisplayName)=UPPER('$escaped_display_name') OR UserId='$uid';", 1)) {
+                if ($result->num_rows == 1) {
+                    $now = time();
+                    $row = $result->fetch_assoc();
+                    $last_change_time = (int)$row['DisplayNameChangeTime'];
+                    if ($now - $last_change_time >= DISPLAY_NAME_CHANGE_TIME_LIMIT) {
+                        // TODO: Log change.
+                        $user_table_sets[] = "DisplayName='$escaped_display_name'";
+                        $user_table_sets[] = "DisplayNameChangeTime=$now";
+                    } else {
+                        PostErrorMessage("Can only change name once every ".DISPLAY_NAME_CHANGE_TIME_LIMIT_STR);
+                    }
+                } else {
+                    PostErrorMessage("Name already taken!");
+                }
             } else {
-                PostErrorMessage("Name already taken!");
+                PostErrorMessage("Failed to change Name");
             }
         } else {
-            PostErrorMessage("Failed to change Name");
+            PostErrorMessage("Name must be between ".MIN_DISPLAY_NAME_LENGTH." and ".MAX_DISPLAY_NAME_LENGTH." characters");
         }
+    }
+    // Gender
+    $gender = $_POST['gender'];
+    if ($gender == "male") {
+        $gender = 'M';
+    } else if ($gender == "female") {
+        $gender = 'F';
+    } else if ($gender == "other") {
+        $gender = 'O';
+    } else {
+        $gender = 'U';
+    }
+    if ($gender != $profile_user['Gender']) {
+        $user_table_sets[] = "Gender='$gender'";
     }
     // DOB
     if ($_POST['dob'] != $profile_user['DOB']) {
@@ -86,8 +114,59 @@ if (isset($_POST['display-name']) &&
         $escaped_location = sql_escape($_POST['location']);
         $user_table_sets[] = "Location='$escaped_location'";
     }
-    // TODO: Email
-    // TODO: Password
+    // Email/Password.
+    $stop_change_email_password = false;
+    $email = $profile_user['Email'];
+    $pass = $profile_user['Password'];
+    if ($_POST['email'] != $email) {
+        if (ValidateEmail($_POST['email'])) {
+            $email = $_POST['email'];
+        } else {
+            PostErrorMessage("Invalid email address, Email/Password not changed");
+            $stop_change_email_password = true;
+        }
+    }
+    if (mb_strlen($_POST['password']) > 0) {
+        if ($_POST['password'] != $_POST['password-confirm']) {
+            PostErrorMessage("Passwords do not match, Email/Password not changed");
+            $stop_change_email_password = true;
+        } else if (mb_strlen($_POST['password']) < MIN_PASSWORD_LENGTH) {
+            PostErrorMessage("Password must be at least ".MIN_PASSWORD_LENGTH." characters, Email/Password not changed");
+            $stop_change_email_password = true;
+        } else {
+            debug("Got new pass md5");
+            $pass = md5($_POST['password']);
+        }
+    }
+    $email_changed = $email != $profile_user['Email'];
+    $pass_changed = $pass != $profile_user['Password'];
+    if (!$stop_change_email_password && ($email_changed || $pass_changed)) {
+        if ($email_changed && $pass_changed) {
+            $detailed_desc = "email and password";
+        } else if ($email_changed) {
+            $detailed_desc = "email";
+        } else if ($pass_changed) {
+            $detailed_desc = "password";
+        }
+        // /recover/success/
+        $old_email = $profile_user['Email'];
+        $username = $profile_user['UserName'];
+        $redirect = "/user/auth/change/";
+        debug("Pass:$pass, Post=".$profile_user['UserId'].",".$email.",".$pass);
+        $code = CreateCodeEntry($old_email, "account_auth_change", $profile_user['UserId'].",".$email.",".$pass, $redirect);
+        if ($code !== FALSE) {
+            if (SendRecoveryEmail($old_email, $username, $email_changed, $pass_changed, $code)) {
+                debug("Email sent, with uid=".$profile_user['UserId'].", email=".$email.", pass_md5=".$pass);
+                PostConfirmMessage("To finish changing your $detailed_desc, please click the link in the email sent to ".$profile_user['Email']);
+            } else {
+                $vars['error'] = "Error sending confirmation email, please try again later";
+            }
+        } else {
+            PostErrorMessage("Failed to change email/password");
+        }
+    } else {
+        debug("Email and pass still matched");
+    }
     // Timezone
     $timezone = ParseGMTTimeZoneToFloat($_POST['timezone']);
     if ($timezone != null && $timezone != $profile_user['Timezone']) {
@@ -102,6 +181,7 @@ if (isset($_POST['display-name']) &&
     ProcessAvatarUpload($user_table_sets);
     if (sizeof($user_table_sets) > 0) {
         sql_query("UPDATE ".USER_TABLE." SET ".implode(", ", $user_table_sets)." WHERE UserId=".$profile_user['UserId'].";");
+        $settings_changed = true;
     }
 
     $forums_table_sets = array();
@@ -134,6 +214,7 @@ if (isset($_POST['display-name']) &&
     }
     if (sizeof($forums_table_sets) > 0) {
         sql_query("UPDATE ".FORUMS_USER_PREF_TABLE." SET ".implode(", ", $forums_table_sets)." WHERE UserId=".$profile_user['UserId'].";");
+        $settings_changed = true;
     }
 
     $gallery_table_sets = array();
@@ -166,6 +247,7 @@ if (isset($_POST['display-name']) &&
     }
     if (sizeof($gallery_table_sets) > 0) {
         sql_query("UPDATE ".GALLERY_USER_PREF_TABLE." SET ".implode(", ", $gallery_table_sets)." WHERE UserId=".$profile_user['UserId'].";");
+        $settings_changed = true;
     }
 
 
@@ -190,6 +272,7 @@ if (isset($_POST['display-name']) &&
     }
     if (sizeof($fics_table_sets) > 0) {
         sql_query("UPDATE ".FICS_USER_PREF_TABLE." SET ".implode(", ", $fics_table_sets)." WHERE UserId=".$profile_user['UserId'].";");
+        $settings_changed = true;
     }
 
     // TODO: Save Oekaki settings.
@@ -201,7 +284,7 @@ if (isset($_POST['display-name']) &&
     LoadAllUserPreferences($user['UserId'], $user, true/*fresh*/);
     
     // Show error/confirmation banner.
-    PostConfirmMessage("Settings saved");
+    if ($settings_changed) PostConfirmMessage("Settings saved");
 }
 
 /////////////////////////////////////////

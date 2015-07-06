@@ -51,6 +51,13 @@
             <h3>Basic Info</h3>
             <ul id="basic-info">
                 <li><span class="basic-info-label">Displayed Name:</span>         <span><input type="text" name="display-name" value="{{ profile.user.DisplayName }}" /></span></li>
+                <li><span class="basic-info-label">Gender:</span>           <span>
+                    <select name="gender">
+                        <option value=""{% if profile.user.Gender == 'U' %} selected{% endif %}>- - -</option>
+                        <option value="male"{% if profile.user.Gender == 'M' %} selected{% endif %}>Male</option>
+                        <option value="female"{% if profile.user.Gender == 'F' %} selected{% endif %}>Female</option>
+                        <option value="other"{% if profile.user.Gender == 'O' %} selected{% endif %}>Other</option>
+                    </select></span></li>
                 <li><span class="basic-info-label">Birthday:</span>         <span><input type="date" name="dob" value="{{ profile.user.DOB }}" /></span></li>
                 <li><span class="basic-info-label">Show Birthday:</span>    <span><input type="checkbox" name="show-dob" value="show"{% if profile.user.ShowDOB %} checked{% endif%} /></span></li>
                 <li><span class="basic-info-label">Species:</span>          <span><input type="text" name="species" value="{{ profile.user.Species }}" /></span></li>
@@ -67,11 +74,10 @@
             <span class="twiddle"><h3>+</h3></span>
             <h3>Account Settings</h3>
             <ul id="basic-info">
-                <small style="color: red">Type your password to change these settings</small>
                 <li><span class="basic-info-label">Username:</span>         <span>{{ profile.user.UserName }}</span></li>
                 <li><span class="basic-info-label">Email:</span>            <span><input type="text" name="email" value="{{ profile.user.Email }}" /></span></li>
-                <li><span class="basic-info-label">Password:</span>         <span><input type="password" name="password" value="" /></span></li>
-                <li><span class="basic-info-label">Retype Password:</span>  <span><input type="password" name="passwordconfirm" value="" /></span></li>
+                <li><span class="basic-info-label">New Password:</span>         <span><input type="password" name="password" value="" /></span></li>
+                <li><span class="basic-info-label">Retype Password:</span>  <span><input type="password" name="password-confirm" value="" /></span></li>
             </ul>
         </div>
         <div class="infoblock">

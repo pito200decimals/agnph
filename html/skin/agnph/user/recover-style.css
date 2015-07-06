@@ -1,0 +1,15 @@
+h4 {
+    text-align: center;
+}
+
+.recover-form {
+    margin: 10px auto;
+    padding: 15px;
+    max-width: 800px;
+    background-color: rgb(223,223,255);
+    border-radius: 15px;
+}
+
+.error {
+    color: rgb(255,0,0);
+}

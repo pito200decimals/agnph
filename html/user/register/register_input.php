@@ -1,14 +1,14 @@
 <?php
 // Register a new account page.
 // URL: /register/
-// URL: /user/register.php
+// URL: /user/register/register_input.php
 
-include_once("../header.php");
+include_once("../../header.php");
 include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."includes/util/user.php");
 include_once(SITE_ROOT."includes/util/html_funcs.php");
 include_once(SITE_ROOT."includes/util/date.php");
-include_once(SITE_ROOT."user/includes/register_functions.php");
+include_once(SITE_ROOT."includes/auth/email_auth.php");
 
 if (isset($user)) {
     header("Location: /");
@@ -23,6 +23,7 @@ if (isset($_POST['username']) &&
     isset($_POST['bday']) &&
     isset($_POST['captcha'])) {
     $success = true;
+    // Check username format.
     $username = mb_strtolower($_POST['username']);
     if (strlen($username) < MIN_USERNAME_LENGTH) {
         ShowErrorBanner("Username too short");
@@ -34,27 +35,29 @@ if (isset($_POST['username']) &&
         ShowErrorBanner("Username must consist of a-z, 0-9, or _");
         $success = false;
     }
+    // Check email.
     $email = $_POST['email'];
     if ($email != $_POST['email-confirm']) {
         ShowErrorBanner("Mismatched email addresses");
         $success = false;
     }
-    // Email regex taken from http://www.regular-expressions.info/email.html
-    if (!mb_eregi("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$", $email) &&
-        !mb_eregi("^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$", $email)) {
+    if (!ValidateEmail($email)) {
         ShowErrorBanner("Invalid email address");
         $success = false;
     }
+    // Check matching password.
     $password = $_POST['password'];
     if ($password !== $_POST['password-confirm']) {
         ShowErrorBanner("Mismatched passwords");
         $success = false;
     }
+    // Check parsable birthday.
     $bday = ParseDate($_POST['bday']);
     if ($bday == null) {
         ShowErrorBanner("Invalid birthday");
         $success = false;
     }
+    // Check for captcha validation.
     $captcha = $_POST['captcha'];
     if (!isset($_SESSION['captcha_code'])) {
         ShowErrorBanner("Form expired, please try again");
@@ -64,15 +67,18 @@ if (isset($_POST['username']) &&
         $success = false;
     }
 
-    // Do database checks for username/email.
+    // Do database checks for Username/DisplayName/Email.
     $escaped_username = sql_escape($username);
-    if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserName='$escaped_username' LIMIT 1;", 1)) {
+    // Fail if username taken, or display name taken with an activated account.
+    // This will allow duplicate display names when including unactivated accounts, but presumably people will want to link this account.
+    if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UPPER(UserName)=UPPER('$escaped_username') OR (UPPER(DisplayName)=UPPER('$escaped_username') AND RegisterIP<>'') LIMIT 1;", 1)) {
         // Exists a duplicate username.
         ShowErrorBanner("Username already taken.");
         $success = false;
     }
     $escaped_email = sql_escape($email);
-    if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UPPER(Email)=UPPER('$escaped_email') And RegisterIP<>'' LIMIT 1;", 1)) {
+    // Fail if Email taken with an activated account. Also helps in preventing spam.
+    if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UPPER(Email)=UPPER('$escaped_email') AND RegisterIP<>'' LIMIT 1;", 1)) {
         // Exists a duplicate email on a non-imported account.
         ShowErrorBanner("Email address already in use.");
         $success = false;
@@ -81,7 +87,8 @@ if (isset($_POST['username']) &&
     if ($success) {
         if (HandlePostSuccess($username, $email, $password, $bday)) {
             $_SESSION['register_email'] = $email;
-            header("Location: /register/success/");
+            unset($_SESSION['captcha_code']);
+            header("Location: /register/confirm/");
             return;
         }
     }
@@ -124,25 +131,27 @@ function HandlePostSuccess($username, $email, $password, $bday) {
         ('$escaped_username', '$escaped_username', '$escaped_email', '$escaped_password', '$escaped_bday', $register_time, '$escaped_ip');");
     if ($success) {
         $uid = sql_last_id();
-        $interval = REGISTER_ACCOUNT_EXPIRE_TIME;
+        $interval = REGISTER_ACCOUNT_SQL_EVENT_DURATION;
         $success = sql_query("
             CREATE EVENT delete_expired_register_account_$uid
             ON SCHEDULE AT CURRENT_TIMESTAMP + INTERVAL $interval DO
             DELETE FROM ".USER_TABLE." WHERE UserId=$uid AND Usermode=0;");
     }
-    if ($success) $success = SendValidationEmailLink($username, $email, $register_time);
+    if ($success) $success = SendValidationEmailLink($uid, $username, $email, $register_time);
     // TODO: Log action
-    if (!$success) ShowErrorBanner("Error creating account, please try again");
+    if (!$success) ShowErrorBanner("Error creating account, please try again later");
     return $success;
 }
 
-function SendValidationEmailLink($username, $email, $joinTime) {
+function SendValidationEmailLink($uid, $username, $email, $joinTime) {
     $to = "$username <$email>";
     // TODO: Remove (TEST)
     $subject = "(TEST) Account Registration for AGNPH";
-    $auth = HashAuthKey($username, $email, $joinTime);
-    $url = "http:/agnph.cloudapp.net/register/success/?key=$auth";
-    $time = REGISTER_ACCOUNT_EXPIRE_TIME_READABLE_STRING;
+    // Don't have to worry about duplicate codes, as only one account can exist per-email.
+    $code = CreateCodeEntry($email, "registration", "$uid", "/register/success/", REGISTER_ACCOUNT_TIMESTAMP_DURATION);
+    if ($code === FALSE) return false;
+    $url = GetAuthURL($code);
+    $time = REGISTER_ACCOUNT_HUMAN_READABLE_STRING;
     $message = <<<EOT
 <html>
     <head>

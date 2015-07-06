@@ -10,7 +10,22 @@ if (!isset($_GET['uid']) || !is_numeric($_GET['uid'])) {
     return;
 }
 $profile_id = (int)$_GET['uid'];
-LoadAllUserPreferences($profile_id, $profile_user, true);
+if (!LoadAllUserPreferences($profile_id, $profile_user, true)) RenderErrorPage("Error loading profile");
 $profile_user['avatarURL'] = GetAvatarURL($profile_user);
+switch ($profile_user['Gender']) {
+    case 'U':
+        break;
+    case 'M':
+        $profile_user['gender'] = "Male";
+        break;
+    case 'F':
+        $profile_user['gender'] = "Female";
+        break;
+    case 'O':
+        $profile_user['gender'] = "Other";
+        break;
+    default:
+        break;
+}
 $vars['profile']['user'] = $profile_user;
 ?>

@@ -3,7 +3,6 @@
 // URL: /login/ => /login.php
 
 define("SITE_ROOT",  __DIR__."/");
-define("DEBUG", true);
 
 // TODO: Remove after site testing is complete.
 if (isset($_GET['debug']) && $_GET['debug'] == true) {

@@ -82,7 +82,7 @@ do_or_die(sql_query(
     "INSERT INTO ".SITE_TEXT_TABLE."
     (Name, Text)
     VALUES
-    ('RegisterDisclaimer', 'By clicking \'Register\', you agree that you are above 18 years of age. A verification email will be sent to the provided email address.');"));
+    ('RegisterDisclaimer', 'By clicking \'Register\', you agree that you are 18 years of age or older. A verification email will be sent to the provided email address.');"));
     
 function rand_date() {
     return mt_rand(0, 2147483647);
@@ -206,7 +206,7 @@ CreateTag("flygon", "S");
 CreateTag("solo", "G");
 CreateTag("floatzel", "S");
 
-/*
+//*
 CreateGalleryPost("c3024ba611837d85397d9661aec12840", "jpg", array("harlem", "umbreon", "quilava", "male"), "e");
 CreateGalleryPost("16f7fdb2e63740e6dbf524e137899433", "png", array("syntex", "quilava", "raichu", "male"), "s");
 CreateGalleryPost("0f80621ad5be140be8e3077bea316b06", "jpg", array("eroborus", "quilava", "dewott", "male"), "q");

@@ -113,6 +113,7 @@
             {% if profile.user.Species|length > 0 %}    <li><span class="basic-info-label">Species:</span><span>{{ profile.user.Species }}</span></li>{% endif %}
             {% if profile.user.Title|length > 0 %}      <li><span class="basic-info-label">Title:</span><span>{{ profile.user.Title }}</span></li>{% endif %}
             {% if profile.user.Location|length > 0 %}   <li><span class="basic-info-label">Location:</span><span>{{ profile.user.Location }}</span></li>{% endif %}
+            {% if profile.user.gender|length > 0 %}     <li><span class="basic-info-label">Gender:</span><span>{{ profile.user.gender }}</span></li>{% endif %}
             {% if canSeePrivateInfo %}
         </ul>
         <h3>Private Info</h3>

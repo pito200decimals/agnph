@@ -12,25 +12,29 @@ TODOs
 * Verify tag aliasing works once admin support for that is added
 * Comment deletion
 * Gallery post descriptions
+    - Should these edits be logged?
 - Gallery linking to source on delete
-- Gallery/Fics mass tag edits?
-- Slideshow view?
+- Gallery/Fics mass tag edits
+- Slideshow view
 X IP address tracking for uploads (Do we need this, since user is tracked?)
-- Upvote/Downvote (On hold for now. Don't know where to put buttons. Feature not used in Ouroboros gallery)
+X Upvote/Downvote (On hold for now. Don't know where to put buttons. Feature not used in Ouroboros gallery)
 - Gallery notes?
-- Custom swf/webm thumbs when parent is set?
+X Custom swf/webm thumbs when parent is set to image.
 - Tag implications
 - Some sort of tag exploration feature, perhaps tag cloud?
+- Tag edit rollbacks?
+- Viewing tag edits for user.
 
 == FICS ==
 * User favorites (story, author)
 * Author following
 * Comment deletion
-- Fics search ordering?
-- More complex search queries ("OR", more metadata filters like ordering?)
+X Fics search ordering
+X More complex search queries ("OR", more metadata filters like ordering?)
 - Index page, including news and featured stories, perhaps random selection
 - Ability to subscribe for email/PM notifications (for your stories and watching others)
-- Breakdown of views per-chapter?
+- Breakdown of views per-chapter
+- Co-authors
 
 == SITE ==
 * Check for vuln's for style background-image URL
@@ -54,20 +58,20 @@ X IP address tracking for uploads (Do we need this, since user is tracked?)
 - All comment user links should go to respective sections.
 
 == ACCOUNT ==
-* Add gender
-* Support email/password changing
 * Mailbox/PM system
     - Add unread-message notification to both account tab and inbox tab.
     X Support message deletion? For now, no.
     - Should add user blacklisting?
 * User ban system
 * Admin management of user permissions
-* Support more restrictions on display name changing
 - Global user action logging
 - Non-user IP tracking (DoS investigating, user demographic statistics, etc?)
 - Allow user account deletion
 - Password recovery via email
     X Secret questions scrapped for now
+- Time limited bans
+- Ensure registered but un-activated users don't exist.
+- Perhaps a badge/text to tell users this account was created for archive and hasn't logged in before?
 
 
 == Things to remember when setting up site ==
@@ -76,3 +80,4 @@ X IP address tracking for uploads (Do we need this, since user is tracked?)
 - enable module gd (for swf size info)
 - Install sendmail
 - Suppress PHP logging on errors.
+- When importing accounts, add prefix/suffix to usernames to avoid duplicates.

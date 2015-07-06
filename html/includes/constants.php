@@ -16,6 +16,7 @@ define("SITE_NAV_TABLE", "nav_links");
 define("SITE_TAG_ALIAS_TABLE", "tag_aliases");
 define("SITE_LOGGING_TABLE", "action_log");
 define("SITE_TEXT_TABLE", "site_text");
+define("SECURITY_EMAIL_TABLE", "account_recovery");
 
 // User content data tables.
 define("USER_TABLE", "user");
@@ -63,12 +64,64 @@ define("DEFAULT_FICS_COMMENTS_PER_PAGE", 10);
 define("FICS_LIST_ITEMS_PER_PAGE", 50);
 
 // General constants.
+// Site-related
+define("SITE_DOMAIN", "http://agnph.cloudapp.net");  // TODO: Change on live site.
+define("MIN_USERNAME_LENGTH", 3);  // Also present in register.tpl
+define("MAX_USERNAME_LENGTH", 24);  // Also present in register.tpl
+define("MIN_PASSWORD_LENGTH", 4);  // Also present in register.tpl
+define("MAX_TAG_NAME_LENGTH", 32);
+define("PROFILE_DATE_FORMAT", "Y-m-d");
+define("PROFILE_DATE_TIME_FORMAT", "Y-m-d H:i:s");
+define("PROFILE_DOB_FORMAT", "F d Y");
+define("MIN_COMMENT_STRING_SIZE", 10);  // TODO: Enforce everywhere.
+define("MAX_PM_LENGTH", 4096);
+define("MIN_DISPLAY_NAME_LENGTH", 3);
+define("MAX_DISPLAY_NAME_LENGTH", 24);
+define("MIN_USER_NAME_LENGTH", 3);
+define("MAX_USER_NAME_LENGTH", 24);
+define("INBOX_ITEMS_PER_PAGE", 50);
+define("MIN_USER_LOOKUP_PREFIX_LENGTH", 1);  // For ajax PM user lookup.
+define("DISPLAY_NAME_CHANGE_TIME_LIMIT", 24*60*60);  // Once a day.
+define("DISPLAY_NAME_CHANGE_TIME_LIMIT_STR", "24 hours");
+define("DEFAULT_AVATAR_PATH", "/images/default-avatar.png");
+define("AVATAR_UPLOAD_EXTENSION", "png");
+define("MAX_AVATAR_UPLOAD_DIMENSIONS", 200);
+define("MAX_EMAIL_LENGTH", 128);
+// Site security-related timeouts.
+define("REGISTER_ACCOUNT_HUMAN_READABLE_STRING", "24 hours");  // 24 hours.
+define("REGISTER_ACCOUNT_SQL_EVENT_DURATION", "24 HOUR");
+define("REGISTER_ACCOUNT_TIMESTAMP_DURATION", 24*60*60);
+define("DEFAULT_EMAIL_EXPIRE_HUMAN_READABLE_STRING", "15 minutes");  // 15 minutes.
+define("DEFAULT_EMAIL_EXPIRE_SQL_EVENT_DURATION", "0:15 HOUR_MINUTE");
+define("DEFAULT_EMAIL_EXPIRE_TIMESTAMP_DURATION", 15*60);
+
+// Forums-related
+define("FORUMS_DATE_FORMAT", "Y-m-d H:i:s");
+define("MAX_FORUMS_SIGNATURE_LENGTH", 256);
+define("MAX_FORUMS_THREADS_PER_PAGE", 100);
+define("MAX_FORUMS_POSTS_PER_PAGE", 50);
+
+// Gallery-related
 $GALLERY_TAG_TYPES = array(
     "A" => "Artist",
     "C" => "Character",
     "D" => "Copyright",
     "G" => "General",
     "S" => "Species");
+define("GALLERY_THUMB_FILE_EXTENSION", "jpg");  // Don't change once gallery starts indexing.
+define("MAX_IMAGE_THUMB_SIZE", 150);
+define("MAX_IMAGE_PREVIEW_SIZE", 1200);
+define("MAX_POOL_NAME_LENGTH", 128);
+define("MIN_POOL_PREFIX_LENGTH", 3);  // For ajax add-to-pool search.
+define("MAX_GALLERY_POST_FLAG_REASON_LENGTH", 64);
+define("GALLERY_DATE_FORMAT", "Y-m-d");
+define("MAX_GALLERY_POSTS_PER_PAGE", 100);
+define("MAX_GALLERY_BLACKLIST_TAGS", 50);
+define("GALLERY_PROFILE_SHOW_NUM_UPLOADS", 6);
+define("GALLERY_PROFILE_SHOW_NUM_FAVORITES", 6);
+define("INITIAL_GALLERY_UPLOAD_LIMIT", 10);
+
+// Fics-related
 $FICS_TAG_TYPES = array(
     "C" => "Category",
     "S" => "Species",
@@ -76,44 +129,14 @@ $FICS_TAG_TYPES = array(
     "H" => "Character",
     "R" => "Series",
     "G" => "General");
-define("GALLERY_THUMB_FILE_EXTENSION", "jpg");  // Don't change once gallery starts indexing.
-define("AVATAR_UPLOAD_EXTENSION", "jpg");
-define("MAX_IMAGE_THUMB_SIZE", 150);
-define("MAX_IMAGE_PREVIEW_SIZE", 1200);
-define("MAX_TAG_NAME_LENGTH", 32);
-define("MAX_POOL_NAME_LENGTH", 128);
-define("MIN_POOL_PREFIX_LENGTH", 3);  // For ajax add-to-pool search.
-define("MAX_GALLERY_POST_FLAG_REASON_LENGTH", 64);
-define("FORUMS_DATE_FORMAT", "Y-m-d H:i:s");
-define("GALLERY_DATE_FORMAT", "Y-m-d");
 define("FICS_DATE_FORMAT", "Y-m-d");
-define("PROFILE_DATE_FORMAT", "Y-m-d");
-define("PROFILE_DATE_TIME_FORMAT", "Y-m-d H:i:s");
-define("PROFILE_DOB_FORMAT", "F d Y");
-define("MIN_COMMENT_STRING_SIZE", 10);
 define("MIN_FICS_TITLE_SUMMARY_SEARCH_STRING_SIZE", 3);
-define("MAX_FORUMS_SIGNATURE_LENGTH", 256);
-define("MAX_FORUMS_THREADS_PER_PAGE", 100);
-define("MAX_FORUMS_POSTS_PER_PAGE", 50);
-define("MAX_GALLERY_POSTS_PER_PAGE", 100);
 define("MAX_FICS_POSTS_PER_PAGE", 100);
-define("MAX_GALLERY_BLACKLIST_TAGS", 50);
 define("MAX_FICS_BLACKLIST_TAGS", 50);
 define("FICS_NOT_FEATURED", "D");  // Also present in templates: editstory.tpl
-define("GALLERY_PROFILE_SHOW_NUM_UPLOADS", 6);
-define("GALLERY_PROFILE_SHOW_NUM_FAVORITES", 6);
-define("MAX_PM_LENGTH", 4096);
-define("MIN_DISPLAY_NAME_LENGTH", 3);
-define("INBOX_ITEMS_PER_PAGE", 50);
-define("MIN_USER_LOOKUP_PREFIX_LENGTH", 1);  // For ajax PM user lookup.
 
-define("MIN_USERNAME_LENGTH", 3);  // Also present in register.tpl
-define("MAX_USERNAME_LENGTH", 24);  // Also present in register.tpl
-define("MIN_PASSWORD_LENGTH", 4);  // Also present in register.tpl
 
-define("REGISTER_ACCOUNT_EXPIRE_TIME_READABLE_STRING", "24 hours");
-define("REGISTER_ACCOUNT_EXPIRE_TIME", "24 HOUR");  // Time after registration that email link expires.
-define("DEFAULT_AVATAR_PATH", "/images/default-avatar.png");
-define("MAX_AVATAR_UPLOAD_DIMENSIONS", 200);
+
+
 
 ?>

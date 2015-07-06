@@ -6,9 +6,14 @@ Options -MultiViews
 # Rewrites for Sitewide pages
 RewriteRule ^login/?$ /login.php
 RewriteRule ^logout/?$ /logout.php
-RewriteRule ^register/?$ /user/register.php
-RewriteRule ^register/captcha/?$ /user/captcha/captcha.php [QSA]
-RewriteRule ^register/success/?$ /user/register_success.php [QSA]
+RewriteRule ^register/captcha/?$ /user/captcha/captcha.php
+RewriteRule ^register/?$ /user/register/register_input.php
+RewriteRule ^register/confirm/?$ /user/register/register_confirm.php
+RewriteRule ^register/success/?$ /user/register/register_success.php
+RewriteRule ^auth/?$ /auth_code.php [QSA]
+RewriteRule ^recover/?$ /user/recover/recover_account_input.php
+RewriteRule ^recover/confirm/?$ /user/recover/recover_account_confirm.php
+RewriteRule ^recover/success/?$ /user/recover/recover_account_success.php
 
 # Rewrites for forums pages
 RewriteRule ^forums/thread/(\d+)/?$ /forums/thread/viewthread.php?t=$1
@@ -35,6 +40,7 @@ RewriteRule ^user/(\d+)/mail/unread/?$ /user/mail/mail.php?uid=$1&unread=1 [QSA]
 RewriteRule ^user/(\d+)/mail/message/(\d+)/?$ /user/mail/view_message.php?uid=$1&mid=$2
 RewriteRule ^user/(\d+)/mail/compose/?$ /user/mail/compose_message.php?uid=$1 [QSA]
 RewriteRule ^user/(\d+)/mail/send/?$ /user/mail/mail_action.php?uid=$1&action=send
+RewriteRule ^user/auth/change/?$ /user/recover/recover_account_success.php
 
 # Rewrites for gallery pages
 RewriteRule ^gallery/post/?$ /gallery/posts/postindex.php [QSA]
