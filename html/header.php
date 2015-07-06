@@ -66,7 +66,7 @@ FetchUserHeaderVars();
 
 
 function FetchUserHeaderVars() {
-    global $user, $vars;
+    global $user, $vars, $twig;
     // Account management and login links.
     $vars['account_links'] = array();
     if (isset($user)) {
