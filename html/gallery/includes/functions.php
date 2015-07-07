@@ -24,7 +24,7 @@ function CanUserCreateGalleryTags($user) {
 }
 function CanUserUploadNonPending($user) {
     if (!IsUserActivated($user)) return false;
-    return true;
+    return false;
 }
 function CanUserAddOrRemoveFromPools($user) {
     if (!IsUserActivated($user)) return false;
@@ -279,6 +279,34 @@ function SetOutlineClasses(&$posts) {
             $postsToCheckChild[$row['ParentPostId']]['outlineClass'] = "parentoutline";
         }
     }
+}
+
+function FetchUploadCountsByUserBySuccess($uid, &$numPending, &$numSuccessful, &$numDeletedNotFlaggedBySelf) {
+    $numPending = 0;
+    $numSuccessful = 0;
+    $numDeletedNotFlaggedBySelf = 0;
+    if (!sql_query_into($result, "SELECT
+        count(CASE Status WHEN 'P' THEN 1 ELSE NULL END) AS NumPending,
+        count(CASE Status WHEN 'A' THEN 1 ELSE NULL END) AS NumSuccess,
+        count(CASE Status WHEN 'D' THEN (CASE FlaggerUserId WHEN $uid THEN NULL ELSE 1 END) ELSE NULL END) AS NumFail
+        FROM ".GALLERY_POST_TABLE." WHERE UploaderId=$uid;", 1)) return false;
+    $row = $result->fetch_assoc();
+    $numPending = $row['NumPending'];
+    $numSuccessful = $row['NumSuccess'];
+    $numDeletedNotFlaggedBySelf = $row['NumFail'];
+    return true;
+}
+
+function ComputeUploadLimit($numSuccessful, $numDeletedNotFlaggedBySelf) {
+    return (int)round(1 + ($numSuccessful / 2.0) - ($numDeletedNotFlaggedBySelf/4.0));
+}
+
+function CanUserUpload($numPending, $numSuccessful, $numDeletedNotFlaggedBySelf) {
+    $limit = ComputeUploadLimit($numSuccessful, $numDeletedNotFlaggedBySelf);
+    return $numPending < $limit;
+}
+function QuickCanUserUpload($uid) {
+    return FetchUploadCountsByUserBySuccess($uid, $numPending, $numSuccessful, $numDeletedNotFlaggedBySelf) && CanUserUpload($numPending, $numSuccessful, $numDeletedNotFlaggedBySelf);
 }
 
 ?>

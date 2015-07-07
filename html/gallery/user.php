@@ -32,6 +32,19 @@ $profile_user['numGalleryTagEdits'] = $result->fetch_assoc()['count(*)'];
 sql_query_into($result, "SELECT count(*) FROM ".GALLERY_COMMENT_TABLE." WHERE UserId=$profile_uid;", 1) or RenderErrorPage("Failed to fetch user profile");
 $profile_user['numGalleryPostComments'] = $result->fetch_assoc()['count(*)'];
 
+if (FetchUploadCountsByUserBySuccess($profile_user['UserId'], $numPending, $numUploaded, $numDeleted)) {
+    $limit = ComputeUploadLimit($numUploaded, $numDeleted);
+    $profile_user['numBaseUploadLimit'] = 10;
+    $profile_user['numGoodUploads'] = $numUploaded;
+    $profile_user['numBadUploads'] = $numDeleted;
+    $profile_user['numUploadLimit'] = $limit;
+} else {
+    $profile_user['numBaseUploadLimit'] = 0;
+    $profile_user['numGoodUploads'] = 0;
+    $profile_user['numBadUploads'] = 0;
+    $profile_user['numUploadLimit'] = 0;
+}
+
 // Get some recent uploaded posts. Include flagged posts.
 if (sql_query_into($result,
     "SELECT * FROM ".GALLERY_POST_TABLE."

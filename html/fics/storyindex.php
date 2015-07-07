@@ -23,11 +23,14 @@ if (isset($user)) {
 
 // Get search filters.
 $search_clauses = "TRUE";
+$order_clauses = "";
 if (isset($_GET['search'])) {
     $search_terms = $_GET['search'];
     $vars['searchTerms'] = $search_terms;
     $search_clauses = GetSearchClauses($search_terms);
     if (mb_strlen($search_clauses) == 0) $search_clauses = "TRUE";
+    $order_clauses = GetOrderingClauses($search_terms);
+    if (mb_strlen($order_clauses) != 0) $order_clauses .= ", ";
 } else {
     $blacklist_clauses = GetSearchClauses("");
     if (mb_strlen($blacklist_clauses) > 0) $search_clauses = $blacklist_clauses;
@@ -37,7 +40,7 @@ if (!sql_query_into($result,
    "SELECT * FROM ".FICS_STORY_TABLE." T
     WHERE
     $search_clauses
-    ORDER BY DateUpdated DESC, StoryId DESC;", 0)) RenderErrorPage("No stories found.");
+    ORDER BY $order_clauses DateUpdated DESC, StoryId DESC;", 0)) RenderErrorPage("No stories found.");
 $stories = array();
 while ($story = $result->fetch_assoc()) {
     FillStoryInfo($story);

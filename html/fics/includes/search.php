@@ -8,8 +8,6 @@ include_once(SITE_ROOT."includes/util/table_data.php");
 include_once(SITE_ROOT."includes/tagging/tag_functions.php");
 include_once(SITE_ROOT."fics/includes/functions.php");
 
-// TODO: Ordering.
-
 function GetSearchClauses($search_term_string) {
     $search_term_array = explode(" ", $search_term_string);
     $search_term_array = array_map("trim", $search_term_array);
@@ -24,6 +22,38 @@ function GetSearchClauses($search_term_string) {
         $clause_string = implode(" AND ", array_map(function($clause) { return "($clause)"; }, $clauses));
     }
     return $clause_string;
+}
+
+function GetOrderingClauses($search_term_string) {
+    $search_term_array = explode(" ", $search_term_string);
+    $search_term_array = array_map("trim", $search_term_array);
+    $search_term_array = array_filter($search_term_array, "mb_strlen");
+    $search_term_array = array_slice($search_term_array, 0, MAX_FICS_SEARCH_TERMS);
+    $orderings = array_filter(array_map("GetOrdering", $search_term_array), "mb_strlen");
+    return implode(", ", $orderings);
+}
+
+function GetOrdering($search_term) {
+    $search_term = mb_strtolower($search_term);
+    if (startsWith($search_term, "order:rating") ||
+        startsWith($search_term, "order:score")) {
+        return "(TotalStars / IF (TotalRatings = 0, 1, TotalRatings)) DESC";
+    } else if (startsWith($search_term, "order:views") ||
+        startsWith($search_term, "order:reads")) {
+        return "Views DESC";
+    } else if (startsWith($search_term, "order:words") ||
+        startsWith($search_term, "order:length") ||
+        startsWith($search_term, "order:size")) {
+        return "WordCount DESC";
+    } else if (startsWith($search_term, "order:chapters")) {
+        return "ChapterCount DESC";
+    } else if (startsWith($search_term, "order:reviews")) {
+        return "NumReviews DESC";
+    } else if (startsWith($search_term, "order:published")) {
+        return "DateCreated DESC";
+    } else {
+        return "";
+    }
 }
 
 function GetFicsBlacklistClauses($terms) {
@@ -41,6 +71,10 @@ function GetFicsBlacklistClauses($terms) {
 
 function GetClause($search_term) {
     global $user;
+    $order = GetOrdering($search_term);
+    if (mb_strlen($order) > 0) {
+        return "";
+    }
     if (mb_substr($search_term, 0, 1) == "-") {
         while (mb_substr($search_term, 0, 1) == "-") {
             $search_term = mb_substr($search_term, 1);

@@ -20,7 +20,7 @@ $post = $result->fetch_assoc();
 
 if ($_POST['action'] == "delete" && CanUserDeleteGalleryPost($user) && $post['Status'] != 'D') {
     // Delete post and return. Also remove from any pools and favorites.
-    if (!sql_query("UPDATE ".GALLERY_POST_TABLE." SET Status='D', FlaggerUserId='$user_id', ParentPoolId=-1 WHERE PostId='$escaped_post_id';")) {
+    if (!sql_query("UPDATE ".GALLERY_POST_TABLE." SET Status='D', FlaggerUserId='$user_id', ParentPoolId=-1, NumFavorites=0 WHERE PostId='$escaped_post_id';")) {
         RenderErrorPage("Error processing request");
     }
     // Remove from favorites. Don't check for errors since we can't do anything.

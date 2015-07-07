@@ -164,7 +164,7 @@ function PreparePostStatistics(&$post) {
     $poster_id = $post['UploaderId'];
     sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId=$poster_id;", 1) or RenderErrorPage("Post not found.");
     $poster = $result->fetch_assoc();
-    $post['postedHtml'] = FormatDuration(time() - $postdate)." ago by <a href='/user/".$poster['UserId']."/'>".$poster['DisplayName']."</a>";
+    $post['postedHtml'] = FormatDuration(time() - $postdate)." ago by <a href='/user/".$poster['UserId']."/gallery/'>".$poster['DisplayName']."</a>";
     switch($post['Rating']) {
       case "s":
         $post['ratingHtml'] = "<span class='srating'>Safe</span>";

@@ -53,6 +53,7 @@ function GetAllPosterData(&$posts) {
     if (LoadTableData(array(USER_TABLE, FORUMS_USER_PREF_TABLE), "UserId", $uids, $users)) {
         foreach ($users as &$usr) {
             $usr['avatarURL'] = GetAvatarURL($usr);
+            $usr['Signature'] = SanitizeHTMLTags($usr['Signature'], DEFAULT_ALLOWED_TAGS);
         }
         foreach ($posts as &$post) {
             $post['poster'] = $users[$post['UserId']];

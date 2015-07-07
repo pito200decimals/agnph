@@ -46,7 +46,9 @@
             <hr />
         {% endif %}
         <div class="postsig">
-            {{ post.poster.Signature }}
+            {% autoescape false %}
+                {{ post.poster.Signature }}
+            {% endautoescape %}
         </div>
     </div>
 </div>

@@ -8,7 +8,6 @@ TODOs
 - Spoiler tags
 
 == GALLERY ==
-* Gallery upload limits
 * Verify tag aliasing works once admin support for that is added
 * Comment deletion
 * Gallery post descriptions
@@ -24,13 +23,14 @@ X Custom swf/webm thumbs when parent is set to image.
 - Some sort of tag exploration feature, perhaps tag cloud?
 - Tag edit rollbacks?
 - Viewing tag edits for user.
+- "Popular" recent posts, maybe by # of views in last day/week/month?
+- Back/Next buttons
+- Pool search by name
 
 == FICS ==
 * User favorites (story, author)
 * Author following
 * Comment deletion
-X Fics search ordering
-X More complex search queries ("OR", more metadata filters like ordering?)
 - Index page, including news and featured stories, perhaps random selection
 - Ability to subscribe for email/PM notifications (for your stories and watching others)
 - Breakdown of views per-chapter
