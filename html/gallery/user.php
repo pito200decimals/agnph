@@ -16,10 +16,10 @@ $profile_user = &$vars['profile']['user'];
 $profile_uid = $profile_user['UserId'];
 
 // Fetch user statistics.
-// Posts Uploaded
-sql_query_into($result, "SELECT count(*) FROM ".GALLERY_POST_TABLE." WHERE UploaderId=$profile_uid AND (Status='P' OR Status='A');", 1) or RenderErrorPage("Failed to fetch user profile");
+// Posts Uploaded by user and not deleted:
+sql_query_into($result, "SELECT count(*) FROM ".GALLERY_POST_TABLE." WHERE UploaderId=$profile_uid AND (Status='P' OR Status='A' OR Status='F');", 1) or RenderErrorPage("Failed to fetch user profile");
 $profile_user['numGalleryPostsUploaded'] = $result->fetch_assoc()['count(*)'];
-//Posts Flagged:
+//Posts Flagged by user:
 sql_query_into($result, "SELECT count(*) FROM ".GALLERY_POST_TABLE." WHERE FlaggerUserId=$profile_uid AND (Status='F' OR Status='D');", 1) or RenderErrorPage("Failed to fetch user profile");
 $profile_user['numGalleryPostsFlagged'] = $result->fetch_assoc()['count(*)'];
 //Posts Favorited:

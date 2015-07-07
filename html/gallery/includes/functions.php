@@ -298,7 +298,7 @@ function FetchUploadCountsByUserBySuccess($uid, &$numPending, &$numSuccessful, &
 }
 
 function ComputeUploadLimit($numSuccessful, $numDeletedNotFlaggedBySelf) {
-    return (int)round(1 + ($numSuccessful / 2.0) - ($numDeletedNotFlaggedBySelf/4.0));
+    return (int)round(10 + ($numSuccessful / 10.0) - ($numDeletedNotFlaggedBySelf/4.0));
 }
 
 function CanUserUpload($numPending, $numSuccessful, $numDeletedNotFlaggedBySelf) {
