@@ -71,6 +71,10 @@ if ($post['ParentPoolId'] != -1) {
     if (mb_strlen($iter) > 0) $vars['poolIterator'] = $iter;
 }
 
+PreparePostStatistics($post);
+PrepPostNotificationBanner($post);
+HandleCreatingAllBanners($post);  // Make sure to create banners before posts below.
+
 if (isset($user)) {
     $uid = $user['UserId'];
     if (isset($_POST['favorite-action'])) {
@@ -79,11 +83,11 @@ if (isset($user)) {
             $now = time();
             sql_query("INSERT INTO ".GALLERY_USER_FAVORITES_TABLE." (UserId, PostId, Timestamp) VALUES ($uid, $pid, $now);");
             UpdatePostStatistics($pid);
-            $_SESSION['gallery_action_message'] = "Added to Favorites";
+            PostBanner("Added to Favorites", "green");
         } else if ($_POST['favorite-action'] == "remove") {
             sql_query("DELETE FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE UserId=$uid AND PostId=$pid;");
             UpdatePostStatistics($pid);
-            $_SESSION['gallery_action_message'] = "Removed from Favorites";
+            PostBanner("Removed from Favorites", "green");
         }
     }
     if (isset($_POST['set-avatar-action'])) {
@@ -96,9 +100,32 @@ if (isset($user)) {
             }
             $user['AvatarPostId'] = $pid;
             $user['AvatarFname'] = "";
-            $_SESSION['gallery_action_message'] = "Set as Avatar";
+            PostBanner("Set as Avatar", "green");
         }
     }
+    if (isset($_POST['action']) && $_POST['action'] == "delete-comment" &&
+        isset($_POST['id']) && is_numeric($_POST['id'])) {
+        $cid = (int)$_POST['id'];
+        $escaped_cid = sql_escape($cid);  // Just in case.
+        if (sql_query_into($result, "SELECT * FROM ".GALLERY_COMMENT_TABLE." WHERE CommentId='$escaped_cid';", 1)) {
+            $comment_to_delete = $result->fetch_assoc();
+            if (CanUserDeleteComment($user, $comment_to_delete)) {
+                if (sql_query("DELETE FROM ".GALLERY_COMMENT_TABLE." WHERE CommentId='$escaped_cid';")) {
+                    UpdatePostStatistics($comment_to_delete['PostId']);
+                    PostBanner("Comment deleted", "green");
+                } else {
+                    PostBanner("Error deleting comment", "red");
+                }
+            } else {
+                PostBanner("Unable to delete comment", "red");
+            }
+        } else {
+            PostBanner("Unable to delete comment", "red");
+        }
+    }
+
+    // Read user permissions and set flags.
+
     // Check for user favorite.
     $vars['isFavorited'] = sql_query_into($result, "SELECT * FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE UserId=$uid AND PostId=$pid;", 1);
     // Settings for action perms flags.
@@ -149,9 +176,6 @@ ConstructCommentBlockIterator($comments, $vars['commentIterator'], true /* allow
     }, DEFAULT_GALLERY_COMMENTS_PER_PAGE);
 $vars['comments'] = $comments;
 
-PreparePostStatistics($post);
-PrepPostNotificationBanner($post);
-HandleCreatingAllBanners($post);
 
 // Increment view count, and do SQL after page is rendered.
 $post['NumViews']++;
@@ -203,6 +227,7 @@ function CreatePoolIterator($post) {
     return $prev_link . $curr_link . $next_link;
 }
 function GetComments($pid) {
+    global $user;
     $escaped_pid = sql_escape($pid);
     $comments = array();
     if (!sql_query_into($result, "SELECT * FROM ".GALLERY_COMMENT_TABLE." WHERE PostId='$escaped_pid' ORDER BY CommentDate ASC, CommentId ASC;", 0)) return null;
@@ -224,6 +249,10 @@ function GetComments($pid) {
             $comment['date'] = FormatDate($comment['CommentDate'], GALLERY_DATE_FORMAT);
             $comment['title'] = "";
             $comment['text'] = $comment['CommentText'];
+            $comment['id'] = $comment['CommentId'];
+            if (CanUserDeleteComment($user, $comment)) {
+                $comment['canDelete'] = true;
+            }
         }
     }
     return $comments;
@@ -278,11 +307,7 @@ function HandleCreatingAllBanners($post) {
     global $vars;
     $vars['banner_nofications'] = array();
     if ($post['Status'] == 'P') {
-        $vars['banner_nofications'][] = array(
-            "classes" => array("blue-banner"),
-            "text" => "This post is pending moderator approval",
-            "dismissable" => false,
-            "strong" => true);
+        PostBanner("This post is pending moderator approval", "blue", false);
     } else if ($post['Status'] == 'F') {
         if (isset($post['flagger'])) {
             $msg = "This post has been flagged for deletion by <a href='/user/".$post['flagger']['UserId']."/gallery/'>".$post['flagger']['DisplayName']."</a>";
@@ -294,26 +319,24 @@ function HandleCreatingAllBanners($post) {
         } else if (isset($post['FlagReason']) && mb_strlen($post['FlagReason'])) {
             $msg .= ". Reason: ".SanitizeHTMLTags($post['FlagReason'], "" /*no tags*/);
         }
-        $vars['banner_nofications'][] = array(
-            "classes" => array("red-banner"),
-            "text" => $msg,
-            "dismissable" => false,
-            "strong" => true,
-            "noescape" => true);
+        PostBanner($msg, "red", false, true);
     } else if ($post['Status'] == 'D') {
-        $vars['banner_nofications'][] = array(
-            "classes" => array("red-banner"),
-            "text" => "This post has been deleted",
-            "dismissable" => false,
-            "strong" => true);
+        PostBanner("This post has been deleted", "red", false);
     }
     if (isset($_SESSION['gallery_action_message'])) {
-        $vars['banner_nofications'][] = array(
-            "classes" => array("green-banner"),
-            "text" => $_SESSION['gallery_action_message'],
-            "dismissable" => true,
-            "strong" => true);
+        // Required as this is passed from editpost.php
+        PostBanner($_SESSION['gallery_action_message'], "green");
         unset($_SESSION['gallery_action_message']);
     }
+}
+
+function PostBanner($msg, $color, $dismissable = true, $noescape = false) {
+    global $vars;
+    $vars['banner_nofications'][] = array(
+        "classes" => array("$color-banner"),
+        "text" => $msg,
+        "dismissable" => $dismissable,
+        "strong" => true,
+        "noescape" => $noescape);
 }
 ?>

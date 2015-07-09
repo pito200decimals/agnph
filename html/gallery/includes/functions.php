@@ -24,6 +24,8 @@ function CanUserCreateGalleryTags($user) {
 }
 function CanUserUploadNonPending($user) {
     if (!IsUserActivated($user)) return false;
+    if ($user['GalleryPermissions'] == 'A') return true;
+    if ($user['GalleryPermissions'] == 'C') return true;
     return false;
 }
 function CanUserAddOrRemoveFromPools($user) {
@@ -36,19 +38,30 @@ function CanUserChangePoolOrdering($user) {
 }
 function CanUserCreateOrDeletePools($user) {
     if (!IsUserActivated($user)) return false;
+    if ($user['GalleryPermissions'] == 'A') return true;
+    if ($user['GalleryPermissions'] == 'C') return true;
     return true;
 }
 function CanUserDeleteGalleryPost($user) {
     if (!IsUserActivated($user)) return false;
+    if ($user['GalleryPermissions'] == 'A') return true;
     return true;
 }
 function CanUserApprovePost($user) {
     if (!IsUserActivated($user)) return false;
+    if ($user['GalleryPermissions'] == 'A') return true;
+    if ($user['GalleryPermissions'] == 'C') return true;
     return true;
 }
 function CanUserCommentOnPost($user) {
     if (!IsUserActivated($user)) return false;
     return true;
+}
+function CanUserDeleteComment($user, $comment) {
+    if (!IsUserActivated($user)) return false;
+    if ($user['GalleryPermissions'] == 'A') return true;
+    // if ($user['UserId'] == $comment['UserId']) return true;
+    return false;
 }
 
 // General path functions.

@@ -19,6 +19,19 @@ $profile_uid = $profile_user['UserId'];
 // Posts Uploaded by user and not deleted:
 sql_query_into($result, "SELECT count(*) FROM ".GALLERY_POST_TABLE." WHERE UploaderId=$profile_uid AND (Status='P' OR Status='A' OR Status='F');", 1) or RenderErrorPage("Failed to fetch user profile");
 $profile_user['numGalleryPostsUploaded'] = $result->fetch_assoc()['count(*)'];
+sql_query_into($result, "SELECT count(*) FROM ".GALLERY_POST_TABLE." WHERE UploaderId=$profile_uid AND (Status='P');", 1) or RenderErrorPage("Failed to fetch user profile");
+$num_pending = $result->fetch_assoc()['count(*)'];
+sql_query_into($result, "SELECT count(*) FROM ".GALLERY_POST_TABLE." WHERE UploaderId=$profile_uid AND (Status='F');", 1) or RenderErrorPage("Failed to fetch user profile");
+$num_flagged = $result->fetch_assoc()['count(*)'];
+$detail_upload_str = array();
+if ($num_pending > 0) $detail_upload_str[] = "$num_pending pending";
+if ($num_flagged > 0) $detail_upload_str[] = "$num_flagged flagged";
+$detail_upload_str = implode(", ", $detail_upload_str);
+if (mb_strlen($detail_upload_str) > 0) {
+    $profile_user['galleryPostsUploadedDetail'] = "($detail_upload_str)";
+} else {
+    $profile_user['galleryPostsUploadedDetail'] = "$detail_upload_str";
+}
 //Posts Flagged by user:
 sql_query_into($result, "SELECT count(*) FROM ".GALLERY_POST_TABLE." WHERE FlaggerUserId=$profile_uid AND (Status='F' OR Status='D');", 1) or RenderErrorPage("Failed to fetch user profile");
 $profile_user['numGalleryPostsFlagged'] = $result->fetch_assoc()['count(*)'];

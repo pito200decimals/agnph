@@ -8,6 +8,7 @@ TODOs
 - Spoiler tags
 
 == GALLERY ==
+* Gallery permissions model
 * Verify tag aliasing works once admin support for that is added
 * Comment deletion
 * Gallery post descriptions
@@ -26,8 +27,10 @@ X Custom swf/webm thumbs when parent is set to image.
 - "Popular" recent posts, maybe by # of views in last day/week/month?
 - Back/Next buttons
 - Pool search by name
+- Clean up gallery viewpost POST model
 
 == FICS ==
+* Fics permissions model
 * User favorites (story, author)
 * Author following
 * Comment deletion

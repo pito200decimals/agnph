@@ -47,11 +47,11 @@ do_or_die(sql_query(
     (3, 'Sig of User3');"));
 do_or_die(sql_query(
    "INSERT INTO ".GALLERY_USER_PREF_TABLE."
-    (UserId)
+    (UserId, GalleryPermissions)
     VALUES
-    (1),
-    (2),
-    (3);"));
+    (1, 'A'),
+    (2, 'C'),
+    (3, 'N');"));
 do_or_die(sql_query(
    "INSERT INTO ".FICS_USER_PREF_TABLE."
     (UserId, FicsPermissions)

@@ -17,7 +17,7 @@
     <div class="infoblock">
         <h3>Gallery Statistics</h3>
         <ul id="basic-info">
-            <li><span class="basic-info-label">Posts Uploaded:</span><span>{{ profile.user.numGalleryPostsUploaded }}</span></li>
+            <li><span class="basic-info-label">Posts Uploaded:</span><span>{{ profile.user.numGalleryPostsUploaded }} {{ profile.user.galleryPostsUploadedDetail }}</span></li>
             <li><span class="basic-info-label">Upload Limit:</span><span><span title="Base upload limit" style="cursor: help;">{{ profile.user.numBaseUploadLimit }}</span> + (<span title="Number of approved uploads" style="cursor: help;">{{ profile.user.numGoodUploads }}</span> / 10) - (<span title="Number of deleted uploads" style="cursor: help;">{{ profile.user.numBadUploads }}</span> / 4) = <span title="User upload limit" style="cursor: help; font-weight: bold;">{{ profile.user.numUploadLimit }}</span></span></li>
             <li><span class="basic-info-label">Posts Flagged:</span><span>{{ profile.user.numGalleryPostsFlagged }}</span></li>
             <li><span class="basic-info-label">Posts Favorited:</span><span>{{ profile.user.numGalleryPostsFavorited }}</span></li>
