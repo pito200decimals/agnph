@@ -22,7 +22,8 @@ if (!isset($user) || !CanUserEditBasicInfo($user, $profile_user)) {
     return;
 }
 
-$vars['banner_nofications'] = array();
+// TODO: Fix banners.
+$vars['banner_notifications'] = array();
 
 if (isset($_POST['display-name']) &&
     isset($_POST['dob']) &&
@@ -313,7 +314,7 @@ return;
 
 function PostErrorMessage($msg) {
     global $vars;
-    $vars['banner_nofications'][] = array(
+    $vars['banner_notifications'][] = array(
         "classes" => array("red-banner"),
         "text" => $msg,
         "dismissable" => true,
@@ -322,7 +323,7 @@ function PostErrorMessage($msg) {
 
 function PostConfirmMessage($msg) {
     global $vars;
-    $vars['banner_nofications'][] = array(
+    $vars['banner_notifications'][] = array(
         "classes" => array("green-banner"),
         "text" => $msg,
         "dismissable" => true,

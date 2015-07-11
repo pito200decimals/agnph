@@ -14,7 +14,8 @@ if (isset($user)) {
     header("Location: /");
     return;
 }
-$vars['banner_nofications'] = array();
+// TODO: Fix banners.
+$vars['banner_notifications'] = array();
 if (isset($_POST['username']) &&
     isset($_POST['email']) &&
     isset($_POST['email-confirm']) &&
@@ -109,7 +110,7 @@ return;
 
 function ShowErrorBanner($msg) {
     global $vars;
-        $vars['banner_nofications'][] = array(
+        $vars['banner_notifications'][] = array(
             "strong" => true,
             "classes" => array("red-banner"),
             "text" => $msg,

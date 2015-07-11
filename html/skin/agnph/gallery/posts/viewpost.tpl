@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block scripts %}
-    {% if canEdit %}
+    {% if post.canEdit %}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
         <script src="{{ skinDir }}/gallery/posts/viewpost-script.php?pi={{ post.PostId }}&ppi={{ post.ParentPoolId }}{% if user and user.NavigateGalleryPoolsWithKeyboard %}&keynav=1{% endif %}"></script>
@@ -38,11 +38,11 @@
             </form>
         </div>
         <hr />
-        {% if poolIterator %}
+        {% if post.poolIterator %}
             <div class="poolbox">
                 <p><strong>Pool</strong></p>
                 {% autoescape false %}
-                <p>{{ poolIterator }}</p>
+                <p>{{ post.poolIterator }}</p>
                 {% endautoescape %}
             </div>
         {% endif %}
@@ -84,19 +84,46 @@
                 <li><a href="/gallery/post/show/{{ post.PostId }}/history/">Tag History</a></li>
             </ul>
         </div>
-        {% if canEdit %}
+        {% if post.canEdit %}
         <h3>Actions</h3>
         <div class="actionbox">
             <ul class="actionlist">
-                <li><a href="/gallery/post/edit/{{ post.PostId }}/" onclick="return toggleEdit();">Edit</a></li>
-                {% if canFlag %}
+                <li><a href="/gallery/post/show/{{ post.PostId }}/" onclick="return toggleEdit();">Edit</a></li>
+                {% if post.canApprove %}
                     <li>
-                        <a id="flagaction" href="#">{# No text for no javascript #}</a>
+                        <form hidden id="approveform" method="POST" accept-charset="UTF-8">
+                            <input name="post" type="hidden" value="{{ post.PostId }}" />
+                            <input name="action" type="hidden" value="approve" />
+                        </form>
+                        <a href="#" onclick="$('#approveform')[0].submit();return false;">Approve Post</a>
                     </li>
                 {% endif %}
-                {% if canDelete %}
+                {% if post.canFlag %}
                     <li>
-                        <form hidden id="deleteform" action="/gallery/post/status/" method="POST" accept-charset="UTF-8">
+                        <a id="flagaction" href="#">{# No text for no javascript #}</a>
+                        <div class="flageditbox">
+                            <form method="POST" accept-charset="UTF-8">
+                                <label>Reason:</label><br />
+                                <input name="post" type="hidden" value="{{ post.PostId }}" />
+                                <input id="flag-edit-text" name="reason" type="text" />
+                                <input name="action" type="hidden" value="flag" />
+                                <input type="submit" value="Flag" />
+                            </form>
+                        </div>
+                    </li>
+                {% endif %}
+                {% if post.canUnflag %}
+                    <li>
+                        <form hidden id="unflagform" method="POST" accept-charset="UTF-8">
+                            <input name="post" type="hidden" value="{{ post.PostId }}" />
+                            <input name="action" type="hidden" value="unflag" />
+                        </form>
+                        <a href="#" onclick="$('#unflagform')[0].submit();return false;">Unflag Post</a>
+                    </li>
+                {% endif %}
+                {% if post.canDelete %}
+                    <li>
+                        <form hidden id="deleteform" method="POST" accept-charset="UTF-8">
                             <input name="post" type="hidden" value="{{ post.PostId }}" />
                             <input name="reason" type="hidden" value="" />
                             <input name="action" type="hidden" value="delete" />
@@ -104,31 +131,13 @@
                         <a href="#" onclick="$('#deleteform')[0].submit();return false;">Delete Post</a>
                     </li>
                 {% endif %}
-                {% if canUnDelete %}
+                {% if post.canUnDelete %}
                     <li>
-                        <form hidden id="undeleteform" action="/gallery/post/status/" method="POST" accept-charset="UTF-8">
+                        <form hidden id="undeleteform" method="POST" accept-charset="UTF-8">
                             <input name="post" type="hidden" value="{{ post.PostId }}" />
                             <input name="action" type="hidden" value="undelete" />
                         </form>
                         <a href="#" onclick="$('#undeleteform')[0].submit();return false;">Undelete Post</a>
-                    </li>
-                {% endif %}
-                {% if canApprove %}
-                    <li>
-                        <form hidden id="approveform" action="/gallery/post/status/" method="POST" accept-charset="UTF-8">
-                            <input name="post" type="hidden" value="{{ post.PostId }}" />
-                            <input name="action" type="hidden" value="approve" />
-                        </form>
-                        <a href="#" onclick="$('#approveform')[0].submit();return false;">Approve Post</a>
-                    </li>
-                {% endif %}
-                {% if canUnflag %}
-                    <li>
-                        <form hidden id="unflagform" action="/gallery/post/status/" method="POST" accept-charset="UTF-8">
-                            <input name="post" type="hidden" value="{{ post.PostId }}" />
-                            <input name="action" type="hidden" value="unflag" />
-                        </form>
-                        <a href="#" onclick="$('#unflagform')[0].submit();return false;">Unflag Post</a>
                     </li>
                 {% endif %}
                 <li>
@@ -143,56 +152,45 @@
                 </li>
                 <li>
                     {% if isFavorited %}
-                        <form id="favorite-form" action="" method="POST">
-                            <input type="hidden" name="favorite-action" value="remove" />
+                        <form id="favorite-form" method="POST">
+                            <input type="hidden" name="action" value="remove-favorite" />
                             <a href="#" onclick="document.getElementById('favorite-form').submit();return false;">Remove from Favorites</a>
                         </form>
                     {% else %}
-                        <form id="favorite-form" action="" method="POST">
-                            <input type="hidden" name="favorite-action" value="add" />
+                        <form id="favorite-form" method="POST">
+                            <input type="hidden" name="action" value="add-favorite" />
                             <a href="#" onclick="document.getElementById('favorite-form').submit();return false;">Add to Favorites</a>
                         </form>
                     {% endif %}
                 </li>
-                {% if canSetAvatar %}
+                {% if post.canSetAvatar %}
                     <li>
-                        <form id="set-avatar-form" action="" method="POST">
-                            <input type="hidden" name="set-avatar-action" value="set" />
+                        <form id="set-avatar-form" method="POST">
+                            <input type="hidden" name="action" value="set-avatar" />
                             <a href="#" onclick="document.getElementById('set-avatar-form').submit();return false;">Set as Avatar</a>
                         </form>
                     </li>
                 {% endif %}
             </ul>
         </div>
-        {% if canFlag %}
-            <div class="flageditbox">
-                <form action="/gallery/post/status/" method="POST" accept-charset="UTF-8">
-                    <label>Reason:</label><br />
-                    <input name="post" type="hidden" value="{{ post.PostId }}" />
-                    <input id="flag-edit-text" name="reason" type="text" />
-                    <input name="action" type="hidden" value="flag" />
-                    <input type="submit" value="Flag" />
-                </form>
-            </div>
-        {% endif %}
-        {% endif %}  {# canEdit #}
+        {% endif %}  {# post.canEdit #}
     </div>
     <div class="mainpanel">
         {% if post.Status!="D" %}
             {# Only render image if status is not deleted #}
             <p>
                 {% if post.Extension == "swf" %}
-                    <object width="{{ post.Width }}" height="{{ post.Height }}" data="{{ downloadUrl }}"></object>
+                    <object width="{{ post.Width }}" height="{{ post.Height }}" data="{{ post.downloadUrl }}"></object>
                 {% elseif post.Extension == "webm" %}
                     <video width="{{ post.Width }}" height="{{ post.Height }}" preload controls>
-                        <source src="{{ downloadUrl }}" type="video/webm" />
+                        <source src="{{ post.downloadUrl }}" type="video/webm" />
                         Your browser does not support the video tag.
                     </video>
                 {% else %}
-                    {% if previewUrl==downloadUrl %}
-                        <img class="previewImg" src="{{ previewUrl }}" />
+                    {% if post.previewUrl==post.downloadUrl %}
+                        <img class="previewImg" src="{{ post.previewUrl }}" />
                     {% else %}
-                        <a href="{{ downloadUrl }}"><img class="previewImg" src="{{ previewUrl }}" /></a>
+                        <a href="{{ post.downloadUrl }}"><img class="previewImg" src="{{ post.previewUrl }}" /></a>
                     {% endif %}
                 {% endif %}
             </p>
@@ -200,12 +198,12 @@
                 {{ post.Description }}
             </p>#}
             <p>
-                {% if user.UserId > 0 %}<a href="/gallery/post/edit/{{ post.PostId }}/" onclick="return toggleEdit();">Edit</a> | {% endif %}<a href="{{ downloadUrl }}">Download</a>
+                {% if user.UserId > 0 %}<a href="/gallery/post/show/{{ post.PostId }}/" onclick="return toggleEdit();">Edit</a> | {% endif %}<a href="{{ downloadUrl }}">Download</a>
             </p>
             <div class="posteditbox">
                 <a id="editanchor" />
-                <form action="/gallery/edit/" method="POST" accept-charset="UTF-8">
-                    <input type="hidden" name="post" value="{{ post.PostId }}" />
+                <form method="POST" accept-charset="UTF-8">
+                    <input type="hidden" name="action" value="edit" />
                     <label class="formlabel">Rating</label>         <input name="rating" type="radio"{% if post.Rating=='e' %} checked{% endif %} value="e" /><label>Explicit</label>
                                                                     <input name="rating" type="radio"{% if post.Rating=='q' %} checked{% endif %} value="q" /><label>Questionable</label>
                                                                     <input name="rating" type="radio"{% if post.Rating=='s' %} checked{% endif %} value="s" /><label>Safe</label><br />
@@ -220,9 +218,9 @@
             </div>
             <div class="Clear">&nbsp;</div>
             <div class="comment-section">
-                {% if comments|length > 0 %}
+                {% if post.comments|length > 0 %}
                     <ul class="comment-list">
-                        {% for comment in comments %}
+                        {% for comment in post.comments %}
                             {{ block('comment') }}
                         {% endfor %}
                     </ul>
@@ -230,9 +228,10 @@
                 {% else %}
                     <span class="no-comments">No comments posted</span>
                 {% endif %}
-                {% if user and canComment%}
+                {% if user and post.canComment%}
                     <input id="commentbutton" type="button" value="Add Comment"/>
-                    <form id="commentform" action="" method="POST">
+                    <form id="commentform" method="POST">
+                        <input type="hidden" name="action" value="add-comment" />
                         <textarea id="commenttextbox" name="text" class="commenttextbox">
                         </textarea>
                         <input type="submit" value="Add Comment" />

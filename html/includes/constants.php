@@ -52,6 +52,7 @@ define("DEFAULT_SKIN", "agnph");
 define("DEFAULT_FORUM_THREADS_PER_PAGE", 25);
 define("DEFAULT_FORUM_POSTS_PER_PAGE", 10);
 define("DEFAULT_PAGE_ITERATOR_SIZE", 2);  // 2 => 1 ... 5 6 [7] 8 9 ... 12
+define("NO_HTML_TAGS", "");
 define("DEFAULT_ALLOWED_TAGS", "a[href],p[style],span[style],b,u,i,strong,em,ol,ul,li,center,hr,br,div,pre,small");  // For Forums, Fics and Bios.
 define("DEFAULT_GALLERY_POSTS_PER_PAGE", 45);  // Customizable.
 define("DEFAULT_GALLERY_PAGE_ITERATOR_SIZE", 2);

@@ -28,6 +28,7 @@ X Custom swf/webm thumbs when parent is set to image.
 - Back/Next buttons
 - Pool search by name
 - Clean up gallery viewpost POST model
+- Handle parent cleanup on post delete?
 
 == FICS ==
 * Fics permissions model
@@ -61,6 +62,7 @@ X Custom swf/webm thumbs when parent is set to image.
 - All comment user links should go to respective sections.
 
 == ACCOUNT ==
+* Enable login via email, not just username (Also allow display name?)
 * Mailbox/PM system
     - Add unread-message notification to both account tab and inbox tab.
     X Support message deletion? For now, no.
@@ -75,6 +77,7 @@ X Custom swf/webm thumbs when parent is set to image.
 - Time limited bans
 - Ensure registered but un-activated users don't exist.
 - Perhaps a badge/text to tell users this account was created for archive and hasn't logged in before?
+- Display section permissions
 
 
 == Things to remember when setting up site ==

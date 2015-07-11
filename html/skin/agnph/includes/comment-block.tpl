@@ -7,7 +7,7 @@
 {% block comment %}
     <li class="comment">
         <img class="comment-avatarimg" src="{{ comment.user.avatarURL }}" />
-        {% if comment.canDelete %}<form action="" method="POST" accept-charset="UTF-8">{% endif %}
+        {% if comment.canDelete %}<form method="POST" accept-charset="UTF-8">{% endif %}
             <p class="commentheader">
                 {% if comment.canDelete %}
                     <span style="float: right; display: block;">

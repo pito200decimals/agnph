@@ -7,189 +7,256 @@ include_once("../../header.php");
 include_once(SITE_ROOT."gallery/includes/functions.php");
 include_once(SITE_ROOT."includes/util/user.php");
 include_once(SITE_ROOT."user/includes/functions.php");  // For avatar perms.
+include_once(SITE_ROOT."gallery/posts/viewpost_actions.php");
 
-if (!isset($_GET['post'])) {
+// Layout of file:
+// 1. Get post.
+// 2. Process POST
+// 3. Initialize page (post, comments, statistics, etc.)
+
+if (!isset($_GET['post']) || !is_numeric($_GET['post'])) {
     InvalidURL();
 }
-// TODO: Show some sort of notification if this was resulting from a post edit.
 
-$pid = $_GET['post'];
-$escaped_post_id = sql_escape($pid);
-sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE PostId='$escaped_post_id';", 1) or RenderErrorPage("Post not found.");
-$post = $result->fetch_assoc();
-$pid = $post['PostId'];  // Get safe value, not user-generated.
-$vars['post'] = &$post;
+// Fetch post.
+$pid = (int)$_GET['post'];
+$post = GetPost($pid) or RenderErrorPage("Post not found");
 
+// Process actions.
+if (isset($_POST['action'])) {
+    // Post actions cannot occur when not logged in.
+    if (!isset($user)) {
+        PostBanner("Must be logged in to perform action", "red");
+    } else {
+        $action = $_POST['action'];
+        switch ($action) {
+            // Post actions.
+            case "edit":
+                HandleEditAction($post);
+                break;
+            case "approve":
+                HandleApproveAction($post);
+                break;
+            case "flag":
+                HandleFlagAction($post);
+                break;
+            case "unflag":
+                HandleUnflagAction($post);
+                break;
+            case "delete":
+                HandleDeleteAction($post);
+                break;
+            case "undelete":
+                HandleUndeleteAction($post);
+                break;
+            // Add/Remove pool is done via AJAX on separate URL.
+            case "add-comment":
+                HandleAddCommentAction($post);
+                break;
+            case "delete-comment":
+                HandleDeleteCommentAction($post);
+                break;
+            // User personal actions.
+            case "add-favorite":
+                HandleAddFavoriteAction($post);
+                break;
+            case "remove-favorite":
+                HandleRemoveFavoriteAction($post);
+                break;
+            case "set-avatar":
+                HandleSetAvatarAction($post);
+                break;
+            default:
+                break;
+        }
+        // For all POST actions, redirect to this same page.
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        return;
+    }
+}
+
+// Get ready to show the post, process all metadata.
+
+// Get image URLs.
 $md5 = $post['Md5'];
 $ext = $post['Extension'];
 if ($post['HasPreview']) {
-    $vars['previewUrl'] = GetSitePreviewPath($md5, $ext);
+    $post['previewUrl'] = GetSitePreviewPath($md5, $ext);
 } else {
-    $vars['previewUrl'] = GetSiteImagePath($md5, $ext);
+    $post['previewUrl'] = GetSiteImagePath($md5, $ext);
 }
-$vars['downloadUrl'] = GetSiteImagePath($md5, $ext);
+$post['downloadUrl'] = GetSiteImagePath($md5, $ext);
 
-$allTagIds = array();
-sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TAG_TABLE." WHERE PostId=$pid;", 0) or RenderErrorPage("Post not found.");
-while ($row = $result->fetch_assoc()) {
-    $allTagIds[] = $row['TagId'];
-}
-$allTags = array();
-if (sizeof($allTagIds) > 0) {
-    sql_query_into($result, "SELECT * FROM ".GALLERY_TAG_TABLE." WHERE TagId IN (".implode(",", $allTagIds).");", 1) or RenderErrorPage("Post not found.");
-    while ($row = $result->fetch_assoc()) {
-        $allTags[] = $row;
-    }
-}
+// Process tags.
+$tags = GetTags($post);
+$tagNameStr = ToTagNameString($tags);
+$tagCategories = ToTagCategorized($tags);
+$post['tagstring'] = $tagNameStr;
+$post['tagCategories'] = $tagCategories;
 
-$tagNames = array_map(function($tag) { return $tag['Name']; }, $allTags);
-sort($tagNames);
-$post['tagstring'] = implode(" ", $tagNames);
+// Get other properties like uploader, rating HTML, etc.
+FetchPostProperties($post) or RenderErrorPage("Post not found");
 
-$tagCategories = array();
-foreach ($GALLERY_TAG_TYPES as $char => $name) {
-    $category = array();
-    $category['name'] = $name;
-    $category['tags'] = array();
-    foreach ($allTags as $tag) {
-        if ($tag['Type'] == $char) {
-            $tag['displayName'] = TagNameToDisplayName($tag['Name']);
-            $category['tags'][] = $tag;
-        }
-    }
-    if (sizeof($category['tags']) > 0) {
-        usort($category['tags'], function($tag1, $tag2) {
-            if ($tag1['Name'] == $tag2['Name']) return 0;
-            return ($tag1['Name'] < $tag2['Name']) ? -1 : 1;
-        });
-        $tagCategories[] = $category;
-    }
-}
-$vars['post']['tagCategories'] = $tagCategories;
-if ($post['ParentPoolId'] != -1) {
-    $iter = CreatePoolIterator($post);
-    if (mb_strlen($iter) > 0) $vars['poolIterator'] = $iter;
-}
-
-PreparePostStatistics($post);
-PrepPostNotificationBanner($post);
-HandleCreatingAllBanners($post);  // Make sure to create banners before posts below.
-
-if (isset($user)) {
-    $uid = $user['UserId'];
-    if (isset($_POST['favorite-action'])) {
-        // Update favorite status.
-        if ($_POST['favorite-action'] == "add") {
-            $now = time();
-            sql_query("INSERT INTO ".GALLERY_USER_FAVORITES_TABLE." (UserId, PostId, Timestamp) VALUES ($uid, $pid, $now);");
-            UpdatePostStatistics($pid);
-            PostBanner("Added to Favorites", "green");
-        } else if ($_POST['favorite-action'] == "remove") {
-            sql_query("DELETE FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE UserId=$uid AND PostId=$pid;");
-            UpdatePostStatistics($pid);
-            PostBanner("Removed from Favorites", "green");
-        }
-    }
-    if (isset($_POST['set-avatar-action'])) {
-        // Set this post as our avatar.
-        if (sql_query("UPDATE ".USER_TABLE." SET AvatarPostId=$pid, AvatarFname='' WHERE UserId=$uid;")) {
-            $fname = $user['AvatarFname'];
-            if (strlen($fname)) {
-                $path = SITE_ROOT."images/uploads/avatars/$fname";
-                unlink($path);
-            }
-            $user['AvatarPostId'] = $pid;
-            $user['AvatarFname'] = "";
-            PostBanner("Set as Avatar", "green");
-        }
-    }
-    if (isset($_POST['action']) && $_POST['action'] == "delete-comment" &&
-        isset($_POST['id']) && is_numeric($_POST['id'])) {
-        $cid = (int)$_POST['id'];
-        $escaped_cid = sql_escape($cid);  // Just in case.
-        if (sql_query_into($result, "SELECT * FROM ".GALLERY_COMMENT_TABLE." WHERE CommentId='$escaped_cid';", 1)) {
-            $comment_to_delete = $result->fetch_assoc();
-            if (CanUserDeleteComment($user, $comment_to_delete)) {
-                if (sql_query("DELETE FROM ".GALLERY_COMMENT_TABLE." WHERE CommentId='$escaped_cid';")) {
-                    UpdatePostStatistics($comment_to_delete['PostId']);
-                    PostBanner("Comment deleted", "green");
-                } else {
-                    PostBanner("Error deleting comment", "red");
-                }
-            } else {
-                PostBanner("Unable to delete comment", "red");
-            }
-        } else {
-            PostBanner("Unable to delete comment", "red");
-        }
-    }
-
-    // Read user permissions and set flags.
-
-    // Check for user favorite.
-    $vars['isFavorited'] = sql_query_into($result, "SELECT * FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE UserId=$uid AND PostId=$pid;", 1);
-    // Settings for action perms flags.
-    if (CanUserEditGalleryPost($user)) {
-        $vars['canEdit'] = true;
-        if ($post['Status'] != 'F' && $post['Status'] != 'D') {
-            $vars['canFlag'] = true;
-        }
-    }
-    if (CanUserDeleteGalleryPost($user)) {
-        if ($post['Status'] == 'F') {
-            // TODO: Decide if admins can delete post from any state.
-            $vars['canDelete'] = true;
-            $vars['canUnflag'] = true;
-        } else if ($post['Status'] == 'D') {
-            $vars['canUnDelete'] = true;
-        }
-    }
-    if (CanUserApprovePost($user)) {
-        if ($post['Status'] == 'P') {
-            $vars['canApprove'] = true;
-        }
-    }
-    if (CanUserCommentOnPost($user)) {
-        $vars['canComment'] = true;
-    }
-    if (CanUserEditBasicInfo($user, $user) && $user['AvatarPostId'] != $pid) {
-        $vars['canSetAvatar'] = true;
-    }
-}
-// Init comments.
-// First, do a POST if we were previously posting a comment.
-if (isset($_POST['text'])) {
-    HandleCommentPOST($pid);
-}
-if (isset($_GET['offset']) && is_numeric($_GET['offset'])) {
-    $comment_offset = (int)($_GET['offset']);
-    if ($comment_offset < 0) $comment_offset = 0;
-} else {
-    $comment_offset = 0;
-}
-$comments = GetComments($pid);
+// Get comments.
+$comments = GetComments($post);
 ConstructCommentBlockIterator($comments, $vars['commentIterator'], true /* allow_offset */,
     function($index) use ($pid) {
         $offset = ($index - 1) * DEFAULT_GALLERY_COMMENTS_PER_PAGE;
         $url = "/gallery/post/show/$pid/?offset=$offset";
         return $url;
     }, DEFAULT_GALLERY_COMMENTS_PER_PAGE);
-$vars['comments'] = $comments;
+$post['comments'] = $comments;
 
+// Process user permissions for general actions.
+if (isset($user)) {
+    AddUserPermissions($post, $user);
+}
 
 // Increment view count, and do SQL after page is rendered.
 $post['NumViews']++;
+$vars['post'] = &$post;
 RenderPage("gallery/posts/viewpost.tpl");
 sql_query("UPDATE ".GALLERY_POST_TABLE." SET NumViews = NumViews + 1 WHERE PostId=$pid;");
 return;
 
-function PreparePostStatistics(&$post) {
+function GetPost(&$pid) {
+    $escaped_pid = sql_escape($pid);
+    if (!sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE PostId='$escaped_pid';", 1)) return null;
+    $post = $result->fetch_assoc();
+    $pid = $post['PostId'];  // Get safe value, not user-generated.
+    return $post;
+}
+
+function GetTags($post) {
+    $pid = $post['PostId'];
+    $allTagIds = array();
+    if (!sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TAG_TABLE." WHERE PostId=$pid;", 0)) return null;
+    while ($row = $result->fetch_assoc()) {
+        $allTagIds[] = $row['TagId'];
+    }
+    $allTags = array();
+    if (sizeof($allTagIds) > 0) {
+        if (!sql_query_into($result, "SELECT * FROM ".GALLERY_TAG_TABLE." WHERE TagId IN (".implode(",", $allTagIds).");", 1)) return null;
+        while ($row = $result->fetch_assoc()) {
+            $allTags[] = $row;
+        }
+    }
+    return $allTags;
+}
+
+function ToTagNameString($allTags) {
+    $tagNames = array_map(function($tag) { return $tag['Name']; }, $allTags);
+    sort($tagNames);
+    return implode(" ", $tagNames);
+
+}
+
+function ToTagCategorized($allTags) {
+    global $GALLERY_TAG_TYPES;
+    $tagCategories = array();
+    foreach ($GALLERY_TAG_TYPES as $char => $name) {
+        $category = array();
+        $category['name'] = $name;
+        $category['tags'] = array();
+        foreach ($allTags as $tag) {
+            if ($tag['Type'] == $char) {
+                $tag['displayName'] = TagNameToDisplayName($tag['Name']);
+                $category['tags'][] = $tag;
+            }
+        }
+        if (sizeof($category['tags']) > 0) {
+            usort($category['tags'], function($tag1, $tag2) {
+                if ($tag1['Name'] == $tag2['Name']) return 0;
+                return ($tag1['Name'] < $tag2['Name']) ? -1 : 1;
+            });
+            $tagCategories[] = $category;
+        }
+    }
+    return $tagCategories;
+}
+
+function GetUsers($user_ids) {
+    $ret = array();
+    $tables = array(USER_TABLE);
+    if (!LoadTableData($tables, "UserId", $user_ids, $ret)) return null;
+    return $ret;
+}
+
+function GetComments($post) {
+    $pid = $post['PostId'];
+    $comments = array();
+    if (!sql_query_into($result, "SELECT * FROM ".GALLERY_COMMENT_TABLE." WHERE PostId=$pid ORDER BY CommentDate ASC, CommentId ASC;", 0)) return null;
+    $uids = array();
+    while ($row = $result->fetch_assoc()) {
+        $uids[] = $row['UserId'];
+        $comments[] = $row;
+    }
+    $uids = array_unique($uids);
+    $users = GetUsers($uids);
+    if ($users != null) {
+        foreach ($users as &$usr) {
+            $usr['avatarURL'] = GetAvatarURL($usr);
+        }
+        foreach ($comments as &$comment) {
+            $uid = $comment['UserId'];
+            // Set parameters that template expects.
+            $comment['user'] = $users[$uid];
+            $comment['date'] = FormatDate($comment['CommentDate'], GALLERY_DATE_FORMAT);
+            $comment['title'] = "";
+            $comment['text'] = $comment['CommentText'];
+            $comment['id'] = $comment['CommentId'];
+        }
+    }
+    return $comments;
+}
+
+function AddUserPermissions(&$post, $user) {
+    global $vars;
+    $pid = $post['PostId'];
+    $uid = $user['UserId'];
+    $vars['isFavorited'] = sql_query_into($result, "SELECT * FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE UserId=$uid AND PostId=$pid;", 1);
+    // Settings for action perms flags.
+    if (CanUserEditGalleryPost($user)) {
+        $post['canEdit'] = true;
+        if ($post['Status'] != 'F' && $post['Status'] != 'D') {
+            $post['canFlag'] = true;
+        }
+    }
+    if (CanUserDeleteGalleryPost($user)) {
+        if ($post['Status'] == 'F') {
+            // TODO: Decide if admins can delete post from any state.
+            $post['canDelete'] = true;
+            $post['canUnflag'] = true;
+        } else if ($post['Status'] == 'D') {
+            $post['canUnDelete'] = true;
+        }
+    }
+    if (CanUserApprovePost($user)) {
+        if ($post['Status'] == 'P') {
+            $post['canApprove'] = true;
+        }
+    }
+    if (CanUserCommentOnPost($user)) {
+        $post['canComment'] = true;
+    }
+    if (CanUserEditBasicInfo($user, $user) && $user['AvatarPostId'] != $pid) {
+        $post['canSetAvatar'] = true;
+    }
+    // Add perms for all comments.
+    foreach ($post['comments'] as &$comment) {
+        if (CanUserDeleteGalleryComment($user, $comment)) {
+            $comment['canDelete'] = true;
+        }
+    }
+}
+
+function FetchPostProperties(&$post) {
     $postdate = $post['DateUploaded'];
     $poster_id = $post['UploaderId'];
-    sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId=$poster_id;", 1) or RenderErrorPage("Post not found.");
+    if (!sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId=$poster_id;", 1)) return false;
     $poster = $result->fetch_assoc();
     $post['postedHtml'] = FormatDuration(time() - $postdate)." ago by <a href='/user/".$poster['UserId']."/gallery/'>".$poster['DisplayName']."</a>";
-    switch($post['Rating']) {
+    switch ($post['Rating']) {
       case "s":
         $post['ratingHtml'] = "<span class='srating'>Safe</span>";
         break;
@@ -200,10 +267,70 @@ function PreparePostStatistics(&$post) {
         $post['ratingHtml'] = "<span class='erating'>Explicit</span>";
         break;
     }
-    sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE ParentPostId=".$post['PostId']." AND Status!='D';", 0) or RenderErrorPage("Post not found.");
+    sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE ParentPostId=".$post['PostId']." AND Status!='D';", 0);
     if ($result->num_rows > 0) {
         $post['hasChildren'] = true;
     }
+    // Show status banners for pending, flagged, etc.
+    CreateStatusBanner($post);
+    // Get pool iterator box.
+    $iter = CreatePoolIterator($post);
+    if (mb_strlen($iter) > 0) $post['poolIterator'] = $iter;
+    return true;
+}
+
+function CreateStatusBanner($post) {
+    global $vars;
+    // Find and link posts, if in the flag reason.
+    $extra_msg = "";
+    if ($post['Status'] == 'F' || $post['Status'] == 'D') {
+        $pattern = "(post #?(\d+))";
+        $groups = array();
+        // When adding link to reason, escape characters. Not needed normally since template won't allow html.
+        $reason = htmlspecialchars($post['FlagReason']);
+        if (mb_eregi(".*$pattern.*", $reason, $groups) !== FALSE) {
+            if (is_numeric($groups[2])) {
+                $pid = (int)($groups[2]);
+                $replacement = "<a href='/gallery/post/show/$pid/'>post #$pid</a>";
+                $post['flagReasonWithLink'] = mb_eregi_replace($pattern, $replacement, $reason);
+            }
+        }
+        if (isset($post['flagReasonWithLink']) && mb_strlen($post['flagReasonWithLink'])) {
+            $extra_msg = ". Reason: ".$post['flagReasonWithLink'];
+        } else if (isset($post['FlagReason']) && mb_strlen($post['FlagReason'])) {
+            $extra_msg = ". Reason: ".SanitizeHTMLTags($post['FlagReason'], "" /*no tags*/);
+        }
+    }
+    // Create the banner message.
+    switch ($post['Status']) {
+        case 'P':
+            PostBanner("This post is pending moderator approval", "blue", false);
+            break;
+        case 'A':
+            break;
+        case 'F':
+            $fuid = $post['FlaggerUserId'];
+            if ($fuid > 0 && sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId=$fuid;", 1)) {
+                $flagger = $result->fetch_assoc();
+                $post['flagger'] = $flagger;
+                $msg = "This post has been flagged for deletion by <a href='/user/".$flagger['UserId']."/gallery/'>".$flagger['DisplayName']."</a>";
+            } else {
+                $msg = "This post has been flagged for deletion";
+            }
+            $msg .= $extra_msg;
+            PostBanner($msg, "red", false, true);
+            break;
+        case 'D':
+            PostBanner("This post has been deleted".$extra_msg, "red", false);
+            break;
+        default:
+            break;
+    }
+    // Also show any session banners.
+    foreach ($_SESSION['banner_notifications'] as $banner) {
+        $vars['banner_notifications'][] = $banner;
+    }
+    $_SESSION['banner_notifications'] = array();  // Clear banners.
 }
 
 function CreatePoolIterator($post) {
@@ -226,117 +353,24 @@ function CreatePoolIterator($post) {
     $next_link = (isset($next_url) ? "<a id='nextinpool' href='$next_url'>&gt;&gt;</a>" : "");
     return $prev_link . $curr_link . $next_link;
 }
-function GetComments($pid) {
-    global $user;
-    $escaped_pid = sql_escape($pid);
-    $comments = array();
-    if (!sql_query_into($result, "SELECT * FROM ".GALLERY_COMMENT_TABLE." WHERE PostId='$escaped_pid' ORDER BY CommentDate ASC, CommentId ASC;", 0)) return null;
-    $ids = array();
-    while ($row = $result->fetch_assoc()) {
-        $ids[] = $row['UserId'];
-        $comments[] = $row;
-    }
-    $ids = array_unique($ids);
-    $users = GetUsers($ids);
-    if ($users != null) {
-        foreach ($users as &$usr) {
-            $usr['avatarURL'] = GetAvatarURL($usr);
-        }
-        foreach ($comments as &$comment) {
-            $uid = $comment['UserId'];
-            // Set parameters that template expects.
-            $comment['user'] = $users[$uid];
-            $comment['date'] = FormatDate($comment['CommentDate'], GALLERY_DATE_FORMAT);
-            $comment['title'] = "";
-            $comment['text'] = $comment['CommentText'];
-            $comment['id'] = $comment['CommentId'];
-            if (CanUserDeleteComment($user, $comment)) {
-                $comment['canDelete'] = true;
-            }
-        }
-    }
-    return $comments;
-}
-function GetUsers($uids) {
-    $ret = array();
-    $tables = array(USER_TABLE);
-    if (!LoadTableData($tables, "UserId", $uids, $ret)) return null;
-    return $ret;
-}
-function HandleCommentPOST($pid) {
-    global $user;
-    if (!isset($user)) RenderErrorPage("You must be logged in to comment");
-    if (!CanUserCommentOnPost($user)) RenderErrorPage("You are not authorized to comment");
-    $text = SanitizeHTMLTags($_POST['text'], DEFAULT_ALLOWED_TAGS);
-    if (mb_strlen($text) < MIN_COMMENT_STRING_SIZE) RenderErrorPage("Review length is too short");
-    $escaped_text = sql_escape($text);
-    $uid = $user['UserId'];
-    $now = time();
-    sql_query("INSERT INTO ".GALLERY_COMMENT_TABLE." (PostId, UserId, CommentDate, CommentText) VALUES ($pid, $uid, $now, '$escaped_text');");
-    UpdatePostStatistics($pid);
-    header("Location: /gallery/post/show/$pid/");
-    exit();
-}
-
-// Links post and expands user for notification banners.
-function PrepPostNotificationBanner(&$post) {
-    // Get display name for flagger.
-    if ($post['Status'] == 'F') {
-        $uid = $post['FlaggerUserId'];
-        if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId=$uid;", 1)) {
-            $post['flagger'] = $result->fetch_assoc();
-        }
-    }
-    // Find and link posts.
-    if ($post['Status'] == 'F' || $post['Status'] == 'D') {
-        $pattern = "(post (\d+))";
-        $groups = array();
-        // When adding link to reason, escape characters. Not needed normally since template won't allow html.
-        $reason = htmlspecialchars ($post['FlagReason']);
-        if (mb_eregi(".*$pattern.*", $reason, $groups) !== FALSE) {
-            if (is_numeric($groups[2])) {
-                $pid = (int)($groups[2]);
-                $replacement = "<a href='/gallery/post/show/$pid/'>post #$pid</a>";
-                $post['flagReasonWithLink'] = mb_eregi_replace($pattern, $replacement, $reason);
-            }
-        }
-    }
-}
-
-function HandleCreatingAllBanners($post) {
-    global $vars;
-    $vars['banner_nofications'] = array();
-    if ($post['Status'] == 'P') {
-        PostBanner("This post is pending moderator approval", "blue", false);
-    } else if ($post['Status'] == 'F') {
-        if (isset($post['flagger'])) {
-            $msg = "This post has been flagged for deletion by <a href='/user/".$post['flagger']['UserId']."/gallery/'>".$post['flagger']['DisplayName']."</a>";
-        } else {
-            $msg = "This post has been flagged for deletion";
-        }
-        if (isset($post['flagReasonWithLink']) && mb_strlen($post['flagReasonWithLink'])) {
-            $msg .= ". Reason: ".$post['flagReasonWithLink'];
-        } else if (isset($post['FlagReason']) && mb_strlen($post['FlagReason'])) {
-            $msg .= ". Reason: ".SanitizeHTMLTags($post['FlagReason'], "" /*no tags*/);
-        }
-        PostBanner($msg, "red", false, true);
-    } else if ($post['Status'] == 'D') {
-        PostBanner("This post has been deleted", "red", false);
-    }
-    if (isset($_SESSION['gallery_action_message'])) {
-        // Required as this is passed from editpost.php
-        PostBanner($_SESSION['gallery_action_message'], "green");
-        unset($_SESSION['gallery_action_message']);
-    }
-}
 
 function PostBanner($msg, $color, $dismissable = true, $noescape = false) {
     global $vars;
-    $vars['banner_nofications'][] = array(
+    $vars['banner_notifications'][] = array(
         "classes" => array("$color-banner"),
         "text" => $msg,
         "dismissable" => $dismissable,
         "strong" => true,
         "noescape" => $noescape);
 }
+
+function PostSessionBanner($msg, $color) {
+    $_SESSION['banner_notifications'][] =  array(
+        "classes" => array("$color-banner"),
+        "text" => $msg,
+        "dismissable" => true,
+        "strong" => true,
+        "noescape" => false);
+}
+
 ?>

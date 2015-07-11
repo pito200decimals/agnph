@@ -185,7 +185,7 @@ do_or_die(sql_query(
         Height INT(11) NOT NULL,
         FileSize VARCHAR(8) NOT NULL,
         Status CHAR(1) DEFAULT 'P',".  // P for pending, A for approved, F for flagged for deletion, D for deleted (L for linked to source?)
-       "FlaggerUserId INT(11) NOT NULL,
+       "FlaggerUserId INT(11) DEFAULT -1 NOT NULL,
         FlagReason VARCHAR(".MAX_GALLERY_POST_FLAG_REASON_LENGTH.") NOT NULL,
         PRIMARY KEY(PostId)
     ) DEFAULT CHARSET=utf8;"));

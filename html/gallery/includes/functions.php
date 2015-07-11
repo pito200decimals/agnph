@@ -40,26 +40,40 @@ function CanUserCreateOrDeletePools($user) {
     if (!IsUserActivated($user)) return false;
     if ($user['GalleryPermissions'] == 'A') return true;
     if ($user['GalleryPermissions'] == 'C') return true;
-    return true;
-}
-function CanUserDeleteGalleryPost($user) {
-    if (!IsUserActivated($user)) return false;
-    if ($user['GalleryPermissions'] == 'A') return true;
-    return true;
+    return false;
 }
 function CanUserApprovePost($user) {
     if (!IsUserActivated($user)) return false;
     if ($user['GalleryPermissions'] == 'A') return true;
     if ($user['GalleryPermissions'] == 'C') return true;
+    return false;
+}
+function CanUserFlagGalleryPost($user) {
+    if (!IsUserActivated($user)) return false;
     return true;
+}
+function CanUserUnflagGalleryPost($user) {
+    if (!IsUserActivated($user)) return false;
+    return true;
+}
+function CanUserDeleteGalleryPost($user) {
+    if (!IsUserActivated($user)) return false;
+    if ($user['GalleryPermissions'] == 'A') return true;
+    return false;
+}
+function CanUserUndeleteGalleryPost($user) {
+    if (!IsUserActivated($user)) return false;
+    if ($user['GalleryPermissions'] == 'A') return true;
+    return false;
 }
 function CanUserCommentOnPost($user) {
     if (!IsUserActivated($user)) return false;
     return true;
 }
-function CanUserDeleteComment($user, $comment) {
+function CanUserDeleteGalleryComment($user, $comment) {
     if (!IsUserActivated($user)) return false;
     if ($user['GalleryPermissions'] == 'A') return true;
+    // TODO: Allow users to delete their own comments?
     // if ($user['UserId'] == $comment['UserId']) return true;
     return false;
 }

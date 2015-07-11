@@ -18,6 +18,7 @@ unset($folder_level);
 
 // Set up charset.
 header('Content-type: text/html; charset=utf-8');
+// TODO: Cache control.
 
 // Include common headers.
 include_once(SITE_ROOT."includes/config.php");
@@ -61,6 +62,9 @@ if (sql_query_into($result, "SELECT * FROM ".SITE_NAV_TABLE." ORDER BY ItemOrder
 // Template engine includes.
 include_once(__DIR__."/../lib/Twig/Autoloader.php");
 Twig_Autoloader::register();
+// Set up for banner notifications. Initialize session banners if not created yet.
+$vars['banner_notifications'] = array();
+if (!isset($_SESSION['banner_notifications'])) $_SESSION['banner_notifications'] = array();
 
 FetchUserHeaderVars();
 

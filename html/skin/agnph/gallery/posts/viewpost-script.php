@@ -104,7 +104,7 @@ function RemoveFromPool(poolid) {
         in_flight = null;
     }
     $("#poolactionworking").show();
-    in_flight = $.ajax("/gallery/pools/addremove_pool.php?post=<?php echo $postId; ?>&pool="+poolid, {
+    in_flight = $.ajax("/gallery/pools/modify/<?php echo $postId; ?>/"+poolid+"/", {
         data: {
             action: "remove"
         },
