@@ -24,7 +24,7 @@ define("FORUMS_USER_PREF_TABLE", "forums_user");
 define("GALLERY_USER_PREF_TABLE", "gallery_user");
 define("GALLERY_USER_FAVORITES_TABLE", "gallery_user_fav");
 define("FICS_USER_PREF_TABLE", "fics_user");
-// define("FICS_USER_FAVORITES_TABLE", "gallery_user_fav");
+define("FICS_USER_FAVORITES_TABLE", "fics_user_fav");
 define("USER_MAILBOX_TABLE", "user_mail");
 
 // Forums tables.
@@ -39,6 +39,8 @@ define("GALLERY_POST_TAG_TABLE", "gallery_post_tag");
 define("GALLERY_POST_TAG_HISTORY_TABLE", "gallery_tag_history");
 define("GALLERY_POOLS_TABLE", "gallery_pools");
 define("GALLERY_COMMENT_TABLE", "gallery_comments");
+define("GALLERY_TAG_ALIAS_TABLE", "gallery_tag_aliases");
+define("GALLERY_TAG_IMPLICATION_TABLE", "gallery_tag_implications");
 
 // Fics tables.
 define("FICS_STORY_TABLE", "fics_stories");
@@ -46,6 +48,8 @@ define("FICS_CHAPTER_TABLE", "fics_chapters");
 define("FICS_STORY_TAG_TABLE", "fics_story_tag");
 define("FICS_TAG_TABLE", "fics_tags");
 define("FICS_REVIEW_TABLE", "fics_reviews");
+define("FICS_TAG_ALIAS_TABLE", "fics_tag_aliases");
+define("FICS_TAG_IMPLICATION_TABLE", "fics_tag_implications");
 
 // User Settings Defaults.
 define("DEFAULT_SKIN", "agnph");

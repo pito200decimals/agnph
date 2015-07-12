@@ -18,7 +18,7 @@ TODOs
 - Slideshow view
 X IP address tracking for uploads (Do we need this, since user is tracked?)
 X Upvote/Downvote (On hold for now. Don't know where to put buttons. Feature not used in Ouroboros gallery)
-- Gallery notes?
+X Gallery notes
 X Custom swf/webm thumbs when parent is set to image.
 - Tag implications
 - Some sort of tag exploration feature, perhaps tag cloud?
@@ -27,7 +27,6 @@ X Custom swf/webm thumbs when parent is set to image.
 - "Popular" recent posts, maybe by # of views in last day/week/month?
 - Back/Next buttons
 - Pool search by name
-- Clean up gallery viewpost POST model
 - Handle parent cleanup on post delete?
 - Page for global tag edits/deletes/etc
 - Pool search
@@ -48,7 +47,8 @@ X Custom swf/webm thumbs when parent is set to image.
 * Splash for Disclaimer/Warning/Age gate.
 * Oekaki section
 * Admin site management
-    - Global tag aliasing support
+    - Tag aliasing support per-section (Note: Ensure can't add cycles)
+    - Tag implication support per-section
 * Timezone/date management
 * General help pages
 * General about section, admin bios, etc.

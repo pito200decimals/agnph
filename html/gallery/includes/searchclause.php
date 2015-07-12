@@ -69,7 +69,14 @@ function CreateSQLClauseFromTerm($term) {
     if (startsWith($term, "-")) {
         return "NOT(".CreateSQLClauseFromTerm(mb_substr($term, 1)).")";
     } else {
-        return "EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." PT JOIN ".GALLERY_TAG_TABLE." TG ON PT.TagId=TG.TagId WHERE T.PostId=PostId AND TG.Name='".sql_escape($term)."')";
+        // Get appropriate tag id.
+        $tags = GetTagsByNameWithAliasAndImplied(GALLERY_TAG_TABLE, GALLERY_TAG_ALIAS_TABLE, GALLERY_TAG_IMPLICATION_TABLE, array($term), false, -1, false, false);  // No alias.
+        $aliased_tags = GetTagsByNameWithAliasAndImplied(GALLERY_TAG_TABLE, GALLERY_TAG_ALIAS_TABLE, GALLERY_TAG_IMPLICATION_TABLE, array($term), false, -1, true, false);  // Yes alias.
+        // Add tags together (able to search for old aliased tags).
+        $tags = $tags + $aliased_tags;  // Key merge okay here.
+        $tag_ids = array_keys($tags);
+        $joined = implode(",", $tag_ids);
+        return "EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." WHERE T.PostId=PostId AND TagId IN ($joined) LIMIT 1)";
     }
 }
 

@@ -14,10 +14,6 @@ function TagNameToDisplayName($tag_name) {
 // Gets tag name of display name, using underscores.
 function TagDisplayNameToTagName($tag_name) {
     $ret = mb_strtolower(str_replace(" ", "_", $tag_name));
-    $escaped_tag_name = sql_escape($ret);
-    if (sql_query_into($result, "SELECT * FROM ".SITE_TAG_ALIAS_TABLE." WHERE Name='$escaped_tag_name';", 1)) {
-        $ret = $result->fetch_assoc();
-    }
     return $ret;
 }
 
@@ -54,6 +50,12 @@ function GetTagsById($tag_table_name, $tag_ids) {
     return $ret;
 }
 
+// Returns tags by name (as below), but with aliasing and implications applied.
+function GetTagsByNameWithAliasAndImplied($tag_table_name, $alias_table_name, $implication_table_name, $tag_names, $create_new = false, $user_id = -1, $do_alias = true, $do_implication = true) {
+    $tags = GetTagsByName($tag_table_name, $tag_names, $create_new, $user_id);
+    $tags = GetAliasedAndImpliedTags($tag_table_name, $alias_table_name, $implication_table_name, $tags, $do_alias, $do_implication);
+    return $tags;
+}
 
 // Gets and returns an array of tag objects specified by the tag name array. Creates them if the flag is set, with the associated creator user id.
 // All created tags will have the 'General' type.
@@ -84,14 +86,77 @@ function GetTagsByName($tag_table_name, $tag_names, $create_new = false, $user_i
     } else {
         if (sizeof($tag_names) == 0) return array();
         $joined = implode(",", array_map(function($name) { return "'".sql_escape($name)."'"; }, $tag_names));
-        $sql = "SELECT * FROM $tag_table_name WHERE Name IN ($joined);";
         $ret = array();
-        if (!sql_query_into($result, $sql, 0)) return null;
+        if (!sql_query_into($result, "SELECT * FROM $tag_table_name WHERE Name IN ($joined);", 0)) return array();  // Return empty on error, or none found.
         while ($row = $result->fetch_assoc()) {
-            $ret[$row['TagId']] = $row;
+            $tid = $row['TagId'];
+            $ret[$tid] = $row;
         }
         return $ret;
     }
+}
+
+// Applies aliasing and implications to the given tag map.
+function GetAliasedAndImpliedTags($tag_table_name, $alias_table_name, $implication_table_name, $tags_by_id, $do_alias = true, $do_implication = true) {
+    // Internal heper function, applies aliasing and implications.
+    // Note: As long as there are no alias cycles, this will terminate. Since implications explicitly add tags without removing the original, this means that
+    // this set of tags will be added on every iteration, eventually filling up to a steady state (containing all tags in the implied alias chain).
+    $GetAliasedAndImpliedTagIds = function($tag_ids) use (&$GetAliasedAndImpliedTagIds, $alias_table_name, $implication_table_name, &$do_alias, &$do_implication) {
+        $orig_ids = $tag_ids;
+        if ($do_alias) {
+            $joined = implode(",", $tag_ids);
+            if (sql_query_into($result, "SELECT * FROM $alias_table_name WHERE TagId IN ($joined);", 1)) {
+                while ($row = $result->fetch_assoc()) {
+                    $tid = $row['TagId'];
+                    $atid = $row['AliasTagId'];
+                    if(($index = array_search($tid, $tag_ids)) !== false) {
+                        unset($tag_ids[$index]);
+                    }
+                    $tag_ids[] = $atid;
+                }
+            }
+        }
+        if ($do_implication) {
+            $joined = implode(",", $tag_ids);
+            if (sql_query_into($result, "SELECT * FROM $implication_table_name WHERE TagId IN ($joined);", 1)) {
+                while ($row = $result->fetch_assoc()) {
+                    $tid = $row['TagId'];
+                    $itid = $row['ImpliedTagId'];
+                    $tag_ids[] = $itid;
+                }
+            }
+        }
+
+        // Canonical unique and sort.
+        $tag_ids = array_unique($tag_ids);
+        sort($tag_ids);
+        if ($orig_ids !== $tag_ids) return $GetAliasedAndImpliedTagIds($tag_ids);
+        else return $tag_ids;
+    };
+    $orig_tag_ids = array_map(function($tag) { return $tag['TagId']; }, $tags_by_id);
+
+    // Canonical unique and sort.
+    $orig_tag_ids = array_unique($orig_tag_ids);
+    sort($orig_tag_ids);
+
+    $tag_ids = $GetAliasedAndImpliedTagIds($orig_tag_ids);
+    $new_ids = array_diff($tag_ids, $orig_tag_ids);
+    // Fetch new tags, and build up new returned array.
+    $ret = array();
+    $joined = implode(", ", $new_ids);
+    if (sizeof($new_ids) > 0 && sql_query_into($result, "SELECT * FROM $tag_table_name WHERE TagId IN ($joined);", 1)) {
+        while ($row = $result->fetch_assoc()) {
+            $ret[$row['TagId']] = $row;
+        }
+    }
+    foreach ($tag_ids as $tid) {
+        if (isset($tags_by_id[$tid])) {
+            $ret[$tid] = $tags_by_id[$tid];
+        } else if (!isset($ret[$tid])) {
+            debug("Failed to fetch new tag: $tid!");
+        }
+    }
+    return $ret;
 }
 
 // Returns tag descriptors of the given token array. The filter function is fn(token, label, tag, item_id) => obj{label, tag, isTag}.

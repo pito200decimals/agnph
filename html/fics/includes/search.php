@@ -135,11 +135,14 @@ function GetClause($search_term) {
 
 function ClauseForTag($tag_name) {
     $tag_name = SanitizeTagName($tag_name);  // Remove extra punctuation.
-    $tag = GetTagsByName(FICS_TAG_TABLE, array($tag_name));  // No automatic creation.
-    if ($tag == null || sizeof($tag) == 0) return null;
-    $tag = array_values($tag)[0];
-    $tag_id = $tag['TagId'];
-    return "EXISTS(SELECT 1 FROM ".FICS_STORY_TAG_TABLE." U WHERE T.StoryId=U.StoryId AND U.TagId=$tag_id LIMIT 1)";
+    $tags = GetTagsByNameWithAliasAndImplied(FICS_TAG_TABLE, FICS_TAG_ALIAS_TABLE, FICS_TAG_IMPLICATION_TABLE, array($tag_name), false, -1, false, false);  // No alias.
+    $aliased_tags = GetTagsByNameWithAliasAndImplied(FICS_TAG_TABLE, FICS_TAG_ALIAS_TABLE, FICS_TAG_IMPLICATION_TABLE, array($tag_name), false, -1, true, false);  // Yes alias.
+    // Add tags together (able to search for old aliased tags).
+    $tags = $tags + $aliased_tags;  // Key merge okay here.
+    if ($tags == null || sizeof($tags) == 0) return null;
+    $tag_ids = array_keys($tags);
+    $joined = implode(",", $tag_ids);
+    return "EXISTS(SELECT 1 FROM ".FICS_STORY_TAG_TABLE." U WHERE T.StoryId=U.StoryId AND U.TagId IN ($joined) LIMIT 1)";
 }
 
 function ClauseForTitle($text) {

@@ -144,7 +144,7 @@ function UpdatePostWithDescriptors($descriptors, $post_id, $user) {
     $log_fields = array();
 
     // Update tags.
-    $tags = GetTagsByName(GALLERY_TAG_TABLE, $tag_names, CanUserCreateGalleryTags($user), $user['UserId']);
+    $tags = GetTagsByNameWithAliasAndImplied(GALLERY_TAG_TABLE, GALLERY_TAG_ALIAS_TABLE, GALLERY_TAG_IMPLICATION_TABLE, $tag_names, CanUserCreateGalleryTags($user), $user['UserId']);
     $tag_ids = array_map(function($tag) { return $tag['TagId']; }, $tags);
     $tag_ids_joined = implode(",", $tag_ids);
     if (sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TAG_TABLE." WHERE PostId=$post_id;", 0)) {

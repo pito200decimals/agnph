@@ -342,7 +342,7 @@ AddComment(1, 3, 1, "Comment text on chapter 3", 7);
 
 function AddTagsToStory($sid, $tagNames) {
     if (is_array($tagNames)) {
-        $tags = GetTagsByName(FICS_TAG_TABLE, $tagNames, true, 1);
+        $tags = GetTagsByNameWithAliasAndImplied(FICS_TAG_TABLE, FICS_TAG_ALIAS_TABLE, FICS_TAG_IMPLICATION_TABLE, $tagNames, true, 1);
         $list = array_map(function($tag) use ($sid) {
             return "($sid, ".$tag['TagId'].")";
         }, $tags);

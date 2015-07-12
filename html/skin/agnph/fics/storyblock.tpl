@@ -77,6 +77,19 @@
             {% elseif story.canUnDelete and story.ApprovalStatus=="D" %}
                 [<a href="/fics/undelete/{{ story.StoryId }}/">Un-Delete</a>]
             {% endif %}
+            {% if story.canFavorite %}
+                <form id="favform" method="POST" accept-charset="UTF-8">
+                    <input type="hidden" name="action" value="add-favorite" />
+                    <input type="hidden" name="id" value="{{ story.StoryId }}" />
+                </form>
+                <a href="#" onclic="$('#favform')[0].submit();return false;">Add to Favorites</a>
+            {% elseif story.canUnfavorite %}
+                <form id="favform" method="POST" accept-charset="UTF-8">
+                    <input type="hidden" name="action" value="remove-favorite" />
+                    <input type="hidden" name="id" value="{{ story.StoryId }}" />
+                </form>
+                <a href="#" onclic="$('#favform')[0].submit();return false;">Remove from Favorites</a>
+            {% endif %}
         </div>
     </div>
 </div>

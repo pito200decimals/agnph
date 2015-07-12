@@ -166,7 +166,7 @@ function ProcessTagChanges($tag_string, $story_id) {
 function UpdateStoryTags($descriptors, $story_id) {
     global $user;
     $tag_names = array_map(function($desc) { return $desc->tag; }, $descriptors);
-    $tags = GetTagsByName(FICS_TAG_TABLE, $tag_names, CanUserCreateFicsTags($user), $user['UserId']);
+    $tags = GetTagsByNameWithAliasAndImplied(FICS_TAG_TABLE, FICS_TAG_ALIAS_TABLE, FICS_TAG_IMPLICATION_TABLE, $tag_names, CanUserCreateFicsTags($user), $user['UserId']);
     $tag_ids = array_map(function($tag) { return $tag['TagId']; }, $tags);
     $tag_ids_joined = implode(",", $tag_ids);
     if (sql_query_into($result, "SELECT * FROM ".FICS_STORY_TAG_TABLE." WHERE StoryId=$story_id;", 0)) {
