@@ -13,7 +13,7 @@
             <table class="tag-edit-table">
                 <tr>
                     <td><strong>Date</strong></td>
-                    <td><strong>Edited by By</strong></td>
+                    <td><strong>Edited by</strong></td>
                     <td><strong>Tag Changes</strong></td>
                 </tr>
                 {% for item in tagHistoryItems %}

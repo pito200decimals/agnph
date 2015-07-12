@@ -41,10 +41,10 @@ $(document).ready(function() {
     <div class="uploadpanel">
         <h3>Upload</h3>
         <form action="" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
-            <label class="formlabel">File</label>           <input id="imgbrowse" class="textbox" type="file" name="file" accept="image/jpeg,image/png,image/gif,application/x-shockwave-flash,video/webm" /><br />
+            <label class="formlabel">File</label>           <input id="imgbrowse" class="textbox" type="file" name="file" accept="image/jpeg,image/png,image/gif,application/x-shockwave-flash,video/webm" required /><br />
             <label class="formlabel">Source</label>         <input id="imgsource" class="textbox" type="textbox" size=35 name="source" /><br />
-            <label class="formlabel">Tags</label>           <textarea class="textbox" name="tags"></textarea><br />
-            <label class="formlabel">Description</label>    <textarea id="desc" class="textbox" name="description"></textarea><br />
+            <label class="formlabel">Tags</label>           <textarea class="textbox" name="tags" required></textarea><br />
+            {#<label class="formlabel">Description</label>    <textarea id="desc" class="textbox" name="description"></textarea><br />#}
             <label class="formlabel">Parent</label>         <input id="parent" class="textbox" type="textbox" name="parent" /><br />
             <label class="formlabel">Rating</label>         <input name="rating" type="radio" value="e" /><label>Explicit</label>
                                                             <input name="rating" type="radio" checked value="q" /><label>Questionable</label>

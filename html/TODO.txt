@@ -29,6 +29,8 @@ X Custom swf/webm thumbs when parent is set to image.
 - Pool search by name
 - Clean up gallery viewpost POST model
 - Handle parent cleanup on post delete?
+- Page for global tag edits/deletes/etc
+- Pool search
 
 == FICS ==
 * Fics permissions model
@@ -59,7 +61,9 @@ X Custom swf/webm thumbs when parent is set to image.
     - Include welcome message, and account migration message on registration.
 - Show who's online, and viewing what page?
 - API, at least for gallery similar to Ouroboros?
-- All comment user links should go to respective sections.
+X All comment user links should go to respective sections.
+- All CSS
+    - Don't forget page iterators
 
 == ACCOUNT ==
 * Enable login via email, not just username (Also allow display name?)

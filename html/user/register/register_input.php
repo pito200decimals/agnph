@@ -104,17 +104,22 @@ if (sql_query_into($result, "SELECT * FROM ".SITE_TEXT_TABLE." WHERE Name='Regis
     $vars['RegisterDisclaimer'] = $result->fetch_assoc()['Text'];
 }
 
+// Also show any session banners.
+foreach ($_SESSION['banner_notifications'] as $banner) {
+    $vars['banner_notifications'][] = $banner;
+}
+$_SESSION['banner_notifications'] = array();  // Clear banners.
+
 // This is how to output the template.
 RenderPage("user/register.tpl");
 return;
 
 function ShowErrorBanner($msg) {
-    global $vars;
-        $vars['banner_notifications'][] = array(
-            "strong" => true,
-            "classes" => array("red-banner"),
-            "text" => $msg,
-            "dismissable" => true);
+    $_SESSION['banner_notifications'][] = array(
+        "strong" => true,
+        "classes" => array("red-banner"),
+        "text" => $msg,
+        "dismissable" => true);
 }
 
 function HandlePostSuccess($username, $email, $password, $bday) {

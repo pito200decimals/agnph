@@ -56,7 +56,7 @@ if ($action == "send") {
             (SenderUserId, RecipientUserId, ParentMessageId, Timestamp, Title, Content)
             VALUES
             ($suid, $ruid, $pmid, $now, '$escaped_title', '$escaped_message');") or RenderErrorPage("Unable to send message");
-        $_SESSION['mail_send_message'] = "Message sent";
+        PostMailSessionBanner("Message sent");
         header("Location: /user/$uid/mail/");
     } else if (isset($_POST['to']) &&
         isset($_POST['ruid']) &&
@@ -83,7 +83,7 @@ if ($action == "send") {
             VALUES
             ($uid, $ruid, -1, $now, '$escaped_title', '$escaped_message');") or RenderErrorPage("Unable to send message");
 
-        $_SESSION['mail_send_message'] = "Message sent";
+        PostMailSessionBanner("Message sent");
         header("Location: /user/$uid/mail/");
     } else {
         RenderErrorPage("Unable to send message");
@@ -95,4 +95,12 @@ if ($action == "send") {
 // This is how to output the template.
 RenderPage("user/mail/mail.tpl");
 return;
+
+function PostMailSessionBanner($msg, $color="green") {
+    $_SESSION['banner_notifications'][] = array(
+        "classes" => array("green-banner"),
+        "text" => $msg,
+        "dismissable" => true,
+        "strong" => true);
+}
 ?>

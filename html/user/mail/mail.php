@@ -60,16 +60,10 @@ if (sizeof($messages) > INBOX_ITEMS_PER_PAGE) {
 $vars['messages'] = $messages;
 
 // Set up banners.
-// TODO: Fix banners.
-$vars['banner_notifications'] = array();
-if (isset($_SESSION['mail_send_message'])) {
-    $vars['banner_notifications'][] = array(
-        "classes" => array("green-banner"),
-        "text" => $_SESSION['mail_send_message'],
-        "dismissable" => true,
-        "strong" => true);
-    unset($_SESSION['mail_send_message']);
+foreach ($_SESSION['banner_notifications'] as $banner) {
+    $vars['banner_notifications'][] = $banner;
 }
+$_SESSION['banner_notifications'] = array();  // Clear banners.
 
 // This is how to output the template.
 RenderPage("user/mail/mail.tpl");

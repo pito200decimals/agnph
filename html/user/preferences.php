@@ -43,9 +43,9 @@ if (isset($_POST['display-name']) &&
     $settings_changed = false;
     // Handle post submit.
     $user_table_sets = array();
+    $uid = $profile_user['UserId'];
     // DisplayName
     if ($_POST['display-name'] != $profile_user['DisplayName']) {
-        $uid = $profile_user['UserId'];
         $display_name = $_POST['display-name'];
         if (MIN_DISPLAY_NAME_LENGTH <= strlen($display_name) && strlen($display_name) <= MAX_DISPLAY_NAME_LENGTH) {
             $display_name = mb_ereg_replace("[^a-zA-Z0-9_.-]", "", $display_name);
@@ -281,11 +281,12 @@ if (isset($_POST['display-name']) &&
     // Resend cookie set.
     // Reload profile with new settings.
     include(SITE_ROOT."user/includes/profile_setup.php");
-    // Also grab $user again, since $user may not be equal to $profile_user.
-    LoadAllUserPreferences($user['UserId'], $user, true/*fresh*/);
-    
     // Show error/confirmation banner.
     if ($settings_changed) PostConfirmMessage("Settings saved");
+
+    // Redirect user.
+    header("Location: /user/$uid/preferences/");
+    return;
 }
 
 /////////////////////////////////////////
@@ -307,14 +308,18 @@ if (isset($user)) {
         $profile_user['ips'] = $profile_user['RegisterIP'].",".$profile_user['KnownIPs'];
     }
 }
+// Render banners.
+foreach ($_SESSION['banner_notifications'] as $banner) {
+    $vars['banner_notifications'][] = $banner;
+}
+$_SESSION['banner_notifications'] = array();  // Clear banners.
 
 // This is how to output the template.
 RenderPage("user/preferences.tpl");
 return;
 
 function PostErrorMessage($msg) {
-    global $vars;
-    $vars['banner_notifications'][] = array(
+    $_SESSION['banner_notifications'][] = array(
         "classes" => array("red-banner"),
         "text" => $msg,
         "dismissable" => true,
@@ -322,8 +327,7 @@ function PostErrorMessage($msg) {
 }
 
 function PostConfirmMessage($msg) {
-    global $vars;
-    $vars['banner_notifications'][] = array(
+    $_SESSION['banner_notifications'][] = array(
         "classes" => array("green-banner"),
         "text" => $msg,
         "dismissable" => true,
