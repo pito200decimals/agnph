@@ -3,7 +3,7 @@
         display: table;
         table-layout:fixed;
         overflow: hidden;
-        width: 100%;
+        width: 95%; /* A bit hacky, but tables are weird */
     }
     .sidepanel {
         display: table-footer-group;

@@ -82,3 +82,23 @@ ul#basic-info li {
     width: 400px;
     height: 100px;
 }
+
+@media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
+    .userpage {
+        display: block;
+    }
+    .userpage-container {
+        display: block;
+    }
+    .profile-sidepanel {
+        display: block;
+        float: right;
+    }
+    .profile-content {
+        display: block;
+    }
+    .profile-avatarimg {
+        max-width: 100px;
+        max-height: 100px;
+    }
+}

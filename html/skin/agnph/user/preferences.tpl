@@ -46,7 +46,6 @@
 
 {% block usercontent %}
     <form action="" method="POST" enctype="multipart/form-data" accept-charset="UTF=8">
-        {{ block('banner') }}
         <div class="infoblock">
             <h3>Basic Info</h3>
             <ul id="basic-info">

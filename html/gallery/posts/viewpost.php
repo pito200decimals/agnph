@@ -239,7 +239,9 @@ function AddUserPermissions(&$post, $user) {
     if (CanUserCommentOnPost($user)) {
         $post['canComment'] = true;
     }
-    if (CanUserEditBasicInfo($user, $user) && $user['AvatarPostId'] != $pid) {
+    $ext = $post['Extension'];
+    if (CanUserEditBasicInfo($user, $user) && $user['AvatarPostId'] != $pid &&
+        ($ext == "jpg" || $ext == "png" || $ext == "gif")) {
         $post['canSetAvatar'] = true;
     }
     // Add perms for all comments.

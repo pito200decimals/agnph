@@ -180,9 +180,12 @@
             {# Only render image if status is not deleted #}
             <p>
                 {% if post.Extension == "swf" %}
-                    <object width="{{ post.Width }}" height="{{ post.Height }}" data="{{ post.downloadUrl }}"></object>
+                    {# Some messy scaling calculations :( #}
+                    <div style="position:relative;padding-bottom:{{ post.Height * 100 / post.Width }}%;padding-top:0px;height:0;overflow:hidden;">
+                        <object style="position:absolute;top:0;left:0;width:100%;height:100%;" data="{{ post.downloadUrl }}"></object>
+                    </div>
                 {% elseif post.Extension == "webm" %}
-                    <video width="{{ post.Width }}" height="{{ post.Height }}" preload controls>
+                    <video class="previewImg" preload controls loop=true>
                         <source src="{{ post.downloadUrl }}" type="video/webm" />
                         Your browser does not support the video tag.
                     </video>
