@@ -51,9 +51,9 @@ function GetTagsById($tag_table_name, $tag_ids) {
 }
 
 // Returns tags by name (as below), but with aliasing and implications applied.
-function GetTagsByNameWithAliasAndImplied($tag_table_name, $alias_table_name, $implication_table_name, $tag_names, $create_new = false, $user_id = -1, $do_alias = true, $do_implication = true) {
+function GetTagsByNameWithAliasAndImplied($tag_table_name, $alias_table_name, $implication_table_name, $tag_names, $create_new = false, $user_id = -1, $do_alias = true, $do_implication = true, $alias_removes_tags = true) {
     $tags = GetTagsByName($tag_table_name, $tag_names, $create_new, $user_id);
-    $tags = GetAliasedAndImpliedTags($tag_table_name, $alias_table_name, $implication_table_name, $tags, $do_alias, $do_implication);
+    $tags = GetAliasedAndImpliedTags($tag_table_name, $alias_table_name, $implication_table_name, $tags, $do_alias, $do_implication, $alias_removes_tags);
     return $tags;
 }
 
@@ -97,11 +97,11 @@ function GetTagsByName($tag_table_name, $tag_names, $create_new = false, $user_i
 }
 
 // Applies aliasing and implications to the given tag map.
-function GetAliasedAndImpliedTags($tag_table_name, $alias_table_name, $implication_table_name, $tags_by_id, $do_alias = true, $do_implication = true) {
+function GetAliasedAndImpliedTags($tag_table_name, $alias_table_name, $implication_table_name, $tags_by_id, $do_alias = true, $do_implication = true, $alias_removes_tags = true) {
     // Internal heper function, applies aliasing and implications.
     // Note: As long as there are no alias cycles, this will terminate. Since implications explicitly add tags without removing the original, this means that
     // this set of tags will be added on every iteration, eventually filling up to a steady state (containing all tags in the implied alias chain).
-    $GetAliasedAndImpliedTagIds = function($tag_ids) use (&$GetAliasedAndImpliedTagIds, $alias_table_name, $implication_table_name, &$do_alias, &$do_implication) {
+    $GetAliasedAndImpliedTagIds = function($tag_ids) use (&$GetAliasedAndImpliedTagIds, $alias_table_name, $implication_table_name, &$do_alias, &$do_implication, &$alias_removes_tags) {
         $orig_ids = $tag_ids;
         if ($do_alias) {
             $joined = implode(",", $tag_ids);
@@ -109,10 +109,21 @@ function GetAliasedAndImpliedTags($tag_table_name, $alias_table_name, $implicati
                 while ($row = $result->fetch_assoc()) {
                     $tid = $row['TagId'];
                     $atid = $row['AliasTagId'];
-                    if(($index = array_search($tid, $tag_ids)) !== false) {
-                        unset($tag_ids[$index]);
+                    if ($alias_removes_tags) {
+                        if(($index = array_search($tid, $tag_ids)) !== false) {
+                            unset($tag_ids[$index]);
+                        }
                     }
                     $tag_ids[] = $atid;
+                }
+            }
+            if (!$alias_removes_tags) {
+                // When expanding aliases without removing tags, expand in both directions.
+                if (sql_query_into($result, "SELECT * FROM $alias_table_name WHERE AliasTagId IN ($joined);", 1)) {
+                    while ($row = $result->fetch_assoc()) {
+                        $tid = $row['TagId'];
+                        $tag_ids[] = $tid;
+                    }
                 }
             }
         }

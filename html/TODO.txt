@@ -30,6 +30,8 @@ X Custom swf/webm thumbs when parent is set to image.
 - Handle parent cleanup on post delete?
 - Page for global tag edits/deletes/etc
 - Pool search
+- Tag suggestions
+- Collapse adjacent image pools
 
 == FICS ==
 * Fics permissions model

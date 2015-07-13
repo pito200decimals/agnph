@@ -26,6 +26,7 @@ include_once(SITE_ROOT."includes/constants.php");
 include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."includes/util/sql.php");
 include_once(SITE_ROOT."includes/util/logging.php");
+include_once(SITE_ROOT."includes/util/user.php");
 // Authenticate logged-in user.
 include_once(SITE_ROOT."includes/auth/auth.php");
 
@@ -34,30 +35,11 @@ $vars = array();
 if (isset($user)) {
     // TODO: Record page viewed, for both users and guests.
     RecordUserIP($user);
+    $user['avatarURL'] = GetAvatarURL($user);
     $vars['user'] = &$user;
 }
 
 $vars['debug'] = DEBUG;
-
-// Set up site-wide defaults.
-// Navigation links.
-$vars['navigation'] = array();
-if (sql_query_into($result, "SELECT * FROM ".SITE_NAV_TABLE." ORDER BY ItemOrder;", 0)) {
-    while ($row = $result->fetch_assoc()) {
-        $nav = array('href' => $row['Link'], 'caption' => $row['Label']);
-        // Highlight current section.
-        $prefix = mb_substr($_SERVER['REQUEST_URI'], 0, 5);
-        $link_url = mb_substr($nav['href'], 0, 5);
-        if (mb_strlen($prefix) == 5 && mb_strpos($link_url, $prefix) !== FALSE) {
-            $nav['highlight'] = true;
-        }
-        unset($prefix);
-        $vars['navigation'][] = $nav;
-    }
-} else {
-    $vars['navigation'][] = array('href' => "/", 'caption' => "Home");
-}
-
 
 // Template engine includes.
 include_once(__DIR__."/../lib/Twig/Autoloader.php");
@@ -67,6 +49,7 @@ $vars['banner_notifications'] = array();
 if (!isset($_SESSION['banner_notifications'])) $_SESSION['banner_notifications'] = array();
 
 FetchUserHeaderVars();
+SetHeaderHighlight();
 
 
 function FetchUserHeaderVars() {

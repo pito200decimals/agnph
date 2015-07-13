@@ -123,4 +123,26 @@ function InvalidURL() {
     exit();
 }
 
+function SetHeaderHighlight() {
+    global $vars;
+    $url = $_SERVER['REQUEST_URI'];
+    if ($url == "/" || $url == "") {
+        $vars['nav_section'] = "home";
+    } else if (startsWith($url, "/forums")) {
+        $vars['nav_section'] = "forums";
+    } else if (startsWith($url, "/gallery")) {
+        $vars['nav_section'] = "gallery";
+    } else if (startsWith($url, "/fics")) {
+        $vars['nav_section'] = "fics";
+    } else if (preg_match("#^/user/\d+/preferences.*$#", $url)) {
+        $vars['nav_section'] = "account_preferences";
+    } else if (preg_match("#^/user/\d+/mail.*$#", $url)) {
+        $vars['nav_section'] = "mail";
+    } else if (preg_match("#^/user/\d+.*$#", $url)) {
+        $vars['nav_section'] = "user";
+    } else if (startsWith($url, "/about")) {
+        $vars['nav_section'] = "about";
+    }
+}
+
 ?>

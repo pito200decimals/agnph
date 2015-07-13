@@ -113,8 +113,8 @@ $GALLERY_TAG_TYPES = array(
     "D" => "Copyright",
     "G" => "General",
     "S" => "Species");
-define("GALLERY_THUMB_FILE_EXTENSION", "jpg");  // Don't change once gallery starts indexing.
-define("MAX_IMAGE_THUMB_SIZE", 150);
+define("GALLERY_THUMB_FILE_EXTENSION", "png");  // Don't change once gallery starts indexing.
+define("MAX_IMAGE_THUMB_SIZE", 200);
 define("MAX_IMAGE_PREVIEW_SIZE", 1200);
 define("MAX_POOL_NAME_LENGTH", 128);
 define("MIN_POOL_PREFIX_LENGTH", 3);  // For ajax add-to-pool search.

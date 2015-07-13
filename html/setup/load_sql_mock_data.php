@@ -64,20 +64,6 @@ WriteBio(1, "Bio of User1!<br />TEST");
 WriteBio(2, "Bio of User2!");
 WriteBio(3, "Bio of User3!");
 
-
-// Populate site nav table.
-do_or_die(sql_query(
-    "INSERT INTO ".SITE_NAV_TABLE."
-    (Label, Link, ItemOrder)
-    VALUES
-    ('News', '/index.php', 0),
-    ('Forums', '/forums/', 1),
-    ('Gallery', '/gallery/post/', 2),
-    ('Fics', '/fics/', 3),
-    ('Oekaki', '/oekaki/', 4),
-    ('About', '/about/', 5),
-    ('Setup', '/setup/sql_setup.php', 6);"));
-
 do_or_die(sql_query(
     "INSERT INTO ".SITE_TEXT_TABLE."
     (Name, Text)

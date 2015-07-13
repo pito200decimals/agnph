@@ -135,10 +135,7 @@ function GetClause($search_term) {
 
 function ClauseForTag($tag_name) {
     $tag_name = SanitizeTagName($tag_name);  // Remove extra punctuation.
-    $tags = GetTagsByNameWithAliasAndImplied(FICS_TAG_TABLE, FICS_TAG_ALIAS_TABLE, FICS_TAG_IMPLICATION_TABLE, array($tag_name), false, -1, false, false);  // No alias.
-    $aliased_tags = GetTagsByNameWithAliasAndImplied(FICS_TAG_TABLE, FICS_TAG_ALIAS_TABLE, FICS_TAG_IMPLICATION_TABLE, array($tag_name), false, -1, true, false);  // Yes alias.
-    // Add tags together (able to search for old aliased tags).
-    $tags = $tags + $aliased_tags;  // Key merge okay here.
+    $tags = GetTagsByNameWithAliasAndImplied(FICS_TAG_TABLE, FICS_TAG_ALIAS_TABLE, FICS_TAG_IMPLICATION_TABLE, array($tag_name), false, -1, true, false, false);  // Apply alias, but don't drop tags.
     if ($tags == null || sizeof($tags) == 0) return null;
     $tag_ids = array_keys($tags);
     $joined = implode(",", $tag_ids);

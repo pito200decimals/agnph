@@ -198,7 +198,7 @@
                 {{ post.Description }}
             </p>#}
             <p>
-                {% if user.UserId > 0 %}<a href="/gallery/post/show/{{ post.PostId }}/" onclick="return toggleEdit();">Edit</a> | {% endif %}<a href="{{ downloadUrl }}">Download</a>
+                {% if user.UserId > 0 %}<a href="/gallery/post/show/{{ post.PostId }}/" onclick="return toggleEdit();">Edit</a> | {% endif %}<a href="{{ post.downloadUrl }}">Download</a>
             </p>
             <div class="posteditbox">
                 <a id="editanchor" />

@@ -24,7 +24,7 @@ include_once(SITE_ROOT."gallery/includes/functions.php");
 
 // If doesn't exist, is a no-op.
 sql_query("DROP TABLE ".USER_TABLE.";");
-sql_query("DROP TABLE ".SITE_NAV_TABLE.";");
+sql_query("DROP TABLE ".SITE_NAV_TABLE.";");  // TODO: Remove.
 sql_query("DROP TABLE ".SITE_TAG_ALIAS_TABLE.";");  // TODO: Remove.
 sql_query("DROP TABLE ".USER_MAILBOX_TABLE.";");
 sql_query("DROP TABLE ".SITE_LOGGING_TABLE.";");
@@ -88,15 +88,6 @@ do_or_die(sql_query(
     ) DEFAULT CHARSET=utf8;"));
 do_or_die(sql_query("SET GLOBAL event_scheduler = ON;"));  // Turn on cleanup scheduler.
 // User biography is stored in text files at /user/bio/{UserId}.txt
-
-// TODO: Do we want this in a table, or in the site template?
-do_or_die(sql_query(
-    "CREATE TABLE ".SITE_NAV_TABLE." (
-        Label VARCHAR(24) NOT NULL,
-        Link VARCHAR(64) NOT NULL,
-        ItemOrder INT(11) NOT NULL,
-        PRIMARY KEY(Label, Link)
-    ) DEFAULT CHARSET=utf8;"));
 
 do_or_die(sql_query(
     "CREATE TABLE ".SITE_TEXT_TABLE." (
