@@ -1,23 +1,19 @@
-@media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
-    #content {
-        display: table;
-        table-layout:fixed;
-        overflow: hidden;
-        width: 95%; /* A bit hacky, but tables are weird */
-    }
-    .sidepanel {
-        display: table-footer-group;
-    }
-    .mainpanel {
-        display: block;
-    }
-    .parentbox p {
-        display: inline;
-    }
-    .poolbox p {
-        display: inline;
-    }
+
+.sidepanel-list {
+    list-style: none;
+    padding: 0px;
+    display: block;
 }
+.sidepanel-list li {
+    display: block;
+    float: none;
+}
+.side-search-pool {
+}
+.top-search-pool {
+    display: none;
+}
+
 
 .parentbox {
     margin: 5px;
@@ -153,4 +149,68 @@ textarea {
 .comment-section {
     background-color: white;
     padding: 10px;
+}
+.comment-section-input {
+    text-align: center;
+}
+
+@media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
+    .post-layout-container {
+        display: table;
+        table-layout:fixed;
+        overflow: hidden;
+    }
+    .sidepanel {
+        display: block;
+    }
+    .mainpanel {
+        display: table-header-group;
+    }
+    .parentbox p {
+        display: inline;
+    }
+    .poolbox p {
+        display: inline;
+    }
+    .sidepanel-list > li {
+        float: left;
+        margin: 5px;
+    }
+    .sidepanel-list>li:first-child {
+        float: none;
+        display: block;
+    }
+    .tagcategory>.taglist>.tag {
+        display: inline-block;
+    }
+    .tagcategory>.taglist {
+        display: block;
+    }
+    .taglist {
+        display: inline-block;
+    }
+    .searchbox {
+        display: table-header-group;
+    }
+    li.sidepanel-block {
+        float: none;
+        display: block;
+    }
+    .side-search-pool {
+        display: none;
+    }
+    .top-search-pool {
+        display: block;
+    }
+    .poolbox {
+        margin: 5px;
+        border-radius: 5px;
+        background-color: rgb(85,153,85);
+        padding: 5px;
+        box-shadow: 2px 2px 5px #07162D;
+    }
+    .poolbox p {
+        margin: 0px 5px;
+        display: block;
+    }
 }

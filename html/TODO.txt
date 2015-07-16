@@ -32,6 +32,7 @@ X Custom swf/webm thumbs when parent is set to image.
 - Pool search
 - Tag suggestions
 - Collapse adjacent image pools
+- Fix mobile layout table cell backgrounds
 
 == FICS ==
 * Fics permissions model
