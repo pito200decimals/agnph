@@ -145,4 +145,23 @@ function SetHeaderHighlight() {
     }
 }
 
+function PostBanner($msg, $color, $dismissable = true, $noescape = false) {
+    global $vars;
+    $vars['banner_notifications'][] = array(
+        "classes" => array("$color-banner"),
+        "text" => $msg,
+        "dismissable" => $dismissable,
+        "strong" => true,
+        "noescape" => $noescape);
+}
+
+function PostSessionBanner($msg, $color, $dismissable = true, $noescape = false) {
+    $_SESSION['banner_notifications'][] =  array(
+        "classes" => array("$color-banner"),
+        "text" => $msg,
+        "dismissable" => $dismissable,
+        "strong" => true,
+        "noescape" => $noescape);
+}
+
 ?>

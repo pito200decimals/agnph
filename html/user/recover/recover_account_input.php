@@ -33,16 +33,16 @@ if (isset($_POST['email']) &&
                     header("Location: /recover/confirm/");
                     return;
                 } else {
-                    $vars['error'] = "Error sending confirmation email, please try again later";
+                    PostBanner("Error sending confirmation email, please try again later", "red");
                 }
             } else {
-                $vars['error'] = "Unexpected error, please try again later";
+                PostBanner("Unexpected error, please try again later", "red");
             }
         } else {
-            $vars['error'] = "Account not found";
+            PostBanner("Account not found", "red");
         }
     } else {
-        $vars['error'] = "Password does not match";
+        PostBanner("Password does not match", "red");
     }
 }
 RenderPage("user/recover.tpl");

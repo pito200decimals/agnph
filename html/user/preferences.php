@@ -22,9 +22,6 @@ if (!isset($user) || !CanUserEditBasicInfo($user, $profile_user)) {
     return;
 }
 
-// TODO: Fix banners.
-$vars['banner_notifications'] = array();
-
 if (isset($_POST['display-name']) &&
     isset($_POST['dob']) &&
     isset($_POST['species']) &&
@@ -308,30 +305,17 @@ if (isset($user)) {
         $profile_user['ips'] = $profile_user['RegisterIP'].",".$profile_user['KnownIPs'];
     }
 }
-// Render banners.
-foreach ($_SESSION['banner_notifications'] as $banner) {
-    $vars['banner_notifications'][] = $banner;
-}
-$_SESSION['banner_notifications'] = array();  // Clear banners.
 
 // This is how to output the template.
 RenderPage("user/preferences.tpl");
 return;
 
 function PostErrorMessage($msg) {
-    $_SESSION['banner_notifications'][] = array(
-        "classes" => array("red-banner"),
-        "text" => $msg,
-        "dismissable" => true,
-        "strong" => true);
+    PostSessionBanner($msg, "red");
 }
 
 function PostConfirmMessage($msg) {
-    $_SESSION['banner_notifications'][] = array(
-        "classes" => array("green-banner"),
-        "text" => $msg,
-        "dismissable" => true,
-        "strong" => true);
+    PostSessionBanner($msg, "green");
 }
 
 // Returns the valid date string, or false on parse error.

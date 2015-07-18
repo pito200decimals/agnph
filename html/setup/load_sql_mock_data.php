@@ -68,7 +68,7 @@ do_or_die(sql_query(
     "INSERT INTO ".SITE_TEXT_TABLE."
     (Name, Text)
     VALUES
-    ('RegisterDisclaimer', 'By clicking \'Register\', you agree that you are 18 years of age or older. A verification email will be sent to the provided email address.');"));
+    ('RegisterDisclaimer', 'By clicking \'Register\', you agree to the <a href=\'\'>terms of use</a> and that you are 18 years of age or older. A verification email will be sent to the provided email address.');"));
     
 function rand_date() {
     return mt_rand(0, 2147483647);

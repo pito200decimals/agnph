@@ -45,8 +45,14 @@ $vars['debug'] = DEBUG;
 include_once(__DIR__."/../lib/Twig/Autoloader.php");
 Twig_Autoloader::register();
 // Set up for banner notifications. Initialize session banners if not created yet.
-$vars['banner_notifications'] = array();
-if (!isset($_SESSION['banner_notifications'])) $_SESSION['banner_notifications'] = array();
+if (!isset($_SESSION['banner_notifications'])) {
+    $_SESSION['banner_notifications'] = array();
+} else if (sizeof($_SESSION['banner_notifications']) > 0) {
+    $vars['banner_notifications'] = $_SESSION['banner_notifications'];
+    unset($_SESSION['banner_notifications']);
+} else {
+    $vars['banner_notifications'] = array();
+}
 
 FetchUserHeaderVars();
 SetHeaderHighlight();

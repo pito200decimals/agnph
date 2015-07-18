@@ -328,11 +328,6 @@ function CreateStatusBanner($post) {
         default:
             break;
     }
-    // Also show any session banners.
-    foreach ($_SESSION['banner_notifications'] as $banner) {
-        $vars['banner_notifications'][] = $banner;
-    }
-    $_SESSION['banner_notifications'] = array();  // Clear banners.
 }
 
 function CreatePoolIterator($post) {
@@ -354,25 +349,6 @@ function CreatePoolIterator($post) {
     $curr_link = "<a href='$pool_url'>".$pool['Name']."</a>";
     $next_link = (isset($next_url) ? "<a id='nextinpool' href='$next_url'>&gt;&gt;</a>" : "");
     return $prev_link . $curr_link . $next_link;
-}
-
-function PostBanner($msg, $color, $dismissable = true, $noescape = false) {
-    global $vars;
-    $vars['banner_notifications'][] = array(
-        "classes" => array("$color-banner"),
-        "text" => $msg,
-        "dismissable" => $dismissable,
-        "strong" => true,
-        "noescape" => $noescape);
-}
-
-function PostSessionBanner($msg, $color) {
-    $_SESSION['banner_notifications'][] =  array(
-        "classes" => array("$color-banner"),
-        "text" => $msg,
-        "dismissable" => true,
-        "strong" => true,
-        "noescape" => false);
 }
 
 ?>

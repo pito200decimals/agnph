@@ -96,11 +96,7 @@ if ($action == "send") {
 RenderPage("user/mail/mail.tpl");
 return;
 
-function PostMailSessionBanner($msg, $color="green") {
-    $_SESSION['banner_notifications'][] = array(
-        "classes" => array("green-banner"),
-        "text" => $msg,
-        "dismissable" => true,
-        "strong" => true);
+function PostMailSessionBanner($msg, $color="green") 
+    PostSessionBanner($msg, $color);
 }
 ?>

@@ -16,7 +16,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         header("Location: /");
         return;
     } else {
-        $vars['error'] = "Invalid username/password";
+        PostBanner("Invalid username/password", "red");
         $vars['username'] = $_POST['username'];
     }
 } else {
@@ -28,12 +28,6 @@ if (isset($user)) {
     return;
 }
 
-
-// Pages will set their content here.
-$content = "";
-
-// This is how to output the template.
-$vars['content'] = $content;
 RenderPage("login.tpl");
 return;
 ?>

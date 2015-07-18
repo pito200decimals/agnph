@@ -1,12 +1,38 @@
 {% extends 'base.tpl' %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/user/style.css" />
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/user/register-style.css" />
+    <style>
+        #register-form {
+            max-width: 800px;
+        }
+        #register-form ul {
+            list-style: none;
+            padding: 0px;
+        }
+        #register-form li {
+            margin: 5px;
+        }
+        #register-form label {
+            display: inline-block;
+            width: 200px;
+        }
+        .captcha-offset {
+            margin-left: 200px;
+        }
+        .form-error {
+            display: none;
+            color: red;
+            margin-left: 5px;
+            font-size: 75%;
+        }
+        #register-disclaimer {
+            margin: 5px;
+            font-size: 75%;
+        }
+    </style>
 {% endblock %}
 
 {% block scripts %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script type="text/javascript">
         function refresh() {
             $('#captcha-img').attr("src", "/register/captcha/?timestamp=" + new Date().getTime());
@@ -89,7 +115,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="register-form">
+    <div id="register-form" class="form-box">
         <h3>Register Account</h3>
         {{ block('banner') }}
         <form action="" method="POST" accept-charset="UTF-8">
@@ -114,11 +140,11 @@
                 </li>
                 <li>
                     <img class="captcha-offset" id="captcha-img" src="/register/captcha/" alt="Captcha text" /><br />
-                    <small class="captcha-offset"><a href="javascript: refresh()" tabindex="-1">Refresh image</a></small><br />
+                    <small class="captcha-offset"><a href="javascript: refresh()" tabindex="-1">Can't read?</a></small><br />
                     <label>Enter Captcha:</label><input id="captcha" name="captcha" type="text" value="" />
                 </li>
             </ul>
-            <div class="register-disclaimer">
+            <div id="register-disclaimer">
                 {% autoescape false %}
                     {{ RegisterDisclaimer }}
                 {% endautoescape %}

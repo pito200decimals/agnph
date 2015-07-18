@@ -1,11 +1,15 @@
 {% extends "base.tpl" %}
 
 {% block styles %}
-<link rel="stylesheet" type="text/css" href="{{ skinDir }}/login-style.css" />
+<style>
+    #logout-box {
+        width: 320px;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-<div class="logoutbox">
+<div class="form-box" id="logout-box">
     <p>You have been successfully logged out.</p>
     <p><a href="/">Click here to continue</a></p>
 </div>

@@ -3,22 +3,26 @@
 {% block styles %}
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/user/style.css" />
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/user/recover-style.css" />
+    <style>
+        h4 {
+            text-align: center;
+        }
+        #recover-form {
+            max-width: 400px;
+        }
+    </style>
 {% endblock %}
 
 {% block scripts %}
 {% endblock %}
 
 {% block content %}
-    <div class="recover-form">
+    <div id="recover-form" class="form-box">
         <h4>Account Recovery</h4>
+        {{ block('banner') }}
         <p>
             Please confirm your email address to change your password.
         </p>
-        {% if error %}
-            <p>
-                <span class="error">{{ error }}</span>
-            </p>
-        {% endif %}
         <p>
             <form action="/recover/" method="POST" accept-charset="UTF-8">
                 <table>

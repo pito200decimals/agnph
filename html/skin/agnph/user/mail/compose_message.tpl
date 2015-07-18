@@ -7,7 +7,6 @@
 
 {% block scripts %}
     <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="{{ skinDir }}/scripts/jquery.autocomplete.min.js"></script>
     <script type="text/javascript">
         tinymce.init({
