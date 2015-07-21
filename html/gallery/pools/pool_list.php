@@ -9,13 +9,14 @@ include_once("../../includes/util/sql.php");
 
 header('Content-type: application/json; charset=utf-8');
 
+// Not really a prefix, just a general pool search term.
 if (!isset($_GET['prefix']) || mb_strlen($_GET['prefix']) < MIN_POOL_PREFIX_LENGTH) {
     echo json_encode(array());
     return;
 }
 
 $escaped_prefix = sql_escape($_GET['prefix']);
-if (!sql_query_into($result, "SELECT * FROM ".GALLERY_POOLS_TABLE." WHERE UPPER(Name) LIKE UPPER('$escaped_prefix%') ORDER BY Name LIMIT 5;", 0)) {
+if (!sql_query_into($result, "SELECT * FROM ".GALLERY_POOLS_TABLE." WHERE UPPER(Name) LIKE UPPER('%$escaped_prefix%') ORDER BY Name LIMIT 5;", 0)) {
     AJAXErr();
 }
 $elems = array();

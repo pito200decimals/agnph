@@ -1,0 +1,26 @@
+.list-table {
+    border-radius: 15px;
+    background-color: rgb(170,200,255);
+    width: 100%;
+    border-style: none;
+    overflow: hidden;
+    -webkit-border-horizontal-spacing: 0px;
+    -webkit-border-vertical-spacing: 0px;
+    border-collapse: collapse;
+}
+.list-table thead td {
+    padding: 5px;
+    background-color: rgb(100,130,185);
+}
+.list-table tbody td {
+    padding: 5px;
+}
+.list-table tbody tr:nth-child(odd) {
+    background-color: rgb(150,180,235);
+}
+.list-table tbody tr:nth-child(even) {
+    background-color: rgb(130,160,215);
+}
+.mainpanel {
+    margin: 5px;
+}

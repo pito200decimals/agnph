@@ -1,4 +1,4 @@
-
+/* Panel layout */
 .sidepanel-list {
     list-style: none;
     padding: 0px;
@@ -14,98 +14,52 @@
     display: none;
 }
 
-
-.parentbox {
+/* Post parent/child/pool links */
+.parentbox, .poolbox {
     margin: 5px;
     border-radius: 5px;
     background-color: rgb(85,153,85);
     padding: 5px;
     box-shadow: 2px 2px 5px #07162D;
 }
-
-.parentbox p {
+.parentbox p, .poolbox p {
     margin: 0px 5px;
 }
-
-.poolbox {
+.poolbox a {
     margin: 5px;
-    border-radius: 5px;
-    background-color: rgb(85,153,85);
-    padding: 5px;
-    box-shadow: 2px 2px 5px #07162D;
-}
-.poolbox p {
-    margin: 0px 5px;
 }
 
-.previewImg {
+.preview-img {
     max-width: 100%;
 }
 
-.posteditbox input {
-    margin: 5px;
-}
-
-textarea {
-    margin: 5px;
-    height: 150px;
-}
-
-#desc {
-    height: 75px;
-}
-
-#parent {
-    width: 100px;
-}
-
-.posteditbox {
-    margin: 5px;
-    padding: 5px;
-    border-radius: 5px;
-    background-color: rgb(170,200,255);
-    float: left;
-    display: none;
-}
-
-.tagbox {
-
-}
-
+/* Tags */
 .taglist {
     margin: 0px;
     padding: 0px;
 }
-
 .tagcategory {
     margin-top: 10px;
     margin-left: 10px;
     display: block;
 }
-
 .tag {
     margin-left: 10px;
     display: block;
 }
-
 .tag a {
     text-decoration: none;
     font-weight: bold;
 }
-
 .tag a:hover {
     color: rgb(144,147,255);
 }
 
-.statbox {
-
-}
-
+/* Stats */
 .statlist {
     margin: 0px;
     padding: 0px;
 }
-
 .statlist li {
     margin-left: 0px;
     display: block;
@@ -114,15 +68,11 @@ textarea {
     padding: 0px;
 }
 
-.actionbox {
-
-}
-
+/* Actions */
 .actionlist {
     margin: 0px;
     padding: 0px;
 }
-
 .actionlist li {
     margin-left: 0px;
     display: block;
@@ -130,12 +80,11 @@ textarea {
     max-width: 275px;
     padding: 0px;
 }
-
 .pooleditbox {
     display: none;
 }
-.pooleditbox ul li a span {
-    text-decoration: underline;
+#poolautocomplete span {
+    font-weight: bold;
 }
 #poolactionworking {
 }
@@ -143,6 +92,38 @@ textarea {
     display: none;
 }
 
+/* Edit form */
+.posteditbox {
+    margin: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: rgb(170,200,255);
+    float: left;
+    display: none;
+}
+.posteditbox input {
+    margin: 5px;
+}
+textarea {
+    margin: 5px;
+    height: 150px;
+}
+#desc {
+    height: 75px;
+}
+#parent {
+    width: 100px;
+}
+.formlabel {
+    vertical-align: top;
+    width: 100px;
+    display: inline-block;
+}
+.textbox {
+    width: 400px;
+}
+
+/* Comments */
 #commentform {
     display: none;
 }
@@ -169,48 +150,32 @@ textarea {
     .parentbox p {
         display: inline;
     }
-    .poolbox p {
-        display: inline;
+    .preview-img {
+        width: 100%;
     }
+    /* Float the sidepanel sections */
     .sidepanel-list > li {
         float: left;
         margin: 5px;
     }
-    .sidepanel-list>li:first-child {
+    .sidepanel-list > li:first-child {
         float: none;
-        display: block;
     }
-    .tagcategory>.taglist>.tag {
+    /* Re-flow tags */
+    .tagcategory > .taglist > .tag {
         display: inline-block;
     }
-    .tagcategory>.taglist {
+    .tagcategory > .taglist {
         display: block;
     }
     .taglist {
         display: inline-block;
     }
-    .searchbox {
-        display: table-header-group;
-    }
-    li.sidepanel-block {
-        float: none;
-        display: block;
-    }
+    /* Move search box to top */
     .side-search-pool {
         display: none;
     }
     .top-search-pool {
-        display: block;
-    }
-    .poolbox {
-        margin: 5px;
-        border-radius: 5px;
-        background-color: rgb(85,153,85);
-        padding: 5px;
-        box-shadow: 2px 2px 5px #07162D;
-    }
-    .poolbox p {
-        margin: 0px 5px;
         display: block;
     }
 }

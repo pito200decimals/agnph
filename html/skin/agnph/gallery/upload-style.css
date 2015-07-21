@@ -39,6 +39,14 @@ textarea {
 .previewpanel img {
     max-width: 100%;
 }
+.formlabel {
+    vertical-align: top;
+    width: 100px;
+    display: inline-block;
+}
+.textbox {
+    width: 400px;
+}
 
 @media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
     .previewpanel {

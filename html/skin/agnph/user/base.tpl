@@ -19,9 +19,9 @@
 {% endblock %}
 
 {% block content %}
+    {{ block('banner') }}
     <div class="userpage">
         <div class="userpage-container">
-            {{ block('banner') }}
             <div class="profile-sidepanel">
                 <div class="sidepanel-section">
                     <img class="profile-avatarimg" src="{{ profile.user.avatarURL }}" />

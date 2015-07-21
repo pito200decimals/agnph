@@ -79,12 +79,10 @@
                             <input class="postorder" type="hidden" value="{{ post.PoolItemOrder }}" />
                         {% endif %}
                         <a class="postlink" href="/gallery/post/show/{{ post.PostId }}/">
-                            <div class="postsquare">
-                                <div class="postsquarepreview">
-                                    {# TODO: Deleted thumbnail instead of preview #}
-                                    <img class="postsquarepreview {{ post.outlineClass }}" src="{{ post.thumbnail }}" />
-                                </div>
-                                <div class="postlabel">
+                            <div class="post-tile">
+                                {# TODO: Deleted thumbnail instead of preview? #}
+                                <img class="post-preview-img {{ post.outlineClass }}" src="{{ post.thumbnail }}" />
+                                <div class="post-label">
                                     {% autoescape false %}
                                     {{ post.favHtml }}{{ post.commentsHtml }}{{ post.ratingHtml }}
                                     {% endautoescape %}
@@ -95,7 +93,7 @@
                 {% endfor %}
             </ul>
             <div class="Clear">&nbsp;</div>
-            <div class="indexIterator">
+            <div class="iterator">
                 {% autoescape false %}
                 {{ postIterator }}
                 {% endautoescape %}

@@ -2,7 +2,32 @@
 
 {% block styles %}
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/gallery/style.css" />
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/gallery/poolindex-style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/gallery/list-style.css" />
+    <style>
+        #actionbar {
+            display: block;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        #pool-search {
+            display: inline;
+        }
+        #pool-search input {
+            float: right;
+            margin: 0px;
+            margin-top: -4px;
+        }
+        #newpanel {
+            padding: 5px;
+            display: inline-block;
+        }
+        .floatactionpanel {
+            position: absolute;
+            border: 1px solid rgb(0,0,0);
+            background-color: rgb(63, 127, 255);
+            box-shadow: 5px 5px 8px #07162D;
+        }
+    </style>
 {% endblock %}
 
 {% block scripts %}
@@ -24,22 +49,28 @@
 {% block content %}
     <div class="mainpanel">
         <h3>Pools</h3>
-        {% if canEditPools %}
+        {{ block('banner') }}
         <div id="actionbar">
-            <ul class="gallerynav" hidden>
-                <li><a href="">New</a></li>
-            </ul>
-            <div id="newpanel">
-                <form action="/gallery/pools/create/" method="POST" accept-charset="UTF-8">
-                    <input name="name" type="text" />
-                    <input type="submit" value="Create New" />
-                </form>
-            </div>
+            <form id="pool-search" method="GET" accept-encoding="UTF-8">
+                <input type="text" class="search" name="search" value="" required />
+            </form>
+            {% if canEditPools %}
+                <ul class="gallerynav" hidden>
+                    <li><a href="">New</a></li>
+                </ul>
+                <div id="newpanel">
+                    <form action="/gallery/pools/create/" method="POST" accept-charset="UTF-8">
+                        <input name="search" type="text" />
+                        <input type="submit" value="Create New" />
+                    </form>
+                </div>
+            {% else %}
+                &nbsp;
+            {% endif %}
         </div>
-        {% endif %}
         {% if pools|length > 0 %}
             {# Display pool index. #}
-            <table class="pooltable">
+            <table class="list-table">
                 <thead>
                     <tr>
                         <td><div><strong>Name</strong></div></td>
@@ -51,7 +82,7 @@
                 <tbody>
                     {% for pool in pools %}
                         <tr>
-                            <td><div><a href="/gallery/post/?search=pool%3A{{ pool.PoolId }}">{{ pool.Name }}</a></div></td>
+                            <td><div><a href="/gallery/post/?search={{ pool.searchName }}">{{ pool.Name }}</a></div></td>
                             <td><div>{{ pool.count }}</div></td>
                             <td><div><a href="/user/{{ pool.creator.UserId }}/gallery/">{{ pool.creator.DisplayName }}</a></div></td>
                             {% if canEditPools %}<td><div>
@@ -65,7 +96,7 @@
                 </tbody>
             </table>
             <div class="Clear">&nbsp;</div>
-            <div class="indexIterator">
+            <div class="iterator">
                 {% autoescape false %}
                 {{ postIterator }}
                 {% endautoescape %}

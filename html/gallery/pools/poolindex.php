@@ -6,13 +6,24 @@ include_once("../../header.php");
 include_once(SITE_ROOT."gallery/includes/functions.php");
 include_once(SITE_ROOT."includes/util/listview.php");
 
+if (isset($_GET['search'])) {
+    $term = $_GET['search'];
+    $escaped_term = sql_escape($term);
+    $whereClause = "WHERE UPPER(Name) LIKE UPPER('%$escaped_term%')";
+} else {
+    $whereClause = "";
+}
 
 $pools = array();
-CollectItems(GALLERY_POOLS_TABLE, "ORDER BY Name ASC", $pools, GALLERY_LIST_ITEMS_PER_PAGE, $iterator, function($i) {
+CollectItems(GALLERY_POOLS_TABLE, "$whereClause ORDER BY Name ASC", $pools, GALLERY_LIST_ITEMS_PER_PAGE, $iterator, function($i) {
     return "/gallery/pools/?page=$i";
 }, "No pools found.");
 
 if (sizeof($pools) > 0) {
+    // Compute pool search names.
+    foreach ($pools as &$pool) {
+        $pool['searchName'] = urlencode("pool:".str_replace(" ", "_", $pool['Name']));
+    }
     // Compute counts.
     foreach ($pools as &$pool) { $pool['count'] = 0; }
     $pool_ids = array_map(function($pool) {

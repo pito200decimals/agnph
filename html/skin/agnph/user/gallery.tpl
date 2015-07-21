@@ -32,12 +32,10 @@
                 {% for post in profile.user.uploads %}
                     <li class="dragitem">
                         <a class="postlink" href="/gallery/post/show/{{ post.PostId }}/">
-                            <div class="postsquare">
-                                <div class="postsquarepreview">
-                                    {# TODO: Deleted thumbnail instead of preview #}
-                                    <img class="postsquarepreview {{ post.outlineClass }}" src="{{ post.thumbnail }}" />
-                                </div>
-                                <div class="postlabel">
+                            <div class="post-tile">
+                                {# TODO: Deleted thumbnail instead of preview? #}
+                                <img class="post-preview-img {{ post.outlineClass }}" src="{{ post.thumbnail }}" />
+                                <div class="post-label">
                                     {% autoescape false %}
                                     {{ post.favHtml }}{{ post.commentsHtml }}{{ post.ratingHtml }}
                                     {% endautoescape %}
@@ -58,12 +56,10 @@
                 {% for post in profile.user.favorites %}
                     <li class="dragitem">
                         <a class="postlink" href="/gallery/post/show/{{ post.PostId }}/">
-                            <div class="postsquare">
-                                <div class="postsquarepreview">
-                                    {# TODO: Deleted thumbnail instead of preview #}
-                                    <img class="postsquarepreview {{ post.outlineClass }}" src="{{ post.thumbnail }}" />
-                                </div>
-                                <div class="postlabel">
+                            <div class="post-tile">
+                                {# TODO: Deleted thumbnail instead of preview? #}
+                                <img class="post-preview-img {{ post.outlineClass }}" src="{{ post.thumbnail }}" />
+                                <div class="post-label">
                                     {% autoescape false %}
                                     {{ post.favHtml }}{{ post.commentsHtml }}{{ post.ratingHtml }}
                                     {% endautoescape %}

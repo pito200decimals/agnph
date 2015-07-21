@@ -22,16 +22,17 @@ if (isset($user)) {
 }
 $vars['search'] = $searchterms;
 $sql = CreatePostSearchSQL(mb_strtolower($searchterms), $posts_per_page, $page, $can_sort_pool, $pool_id);
-sql_query_into($result, $sql, 0) or RenderErrorPage("No posts found");
 $posts = array();
-while ($row = $result->fetch_assoc()) {
-    $md5 = $row['Md5'];
-    $ext = $row['Extension'];
-    $row['thumbnail'] = GetSiteThumbPath($md5, $ext);
-    CreatePostLabel($row);
-    $posts[] = $row;
+if (sql_query_into($result, $sql, 0)) {
+    while ($row = $result->fetch_assoc()) {
+        $md5 = $row['Md5'];
+        $ext = $row['Extension'];
+        $row['thumbnail'] = GetSiteThumbPath($md5, $ext);
+        CreatePostLabel($row);
+        $posts[] = $row;
+    }
+    SetOutlineClasses($posts);
 }
-SetOutlineClasses($posts);
 
 // Construct page iterator.
 $vars['postIterator'] = CreatePageIterator($searchterms, $page, $posts_per_page);

@@ -20,16 +20,13 @@ X IP address tracking for uploads (Do we need this, since user is tracked?)
 X Upvote/Downvote (On hold for now. Don't know where to put buttons. Feature not used in Ouroboros gallery)
 X Gallery notes
 X Custom swf/webm thumbs when parent is set to image.
-- Tag implications
 - Some sort of tag exploration feature, perhaps tag cloud?
 - Tag edit rollbacks?
 - Viewing tag edits for user.
 - "Popular" recent posts, maybe by # of views in last day/week/month?
 - Back/Next buttons
-- Pool search by name
 - Handle parent cleanup on post delete?
 - Page for global tag edits/deletes/etc
-- Pool search
 - Tag suggestions
 - Collapse adjacent image pools
 - Fix mobile layout table cell backgrounds
@@ -67,6 +64,7 @@ X Custom swf/webm thumbs when parent is set to image.
 X All comment user links should go to respective sections.
 - All CSS
     - Don't forget page iterators
+- Theme switcher
 
 == ACCOUNT ==
 * Enable login via email, not just username (Also allow display name?)

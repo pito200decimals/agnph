@@ -63,136 +63,130 @@
             <ul class="sidepanel-list">
                 <li>
                     <h3>Tags:</h3>
-                    <div class="tagbox">
-                        <ul class="taglist">
-                            {% for category in post.tagCategories %}
-                                <li class="tagcategory">
-                                    <strong>{{ category.name }}</strong>
-                                    <ul class="taglist">
-                                        {% for tag in category.tags %}
-                                            <li class="tag">
-                                                <a href="/gallery/post/?search={{ tag.Name|url_encode }}" class="{{ tag.Type|lower }}typetag">{{ tag.displayName }}</a>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+                    <ul class="taglist">
+                        {% for category in post.tagCategories %}
+                            <li class="tagcategory">
+                                <strong>{{ category.name }}</strong>
+                                <ul class="taglist">
+                                    {% for tag in category.tags %}
+                                        <li class="tag">
+                                            <a href="/gallery/post/?search={{ tag.Name|url_encode }}" class="{{ tag.Type|lower }}typetag">{{ tag.displayName }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </li>
                 <li>
                     <h3>Statistics</h3>
-                    <div class="statbox">
-                        <ul class="statlist">
-                            <li>ID: {{ post.PostId }}</li>
-                            {% if post.Source != "" %}
-                                <li>Source:
-                                    {% if post.Source starts with "http://" or post.Source starts with "https://" %}
-                                        <a href="{{ post.Source }}">{{ post.Source }}</a>
-                                    {% else %}
-                                        {{ post.Source }}
-                                    {% endif %}
-                                </li>
-                            {% endif %}
-                            <li>Posted: {% autoescape false %}{{ post.postedHtml }}{% endautoescape %}</li>
-                            <li>Rating: {% autoescape false %}{{ post.ratingHtml }}{% endautoescape %}</li>
-                            <li>Favorites: {{ post.NumFavorites }}</li>
-                            {% if post.FileSize != "" %}<li>Size: {{ post.FileSize }}</li>{% endif %}
-                            <li>Views: {{ post.NumViews }}</li>
-                            <li><a href="/gallery/post/show/{{ post.PostId }}/history/">Tag History</a></li>
-                        </ul>
-                    </div>
+                    <ul class="statlist">
+                        <li>ID: {{ post.PostId }}</li>
+                        {% if post.Source != "" %}
+                            <li>Source:
+                                {% if post.Source starts with "http://" or post.Source starts with "https://" %}
+                                    <a href="{{ post.Source }}">{{ post.Source }}</a>
+                                {% else %}
+                                    {{ post.Source }}
+                                {% endif %}
+                            </li>
+                        {% endif %}
+                        <li>Posted: {% autoescape false %}{{ post.postedHtml }}{% endautoescape %}</li>
+                        <li>Rating: {% autoescape false %}{{ post.ratingHtml }}{% endautoescape %}</li>
+                        <li>Favorites: {{ post.NumFavorites }}</li>
+                        {% if post.FileSize != "" %}<li>Size: {{ post.FileSize }}</li>{% endif %}
+                        <li>Views: {{ post.NumViews }}</li>
+                        <li><a href="/gallery/post/show/{{ post.PostId }}/history/">Tag History</a></li>
+                    </ul>
                 </li>
                 {% if post.canEdit %}
                 <li>
                     <h3>Actions</h3>
-                    <div class="actionbox">
-                        <ul class="actionlist">
-                            <li><a href="/gallery/post/show/{{ post.PostId }}/" onclick="return toggleEdit();">Edit</a></li>
-                            {% if post.canApprove %}
-                                <li>
-                                    <form hidden id="approveform" method="POST" accept-charset="UTF-8">
-                                        <input name="post" type="hidden" value="{{ post.PostId }}" />
-                                        <input name="action" type="hidden" value="approve" />
-                                    </form>
-                                    <a href="#" onclick="$('#approveform')[0].submit();return false;">Approve Post</a>
-                                </li>
-                            {% endif %}
-                            {% if post.canFlag %}
-                                <li>
-                                    <a id="flagaction" href="#">{# No text for no javascript #}</a>
-                                    <div class="flageditbox">
-                                        <form method="POST" accept-charset="UTF-8">
-                                            <label>Reason:</label><br />
-                                            <input name="post" type="hidden" value="{{ post.PostId }}" />
-                                            <input id="flag-edit-text" name="reason" type="text" />
-                                            <input name="action" type="hidden" value="flag" />
-                                            <input type="submit" value="Flag" />
-                                        </form>
-                                    </div>
-                                </li>
-                            {% endif %}
-                            {% if post.canUnflag %}
-                                <li>
-                                    <form hidden id="unflagform" method="POST" accept-charset="UTF-8">
-                                        <input name="post" type="hidden" value="{{ post.PostId }}" />
-                                        <input name="action" type="hidden" value="unflag" />
-                                    </form>
-                                    <a href="#" onclick="$('#unflagform')[0].submit();return false;">Unflag Post</a>
-                                </li>
-                            {% endif %}
-                            {% if post.canDelete %}
-                                <li>
-                                    <form hidden id="deleteform" method="POST" accept-charset="UTF-8">
-                                        <input name="post" type="hidden" value="{{ post.PostId }}" />
-                                        <input name="reason" type="hidden" value="" />
-                                        <input name="action" type="hidden" value="delete" />
-                                    </form>
-                                    <a href="#" onclick="$('#deleteform')[0].submit();return false;">Delete Post</a>
-                                </li>
-                            {% endif %}
-                            {% if post.canUnDelete %}
-                                <li>
-                                    <form hidden id="undeleteform" method="POST" accept-charset="UTF-8">
-                                        <input name="post" type="hidden" value="{{ post.PostId }}" />
-                                        <input name="action" type="hidden" value="undelete" />
-                                    </form>
-                                    <a href="#" onclick="$('#undeleteform')[0].submit();return false;">Undelete Post</a>
-                                </li>
-                            {% endif %}
+                    <ul class="actionlist">
+                        <li><a href="/gallery/post/show/{{ post.PostId }}/" onclick="return toggleEdit();">Edit</a></li>
+                        {% if post.canApprove %}
                             <li>
-                                <a id="poolaction" href="#"></a><span id="poolactionworking" hidden>
-                                <small>Processing...</small></span>
-                                <div class="pooleditbox">
-                                    <label>Search for Pool:</label><br />
-                                    <input id="pooleditfield" type="text" />
-                                    <ul id="poolautocomplete">
-                                    </ul>
+                                <form hidden id="approveform" method="POST" accept-charset="UTF-8">
+                                    <input name="post" type="hidden" value="{{ post.PostId }}" />
+                                    <input name="action" type="hidden" value="approve" />
+                                </form>
+                                <a href="#" onclick="$('#approveform')[0].submit();return false;">Approve Post</a>
+                            </li>
+                        {% endif %}
+                        {% if post.canFlag %}
+                            <li>
+                                <a id="flagaction" href="#">{# No text for no javascript #}</a>
+                                <div class="flageditbox">
+                                    <form method="POST" accept-charset="UTF-8">
+                                        <label>Reason:</label><br />
+                                        <input name="post" type="hidden" value="{{ post.PostId }}" />
+                                        <input id="flag-edit-text" name="reason" type="text" />
+                                        <input name="action" type="hidden" value="flag" />
+                                        <input type="submit" value="Flag" />
+                                    </form>
                                 </div>
                             </li>
+                        {% endif %}
+                        {% if post.canUnflag %}
                             <li>
-                                {% if isFavorited %}
-                                    <form id="favorite-form" method="POST">
-                                        <input type="hidden" name="action" value="remove-favorite" />
-                                        <a href="#" onclick="document.getElementById('favorite-form').submit();return false;">Remove from Favorites</a>
-                                    </form>
-                                {% else %}
-                                    <form id="favorite-form" method="POST">
-                                        <input type="hidden" name="action" value="add-favorite" />
-                                        <a href="#" onclick="document.getElementById('favorite-form').submit();return false;">Add to Favorites</a>
-                                    </form>
-                                {% endif %}
+                                <form hidden id="unflagform" method="POST" accept-charset="UTF-8">
+                                    <input name="post" type="hidden" value="{{ post.PostId }}" />
+                                    <input name="action" type="hidden" value="unflag" />
+                                </form>
+                                <a href="#" onclick="$('#unflagform')[0].submit();return false;">Unflag Post</a>
                             </li>
-                            {% if post.canSetAvatar %}
-                                <li>
-                                    <form id="set-avatar-form" method="POST">
-                                        <input type="hidden" name="action" value="set-avatar" />
-                                        <a href="#" onclick="document.getElementById('set-avatar-form').submit();return false;">Set as Avatar</a>
-                                    </form>
-                                </li>
+                        {% endif %}
+                        {% if post.canDelete %}
+                            <li>
+                                <form hidden id="deleteform" method="POST" accept-charset="UTF-8">
+                                    <input name="post" type="hidden" value="{{ post.PostId }}" />
+                                    <input name="reason" type="hidden" value="" />
+                                    <input name="action" type="hidden" value="delete" />
+                                </form>
+                                <a href="#" onclick="$('#deleteform')[0].submit();return false;">Delete Post</a>
+                            </li>
+                        {% endif %}
+                        {% if post.canUnDelete %}
+                            <li>
+                                <form hidden id="undeleteform" method="POST" accept-charset="UTF-8">
+                                    <input name="post" type="hidden" value="{{ post.PostId }}" />
+                                    <input name="action" type="hidden" value="undelete" />
+                                </form>
+                                <a href="#" onclick="$('#undeleteform')[0].submit();return false;">Undelete Post</a>
+                            </li>
+                        {% endif %}
+                        <li>
+                            <a id="poolaction" href="#"></a><span id="poolactionworking" hidden>
+                            <small>Processing...</small></span>
+                            <div class="pooleditbox">
+                                <label>Search for Pool:</label><br />
+                                <input id="pooleditfield" type="text" />
+                                <ul id="poolautocomplete">
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            {% if isFavorited %}
+                                <form id="favorite-form" method="POST">
+                                    <input type="hidden" name="action" value="remove-favorite" />
+                                    <a href="#" onclick="document.getElementById('favorite-form').submit();return false;">Remove from Favorites</a>
+                                </form>
+                            {% else %}
+                                <form id="favorite-form" method="POST">
+                                    <input type="hidden" name="action" value="add-favorite" />
+                                    <a href="#" onclick="document.getElementById('favorite-form').submit();return false;">Add to Favorites</a>
+                                </form>
                             {% endif %}
-                        </ul>
-                    </div>      {# Actions div box #}
+                        </li>
+                        {% if post.canSetAvatar %}
+                            <li>
+                                <form id="set-avatar-form" method="POST">
+                                    <input type="hidden" name="action" value="set-avatar" />
+                                    <a href="#" onclick="document.getElementById('set-avatar-form').submit();return false;">Set as Avatar</a>
+                                </form>
+                            </li>
+                        {% endif %}
+                    </ul>
                 </li>
                 {% endif %} {# post.canEdit #}
             </ul>
@@ -212,15 +206,15 @@
                             <object style="position:absolute;top:0;left:0;width:100%;height:100%;" data="{{ post.downloadUrl }}"></object>
                         </div>
                     {% elseif post.Extension == "webm" %}
-                        <video class="previewImg" preload controls loop=true>
+                        <video class="preview-img" preload controls loop=true>
                             <source src="{{ post.downloadUrl }}" type="video/webm" />
                             Your browser does not support the video tag.
                         </video>
                     {% else %}
                         {% if post.previewUrl==post.downloadUrl %}
-                            <img class="previewImg" src="{{ post.previewUrl }}" />
+                            <img class="preview-img" src="{{ post.previewUrl }}" />
                         {% else %}
-                            <a href="{{ post.downloadUrl }}"><img class="previewImg" src="{{ post.previewUrl }}" /></a>
+                            <a href="{{ post.downloadUrl }}"><img class="preview-img" src="{{ post.previewUrl }}" /></a>
                         {% endif %}
                     {% endif %}
                 </p>
@@ -231,7 +225,7 @@
                     {% if user.UserId > 0 %}<a href="/gallery/post/show/{{ post.PostId }}/" onclick="return toggleEdit();">Edit</a> | {% endif %}<a href="{{ post.downloadUrl }}">Download</a>
                 </p>
                 <div class="posteditbox">
-                    <a id="editanchor" />
+                    <a id="editanchor">&nbsp;</a>
                     <form method="POST" accept-charset="UTF-8">
                         <input type="hidden" name="action" value="edit" />
                         <label class="formlabel">Rating</label>         <input name="rating" type="radio"{% if post.Rating=='e' %} checked{% endif %} value="e" /><label>Explicit</label>

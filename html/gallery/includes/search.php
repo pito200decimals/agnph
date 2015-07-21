@@ -20,12 +20,26 @@ function CreatePostSearchSQL($search_string, $posts_per_page, $page, &$can_sort_
     $sortOrder = "T.PostId DESC";  // Will effectively be the same as DateUploaded DESC.
     $can_sort_pool = false;
     $matches = array();
-    // Safe to use preg_match here.
-    if (preg_match("/^.*pool:(\d+)($|[^\d].*$)/i", $search_string, $matches)) {
-        // Pool search, use this as default (with old default as tiebreaker).
-        $sortOrder = "T.PoolItemOrder ASC, ".$sortOrder;
-        $can_sort_pool = true;
-        $pool_sort_id = $matches[1];
+    // If pool name is specified, replace with id here.
+    // Safe to use preg_match here, as user input is only understood if formatted properly.
+    if (preg_match("/^.*pool:([^ ]*)($| .*)/", $search_string, $matches)) {
+        $pool_name = $matches[1];
+        $pool_name = str_replace("_", " ", $pool_name);  // Un-escape out the underscores.
+        $escaped_pool_name = sql_escape($pool_name);
+        if (sql_query_into($result, "SELECT * FROM ".GALLERY_POOLS_TABLE." WHERE UPPER(Name)=UPPER('$escaped_pool_name');", 1)) {
+            $pool_id = $result->fetch_assoc()['PoolId'];
+            $replacement = "pool:$pool_id";
+            $search_string = mb_ereg_replace("^(.*)(pool:[^ ]*)($| .*)", "\\1$replacement\\3", $search_string);
+            $sortOrder = "T.PoolItemOrder ASC, ".$sortOrder;
+            $can_sort_pool = true;
+            $pool_sort_id = $matches[1];
+        } else if (is_numeric($pool_name)) {
+            $sortOrder = "T.PoolItemOrder ASC, ".$sortOrder;
+            $can_sort_pool = true;
+            $pool_sort_id = $pool_name;
+        } else {
+            return "FALSE";  // No pool found, so no results.
+        }
     }
     // If order specified, use new order.
     $lower_search_string = mb_strtolower($search_string);
