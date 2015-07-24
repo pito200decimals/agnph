@@ -4,7 +4,6 @@
 // If new index is < old index, move chapters towards end until desired index is reached.
 // If new index is > old index, move chapters towards front until desired index is reached.
 
-define("DEBUG", false);
 include_once("../header.php");
 include_once(SITE_ROOT."fics/includes/functions.php");
 

@@ -106,17 +106,26 @@ function FillStoryInfo(&$story) {
 
     global $user;
     // Set up permissions.
-    if (isset($user) && CanUserEditStory($story, $user)) {
-        $story['canEdit'] = true;
-    }
-    if (isset($user) && CanUserFeatureStory($story, $user)) {
-        $story['canFeature'] = true;
-    }
-    if (isset($user) && CanUserDeleteStory($story, $user)) {
-        $story['canDelete'] = true;
-    }
-    if (isset($user) && CanUserUndeleteStory($story, $user)) {
-        $story['canUnDelete'] = true;
+    if (isset($user)) {
+        if (CanUserEditStory($story, $user)) {
+            $story['canEdit'] = true;
+        }
+        if (CanUserFeatureStory($story, $user)) {
+            $story['canFeature'] = true;
+        }
+        if (CanUserDeleteStory($story, $user)) {
+            $story['canDelete'] = true;
+        }
+        if (CanUserUndeleteStory($story, $user)) {
+            $story['canUnDelete'] = true;
+        }
+        if (sql_query_into($result, "SELECT * FROM ".FICS_USER_FAVORITES_TABLE." WHERE UserId=".$user['UserId']." AND StoryId=".$story['StoryId'].";", 1)) {
+            // Found a favorite.
+            $story['canUnfavorite'] = true;
+        } else {
+            // Did not find a favorite.
+            $story['canFavorite'] = true;
+        }
     }
 }
 

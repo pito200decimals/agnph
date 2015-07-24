@@ -80,6 +80,9 @@
     padding: 5px;
     background-color: rgb(191,223,255);
 }
+.storyblockfooter form {
+    display: inline;
+}
 .reviews {
     font-size: 75%;
 }

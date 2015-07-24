@@ -22,6 +22,7 @@
 
 {% block content %}
     <div style="padding: 5px">
+        {{ block('banner') }}
         {{ block('storyblock') }}
         {% if story.StoryNotes|length > 0 %}
             <div class="notesbox">

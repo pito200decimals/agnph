@@ -72,3 +72,4 @@ RewriteRule ^fics/search/?$ /fics/storyindex.php [QSA]
 RewriteRule ^fics/authors/?$ /fics/authorindex.php [QSA]
 RewriteRule ^fics/delete/(\d+)/?$ /fics/delete_story.php?sid=$1&action=delete
 RewriteRule ^fics/undelete/(\d+)/?$ /fics/delete_story.php?sid=$1&action=undelete
+RewriteRule ^fics/favorite/?$ /fics/edit_favorites.php

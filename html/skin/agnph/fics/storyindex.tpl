@@ -48,6 +48,7 @@
 {% use 'fics/storyblock.tpl' %}
 
 {% block content %}
+    {{ block('banner') }}
     {# Avoid taking up too much vertical space in the story index #}
     {% set restrictSummaryHeight=true %}
     <div style="padding: 5px;">

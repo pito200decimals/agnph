@@ -10,7 +10,6 @@ TODOs
 == GALLERY ==
 * Gallery permissions model
 * Verify tag aliasing works once admin support for that is added
-* Comment deletion
 * Gallery post descriptions
     - Should these edits be logged?
 - Gallery linking to source on delete
@@ -30,12 +29,13 @@ X Custom swf/webm thumbs when parent is set to image.
 - Tag suggestions
 - Collapse adjacent image pools
 - Fix mobile layout table cell backgrounds
+- Regenerate thumbnail functionality
 
 == FICS ==
 * Fics permissions model
 * User favorites (story, author)
+    - Do we want to be able to favorite authors?
 * Author following
-* Comment deletion
 - Index page, including news and featured stories, perhaps random selection
 - Ability to subscribe for email/PM notifications (for your stories and watching others)
 - Breakdown of views per-chapter
