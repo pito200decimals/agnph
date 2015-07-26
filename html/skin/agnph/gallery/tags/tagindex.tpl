@@ -18,13 +18,15 @@
                     <tr>
                         <td><div><strong>Name</strong></div></td>
                         <td><div><strong>Type</strong></div></td>
+                        <td><div><strong>Count</strong></div></td>
                     </tr>
                 </thead>
                 <tbody>
                     {% for tag in tags %}
                         <tr>
                             <td><div><a class="{{ tag.typeClass }}" href="/gallery/post/?search={{ tag.Name }}">{{ tag.Name }}</a></div></td>
-                            <td><div>{{ tag.typeName }}</div></td>
+                            <td><div>{{ tag.typeName }}{% if tag.EditLocked %} (locked){% endif %}</div></td>
+                            <td><div>{{ tag.tagCounts }}</div></td>
                         </tr>
                     {% endfor %}
                 </tbody>
