@@ -37,4 +37,15 @@ function GetAvatarURL($user) {
     return DEFAULT_AVATAR_PATH;
 }
 
+function ShouldShowAdminTab($user) {
+    // Permissions: A=Super Admin, R=Forums, G=Gallery, F=Fics, O=Oekaki, I=IRC, M=Minecraft
+    // Admin tab available to everyone except IRC and Minecraft.
+    if (contains($user['Permissions'], 'A')) return true;
+    if (contains($user['Permissions'], 'R')) return true;
+    if (contains($user['Permissions'], 'G')) return true;
+    if (contains($user['Permissions'], 'F')) return true;
+    if (contains($user['Permissions'], 'O')) return true;
+    return false;
+}
+
 ?>

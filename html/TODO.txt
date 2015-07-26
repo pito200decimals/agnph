@@ -25,7 +25,8 @@ X Custom swf/webm thumbs when parent is set to image.
 - "Popular" recent posts, maybe by # of views in last day/week/month?
 - Back/Next buttons
 - Handle parent cleanup on post delete?
-- Page for global tag edits/deletes/etc
+- Page for global tag edits/deletes/etc [Editing DONE]
+    - Deletes
 - Tag suggestions
 - Collapse adjacent image pools
 - Fix mobile layout table cell backgrounds

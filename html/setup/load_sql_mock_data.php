@@ -35,7 +35,7 @@ do_or_die(sql_query(
     (UserID, UserName, DisplayName, Email, Password, Usermode, DOB, Permissions, Title, Species, JoinTime, LastVisitTime)
     VALUES
     (1, 'User1', 'User1', 'user1@example.com', '".md5("Password 1")."', 1, '2003-02-01', 'A', 'Most Awesome Cyndaquil', 'Cyndaquil', $now, $now),
-    (2, 'User2', 'User2', 'user2@example.com', '".md5("Password 2")."', 1, '2006-05-04', '', 'Hungry Resident', 'Totodile', $now, $now),
+    (2, 'User2', 'User2', 'user2@example.com', '".md5("Password 2")."', 1, '2006-05-04', 'F', 'Hungry Resident', 'Totodile', $now, $now),
     (3, 'User3', 'User3', 'user3@example.com', '".md5("Password 3")."', 1, '2009-08-07', '', 'Generic Title', 'Chikorita', $now, $now);"));
 // Forums settings.
 do_or_die(sql_query(
@@ -57,7 +57,7 @@ do_or_die(sql_query(
     (UserId, FicsPermissions)
     VALUES
     (1, 'A'),
-    (2, 'N'),
+    (2, 'A'),
     (3, 'N');"));
 
 WriteBio(1, "Bio of User1!<br />TEST");

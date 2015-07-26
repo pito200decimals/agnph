@@ -36,6 +36,10 @@ if (isset($user)) {
     // TODO: Record page viewed, for both users and guests.
     RecordUserIP($user);
     $user['avatarURL'] = GetAvatarURL($user);
+    // Check if admin tab should be visible.
+    if (ShouldShowAdminTab($user)) {
+        $user['showAdminTab'] = true;
+    }
     $vars['user'] = &$user;
 }
 

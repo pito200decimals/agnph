@@ -142,6 +142,8 @@ function SetHeaderHighlight() {
         $vars['nav_section'] = "user";
     } else if (startsWith($url, "/about")) {
         $vars['nav_section'] = "about";
+    } else if (startsWith($url, "/admin")) {
+        $vars['nav_section'] = "admin";
     }
 }
 

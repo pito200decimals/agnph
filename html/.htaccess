@@ -73,3 +73,11 @@ RewriteRule ^fics/authors/?$ /fics/authorindex.php [QSA]
 RewriteRule ^fics/delete/(\d+)/?$ /fics/delete_story.php?sid=$1&action=delete
 RewriteRule ^fics/undelete/(\d+)/?$ /fics/delete_story.php?sid=$1&action=undelete
 RewriteRule ^fics/favorite/?$ /fics/edit_favorites.php
+
+#Rewrites for admin pages
+RewriteRule ^admin/?$ /admin/site/site.php
+RewriteRule ^admin/forums/?$ /admin/forums/forums.php
+# TODO: Change to more pages.
+RewriteRule ^admin/gallery/?$ /admin/gallery/tag_management.php
+# TODO: Change to more pages.
+RewriteRule ^admin/fics/?$ /admin/fics/tag_management.php
