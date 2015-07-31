@@ -24,6 +24,7 @@ $(document).ready(function() {
     var toggled_visible_mobile = false;
     $("#main_menu_icon").bind("touchstart click", function(e) {
         e.preventDefault();
+        $(this).toggleClass("nav-dropdown-tray");
         if (toggled_visible_mobile) {
             $(".navigation_left").removeAttr("style");
         } else {

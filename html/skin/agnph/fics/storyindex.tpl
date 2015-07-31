@@ -51,18 +51,16 @@
     {{ block('banner') }}
     {# Avoid taking up too much vertical space in the story index #}
     {% set restrictSummaryHeight=true %}
-    <div style="padding: 5px;">
-        {% if searchTerms %}
-            <h3>Search Results: {{ searchTerms }}</h3>
-        {% endif %}
-        {% if stories|length > 0 %}
-            {% for story in stories %}
-                {{ block('storyblock') }}
-            {% endfor %}
-        {% else %}
-            No stories found
-        {% endif %}
-    </div>
+    {% if searchTerms %}
+        <h3>Search Results: {{ searchTerms }}</h3>
+    {% endif %}
+    {% if stories|length > 0 %}
+        {% for story in stories %}
+            {{ block('storyblock') }}
+        {% endfor %}
+    {% else %}
+        No stories found
+    {% endif %}
     <div>
         {% autoescape false %}{{ iterator }}{% endautoescape %}
     </div>

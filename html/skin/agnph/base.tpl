@@ -54,42 +54,46 @@
     </head>
     <body>
         <div class="site-navbar">
-            {# float right goes before normal nav, so it positions correctly #}
-            <ul class="navigation_right">
-                {% if user %}
-                    <noscript><li><a href="/logout/">Log out</a></li></noscript>
-                    {# TODO: Mail notifications #}
-                    <li class="navigation_left"><a href="/user/{{ user.UserId }}/mail/"><img src="/images/message.png" /></a></li>
-                    <li id="account_link">
-                        <a href="/user/{{ user.UserId }}/"><img src="{{ user.avatarURL }}" />{{ user.DisplayName }}</a>
-                        <ul id="account_dropdown" class="" hidden>
-                            <li><a href="/user/{{ user.UserId }}/">Profile</a></li>
-                            <li><a href="/user/{{ user.UserId }}/preferences/">Settings</a></li>
-                            <li><a href="/logout/">Log out</a></li>
-                        </ul>
-                    </li>
-                {% else %}
-                    <li><a href="/login/">Login</a></li>
-                    <li><a href="/register/">Register</a></li>
-                {% endif %}
-            </ul>
-            <img id="main_menu_icon" src="/images/menu-icon.png" />
-            <ul class="navigation_left">
-                <li{% if nav_section=="home" %} class="selected-nav"{% endif %}><a href="/">Home</a></li>
-                <li{% if nav_section=="forums" %} class="selected-nav"{% endif %}><a href="/forums/">Forums</a></li>
-                <li{% if nav_section=="gallery" %} class="selected-nav"{% endif %}><a href="/gallery/post/">Gallery</a></li>
-                <li{% if nav_section=="fics" %} class="selected-nav"{% endif %}><a href="/fics/">Fics</a></li>
-                <li{% if nav_section=="user" %} class="selected-nav"{% endif %}><a href="/user/list/">Users</a></li>
-                <li{% if nav_section=="about" %} class="selected-nav"{% endif %}><a href="/about/">About</a></li>
-                {% if user.showAdminTab %}<li{% if nav_section=="admin" %} class="selected-nav"{% endif %}><a href="/admin/">Admin</a></li>{% endif %}
-                {# TODO: Remove after debugging complete #}<li><a href="/setup/sql_setup.php">DEBUG Setup</a></li>
-                {# TODO: Remove after debugging complete #}{% if not user %}<li><a href="/login/?debug=true">DEBUG Login</a></li>{% endif %}
-            </ul>
+            <div id="site-navbar-container">
+                {# float right goes before normal nav, so it positions correctly #}
+                <ul class="navigation_right">
+                    {% if user %}
+                        <noscript><li><a href="/logout/">Log out</a></li></noscript>
+                        {# TODO: Mail notifications #}
+                        <li class="navigation_left"><a id="mail_icon" href="/user/{{ user.UserId }}/mail/"><img src="/images/message.png" /></a></li>
+                        <li id="account_link">
+                            <a href="/user/{{ user.UserId }}/"><img src="{{ user.avatarURL }}" />{{ user.DisplayName }}</a>
+                            <ul id="account_dropdown" class="" hidden>
+                                <li><a href="/user/{{ user.UserId }}/">Profile</a></li>
+                                <li><a href="/user/{{ user.UserId }}/preferences/">Settings</a></li>
+                                <li><a href="/logout/">Log out</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li><a href="/login/">Login</a></li>
+                        <li><a href="/register/">Register</a></li>
+                    {% endif %}
+                </ul>
+                <img id="main_menu_icon" src="/images/menu-icon.png" />
+                {# TODO: Adjust logo #}
+                {# <a id="logo" href="/"><img src="/images/logo.png" /></a> #}
+                <ul class="navigation_left">
+                    <li{% if nav_section=="home" %} class="selected-nav"{% endif %}><a href="/">Home</a></li>
+                    <li{% if nav_section=="forums" %} class="selected-nav"{% endif %}><a href="/forums/">Forums</a></li>
+                    <li{% if nav_section=="gallery" %} class="selected-nav"{% endif %}><a href="/gallery/post/">Gallery</a></li>
+                    <li{% if nav_section=="fics" %} class="selected-nav"{% endif %}><a href="/fics/">Fics</a></li>
+                    <li{% if nav_section=="user" %} class="selected-nav"{% endif %}><a href="/user/list/">Users</a></li>
+                    <li{% if nav_section=="about" %} class="selected-nav"{% endif %}><a href="/about/">About</a></li>
+                    {% if user.showAdminTab %}<li{% if nav_section=="admin" %} class="selected-nav"{% endif %}><a href="/admin/">Admin</a></li>{% endif %}
+                    {# TODO: Remove after debugging complete #}<li><a href="/setup/sql_setup.php">DEBUG Setup</a></li>
+                    {# TODO: Remove after debugging complete #}{% if not user %}<li><a href="/login/?debug=true">DEBUG Login</a></li>{% endif %}
+                </ul>
+            </div>
             <div class="Clear">&nbsp;</div>
         </div>
         <div id="mainbody">
             <div id="header">
-                {# TODO: Add site banner here, above section navigation #}
+                {# TODO: Add site banner here, above section navigation? #}
                 {% block section_navigation %}
                 {% endblock %}
             </div>

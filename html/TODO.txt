@@ -84,6 +84,7 @@ X All comment user links should go to respective sections.
 - Ensure registered but un-activated users don't exist.
 - Perhaps a badge/text to tell users this account was created for archive and hasn't logged in before?
 - Display section permissions
+- Enable admin changing of email without confirmation (if empty, or unactivated?)
 
 
 == Things to remember when setting up site ==
