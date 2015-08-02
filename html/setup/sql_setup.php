@@ -190,7 +190,8 @@ do_or_die(sql_query(
         TagsAdded VARCHAR(512) DEFAULT '',
         TagsRemoved VARCHAR(512) DEFAULT '',
         PropertiesChanged VARCHAR(512) DEFAULT '',
-        PRIMARY KEY(Id, PostId, Timestamp)
+        BatchId INT(11) DEFAULT 0,".  // Id for storing groups of related tag edits. 0 if unbatched.
+       "PRIMARY KEY(Id, PostId, Timestamp)
     ) DEFAULT CHARSET=utf8;"));
 // General information about pools.
 do_or_die(sql_query(

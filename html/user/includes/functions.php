@@ -40,7 +40,7 @@ function CanUserEditBasicInfo($user, $profile_user) {
 function CanUserViewPMs($user, $profile_user) {
     if (!IsUserActivated($user)) return false;
     // TODO: Do we want to allow admins to view messages?
-     if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
+    if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
     if ($user['UserId'] == $profile_user['UserId']) return true;
     return false;
 }
@@ -58,6 +58,40 @@ function DateStringToReadableString($datestr) {
     // TODO: Account properly for time zone conversion. Probably just parse it manually.
     $datetime = strtotime($datestr);
     return FormatDate($datetime, PROFILE_DOB_FORMAT);
+}
+
+function CanUserMakeSiteAdmin($user) {
+    if (!IsUserActivated($user)) return false;
+    if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
+    return false;
+}
+
+function CanUserMakeForumsAdmin($user) {
+    if (!IsUserActivated($user)) return false;
+    if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
+    if (mb_strpos($user['Permissions'], 'R') !== FALSE) return true;
+    return false;
+}
+
+function CanUserMakeGalleryAdmin($user) {
+    if (!IsUserActivated($user)) return false;
+    if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
+    if (mb_strpos($user['Permissions'], 'G') !== FALSE) return true;
+    return false;
+}
+
+function CanUserMakeFicsAdmin($user) {
+    if (!IsUserActivated($user)) return false;
+    if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
+    if (mb_strpos($user['Permissions'], 'F') !== FALSE) return true;
+    return false;
+}
+
+function CanUserMakeOekakiAdmin($user) {
+    if (!IsUserActivated($user)) return false;
+    if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
+    if (mb_strpos($user['Permissions'], 'O') !== FALSE) return true;
+    return false;
 }
 
 function GetAdminBadge($profile_user) {

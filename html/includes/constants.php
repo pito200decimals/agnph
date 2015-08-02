@@ -125,6 +125,7 @@ define("MAX_GALLERY_BLACKLIST_TAGS", 50);
 define("GALLERY_PROFILE_SHOW_NUM_UPLOADS", 6);
 define("GALLERY_PROFILE_SHOW_NUM_FAVORITES", 6);
 define("INITIAL_GALLERY_UPLOAD_LIMIT", 10);
+define("GALLERY_ADMIN_TAG_ALIAS_CHANGE_LIMIT", 1000);  // Max # of posts to edit when adding an alias.
 
 // Fics-related
 $FICS_TAG_TYPES = array(

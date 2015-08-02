@@ -80,6 +80,9 @@ if ($new_alias_exists) {
                     } else {
                         sql_query("UPDATE ".ALIAS_TABLE." SET AliasTagId=$alias_tag_id, CreatorUserId=$uid, Timestamp=$now WHERE TagId=$tag_id;");
                     }
+                    // Record alias change here, so parent php file can handle it if desired.
+                    $original_tag_id = $tag_id;
+                    $new_alias_tag_id = $renamed_alias_tag['TagId'];
                 }
             }
         }

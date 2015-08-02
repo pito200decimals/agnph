@@ -9,7 +9,6 @@ TODOs
 
 == GALLERY ==
 * Gallery permissions model
-* Verify tag aliasing works once admin support for that is added
 * Gallery post descriptions
     - Should these edits be logged?
 - Gallery linking to source on delete
@@ -48,8 +47,6 @@ X Custom swf/webm thumbs when parent is set to image.
 * Splash for Disclaimer/Warning/Age gate.
 * Oekaki section
 * Admin site management
-    - Tag aliasing support per-section (Note: Ensure can't add cycles)
-    - Tag implication support per-section
 * Timezone/date management
 * General help pages
 * General about section, admin bios, etc.

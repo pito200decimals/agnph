@@ -80,8 +80,13 @@
         <ul>
             {% if canEditBasicInfo %}<li><a href="/user/{{ profile.user.UserId }}/preferences/">Change Avatar</a></li>{% endif %}
             {% if user %}<li><a href="/user/{{ user.UserId }}/mail/compose/?to={{ profile.user.DisplayName|url_encode }}">Send a Message</a></li>{% endif %}
-            <li>Make Administrator</li>
-            <li>Revoke Administrator</li>
+            {% if canMakeSiteAdmin %}
+                {% if isUserSiteAdmin %}
+                    <li>Revoke Administrator</li>
+                {% else %}
+                    <li>Make Administrator</li>
+                {% endif %}
+            {% endif %}
         </ul>
 {% endblock %}
 

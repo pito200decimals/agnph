@@ -39,6 +39,7 @@
                     in_flight_ajax = null;
                     if (filter == "create") $("#tag-filter").prop("checked", true);
                     SetTags(data);
+                    $("#tag-container").empty();
                     if (cb) cb();
                 },
                 error: function() {
@@ -48,15 +49,13 @@
         function SetTags(tags) {
             var tag_list = $("#tag-list");
             tag_list.empty();
-            if (tags.length == 0) {
-                tag_list.append("<p>No tags found</p>");
-            } else {
+            if (tags.length > 0) {
                 tags.forEach(function(tag) {
                     var option_text = tag.name;
                     if (tag.alias != null) {
                         option_text += " → " + tag.alias.name;
                     }
-                    var option = $("<option class='"+tag.class+"'>"+option_text+"</option>");
+                    var option = $("<option class='"+tag.class+"' value='"+tag.name+"'>"+option_text+"</option>");
                     tag_list.append(option);
                     $.data(option[0], "tag", tag);
                 });
@@ -95,7 +94,7 @@
                     container.append($("<p></p>").append($("<label>Implied by:</label>")).append(implied_by_list));
                 }
                 container.append($("<p><label style='vertical-align: top;'>Notes:</label><textarea style='width: 250px; height: 75px;' id='note'>"+tag.note+"</textarea></p>"));
-                container.append($("<p><input id='save-button' type='button' value='Save Changes'/></p>"));
+                container.append($("<p><input id='save-button' type='button' value='Save Changes' /></p>"));
                 InitFormEvents();
                 tag_data = tag;
             }
@@ -137,7 +136,9 @@
                     var selected_value = $("#tag-list").val();
                     $("#tag-list").val("");
                     DoAjax(function() {
-                        $("#tag-list").val(selected_value).change();
+                        if ($("#tag-list option[value='"+selected_value+"']").length > 0) {
+                            $("#tag-list").val(selected_value).change();
+                        }
                     });
                 });
             });

@@ -37,6 +37,8 @@ if (isset($user)) {
     $vars['canEditBasicInfo'] = CanUserEditBasicInfo($user, $profile_user);
     $vars['canSeePrivateInfo'] = CanUserSeePrivateInfo($user, $profile_user);
     $vars['canSeeAdminInfo'] = CanUserSeeAdminInfo($user);
+    $vars['canMakeSiteAdmin'] = CanUserMakeSiteAdmin($user);
+    $vars['isUserSiteAdmin'] = (mb_strpos($user['Permissions'], 'A') !== FALSE);
     if (mb_strlen($profile_user['RegisterIP']) == 0 || mb_strpos($profile_user['KnownIPs'], $profile_user['RegisterIP']) !== FALSE) {
         $profile_user['ips'] = $profile_user['KnownIPs'];
     } else {

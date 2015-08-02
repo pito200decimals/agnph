@@ -18,14 +18,14 @@ function CollectItems($table_name, $sql_order, &$items, $items_per_page, &$itera
     }
 
     $offset = $items_per_page * ($page - 1);
-    sql_query_into($result, "SELECT * FROM $table_name $sql_order LIMIT $items_per_page OFFSET $offset;", 0) or RenderErrorPage($error_msg);
+    sql_query_into($result, "SELECT * FROM $table_name T $sql_order LIMIT $items_per_page OFFSET $offset;", 0) or RenderErrorPage($error_msg);
     $items = array();
     while ($row = $result->fetch_assoc()) {
         $items[] = $row;
     }
 
     // Get total number, and construct iterator.
-    sql_query_into($result, "SELECT count(*) FROM $table_name $sql_order;", 1) or RenderErrorPage($error_msg);
+    sql_query_into($result, "SELECT count(*) FROM $table_name T $sql_order;", 1) or RenderErrorPage($error_msg);
     $total_num_items = $result->fetch_assoc()['count(*)'];
     $num_max_pages = (int)(($total_num_items + $items_per_page - 1) / $items_per_page);
     if ($num_max_pages > 1) {

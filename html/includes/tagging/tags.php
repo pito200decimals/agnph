@@ -9,10 +9,10 @@
 
 include_once(SITE_ROOT."includes/util/listview.php");
 
+$clauseArray = array();
 if (isset($_GET['prefix'])) {
     $prefix = mb_strtolower($_GET['prefix']);
     $clauses = explode(" ", $prefix);
-    $clauseArray = array();
     foreach ($clauses as $clause) {
         $isTypeSearch = false;
         foreach ($TAG_TYPE_MAP as $char => $name) {
@@ -27,10 +27,10 @@ if (isset($_GET['prefix'])) {
             $clauseArray[] = "(LOWER(Name) LIKE '$escaped_prefix%')";
         }
     }
-    if (sizeof($clauseArray) > 0) {
-        $search_clause = "WHERE ".implode(" AND ", $clauseArray);
-    }
 }
+// Only include tags that have at least one item.
+$clauseArray[] = "EXISTS(SELECT 1 FROM ".TAG_ITEM_TABLE." P WHERE T.TagId=P.TagId)";
+$search_clause = "WHERE ".implode(" AND ", $clauseArray);
 
 if (!isset($search_clause)) $search_clause = "";
 if (!isset($prefix)) $prefix = "";
