@@ -377,6 +377,7 @@ function CreateItemTagTables($tag_table_name, $item_tag_table_name, $alias_table
             CreatorUserId INT(11) NOT NULL,
             ChangeTypeUserId INT(11) NOT NULL,
             ChangeTypeTimestamp INT(11) NOT NULL,
+            Note VARCHAR(256) NOT NULL,
             PRIMARY KEY(TagId, Name)
         ) DEFAULT CHARSET=utf8;"));
     // Table for item-tag mapping.
@@ -386,6 +387,7 @@ function CreateItemTagTables($tag_table_name, $item_tag_table_name, $alias_table
             TagId INT(11) NOT NULL,
             PRIMARY KEY($item_id, TagId)
         ) DEFAULT CHARSET=utf8;"));
+    // Table for tag aliases.
     do_or_die(sql_query(
         "CREATE TABLE $alias_table_name (
             TagId INT(11) NOT NULL,
@@ -394,6 +396,7 @@ function CreateItemTagTables($tag_table_name, $item_tag_table_name, $alias_table
             Timestamp INT(11) NOT NULL,
             PRIMARY KEY(TagId)
         ) DEFAULT CHARSET=utf8;"));
+    // Table for tag implications.
     do_or_die(sql_query(
         "CREATE TABLE $implication_table_name (
             TagId INT(11) NOT NULL,

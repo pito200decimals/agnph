@@ -16,6 +16,8 @@ if (!$vars['canAdminGallery']) {
 }
 
 define("TABLE", GALLERY_TAG_TABLE);
+define("ALIAS_TABLE", GALLERY_TAG_ALIAS_TABLE);
+define("IMPLICATION_TABLE", GALLERY_TAG_IMPLICATION_TABLE);
 $TAG_TYPE_MAP = $GALLERY_TAG_TYPES;
 include_once(SITE_ROOT."admin/tags/save_tag_ajax.php");
 return;

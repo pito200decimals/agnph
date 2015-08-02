@@ -5,7 +5,6 @@
 {% endblock %}
 
 {% block section_navigation %}
-    <h3>Administrator Control Panel</h3>
     <ul class="section-nav">
         {% if canAdminSite %}<li><a href="/admin/">Site</a></li>{% endif %}
         {% if canAdminForums %}<li><a href="/admin/forums/">Forums</a></li>{% endif %}
@@ -15,4 +14,5 @@
 {% endblock %}
 
 {% block content %}
+    <h3>Administrator Control Panel</h3>
 {% endblock %}

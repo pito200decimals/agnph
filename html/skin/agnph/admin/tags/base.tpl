@@ -5,7 +5,7 @@
         var tag_data = null;
         $(document).ready(function() {
             var in_flight_ajax = null;
-            $("#search").change(function() {
+            $("#search, #tag-filter, #alias-filter, #implication-filter, #create-filter").change(function() {
                 if (in_flight_ajax) {
                     in_flight_ajax.abort();
                 }
@@ -20,17 +20,24 @@
         });
         function DoAjax(cb) {
             var searchTerm = $("#search").val();
+            var filter = "tag";
+            if ($("#tag-filter").is(":checked")) filter = "tag";
+            if ($("#alias-filter").is(":checked")) filter = "alias";
+            if ($("#implication-filter").is(":checked")) filter = "implication";
+            if ($("#create-filter").is(":checked")) filter = "create";
             $("#searching-span").show();
             return $.ajax({
                 url: "/admin/{{ section }}/fetch_tag_ajax.php",
                 data: {
-                    search: searchTerm
+                    search: searchTerm,
+                    filter: filter
                 },
                 dataType: "json",
                 method: "GET",
                 success: function(data) {
                     $("#searching-span").hide();
                     in_flight_ajax = null;
+                    if (filter == "create") $("#tag-filter").prop("checked", true);
                     SetTags(data);
                     if (cb) cb();
                 },
@@ -45,7 +52,11 @@
                 tag_list.append("<p>No tags found</p>");
             } else {
                 tags.forEach(function(tag) {
-                    var option = $("<option class='"+tag.class+"'>"+tag.name+"</option>");
+                    var option_text = tag.name;
+                    if (tag.alias != null) {
+                        option_text += " → " + tag.alias.name;
+                    }
+                    var option = $("<option class='"+tag.class+"'>"+option_text+"</option>");
                     tag_list.append(option);
                     $.data(option[0], "tag", tag);
                 });
@@ -63,6 +74,27 @@
                 container.append($("<p></p>").append($("<label>Type:</label>")).append(type_select));
                 container.append($("<p><label>Type Lock:</label><select id='edit-lock'><option "+(tag.editLock==1?"":"selected")+">- - -</option><option "+(tag.editLock==1?"selected":"")+">Locked</option></select></p>"));
                 container.append($("<p><label>Add Lock:</label><select id='add-lock'><option "+(tag.addLock==1?"":"selected")+">- - -</option><option "+(tag.addLock==1?"selected":"")+">Locked</option></select></p>"));
+                container.append($("<p><label>Alias:</label><input id='alias' type='text' value='"+(tag.alias==null?"":tag.alias.name)+"' /></p>"));
+                if (tag.aliased_by != null && tag.aliased_by.length > 0) {
+                    var alias_list = $("<ul style='list-style: none; display: inline-block; padding: 0px; margin: 0px;'></ul>");
+                    tag.aliased_by.forEach(function(tag) {
+                        alias_list.append($("<li style='display: inline-block; margin-left: 5px; margin-right: 5px;'><span class='"+tag.class+"'>"+tag.name+"</span></li>"));
+                    });
+                    container.append($("<p></p>").append($("<label>Aliased by:</label>")).append(alias_list));
+                }
+                var implied_list = "";
+                if (tag.implies != null && tag.implies.length > 0) {
+                    implied_list = tag.implies.map(function(tag) { return tag.name; }).join(" ");
+                }
+                container.append($("<p><label style='vertical-align: top;'>Implies:</label><textarea style='width: 250px; height: 50px;' id='implied-tags'>"+implied_list+"</textarea>"));
+                if (tag.implied_by != null && tag.implied_by.length > 0) {
+                    var implied_by_list = $("<ul style='list-style: none; display: inline-block; padding: 0px; margin: 0px;'></ul>");
+                    tag.implied_by.forEach(function(tag) {
+                        implied_by_list.append($("<li style='display: inline-block; margin-left: 5px; margin-right: 5px;'><span class='"+tag.class+"'>"+tag.name+"</span></li>"));
+                    });
+                    container.append($("<p></p>").append($("<label>Implied by:</label>")).append(implied_by_list));
+                }
+                container.append($("<p><label style='vertical-align: top;'>Notes:</label><textarea style='width: 250px; height: 75px;' id='note'>"+tag.note+"</textarea></p>"));
                 container.append($("<p><input id='save-button' type='button' value='Save Changes'/></p>"));
                 InitFormEvents();
                 tag_data = tag;
@@ -76,7 +108,10 @@
                     id: tag_data.id,
                     type: $("#tag-type").val(),
                     edit: $("#edit-lock").val(),
-                    add: $("#add-lock").val()
+                    add: $("#add-lock").val(),
+                    alias: $("#alias").val(),
+                    implied: $("#implied-tags").val(),
+                    note: $("#note").val()
                 },
                 method: "POST",
                 success: function() {
@@ -112,7 +147,12 @@
 
 {% block content %}
     <h3>{% block section %}[Section]{% endblock %} Tags</h3>
-    <p>Tag: <input id="search" type="text" />&nbsp;<small id="searching-span">Searching...</small></p>
+    <p>Search: <input id="search" type="text" />
+        <input id="tag-filter" name="filter" type="radio" checked />Tags
+        <input id="alias-filter" name="filter" type="radio" />Aliases
+        <input id="implication-filter" name="filter" type="radio" />Implications
+        <input id="create-filter" name="filter" type="radio" />Create New Tag</p>
+    <p><small id="searching-span">Searching...</small></p>
     <select id="tag-list" size="10" style="width: 100%;">
     </select>
     <div id="tag-container">

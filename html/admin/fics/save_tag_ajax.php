@@ -16,6 +16,8 @@ if (!$vars['canAdminFics']) {
 }
 
 define("TABLE", FICS_TAG_TABLE);
+define("ALIAS_TABLE", FICS_TAG_ALIAS_TABLE);
+define("IMPLICATION_TABLE", FICS_TAG_IMPLICATION_TABLE);
 $TAG_TYPE_MAP = $FICS_TAG_TYPES;
 include_once(SITE_ROOT."admin/tags/save_tag_ajax.php");
 return;
