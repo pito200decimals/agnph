@@ -40,6 +40,7 @@ X Custom swf/webm thumbs when parent is set to image.
 - Ability to subscribe for email/PM notifications (for your stories and watching others)
 - Breakdown of views per-chapter
 - Co-authors
+- RSS Feed?
 
 == SITE ==
 * Check for vuln's for style background-image URL

@@ -11,5 +11,12 @@
     </style>
 {% endblock %}
 
+{% block sub_section_navigation %}
+    <ul class="section-nav">
+        <li><a href="/admin/fics/">Settings</a></li>
+        <li><a href="/admin/fics/tags/">Tags</a></li>
+    </ul>
+{% endblock %}
+
 {% block section %}Fics{% endblock %}
 {% block type_list %}["Category", "Species", "Warning", "Character", "Series", "General"]{% endblock %}

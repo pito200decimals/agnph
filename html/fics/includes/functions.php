@@ -219,7 +219,8 @@ function GetUsers($uids) {
 }
 
 define("SCORES_THAT_COUNT", "SUM(CASE WHEN ReviewScore>0 THEN ReviewScore ELSE 0 END)");
-define("NUM_SCORES_THAT_COUNT", "SUM(CASE WHEN ReviewScore>0 THEN 1 ELSE 0 END)");
+define("NUM_SCORES_THAT_COUNT", "COUNT(CASE WHEN ReviewScore>0 THEN 1 ELSE NULL END)");
+define("NUM_REVIEWS", "COUNT(CASE WHEN IsReview THEN 1 ELSE NULL END)");
 
 // Does a full refresh on story stats. Updates ChapterCount, WordCount, TotalReviewStars, TotalReviews
 function UpdateStoryStats($sid) {
@@ -237,11 +238,11 @@ function UpdateStoryStats($sid) {
         $wordcount += $chapterWordCount;
         $viewcount += $chapter['Views'];
         // Also get chapter reviews.
-        if (sql_query_into($result, "SELECT ".SCORES_THAT_COUNT.", ".NUM_SCORES_THAT_COUNT.", sum(IsReview) FROM ".FICS_REVIEW_TABLE." WHERE ChapterId=$cid;", 0)) {
+        if (sql_query_into($result, "SELECT ".SCORES_THAT_COUNT." as C1, ".NUM_SCORES_THAT_COUNT." as C2, ".NUM_REVIEWS." as C3 FROM ".FICS_REVIEW_TABLE." WHERE ChapterId=$cid;", 0)) {
             $row = $result->fetch_assoc();
-            $totalStars = $row[SCORES_THAT_COUNT];
-            $totalRatings = $row[NUM_SCORES_THAT_COUNT];
-            $numReviews = $row['sum(IsReview)'];
+            $totalStars = $row['C1'];
+            $totalRatings = $row['C2'];
+            $numReviews = $row['C3'];
             sql_query("UPDATE ".FICS_CHAPTER_TABLE." SET WordCount=$wordcount, TotalStars=$totalStars, TotalRatings=$totalRatings, NumReviews=$numReviews WHERE ChapterId=$cid;");
         } else {
             sql_query("UPDATE ".FICS_CHAPTER_TABLE." SET WordCount=$wordcount WHERE ChapterId=$cid;");
@@ -249,11 +250,11 @@ function UpdateStoryStats($sid) {
     }
 
     // Also get story reviews.
-    if (sql_query_into($result, "SELECT ".SCORES_THAT_COUNT.", ".NUM_SCORES_THAT_COUNT.", sum(IsReview) FROM ".FICS_REVIEW_TABLE." WHERE StoryId='$escaped_sid';", 0)) {
+    if (sql_query_into($result, "SELECT ".SCORES_THAT_COUNT." as C1, ".NUM_SCORES_THAT_COUNT." as C2, ".NUM_REVIEWS." as C3 FROM ".FICS_REVIEW_TABLE." WHERE StoryId='$escaped_sid';", 0)) {
         $row = $result->fetch_assoc();
-        $totalStars = $row[SCORES_THAT_COUNT];
-        $totalRatings = $row[NUM_SCORES_THAT_COUNT];
-        $numReviews = $row['sum(IsReview)'];
+        $totalStars = $row['C1'];
+        $totalRatings = $row['C2'];
+        $numReviews = $row['C3'];
         sql_query("UPDATE ".FICS_STORY_TABLE." SET ChapterCount=$chapcount, WordCount=$wordcount, Views=$viewcount, TotalStars=$totalStars, TotalRatings=$totalRatings, NumReviews=$numReviews WHERE StoryId='$escaped_sid';");
     } else {
         sql_query("UPDATE ".FICS_STORY_TABLE." SET ChapterCount=$chapcount, WordCount=$wordcount, Views=$viewcount WHERE StoryId='$escaped_sid';");

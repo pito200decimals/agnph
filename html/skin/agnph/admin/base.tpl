@@ -11,6 +11,9 @@
         {% if canAdminGallery %}<li><a href="/admin/gallery/">Gallery</a></li>{% endif %}
         {% if canAdminFics %}<li><a href="/admin/fics/">Fics</a></li>{% endif %}
     </ul>
+    <div class="Clear">&nbsp;</div>
+    {% block sub_section_navigation %}
+    {% endblock %}
 {% endblock %}
 
 {% block content %}

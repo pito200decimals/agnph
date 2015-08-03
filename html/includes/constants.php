@@ -50,6 +50,7 @@ define("FICS_TAG_TABLE", "fics_tags");
 define("FICS_REVIEW_TABLE", "fics_reviews");
 define("FICS_TAG_ALIAS_TABLE", "fics_tag_aliases");
 define("FICS_TAG_IMPLICATION_TABLE", "fics_tag_implications");
+define("FICS_SITE_SETTINGS_TABLE", "fics_settings");
 
 // User Settings Defaults.
 define("DEFAULT_SKIN", "agnph");
@@ -140,6 +141,11 @@ define("MIN_FICS_TITLE_SUMMARY_SEARCH_STRING_SIZE", 3);
 define("MAX_FICS_POSTS_PER_PAGE", 100);
 define("MAX_FICS_BLACKLIST_TAGS", 50);
 define("FICS_NOT_FEATURED", "D");  // Also present in templates: editstory.tpl
+// Fics site settings constants.
+define("FICS_CHAPTER_MIN_WORD_COUNT_KEY", "MinWordCount");
+define("DEFAULT_FICS_CHAPTER_MIN_WORD_COUNT", 500);
+define("FICS_WELCOME_MESSAGE_KEY", "WelcomeMessage");
+define("DEFAULT_FICS_WELCOME_MESSAGE", "");
 
 
 

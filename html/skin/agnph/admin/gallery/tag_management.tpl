@@ -11,5 +11,12 @@
     </style>
 {% endblock %}
 
+{% block sub_section_navigation %}
+    <ul class="section-nav">
+        <li><a href="/admin/gallery/">Settings</a></li>
+        <li><a href="/admin/gallery/tags/">Tags</a></li>
+    </ul>
+{% endblock %}
+
 {% block section %}Gallery{% endblock %}
 {% block type_list %}["Artist", "Character", "Copyright", "General", "Species"]{% endblock %}

@@ -53,6 +53,7 @@ sql_query("DROP TABLE ".FICS_USER_PREF_TABLE.";");
 sql_query("DROP TABLE ".FICS_USER_FAVORITES_TABLE.";");
 sql_query("DROP TABLE ".FICS_TAG_ALIAS_TABLE.";");
 sql_query("DROP TABLE ".FICS_TAG_IMPLICATION_TABLE.";");
+sql_query("DROP TABLE ".FICS_SITE_SETTINGS_TABLE.";");
 sql_query("DELETE FROM mysql.event");
 
 // Main user data table. General information that is shared between sections.
@@ -314,6 +315,12 @@ do_or_die(sql_query(
         Timestamp INT(11) NOT NULL,
         PRIMARY KEY(UserId, StoryId)
     ) DEFAULT CHARSET=utf8;"));
+do_or_die(sql_query(
+    "CREATE TABLE ".FICS_SITE_SETTINGS_TABLE." (
+        Name VARCHAR(24) NOT NULL,
+        Value TEXT(4096) NOT NULL,
+        PRIMARY KEY(Name)
+    ) DEFAULT CHARSET=utf8;"));
 // TODO: Author following
 
 // Table holding all user PM's.
@@ -359,6 +366,13 @@ do_or_die(sql_query(
 // Table cleanup events.
 sql_query("CREATE EVENT delete_security_email_entries ON SCHEDULE EVERY 0:15 HOUR_MINUTE DO DELETE FROM ".SECURITY_EMAIL_TABLE." WHERE CURRENT_TIMESTAMP > MaxTimestamp;");
 
+// Set up site settings defaults.
+do_or_die(sql_query(
+    "INSERT INTO ".FICS_SITE_SETTINGS_TABLE."
+        (Name, Value)
+        VALUES
+        ('".FICS_CHAPTER_MIN_WORD_COUNT_KEY."', '".DEFAULT_FICS_CHAPTER_MIN_WORD_COUNT."'),
+        ('".FICS_WELCOME_MESSAGE_KEY."', '".DEFAULT_FICS_WELCOME_MESSAGE."');"));
 
 // TODO: Initialize file directories.
 

@@ -147,7 +147,7 @@
 {% endblock %}
 
 {% block content %}
-    <h3>{% block section %}[Section]{% endblock %} Tags</h3>
+    <h3>{% block section %}[Section]{% endblock %} Tag Console</h3>
     <p>Search: <input id="search" type="text" />
         <input id="tag-filter" name="filter" type="radio" checked />Tags
         <input id="alias-filter" name="filter" type="radio" />Aliases

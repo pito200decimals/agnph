@@ -8,10 +8,11 @@ include_once(SITE_ROOT."fics/includes/functions.php");
 if (isset($_POST) && isset($_POST['sid']) && isset($_POST['chapternum'])) {
     include_once(SITE_ROOT."fics/save_chapter_changes.php");
     if (isset($success) && $success && isset($sid) && $sid > 0) {
-        // TODO: Go to story edit page?
         header("Location: /fics/edit/$sid/");
+        return;
     } else {
         unset($success);
+        // TODO: Display error message as banner.
         if (isset($errmsg)) $vars['errmsg'] = $errmsg;
         // Failed, but try to repopulate story fields.
         $fill_from_post = true;

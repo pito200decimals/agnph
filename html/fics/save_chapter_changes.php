@@ -35,6 +35,18 @@ if (mb_strlen($chaptertitle) == 0) {
     $errmsg = "Invalid Chapter Title";
     return;
 }
+// Check min word count.
+$min_word_count = DEFAULT_FICS_CHAPTER_MIN_WORD_COUNT;
+if (sql_query_into($result, "SELECT * FROM ".FICS_SITE_SETTINGS_TABLE." WHERE Name='".FICS_CHAPTER_MIN_WORD_COUNT_KEY."';", 1)) {
+    $min_word_count = (int)$result->fetch_assoc()['Value'];
+}
+if ($min_word_count > 0) {
+    $word_count = ChapterWordCount($chaptertext);
+    if ($word_count < $min_word_count) {
+        $errmsg = "Chapter must be at least $min_word_count words long.";
+        return;
+    }
+}
 
 // Edit existing story.
 $story = GetStory($sid);
@@ -82,7 +94,7 @@ if ($action == "edit") {
         // Don't update DateUpdated. Don't want to bump stories.
         $sets = implode(",", $sets);
         $success = sql_query("UPDATE ".FICS_CHAPTER_TABLE." SET $sets WHERE ChapterId=$cid;");
-        if (!success) return;
+        if (!$success) return;
     } else {
         // Nothing to change.
         $success = true;
