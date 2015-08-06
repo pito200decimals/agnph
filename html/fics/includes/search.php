@@ -113,6 +113,31 @@ function GetClause($search_term) {
             return "ApprovalStatus='D'";
         }
     }
+    // Search for user favorites.
+    // Okay to do non-multibyte match here.
+    $match = array();
+    if (preg_match("/^fav(e|orite[ds]?)?:(.*)$/", $lower_term, $match)) {
+        $name = $match[2];
+        if (isset($user)) {
+            $uid = $user['UserId'];
+            if ($name == "me") return "EXISTS(SELECT 1 FROM ".FICS_USER_FAVORITES_TABLE." F WHERE UserId=$uid AND F.StoryId=T.StoryId)";
+        } else {
+            $uid = -1;
+        }
+        $escaped_name = sql_escape($name);
+        $uids = array();
+        // Get any users with name matching search, and either their settings allow visibility, or it's the self user.
+        if (sql_query_into($result,
+            "SELECT UserId FROM ".USER_TABLE." U WHERE
+            LOWER(DisplayName) LIKE '%$escaped_name%' AND
+            (UserId=$uid OR EXISTS(SELECT 1 FROM ".FICS_USER_PREF_TABLE." P WHERE P.UserId=U.UserId AND P.PrivateFicsFavorites=0));", 1)) {
+            while ($row = $result->fetch_assoc()) {
+                $uids[] = $row['UserId'];
+            }
+        }
+        $joined_uids = implode(",", $uids);
+        return "EXISTS(SELECT 1 FROM ".FICS_USER_FAVORITES_TABLE." F WHERE F.StoryId=T.StoryId AND F.UserId IN ($joined_uids))";
+    }
     // Strip "", if it exists. No multi-byte needed.
     // Allows for searching for terms that are also filters.
     $search_term = str_replace("\"", "", $search_term);

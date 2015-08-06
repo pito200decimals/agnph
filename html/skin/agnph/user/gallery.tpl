@@ -46,12 +46,12 @@
                 {% endfor %}
             </ul>
             <div class="Clear">&nbsp;</div>
-            <a href="/gallery/post/?search=user%3A{{ profile.user.DisplayName }}">Show all</a>
+            <a href="/gallery/post/?search=user%3A{{ profile.user.DisplayName|url_encode }}">Show all</a>
         </div>
     {% endif %}
     {% if profile.user.favorites|length > 0 %}
         <div class="infoblock">
-            <h3>UserFavorites</h3>
+            <h3>User Favorites</h3>
             <ul class="post-list">
                 {% for post in profile.user.favorites %}
                     <li class="dragitem">
@@ -70,7 +70,7 @@
                 {% endfor %}
             </ul>
             <div class="Clear">&nbsp;</div>
-            <a href="/gallery/post/?search=fav%3A{{ profile.user.DisplayName }}">Show all</a>
+            <a href="/gallery/post/?search=fav%3A{{ profile.user.DisplayName|url_encode }}">Show all</a>
         </div>
     {% endif %}
 {% endblock %}

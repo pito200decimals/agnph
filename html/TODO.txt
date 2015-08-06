@@ -11,7 +11,7 @@ TODOs
 * Gallery permissions model
 * Gallery post descriptions
     - Should these edits be logged?
-- Gallery linking to source on delete
+X Gallery linking to source on delete
 - Gallery/Fics mass tag edits
 - Slideshow view
 X IP address tracking for uploads (Do we need this, since user is tracked?)
@@ -27,9 +27,10 @@ X Custom swf/webm thumbs when parent is set to image.
 - Page for global tag edits/deletes/etc [Editing DONE]
     - Deletes
 - Tag suggestions
-- Collapse adjacent image pools
+X Collapse adjacent image pools
 - Fix mobile layout table cell backgrounds
 - Regenerate thumbnail functionality
+- Private favorites
 
 == FICS ==
 * Fics permissions model
@@ -41,6 +42,7 @@ X Custom swf/webm thumbs when parent is set to image.
 - Breakdown of views per-chapter
 - Co-authors
 - RSS Feed?
+- Private favorites
 
 == SITE ==
 * Check for vuln's for style background-image URL

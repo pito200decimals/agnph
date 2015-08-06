@@ -32,7 +32,9 @@
             <p>
                 <span class="rating">Rated: {{ story.rating }}</span>
                 <span class="stars">{% autoescape false %}{{ story.stars }}{% endautoescape %}</span>
+                {% if not story.shortDesc %}
                 {% if story.NumReviews > 0 %}<span class="reviews">[<a href="/fics/story/{{ story.StoryId }}/?reviews#reviews">Reviews: {{ story.NumReviews }}</a>]</span>{% endif %}
+                {% endif %}
             </p>
         </div>
         <div class="storyblockinfo">
@@ -56,6 +58,7 @@
                     {% endif %}
                 </li>
                 <li><span class="metalabel">Chapters:</span>{{ story.ChapterCount }}</li>
+                {% if not story.shortDesc %}
                 <li>
                     <span class="metalabel">Completed:</span>{% if story.Completed %}Yes{% else %}No{% endif %}
                     <span class="metalabel">Word Count:</span>{{ story.WordCount }}
@@ -65,8 +68,10 @@
                     <span class="metalabel">Published:</span>{{ story.DateCreated }}
                     {% if story.DateCreated != story.DateUpdated %}<span class="metalabel">Updated:</span>{{ story.DateUpdated }}{% endif %}
                 </li>
+                {% endif %}
             </ul>
         </div>
+        {% if not story.shortDesc %}
         <div class="storyblockfooter">
             {% if story.canEdit %}
                 {# canFeature will always have canEdit #}
@@ -91,6 +96,7 @@
                 [<a href="#" onclick="$('#favform-{{ story.StoryId }}')[0].submit();return false;">Remove from Favorites</a>]
             {% endif %}
         </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

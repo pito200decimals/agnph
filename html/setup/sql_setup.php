@@ -223,6 +223,7 @@ do_or_die(sql_query(
        "GalleryPostsPerPage INT(11) DEFAULT ".DEFAULT_GALLERY_POSTS_PER_PAGE.",
         GalleryTagBlacklist TEXT(512) NOT NULL,
         NavigateGalleryPoolsWithKeyboard TINYINT(1) DEFAULT 0,
+        PrivateGalleryFavorites TINYINT(1) DEFAULT 0,
         PRIMARY KEY(UserId)
     ) DEFAULT CHARSET=utf8;"));
 // User favorites for gallery section.
@@ -305,6 +306,7 @@ do_or_die(sql_query(
         FicsPermissions CHAR(1) DEFAULT 'N',".  // N - Normal user, A - Admin TODO: Enforce.
        "FicsStoriesPerPage INT(11) DEFAULT ".DEFAULT_FICS_STORIES_PER_PAGE.",
         FicsTagBlacklist TEXT(512) NOT NULL,
+        PrivateFicsFavorites TINYINT(1) DEFAULT 0,
         PRIMARY KEY(UserId)
     ) DEFAULT CHARSET=utf8;"));
 // Table holding user story favorites.
