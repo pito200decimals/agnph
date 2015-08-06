@@ -96,7 +96,7 @@ if ($action == "send") {
 RenderPage("user/mail/mail.tpl");
 return;
 
-function PostMailSessionBanner($msg, $color="green") 
+function PostMailSessionBanner($msg, $color="green") {
     PostSessionBanner($msg, $color);
 }
 ?>
