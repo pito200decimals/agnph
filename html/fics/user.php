@@ -46,6 +46,7 @@ if (sql_query_into($result,
     }
 }
 $profile_user['favorites'] = $stories;
+$vars['showFavorites'] = ($profile_user['PrivateFicsFavorites'] != 1 || (isset($user) && $profile_user['UserId'] == $user['UserId']));
 
 
 // This is how to output the template.

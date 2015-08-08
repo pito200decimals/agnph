@@ -20,7 +20,9 @@
             <li><span class="basic-info-label">Posts Uploaded:</span><span>{{ profile.user.numGalleryPostsUploaded }} {{ profile.user.galleryPostsUploadedDetail }}</span></li>
             <li><span class="basic-info-label">Upload Limit:</span><span><span title="Base upload limit" style="cursor: help;">{{ profile.user.numBaseUploadLimit }}</span> + (<span title="Number of approved uploads" style="cursor: help;">{{ profile.user.numGoodUploads }}</span> / 10) - (<span title="Number of deleted uploads" style="cursor: help;">{{ profile.user.numBadUploads }}</span> / 4) = <span title="User upload limit" style="cursor: help; font-weight: bold;">{{ profile.user.numUploadLimit }}</span></span></li>
             <li><span class="basic-info-label">Posts Flagged:</span><span>{{ profile.user.numGalleryPostsFlagged }}</span></li>
-            <li><span class="basic-info-label">Posts Favorited:</span><span>{{ profile.user.numGalleryPostsFavorited }}</span></li>
+            {% if showFavorites %}
+                <li><span class="basic-info-label">Posts Favorited:</span><span>{{ profile.user.numGalleryPostsFavorited }}</span></li>
+            {% endif %}
             <li><span class="basic-info-label">Tag Edits:</span><span>{{ profile.user.numGalleryTagEdits }}</span></li>
             <li><span class="basic-info-label">Post Comments:</span><span>{{ profile.user.numGalleryPostComments }}</span></li>
         </ul>
@@ -49,7 +51,7 @@
             <a href="/gallery/post/?search=user%3A{{ profile.user.DisplayName|url_encode }}">Show all</a>
         </div>
     {% endif %}
-    {% if profile.user.favorites|length > 0 %}
+    {% if showFavorites and profile.user.favorites|length > 0 %}
         <div class="infoblock">
             <h3>User Favorites</h3>
             <ul class="post-list">

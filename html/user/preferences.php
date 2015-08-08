@@ -234,6 +234,7 @@ if (isset($_POST['display-name']) &&
         $escaped_blacklist = sql_escape($_POST['gallery-tag-blacklist']);
         $gallery_table_sets[] = "GalleryTagBlacklist='$escaped_blacklist'";
     }
+    // Gallery enable keyboard navigation
     if (isset($_POST['gallery-enable-keyboard'])) {
         if (!$profile_user['NavigateGalleryPoolsWithKeyboard']) {
             $gallery_table_sets[] = "NavigateGalleryPoolsWithKeyboard=TRUE";
@@ -241,6 +242,16 @@ if (isset($_POST['display-name']) &&
     } else {
         if ($profile_user['NavigateGalleryPoolsWithKeyboard']) {
             $gallery_table_sets[] = "NavigateGalleryPoolsWithKeyboard=FALSE";
+        }
+    }
+    // Gallery hide favorites
+    if (isset($_POST['gallery-hide-favorites'])) {
+        if (!$profile_user['PrivateGalleryFavorites']) {
+            $gallery_table_sets[] = "PrivateGalleryFavorites=TRUE";
+        }
+    } else {
+        if ($profile_user['PrivateGalleryFavorites']) {
+            $gallery_table_sets[] = "PrivateGalleryFavorites=FALSE";
         }
     }
     if (sizeof($gallery_table_sets) > 0) {
@@ -267,6 +278,16 @@ if (isset($_POST['display-name']) &&
     if ($_POST['fics-tag-blacklist'] != $profile_user['FicsTagBlacklist']) {
         $escaped_blacklist = sql_escape($_POST['fics-tag-blacklist']);
         $fics_table_sets[] = "FicsTagBlacklist='$escaped_blacklist'";
+    }
+    // Fics hide favorites
+    if (isset($_POST['fics-hide-favorites'])) {
+        if (!$profile_user['PrivateFicsFavorites']) {
+            $fics_table_sets[] = "PrivateFicsFavorites=TRUE";
+        }
+    } else {
+        if ($profile_user['PrivateFicsFavorites']) {
+            $fics_table_sets[] = "PrivateFicsFavorites=FALSE";
+        }
     }
     if (sizeof($fics_table_sets) > 0) {
         sql_query("UPDATE ".FICS_USER_PREF_TABLE." SET ".implode(", ", $fics_table_sets)." WHERE UserId=".$profile_user['UserId'].";");

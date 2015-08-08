@@ -59,41 +59,42 @@ if (FetchUploadCountsByUserBySuccess($profile_user['UserId'], $numPending, $numU
 }
 
 // Get some recent uploaded posts. Include flagged posts.
+$posts = array();
 if (sql_query_into($result,
     "SELECT * FROM ".GALLERY_POST_TABLE."
     WHERE UploaderId=$profile_uid AND (Status='P' OR Status='A' OR Status='F')
     ORDER BY DateUploaded DESC, PostId DESC LIMIT ".GALLERY_PROFILE_SHOW_NUM_UPLOADS.";", 0)) {
-    $profile_user['uploads'] = array();
     while ($row = $result->fetch_assoc()) {
         debug($row);
         $md5 = $row['Md5'];
         $ext = $row['Extension'];
         $row['thumbnail'] = GetSiteThumbPath($md5, $ext);
         CreatePostLabel($row);
-        $profile_user['uploads'][] = $row;
+        $posts[] = $row;
     }
-    SetOutlineClasses($profile_user['uploads']);
-} else {
-    $profile_user['uploads'] = array();
+    SetOutlineClasses($posts);
 }
+$profile_user['uploads'] = $posts;
+
 // Get some favorited posts. Deleted posts can't be favorites, so don't worry about status.
+
+$posts = array();
 if (sql_query_into($result,
     "SELECT * FROM ".GALLERY_POST_TABLE." P JOIN ".GALLERY_USER_FAVORITES_TABLE." F ON P.PostId=F.PostId
     WHERE F.UserId=$profile_uid
     ORDER BY P.DateUploaded DESC, P.PostId DESC LIMIT ".GALLERY_PROFILE_SHOW_NUM_FAVORITES.";", 0)) {
-    $profile_user['favorites'] = array();
     while ($row = $result->fetch_assoc()) {
         debug($row);
         $md5 = $row['Md5'];
         $ext = $row['Extension'];
         $row['thumbnail'] = GetSiteThumbPath($md5, $ext);
         CreatePostLabel($row);
-        $profile_user['favorites'][] = $row;
+        $posts[] = $row;
     }
-    SetOutlineClasses($profile_user['favorites']);
-} else {
-    $profile_user['favorites'] = array();
+    SetOutlineClasses($posts);
 }
+$profile_user['favorites'] = $posts;
+$vars['showFavorites'] = ($profile_user['PrivateGalleryFavorites'] != 1 || (isset($user) && $profile_user['UserId'] == $user['UserId']));
 
 
 // This is how to output the template.

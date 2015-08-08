@@ -28,7 +28,9 @@
         <ul id="basic-info">
             <li><span class="basic-info-label">Stories Uploaded:</span><span>{{ profile.user.numStoriesUploaded }}</span></li>
             <li><span class="basic-info-label">Reviews Posted:</span><span>{{ profile.user.numReviewsPosted }}</span></li>
-            <li><span class="basic-info-label">Num Favorites:</span><span>{{ profile.user.numFavorites }}</span></li>
+            {% if showFavorites %}
+                <li><span class="basic-info-label">Num Favorites:</span><span>{{ profile.user.numFavorites }}</span></li>
+            {% endif %}
         </ul>
     </div>
     {% if profile.user.stories|length > 0 %}
@@ -45,7 +47,7 @@
             <a href="/fics/search/?search={{ profile.user.DisplayName|url_encode }}">Show all</a>
         </div>
     {% endif %}
-    {% if profile.user.favorites|length > 0 %}
+    {% if showFavorites and profile.user.favorites|length > 0 %}
         <div class="infoblock">
             <h3>Favorited Stories</h3>
             <ul class="story-list">

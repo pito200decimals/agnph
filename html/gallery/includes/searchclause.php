@@ -79,9 +79,11 @@ function CreateSQLClauseFromTerm($term) {
 }
 
 function CreateSQLClauseFromFilter($filter) {
+    global $user;
     if (startsWith($filter, "-")) {
         return "NOT(".CreateSQLClauseFromFilter(mb_substr($filter, 1)).")";
     } else {
+        $match = array();  // For regex matching.
         if (startsWith($filter, "id:")) {
             $id = mb_substr($filter, 3);
             $escaped_id = sql_escape($id);
@@ -98,10 +100,27 @@ function CreateSQLClauseFromFilter($filter) {
             $name = mb_substr($filter, 5);
             $escaped_name = sql_escape($name);
             return "EXISTS(SELECT 1 FROM ".USER_TABLE." U WHERE U.DisplayName='$escaped_name' AND T.UploaderId=U.UserId)";
-        } else if (startsWith($filter, "fav:")) {
-            $name = mb_substr($filter, 4);
+        } else if (preg_match("/^fav(e|orite[ds]?)?:(.*)$/", $filter, $match)) {
+            $name = $match[2];
+            if (isset($user)) {
+                $uid = $user['UserId'];
+                if ($name == "me") return "EXISTS(SELECT 1 FROM ".GALLERY_USER_FAVORITES_TABLE." F WHERE UserId=$uid AND F.PostId=T.PostId)";
+            } else {
+                $uid = -1;
+            }
             $escaped_name = sql_escape($name);
-            return "EXISTS(SELECT 1 FROM ".USER_TABLE." U JOIN ".GALLERY_USER_FAVORITES_TABLE." F ON U.UserId=F.UserId WHERE U.DisplayName='$escaped_name' AND T.PostId=F.PostId)";
+            $uids = array();
+            // Get any users with name matching search, and either their settings allow visibility, or it's the self user.
+            if (sql_query_into($result,
+                "SELECT UserId FROM ".USER_TABLE." U WHERE
+                LOWER(DisplayName) LIKE '%$escaped_name%' AND
+                (UserId=$uid OR EXISTS(SELECT 1 FROM ".GALLERY_USER_PREF_TABLE." P WHERE P.UserId=U.UserId AND P.PrivateGalleryFavorites=0));", 1)) {
+                while ($row = $result->fetch_assoc()) {
+                    $uids[] = $row['UserId'];
+                }
+            }
+            $joined_uids = implode(",", $uids);
+            return "EXISTS(SELECT 1 FROM ".GALLERY_USER_FAVORITES_TABLE." F WHERE F.PostId=T.PostId AND F.UserId IN ($joined_uids))";
         } else if (startsWith($filter, "parent:")) {
             $parent = mb_substr($filter, 7);
             if (mb_strtolower($parent) == "none" || !is_numeric($parent) || $parent <= 0) return "FALSE";  // Don't let searching for all non-child posts.

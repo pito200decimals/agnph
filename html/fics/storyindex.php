@@ -36,15 +36,16 @@ if (isset($_GET['search'])) {
     if (mb_strlen($blacklist_clauses) > 0) $search_clauses = $blacklist_clauses;
 }
 
-if (!sql_query_into($result,
+$stories = array();
+if (sql_query_into($result,
    "SELECT * FROM ".FICS_STORY_TABLE." T
     WHERE
     $search_clauses
-    ORDER BY $order_clauses DateUpdated DESC, StoryId DESC;", 0)) RenderErrorPage("No stories found.");
-$stories = array();
-while ($story = $result->fetch_assoc()) {
-    FillStoryInfo($story);
-    $stories[] = $story;
+    ORDER BY $order_clauses DateUpdated DESC, StoryId DESC;", 0)) {
+    while ($story = $result->fetch_assoc()) {
+        FillStoryInfo($story);
+        $stories[] = $story;
+    }
 }
 if (sizeof($stories) <= $stories_per_page) {
     $iterator = "";
