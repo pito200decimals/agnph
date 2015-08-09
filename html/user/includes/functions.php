@@ -8,35 +8,30 @@ function CanUserSeeAdminInfo($user) {
     if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
     return false;
 }
-
 function CanUserSeePrivateInfo($user, $profile_user) {
     if (!IsUserActivated($user)) return false;
     if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
     if ($user['UserId'] == $profile_user['UserId']) return true;
     return false;
 }
-
 function CanUserEditBio($user, $profile_user) {
     if (!IsUserActivated($user)) return false;
     if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
     if ($user['UserId'] == $profile_user['UserId']) return true;
     return false;
 }
-
 function CanUserEditSignature($user, $profile_user) {
     if (!IsUserActivated($user)) return false;
     if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
     if ($user['UserId'] == $profile_user['UserId']) return true;
     return false;
 }
-
 function CanUserEditBasicInfo($user, $profile_user) {
     if (!IsUserActivated($user)) return false;
     if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
     if ($user['UserId'] == $profile_user['UserId']) return true;
     return false;
 }
-
 function CanUserViewPMs($user, $profile_user) {
     if (!IsUserActivated($user)) return false;
     // TODO: Do we want to allow admins to view messages?
@@ -44,12 +39,24 @@ function CanUserViewPMs($user, $profile_user) {
     if ($user['UserId'] == $profile_user['UserId']) return true;
     return false;
 }
-
 function CanUserSendPMsForUser($user, $profile_user) {
     if (!IsUserActivated($user)) return false;
     // Only users can send messages as themselves (no admin spoofing).
     if ($user['UserId'] == $profile_user['UserId']) return true;
     return false;
+}
+function CanUserSetPermissions($user, $profile, $action, $perm) {
+    // When action = "site", perm = "+/-{char}"
+    // When action != "site", perm = "={char}"
+    if (!IsUserActivated($user)) return false;
+    if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
+    if ($action == "site") {
+        if (mb_strpos($user['Permissions'], $perm[1]) !== FALSE) return true;
+    }
+    if ($action == "gallery" && mb_strpos($user['Permissions'], "G") !== FALSE) return true;
+    if ($action == "fics" && mb_strpos($user['Permissions'], "F") !== FALSE) return true;
+    // Default permission for all other users.
+    return true;
 }
 
 
@@ -60,50 +67,38 @@ function DateStringToReadableString($datestr) {
     return FormatDate($datetime, PROFILE_DOB_FORMAT);
 }
 
-function CanUserMakeSiteAdmin($user) {
-    if (!IsUserActivated($user)) return false;
-    if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
-    return false;
-}
-
-function CanUserMakeForumsAdmin($user) {
-    if (!IsUserActivated($user)) return false;
-    if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
-    if (mb_strpos($user['Permissions'], 'R') !== FALSE) return true;
-    return false;
-}
-
-function CanUserMakeGalleryAdmin($user) {
-    if (!IsUserActivated($user)) return false;
-    if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
-    if (mb_strpos($user['Permissions'], 'G') !== FALSE) return true;
-    return false;
-}
-
-function CanUserMakeFicsAdmin($user) {
-    if (!IsUserActivated($user)) return false;
-    if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
-    if (mb_strpos($user['Permissions'], 'F') !== FALSE) return true;
-    return false;
-}
-
-function CanUserMakeOekakiAdmin($user) {
-    if (!IsUserActivated($user)) return false;
-    if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
-    if (mb_strpos($user['Permissions'], 'O') !== FALSE) return true;
-    return false;
-}
-
+// TODO: Better badge icon.
 function GetAdminBadge($profile_user) {
     $ret = array();
-    if (mb_strpos($profile_user['Permissions'], 'A') !== FALSE) $ret[] = "Administrator";
+    if (mb_strpos($profile_user['Permissions'], 'A') !== FALSE) return "Site Administrator";
     if (mb_strpos($profile_user['Permissions'], 'R') !== FALSE) $ret[] = "Forums Moderator";
-    if (mb_strpos($profile_user['Permissions'], 'G') !== FALSE) $ret[] = "Gallery Moderator";
-    if (mb_strpos($profile_user['Permissions'], 'F') !== FALSE) $ret[] = "Fics Moderator";
-    if (mb_strpos($profile_user['Permissions'], 'O') !== FALSE) $ret[] = "Oekaki Moderator";
+    if (mb_strpos($profile_user['Permissions'], 'G') !== FALSE) $ret[] = "Gallery Administrator";
+    if (mb_strpos($profile_user['GalleryPermissions'], 'C') !== FALSE) $ret[] = "Gallery Contributor";
+    if (mb_strpos($profile_user['Permissions'], 'F') !== FALSE) $ret[] = "Fics Administrator";
+    if (mb_strpos($profile_user['Permissions'], 'O') !== FALSE) $ret[] = "Oekaki Administrator";
     if (mb_strpos($profile_user['Permissions'], 'I') !== FALSE) $ret[] = "IRC Moderator";
     if (mb_strpos($profile_user['Permissions'], 'M') !== FALSE) $ret[] = "Minecraft Moderator";
     if (sizeof($ret) == 0) return "";
     return implode(",", $ret);
+}
+
+// Actions is a list of actions, each a string of the form "site+A", "gallery=C", etc.
+function AddAdminActionLink(&$admin_links, $actions, $text) {
+    global $user, $profile_user;
+    $link = array();
+    $link['formId'] = "admin-link-".sizeof($admin_links);
+    foreach ($actions as $action) {
+        // Okay to use non-multibyte here.
+        $pieces = preg_split("/[+-=]/", $action);
+        $key = $pieces[0];
+        $value = $pieces[1];
+        $op = substr($action, strlen($key), 1);
+        if (!CanUserSetPermissions($user, $profile_user, $key, $op.$value)) {
+            return;  // Don't add the link.
+        }
+    }
+    $link['actions'] = $actions;
+    $link['text'] = $text;
+    $admin_links[] = $link;
 }
 ?>

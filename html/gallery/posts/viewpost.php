@@ -66,6 +66,9 @@ if (isset($_POST['action'])) {
             case "set-avatar":
                 HandleSetAvatarAction($post);
                 break;
+            case "regen-thumbnail":
+                HandleRegenThumbnailsAction($post);
+                break;
             default:
                 break;
         }
@@ -239,7 +242,11 @@ function AddUserPermissions(&$post, $user) {
     if (CanUserCommentOnPost($user)) {
         $post['canComment'] = true;
     }
+    if (CanUserRegenerateThumbnail($user, $post)) {
+        $post['canGenerateThumbnail'] = true;
+    }
     $ext = $post['Extension'];
+    // Don't allow swf of webm posts to be used as an avatar.
     if (CanUserEditBasicInfo($user, $user) && $user['AvatarPostId'] != $pid &&
         ($ext == "jpg" || $ext == "png" || $ext == "gif")) {
         $post['canSetAvatar'] = true;

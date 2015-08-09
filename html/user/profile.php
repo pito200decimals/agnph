@@ -37,13 +37,35 @@ if (isset($user)) {
     $vars['canEditBasicInfo'] = CanUserEditBasicInfo($user, $profile_user);
     $vars['canSeePrivateInfo'] = CanUserSeePrivateInfo($user, $profile_user);
     $vars['canSeeAdminInfo'] = CanUserSeeAdminInfo($user);
-    $vars['canMakeSiteAdmin'] = CanUserMakeSiteAdmin($user);
-    $vars['isUserSiteAdmin'] = (mb_strpos($user['Permissions'], 'A') !== FALSE);
     if (mb_strlen($profile_user['RegisterIP']) == 0 || mb_strpos($profile_user['KnownIPs'], $profile_user['RegisterIP']) !== FALSE) {
         $profile_user['ips'] = $profile_user['KnownIPs'];
     } else {
         $profile_user['ips'] = $profile_user['RegisterIP'].",".$profile_user['KnownIPs'];
     }
+    // Set up global admin links.
+    $admin_links = array();
+    if (contains($profile_user['Permissions'], 'A')) {
+        AddAdminActionLink($admin_links, array("site-A", "gallery=N", "fics=N"), "Revoke Site Administrator");
+    } else {
+        AddAdminActionLink($admin_links, array("site=A", "gallery=A", "fics=A"), "Make Site Administrator");
+        // Gallery options.
+        if ($profile_user['GalleryPermissions'] == 'N') {
+            AddAdminActionLink($admin_links, array("gallery=C"), "Make Gallery Contributor");
+            AddAdminActionLink($admin_links, array("site+G", "gallery=A"), "Make Gallery Administrator");
+        } else if ($profile_user['GalleryPermissions'] == 'C') {
+            AddAdminActionLink($admin_links, array("gallery=N"), "Revoke Gallery Contributor");
+            AddAdminActionLink($admin_links, array("site+G", "gallery=A"), "Make Gallery Administrator");
+        } else if ($profile_user['GalleryPermissions'] == 'A') {
+            AddAdminActionLink($admin_links, array("site-G", "gallery=N"), "Revoke Gallery Administrator");
+        }
+        // Fics options.
+        if ($profile_user['FicsPermissions'] == 'N') {
+            AddAdminActionLink($admin_links, array("site+F", "fics=A"), "Make Fics Administrator");
+        } else if ($profile_user['FicsPermissions'] == 'A') {
+            AddAdminActionLink($admin_links, array("site-F", "fics=N"), "Revoke Fics Administrator");
+        }
+    }
+    $vars['adminLinks'] = $admin_links;
 }
 
 // This is how to output the template.

@@ -155,6 +155,15 @@
                                 <a href="#" onclick="$('#undeleteform')[0].submit();return false;">Undelete Post</a>
                             </li>
                         {% endif %}
+                        {% if post.canGenerateThumbnail %}
+                            <li>
+                                <form hidden id="gen-thumb-form" method="POST" accept-charset="UTF-8">
+                                    <input name="post" type="hidden" value="{{ post.PostId }}" />
+                                    <input name="action" type="hidden" value="regen-thumbnail" />
+                                </form>
+                                <a href="#" onclick="$('#gen-thumb-form')[0].submit();return false;">Regenerate Thumbnail</a>
+                            </li>
+                        {% endif %}
                         <li>
                             <a id="poolaction" href="#"></a><span id="poolactionworking" hidden>
                             <small>Processing...</small></span>

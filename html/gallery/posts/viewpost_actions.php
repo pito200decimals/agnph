@@ -2,6 +2,8 @@
 // Helper functions for applying user actions to a post.
 
 include_once(SITE_ROOT."gallery/includes/functions.php");
+include_once(SITE_ROOT."gallery/includes/image.php");
+include_once(SITE_ROOT."includes/util/file.php");
 
 function InvalidActionBanner() {
     PostSessionBanner("Invalid action", "red");
@@ -231,7 +233,15 @@ function HandleSetAvatarAction($post) {
     }
     $user['AvatarPostId'] = $pid;
     $user['AvatarFname'] = "";
-    PostSessionBanner("Set as Avatar", "green");
+    PostSessionBanner("Image set as Avatar", "green");
 }
-
+function HandleRegenThumbnailsAction($post) {
+    global $user;
+    if (!isset($user) || !CanUserRegenerateThumbnail($user, $post)) {
+        InsufficientPermissionBanner();
+        return;
+    }
+    CreateThumbnailFile($post['Md5'], $post['Extension']);
+    PostSessionBanner("Thumbnail created", "green");
+}
 ?>

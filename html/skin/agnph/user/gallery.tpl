@@ -9,8 +9,24 @@
 {% block scripts %}
 {% endblock %}
 
-{# TODO: Sidebar for user gallery actions. #}
 {% block sidebar %}
+    <h4>Actions</h4>
+    <ul>
+        {% for link in adminLinks %}
+            <li>
+                <form id="{{ link.formId }}-form" action="/user/{{ profile.user.UserId }}/admin/" method="POST" accept-encoding="UTF-8" hidden>
+                    {% for action in link.actions %}
+                        <input type="hidden" name="action[]" value="{{ action }}" />
+                    {% endfor %}
+                </form>
+                <a href="/user/{{ profile.user.UserId }}/admin/" onclick="document.getElementById('{{ link.formId }}-form').submit();return false;">
+                    {% autoescape false %}
+                        {{ link.text|replace({' ': '&nbsp;'})  }}
+                    {% endautoescape %}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}
 
 {% block usercontent %}

@@ -76,18 +76,28 @@
 {% endblock %}
 
 {% block sidebar %}
-        <h4>Actions</h4>
-        <ul>
-            {% if canEditBasicInfo %}<li><a href="/user/{{ profile.user.UserId }}/preferences/">Change Avatar</a></li>{% endif %}
-            {% if user %}<li><a href="/user/{{ user.UserId }}/mail/compose/?to={{ profile.user.DisplayName|url_encode }}">Send a Message</a></li>{% endif %}
-            {% if canMakeSiteAdmin %}
-                {% if isUserSiteAdmin %}
-                    <li>Revoke Administrator</li>
-                {% else %}
-                    <li>Make Administrator</li>
-                {% endif %}
-            {% endif %}
-        </ul>
+    <h4>Actions</h4>
+    <ul>
+        {% if canEditBasicInfo %}<li><a href="/user/{{ profile.user.UserId }}/preferences/">Change Avatar</a></li>{% endif %}
+        {% if user %}<li><a href="/user/{{ user.UserId }}/mail/compose/?to={{ profile.user.DisplayName|url_encode }}">Send a Message</a></li>{% endif %}
+        {% if adminLinks|length > 0 %}
+            <br />
+        {% endif %}
+        {% for link in adminLinks %}
+            <li>
+                <form id="{{ link.formId }}-form" action="/user/{{ profile.user.UserId }}/admin/" method="POST" accept-encoding="UTF-8" hidden>
+                    {% for action in link.actions %}
+                        <input type="hidden" name="action[]" value="{{ action }}" />
+                    {% endfor %}
+                </form>
+                <a href="/user/{{ profile.user.UserId }}/admin/" onclick="document.getElementById('{{ link.formId }}-form').submit();return false;">
+                    {% autoescape false %}
+                        {{ link.text|replace({' ': '&nbsp;'})  }}
+                    {% endautoescape %}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}
 
 {% block usercontent %}

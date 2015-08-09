@@ -77,6 +77,12 @@ function CanUserDeleteGalleryComment($user, $comment) {
     // if ($user['UserId'] == $comment['UserId']) return true;
     return false;
 }
+function CanUserRegenerateThumbnail($user, $post) {
+    if (!IsUserActivated($user)) return false;
+    if ($user['GalleryPermissions'] == 'A') return true;
+    if ($user['GalleryPermissions'] == 'C') return true;
+    return false;
+}
 
 // General path functions.
 function GetSiteImagePath($md5, $ext) { return "/".GetImagePath($md5, $ext); }

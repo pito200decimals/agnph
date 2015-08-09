@@ -120,6 +120,7 @@ function AJAXErr() {
 // Error to be returned on malformed URL arguments (when not in AJAX scripts).
 function InvalidURL() {
     header("HTTP/1.0 404 Not Found");
+    // TODO: Custom 404 page here.
     exit();
 }
 

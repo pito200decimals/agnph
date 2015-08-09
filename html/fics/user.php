@@ -14,6 +14,7 @@ include(SITE_ROOT."user/includes/profile_setup.php");
 
 $profile_user = &$vars['profile']['user'];
 $profile_uid = $profile_user['UserId'];
+$profile_user['admin'] = GetAdminBadge($profile_user);
 
 sql_query_into($result, "SELECT count(*) FROM ".FICS_STORY_TABLE." WHERE AuthorUserId=$profile_uid AND ApprovalStatus='A';", 1) or RenderErrorPage("Failed to fetch user profile");
 $profile_user['numStoriesUploaded'] = $result->fetch_assoc()['count(*)'];
@@ -48,6 +49,17 @@ if (sql_query_into($result,
 $profile_user['favorites'] = $stories;
 $vars['showFavorites'] = ($profile_user['PrivateFicsFavorites'] != 1 || (isset($user) && $profile_user['UserId'] == $user['UserId']));
 
+// Set up global admin links.
+$admin_links = array();
+if (!contains($profile_user['Permissions'], 'A')) {
+    // Fics options.
+    if ($profile_user['FicsPermissions'] == 'N') {
+        AddAdminActionLink($admin_links, array("site+F", "fics=A"), "Make Fics Administrator");
+    } else if ($profile_user['FicsPermissions'] == 'A') {
+        AddAdminActionLink($admin_links, array("site-F", "fics=N"), "Revoke Fics Administrator");
+    }
+}
+$vars['adminLinks'] = $admin_links;
 
 // This is how to output the template.
 RenderPage("user/fics.tpl");

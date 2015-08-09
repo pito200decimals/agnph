@@ -14,6 +14,7 @@ include(SITE_ROOT."user/includes/profile_setup.php");
 
 $profile_user = &$vars['profile']['user'];
 $profile_uid = $profile_user['UserId'];
+$profile_user['admin'] = GetAdminBadge($profile_user);
 
 // Fetch user statistics.
 // Posts Uploaded by user and not deleted:
@@ -96,6 +97,21 @@ if (sql_query_into($result,
 $profile_user['favorites'] = $posts;
 $vars['showFavorites'] = ($profile_user['PrivateGalleryFavorites'] != 1 || (isset($user) && $profile_user['UserId'] == $user['UserId']));
 
+// Set up global admin links.
+$admin_links = array();
+if (!contains($profile_user['Permissions'], 'A')) {
+    // Gallery options.
+    if ($profile_user['GalleryPermissions'] == 'N') {
+        AddAdminActionLink($admin_links, array("gallery=C"), "Make Gallery Contributor");
+        AddAdminActionLink($admin_links, array("site+G", "gallery=A"), "Make Gallery Administrator");
+    } else if ($profile_user['GalleryPermissions'] == 'C') {
+        AddAdminActionLink($admin_links, array("gallery=N"), "Revoke Gallery Contributor");
+        AddAdminActionLink($admin_links, array("site+G", "gallery=A"), "Make Gallery Administrator");
+    } else if ($profile_user['GalleryPermissions'] == 'A') {
+        AddAdminActionLink($admin_links, array("site-G", "gallery=N"), "Revoke Gallery Administrator");
+    }
+}
+$vars['adminLinks'] = $admin_links;
 
 // This is how to output the template.
 RenderPage("user/gallery.tpl");
