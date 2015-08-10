@@ -46,9 +46,9 @@ $profile_user['numGalleryTagEdits'] = $result->fetch_assoc()['count(*)'];
 sql_query_into($result, "SELECT count(*) FROM ".GALLERY_COMMENT_TABLE." WHERE UserId=$profile_uid;", 1) or RenderErrorPage("Failed to fetch user profile");
 $profile_user['numGalleryPostComments'] = $result->fetch_assoc()['count(*)'];
 
-if (FetchUploadCountsByUserBySuccess($profile_user['UserId'], $numPending, $numUploaded, $numDeleted)) {
-    $limit = ComputeUploadLimit($numUploaded, $numDeleted);
-    $profile_user['numBaseUploadLimit'] = 10;
+if (FetchUploadCountsByUserBySuccess($profile_user, $numPending, $numUploaded, $numDeleted)) {
+    $limit = ComputeUploadLimit($profile_user, $numUploaded, $numDeleted);
+    $profile_user['numBaseUploadLimit'] = GetBaseGalleryUploadLimit($profile_user);
     $profile_user['numGoodUploads'] = $numUploaded;
     $profile_user['numBadUploads'] = $numDeleted;
     $profile_user['numUploadLimit'] = $limit;
@@ -101,7 +101,12 @@ $vars['showFavorites'] = ($profile_user['PrivateGalleryFavorites'] != 1 || (isse
 $admin_links = array();
 if (!contains($profile_user['Permissions'], 'A')) {
     // Gallery options.
-    if ($profile_user['GalleryPermissions'] == 'N') {
+    if ($profile_user['GalleryPermissions'] == 'R') {
+        AddAdminActionLink($admin_links, array("gallery=N"), "Unrestrict Gallery Edits");
+        AddAdminActionLink($admin_links, array("gallery=C"), "Make Gallery Contributor");
+        AddAdminActionLink($admin_links, array("site+G", "gallery=A"), "Make Gallery Administrator");
+    } else if ($profile_user['GalleryPermissions'] == 'N') {
+        AddAdminActionLink($admin_links, array("gallery=R"), "Restrict Gallery Edits");
         AddAdminActionLink($admin_links, array("gallery=C"), "Make Gallery Contributor");
         AddAdminActionLink($admin_links, array("site+G", "gallery=A"), "Make Gallery Administrator");
     } else if ($profile_user['GalleryPermissions'] == 'C') {

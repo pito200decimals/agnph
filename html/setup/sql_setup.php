@@ -217,7 +217,7 @@ do_or_die(sql_query(
         UserId INT(11) NOT NULL,
         UploadLimit INT(11) NOT NULL,
         ArtistTagId INT(11) NOT NULL,
-        GalleryPermissions CHAR(1) DEFAULT 'N',".  // N - Normal user, C - Contributor, A - Admin
+        GalleryPermissions CHAR(1) DEFAULT 'N',".  // R - Restricted user, N - Normal user, C - Contributor, A - Admin
        "GalleryPostsPerPage INT(11) DEFAULT ".DEFAULT_GALLERY_POSTS_PER_PAGE.",
         GalleryTagBlacklist TEXT(512) NOT NULL,
         NavigateGalleryPoolsWithKeyboard TINYINT(1) DEFAULT 0,

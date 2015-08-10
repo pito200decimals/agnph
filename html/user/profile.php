@@ -49,7 +49,12 @@ if (isset($user)) {
     } else {
         AddAdminActionLink($admin_links, array("site=A", "gallery=A", "fics=A"), "Make Site Administrator");
         // Gallery options.
-        if ($profile_user['GalleryPermissions'] == 'N') {
+        if ($profile_user['GalleryPermissions'] == 'R') {
+            AddAdminActionLink($admin_links, array("gallery=N"), "Unrestrict Gallery Edits");
+            AddAdminActionLink($admin_links, array("gallery=C"), "Make Gallery Contributor");
+            AddAdminActionLink($admin_links, array("site+G", "gallery=A"), "Make Gallery Administrator");
+        } else if ($profile_user['GalleryPermissions'] == 'N') {
+            AddAdminActionLink($admin_links, array("gallery=R"), "Restrict Gallery Edits");
             AddAdminActionLink($admin_links, array("gallery=C"), "Make Gallery Contributor");
             AddAdminActionLink($admin_links, array("site+G", "gallery=A"), "Make Gallery Administrator");
         } else if ($profile_user['GalleryPermissions'] == 'C') {

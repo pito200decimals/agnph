@@ -41,6 +41,10 @@ if (isset($user)) {
         $user['showAdminTab'] = true;
     }
     $vars['user'] = &$user;
+    $now = time();
+    if ($user['LastVisitTime'] + REFRESH_ONLINE_TIMEOUT < $now) {
+        sql_query("UPDATE ".USER_TABLE." SET LastVisitTime=$now WHERE UserId=".$user['UserId'].";");
+    }
 }
 
 $vars['debug'] = DEBUG;
@@ -84,8 +88,8 @@ function FetchUserHeaderVars() {
         $skin = DEFAULT_SKIN;
     }
     $vars['skin'] = $skin;
-    $vars['skinDir'] = "/skin/$skin";
-    $loader = new Twig_Loader_Filesystem(__DIR__."/skin/$skin/");
+    $vars['skinDir'] = "/skin/$skin";  // TODO: Fix CSS paths with baseSkinDir.
+    $loader = new Twig_Loader_Filesystem(array(__DIR__."/skin/$skin/", __DIR__."/skin/".BASE_SKIN."/"));
     $twig = new Twig_Environment($loader);
 }
 ?>

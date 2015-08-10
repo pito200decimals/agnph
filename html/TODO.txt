@@ -25,7 +25,7 @@ X Custom swf/webm thumbs when parent is set to image.
 - Back/Next buttons
 - Handle parent cleanup on post delete?
 - Page for global tag edits/deletes/etc [Editing DONE]
-    - Deletes
+    - Deletes [Handled by alias/locking]
 - Tag suggestions
 X Collapse adjacent image pools
 - Fix mobile layout table cell backgrounds

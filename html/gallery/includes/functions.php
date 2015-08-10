@@ -12,14 +12,26 @@ include_once(SITE_ROOT."includes/comments/comments_functions.php");
 // Permissions functions.
 function CanUserUploadPost($user) {
     if (!IsUserActivated($user)) return false;
+    if ($user['GalleryPermissions'] == 'A') return true;
+    // Restrict user based on permissions and time since registration.
+    if ($user['GalleryPermissions'] == 'R') return false;
+    if ($user['JoinTime'] + ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE > time()) return false;
     return true;
 }
 function CanUserEditGalleryPost($user) {
     if (!IsUserActivated($user)) return false;
+    if ($user['GalleryPermissions'] == 'A') return true;
+    // Restrict user based on permissions and time since registration.
+    if ($user['GalleryPermissions'] == 'R') return false;
+    if ($user['JoinTime'] + ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE > time()) return false;
     return true;
 }
 function CanUserCreateGalleryTags($user) {
     if (!IsUserActivated($user)) return false;
+    if ($user['GalleryPermissions'] == 'A') return true;
+    // Restrict user based on permissions and time since registration.
+    if ($user['GalleryPermissions'] == 'R') return false;
+    if ($user['JoinTime'] + ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE > time()) return false;
     return true;
 }
 function CanUserUploadNonPending($user) {
@@ -30,10 +42,16 @@ function CanUserUploadNonPending($user) {
 }
 function CanUserAddOrRemoveFromPools($user) {
     if (!IsUserActivated($user)) return false;
+    // Restrict user based on permissions and time since registration.
+    if ($user['GalleryPermissions'] == 'R') return false;
+    if ($user['JoinTime'] + ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE > time()) return false;
     return true;
 }
 function CanUserChangePoolOrdering($user) {
     if (!IsUserActivated($user)) return false;
+    // Restrict user based on permissions and time since registration.
+    if ($user['GalleryPermissions'] == 'R') return false;
+    if ($user['JoinTime'] + ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE > time()) return false;
     return true;
 }
 function CanUserCreateOrDeletePools($user) {
@@ -50,11 +68,16 @@ function CanUserApprovePost($user) {
 }
 function CanUserFlagGalleryPost($user) {
     if (!IsUserActivated($user)) return false;
+    // Restrict user based on permissions and time since registration.
+    if ($user['GalleryPermissions'] == 'R') return false;
+    if ($user['JoinTime'] + ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE > time()) return false;
     return true;
 }
 function CanUserUnflagGalleryPost($user) {
     if (!IsUserActivated($user)) return false;
-    return true;
+    if ($user['GalleryPermissions'] == 'A') return true;
+    if ($user['GalleryPermissions'] == 'C') return true;
+    return false;
 }
 function CanUserDeleteGalleryPost($user) {
     if (!IsUserActivated($user)) return false;
@@ -68,6 +91,7 @@ function CanUserUndeleteGalleryPost($user) {
 }
 function CanUserCommentOnPost($user) {
     if (!IsUserActivated($user)) return false;
+    if ($user['GalleryPermissions'] == 'R') return false;
     return true;
 }
 function CanUserDeleteGalleryComment($user, $comment) {
@@ -314,10 +338,19 @@ function SetOutlineClasses(&$posts) {
     }
 }
 
-function FetchUploadCountsByUserBySuccess($uid, &$numPending, &$numSuccessful, &$numDeletedNotFlaggedBySelf) {
+function GetBaseGalleryUploadLimit($user) {
+    if ($user['GalleryPermissions'] == 'A') return 1000;
+    if ($user['GalleryPermissions'] == 'C') return 10;
+    if ($user['GalleryPermissions'] == 'R') return 0;
+    if ($user['JoinTime'] + ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE > time()) return 0;
+    return 10;
+}
+
+function FetchUploadCountsByUserBySuccess($user, &$numPending, &$numSuccessful, &$numDeletedNotFlaggedBySelf) {
     $numPending = 0;
     $numSuccessful = 0;
     $numDeletedNotFlaggedBySelf = 0;
+    $uid = $user['UserId'];
     if (!sql_query_into($result, "SELECT
         count(CASE Status WHEN 'P' THEN 1 ELSE NULL END) AS NumPending,
         count(CASE Status WHEN 'A' THEN 1 ELSE NULL END) AS NumSuccess,
@@ -330,16 +363,17 @@ function FetchUploadCountsByUserBySuccess($uid, &$numPending, &$numSuccessful, &
     return true;
 }
 
-function ComputeUploadLimit($numSuccessful, $numDeletedNotFlaggedBySelf) {
-    return (int)round(10 + ($numSuccessful / 10.0) - ($numDeletedNotFlaggedBySelf/4.0));
+function ComputeUploadLimit($user, $numSuccessful, $numDeletedNotFlaggedBySelf) {
+    $base_limit = GetBaseGalleryUploadLimit($user);
+    return (int)round($base_limit + ($numSuccessful / 10.0) - ($numDeletedNotFlaggedBySelf/4.0));
 }
 
-function CanUserUpload($numPending, $numSuccessful, $numDeletedNotFlaggedBySelf) {
-    $limit = ComputeUploadLimit($numSuccessful, $numDeletedNotFlaggedBySelf);
+function CanUserUpload($user, $numPending, $numSuccessful, $numDeletedNotFlaggedBySelf) {
+    $limit = ComputeUploadLimit($user, $numSuccessful, $numDeletedNotFlaggedBySelf);
     return $numPending < $limit;
 }
-function QuickCanUserUpload($uid) {
-    return FetchUploadCountsByUserBySuccess($uid, $numPending, $numSuccessful, $numDeletedNotFlaggedBySelf) && CanUserUpload($numPending, $numSuccessful, $numDeletedNotFlaggedBySelf);
+function QuickCanUserUpload($user) {
+    return FetchUploadCountsByUserBySuccess($user, $numPending, $numSuccessful, $numDeletedNotFlaggedBySelf) && CanUserUpload($user, $numPending, $numSuccessful, $numDeletedNotFlaggedBySelf);
 }
 
 ?>

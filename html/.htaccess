@@ -75,6 +75,9 @@ RewriteRule ^fics/delete/(\d+)/?$ /fics/delete_story.php?sid=$1&action=delete
 RewriteRule ^fics/undelete/(\d+)/?$ /fics/delete_story.php?sid=$1&action=undelete
 RewriteRule ^fics/favorite/?$ /fics/edit_favorites.php
 
+#Rewrites for user pages.
+RewriteRule ^user/list/?$ /user/list.php [QSA]
+
 #Rewrites for admin pages
 RewriteRule ^admin/?$ /admin/site/site.php
 RewriteRule ^admin/forums/?$ /admin/forums/forums.php

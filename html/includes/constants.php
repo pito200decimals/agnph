@@ -68,6 +68,7 @@ define("DEFAULT_GALLERY_COMMENTS_PER_PAGE", 10);
 define("DEFAULT_FICS_STORIES_PER_PAGE", 15);  // Customizable.
 define("DEFAULT_FICS_COMMENTS_PER_PAGE", 10);
 define("FICS_LIST_ITEMS_PER_PAGE", 50);
+define("USERS_LIST_ITEMS_PER_PAGE", 50);
 
 // General constants.
 // Site-related
@@ -93,6 +94,7 @@ define("DEFAULT_AVATAR_PATH", "/images/default-avatar.png");
 define("AVATAR_UPLOAD_EXTENSION", "png");
 define("MAX_AVATAR_UPLOAD_DIMENSIONS", 200);
 define("MAX_EMAIL_LENGTH", 128);
+define("BASE_SKIN", "agnph");
 // Site security-related timeouts.
 define("REGISTER_ACCOUNT_HUMAN_READABLE_STRING", "24 hours");  // 24 hours.
 define("REGISTER_ACCOUNT_SQL_EVENT_DURATION", "24 HOUR");
@@ -100,6 +102,7 @@ define("REGISTER_ACCOUNT_TIMESTAMP_DURATION", 24*60*60);
 define("DEFAULT_EMAIL_EXPIRE_HUMAN_READABLE_STRING", "15 minutes");  // 15 minutes.
 define("DEFAULT_EMAIL_EXPIRE_SQL_EVENT_DURATION", "0:15 HOUR_MINUTE");
 define("DEFAULT_EMAIL_EXPIRE_TIMESTAMP_DURATION", 15*60);
+define("ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE", 7 * 24 * 60 * 60);  // 7 days.
 
 // Forums-related
 define("FORUMS_DATE_FORMAT", "Y-m-d H:i:s");
@@ -148,6 +151,11 @@ define("FICS_WELCOME_MESSAGE_KEY", "WelcomeMessage");
 define("DEFAULT_FICS_WELCOME_MESSAGE", "");
 define("FICS_PROFILE_SHOW_NUM_STORIES", 3);
 define("FICS_PROFILE_SHOW_NUM_FAVORITES", 3);
+
+// Account-related.
+define("USERLIST_DATE_FORMAT", "Y-m-d");
+define("REFRESH_ONLINE_TIMEOUT", 5 * 60);  // 5 minutes.
+define("CONSIDERED_ONLINE_DURATION", 15 * 60);  // 15 minutes.
 
 
 

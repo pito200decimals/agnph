@@ -14,7 +14,7 @@ if (!CanUserUploadPost($user)) {
     RenderErrorPage("You are not authorized to upload a new posts");
     return;
 }
-if (!QuickCanUserUpload($user['UserId'])) {
+if (!QuickCanUserUpload($user)) {
     RenderErrorPage("You have reached your upload limit. Please wait for your pending uploads to be approved.");
     return;
 }

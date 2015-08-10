@@ -56,7 +56,7 @@ function CanUserSetPermissions($user, $profile, $action, $perm) {
     if ($action == "gallery" && mb_strpos($user['Permissions'], "G") !== FALSE) return true;
     if ($action == "fics" && mb_strpos($user['Permissions'], "F") !== FALSE) return true;
     // Default permission for all other users.
-    return true;
+    return false;
 }
 
 
@@ -73,11 +73,11 @@ function GetAdminBadge($profile_user) {
     if (mb_strpos($profile_user['Permissions'], 'A') !== FALSE) return "Site Administrator";
     if (mb_strpos($profile_user['Permissions'], 'R') !== FALSE) $ret[] = "Forums Moderator";
     if (mb_strpos($profile_user['Permissions'], 'G') !== FALSE) $ret[] = "Gallery Administrator";
-    if (mb_strpos($profile_user['GalleryPermissions'], 'C') !== FALSE) $ret[] = "Gallery Contributor";
     if (mb_strpos($profile_user['Permissions'], 'F') !== FALSE) $ret[] = "Fics Administrator";
     if (mb_strpos($profile_user['Permissions'], 'O') !== FALSE) $ret[] = "Oekaki Administrator";
     if (mb_strpos($profile_user['Permissions'], 'I') !== FALSE) $ret[] = "IRC Moderator";
     if (mb_strpos($profile_user['Permissions'], 'M') !== FALSE) $ret[] = "Minecraft Moderator";
+    if (mb_strpos($profile_user['GalleryPermissions'], 'C') !== FALSE) $ret[] = "Gallery Contributor";
     if (sizeof($ret) == 0) return "";
     return implode(",", $ret);
 }

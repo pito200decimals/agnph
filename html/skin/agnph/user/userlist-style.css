@@ -1,4 +1,4 @@
-.tagtable {
+.user-table {
     margin: 5px;
     border-radius: 15px;
     background-color: rgb(170,200,255);
@@ -9,19 +9,19 @@
     -webkit-border-vertical-spacing: 0px;
     border-collapse: collapse;
 }
-.tagtable td {
+.user-table td {
     padding: 0px;
 }
-.tagtable div {
+.user-table div {
     padding: 5px;
 }
-.tagtable thead tr div {
+.user-table thead tr div {
     background-color: rgb(100,130,185);
 }
-.tagtable tbody tr:nth-child(odd) div {
+.user-table tbody tr:nth-child(odd) div {
     background-color: rgb(150,180,235);
 }
-.tagtable tbody tr:nth-child(even) div {
+.user-table tbody tr:nth-child(even) div {
     background-color: rgb(130,160,215);
 }
 
@@ -47,13 +47,4 @@
 }
 .actionset {
     font-size: 0px;
-}
-.tagtable input {
-}
-.tagname {
-    font-weight: bold;
-    text-decoration: none;
-}
-.tagname:hover {
-    color: rgb(144,147,255);
 }

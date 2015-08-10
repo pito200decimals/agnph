@@ -35,7 +35,7 @@ $ACTION_KEYS = array(
     "fics" => "FicsPermissions");
 $ALLOWED_CHARS = array(
     "site" => "ARGFOIM",
-    "gallery" => "ACN",
+    "gallery" => "ACNR",
     "fics" => "AN");
 foreach ($actions as $action) {
     foreach ($ACTION_TABLE as $prefix => $table) {

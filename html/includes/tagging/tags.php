@@ -49,7 +49,6 @@ if (sizeof($tags) > 0) {
     foreach ($tags as &$tag) {
         $tag['typeName'] = $TAG_TYPE_MAP[$tag['Type']];
         $tag['typeClass'] = mb_strtolower($tag['Type'])."typetag tagname";
-        // Get counts.
     }
     if (defined("TAG_ITEM_TABLE")) {
         $tags_by_id = array();
