@@ -100,6 +100,14 @@ $post['tagCategories'] = $tagCategories;
 // Get other properties like uploader, rating HTML, etc.
 FetchPostProperties($post) or RenderErrorPage("Post not found");
 
+// Get previous, next posts.
+if (sql_query_into($result, "SELECT PostId FROM ".GALLERY_POST_TABLE." WHERE PostId < $pid AND Status<>'D' ORDER BY PostId DESC LIMIT 1;", 1)) {
+    $vars['prevPostId'] = $result->fetch_assoc()['PostId'];
+}
+if (sql_query_into($result, "SELECT PostId FROM ".GALLERY_POST_TABLE." WHERE PostId > $pid AND Status<>'D' ORDER BY PostId ASC LIMIT 1;", 1)) {
+    $vars['nextPostId'] = $result->fetch_assoc()['PostId'];
+}
+
 // Get comments.
 $comments = GetComments($post);
 ConstructCommentBlockIterator($comments, $vars['commentIterator'], true /* allow_offset */,

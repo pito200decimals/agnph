@@ -55,7 +55,7 @@
         </table>
         <div class="Clear">&nbsp;</div>
         {% if iterator %}
-            <div class="indexIterator">
+            <div class="iterator">
                 {% autoescape false %}
                 {{ iterator }}
                 {% endautoescape %}

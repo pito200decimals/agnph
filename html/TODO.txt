@@ -12,20 +12,19 @@ TODOs
 * Gallery post descriptions
     - Should these edits be logged?
 X Gallery linking to source on delete
-- Gallery/Fics mass tag edits
+- Gallery mass tag edits
+    - For a given search, add/remove all tags on matched posts?
 - Slideshow view
 X IP address tracking for uploads (Do we need this, since user is tracked?)
 X Upvote/Downvote (On hold for now. Don't know where to put buttons. Feature not used in Ouroboros gallery)
 X Gallery notes
 X Custom swf/webm thumbs when parent is set to image.
 - Some sort of tag exploration feature, perhaps tag cloud?
-- Tag edit rollbacks?
 - Viewing tag edits for user.
+    - (Should this be visible publicly?)
 - "Popular" recent posts, maybe by # of views in last day/week/month?
-- Back/Next buttons
-- Handle parent cleanup on post delete?
-- Page for global tag edits/deletes/etc [Editing DONE]
-    - Deletes [Handled by alias/locking]
+- Handle parent cleanup on post delete
+    - Move favorites over to parent?
 - Tag suggestions
 X Collapse adjacent image pools
 - Fix mobile layout table cell backgrounds

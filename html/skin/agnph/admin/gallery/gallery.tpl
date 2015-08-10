@@ -4,6 +4,7 @@
     <ul class="section-nav">
         <li><a href="/admin/gallery/">Settings</a></li>
         <li><a href="/admin/gallery/tags/">Tags</a></li>
+        <li><a href="/admin/gallery/edit-history/">Edit History</a></li>
     </ul>
 {% endblock %}
 

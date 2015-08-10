@@ -31,7 +31,7 @@
                     {% for account in users %}
                         <tr>
                             <td><div>{% if account.online %}ONLINE{% else %}OFFLINE{% endif %}</div></td>
-                            <td><div>{{ account.DisplayName }}</div></td>
+                            <td><div><a href="/user/{{ account.UserId }}/">{{ account.DisplayName }}</a></div></td>
                             <td><div>{% if account.administrator %}Administrator{% else %}User{% endif %}</div></td>
                             <td><div>{{ account.dateJoined }}</div></td>
                         </tr>

@@ -32,7 +32,7 @@
                 </tbody>
             </table>
             <div class="Clear">&nbsp;</div>
-            <div class="indexIterator">
+            <div class="iterator">
                 {% autoescape false %}
                 {{ iterator }}
                 {% endautoescape %}

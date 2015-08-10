@@ -13,6 +13,7 @@ include_once(SITE_ROOT."includes/comments/comments_functions.php");
 function CanUserUploadPost($user) {
     if (!IsUserActivated($user)) return false;
     if ($user['GalleryPermissions'] == 'A') return true;
+    if ($user['GalleryPermissions'] == 'C') return true;
     // Restrict user based on permissions and time since registration.
     if ($user['GalleryPermissions'] == 'R') return false;
     if ($user['JoinTime'] + ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE > time()) return false;
@@ -21,6 +22,7 @@ function CanUserUploadPost($user) {
 function CanUserEditGalleryPost($user) {
     if (!IsUserActivated($user)) return false;
     if ($user['GalleryPermissions'] == 'A') return true;
+    if ($user['GalleryPermissions'] == 'C') return true;
     // Restrict user based on permissions and time since registration.
     if ($user['GalleryPermissions'] == 'R') return false;
     if ($user['JoinTime'] + ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE > time()) return false;
@@ -29,6 +31,7 @@ function CanUserEditGalleryPost($user) {
 function CanUserCreateGalleryTags($user) {
     if (!IsUserActivated($user)) return false;
     if ($user['GalleryPermissions'] == 'A') return true;
+    if ($user['GalleryPermissions'] == 'C') return true;
     // Restrict user based on permissions and time since registration.
     if ($user['GalleryPermissions'] == 'R') return false;
     if ($user['JoinTime'] + ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE > time()) return false;
@@ -42,6 +45,8 @@ function CanUserUploadNonPending($user) {
 }
 function CanUserAddOrRemoveFromPools($user) {
     if (!IsUserActivated($user)) return false;
+    if ($user['GalleryPermissions'] == 'A') return true;
+    if ($user['GalleryPermissions'] == 'C') return true;
     // Restrict user based on permissions and time since registration.
     if ($user['GalleryPermissions'] == 'R') return false;
     if ($user['JoinTime'] + ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE > time()) return false;
@@ -49,6 +54,8 @@ function CanUserAddOrRemoveFromPools($user) {
 }
 function CanUserChangePoolOrdering($user) {
     if (!IsUserActivated($user)) return false;
+    if ($user['GalleryPermissions'] == 'A') return true;
+    if ($user['GalleryPermissions'] == 'C') return true;
     // Restrict user based on permissions and time since registration.
     if ($user['GalleryPermissions'] == 'R') return false;
     if ($user['JoinTime'] + ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE > time()) return false;
@@ -68,6 +75,8 @@ function CanUserApprovePost($user) {
 }
 function CanUserFlagGalleryPost($user) {
     if (!IsUserActivated($user)) return false;
+    if ($user['GalleryPermissions'] == 'A') return true;
+    if ($user['GalleryPermissions'] == 'C') return true;
     // Restrict user based on permissions and time since registration.
     if ($user['GalleryPermissions'] == 'R') return false;
     if ($user['JoinTime'] + ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE > time()) return false;
@@ -216,6 +225,7 @@ function UpdatePostWithDescriptors($descriptors, $post_id, $user) {
             $sql_sets = array();
             foreach ($properties as $prop) {
                 switch ($prop->label) {
+                    // NOTE: When adding more here, make sure reverts take them into account.
                     case "rating":
                         if ($post['Rating'] != $prop->tag) $sql_sets[] = "Rating='".sql_escape($prop->tag)."'";
                         break;

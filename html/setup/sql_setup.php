@@ -186,9 +186,9 @@ do_or_die(sql_query(
        "PostId INT(11) NOT NULL,
         Timestamp INT(11) NOT NULL,
         UserId INT(11) NOT NULL,
-        TagsAdded VARCHAR(512) DEFAULT '',
-        TagsRemoved VARCHAR(512) DEFAULT '',
-        PropertiesChanged VARCHAR(512) DEFAULT '',
+        TagsAdded TEXT(512) DEFAULT '',
+        TagsRemoved TEXT(512) DEFAULT '',
+        PropertiesChanged TEXT(512) DEFAULT '',
         BatchId INT(11) DEFAULT 0,".  // Id for storing groups of related tag edits. 0 if unbatched.
        "PRIMARY KEY(Id, PostId, Timestamp)
     ) DEFAULT CHARSET=utf8;"));

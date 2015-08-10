@@ -46,6 +46,7 @@ RewriteRule ^user/(\d+)/admin/?$ /user/change_admin.php?uid=$1
 # Rewrites for gallery pages
 RewriteRule ^gallery/post/?$ /gallery/posts/postindex.php [QSA]
 RewriteRule ^gallery/post/show/(\d+)/?$ /gallery/posts/viewpost.php?post=$1 [QSA]
+RewriteRule ^gallery/post/random/?$ /gallery/posts/random_post.php
 RewriteRule ^gallery/upload/?$ /gallery/upload.php
 RewriteRule ^gallery/edit/?$ /gallery/posts/editpost.php
 RewriteRule ^gallery/pools/?$ /gallery/pools/poolindex.php [QSA]
@@ -83,5 +84,7 @@ RewriteRule ^admin/?$ /admin/site/site.php
 RewriteRule ^admin/forums/?$ /admin/forums/forums.php
 RewriteRule ^admin/gallery/?$ /admin/gallery/gallery.php
 RewriteRule ^admin/gallery/tags/?$ /admin/gallery/tag_management.php
+RewriteRule ^admin/gallery/edit-history/?$ /admin/gallery/edit_history.php
+RewriteRule ^admin/gallery/revert-edit/?$ /admin/gallery/revert_edit.php
 RewriteRule ^admin/fics/?$ /admin/fics/fics.php
 RewriteRule ^admin/fics/tags/?$ /admin/fics/tag_management.php

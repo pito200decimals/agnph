@@ -1,24 +1,43 @@
 <?php
-// Page for viewing the tag history of a post.
-// URL: /gallery/post/show/{post-id}/history/
+// Gallery admin page that hows edit history for all posts, with some filter capability (e.g. by user, post).
+// URL: /admin/gallery/edit-history/
+// URL: /admin/gallery/edit_history.php
+
+// TODO: Consolidate into the same code as tag_history.php.
 
 include_once("../../header.php");
 include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."includes/util/html_funcs.php");
 include_once(SITE_ROOT."gallery/includes/functions.php");
 include_once(SITE_ROOT."includes/util/listview.php");
+include_once(SITE_ROOT."admin/includes/functions.php");
 
-if (!isset($_GET['post']) || !is_numeric($_GET['post'])) {
-    InvalidURL();
+if (!isset($user)) {
+    RenderErrorPage("Not authorized to access this page");
+    return;
 }
-$pid = $_GET['post'];
-sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE PostId=$pid;", 1) or RenderErrorPage("Post not found");
-$post = $result->fetch_assoc();
-$pid = $post['PostId'];  // Get database value, not user input.
+ComputePageAccess($user);
+if (!$vars['canAdminGallery']) {
+    DoRedirect();
+}
 
-CollectItems(GALLERY_POST_TAG_HISTORY_TABLE, "WHERE PostId=$pid ORDER BY Timestamp DESC", $tag_history_items, GALLERY_LIST_ITEMS_PER_PAGE, $iterator, function($i) use ($pid) {
-    return "/gallery/post/show/$pid/history/?page=$i";
-}, "Post not found");
+$sql_clause = "TRUE";
+$search = "";
+if (isset($_GET['search'])) $search = $_GET['search'];
+if (mb_strlen($search) > 0) {
+    // Adjust search clauses for username/post-id.
+    $escaped_search = sql_escape($search);
+    $sql_clause = "(PostId='$escaped_search') OR (EXISTS(SELECT 1 FROM ".USER_TABLE." U WHERE U.UserId=T.UserId AND UPPER(U.DisplayName) LIKE UPPER('%$escaped_search%')))";
+}
+
+CollectItems(GALLERY_POST_TAG_HISTORY_TABLE, "WHERE $sql_clause ORDER BY Timestamp DESC", $tag_history_items, GALLERY_LIST_ITEMS_PER_PAGE, $iterator, function($i) use ($search) {
+    if (mb_strlen($search) > 0) {
+        $encoded_search = urlencode($search);
+        return "/admin/gallery/edit-history/?search=$encoded_search&page=$i";
+    } else {
+        return "/admin/gallery/edit-history/?page=$i";
+    }
+}, "Edit history not found");
 
 if (sizeof($tag_history_items) > 0) {
     // Create item elements.
@@ -90,7 +109,8 @@ if (sizeof($tag_history_items) > 0) {
 
 $vars['tagHistoryItems'] = $tag_history_items;
 $vars['postIterator'] = $iterator;
+$vars['search'] = $search;
 
-RenderPage("gallery/posts/tag_history_index.tpl");
+RenderPage("admin/gallery/edit_history.tpl");
 return;
 ?>

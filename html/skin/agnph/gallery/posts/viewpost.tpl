@@ -198,6 +198,14 @@
                     </ul>
                 </li>
                 {% endif %} {# post.canEdit #}
+                <li>
+                    <h3>Related Posts</h3>
+                    <ul class="navlist">
+                        {% if prevPostId %}<li><a href="/gallery/post/show/{{ prevPostId }}/">Previous</a></li>{% endif %}
+                        {% if nextPostId %}<li><a href="/gallery/post/show/{{ nextPostId }}/">Next</a></li>{% endif %}
+                        <li><a href="/gallery/post/random/">Random</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
         <div class="mainpanel">

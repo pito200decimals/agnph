@@ -51,6 +51,7 @@ function DoRedirect() {
         header("Location: /admin/fics/");
         return;
     }
+    RenderErrorPage("Not authorized to access this page");
 }
 
 ?>
