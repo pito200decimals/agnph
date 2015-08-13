@@ -8,7 +8,6 @@ TODOs
 - Spoiler tags
 
 == GALLERY ==
-* Gallery permissions model
 * Gallery post descriptions
     - Should these edits be logged?
 X Gallery linking to source on delete
@@ -20,24 +19,18 @@ X Upvote/Downvote (On hold for now. Don't know where to put buttons. Feature not
 X Gallery notes
 X Custom swf/webm thumbs when parent is set to image.
 - Some sort of tag exploration feature, perhaps tag cloud?
-- Viewing tag edits for user.
-    - (Should this be visible publicly?)
 - "Popular" recent posts, maybe by # of views in last day/week/month?
 - Handle parent cleanup on post delete
     - Move favorites over to parent?
 - Tag suggestions
 X Collapse adjacent image pools
-- Fix mobile layout table cell backgrounds
 
 == FICS ==
-* Fics permissions model
-* User favorites (story, author)
-    - Do we want to be able to favorite authors?
-- Author following
+X Author/Story following?
 - Index page, including news and featured stories, perhaps random selection
-- Ability to subscribe for email/PM notifications (for your stories and watching others)
-- Breakdown of views per-chapter
-- Co-authors
+X Ability to subscribe for email/PM notifications (for your stories and watching others)
+X Breakdown of views per-chapter
+- Co-authors?
 - RSS Feed?
 
 == SITE ==

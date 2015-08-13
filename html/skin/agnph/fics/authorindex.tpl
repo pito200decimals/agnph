@@ -1,8 +1,8 @@
 {% extends 'fics/base.tpl' %}
 
 {% block styles %}
+    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/list-style.css" />
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/fics/style.css" />
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/fics/authorindex-style.css" />
 {% endblock %}
 
 {% block content %}
@@ -13,18 +13,18 @@
         </form>
         {% if authors|length > 0 %}
             {# Display search index. #}
-            <table class="authortable">
+            <table class="list-table">
                 <thead>
                     <tr>
-                        <td><div><strong>Name</strong></div></td>
-                        <td><div><strong>Number of Stories</strong></div></td>
+                        <td><strong>Name</strong></td>
+                        <td><strong>Number of Stories</strong></td>
                     </tr>
                 </thead>
                 <tbody>
                     {% for author in authors %}
                         <tr>
-                            <td><div><a href="/user/{{ author.UserId }}/fics/">{{ author.DisplayName }}</a></div></td>
-                            <td><div>{{ author.storyCount }}</div></td>
+                            <td><a href="/user/{{ author.UserId }}/fics/">{{ author.DisplayName }}</a></td>
+                            <td>{{ author.storyCount }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

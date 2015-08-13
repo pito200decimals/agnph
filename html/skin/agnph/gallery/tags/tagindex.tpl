@@ -1,8 +1,8 @@
 {% extends 'gallery/base.tpl' %}
 
 {% block styles %}
+    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/list-style.css" />
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/gallery/style.css" />
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/gallery/tagindex-style.css" />
 {% endblock %}
 
 {% block content %}
@@ -13,20 +13,20 @@
         </form>
         {% if tags|length > 0 %}
             {# Display tag index. #}
-            <table class="tagtable">
+            <table class="list-table">
                 <thead>
                     <tr>
-                        <td><div><strong>Name</strong></div></td>
-                        <td><div><strong>Type</strong></div></td>
-                        <td><div><strong>Count</strong></div></td>
+                        <td><strong>Name</strong></td>
+                        <td><strong>Type</strong></td>
+                        <td><strong>Count</strong></td>
                     </tr>
                 </thead>
                 <tbody>
                     {% for tag in tags %}
                         <tr>
-                            <td><div><a class="{{ tag.typeClass }}" href="/gallery/post/?search={{ tag.Name }}">{{ tag.Name }}</a></div></td>
-                            <td><div>{{ tag.typeName }}{% if tag.EditLocked %} (locked){% endif %}</div></td>
-                            <td><div>{{ tag.tagCounts }}</div></td>
+                            <td><strong><a class="{{ tag.typeClass }}" href="/gallery/post/?search={{ tag.Name }}">{{ tag.Name }}</a></strong></td>
+                            <td>{{ tag.typeName }}{% if tag.EditLocked %} (locked){% endif %}</td>
+                            <td>{{ tag.tagCounts }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

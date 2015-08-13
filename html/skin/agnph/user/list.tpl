@@ -1,11 +1,20 @@
 {% extends 'base.tpl' %}
 
 {% block styles %}
+    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/list-style.css" />
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/user/style.css" />
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/user/userlist-style.css" />
 {% endblock %}
 
 {% block section_navigation %}
+{% endblock %}
+
+{% block sortArrow %}
+    {% if orderParam == "desc" %}
+        ▼
+    {% else %}
+        ▲
+    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -18,22 +27,22 @@
             <label>Search by Name:</label><input class="search" name="search" type="text" value="{{ search }}" required/>
         </form>
         {% if users|length > 0 %}
-            <table class="user-table">
+            <table class="list-table">
                 <thead>
                     <tr>
-                        <td><div><a href="{{ statusSortUrl }}">Status</a></div></td>
-                        <td><div><a href="{{ nameSortUrl }}">Name</a></div></td>
-                        <td><div><a href="{{ positionSortUrl }}">Position</a></div></td>
-                        <td><div><a href="{{ registerSortUrl }}">Date Registered</a></div></td>
+                        <td><strong><a href="{{ statusSortUrl }}">Status</a></strong>{% if sortParam == "status" %}{{ block('sortArrow') }}{% endif %}</td>
+                        <td><strong><a href="{{ nameSortUrl }}">Name</a></strong>{% if sortParam == "name" %}{{ block('sortArrow') }}{% endif %}</td>
+                        <td><strong><a href="{{ positionSortUrl }}">Position</a></strong>{% if sortParam == "position" %}{{ block('sortArrow') }}{% endif %}</td>
+                        <td><strong><a href="{{ registerSortUrl }}">Date Registered</a></strong>{% if sortParam == "register" or not sortParam %}{{ block('sortArrow') }}{% endif %}</td>
                     </tr>
                 </thead>
                 <tbody>
                     {% for account in users %}
                         <tr>
-                            <td><div>{% if account.online %}ONLINE{% else %}OFFLINE{% endif %}</div></td>
-                            <td><div><a href="/user/{{ account.UserId }}/">{{ account.DisplayName }}</a></div></td>
-                            <td><div>{% if account.administrator %}Administrator{% else %}User{% endif %}</div></td>
-                            <td><div>{{ account.dateJoined }}</div></td>
+                            <td>{% if account.online %}ONLINE{% else %}OFFLINE{% endif %}</td>
+                            <td><a href="/user/{{ account.UserId }}/">{{ account.DisplayName }}</a></td>
+                            <td>{% if account.administrator %}Administrator{% else %}User{% endif %}</td>
+                            <td>{{ account.dateJoined }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

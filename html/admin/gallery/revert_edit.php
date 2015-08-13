@@ -3,8 +3,6 @@
 // URL: /admin/gallery/revert-edit/
 // URL: /admin/gallery/revert_Edit.php
 
-define("DEBUG", true);
-
 include_once("../../header.php");
 include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."includes/util/html_funcs.php");
@@ -139,7 +137,7 @@ foreach ($edits_by_pid as $pid => $edits) {
 
 PostSessionBanner("Edits reverted", "green");
 
-header("Location: ".$_SERVER['REQUEST_URI']);
+header("Location: ".$_SERVER['HTTP_REFERER']);
 return;
 
 function GetPreviousProperty($pid, $eid, $prop_name) {

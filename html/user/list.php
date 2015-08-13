@@ -102,6 +102,8 @@ function GetSortURL($sort) {
             // Currently in ascending order, move to descending order.
             $base_sort_url .= "&order=desc";
         }
+    } else if (!isset($_GET['sort']) && $sort == "register") {
+        $base_sort_url .= "&order=desc";
     }
     return $base_sort_url;
 }

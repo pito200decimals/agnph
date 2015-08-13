@@ -10,17 +10,16 @@
 }
 .list-table thead td {
     padding: 5px;
+    padding-left: 10px;
     background-color: rgb(100,130,185);
 }
 .list-table tbody td {
     padding: 5px;
+    padding-left: 10px;
 }
 .list-table tbody tr:nth-child(odd) {
     background-color: rgb(150,180,235);
 }
 .list-table tbody tr:nth-child(even) {
     background-color: rgb(130,160,215);
-}
-.mainpanel {
-    margin: 5px;
 }

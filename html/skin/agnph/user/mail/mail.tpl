@@ -1,6 +1,7 @@
 {% extends "user/base.tpl" %}
 
 {% block styles %}
+    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/list-style.css" />
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/user/style.css" />
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/user/mail-style.css" />
 {% endblock %}
@@ -20,7 +21,7 @@
         <h3>Messages</h3>
         {{ block('banner') }}
         {# Display message list. #}
-        <table class="message-table">
+        <table class="list-table">
             <thead>
                 <tr>
                     <td><div>{# Send/Recv column #}&nbsp;</div></td>
@@ -42,13 +43,8 @@
                         </tr>
                     {% endfor %}
                 {% else %}
-                    <tr class="no-messages">
-                        <td colspan="5">
-                            <div>
-                                {# No posts here. #}
-                                No messages found.
-                            </div>
-                        </td>
+                    <tr>
+                        <td colspan="5">No messages found</td>
                     </tr>
                 {% endif %}
             </tbody>

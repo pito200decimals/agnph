@@ -1,8 +1,8 @@
 {% extends 'gallery/base.tpl' %}
 
 {% block styles %}
+    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/list-style.css" />
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/gallery/style.css" />
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/gallery/list-style.css" />
     <style>
         #actionbar {
             display: block;
