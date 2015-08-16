@@ -21,7 +21,7 @@ if (!QuickCanUserUpload($user)) {
 
 if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) || empty($_FILES['file']['name'])) || isset($_POST['source'])) &&
     isset($_POST['tags']) &&
-    //isset($_POST['description']) &&
+    isset($_POST['description']) &&
     isset($_POST['parent']) &&
     isset($_POST['rating'])) {
     ignore_user_abort(true);  // Prevent user closing the page from stopping the upload (so as to not corrupt SQL state).
@@ -100,7 +100,8 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
         $rating = 'q';
     }
     if (mb_strlen($_POST['description']) > 0) {
-        $escaped_description = sql_escape(mb_substr($_POST['description'], 0, 512));
+        // TODO: Allow description formatting?
+        $escaped_description = sql_escape(mb_substr($_POST['description'], 0, MAX_GALLERY_POST_DESCRIPTION_LENGTH));
     } else {
         $escaped_description = "";
     }
@@ -108,9 +109,9 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
     $status = CanUserUploadNonPending($user) ? "A" : "P";
     $now = time();
     $result = sql_query("INSERT INTO ".GALLERY_POST_TABLE."
-        (Md5, Extension, HasPreview, UploaderId, DateUploaded, Description, Width, Height, FileSize, Status)
+        (Md5, Extension, HasPreview, UploaderId, DateUploaded, Width, Height, FileSize, Status)
         VALUES
-        ('$md5', '$ext', $has_preview, $uploader_id, $now, '$escaped_description', $width, $height, '$filesize', '$status');");
+        ('$md5', '$ext', $has_preview, $uploader_id, $now, $width, $height, '$filesize', '$status');");
     if (!$result) {
         // Error uploading file. Clean up final data file and thumbnail/preview files.
         // Thumbs won't exist for video/flash, but these are "".
@@ -121,8 +122,10 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
         }
     }
     $post_id = sql_last_id();
+    // Update post with tags history gets recorded.
     // Append rating and stuff before tags, so that tags can override the other fields.
     UpdatePost("rating:$rating source:$source parent:$parent_post_id ".$_POST['tags'], $post_id, $user);
+    UpdatePostDescription($post_id, $_POST['description'], $user);
     header("Location: /gallery/post/show/$post_id/");
     return;
 }

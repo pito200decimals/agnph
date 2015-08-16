@@ -86,5 +86,6 @@ RewriteRule ^admin/gallery/?$ /admin/gallery/gallery.php
 RewriteRule ^admin/gallery/tags/?$ /admin/gallery/tag_management.php
 RewriteRule ^admin/gallery/edit-history/?$ /admin/gallery/edit_history.php
 RewriteRule ^admin/gallery/revert-edit/?$ /admin/gallery/revert_edit.php
+RewriteRule ^admin/gallery/description-history/?$ /admin/gallery/description_history.php
 RewriteRule ^admin/fics/?$ /admin/fics/fics.php
 RewriteRule ^admin/fics/tags/?$ /admin/fics/tag_management.php

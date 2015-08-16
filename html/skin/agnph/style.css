@@ -186,7 +186,7 @@ a:hover {
     position: relative;
 }
 .section-nav li {
-    display: inline;
+    display: inline-block;
 }
 .section-nav a {
     display: inline-block;

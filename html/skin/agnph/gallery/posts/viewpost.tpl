@@ -235,9 +235,12 @@
                         {% endif %}
                     {% endif %}
                 </p>
-                {#<p>
-                    {{ post.Description }}
-                </p>#}
+                {% if post.Description|length > 0 %}
+                    <div class="post-description">
+                        <h4>Description</h4>
+                        {{ post.Description }}
+                    </div>
+                {% endif %}
                 <p>
                     {% if user.UserId > 0 %}<a href="/gallery/post/show/{{ post.PostId }}/" onclick="return toggleEdit();">Edit</a> | {% endif %}<a href="{{ post.downloadUrl }}">Download</a>
                 </p>
@@ -251,8 +254,7 @@
                         <label class="formlabel">Parent</label>         <input id="parent" class="textbox" type="textbox" name="parent" value="{% if post.ParentPostId!=-1 %}{{ post.ParentPostId }}{% endif %}" /><br />
                         <label class="formlabel">Source</label>         <input id="imgsource" class="textbox" type="textbox" size=35 name="source" value="{{ post.Source }}" /><br />
                         <label class="formlabel">Tags</label>           <textarea id="tags" class="textbox" name="tags">{{ post.tagstring }}</textarea><br />
-                        {# TODO: Add description support #}
-                        {# <label class="formlabel">Description</label>    <textarea id="desc" class="textbox" name="description">{{ post.Description }}</textarea><br /> #}<input type="hidden" name="description" value="" />
+                        <label class="formlabel">Description</label>    <textarea id="desc" class="textbox" name="description">{{ post.Description }}</textarea><br />
                         <br />
                         <input type="submit" value="Save Changes" />
                     </form>

@@ -42,6 +42,9 @@ function HandleEditAction($post) {
     $tagstrarray = array_filter($tagstrarray, function($str) { return mb_strlen($str) > 0; });
     $tagstr = implode(" ", $tagstrarray);
     UpdatePost($tagstr, $pid, $user);
+    if (trim($_POST['description']) != trim($post['Description'])) {
+        UpdatePostDescription($pid, $_POST['description'], $user);
+    }
     PostSessionBanner("Post updated", "green");
 }
 function HandleApproveAction($post) {

@@ -36,6 +36,7 @@ sql_query("DROP TABLE ".GALLERY_POST_TABLE.";");
 sql_query("DROP TABLE ".GALLERY_TAG_TABLE.";");
 sql_query("DROP TABLE ".GALLERY_POST_TAG_TABLE.";");
 sql_query("DROP TABLE ".GALLERY_POST_TAG_HISTORY_TABLE.";");
+sql_query("DROP TABLE ".GALLERY_DESC_HISTORY_TABLE.";");
 sql_query("DROP TABLE ".GALLERY_COMMENT_TABLE.";");
 sql_query("DROP TABLE ".GALLERY_USER_PREF_TABLE.";");
 sql_query("DROP TABLE ".GALLERY_USER_FAVORITES_TABLE.";");
@@ -189,8 +190,17 @@ do_or_die(sql_query(
         TagsAdded TEXT(512) DEFAULT '',
         TagsRemoved TEXT(512) DEFAULT '',
         PropertiesChanged TEXT(512) DEFAULT '',
-        BatchId INT(11) DEFAULT 0,".  // Id for storing groups of related tag edits. 0 if unbatched.
+        BatchId INT(11) DEFAULT 0,".  // Id for groups of related tag edits. 0 if unbatched. Not used, but may be helpful in the future.
        "PRIMARY KEY(Id, PostId, Timestamp)
+    ) DEFAULT CHARSET=utf8;"));
+do_or_die(sql_query(
+    "CREATE TABLE ".GALLERY_DESC_HISTORY_TABLE." (
+        Id INT(11) UNSIGNED AUTO_INCREMENT,
+        PostId INT(11) NOT NULL,
+        Timestamp INT(11) NOT NULL,
+        UserId INT(11) NOT NULL,
+        Description TEXT(".MAX_GALLERY_POST_DESCRIPTION_LENGTH.") NOT NULL,
+        PRIMARY KEY(Id, PostId, Timestamp)
     ) DEFAULT CHARSET=utf8;"));
 // General information about pools.
 do_or_die(sql_query(

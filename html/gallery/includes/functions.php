@@ -145,7 +145,7 @@ function GetValidParentPostId($parent_post_id, $post_id) {
     return $parent_post_id;
 }
 
-// Updates a post with the new tags/properties.
+// Updates a post with the new tags/properties (and updates history log).
 function UpdatePost($tag_string, $post_id, $user) {
     global $GALLERY_TAG_TYPES;
     $tag_string = CleanTagString($tag_string);
@@ -153,6 +153,19 @@ function UpdatePost($tag_string, $post_id, $user) {
     $descriptors = GetTagDescriptors($tokens, $post_id, "GalleryTagDescriptorFilterFn");
     UpdatePostWithDescriptors($descriptors, $post_id, $user);
     UpdateTagTypes(GALLERY_TAG_TABLE, $GALLERY_TAG_TYPES, $descriptors, $user);  // Do after creating tags above when setting post tags.
+}
+
+// Updates a post with the new description (and updates history log).
+function UpdatePostDescription($post_id, $description, $user) {
+    $description = mb_substr($description, 0, MAX_GALLERY_POST_DESCRIPTION_LENGTH);
+    $escaped_description = sql_escape($description);
+    $now = time();
+    $user_id = $user['UserId'];
+    sql_query("UPDATE ".GALLERY_POST_TABLE." SET Description='$escaped_description' WHERE PostId=$post_id;");
+    sql_query("INSERT INTO ".GALLERY_DESC_HISTORY_TABLE."
+        (PostId, Timestamp, UserId, Description)
+        VALUES
+        ($post_id, $now, $user_id, '$escaped_description');");
 }
 
 // Writes post statistics to database.

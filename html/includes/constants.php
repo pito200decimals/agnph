@@ -41,6 +41,7 @@ define("GALLERY_POOLS_TABLE", "gallery_pools");
 define("GALLERY_COMMENT_TABLE", "gallery_comments");
 define("GALLERY_TAG_ALIAS_TABLE", "gallery_tag_aliases");
 define("GALLERY_TAG_IMPLICATION_TABLE", "gallery_tag_implications");
+define("GALLERY_DESC_HISTORY_TABLE", "gallery_desc_history");
 
 // Fics tables.
 define("FICS_STORY_TABLE", "fics_stories");
@@ -130,6 +131,7 @@ define("GALLERY_PROFILE_SHOW_NUM_UPLOADS", 6);
 define("GALLERY_PROFILE_SHOW_NUM_FAVORITES", 6);
 define("INITIAL_GALLERY_UPLOAD_LIMIT", 10);
 define("GALLERY_ADMIN_TAG_ALIAS_CHANGE_LIMIT", 1000);  // Max # of posts to edit when adding an alias.
+define("MAX_GALLERY_POST_DESCRIPTION_LENGTH", 1024);
 
 // Fics-related
 $FICS_TAG_TYPES = array(
