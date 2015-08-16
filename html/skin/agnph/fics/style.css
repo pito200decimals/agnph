@@ -4,7 +4,6 @@
 }
 
 /* Storyblock CSS */
-
 .storyblock {
     margin: 5px;
     padding: 5px;
@@ -36,16 +35,18 @@
     padding: 5px;
     background-color: rgb(255,255,255);
 }
-.storyblockinfo p,ul,li {
-    margin: 0px;
-}
 .storyblockinfo ul {
     list-style: none;
     padding: 0px;
 }
+.storyblockinfo .summary p {
+    margin: 0px;
+}
+.meta-list {
+    margin: 0px;
+}
 .metalabel {
     font-weight: bold;
-    margin-right: 5px;
 }
 .summary-box {
     max-height: 300px;

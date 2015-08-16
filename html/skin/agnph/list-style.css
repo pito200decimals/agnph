@@ -1,6 +1,4 @@
 .list-table {
-    border-radius: 15px;
-    background-color: rgb(170,200,255);
     width: 100%;
     border-style: none;
     overflow: hidden;
@@ -17,9 +15,27 @@
     padding: 5px;
     padding-left: 10px;
 }
-.list-table tbody tr:nth-child(odd) {
+.list-table tbody tr:nth-child(odd) td {
     background-color: rgb(150,180,235);
 }
-.list-table tbody tr:nth-child(even) {
+.list-table tbody tr:nth-child(even) td {
     background-color: rgb(130,160,215);
+}
+.list-table thead tr td:first-child {
+    border-radius: 15px 0 0 0;
+}
+.list-table thead tr td:last-child {
+    border-radius: 0 15px 0 0;
+}
+.list-table tbody {
+    border-radius: 0 0 15px 15px;
+}
+.list-table tbody tr:last-child {
+    border-radius: 0 0 15px 15px;
+}
+.list-table tbody tr:last-child td:first-child {
+    border-radius: 0 0 0 15px;
+}
+.list-table tbody tr:last-child td:last-child {
+    border-radius: 0 0 15px 0;
 }

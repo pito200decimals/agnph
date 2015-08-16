@@ -231,6 +231,7 @@ function AddUserPermissions(&$post, $user) {
         $post['canEdit'] = true;
         if ($post['Status'] != 'F' && $post['Status'] != 'D') {
             $post['canFlag'] = true;
+            $post['hasAction'] = true;
         }
     }
     if (CanUserDeleteGalleryPost($user)) {
@@ -238,20 +239,32 @@ function AddUserPermissions(&$post, $user) {
             // TODO: Decide if admins can delete post from any state.
             $post['canDelete'] = true;
             $post['canUnflag'] = true;
+            $post['hasAction'] = true;
         } else if ($post['Status'] == 'D') {
             $post['canUnDelete'] = true;
+            $post['hasAction'] = true;
         }
     }
     if (CanUserApprovePost($user)) {
         if ($post['Status'] == 'P') {
             $post['canApprove'] = true;
+            $post['hasAction'] = true;
         }
-    }
-    if (CanUserCommentOnPost($user)) {
-        $post['canComment'] = true;
     }
     if (CanUserRegenerateThumbnail($user, $post)) {
         $post['canGenerateThumbnail'] = true;
+        $post['hasAction'] = true;
+    }
+    if (CanUserAddOrRemoveFromPools($user)) {
+        $post['canModifyPool'] = true;
+        $post['hasAction'] = true;
+    }
+    $post['canFavorite'] = true;
+    $post['hasAction'] = true;
+
+    // Non-action-bar permissions.
+    if (CanUserCommentOnPost($user)) {
+        $post['canComment'] = true;
     }
     $ext = $post['Extension'];
     // Don't allow swf of webm posts to be used as an avatar.

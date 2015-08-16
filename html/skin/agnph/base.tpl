@@ -27,8 +27,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         {% block head %}
             <title>AGNPH</title>
         {% endblock %}
@@ -44,8 +44,8 @@
         {% if debug %}
             {# Dot all borders to help style debugging #}
             {# TODO: Remove #}
-            <style type="text/css">
-                div,span,li {
+            <style>
+                div,span,li,td {
                     border-style: dotted;
                     border-width: 1px;
                 }
@@ -93,7 +93,7 @@
         </div>
         <div id="mainbody">
             <div id="header">
-                {# TODO: Add site banner here, above section navigation? #}
+                {# TODO: Add site/section banner here, above section navigation? #}
                 {% block section_navigation %}
                 {% endblock %}
             </div>

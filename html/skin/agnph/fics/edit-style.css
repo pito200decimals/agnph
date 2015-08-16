@@ -41,3 +41,6 @@ form hr {
     font-size: 75%;
     display: none;
 }
+.chapter-row span {
+    margin-right: 15px;
+}

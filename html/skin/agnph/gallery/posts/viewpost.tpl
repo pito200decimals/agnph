@@ -99,105 +99,111 @@
                         <li><a href="/gallery/post/show/{{ post.PostId }}/history/">Tag History</a></li>
                     </ul>
                 </li>
-                {% if post.canEdit %}
-                <li>
-                    <h3>Actions</h3>
-                    <ul class="actionlist">
-                        <li><a href="/gallery/post/show/{{ post.PostId }}/" onclick="return toggleEdit();">Edit</a></li>
-                        {% if post.canApprove %}
-                            <li>
-                                <form hidden id="approveform" method="POST" accept-charset="UTF-8">
-                                    <input name="post" type="hidden" value="{{ post.PostId }}" />
-                                    <input name="action" type="hidden" value="approve" />
-                                </form>
-                                <a href="#" onclick="$('#approveform')[0].submit();return false;">Approve Post</a>
-                            </li>
-                        {% endif %}
-                        {% if post.canFlag %}
-                            <li>
-                                <a id="flagaction" href="#">{# No text for no javascript #}</a>
-                                <div class="flageditbox">
-                                    <form method="POST" accept-charset="UTF-8">
-                                        <label>Reason:</label><br />
-                                        <input name="post" type="hidden" value="{{ post.PostId }}" />
-                                        <input id="flag-edit-text" name="reason" type="text" />
-                                        <input name="action" type="hidden" value="flag" />
-                                        <input type="submit" value="Flag" />
-                                    </form>
-                                </div>
-                            </li>
-                        {% endif %}
-                        {% if post.canUnflag %}
-                            <li>
-                                <form hidden id="unflagform" method="POST" accept-charset="UTF-8">
-                                    <input name="post" type="hidden" value="{{ post.PostId }}" />
-                                    <input name="action" type="hidden" value="unflag" />
-                                </form>
-                                <a href="#" onclick="$('#unflagform')[0].submit();return false;">Unflag Post</a>
-                            </li>
-                        {% endif %}
-                        {% if post.canDelete %}
-                            <li>
-                                <form hidden id="deleteform" method="POST" accept-charset="UTF-8">
-                                    <input name="post" type="hidden" value="{{ post.PostId }}" />
-                                    <input name="reason" type="hidden" value="" />
-                                    <input name="action" type="hidden" value="delete" />
-                                </form>
-                                <a href="#" onclick="$('#deleteform')[0].submit();return false;">Delete Post</a>
-                            </li>
-                        {% endif %}
-                        {% if post.canUnDelete %}
-                            <li>
-                                <form hidden id="undeleteform" method="POST" accept-charset="UTF-8">
-                                    <input name="post" type="hidden" value="{{ post.PostId }}" />
-                                    <input name="action" type="hidden" value="undelete" />
-                                </form>
-                                <a href="#" onclick="$('#undeleteform')[0].submit();return false;">Undelete Post</a>
-                            </li>
-                        {% endif %}
-                        {% if post.canGenerateThumbnail %}
-                            <li>
-                                <form hidden id="gen-thumb-form" method="POST" accept-charset="UTF-8">
-                                    <input name="post" type="hidden" value="{{ post.PostId }}" />
-                                    <input name="action" type="hidden" value="regen-thumbnail" />
-                                </form>
-                                <a href="#" onclick="$('#gen-thumb-form')[0].submit();return false;">Regenerate Thumbnail</a>
-                            </li>
-                        {% endif %}
-                        <li>
-                            <a id="poolaction" href="#"></a><span id="poolactionworking" hidden>
-                            <small>Processing...</small></span>
-                            <div class="pooleditbox">
-                                <label>Search for Pool:</label><br />
-                                <input id="pooleditfield" type="text" />
-                                <ul id="poolautocomplete">
-                                </ul>
-                            </div>
-                        </li>
-                        <li>
-                            {% if isFavorited %}
-                                <form id="favorite-form" method="POST">
-                                    <input type="hidden" name="action" value="remove-favorite" />
-                                    <a href="#" onclick="document.getElementById('favorite-form').submit();return false;">Remove from Favorites</a>
-                                </form>
-                            {% else %}
-                                <form id="favorite-form" method="POST">
-                                    <input type="hidden" name="action" value="add-favorite" />
-                                    <a href="#" onclick="document.getElementById('favorite-form').submit();return false;">Add to Favorites</a>
-                                </form>
+                {% if post.hasAction %}
+                    <li>
+                        <h3>Actions</h3>
+                        <ul class="actionlist">
+                            {% if post.canEdit %}
+                                <li><a href="/gallery/post/show/{{ post.PostId }}/" onclick="return toggleEdit();">Edit</a></li>
                             {% endif %}
-                        </li>
-                        {% if post.canSetAvatar %}
-                            <li>
-                                <form id="set-avatar-form" method="POST">
-                                    <input type="hidden" name="action" value="set-avatar" />
-                                    <a href="#" onclick="document.getElementById('set-avatar-form').submit();return false;">Set as Avatar</a>
-                                </form>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </li>
-                {% endif %} {# post.canEdit #}
+                            {% if post.canApprove %}
+                                <li>
+                                    <form hidden id="approveform" method="POST" accept-charset="UTF-8">
+                                        <input name="post" type="hidden" value="{{ post.PostId }}" />
+                                        <input name="action" type="hidden" value="approve" />
+                                    </form>
+                                    <a href="#" onclick="$('#approveform')[0].submit();return false;">Approve Post</a>
+                                </li>
+                            {% endif %}
+                            {% if post.canFlag %}
+                                <li>
+                                    <a id="flagaction" href="#">{# No text for no javascript #}</a>
+                                    <div class="flageditbox">
+                                        <form method="POST" accept-charset="UTF-8">
+                                            <label>Reason:</label><br />
+                                            <input name="post" type="hidden" value="{{ post.PostId }}" />
+                                            <input id="flag-edit-text" name="reason" type="text" />
+                                            <input name="action" type="hidden" value="flag" />
+                                            <input type="submit" value="Flag" />
+                                        </form>
+                                    </div>
+                                </li>
+                            {% endif %}
+                            {% if post.canUnflag %}
+                                <li>
+                                    <form hidden id="unflagform" method="POST" accept-charset="UTF-8">
+                                        <input name="post" type="hidden" value="{{ post.PostId }}" />
+                                        <input name="action" type="hidden" value="unflag" />
+                                    </form>
+                                    <a href="#" onclick="$('#unflagform')[0].submit();return false;">Unflag Post</a>
+                                </li>
+                            {% endif %}
+                            {% if post.canDelete %}
+                                <li>
+                                    <form hidden id="deleteform" method="POST" accept-charset="UTF-8">
+                                        <input name="post" type="hidden" value="{{ post.PostId }}" />
+                                        <input name="reason" type="hidden" value="" />
+                                        <input name="action" type="hidden" value="delete" />
+                                    </form>
+                                    <a href="#" onclick="$('#deleteform')[0].submit();return false;">Delete Post</a>
+                                </li>
+                            {% endif %}
+                            {% if post.canUnDelete %}
+                                <li>
+                                    <form hidden id="undeleteform" method="POST" accept-charset="UTF-8">
+                                        <input name="post" type="hidden" value="{{ post.PostId }}" />
+                                        <input name="action" type="hidden" value="undelete" />
+                                    </form>
+                                    <a href="#" onclick="$('#undeleteform')[0].submit();return false;">Undelete Post</a>
+                                </li>
+                            {% endif %}
+                            {% if post.canGenerateThumbnail %}
+                                <li>
+                                    <form hidden id="gen-thumb-form" method="POST" accept-charset="UTF-8">
+                                        <input name="post" type="hidden" value="{{ post.PostId }}" />
+                                        <input name="action" type="hidden" value="regen-thumbnail" />
+                                    </form>
+                                    <a href="#" onclick="$('#gen-thumb-form')[0].submit();return false;">Regenerate Thumbnail</a>
+                                </li>
+                            {% endif %}
+                            {% if post.canModifyPool %}
+                                <li>
+                                    <a id="poolaction" href="#"></a><span id="poolactionworking" hidden>
+                                    <small>Processing...</small></span>
+                                    <div class="pooleditbox">
+                                        <label>Search for Pool:</label><br />
+                                        <input id="pooleditfield" type="text" />
+                                        <ul id="poolautocomplete">
+                                        </ul>
+                                    </div>
+                                </li>
+                            {% endif %}
+                            {% if post.canFavorite %}
+                                <li>
+                                    {% if isFavorited %}
+                                        <form id="favorite-form" method="POST">
+                                            <input type="hidden" name="action" value="remove-favorite" />
+                                            <a href="#" onclick="document.getElementById('favorite-form').submit();return false;">Remove from Favorites</a>
+                                        </form>
+                                    {% else %}
+                                        <form id="favorite-form" method="POST">
+                                            <input type="hidden" name="action" value="add-favorite" />
+                                            <a href="#" onclick="document.getElementById('favorite-form').submit();return false;">Add to Favorites</a>
+                                        </form>
+                                    {% endif %}
+                                </li>
+                            {% endif %}
+                            {% if post.canSetAvatar %}
+                                <li>
+                                    <form id="set-avatar-form" method="POST">
+                                        <input type="hidden" name="action" value="set-avatar" />
+                                        <a href="#" onclick="document.getElementById('set-avatar-form').submit();return false;">Set as Avatar</a>
+                                    </form>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                {% endif %}  {# post.hasAction #}
                 <li>
                     <h3>Related Posts</h3>
                     <ul class="navlist">

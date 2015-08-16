@@ -56,5 +56,4 @@ $(document).ready(function() {
         <h3>Preview</h3>
         <img id="previewimg" src="/gallery/data/80/14/8014cdf559ca76698f7c1a2fbcd154dc.png" />
     </div>
-    <div class="Clear">&nbsp;</div>
 {% endblock %}

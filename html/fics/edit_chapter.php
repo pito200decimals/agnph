@@ -12,8 +12,7 @@ if (isset($_POST) && isset($_POST['sid']) && isset($_POST['chapternum'])) {
         return;
     } else {
         unset($success);
-        // TODO: Display error message as banner.
-        if (isset($errmsg)) $vars['errmsg'] = $errmsg;
+        if (isset($errmsg)) PostBanner($errmsg, "red");
         // Failed, but try to repopulate story fields.
         $fill_from_post = true;
     }
@@ -46,8 +45,8 @@ if ($action == "create") {
     $vars['chapternotes'] = $chapter['ChapterNotes'];
     $cid = $chapter['ChapterId'];
     $chaptertext = GetChapterText($cid);
-    if ($chaptertext == null) {
-        RenderErrorPage("Chapter not found.");
+    if ($chaptertext === null) {
+        RenderErrorPage("Chapter not found");
     } else {
         $vars['chaptertext'] = $chaptertext;
     }

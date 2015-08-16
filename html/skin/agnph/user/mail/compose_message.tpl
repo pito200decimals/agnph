@@ -55,25 +55,23 @@
 {% endblock %}
 
 {% block usercontent %}
-    <div>
-        <form id="form" action="/user/{{ profile.user.UserId }}/mail/send/" method="POST" accept-charset="UTF-8">
-            <ul class="compose-form">
-                <li>
-                    <label>To:</label>
-                    <input id="to-field" name="to" type="text" value="{{ toUser }}" />
-                    <input id="ruid-field" name="ruid" type="hidden" value="{{ toUserId }}" />
-                    <span id="missing-user" class="compose-error">User missing</span>
-                </li>
-                <li>
-                    <label>Subject:</label>
-                    <input id="subject-field" name="subject" type="text" value="" />
-                </li>
-                <li>
-                    <textarea id="message" name="message">
-                        {{ message }}
-                    </textarea>
-                </li>
-            <input id="submit-button" type="submit" value="Send" />
-        </form>
-    </div>
+    <form id="form" action="/user/{{ profile.user.UserId }}/mail/send/" method="POST" accept-charset="UTF-8">
+        <ul class="compose-form">
+            <li>
+                <label>To:</label>
+                <input id="to-field" name="to" type="text" value="{{ toUser }}" />
+                <input id="ruid-field" name="ruid" type="hidden" value="{{ toUserId }}" />
+                <span id="missing-user" class="compose-error">User missing</span>
+            </li>
+            <li>
+                <label>Subject:</label>
+                <input id="subject-field" name="subject" type="text" value="" />
+            </li>
+            <li>
+                <textarea id="message" name="message">
+                    {{ message }}
+                </textarea>
+            </li>
+        <input id="submit-button" type="submit" value="Send" />
+    </form>
 {% endblock %}

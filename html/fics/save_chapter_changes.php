@@ -26,9 +26,6 @@ $chapterid = $_POST['chapterid'];
 if (!isset($_GET['action'])) return;
 $action = $_GET['action'];
 
-debug("SAVING CHAPTER $chapternum");
-
-
 // Check for valid input.
 if (!is_numeric($sid)) return;
 if (mb_strlen($chaptertitle) == 0) {
@@ -113,9 +110,6 @@ if ($action == "edit") {
     return;
 } else if ($action == "create") {
     // Create new chapter.
-    debug($chapternum);
-    debug(sizeof($chapters));
-    debug($chapters);
     if ($chapternum != sizeof($chapters) + 1) InvalidURL();
     $escaped_title = sql_escape($chaptertitle);
     $escaped_notes = sql_escape($chapternotes);

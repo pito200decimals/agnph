@@ -65,6 +65,8 @@ function ConstructPageIterator($currpage, $maxpage, $iterator_size, $link_fn, $i
 function RenderPage($template) {
     global $twig, $vars;
     $text = mb_ereg_replace("\s+", " ", $twig->render($template, $vars));
+    $text = mb_ereg_replace(">\s+", ">", $text);
+    $text = mb_ereg_replace("\s+<", "<", $text);
     if (DEBUG) {
         echo "\n\n\n\n\n";
         echo "----------------------------------------------------------------------------------------------\n";
@@ -124,7 +126,7 @@ function TidyHTML($html) {
             if (mb_strlen($match[1]) > 0) $ret .= $tabs.$match[1]."\n";
             $ret .= $tabs.$match[2]."\n";
             $html = $match[3];
-        } elseif (mb_ereg("^([^<]*)(<?[^>]+>)(.*)$", $html, $match)) {
+        } elseif (mb_ereg("^([^<]*)(<\\?[^>]+>)(.*)$", $html, $match)) {
             // xml
             $tabs = Tabs($indent);
             if (mb_strlen($match[1]) > 0) $ret .= $tabs.$match[1]."\n";

@@ -96,7 +96,7 @@
                                 {# Update input index, and edit/delete links #}
                                 $(this).children(".chapternum").val(index);
                                 $(this).find(".chaptereditlink").attr("href", "/fics/edit/{{ formstory.StoryId }}/" + index + "/");
-                                {# $(this).find(".chapterdeletelink").attr("href", ""); #}
+                                $(this).find(".chapterdeletelink").attr("href", "/fics/delete/{{ formstory.StoryId }}/" + index + "/");
                                 index++;
                             });
                             $('.sortable').sortable();
@@ -152,98 +152,99 @@
     {% else %}
         <h3>Create Story</h3>
     {% endif %}
-    <div>
-        {% if errmsg and errmsg|length > 0 %}
-            <div class="errormsg">
-                Error: {{ errmsg }}
-            </div>
-        {% endif %}
-        {# Autocomplete off so that hidden inputs in the chapter section don't autofill with previous values #}
-        <form action="" method="POST" autocomplete="off" accept-charset="UTF-8">
-            <input type="hidden" name="sid" value="{% if create %}-1{% else %}{{ formstory.StoryId }}{% endif %}" />
-            <p><label>Title:</label><input type="text" name="title" value="{{ formstory.Title }}" /></p>
-            {# TODO: Coauthors #}
-            <p><label>Summary:</label>
+    {{ block('banner') }}
+    {# Autocomplete off so that hidden inputs in the chapter ordering section don't autofill with previous values #}
+    <form method="POST" autocomplete="off" accept-charset="UTF-8">
+        <input type="hidden" name="sid" value="{% if create %}-1{% else %}{{ formstory.StoryId }}{% endif %}" />
+        <p>
+            <label>Title:</label>
+            <input type="text" name="title" value="{{ formstory.Title }}" />
+        </p>
+        {# TODO: Coauthors #}
+        <p>
+            <label>Summary:</label>
             <textarea id="summary" name="summary">
                 {% autoescape false %}
                     {{ formstory.Summary }}
                 {% endautoescape %}
-            </textarea></p>
-            <p>
-                <label>Rating: </label>
-                <select name="rating">
-                    {# Obfuscate database values #}
-                    <option value="1"{% if not formstory or formstory.Rating == 'G' %} selected{% endif %}>G</option>
-                    <option value="2"{% if formstory.Rating == 'P' %} selected{% endif %}>PG</option>
-                    <option value="3"{% if formstory.Rating == 'T' %} selected{% endif %}>PG-13</option>
-                    <option value="4"{% if formstory.Rating == 'R' %} selected{% endif %}>R</option>
-                    <option value="5"{% if formstory.Rating == 'X' %} selected{% endif %}>XXX</option>
+            </textarea>
+        </p>
+        <p>
+            <label>Rating: </label>
+            <select name="rating">
+                {# Obfuscate database values #}
+                <option value="1"{% if not formstory or formstory.Rating == 'G' %} selected{% endif %}>G</option>
+                <option value="2"{% if formstory.Rating == 'P' %} selected{% endif %}>PG</option>
+                <option value="3"{% if formstory.Rating == 'T' %} selected{% endif %}>PG-13</option>
+                <option value="4"{% if formstory.Rating == 'R' %} selected{% endif %}>R</option>
+                <option value="5"{% if formstory.Rating == 'X' %} selected{% endif %}>XXX</option>
+            </select>
+            <label>Completed:</label>
+            <select name="completed">
+                <option value="1"{% if not formstory or not formstory.Completed %} selected{% endif %}>No</option>
+                <option value="2"{% if formstory.Completed %} selected{% endif %}>Yes</option>
+            </select>
+            {% if formstory.canFeature %}
+                <label>Featured:</label>
+                <select name="featured">
+                    <option value="D"{% if formstory.Featured=="D" %} selected{% endif %}>None</option>
+                    <option value="F"{% if formstory.Featured=="F" %} selected{% endif %}>Featured</option>
+                    <option value="G"{% if formstory.Featured=="G" %} selected{% endif %}>Gold</option>
+                    <option value="S"{% if formstory.Featured=="S" %} selected{% endif %}>Silver</option>
+                    <option value="Z"{% if formstory.Featured=="Z" %} selected{% endif %}>Bronze</option>
+                    <option value="f"{% if formstory.Featured=="f" %} selected{% endif %}>Retired</option>
+                    <option value="g"{% if formstory.Featured=="g" %} selected{% endif %}>Retired Gold</option>
+                    <option value="s"{% if formstory.Featured=="s" %} selected{% endif %}>Retired Silver</option>
+                    <option value="z"{% if formstory.Featured=="z" %} selected{% endif %}>Retired Bronze</option>
                 </select>
-                <label>Completed:</label>
-                <select name="completed">
-                    <option value="1"{% if not formstory or not formstory.Completed %} selected{% endif %}>No</option>
-                    <option value="2"{% if formstory.Completed %} selected{% endif %}>Yes</option>
-                </select>
-                {% if formstory.canFeature %}
-                    <label>Featured:</label>
-                    <select name="featured">
-                        <option value="D"{% if formstory.Featured=="D" %} selected{% endif %}>None</option>
-                        <option value="F"{% if formstory.Featured=="F" %} selected{% endif %}>Featured</option>
-                        <option value="G"{% if formstory.Featured=="G" %} selected{% endif %}>Gold</option>
-                        <option value="S"{% if formstory.Featured=="S" %} selected{% endif %}>Silver</option>
-                        <option value="Z"{% if formstory.Featured=="Z" %} selected{% endif %}>Bronze</option>
-                        <option value="f"{% if formstory.Featured=="f" %} selected{% endif %}>Retired</option>
-                        <option value="g"{% if formstory.Featured=="g" %} selected{% endif %}>Retired Gold</option>
-                        <option value="s"{% if formstory.Featured=="s" %} selected{% endif %}>Retired Silver</option>
-                        <option value="z"{% if formstory.Featured=="z" %} selected{% endif %}>Retired Bronze</option>
-                    </select>
-                {% endif %}
-            </p>
-            {# TODO: Admin Approval #}
-            {# TODO: Series selection #}
-            <p><label>Story Notes:</label>
+            {% endif %}
+        </p>
+        {# TODO: Admin Approval? #}
+        <p>
+            <label>Story Notes:</label>
             <textarea id="notes" name="notes">
                 {% autoescape false %}
                     {{ formstory.StoryNotes }}
                 {% endautoescape %}
-            </textarea></p>
-            <p><label>Story Tags:</label><br />
-            <textarea id="tagbox" class="tagbox" name="tags">{{ formstory.tagstring }}</textarea>
+            </textarea>
+        </p>
+        <p>
+            <label>Story Tags:</label><br />
+            <textarea id="tagbox" class="tagbox" name="tags">
+                {{ formstory.tagstring }}
+            </textarea>
             <span id="gender-warning" class="tag-warning"><br />Tags should include the character's gender or pairing (e.g. Female, Male/Female, Sexless)</span>
-            </p>
+        </p>
 
-            {% if edit and chapters %}
-                <input type="submit" name="save" value="Save Changes" />
-            {% endif %}
-            <hr />
-            <div>
-                {% if create or not chapters %}
-                    <h4>Chapter 1</h4>
-                    {{ block('editchapter') }}
-                    <input type="submit" name="save" value="Create Story" />
-                {% else %}
-                        <h4>Chapters</h4>
-                        <div class="reorder_hint hidden">(Drag to reorder)</div>
-                        <ol class="sortable">
-                            {% for chapter in chapters %}
-                                {# TODO: Add non-JS support (Copy fields on submit) #}
-                                <li>
-                                    <input class="chapternum" type="hidden" value="{{ chapter.ChapterItemOrder + 1 }}" id="{{ chapter.ChapterItemOrder + 1 }}" />
-                                    <input class="chapterid" type="hidden" value="{{ chapter.hash }}" />
-                                    {{ chapter.Title }}
-                                    <span><a class="chaptereditlink" href="/fics/edit/{{ formstory.StoryId }}/{{ chapter.ChapterItemOrder + 1 }}/">Edit</a></span>
-                                    {% if chapters|length > 1 %}
-                                        {# TODO: Delete chapter link #}
-                                        <span>Delete</span>
-                                    {% endif %}
-                                </li>
-                            {% endfor %}
-                        </ol>
-                        <div class="newchapter">
-                            <a href="/fics/create/{{ formstory.StoryId }}/{{ chapters|length + 1 }}/">Add new Chapter</a>
-                        </div>
-                {% endif %}
+        {% if edit and chapters %}
+            <input type="submit" name="save" value="Save Changes" />
+        {% endif %}
+        <hr />
+        {% if create or not chapters %}
+            {# Form to compose new chapter 1 #}
+            <h4>Chapter 1</h4>
+            {{ block('editchapter') }}
+            <input type="submit" name="save" value="Create Story" />
+        {% else %}
+            <h4>Chapters</h4>
+            <div class="reorder_hint hidden">(Drag to reorder)</div>
+            <ol class="sortable">
+                {% for chapter in chapters %}
+                    {# TODO: Add non-JS support (Copy fields on submit) #}
+                    <li class="chapter-row">
+                        <input class="chapternum" type="hidden" value="{{ chapter.ChapterItemOrder + 1 }}" id="{{ chapter.ChapterItemOrder + 1 }}" />
+                        <input class="chapterid" type="hidden" value="{{ chapter.hash }}" />
+                        <span>{{ chapter.Title }}</span>
+                        <span><a class="chaptereditlink" href="/fics/edit/{{ formstory.StoryId }}/{{ chapter.ChapterItemOrder + 1 }}/">Edit</a></span>
+                        {% if chapters|length > 1 %}
+                            <span><a class="chapterdeletelink" href="/fics/delete/{{ formstory.StoryId }}/{{ chapter.ChapterItemOrder + 1 }}/">Delete</a></span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ol>
+            <div class="newchapter">
+                <a href="/fics/create/{{ formstory.StoryId }}/{{ chapters|length + 1 }}/">Add new Chapter</a>
             </div>
-        </form>
-    </div>
+        {% endif %}
+    </form>
 {% endblock %}

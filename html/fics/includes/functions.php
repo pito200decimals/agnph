@@ -133,7 +133,9 @@ function FillStoryInfo(&$story) {
 // Returns null on error.
 function GetChaptersInfo($sid) {
     $escaped_sid = sql_escape($sid);
-    if (!sql_query_into($result, "SELECT * FROM ".FICS_CHAPTER_TABLE." WHERE ParentStoryId='$escaped_sid' ORDER BY ChapterItemOrder ASC, ChapterId DESC;", 1)) return null;
+    if (!sql_query_into($result, "SELECT * FROM ".FICS_CHAPTER_TABLE." WHERE
+        ParentStoryId='$escaped_sid' AND ApprovalStatus='A'
+        ORDER BY ChapterItemOrder ASC, ChapterId DESC;", 1)) return null;
     $chapters = array();
     while ($row = $result->fetch_assoc()) {
         $cid = $row['ChapterId'];
@@ -186,7 +188,12 @@ function GetTagsInfo($tag_id_array) {
 function GetReviews($sid) {
     $escaped_sid = sql_escape($sid);
     $reviews = array();
-    if (!sql_query_into($result, "SELECT * FROM ".FICS_REVIEW_TABLE." WHERE StoryId='$escaped_sid' ORDER BY ReviewDate ASC, ReviewId ASC;", 0)) return null;
+    if (!sql_query_into($result, "SELECT * FROM ".FICS_REVIEW_TABLE." R
+        WHERE StoryId='$escaped_sid' AND
+        EXISTS(SELECT 1 FROM ".FICS_CHAPTER_TABLE." C WHERE
+            R.ChapterId=C.ChapterId AND
+            C.ApprovalStatus='A')
+        ORDER BY ReviewDate ASC, ReviewId ASC;", 0)) return null;
     $ids = array();
     while ($row = $result->fetch_assoc()) {
         $ids[] = $row['ReviewerUserId'];
@@ -233,24 +240,31 @@ function UpdateStoryStats($sid) {
         $cid = $chapter['ChapterId'];
         $text = GetChapterText($cid);
         if ($text == null) continue;
-        $chapcount++;
-        $chapterWordCount = ChapterWordCount($text);
-        $wordcount += $chapterWordCount;
-        $viewcount += $chapter['Views'];
-        // Also get chapter reviews.
-        if (sql_query_into($result, "SELECT ".SCORES_THAT_COUNT." as C1, ".NUM_SCORES_THAT_COUNT." as C2, ".NUM_REVIEWS." as C3 FROM ".FICS_REVIEW_TABLE." WHERE ChapterId=$cid;", 0)) {
-            $row = $result->fetch_assoc();
-            $totalStars = $row['C1'];
-            $totalRatings = $row['C2'];
-            $numReviews = $row['C3'];
-            sql_query("UPDATE ".FICS_CHAPTER_TABLE." SET WordCount=$wordcount, TotalStars=$totalStars, TotalRatings=$totalRatings, NumReviews=$numReviews WHERE ChapterId=$cid;");
-        } else {
-            sql_query("UPDATE ".FICS_CHAPTER_TABLE." SET WordCount=$wordcount WHERE ChapterId=$cid;");
+        if ($chapter['ApprovalStatus'] == 'A') {
+            $orderIndex = $chapcount;
+            $chapcount++;
+            $chapterWordCount = ChapterWordCount($text);
+            $wordcount += $chapterWordCount;
+            $viewcount += $chapter['Views'];
+            // Also get chapter reviews.
+            if (sql_query_into($result, "SELECT ".SCORES_THAT_COUNT." as C1, ".NUM_SCORES_THAT_COUNT." as C2, ".NUM_REVIEWS." as C3 FROM ".FICS_REVIEW_TABLE." WHERE ChapterId=$cid;", 0)) {
+                $row = $result->fetch_assoc();
+                $totalStars = $row['C1'];
+                $totalRatings = $row['C2'];
+                $numReviews = $row['C3'];
+                sql_query("UPDATE ".FICS_CHAPTER_TABLE." SET ChapterItemOrder=$orderIndex, WordCount=$wordcount, TotalStars=$totalStars, TotalRatings=$totalRatings, NumReviews=$numReviews WHERE ChapterId=$cid;");
+            } else {
+                sql_query("UPDATE ".FICS_CHAPTER_TABLE." SET ChapterItemOrder=$orderIndex, WordCount=$wordcount WHERE ChapterId=$cid;");
+            }
         }
     }
 
     // Also get story reviews.
-    if (sql_query_into($result, "SELECT ".SCORES_THAT_COUNT." as C1, ".NUM_SCORES_THAT_COUNT." as C2, ".NUM_REVIEWS." as C3 FROM ".FICS_REVIEW_TABLE." WHERE StoryId='$escaped_sid';", 0)) {
+    if (sql_query_into($result, "SELECT ".SCORES_THAT_COUNT." as C1, ".NUM_SCORES_THAT_COUNT." as C2, ".NUM_REVIEWS." as C3 FROM ".FICS_REVIEW_TABLE." R WHERE
+        StoryId='$escaped_sid' AND
+        EXISTS(SELECT 1 FROM ".FICS_CHAPTER_TABLE." C WHERE
+            R.ChapterId=C.ChapterId AND
+            C.ApprovalStatus='A');", 0)) {
         $row = $result->fetch_assoc();
         $totalStars = $row['C1'];
         $totalRatings = $row['C2'];

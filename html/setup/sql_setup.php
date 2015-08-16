@@ -262,9 +262,7 @@ do_or_die(sql_query(
        "ApprovalStatus CHAR(1) DEFAULT 'A',".  // P - Pending, A - Approved, D - Deleted (Pending not used).
        "Completed TINYINT(1) DEFAULT FALSE,
         Featured CHAR(1) DEFAULT '".FICS_NOT_FEATURED."',".  // D/F/f/G/g/S/s/Z/z (upper-case current, lower-case retired).
-       "ParentSeriesId INT(11) DEFAULT -1,
-        SeriesItemOrder INT(11) NOT NULL,
-        StoryNotes TEXT(1024) NOT NULL,
+       "StoryNotes TEXT(1024) NOT NULL,
         ChapterCount INT(11) NOT NULL,
         WordCount INT(11) NOT NULL,
         Views INT(11) NOT NULL,
@@ -288,7 +286,8 @@ do_or_die(sql_query(
         TotalStars INT(11) NOT NULL,
         TotalRatings INT(11) NOT NULL,
         NumReviews INT(11) NOT NULL,
-        PRIMARY KEY(ChapterId)
+        ApprovalStatus CHAR(1) DEFAULT 'A',".  // P - Pending, A - Approved, D - Deleted (Pending not used).
+       "PRIMARY KEY(ChapterId)
     ) DEFAULT CHARSET=utf8;"));  // NOTE: WordCount, TotalStars and TotalRatings not implemented yet.
 // Fics table that stores comments and reviews.
 do_or_die(sql_query(

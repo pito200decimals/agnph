@@ -21,33 +21,31 @@
 {% endblock %}
 
 {% block content %}
-    <div style="padding: 5px">
-        {{ block('banner') }}
-        {{ block('storyblock') }}
-        {% if story.StoryNotes|length > 0 %}
-            <div class="notesbox">
-                <p><strong>Story Notes:</strong></p>
-                <p id="storynotes">
-                    {% autoescape false %}{{ story.StoryNotes }}{% endautoescape %}
+    {{ block('banner') }}
+    {{ block('storyblock') }}
+    {% if story.StoryNotes|length > 0 %}
+        <div class="notesbox">
+            <p><strong>Story Notes:</strong></p>
+            <p id="storynotes">
+                {% autoescape false %}{{ story.StoryNotes }}{% endautoescape %}
+            </p>
+        </div>
+    {% endif %}
+    <ol>
+        {% for chapter in chapters %}
+            <li>
+                <p class="chapterlisttitle">
+                    <a href="/fics/story/{{ story.StoryId }}/{{ loop.index }}/">
+                        <strong>{{ chapter.Title }}</strong>
+                    </a>
+                    {% if chapter.NumReviews > 0 %}
+                        {% autoescape false %}{{ chapter.stars }}{% endautoescape %}
+                        <span class="reviews">[<a href="/fics/story/{{ story.StoryId }}/{{ chapter.ChaterItemOrder + 1 }}/?reviews#reviews">Reviews: {{ chapter.NumReviews }}</a>]</span>
+                    {% endif %}
                 </p>
-            </div>
-        {% endif %}
-        <ol>
-            {% for chapter in chapters %}
-                <li>
-                    <p class="chapterlisttitle">
-                        <a href="/fics/story/{{ story.StoryId }}/{{ loop.index }}/">
-                            <strong>{{ chapter.Title }}</strong>
-                        </a>
-                        {% if chapter.NumReviews > 0 %}
-                            {% autoescape false %}{{ chapter.stars }}{% endautoescape %}
-                            <span class="reviews">[<a href="/fics/story/{{ story.StoryId }}/{{ chapter.ChaterItemOrder + 1 }}/?reviews#reviews">Reviews: {{ chapter.NumReviews }}</a>]</span>
-                        {% endif %}
-                    </p>
-                    <p class="chapterlistnotes">{% autoescape false %}{{ chapter.ChapterNotes }}{% endautoescape %}</p>
-                </li>
-            {% endfor %}
-        </ol>
-        {{ block('reviewblock') }}
-    </div>
+                <p class="chapterlistnotes">{% autoescape false %}{{ chapter.ChapterNotes }}{% endautoescape %}</p>
+            </li>
+        {% endfor %}
+    </ol>
+    {{ block('reviewblock') }}
 {% endblock %}

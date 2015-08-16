@@ -58,10 +58,11 @@
         {% for story in stories %}
             {{ block('storyblock') }}
         {% endfor %}
+        <div class="Clear">&nbsp;</div>
+        <div class="iterator">
+            {% autoescape false %}{{ iterator }}{% endautoescape %}
+        </div>
     {% else %}
         No stories found
     {% endif %}
-    <div>
-        {% autoescape false %}{{ iterator }}{% endautoescape %}
-    </div>
 {% endblock %}

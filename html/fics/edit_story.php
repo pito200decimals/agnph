@@ -11,7 +11,7 @@ if (isset($_POST) && isset($_POST['sid'])) {
         header("Location: /fics/story/$sid/");
     } else {
         unset($success);
-        if (isset($errmsg)) $vars['errmsg'] = $errmsg;
+        if (isset($errmsg)) PostBanner($errmsg, "red");
         // Failed, but try to repopulate story fields.
         $fill_from_post = true;
     }
@@ -40,6 +40,10 @@ if (!isset($user)) {
 }
 
 if ($action == "edit") {
+    // Update story stats before fetching story data.
+    // Avoids issues with chapter re-ordering and such, in case the database
+    // gets into some sort of corrupted state.
+    UpdateStoryStats($sid);
     $story = GetStory($sid) or RenderErrorPage("Story not found");
     if ($story['ApprovalStatus'] == 'D') {
         RenderErrorPage("Story not found");
@@ -47,7 +51,6 @@ if ($action == "edit") {
     }
     if (!CanUserEditStory($story, $user)) RenderErrorPage("Not authorized to edit story");
     $chapters = GetChaptersInfo($sid) or RenderErrorPage("Story not found");
-    debug($story['tags']);
     $story['tagstring'] = implode(" ", array_map(function($tag) { return $tag['Name']; }, $story['tags']));
     $vars['story'] = $story;
     $vars['chapters'] = &$chapters;

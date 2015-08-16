@@ -6,41 +6,36 @@
 {% endblock %}
 
 {% block content %}
-    <div class="mainpanel">
-        <h3>Tags</h3>
-        <form action="/fics/tags/" accept-charset="UTF-8">
-            <label>Search for Tags:</label><input class="search" name="prefix" type="text" value="{{ searchPrefix }}" required/>
-        </form>
-        {% if tags|length > 0 %}
-            {# Display tag index. #}
-            <table class="list-table">
-                <thead>
+    <h3>Tags</h3>
+    <form action="/fics/tags/" accept-charset="UTF-8">
+        <label>Search for Tags:</label><input class="search" name="prefix" type="text" value="{{ searchPrefix }}" required/>
+    </form>
+    {% if tags|length > 0 %}
+        {# Display tag index. #}
+        <table class="list-table">
+            <thead>
+                <tr>
+                    <td><strong>Name</strong></td>
+                    <td><strong>Type</strong></td>
+                    <td><strong>Count</strong></td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tag in tags %}
                     <tr>
-                        <td><strong>Name</strong></td>
-                        <td><strong>Type</strong></td>
-                        <td><strong>Count</strong></td>
+                        <td><strong><a class="{{ tag.typeClass }}" href="/fics/search/?search={{ tag.Name }}">{{ tag.Name }}</a></strong></td>
+                        <td>{{ tag.typeName }}{% if tag.EditLocked %} (locked){% endif %}</td>
+                        <td>{{ tag.tagCounts }}</td>
                     </tr>
-                </thead>
-                <tbody>
-                    {% for tag in tags %}
-                        <tr>
-                            <td><strong><a class="{{ tag.typeClass }}" href="/fics/search/?search={{ tag.Name }}">{{ tag.Name }}</a></strong></td>
-                            <td>{{ tag.typeName }}{% if tag.EditLocked %} (locked){% endif %}</td>
-                            <td>{{ tag.tagCounts }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <div class="Clear">&nbsp;</div>
-            <div class="iterator">
-                {% autoescape false %}
-                {{ iterator }}
-                {% endautoescape %}
-            </div>
-        {% else %}
-            {# No tags here. #}
-            No tags found.
-        {% endif %}
-    </div>
-    <div class="Clear">&nbsp;</div>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="Clear">&nbsp;</div>
+        <div class="iterator">
+            {% autoescape false %}{{ iterator }}{% endautoescape %}
+        </div>
+    {% else %}
+        {# No tags here. #}
+        No tags found.
+    {% endif %}
 {% endblock %}

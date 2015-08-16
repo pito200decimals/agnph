@@ -18,7 +18,12 @@ $profile_user['admin'] = GetAdminBadge($profile_user);
 
 sql_query_into($result, "SELECT count(*) FROM ".FICS_STORY_TABLE." WHERE AuthorUserId=$profile_uid AND ApprovalStatus='A';", 1) or RenderErrorPage("Failed to fetch user profile");
 $profile_user['numStoriesUploaded'] = $result->fetch_assoc()['count(*)'];
-sql_query_into($result, "SELECT count(*) FROM ".FICS_REVIEW_TABLE." WHERE ReviewerUserId=$profile_uid AND IsReview=1;", 1) or RenderErrorPage("Failed to fetch user profile");
+sql_query_into($result, "SELECT count(*) FROM ".FICS_REVIEW_TABLE." R WHERE
+    ReviewerUserId=$profile_uid AND
+    IsReview=1 AND
+    EXISTS(SELECT 1 FROM ".FICS_CHAPTER_TABLE." C WHERE
+            R.ChapterId=C.ChapterId AND
+            C.ApprovalStatus='A');", 1) or RenderErrorPage("Failed to fetch user profile");
 $profile_user['numReviewsPosted'] = $result->fetch_assoc()['count(*)'];
 sql_query_into($result, "SELECT count(*) FROM ".FICS_USER_FAVORITES_TABLE." F WHERE UserId=$profile_uid;", 1) or RenderErrorPage("Failed to fetch user profile");
 $profile_user['numFavorites'] = $result->fetch_assoc()['count(*)'];

@@ -3,6 +3,7 @@ body {
     background-color: rgb(63,127,255);
     margin: 0px;
     font-family: verdana,sans-serif;
+    overflow-x: hidden;
 }
 a {
     text-decoration: none;
@@ -324,6 +325,7 @@ a:hover {
     #mainbody {
         width: 100%;
         min-width: 100%;
+        min-height: inherit;
     }
     #site-navbar-container {
             width: 100%;

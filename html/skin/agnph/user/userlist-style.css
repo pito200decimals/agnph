@@ -1,50 +1,36 @@
-.user-table {
-    margin: 5px;
-    border-radius: 15px;
-    background-color: rgb(170,200,255);
-    width: 100%;
-    border-style: none;
-    overflow: hidden;
-    -webkit-border-horizontal-spacing: 0px;
-    -webkit-border-vertical-spacing: 0px;
-    border-collapse: collapse;
-}
-.user-table td {
-    padding: 0px;
-}
-.user-table div {
-    padding: 5px;
-}
-.user-table thead tr div {
-    background-color: rgb(100,130,185);
-}
-.user-table tbody tr:nth-child(odd) div {
-    background-color: rgb(150,180,235);
-}
-.user-table tbody tr:nth-child(even) div {
-    background-color: rgb(130,160,215);
+.list-table tr td:nth-child(1) {
+    min-width: 80px;
+    width: 80px;
 }
 
-.mainpanel {
-    padding: 5px;
-    overflow: hidden;
+.user-avatar {
+    max-width: 27px;
+    max-height: 16px;
+    margin: 0px;
+    vertical-align: middle;
 }
-#actionbar {
-    margin: 5px;
+.status-container {
 }
-#newpanel {
-    padding: 5px;
-    display: block;
+.status-alignment {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
 }
-.floatactionpanel {
-    position: absolute;
-    border: 1px solid rgb(0,0,0);
-    background-color: rgb(63, 127, 255);
-    box-shadow: 5px 5px 8px #07162D;
+.status-icon {
+    margin-right: 5px;
+    vertical-align: middle;
+    height: 10px;
 }
+
 #content h3 {
     margin: 5px;
 }
 .actionset {
     font-size: 0px;
+}
+
+@media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
+    .omit-mobile {
+        display: none;
+    }
 }

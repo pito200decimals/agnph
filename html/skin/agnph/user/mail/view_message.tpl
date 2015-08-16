@@ -27,26 +27,24 @@
 {% use 'includes/comment-block.tpl' %}
 
 {% block usercontent %}
-    <div>
-        {% if user.GroupMailboxThreads %}
-            <h3>Conversation with {{ message.toFromUser.DisplayName }}</h3>
-        {% elseif message.inbox %}
-            <h3>Message from {{ message.toFromUser.DisplayName }}</h3>
-        {% else %}
-            <h3>Message to {{ message.toFromUser.DisplayName }}</h3>
-        {% endif %}
-        {% if canSendPM %}
-            <form action="/user/{{ profile.user.UserId }}/mail/send/" method="POST" accept-charset="UTF-8">
-                <input type="hidden" name="rid" value="{{ rid }}" />
-                <textarea id="reply-to" name="message">
-                </textarea>
-                <input type="submit" value="Reply" />
-            </form>
-        {% endif %}
-        <ul class="comment-list">
-            {% for comment in messages %}
-                {{ block('comment') }}
-            {% endfor %}
-        </ul>
-    </div>
+    {% if user.GroupMailboxThreads %}
+        <h3>Conversation with {{ message.toFromUser.DisplayName }}</h3>
+    {% elseif message.inbox %}
+        <h3>Message from {{ message.toFromUser.DisplayName }}</h3>
+    {% else %}
+        <h3>Message to {{ message.toFromUser.DisplayName }}</h3>
+    {% endif %}
+    {% if canSendPM %}
+        <form action="/user/{{ profile.user.UserId }}/mail/send/" method="POST" accept-charset="UTF-8">
+            <input type="hidden" name="rid" value="{{ rid }}" />
+            <textarea id="reply-to" name="message">
+            </textarea>
+            <input type="submit" value="Reply" />
+        </form>
+    {% endif %}
+    <ul class="comment-list">
+        {% for comment in messages %}
+            {{ block('comment') }}
+        {% endfor %}
+    </ul>
 {% endblock %}

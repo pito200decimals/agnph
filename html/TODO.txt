@@ -8,8 +8,6 @@ TODOs
 - Spoiler tags
 
 == GALLERY ==
-* Gallery post descriptions
-    - Should these edits be logged?
 X Gallery linking to source on delete
 - Gallery mass tag edits
     - For a given search, add/remove all tags on matched posts?

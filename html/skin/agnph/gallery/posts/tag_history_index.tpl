@@ -35,9 +35,7 @@
             </table>
             <div class="Clear">&nbsp;</div>
             <div class="iterator">
-                {% autoescape false %}
-                {{ postIterator }}
-                {% endautoescape %}
+                {% autoescape false %}{{ postIterator }}{% endautoescape %}
             </div>
         {% else %}
             {# No history items here. #}
