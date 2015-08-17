@@ -43,32 +43,46 @@ if (isset($_POST['display-name']) &&
     $uid = $profile_user['UserId'];
     // DisplayName
     if ($_POST['display-name'] != $profile_user['DisplayName']) {
-        $display_name = $_POST['display-name'];
-        if (MIN_DISPLAY_NAME_LENGTH <= strlen($display_name) && strlen($display_name) <= MAX_DISPLAY_NAME_LENGTH) {
-            $display_name = mb_ereg_replace("[^a-zA-Z0-9_.-]", "", $display_name);
-            $escaped_display_name = sql_escape($display_name);
-            // Check for duplicates.
-            // Search for display name, and current user (so that at least one result is returned).
-            if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UPPER(DisplayName)=UPPER('$escaped_display_name') OR UserId='$uid';", 1)) {
-                if ($result->num_rows == 1) {
-                    $now = time();
-                    $row = $result->fetch_assoc();
-                    $last_change_time = (int)$row['DisplayNameChangeTime'];
-                    if ($now - $last_change_time >= DISPLAY_NAME_CHANGE_TIME_LIMIT) {
-                        // TODO: Log change.
-                        $user_table_sets[] = "DisplayName='$escaped_display_name'";
-                        $user_table_sets[] = "DisplayNameChangeTime=$now";
-                    } else {
-                        PostErrorMessage("Can only change name once every ".DISPLAY_NAME_CHANGE_TIME_LIMIT_STR);
-                    }
-                } else {
-                    PostErrorMessage("Name already taken!");
-                }
-            } else {
-                PostErrorMessage("Failed to change Name");
-            }
-        } else {
+        $display_name = $_POST['display-name'];  // Allow case-sensitive.
+        $valid_name = true;
+        // Okay to use strlen here, checking for database length.
+        if (!(MIN_DISPLAY_NAME_LENGTH <= strlen($display_name) && strlen($display_name) <= MAX_DISPLAY_NAME_LENGTH)) {
             PostErrorMessage("Name must be between ".MIN_DISPLAY_NAME_LENGTH." and ".MAX_DISPLAY_NAME_LENGTH." characters");
+            $valid_name = false;
+        }
+        if ($valid_name && !mb_ereg("^[A-Za-z0-9_]+$", $display_name)) {
+            PostErrorMessage("Name must consist of letters, numbers or _");
+            $valid_name = false;
+        }
+        if ($valid_name && !mb_ereg("^[A-Za-z][A-Za-z0-9_]+$", $display_name)) {
+            PostErrorMessage("Name must start with a letter");
+            $valid_name = false;
+        }
+        $escaped_display_name = sql_escape($display_name);
+        // Check for duplicates.
+        // Search for display name, and current user (so that at least one result is returned).
+        if ($valid_name) {
+            if (!sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UPPER(DisplayName)=UPPER('$escaped_display_name') OR UserId='$uid';", 1)) {
+                PostErrorMessage("Failed to change name");
+                $valid_name = false;
+            } else {
+                if ($valid_name && $result->num_rows != 1) {
+                    PostErrorMessage("Name already taken!");
+                    $valid_name = false;
+                }
+                $now = time();
+                $row = $result->fetch_assoc();
+                $last_change_time = (int)$row['DisplayNameChangeTime'];
+                if ($valid_name && !CanUserQuickChangeName($user, $profile_user) && $now - $last_change_time < DISPLAY_NAME_CHANGE_TIME_LIMIT) {
+                    PostErrorMessage("Can only change name once every ".DISPLAY_NAME_CHANGE_TIME_LIMIT_STR);
+                    $valid_name = false;
+                }
+                if ($valid_name) {
+                    // TODO: Log change.
+                    $user_table_sets[] = "DisplayName='$escaped_display_name'";
+                    $user_table_sets[] = "DisplayNameChangeTime=$now";
+                }
+            }
         }
     }
     // Gender
@@ -132,7 +146,6 @@ if (isset($_POST['display-name']) &&
             PostErrorMessage("Password must be at least ".MIN_PASSWORD_LENGTH." characters, Email/Password not changed");
             $stop_change_email_password = true;
         } else {
-            debug("Got new pass md5");
             $pass = md5($_POST['password']);
         }
     }
@@ -146,24 +159,30 @@ if (isset($_POST['display-name']) &&
         } else if ($pass_changed) {
             $detailed_desc = "password";
         }
-        // /recover/success/
-        $old_email = $profile_user['Email'];
-        $username = $profile_user['UserName'];
-        $redirect = "/user/auth/change/";
-        debug("Pass:$pass, Post=".$profile_user['UserId'].",".$email.",".$pass);
-        $code = CreateCodeEntry($old_email, "account_auth_change", $profile_user['UserId'].",".$email.",".$pass, $redirect);
-        if ($code !== FALSE) {
-            if (SendRecoveryEmail($old_email, $username, $email_changed, $pass_changed, $code)) {
-                debug("Email sent, with uid=".$profile_user['UserId'].", email=".$email.", pass_md5=".$pass);
-                PostConfirmMessage("To finish changing your $detailed_desc, please click the link in the email sent to ".$profile_user['Email']);
-            } else {
-                $vars['error'] = "Error sending confirmation email, please try again later";
-            }
+        // Allow unverified changes for administrators, if they're not changing their own account (for security reasons).
+        if ($user['UserId'] != $profile_user['UserId'] && CanUserChangeEmailAndPasswordWithoutVerification($user, $profile_user)) {
+            ChangeEmailPassword($profile_user['UserId'], $email, $pass, false /* confirmation email */, false /* force login */);
+            PostConfirmMessage("User $detailed_desc changed");
         } else {
-            PostErrorMessage("Failed to change email/password");
+            // Redirect to: /recover/success/
+            $old_email = $profile_user['Email'];
+            $username = $profile_user['UserName'];
+            $redirect = "/user/auth/change/";
+            debug("Pass:$pass, Post=".$profile_user['UserId'].",".$email.",".$pass);
+            $code = CreateCodeEntry($old_email, "account_auth_change", $profile_user['UserId'].",".$email.",".$pass, $redirect);
+            if ($code !== FALSE) {
+                if (SendRecoveryEmail($old_email, $username, $email_changed, $pass_changed, $code)) {
+                    debug("Email sent, with uid=".$profile_user['UserId'].", email=".$email.", pass_md5=".$pass);
+                    PostConfirmMessage("To finish changing your $detailed_desc, please click the link in the email sent to ".$profile_user['Email']);
+                } else {
+                    $vars['error'] = "Error sending confirmation email, please try again later";
+                }
+            } else {
+                PostErrorMessage("Failed to change email/password");
+            }
         }
     } else {
-        debug("Email and pass still matched");
+        // The user did not change email or password.
     }
     // Timezone
     $timezone = ParseGMTTimeZoneToFloat($_POST['timezone']);

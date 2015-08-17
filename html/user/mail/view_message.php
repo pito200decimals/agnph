@@ -40,7 +40,7 @@ foreach ($messages as &$msg_ref) {
     $msg_ref['text'] = SanitizeHTMLTags($msg_ref['text'], DEFAULT_ALLOWED_TAGS);
 }
 $vars['messages'] = $messages;
-$vars['message'] = $messages[0];  // Any message will do.
+$vars['message'] = current($messages);  // Any message will do.
 $vars['canSendPM'] = CanUserSendPMsForUser($user, $profile_user);
 $vars['rid'] = $selected_msg['Id'];
 

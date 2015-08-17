@@ -72,7 +72,7 @@ function RenderPage($template) {
         echo "----------------------------------------------------------------------------------------------\n";
         $text = TidyHTML($text);
     } else {
-        $text = ($text);
+        $text = TidyHTML($text);
     }
     echo ($text);
 }

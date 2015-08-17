@@ -30,8 +30,11 @@ if (isset($_POST['username']) &&
     } else if (strlen($username) > MAX_USERNAME_LENGTH) {
         ShowErrorBanner("Username too long");
         $success = false;
-    } else if (!mb_ereg("^[a-z0-9_]+$", $username)) {
-        ShowErrorBanner("Username must consist of a-z, 0-9, or _");
+    } else if (!mb_ereg("^[a-z0-9_]+$", $username)) {  // Check this first for this error message.
+        ShowErrorBanner("Username must consist of letters, numbers or _");
+        $success = false;
+    } else if (!mb_ereg("^[a-z][a-z0-9_]+$", $username)) {  // Must start with A-Z.
+        ShowErrorBanner("Username must start with a letter");
         $success = false;
     }
     // Check email.
@@ -70,7 +73,12 @@ if (isset($_POST['username']) &&
     $escaped_username = sql_escape($username);
     // Fail if username taken, or display name taken with an activated account.
     // This will allow duplicate display names when including unactivated accounts, but presumably people will want to link this account.
-    if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UPPER(UserName)=UPPER('$escaped_username') OR (UPPER(DisplayName)=UPPER('$escaped_username') AND RegisterIP<>'') LIMIT 1;", 1)) {
+    if (sql_query_into($result,
+        "SELECT * FROM ".USER_TABLE." WHERE
+        UPPER(UserName)=UPPER('$escaped_username') OR (
+            UPPER(DisplayName)=UPPER('$escaped_username') AND
+            RegisterIP<>'')
+        LIMIT 1;", 1)) {
         // Exists a duplicate username.
         ShowErrorBanner("Username already taken.");
         $success = false;
@@ -98,9 +106,7 @@ if (isset($_POST['username']) &&
     $vars['bday'] = "mm/dd/yyyy";
 }
 
-if (sql_query_into($result, "SELECT * FROM ".SITE_TEXT_TABLE." WHERE Name='RegisterDisclaimer';", 1)) {
-    $vars['RegisterDisclaimer'] = $result->fetch_assoc()['Text'];
-}
+$vars['registerDisclaimerMessage'] = GetSiteSetting(REGISTER_DISCLAIMER_KEY, "");
 
 // This is how to output the template.
 RenderPage("user/register.tpl");

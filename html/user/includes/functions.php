@@ -58,6 +58,22 @@ function CanUserSetPermissions($user, $profile, $action, $perm) {
     // Default permission for all other users.
     return false;
 }
+function CanUserQuickChangeName($user, $profile) {
+    if (!IsUserActivated($user)) return false;
+    if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
+    return false;
+}
+function CanUserChangeEmailAndPasswordWithoutVerification($user, $profile) {
+    if (!IsUserActivated($user)) return false;
+    if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
+    return false;
+}
+function CanUserBan($user, $profile) {
+    if (!IsUserActivated($user)) return false;
+    if ($user['UserId'] == $profile['UserId']) return false;  // Don't allow banning self.
+    if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
+    return false;
+}
 
 
 function DateStringToReadableString($datestr) {
@@ -69,6 +85,12 @@ function DateStringToReadableString($datestr) {
 
 // TODO: Better badge icon.
 function GetAdminBadge($profile_user) {
+    if ($profile_user['Usermode'] == -1) {
+        return "Banned";
+    } else if ($profile_user['Usermode'] == 0) {
+        // Unactivated account.
+        return "";
+    }
     $ret = array();
     if (mb_strpos($profile_user['Permissions'], 'A') !== FALSE) return "Site Administrator";
     if (mb_strpos($profile_user['Permissions'], 'R') !== FALSE) $ret[] = "Forums Moderator";

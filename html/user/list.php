@@ -9,13 +9,18 @@ include_once(SITE_ROOT."includes/util/user.php");
 include_once(SITE_ROOT."user/includes/functions.php");
 include_once(SITE_ROOT."includes/util/listview.php");
 
-$search_clause = "TRUE";
 $order_clause = "DisplayName ASC";
 $search = "";
 if (isset($_GET['search'])) {
     $search = $_GET['search'];
-    $escaped_search = sql_escape($search);
-    $search_clause = "UPPER(DisplayName) LIKE UPPER('%$escaped_search%')";
+    if (mb_strtolower($search) == "status:banned") {
+        $search_clause = "Usermode=-1";
+    } else {
+        $escaped_search = sql_escape($search);
+        $search_clause = "UPPER(DisplayName) LIKE UPPER('%$escaped_search%') AND Usermode=1";
+    }
+} else {
+    $search_clause = "Usermode=1";
 }
 
 $reverse_order_param = "desc";
@@ -51,7 +56,6 @@ if (isset($_GET['sort'])) {
     $reverse_order_param = ($order_asc ? "desc" : "asc");
     $order_clause = "$sort $order";
 }
-$search_clause .= " AND Usermode=1";
 
 $accounts = array();
 CollectItems(USER_TABLE, "WHERE $search_clause ORDER BY $order_clause", $accounts, USERS_LIST_ITEMS_PER_PAGE, $iterator, function($i) use ($search) {

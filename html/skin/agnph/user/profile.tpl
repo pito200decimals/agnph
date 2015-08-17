@@ -92,7 +92,23 @@
                 </form>
                 <a href="/user/{{ profile.user.UserId }}/admin/" onclick="document.getElementById('{{ link.formId }}-form').submit();return false;">
                     {% autoescape false %}
-                        {{ link.text|replace({' ': '&nbsp;'})  }}
+                        {{ link.text|replace({' ': '&nbsp;'}) }}  {# Ensure that each action is only one line #}
+                    {% endautoescape %}
+                </a>
+            </li>
+        {% endfor %}
+        {% if banLinks|length > 0 %}
+            <br />
+        {% endif %}
+        {% for link in banLinks %}
+            <li>
+                <form id="{{ link.formId }}-ban-form" action="/user/{{ profile.user.UserId }}/ban/" method="POST" accept-encoding="UTF-8" hidden>
+                    <input type="hidden" name="action" value="{{ link.action }}" />
+                    <input type="hidden" name="duration" value="{{ link.duration }}" />
+                </form>
+                <a href="/user/{{ profile.user.UserId }}/ban/" onclick="document.getElementById('{{ link.formId }}-ban-form').submit();return false;">
+                    {% autoescape false %}
+                        {{ link.text|replace({' ': '&nbsp;'}) }}  {# Ensure that each action is only one line #}
                     {% endautoescape %}
                 </a>
             </li>
@@ -156,6 +172,9 @@
         <h3>Admin Info</h3>
         <ul id="basic-info">
                                                         <li><span class="basic-info-label">IP Addresses:</span><span>{{ profile.user.ips }}</span></li>
+                                                        {% if profile.user.isBanned %}
+                                                            <li><span class="basic-info-label">Ban duration:</span><span>{{ profile.user.banDuration }}</span></li>
+                                                        {% endif %}
             {% endif %}
         </ul>
     </div>

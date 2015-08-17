@@ -103,6 +103,28 @@ function GetWithDefault($array, $key, $default) {
     }
 }
 
+// Gets or sets a site setting value.
+function GetSiteSetting($key, $default_value) {
+    if (sql_query_into($result, "SELECT * FROM ".SITE_SETTINGS_TABLE.";", 1)) {
+        while ($row = $result->fetch_assoc()) {
+            if ($row['Name'] == $key) {
+                return $row['Value'];
+            }
+        }
+    }
+    return $default_value;
+}
+function SetSiteSetting($key, $value) {
+    $escaped_key = sql_escape($key);
+    $escaped_value = sql_escape($value);
+    sql_query("INSERT INTO ".SITE_SETTINGS_TABLE."
+        (Name, Value)
+        VALUES
+        ('$escaped_key', '$escaped_value')
+        ON DUPLICATE KEY UPDATE
+            Value=VALUES(Value);");
+}
+
 function DefaultUser() {
     $user = array(
         'DisplayName' => "Guest",

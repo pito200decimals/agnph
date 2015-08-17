@@ -15,7 +15,7 @@ define("MAX_FILE_SIZE", 50 * 1024 * 1024);  // 50 MB.
 define("SITE_NAV_TABLE", "nav_links");
 define("SITE_TAG_ALIAS_TABLE", "tag_aliases");
 define("SITE_LOGGING_TABLE", "action_log");
-define("SITE_TEXT_TABLE", "site_text");
+define("SITE_SETTINGS_TABLE", "site_settings");
 define("SECURITY_EMAIL_TABLE", "account_recovery");
 
 // User content data tables.
@@ -51,7 +51,6 @@ define("FICS_TAG_TABLE", "fics_tags");
 define("FICS_REVIEW_TABLE", "fics_reviews");
 define("FICS_TAG_ALIAS_TABLE", "fics_tag_aliases");
 define("FICS_TAG_IMPLICATION_TABLE", "fics_tag_implications");
-define("FICS_SITE_SETTINGS_TABLE", "fics_settings");
 
 // User Settings Defaults.
 define("DEFAULT_SKIN", "agnph");
@@ -96,6 +95,9 @@ define("AVATAR_UPLOAD_EXTENSION", "png");
 define("MAX_AVATAR_UPLOAD_DIMENSIONS", 200);
 define("MAX_EMAIL_LENGTH", 128);
 define("BASE_SKIN", "agnph");
+define("REGISTER_DISCLAIMER_KEY", "RegisterDisclaimer");
+define("SHORT_BAN_DURATION_KEY", "UserShortBanDuration");
+define("DEFAULT_SHORT_BAN_DURATION", 7 * 24 * 60 * 60);  // 7 days.
 // Site security-related timeouts.
 define("REGISTER_ACCOUNT_HUMAN_READABLE_STRING", "24 hours");  // 24 hours.
 define("REGISTER_ACCOUNT_SQL_EVENT_DURATION", "24 HOUR");
@@ -147,9 +149,9 @@ define("MAX_FICS_POSTS_PER_PAGE", 100);
 define("MAX_FICS_BLACKLIST_TAGS", 50);
 define("FICS_NOT_FEATURED", "D");  // Also present in templates: editstory.tpl
 // Fics site settings constants.
-define("FICS_CHAPTER_MIN_WORD_COUNT_KEY", "MinWordCount");
+define("FICS_CHAPTER_MIN_WORD_COUNT_KEY", "FicsMinWordCount");
 define("DEFAULT_FICS_CHAPTER_MIN_WORD_COUNT", 500);
-define("FICS_WELCOME_MESSAGE_KEY", "WelcomeMessage");
+define("FICS_WELCOME_MESSAGE_KEY", "FicsWelcomeMessage");
 define("DEFAULT_FICS_WELCOME_MESSAGE", "");
 define("FICS_PROFILE_SHOW_NUM_STORIES", 3);
 define("FICS_PROFILE_SHOW_NUM_FAVORITES", 3);

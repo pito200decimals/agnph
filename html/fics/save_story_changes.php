@@ -121,10 +121,7 @@ if ($sid > 0) {
     $chapter_count = 1;
     $word_count = ChapterWordCount($chaptertext);
     // Check min word count.
-    $min_word_count = DEFAULT_FICS_CHAPTER_MIN_WORD_COUNT;
-    if (sql_query_into($result, "SELECT * FROM ".FICS_SITE_SETTINGS_TABLE." WHERE Name='".FICS_CHAPTER_MIN_WORD_COUNT_KEY."';", 1)) {
-        $min_word_count = (int)$result->fetch_assoc()['Value'];
-    }
+    $min_word_count = GetSiteSetting(FICS_CHAPTER_MIN_WORD_COUNT_KEY, DEFAULT_FICS_CHAPTER_MIN_WORD_COUNT);
     if ($min_word_count > 0) {
         if ($word_count < $min_word_count) {
             $errmsg = "Chapter must be at least $min_word_count words long.";

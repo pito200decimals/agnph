@@ -26,7 +26,8 @@ include_once(SITE_ROOT."gallery/includes/functions.php");
 sql_query("DROP TABLE ".USER_TABLE.";");
 sql_query("DROP TABLE ".USER_MAILBOX_TABLE.";");
 sql_query("DROP TABLE ".SITE_LOGGING_TABLE.";");
-sql_query("DROP TABLE ".SITE_TEXT_TABLE.";");
+sql_query("DROP TABLE site_text;");  // TODO: Remove.
+sql_query("DROP TABLE ".SITE_SETTINGS_TABLE.";");
 sql_query("DROP TABLE ".SECURITY_EMAIL_TABLE.";");
 sql_query("DROP TABLE ".FORUMS_LOBBY_TABLE.";");
 sql_query("DROP TABLE ".FORUMS_POST_TABLE.";");
@@ -52,7 +53,7 @@ sql_query("DROP TABLE ".FICS_USER_PREF_TABLE.";");
 sql_query("DROP TABLE ".FICS_USER_FAVORITES_TABLE.";");
 sql_query("DROP TABLE ".FICS_TAG_ALIAS_TABLE.";");
 sql_query("DROP TABLE ".FICS_TAG_IMPLICATION_TABLE.";");
-sql_query("DROP TABLE ".FICS_SITE_SETTINGS_TABLE.";");
+sql_query("DROP TABLE fics_settings;");  // TODO: Remove.
 sql_query("DELETE FROM mysql.event");
 
 // Main user data table. General information that is shared between sections.
@@ -68,7 +69,8 @@ do_or_die(sql_query(
         Usermode INT(11) DEFAULT 0 NOT NULL,".  // -1=Banned, 0=Unactivated, 1=User. Unactivated users do not have anything besides this table entry.
        "Permissions VARCHAR(8) NOT NULL,".  // String of characters, A=Super Admin, R=Forums, G=Gallery, F=Fics, O=Oekaki, I=IRC, M=Minecraft
        "BanReason VARCHAR(256) NOT NULL,
-        Title VARCHAR(64) NOT NULL,
+        BanExpireTime INT(11) NOT NULL,".  // Timestamp when ban is lifted. -1 for infinite bans.
+       "Title VARCHAR(64) NOT NULL,
         Location VARCHAR(64) NOT NULL,
         Species VARCHAR(32) NOT NULL,
         DOB CHAR(10) NOT NULL,".  // Format: MM/DD/YYYY
@@ -90,9 +92,9 @@ do_or_die(sql_query("SET GLOBAL event_scheduler = ON;"));  // Turn on cleanup sc
 // User biography is stored in text files at /user/bio/{UserId}.txt
 
 do_or_die(sql_query(
-    "CREATE TABLE ".SITE_TEXT_TABLE." (
+    "CREATE TABLE ".SITE_SETTINGS_TABLE." (
         Name VARCHAR(24) NOT NULL,
-        Text TEXT(4096) NOT NULL,
+        Value TEXT(4096) NOT NULL,
         PRIMARY KEY(Name)
     ) DEFAULT CHARSET=utf8;"));
 
@@ -324,12 +326,6 @@ do_or_die(sql_query(
         Timestamp INT(11) NOT NULL,
         PRIMARY KEY(UserId, StoryId)
     ) DEFAULT CHARSET=utf8;"));
-do_or_die(sql_query(
-    "CREATE TABLE ".FICS_SITE_SETTINGS_TABLE." (
-        Name VARCHAR(24) NOT NULL,
-        Value TEXT(4096) NOT NULL,
-        PRIMARY KEY(Name)
-    ) DEFAULT CHARSET=utf8;"));
 // TODO: Author following
 
 // Table holding all user PM's.
@@ -374,14 +370,6 @@ do_or_die(sql_query(
 
 // Table cleanup events.
 sql_query("CREATE EVENT delete_security_email_entries ON SCHEDULE EVERY 0:15 HOUR_MINUTE DO DELETE FROM ".SECURITY_EMAIL_TABLE." WHERE CURRENT_TIMESTAMP > MaxTimestamp;");
-
-// Set up site settings defaults.
-do_or_die(sql_query(
-    "INSERT INTO ".FICS_SITE_SETTINGS_TABLE."
-        (Name, Value)
-        VALUES
-        ('".FICS_CHAPTER_MIN_WORD_COUNT_KEY."', '".DEFAULT_FICS_CHAPTER_MIN_WORD_COUNT."'),
-        ('".FICS_WELCOME_MESSAGE_KEY."', '".DEFAULT_FICS_WELCOME_MESSAGE."');"));
 
 // TODO: Initialize file directories.
 

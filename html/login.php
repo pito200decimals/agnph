@@ -16,7 +16,17 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         header("Location: /");
         return;
     } else {
-        PostBanner("Invalid username/password", "red");
+        if (isset($user_banned) && $user_banned) {
+            $msg = "Your account has been banned";
+            if (isset($user_ban_timestamp) && $user_ban_timestamp != -1) {
+                // For temporary bans, show time remaining.
+                $duration = FormatDuration($user_ban_timestamp - time());
+                $msg .= " for $duration";
+            }
+            PostBanner($msg, "red");
+        } else {
+            PostBanner("Invalid username/password", "red");
+        }
         $vars['username'] = $_POST['username'];
     }
 } else {

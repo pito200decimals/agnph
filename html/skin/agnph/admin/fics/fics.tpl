@@ -41,7 +41,7 @@
 {% block content %}
     <h3>Fics Administrator Control Panel</h3>
     {{ block('banner') }}
-    <form action="" method="POST" accept-encoding="UTF-8">
+    <form method="POST" accept-encoding="UTF-8">
         <table>
             <tr><td><label>Welcome Message:</label></td><td></td></tr>
             <tr><td colspan="2"><textarea name="welcome-message">{% autoescape false %}{{ welcome_message }}{% endautoescape %}</textarea></td></tr>

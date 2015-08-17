@@ -30,15 +30,4 @@ if ($changed) {
 RenderPage("admin/gallery/gallery.tpl");
 return;
 
-function UpdateSetting($key, $value) {
-    $escaped_key = sql_escape($key);
-    $escaped_value = sql_escape($value);
-    sql_query("INSERT INTO ".FICS_SITE_SETTINGS_TABLE."
-        (Name, Value)
-        VALUES
-        ('$escaped_key', '$escaped_value')
-        ON DUPLICATE KEY UPDATE
-            Value=VALUES(Value);");
-}
-
 ?>

@@ -18,19 +18,20 @@ if (!$vars['canAdminFics']) {
 $changed = false;
 // Try saving settings, if posted.
 if (isset($_POST['welcome-message'])) {
-    UpdateSetting(FICS_WELCOME_MESSAGE_KEY, SanitizeHTMLTags($_POST['welcome-message'], DEFAULT_ALLOWED_TAGS));
+    SetSiteSetting(FICS_WELCOME_MESSAGE_KEY, SanitizeHTMLTags($_POST['welcome-message'], DEFAULT_ALLOWED_TAGS));
     $changed = true;
 }
 if (isset($_POST['min-word-count'])) {
     if (is_numeric($_POST['min-word-count']) &&
         ((int)$_POST['min-word-count']) >= 0) {
-        UpdateSetting(FICS_CHAPTER_MIN_WORD_COUNT_KEY, (int)$_POST['min-word-count']);
+        SetSiteSetting(FICS_CHAPTER_MIN_WORD_COUNT_KEY, (int)$_POST['min-word-count']);
         $changed = true;
     } else {
-        PostBanner("Invalid minimum word count", "red");
+        PostSessionBanner("Invalid minimum word count", "red");
     }
 }
 if ($changed) {
+    PostSessionBanner("Settings changed", "green");
     header("Location: ".$_SERVER['REQUEST_URI']);
     return;
 }
@@ -39,33 +40,10 @@ if ($changed) {
 // Assume defaults to start.
 $vars['welcome_message'] = DEFAULT_FICS_WELCOME_MESSAGE;
 $vars['min_word_count'] = DEFAULT_FICS_CHAPTER_MIN_WORD_COUNT;
-if (sql_query_into($result, "SELECT * FROM ".FICS_SITE_SETTINGS_TABLE.";", 1)) {
-    while ($row = $result->fetch_assoc()) {
-        switch ($row['Name']) {
-            case FICS_WELCOME_MESSAGE_KEY:
-                $vars['welcome_message'] = SanitizeHTMLTags($row['Value'], DEFAULT_ALLOWED_TAGS);
-                break;
-            case FICS_CHAPTER_MIN_WORD_COUNT_KEY:
-                $vars['min_word_count'] = $row['Value'];
-                break;
-            default:
-                break;
-        }
-    }
-}
+$vars['welcome_message'] = SanitizeHTMLTags(GetSiteSetting(FICS_WELCOME_MESSAGE_KEY, ""), DEFAULT_ALLOWED_TAGS);
+$vars['min_word_count'] = GetSiteSetting(FICS_CHAPTER_MIN_WORD_COUNT_KEY, null);
 
 RenderPage("admin/fics/fics.tpl");
 return;
-
-function UpdateSetting($key, $value) {
-    $escaped_key = sql_escape($key);
-    $escaped_value = sql_escape($value);
-    sql_query("INSERT INTO ".FICS_SITE_SETTINGS_TABLE."
-        (Name, Value)
-        VALUES
-        ('$escaped_key', '$escaped_value')
-        ON DUPLICATE KEY UPDATE
-            Value=VALUES(Value);");
-}
 
 ?>

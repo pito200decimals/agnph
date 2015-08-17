@@ -46,16 +46,18 @@ function ValidateEmail($email) {
     return true;
 }
 
-function ChangeEmailPassword($uid, $email, $password_md5) {
+function ChangeEmailPassword($uid, $email, $password_md5, $confirm_email = true, $re_login = true) {
     if (!sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId=$uid AND Usermode=1;", 1)) return false;
     $usr = $result->fetch_assoc();
-    if ($usr['Email'] != $email) {
+    if ($usr['Email'] != $email && $confirm_email) {
         // Ensure sending email works.
         if (!SendEmailChangeConfirmationEmail($email, $usr['UserName'])) return false;
     }
     $escaped_email = sql_escape($email);
     if (!sql_query("UPDATE ".USER_TABLE." SET Email='$escaped_email', Password='$password_md5' WHERE UserId=$uid;")) return false;
-    ForceLogin($uid);
+    if ($re_login) {
+        ForceLogin($uid);
+    }
     return true;
 }
 

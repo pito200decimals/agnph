@@ -71,6 +71,54 @@ if (isset($user)) {
         }
     }
     $vars['adminLinks'] = $admin_links;
+
+    $ban_links = array();
+    if (CanUserBan($user, $profile_user)) {
+        // Show ban links.
+        $is_banned = false;
+        if ($profile_user['Usermode'] == -1) {
+            // If marked ban has expired, update the database here.
+            if ($profile_user['BanExpireTime'] != -1 && time() > $profile_user['BanExpireTime']) {
+                $puid = $profile_user['UserId'];
+                sql_query("UPDATE ".USER_TABLE." SET Usermode=1 WHERE UserId=$puid;");
+                // Update ban status badge.
+                $profile_user['admin'] = GetAdminBadge($profile_user);
+                $profile_user['Usermode'] = 1;
+            } else {
+                // Ban did not expire, user is currently banned.
+                $is_banned = true;
+            }
+        }
+        if ($is_banned) {
+            $ban_links[] = array(
+                "formId" => 0,
+                "action" => "unban",
+                "duration" => 0,
+                "text" => "Unban user");
+        } else {
+            $ban_links[] = array(
+                "formId" => 0,
+                "action" => "tempban",
+                "duration" => (int)GetSiteSetting(SHORT_BAN_DURATION_KEY, DEFAULT_SHORT_BAN_DURATION),
+                "text" => "Temporarily ban user");
+            $ban_links[] = array(
+                "formId" => 1,
+                "action" => "permban",
+                "duration" => 0,
+                "text" => "Permanently ban user");
+        }
+    }
+    $vars['banLinks'] = $ban_links;
+    
+    // Get ban status.
+    if ($profile_user['Usermode'] == -1) {
+        $profile_user['isBanned'] = true;
+        if ($profile_user['BanExpireTime'] == -1) {
+            $profile_user['banDuration'] = "Permanent";
+        } else {
+            $profile_user['banDuration'] = FormatDuration($profile_user['BanExpireTime'] - time());
+        }
+    }
 }
 
 // This is how to output the template.

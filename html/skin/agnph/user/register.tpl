@@ -146,7 +146,7 @@
             </ul>
             <div id="register-disclaimer">
                 {% autoescape false %}
-                    {{ RegisterDisclaimer }}
+                    {{ registerDisclaimerMessage }}
                 {% endautoescape %}
             </div>
             <input id="button" type="submit" value="Register" />

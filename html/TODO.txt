@@ -30,14 +30,16 @@ X Ability to subscribe for email/PM notifications (for your stories and watching
 X Breakdown of views per-chapter
 - Co-authors?
 - RSS Feed?
+- User restrictions, like gallery, to prevent uploads/comments/reviews.
 
 == SITE ==
 * Check for vuln's for style background-image URL
 * Search string length attacks.
 * Splash for Disclaimer/Warning/Age gate.
 * Oekaki section
-* Admin site management
+* Admin site management (Ongoing)
 * Timezone/date management
+    - Try to auto-detect on registration
 * General help pages
 * General about section, admin bios, etc.
 - Link news from forums to each section/home page?
@@ -47,14 +49,11 @@ X Breakdown of views per-chapter
 - Multiple themes?
 - Way to push notifications and site updates to users (via PM system?)
     - Include welcome message, and account migration message on registration.
-- Show who's online, and viewing what page?
 - API, at least for gallery similar to Ouroboros?
-X All comment user links should go to respective sections.
 - All CSS
-    - Don't forget page iterators
 - Theme switcher
     - Better skin fallback code
-- SQL Table prefixes
+- SQL Table prefixes?
 
 == ACCOUNT ==
 * Enable login via email, not just username (Also allow display name?)
@@ -62,16 +61,20 @@ X All comment user links should go to respective sections.
     - Add unread-message notification to both account tab and inbox tab.
     X Support message deletion? For now, no.
     - Should add user blacklisting?
-* User ban system
+        - Offending users can be banned.
+- Allow users to hide online status
 - Global user action logging
 - Non-user IP tracking (DoS investigating, user demographic statistics, etc?)
-- Allow user account deletion
-- Time limited bans
-- Ensure registered but un-activated users don't exist.
+X Allow user account deletion?
+    - Messy
+- Ensure registered but un-activated users don't 'exist' (as they could be deleted at any time)
 - Perhaps a badge/text to tell users this account was created for archive and hasn't logged in before?
+    - Shouldn't be a problem if imported usernames have prefix/suffix
 - Display section permissions (better badge icons)
-- Enable admin changing of email without confirmation (if empty, or unactivated?)
 - Handle case when users register with the same name as an archive account.
+    - Right now, archive accounts will have modified username, but duplicate display names allowed.
+- Prevent account username/displayname from starting with a digit
+- Account merge/import system.
 
 
 == Things to remember when setting up site ==

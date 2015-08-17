@@ -11,24 +11,35 @@ if (isset($user)) {
 // Returns false and unsets the global $user on unsuccessful authentication.
 // If false is returned, cookies are automatically unset.
 function AuthenticateUser($uid, $salt) {
-    global $user;
+    global $user, $user_banned, $user_ban_timestamp;
     debug("Authenticating user with uid=$uid, salt=$salt");
     // TODO: Load only main user table?
     LoadAllUserPreferences($uid, $user, true);
-    /*
-    if ($user['suspended']) {
-        debug("User account was suspended.");
-        UnsetCookies();
-        unset($user);
-        return false;
+    $uid = $user['UserId'];
+    if ($user['Usermode'] == -1) {
+        // Account has been banned. Disallow login if it has not expired.
+        $ban_expiration = $user['BanExpireTime'];
+        if ($ban_expiration != -1 && time() > $ban_expiration) {
+            // Unban account.
+            debug("User account has been un-banned");
+            sql_query("UPDATE ".USER_TABLE." SET Usermode=1 WHERE UserId=$uid;");
+        } else {
+            debug("User account has been banned");
+            UnsetCookies();
+            $user_banned = true;
+            $user_ban_timestamp = $user['BanExpireTime'];
+            $user = null;
+            unset($user);
+            return false;
+        }
     }
-    */
     
     $targetSalt = md5($user['Email'].$user['Password']);
     if ($targetSalt !== $salt) {
         // Cookie did not match user credentials, do not log in.
-        debug("User did not pass authentication.");
+        debug("User did not pass authentication");
         UnsetCookies();
+        $user = null;
         unset($user);
         return false;
     }

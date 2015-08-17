@@ -1,5 +1,5 @@
 <?php
-// PHP page for receiving actions to change administrator permission status.
+// PHP page for receiving actions to change administrator permission status. Also handles user bans.
 // URL: /user/{user-id}/admin/
 // URL: /user/change_admin.php?uid={user-id}
 

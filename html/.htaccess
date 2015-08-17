@@ -42,6 +42,7 @@ RewriteRule ^user/(\d+)/mail/compose/?$ /user/mail/compose_message.php?uid=$1 [Q
 RewriteRule ^user/(\d+)/mail/send/?$ /user/mail/mail_action.php?uid=$1&action=send
 RewriteRule ^user/auth/change/?$ /user/recover/recover_account_success.php
 RewriteRule ^user/(\d+)/admin/?$ /user/change_admin.php?uid=$1
+RewriteRule ^user/(\d+)/ban/?$ /user/change_ban_status.php?uid=$1
 
 # Rewrites for gallery pages
 RewriteRule ^gallery/post/?$ /gallery/posts/postindex.php [QSA]
