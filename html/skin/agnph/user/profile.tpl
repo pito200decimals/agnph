@@ -99,14 +99,27 @@
         {% endfor %}
         {% if banLinks|length > 0 %}
             <br />
+            <script>
+                function ban(id) {
+                    var reason = prompt("Enter ban reason:", "");
+                    if (reason.length == 0) {
+                        alert("Ban reason required");
+                        return false;
+                    }
+                    document.getElementById(id+'-ban-reason').value = reason;
+                    document.getElementById(id+'-ban-form').submit();
+                    return false;
+                }
+            </script>
         {% endif %}
         {% for link in banLinks %}
             <li>
                 <form id="{{ link.formId }}-ban-form" action="/user/{{ profile.user.UserId }}/ban/" method="POST" accept-encoding="UTF-8" hidden>
                     <input type="hidden" name="action" value="{{ link.action }}" />
                     <input type="hidden" name="duration" value="{{ link.duration }}" />
+                    {% if link.isBan %}<input id="{{ link.formId }}-ban-reason" type="hidden" name="reason" value="" />{% endif %}
                 </form>
-                <a href="/user/{{ profile.user.UserId }}/ban/" onclick="document.getElementById('{{ link.formId }}-ban-form').submit();return false;">
+                <a href="#" onclick="{% if link.isBan %}ban('{{ link.formId }}'){% else %}document.getElementById('{{ link.formId }}-ban-form').submit(){% endif %}">
                     {% autoescape false %}
                         {{ link.text|replace({' ': '&nbsp;'}) }}  {# Ensure that each action is only one line #}
                     {% endautoescape %}

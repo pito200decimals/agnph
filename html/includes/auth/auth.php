@@ -11,7 +11,7 @@ if (isset($user)) {
 // Returns false and unsets the global $user on unsuccessful authentication.
 // If false is returned, cookies are automatically unset.
 function AuthenticateUser($uid, $salt) {
-    global $user, $user_banned, $user_ban_timestamp;
+    global $user, $user_banned, $user_ban_timestamp, $user_ban_reason;
     debug("Authenticating user with uid=$uid, salt=$salt");
     // TODO: Load only main user table?
     LoadAllUserPreferences($uid, $user, true);
@@ -28,6 +28,7 @@ function AuthenticateUser($uid, $salt) {
             UnsetCookies();
             $user_banned = true;
             $user_ban_timestamp = $user['BanExpireTime'];
+            $user_ban_reason = $user['BanReason'];
             $user = null;
             unset($user);
             return false;

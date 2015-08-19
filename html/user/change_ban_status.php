@@ -30,16 +30,18 @@ if (!CanUserBan($user, $profile_user)) {
 $action = $_POST['action'];
 switch ($action) {
     case "permban":
-        if (sql_query("UPDATE ".USER_TABLE." SET Usermode=-1, BanExpireTime=-1 WHERE UserId=$puid;")) {
+        $escaped_reason = sql_escape(SanitizeHTMLTags($_POST['reason'], ""));  // Remove tags.
+        if (sql_query("UPDATE ".USER_TABLE." SET Usermode=-1, BanReason='$escaped_reason', BanExpireTime=-1 WHERE UserId=$puid;")) {
             PostSessionBanner("User permanently banned", "green");
         } else {
             PostSessionBanner("Failed to set permanent ban", "red");
         }
         break;
     case "tempban":
+        $escaped_reason = sql_escape(SanitizeHTMLTags($_POST['reason'], ""));  // Remove tags.
         if (isset($_POST['duration']) && is_numeric($_POST['duration'])) {
             $expire_time = time() + (int)$_POST['duration'];
-            if (sql_query("UPDATE ".USER_TABLE." SET Usermode=-1, BanExpireTime=$expire_time WHERE UserId=$puid;")) {
+            if (sql_query("UPDATE ".USER_TABLE." SET Usermode=-1, BanReason='$escaped_reason', BanExpireTime=$expire_time WHERE UserId=$puid;")) {
                 PostSessionBanner("User banned for ".FormatDuration((int)$_POST['duration']), "green");
             } else {
                 PostSessionBanner("Failed to set temporary ban", "red");

@@ -23,7 +23,11 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
                 $duration = FormatDuration($user_ban_timestamp - time());
                 $msg .= " for $duration";
             }
-            PostBanner($msg, "red");
+            if (isset($user_ban_reason)) {
+                $msg .= "<br />";
+                $msg .= "Reason: $user_ban_reason";
+            }
+            PostBanner($msg, "red", true/*dismissable*/, true/*noescape*/);
         } else {
             PostBanner("Invalid username/password", "red");
         }

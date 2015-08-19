@@ -94,18 +94,21 @@ if (isset($user)) {
                 "formId" => 0,
                 "action" => "unban",
                 "duration" => 0,
-                "text" => "Unban user");
+                "text" => "Unban user",
+                "isBan" => false);
         } else {
             $ban_links[] = array(
                 "formId" => 0,
                 "action" => "tempban",
                 "duration" => (int)GetSiteSetting(SHORT_BAN_DURATION_KEY, DEFAULT_SHORT_BAN_DURATION),
-                "text" => "Temporarily ban user");
+                "text" => "Temporarily ban user",
+                "isBan" => true);
             $ban_links[] = array(
                 "formId" => 1,
                 "action" => "permban",
                 "duration" => 0,
-                "text" => "Permanently ban user");
+                "text" => "Permanently ban user",
+                "isBan" => true);
         }
     }
     $vars['banLinks'] = $ban_links;
