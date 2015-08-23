@@ -45,7 +45,11 @@ if (isset($user)) {
     // Set up global admin links.
     $admin_links = array();
     if (contains($profile_user['Permissions'], 'A')) {
-        AddAdminActionLink($admin_links, array("site-A", "gallery=N", "fics=N"), "Revoke Site Administrator");
+        if ($user['UserId'] == $profile_user['UserId']) {
+            // Don't allow admins to revoke their own admin status by accident.
+        } else {
+            AddAdminActionLink($admin_links, array("site-A", "gallery=N", "fics=N"), "Revoke Site Administrator");
+        }
     } else {
         AddAdminActionLink($admin_links, array("site=A", "gallery=A", "fics=A"), "Make Site Administrator");
         // Gallery options.

@@ -6,6 +6,12 @@
     <link rel="stylesheet" type="text/css" href="/skin/agnph/comments-style.css" />
 {% endblock %}
 
+{% block profile_sidepanel %}
+    <div class="sidepanel-section">
+        <img class="profile-avatarimg" src="{{ message.toFromUser.avatarURL }}" />
+    </div>
+{% endblock %}
+
 {% block scripts %}
     {% if canSendPM %}
         <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>

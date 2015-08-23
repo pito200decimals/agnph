@@ -36,6 +36,13 @@ function CanUserComment($user) {
     if (!IsUserActivated($user)) return false;
     return true;
 }
+function CanUserDeleteComment($user, $comment) {
+    if (!IsUserActivated($user)) return false;
+    if ($user['FicsPermissions'] == 'A') return true;
+    // TODO: Allow users to delete their own comments?
+    // if ($user['UserId'] == $comment['UserId']) return true;
+    return false;
+}
 function CanUserReview($user) {
     if (!IsUserActivated($user)) return false;
     return true;
@@ -186,20 +193,28 @@ function GetTagsInfo($tag_id_array) {
 
 // Gets the array of reviews, or null if an error occurs.
 function GetReviews($sid) {
+    global $user;
     $escaped_sid = sql_escape($sid);
     $reviews = array();
     if (!sql_query_into($result, "SELECT * FROM ".FICS_REVIEW_TABLE." R
         WHERE StoryId='$escaped_sid' AND
-        EXISTS(SELECT 1 FROM ".FICS_CHAPTER_TABLE." C WHERE
+        (EXISTS(SELECT 1 FROM ".FICS_CHAPTER_TABLE." C WHERE
             R.ChapterId=C.ChapterId AND
-            C.ApprovalStatus='A')
-        ORDER BY ReviewDate ASC, ReviewId ASC;", 0)) return null;
+            C.ApprovalStatus='A') OR
+         ChapterId=-1)
+        ORDER BY ReviewDate ASC, ReviewId ASC;", 1)) return null;
     $ids = array();
     while ($row = $result->fetch_assoc()) {
         $ids[] = $row['ReviewerUserId'];
         $row['date'] = FormatDate($row['ReviewDate'], FICS_DATE_FORMAT);
         if ($row['IsReview'] && $row['ReviewScore'] > 0) {
             $row['stars'] = GetStarsHTML($row['ReviewScore'], 1);
+        }
+        $row['id'] = $row['ReviewId'];
+        if (isset($user)) {
+            $row['canDelete'] = CanUserDeleteComment($user, $row);
+        } else {
+            $row['canDelete'] = false;
         }
         $reviews[] = $row;
     }
@@ -225,11 +240,11 @@ function GetUsers($uids) {
     return $ret;
 }
 
-define("SCORES_THAT_COUNT", "SUM(CASE WHEN ReviewScore>0 THEN ReviewScore ELSE 0 END)");
+define("SCORES_THAT_COUNT", "COALESCE(SUM(ReviewScore), 0)");
 define("NUM_SCORES_THAT_COUNT", "COUNT(CASE WHEN ReviewScore>0 THEN 1 ELSE NULL END)");
 define("NUM_REVIEWS", "COUNT(CASE WHEN IsReview THEN 1 ELSE NULL END)");
 
-// Does a full refresh on story stats. Updates ChapterCount, WordCount, TotalReviewStars, TotalReviews
+// Does a full refresh on story stats. Updates ChapterCount, WordCount, TotalReviewStars, TotalReviews, and ChapterItemOrder
 function UpdateStoryStats($sid) {
     $escaped_sid = sql_escape($sid);
     $chapters = GetChaptersInfo($sid);
@@ -252,9 +267,9 @@ function UpdateStoryStats($sid) {
                 $totalStars = $row['C1'];
                 $totalRatings = $row['C2'];
                 $numReviews = $row['C3'];
-                sql_query("UPDATE ".FICS_CHAPTER_TABLE." SET ChapterItemOrder=$orderIndex, WordCount=$wordcount, TotalStars=$totalStars, TotalRatings=$totalRatings, NumReviews=$numReviews WHERE ChapterId=$cid;");
+                sql_query("UPDATE ".FICS_CHAPTER_TABLE." SET ChapterItemOrder=$orderIndex, WordCount=$chapterWordCount, TotalStars=$totalStars, TotalRatings=$totalRatings, NumReviews=$numReviews WHERE ChapterId=$cid;");
             } else {
-                sql_query("UPDATE ".FICS_CHAPTER_TABLE." SET ChapterItemOrder=$orderIndex, WordCount=$wordcount WHERE ChapterId=$cid;");
+                sql_query("UPDATE ".FICS_CHAPTER_TABLE." SET ChapterItemOrder=$orderIndex, WordCount=$chapterWordCount WHERE ChapterId=$cid;");
             }
         }
     }

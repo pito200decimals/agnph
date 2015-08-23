@@ -278,6 +278,7 @@ function AddChapter($sid, $author_id, $title, $begin_notes, $content, $end_notes
     $word_count = ChapterWordCount($content);
     $chapter_count = $count + 1;
     do_or_die(sql_query("UPDATE ".FICS_STORY_TABLE." SET ChapterCount=$chapter_count, WordCount=WordCount+$word_count WHERE StoryId=$sid;"));
+    UpdateStoryStats($sid);
 }
 
 AddChapter(1, 1, "Chapter 1 title", "BEGIN", "CONTENT 1", "END");

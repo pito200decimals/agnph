@@ -40,7 +40,7 @@
                     </a>
                     {% if chapter.NumReviews > 0 %}
                         {% autoescape false %}{{ chapter.stars }}{% endautoescape %}
-                        <span class="reviews">[<a href="/fics/story/{{ story.StoryId }}/{{ chapter.ChaterItemOrder + 1 }}/?reviews#reviews">Reviews: {{ chapter.NumReviews }}</a>]</span>
+                        <span class="reviews">[<a href="/fics/story/{{ story.StoryId }}/{{ loop.index }}/?reviews#reviews">Reviews: {{ chapter.NumReviews }}</a>]</span>
                     {% endif %}
                 </p>
                 <p class="chapterlistnotes">{% autoescape false %}{{ chapter.ChapterNotes }}{% endautoescape %}</p>

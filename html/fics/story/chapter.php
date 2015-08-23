@@ -36,6 +36,18 @@ $vars['numchapters'] = sizeof($chapters);
 
 // Also fetch comments/reviews.
 $chapterReviews = GetReviews($sid);
+if ($chapterReviews == null) $chapterReviews = array();
+foreach ($chapterReviews as &$review) {
+    $title = "";
+    if ($review['ChapterId'] != -1) {
+        foreach ($chapters as $chap) {
+            if ($chap['ChapterId'] == $review['ChapterId']) {
+                $title = $chap['Title'];
+            }
+        }
+    }
+    $review['chapterTitle'] = $title;
+}
 $comments = array_filter($chapterReviews, function($review) use ($chapter) {
     return $review['IsComment'] && $review['ChapterId'] == $chapter['ChapterId'];
 });
@@ -54,14 +66,18 @@ ConstructCommentBlockIterator($reviews, $vars['reviewIterator'], isset($_GET['re
         $url = "/fics/story/$sid/$chapternum/?reviews&offset=$offset#reviews";
         return $url;
     }, DEFAULT_FICS_COMMENTS_PER_PAGE);
-$vars['comments'] = array_map(function($comment) {
+$comments = array_map(function($comment) {
+        global $user;
         return array(
+            'id' => $comment['id'],
             'user' => $comment['commenter'],
             'date' => $comment['date'],
             'title' => "",
-            'text' => $comment['ReviewText']
+            'text' => $comment['ReviewText'],
+            'canDelete' => $comment['canDelete']
             );
     }, $comments);
+$vars['comments'] = $comments;
 $vars['reviews'] = $reviews;
 
 if (isset($_GET['reviews'])) $vars['defaultreviews'] = true;

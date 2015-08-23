@@ -76,57 +76,59 @@
 {% endblock %}
 
 {% block sidebar %}
-    <h4>Actions</h4>
-    <ul>
-        {% if canEditBasicInfo %}<li><a href="/user/{{ profile.user.UserId }}/preferences/">Change Avatar</a></li>{% endif %}
-        {% if user %}<li><a href="/user/{{ user.UserId }}/mail/compose/?to={{ profile.user.DisplayName|url_encode }}">Send a Message</a></li>{% endif %}
-        {% if adminLinks|length > 0 %}
-            <br />
-        {% endif %}
-        {% for link in adminLinks %}
-            <li>
-                <form id="{{ link.formId }}-form" action="/user/{{ profile.user.UserId }}/admin/" method="POST" accept-encoding="UTF-8" hidden>
-                    {% for action in link.actions %}
-                        <input type="hidden" name="action[]" value="{{ action }}" />
-                    {% endfor %}
-                </form>
-                <a href="/user/{{ profile.user.UserId }}/admin/" onclick="document.getElementById('{{ link.formId }}-form').submit();return false;">
-                    {% autoescape false %}
-                        {{ link.text|replace({' ': '&nbsp;'}) }}  {# Ensure that each action is only one line #}
-                    {% endautoescape %}
-                </a>
-            </li>
-        {% endfor %}
-        {% if banLinks|length > 0 %}
-            <br />
-            <script>
-                function ban(id) {
-                    var reason = prompt("Enter ban reason:", "");
-                    if (reason.length == 0) {
-                        alert("Ban reason required");
+    {% if user %}
+        <h4>Actions</h4>
+        <ul>
+            {% if canEditBasicInfo %}<li><a href="/user/{{ profile.user.UserId }}/preferences/">Change Avatar</a></li>{% endif %}
+            {% if user %}<li><a href="/user/{{ user.UserId }}/mail/compose/?to={{ profile.user.DisplayName|url_encode }}">Send a Message</a></li>{% endif %}
+            {% if adminLinks|length > 0 %}
+                <br />
+            {% endif %}
+            {% for link in adminLinks %}
+                <li>
+                    <form id="{{ link.formId }}-form" action="/user/{{ profile.user.UserId }}/admin/" method="POST" accept-encoding="UTF-8" hidden>
+                        {% for action in link.actions %}
+                            <input type="hidden" name="action[]" value="{{ action }}" />
+                        {% endfor %}
+                    </form>
+                    <a href="/user/{{ profile.user.UserId }}/admin/" onclick="document.getElementById('{{ link.formId }}-form').submit();return false;">
+                        {% autoescape false %}
+                            {{ link.text|replace({' ': '&nbsp;'}) }}  {# Ensure that each action is only one line #}
+                        {% endautoescape %}
+                    </a>
+                </li>
+            {% endfor %}
+            {% if banLinks|length > 0 %}
+                <br />
+                <script>
+                    function ban(id) {
+                        var reason = prompt("Enter ban reason:", "");
+                        if (reason.length == 0) {
+                            alert("Ban reason required");
+                            return false;
+                        }
+                        document.getElementById(id+'-ban-reason').value = reason;
+                        document.getElementById(id+'-ban-form').submit();
                         return false;
                     }
-                    document.getElementById(id+'-ban-reason').value = reason;
-                    document.getElementById(id+'-ban-form').submit();
-                    return false;
-                }
-            </script>
-        {% endif %}
-        {% for link in banLinks %}
-            <li>
-                <form id="{{ link.formId }}-ban-form" action="/user/{{ profile.user.UserId }}/ban/" method="POST" accept-encoding="UTF-8" hidden>
-                    <input type="hidden" name="action" value="{{ link.action }}" />
-                    <input type="hidden" name="duration" value="{{ link.duration }}" />
-                    {% if link.isBan %}<input id="{{ link.formId }}-ban-reason" type="hidden" name="reason" value="" />{% endif %}
-                </form>
-                <a href="#" onclick="{% if link.isBan %}ban('{{ link.formId }}'){% else %}document.getElementById('{{ link.formId }}-ban-form').submit(){% endif %}">
-                    {% autoescape false %}
-                        {{ link.text|replace({' ': '&nbsp;'}) }}  {# Ensure that each action is only one line #}
-                    {% endautoescape %}
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
+                </script>
+            {% endif %}
+            {% for link in banLinks %}
+                <li>
+                    <form id="{{ link.formId }}-ban-form" action="/user/{{ profile.user.UserId }}/ban/" method="POST" accept-encoding="UTF-8" hidden>
+                        <input type="hidden" name="action" value="{{ link.action }}" />
+                        <input type="hidden" name="duration" value="{{ link.duration }}" />
+                        {% if link.isBan %}<input id="{{ link.formId }}-ban-reason" type="hidden" name="reason" value="" />{% endif %}
+                    </form>
+                    <a href="#" onclick="{% if link.isBan %}ban('{{ link.formId }}'){% else %}document.getElementById('{{ link.formId }}-ban-form').submit(){% endif %}">
+                        {% autoescape false %}
+                            {{ link.text|replace({' ': '&nbsp;'}) }}  {# Ensure that each action is only one line #}
+                        {% endautoescape %}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endblock %}
 
 {% block usercontent %}

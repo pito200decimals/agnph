@@ -23,14 +23,16 @@
     <div class="userpage">
         <div class="userpage-container">
             <div class="profile-sidepanel">
-                <div class="sidepanel-section">
-                    <img class="profile-avatarimg" src="{{ profile.user.avatarURL }}" />
-                </div>
-                {# Other actions to perform on this user #}
-                <div class="sidepanel-section">
-                    {% block sidebar %}
-                    {% endblock %}
-                </div>
+                {% block profile_sidepanel %}
+                    <div class="sidepanel-section">
+                        <img class="profile-avatarimg" src="{{ profile.user.avatarURL }}" />
+                    </div>
+                    {# Other actions to perform on this user #}
+                    <div class="sidepanel-section">
+                        {% block sidebar %}
+                        {% endblock %}
+                    </div>
+                {% endblock %}
             </div>
             <div class="profile-content">
                 <h2>{{ profile.user.DisplayName }}</h2>

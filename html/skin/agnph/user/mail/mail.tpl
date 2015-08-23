@@ -18,7 +18,6 @@
 
 {% block usercontent %}
     <h3>Messages</h3>
-    {{ block('banner') }}
     {# Display message list. #}
     <table class="list-table">
         <thead>

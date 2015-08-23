@@ -3,8 +3,6 @@
 // URL: /user/{user-id}/ban/
 // URL: /user/change_ban_status.php?uid={user-id}
 
-define("DEBUG", true);
-
 include_once("../header.php");
 include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."includes/util/user.php");

@@ -77,11 +77,14 @@
 
 {% block reviewblock %}
     <div class="comments">
+        {# Top-level tabs #}
         <a id="reviews"></a>
         <ul class="tabs">
             <li class="tab-link{% if defaultcomments %} current{% endif %}" data-tab="tab-comments">Comments ({{ comments|length }})</li>
             <li class="tab-link{% if defaultreviews %} current{% endif %}" data-tab="tab-reviews">Reviews ({{ reviews|length }})</li>
         </ul>
+
+        {# Pane for comments #}
         <div id="tab-comments" class="tab-content{% if defaultcomments %}  current{% endif %}">
             {% if comments|length > 0 %}
                 <ul class="comment-list">
@@ -95,24 +98,35 @@
             {% endif %}
             {% if user and canComment%}
                 <input id="commentbutton" type="button" value="Add Comment"/>
-                <form id="commentform" action="#" method="POST">
+                <form id="commentform" method="POST">
                     <textarea id="commenttextbox" name="text" class="commenttextbox">
                     </textarea>
-                    <input type="hidden" name="type" value="comment" />
+                    <input type="hidden" name="action" value="comment" />
                     <input type="submit" value="Add Comment" />
                 </form>
             {% endif %}
         </div>
+
+        {# Pane for reviews #}
         <div id="tab-reviews" class="tab-content{% if defaultreviews %} current{% endif %}">
             {% if reviews|length > 0 %}
                 <ul class="comment-list">
                     {% for review in reviews %}
                         <li class="comment">
                             <img class="comment-avatarimg" src="{{ review.commenter.avatarURL }}" />
-                            <p class="commentheader">
-                                <strong>Reviewer:</strong> <a href="/user/{{ review.commenter.UserId }}/">{{ review.commenter.DisplayName }}</a>{% autoescape false %}{{ review.stars }}{% endautoescape %}<br />
-                                <strong>Date:</strong> {{ review.date }}{% if review.ChapterId > 0 %} <strong>Chapter:</strong> {{ review.chapterTitle }}{% endif %}
-                            </p>
+                            {% if review.canDelete %}<form method="POST" accept-charset="UTF-8">{% endif %}
+                                <p class="commentheader">
+                                    {% if review.canDelete %}
+                                        <span style="float: right; display: block;">
+                                            <input type="hidden" name="action" value="delete-comment" />
+                                            <input type="hidden" name="id" value="{{ review.id }}" />
+                                            <input type="submit" value="Delete" />
+                                        </span>
+                                    {% endif %}
+                                    <strong>Reviewer:</strong> <a href="/user/{{ review.commenter.UserId }}/">{{ review.commenter.DisplayName }}</a>{% autoescape false %}{{ review.stars }}{% endautoescape %}<br />
+                                    <strong>Date:</strong> {{ review.date }}{% if review.ChapterId > 0 %} <strong>Chapter:</strong> {{ review.chapterTitle }}{% endif %}
+                                </p>
+                            {% if review.canDelete %}</form>{% endif %}
                             <div class="commenttext">
                             {% autoescape false %}{{ review.ReviewText }}{% endautoescape %}
                             </div>
@@ -134,7 +148,7 @@
             {% endif %}
             {% if user and canReview %}
                 <input id="reviewbutton" type="button" value="Add Review" />
-                <form id="reviewform" action="#" method="POST">
+                <form id="reviewform" method="POST">
                     <textarea id="reviewtextbox" name="text" class="commenttextbox">
                     </textarea>
                     <label class="metalabel">Stars:</label><select name="score">
@@ -150,17 +164,17 @@
                         <option value="9">9</option>
                         <option value="10">10</option>
                     </select>/10<br />
-                    <input type="hidden" name="type" value="review" />
+                    <input type="hidden" name="action" value="review" />
                     <input type="submit" value="Add Review" />
-                </form action="#" method="POST">
+                </form>
             {% endif %}
         </div>
         {% if story.AuthorUserId == user.UserId %}
             <div id="responseformblock">
-                <form id="responseform" action="#" method="POST">
+                <form id="responseform" method="POST">
                     <textarea id="responsetextbox" name="text" class="commenttextbox">
                     </textarea>
-                    <input type="hidden" name="type" value="response" />
+                    <input type="hidden" name="action" value="response" />
                     <input id="reviewid" type="hidden" name="reviewId" value="" />
                     <input type="submit" value="Add Response" />
                 </form>

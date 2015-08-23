@@ -71,7 +71,6 @@ RewriteRule ^fics/create/(\d+)/(\d+)/?$ /fics/edit_chapter.php?action=create&sid
 RewriteRule ^fics/edit/(\d+)/(\d+)/?$ /fics/edit_chapter.php?action=edit&sid=$1&chapternum=$2
 RewriteRule ^fics/story/chapter/order/?$ /fics/reorder_chapter.php
 RewriteRule ^fics/tags/?$ /fics/tags.php [QSA]
-RewriteRule ^fics/search/?$ /fics/storyindex.php [QSA]
 RewriteRule ^fics/authors/?$ /fics/authorindex.php [QSA]
 RewriteRule ^fics/delete/(\d+)/?$ /fics/delete_story.php?sid=$1&action=delete&type=story
 RewriteRule ^fics/delete/(\d+)/(\d+)/?$ /fics/delete_story.php?sid=$1&action=delete&type=chapter&index=$2

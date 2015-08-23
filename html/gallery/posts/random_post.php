@@ -3,8 +3,6 @@
 // URL: /gallery/post/random/
 // URL: /gallery/posts/random.php
 
-define("DEBUG", true);
-
 include_once("../../header.php");
 
 define("MAX_TRIES", 100);

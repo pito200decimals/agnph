@@ -30,6 +30,9 @@ function AddMessageMetadata(&$messages, $user) {
     $table_list = array(USER_TABLE);
     $all_users = array();
     if (!LoadTableData($table_list, "UserId", $all_user_ids, $all_users)) return false;
+    foreach ($all_users as &$usr) {
+        $usr['avatarURL'] = GetAvatarURL($usr);
+    }
     foreach ($messages as &$message) {
         if ($message['SenderUserId'] != $user['UserId']) {
             $message['toFromUser'] = $all_users[$message['SenderUserId']];

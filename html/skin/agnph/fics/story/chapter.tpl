@@ -36,6 +36,7 @@
 {% endblock %}
 
 {% block content %}
+    {{ block('banner') }}
     <h3><a href="/fics/story/{{ story.StoryId }}/">{{ story.Title }}</a> by <a href="/user/{{ story.author.UserId }}/fics/">{{ story.author.DisplayName }}</a></h3>
     {{ block('prevnext') }}
     {% if story.StoryNotes|length > 0 %}

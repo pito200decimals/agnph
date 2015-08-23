@@ -23,6 +23,7 @@ $vars['story'] = &$story;
 $vars['chapters'] = &$chapters;
 
 $storyReviews = GetReviews($sid);
+if ($storyReviews == null) $storyReviews = array();
 // Get chapter titles for reviews/comments.
 foreach ($storyReviews as &$review) {
     $title = "";
@@ -56,14 +57,18 @@ ConstructCommentBlockIterator($reviews, $vars['reviewIterator'], isset($_GET['re
     }, DEFAULT_FICS_COMMENTS_PER_PAGE);
 
 // Format comments for template.
-$vars['comments'] = array_map(function($comment) {
+$comments = array_map(function($comment) {
+        global $user;
         return array(
+            'id' => $comment['id'],
             'user' => $comment['commenter'],
             'date' => $comment['date'],
             'title' => "",
-            'text' => $comment['ReviewText']
+            'text' => $comment['ReviewText'],
+            'canDelete' => $comment['canDelete']
             );
     }, $comments);
+$vars['comments'] = $comments;
 $vars['reviews'] = $reviews;
 
 if (isset($_GET['reviews'])) $vars['defaultreviews'] = true;

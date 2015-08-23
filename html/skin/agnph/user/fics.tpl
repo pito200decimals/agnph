@@ -17,23 +17,25 @@
 {% endblock %}
 
 {% block sidebar %}
-    <h4>Actions</h4>
-    <ul>
-        {% for link in adminLinks %}
-            <li>
-                <form id="{{ link.formId }}-form" action="/user/{{ profile.user.UserId }}/admin/" method="POST" accept-encoding="UTF-8" hidden>
-                    {% for action in link.actions %}
-                        <input type="hidden" name="action[]" value="{{ action }}" />
-                    {% endfor %}
-                </form>
-                <a href="/user/{{ profile.user.UserId }}/admin/" onclick="document.getElementById('{{ link.formId }}-form').submit();return false;">
-                    {% autoescape false %}
-                        {{ link.text|replace({' ': '&nbsp;'})  }}
-                    {% endautoescape %}
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
+    {% if user %}
+        <h4>Actions</h4>
+        <ul>
+            {% for link in adminLinks %}
+                <li>
+                    <form id="{{ link.formId }}-form" action="/user/{{ profile.user.UserId }}/admin/" method="POST" accept-encoding="UTF-8" hidden>
+                        {% for action in link.actions %}
+                            <input type="hidden" name="action[]" value="{{ action }}" />
+                        {% endfor %}
+                    </form>
+                    <a href="/user/{{ profile.user.UserId }}/admin/" onclick="document.getElementById('{{ link.formId }}-form').submit();return false;">
+                        {% autoescape false %}
+                            {{ link.text|replace({' ': '&nbsp;'})  }}
+                        {% endautoescape %}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endblock %}
 
 {% use "fics/storyblock.tpl" %}
@@ -60,7 +62,7 @@
                 {% endfor %}
             </ul>
             <div class="Clear">&nbsp;</div>
-            <a href="/fics/search/?search={{ profile.user.DisplayName|url_encode }}">Show all</a>
+            <a href="/fics/browse/?search={{ profile.user.DisplayName|url_encode }}">Show all</a>
         </div>
     {% endif %}
     {% if showFavorites and profile.user.favorites|length > 0 %}
@@ -74,7 +76,7 @@
                 {% endfor %}
             </ul>
             <div class="Clear">&nbsp;</div>
-            <a href="/fics/search/?search=fav%3A{{ profile.user.DisplayName|url_encode }}">Show all</a>
+            <a href="/fics/browse/?search=fav%3A{{ profile.user.DisplayName|url_encode }}">Show all</a>
         </div>
     {% endif %}
 {% endblock %}
