@@ -65,13 +65,14 @@ do_or_die(sql_query(
         DisplayName VARCHAR(".MAX_DISPLAY_NAME_LENGTH.") NOT NULL,
         Email VARCHAR(64) NOT NULL,
         Password CHAR(32) NOT NULL,
-        Timezone FLOAT DEFAULT 0 NOT NULL,
         Usermode INT(11) DEFAULT 0 NOT NULL,".  // -1=Banned, 0=Unactivated, 1=User. Unactivated users do not have anything besides this table entry.
        "Permissions VARCHAR(8) NOT NULL,".  // String of characters, A=Super Admin, R=Forums, G=Gallery, F=Fics, O=Oekaki, I=IRC, M=Minecraft
        "BanReason VARCHAR(256) NOT NULL,
         BanExpireTime INT(11) NOT NULL,".  // Timestamp when ban is lifted. -1 for infinite bans.
        "Title VARCHAR(64) NOT NULL,
         Location VARCHAR(64) NOT NULL,
+        AutoDetectTimezone TINYINT(1) DEFAULT 1 NOT NULL,
+        Timezone FLOAT DEFAULT 0 NOT NULL,
         Species VARCHAR(32) NOT NULL,
         DOB CHAR(10) NOT NULL,".  // Format: MM/DD/YYYY
        "ShowDOB TINYINT(1) DEFAULT 0,

@@ -67,7 +67,14 @@ function UnsetCookies() {
 
 
 function FormatDate($epoch, $format = FORUMS_DATE_FORMAT) {
-    // TODO: Take into account user timezone.
+    global $user;
+    $offset = 0;
+    if (isset($user)) {
+        $offset = $user['Timezone'];
+    } else if (isset($_SESSION['timezone_offset'])) {
+        $offset = $_SESSION['timezone_offset'];
+    }
+    $epoch += (int)($offset * 60 * 60);
     $dt = new DateTime("@$epoch");
     return $dt->format($format);
 }

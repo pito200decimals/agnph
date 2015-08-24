@@ -185,9 +185,18 @@ if (isset($_POST['display-name']) &&
         // The user did not change email or password.
     }
     // Timezone
-    $timezone = ParseGMTTimeZoneToFloat($_POST['timezone']);
-    if ($timezone != null && $timezone != $profile_user['Timezone']) {
-        $user_table_sets[] = "Timezone=$timezone";
+    if (isset($_POST['auto-detect-timezone'])) {
+        if ($user['AutoDetectTimezone'] != 1) {
+            $user_table_sets[] = "AutoDetectTimezone=1";
+        }
+    } else {
+        if ($user['AutoDetectTimezone'] != 0) {
+            $user_table_sets[] = "AutoDetectTimezone=0";
+        }
+        $timezone = ParseGMTTimeZoneToFloat($_POST['timezone']);
+        if ($timezone != null && $timezone != $profile_user['Timezone']) {
+            $user_table_sets[] = "Timezone=$timezone";
+        }
     }
     // GroupMailboxThreads
     $group_mailbox = isset($_POST['group-pm']);
@@ -385,8 +394,7 @@ function ValidateDateString($date_str) {
 // Gets a human-readable GMT timezone offset from the database float offset.
 function GetGMTTimeZone($timezone_float) {
     $ret = "GMT ";
-    $ret .= ($timezone_float >= 0 ? "+" : "");
-    $ret .= sprintf("%02d", (int)($timezone_float));
+    $ret .= sprintf("%+03d", (int)($timezone_float));
     $remainder = $timezone_float - (int)($timezone_float);
     $ret .= sprintf("%02d", (int)($remainder * 60));
     return $ret;

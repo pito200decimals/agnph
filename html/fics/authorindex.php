@@ -6,7 +6,7 @@ include_once("../header.php");
 include_once(SITE_ROOT."includes/constants.php");
 include_once(SITE_ROOT."includes/util/core.php");
 
-$search_clause = "";
+$search_clause = "WHERE TRUE";
 if (isset($_GET['prefix'])) {
     $prefix = mb_strtolower($_GET['prefix']);
     $escaped_prefix = sql_escape($prefix);
@@ -14,6 +14,8 @@ if (isset($_GET['prefix'])) {
 } else {
     $prefix = "";
 }
+// TODO: Include co-authors?
+$search_clause .= " AND EXISTS(SELECT 1 FROM ".FICS_STORY_TABLE." S WHERE T.UserId=S.AuthorUserId)";
 
 include_once(SITE_ROOT."includes/util/listview.php");
 

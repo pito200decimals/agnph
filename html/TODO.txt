@@ -26,9 +26,10 @@ X Custom swf/webm thumbs when parent is set to image.
 
 == FICS ==
 - Index page, including news and featured stories, perhaps random selection
+- User restrictions, like gallery, to prevent uploads/comments/reviews.
+- Admin ability to create story as another user
 - Co-authors?
 - RSS Feed?
-- User restrictions, like gallery, to prevent uploads/comments/reviews.
 X Author/Story following?
 X Ability to subscribe for email/PM notifications (for your stories and watching others)
 X Breakdown of views per-chapter
@@ -40,7 +41,7 @@ X Breakdown of views per-chapter
 * Oekaki section
 * Admin site management (Ongoing)
 * Timezone/date management
-    - Try to auto-detect on registration
+    - Should detect on home page, registration, or every page?
 * General help pages
 * General about section, admin bios, etc.
 - Link news from forums to each section/home page?
@@ -75,6 +76,9 @@ X Breakdown of views per-chapter
 - Prevent account username/displayname from starting with a digit
 - Account merge/import system.
 - Enable login via display name???
+- Match "Users" and "Members" header and title
+- Change timezone selection to dropdown options
+- Online indicator by username in profile
 X Allow user account deletion?
     - Messy
 

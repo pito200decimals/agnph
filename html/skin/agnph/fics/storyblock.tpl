@@ -50,7 +50,7 @@
                                     {% for tag in story.tags %}
                                         <li>
                                             {# TODO: Link to search page #}
-                                            <a href="/fics/search/?search={{ tag.Name }}"><span class="{{ tag.class }}">{{ tag.Name }}</span></a>
+                                            <a href="/fics/browse/?search={{ tag.Name }}"><span class="{{ tag.class }}">{{ tag.Name|url_encode }}</span></a>
                                         </li>
                                     {% endfor %}
                                 </ul>

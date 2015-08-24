@@ -69,7 +69,7 @@ function CreatePostIterator(&$stories, $offset, $stories_per_page, $search_terms
                 $offset = ($index - 1) * $stories_per_page;
                 $url = "/fics/browse/?offset=$offset";
                 if ($search_terms != null) {
-                    $url = "/fics/search/?search=".urlencode($search_terms)."&offset=$offset";  // Safe with UTF-8.
+                    $url = "/fics/browse/?search=".urlencode($search_terms)."&offset=$offset";  // Safe with UTF-8.
                 } else {
                     $url = "/fics/browse/?offset=$offset";
                 }

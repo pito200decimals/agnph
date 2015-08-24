@@ -14,6 +14,7 @@ RewriteRule ^auth/?$ /auth_code.php [QSA]
 RewriteRule ^recover/?$ /user/recover/recover_account_input.php
 RewriteRule ^recover/confirm/?$ /user/recover/recover_account_confirm.php
 RewriteRule ^recover/success/?$ /user/recover/recover_account_success.php
+RewriteRule ^timezone/?$ /timezone.php
 
 # Rewrites for forums pages
 RewriteRule ^forums/thread/(\d+)/?$ /forums/thread/viewthread.php?t=$1

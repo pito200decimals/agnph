@@ -23,7 +23,7 @@
             <tbody>
                 {% for tag in tags %}
                     <tr>
-                        <td><strong><a class="{{ tag.typeClass }}" href="/fics/search/?search={{ tag.Name }}">{{ tag.Name }}</a></strong></td>
+                        <td><strong><a class="{{ tag.typeClass }}" href="/fics/browse/?search={{ tag.Name }}">{{ tag.Name|url_encode }}</a></strong></td>
                         <td>{{ tag.typeName }}{% if tag.EditLocked %} (locked){% endif %}</td>
                         <td>{{ tag.tagCounts }}</td>
                     </tr>
