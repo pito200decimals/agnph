@@ -73,6 +73,7 @@ function CreateSQLClauseFromTerm($term) {
         // Get appropriate tag id.
         $tags = GetTagsByNameWithAliasAndImplied(GALLERY_TAG_TABLE, GALLERY_TAG_ALIAS_TABLE, GALLERY_TAG_IMPLICATION_TABLE, array($term), false, -1, true, false, false);  // Apply alias, but don't drop tags.
         $tag_ids = array_keys($tags);
+        if (sizeof($tag_ids) == 0) return "FALSE";
         $joined = implode(",", $tag_ids);
         return "EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." WHERE T.PostId=PostId AND TagId IN ($joined) LIMIT 1)";
     }

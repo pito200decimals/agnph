@@ -2,6 +2,7 @@
 // General image utility classes and functions.
 
 include_once(SITE_ROOT."../lib/getid3/getid3.php");
+include_once(SITE_ROOT."includes/util/core.php");
 
 class SimpleImage
 {
@@ -19,13 +20,13 @@ class SimpleImage
             $this->image = imagecreatefrompng($filename);
         }
     }
-    function save($filename, $image_type = IMAGETYPE_JPEG, $compression = 75, $permissions = null)
+    function save($filename, $compression = 75, $permissions = null)
     {
-        if ($image_type == IMAGETYPE_JPEG) {
+        if (endsWith($filename, "jpg")) {
             imagejpeg($this->image, $filename, $compression);
-        } elseif ($image_type == IMAGETYPE_GIF) {
+        } elseif (endsWith($filename, "gif")) {
             imagegif($this->image, $filename);
-        } elseif ($image_type == IMAGETYPE_PNG) {
+        } elseif (endsWith($filename, "png")) {
             imagepng($this->image, $filename);
         }
         if ($permissions != null) {
@@ -71,6 +72,8 @@ class SimpleImage
     function resize($width, $height)
     {
         $new_image = imagecreatetruecolor($width, $height);
+        imagealphablending($new_image, false);
+        imagesavealpha($new_image, true);
         imagecopyresampled($new_image, $this->image, 0, 0, 0, 0, $width, $height, $this->getWidth(), $this->getHeight());
         $this->image = $new_image;
     }
