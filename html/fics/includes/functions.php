@@ -211,10 +211,15 @@ function GetReviews($sid) {
             $row['stars'] = GetStarsHTML($row['ReviewScore'], 1);
         }
         $row['id'] = $row['ReviewId'];
-        if (isset($user)) {
-            $row['canDelete'] = CanUserDeleteComment($user, $row);
-        } else {
-            $row['canDelete'] = false;
+        // Initialize possible actions.
+        $row['actions'] = array();
+        if (isset($user) && CanUserDeleteComment($user, $row)) {
+            $row['actions'][] = array(
+                // "url" => "",
+                "action" => "delete-comment",
+                "label" => "Delete",
+                "confirmMsg" => "Are you sure you want to delete this ".($row['IsReview'] ? "review" : "comment")."?"
+                );
         }
         $reviews[] = $row;
     }

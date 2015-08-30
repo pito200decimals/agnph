@@ -57,6 +57,8 @@ ConstructCommentBlockIterator($reviews, $vars['reviewIterator'], isset($_GET['re
     }, DEFAULT_FICS_COMMENTS_PER_PAGE);
 
 // Format comments for template.
+debug($reviews);
+debug($comments);
 $comments = array_map(function($comment) {
         global $user;
         return array(
@@ -65,8 +67,7 @@ $comments = array_map(function($comment) {
             'date' => $comment['date'],
             'title' => "",
             'text' => $comment['ReviewText'],
-            'canDelete' => $comment['canDelete']
-            );
+            'actions' => $comment['actions']);
     }, $comments);
 $vars['comments'] = $comments;
 $vars['reviews'] = $reviews;

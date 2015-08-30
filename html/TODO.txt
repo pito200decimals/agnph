@@ -48,11 +48,11 @@ X Breakdown of views per-chapter
 - Global site statistics (including user action logging?)
 - Polls?
 - Maintenance mode (no edits)
-- Multiple themes?
 - Way to push notifications and site updates to users (via PM system?)
     - Include welcome message, and account migration message on registration.
 - API, at least for gallery similar to Ouroboros?
 - All CSS
+- Multiple themes?
 - Theme switcher
     - Better skin fallback code
 - SQL Table prefixes?
@@ -76,8 +76,8 @@ X Breakdown of views per-chapter
 - Prevent account username/displayname from starting with a digit
 - Account merge/import system.
 - Enable login via display name???
-- Match "Users" and "Members" header and title
 - Change timezone selection to dropdown options
+    - Allow DST auto-toggle?
 - Online indicator by username in profile
 X Allow user account deletion?
     - Messy

@@ -29,7 +29,8 @@ sql_query("DROP TABLE ".SITE_LOGGING_TABLE.";");
 sql_query("DROP TABLE site_text;");  // TODO: Remove.
 sql_query("DROP TABLE ".SITE_SETTINGS_TABLE.";");
 sql_query("DROP TABLE ".SECURITY_EMAIL_TABLE.";");
-sql_query("DROP TABLE ".FORUMS_LOBBY_TABLE.";");
+sql_query("DROP TABLE ".FORUMS_LOBBY_TABLE.";");  // TODO: Remove.
+sql_query("DROP TABLE ".FORUMS_BOARD_TABLE.";");
 sql_query("DROP TABLE ".FORUMS_POST_TABLE.";");
 sql_query("DROP TABLE ".FORUMS_USER_PREF_TABLE.";");
 sql_query("DROP TABLE ".FORUMS_UNREAD_POST_TABLE.";");
@@ -105,29 +106,30 @@ do_or_die(sql_query(
 
 // Table specifying the structure of the general forum lobbies.
 do_or_die(sql_query(
-    "CREATE TABLE ".FORUMS_LOBBY_TABLE." (
-        LobbyId INT(11) UNSIGNED AUTO_INCREMENT,
-        ParentLobbyId INT(11) NOT NULL,
+    "CREATE TABLE ".FORUMS_BOARD_TABLE." (
+        BoardId INT(11) UNSIGNED AUTO_INCREMENT,
+        ParentId INT(11) NOT NULL,
         Name VARCHAR(64) NOT NULL,
         Description VARCHAR(512) NOT NULL,
-        AccessRestrictions VARCHAR(8) NOT NULL,".  // List of allowed admin flags (OR'd). Empty to allow everyone. TODO: Enforce.
-       "PRIMARY KEY(LobbyId)
+        RestrictedLobby TINYINT(1) DEFAULT 0 NOT NULL,
+        BoardSortOrder INT(11) DEFAULT 0 NOT NULL,
+        PRIMARY KEY(BoardId)
     ) DEFAULT CHARSET=utf8;"));
-// Post table. ParentThreadId and ParentLobbyId are mutually exclusive.
-// A Forum Thread is just the post id of the first post in the thread. This 
-// first post cannot be deleted unless the whole thread's posts are deleted (or bulk en-masse by admins).
+// Post table. Contains both threads and posts. Threads are equal to the first post in the thread.
 do_or_die(sql_query(
     "CREATE TABLE ".FORUMS_POST_TABLE." (
         PostId INT(11) UNSIGNED AUTO_INCREMENT,
         UserId INT(11) NOT NULL,
+        Title VARCHAR(256) NOT NULL,
+        Text TEXT(131072),
         PostDate INT(11) NOT NULL,
         EditDate INT(11) DEFAULT 0 NOT NULL,
-        Title VARCHAR(256) NOT NULL,
-        ParentThreadId INT(11) DEFAULT -1 NOT NULL,
-        ParentLobbyId INT(11) DEFAULT -1 NOT NULL,
-        Content TEXT(131072),
+        ParentId INT(11) NOT NULL,
+        IsThread TINYINT(1) DEFAULT 0 NOT NULL,".  // Properties below only belong to threads.
+       "Replies INT(11) NOT NULL,
+        Views INT(11) NOT NULL,
+        LastPostDate INT(11) NOT NULL,
         Sticky TINYINT(1) DEFAULT 0 NOT NULL,
-        PostIP VARCHAR(45) NOT NULL,
         PRIMARY KEY(PostId)
     ) DEFAULT CHARSET=utf8;"));
 // User preferences specific to the forums section.

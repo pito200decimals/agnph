@@ -81,8 +81,8 @@ function rand_date() {
 
 // Populate some threads
 do_or_die(sql_query(
-    "INSERT INTO ".FORUMS_LOBBY_TABLE."
-    (LobbyId, ParentLobbyId, Name, Description)
+    "INSERT INTO ".FORUMS_BOARD_TABLE."
+    (BoardId, ParentId, Name, Description)
     VALUES
     (1, -1, 'General Lobby', 'General Lobby Description'),
     (2, -1, 'Creative Lobby', 'Creative Lobby Description'),
@@ -94,20 +94,20 @@ do_or_die(sql_query(
     (8, 3, 'Links', 'Links Description');"));
 do_or_die(sql_query(
     "INSERT INTO ".FORUMS_POST_TABLE."
-    (PostId, UserId, PostDate, ParentThreadId, ParentLobbyId, Title, Content)
+    (PostId, UserId, PostDate, ParentId, IsThread, Title, Text)
     VALUES
-    (1, 1, ".rand_date().", -1, 4, 'Title of thread 1', 'Content of post 1'),
-    (2, 2, ".rand_date().", 1, -1, 'RE: Title of thread 1', 'Content of post 2'),
-    (3, 3, ".rand_date().", 1, -1, 'RE: Title of thread 1', 'Content of post 3'),
-    (4, 1, ".rand_date().", 1, -1, 'RE: Title of thread 1', 'Content of post 4'),
-    (5, 2, ".rand_date().", 1, -1, 'RE: Title of thread 1', 'Content of post 5'),
-    (6, 1, ".rand_date().", 1, -1, 'RE: Title of thread 1', 'Content of post 6'),
-    (7, 2, ".rand_date().", 1, -1, 'RE: Title of thread 1', 'Content of post 7'),
-    (8, 3, ".rand_date().", 1, -1, 'RE: Title of thread 1', 'Content of post 8'),
-    (9, 1, ".rand_date().", 1, -1, 'RE: Title of thread 1', 'Content of post 9'),
-    (10, 2, ".rand_date().", 1, -1, 'RE: Title of thread 1', 'Content of post 10'),
-    (11, 3, ".rand_date().", -1, 4, 'Title of thread 2', 'Content of post 11'),
-    (12, 1, ".rand_date().", -1, 5, 'Title of thread 3', 'Content of post 12');"));
+    (1, 1, ".rand_date().", 4, 1, 'Title of thread 1', 'Content of post 1'),
+    (2, 2, ".rand_date().", 1, 0, 'RE: Title of thread 1', 'Content of post 2'),
+    (3, 3, ".rand_date().", 1, 0, 'RE: Title of thread 1', 'Content of post 3'),
+    (4, 1, ".rand_date().", 1, 0, 'RE: Title of thread 1', 'Content of post 4'),
+    (5, 2, ".rand_date().", 1, 0, 'RE: Title of thread 1', 'Content of post 5'),
+    (6, 1, ".rand_date().", 1, 0, 'RE: Title of thread 1', 'Content of post 6'),
+    (7, 2, ".rand_date().", 1, 0, 'RE: Title of thread 1', 'Content of post 7'),
+    (8, 3, ".rand_date().", 1, 0, 'RE: Title of thread 1', 'Content of post 8'),
+    (9, 1, ".rand_date().", 1, 0, 'RE: Title of thread 1', 'Content of post 9'),
+    (10, 2, ".rand_date().", 1, 0, 'RE: Title of thread 1', 'Content of post 10'),
+    (11, 3, ".rand_date().", 4, 1, 'Title of thread 2', 'Content of post 11'),
+    (12, 1, ".rand_date().", 5, 1, 'Title of thread 3', 'Content of post 12');"));
 
 function WriteBio($uid, $bio) {
     $file = fopen("../user/data/bio/$uid.txt", "w");

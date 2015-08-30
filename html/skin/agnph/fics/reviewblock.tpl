@@ -75,6 +75,35 @@
 
 {% use 'includes/comment-block.tpl' %}
 
+{% block review_post_block %}
+    <li class="comment">
+        <img class="comment-avatarimg" src="{{ review.commenter.avatarURL }}" />
+        <div class="commentheader">
+            {% for action in review.actions|reverse %}
+                <form {% if action.url %}action="{{ action.url }}" {% endif %}class="edit-comment-form" method="POST" accept-charset="UTF-8">
+                    <input type="hidden" name="action" value="{{ action.action }}" />
+                    <input type="hidden" name="id" value="{{ review.id }}" />
+                    <input type="submit" value="{{ action.label }}" {% if action.confirmMsg %}onclick="return confirm('{{ action.confirmMsg }}');" {% endif %}/>
+                </form>
+            {% endfor %}
+            <strong>Reviewer:</strong> <a href="/user/{{ review.commenter.UserId }}/">{{ review.commenter.DisplayName }}</a>{% autoescape false %}{{ review.stars }}{% endautoescape %}<br />
+            <strong>Date:</strong> {{ review.date }}{% if review.ChapterId > 0 %} <strong>Chapter:</strong> {{ review.chapterTitle }}{% endif %}
+        </div>
+        <div class="commenttext">
+        {% autoescape false %}{{ review.ReviewText }}{% endautoescape %}
+        </div>
+        {% if review.AuthorResponseText|length > 0 %}
+            <div class="commentresponse">
+                Author's Response:<br />
+                {% autoescape false %}{{ review.AuthorResponseText }}{% endautoescape %}
+            </div>
+        {% elseif story.AuthorUserId == user.UserId %}
+            <input class="authorresponsebutton" type="button" value="Respond" />
+            <input type="hidden" value="{{ review.ReviewId }}" />
+        {% endif %}
+    </li>
+{% endblock %}
+
 {% block reviewblock %}
     <div class="comments">
         {# Top-level tabs #}
@@ -112,34 +141,7 @@
             {% if reviews|length > 0 %}
                 <ul class="comment-list">
                     {% for review in reviews %}
-                        <li class="comment">
-                            <img class="comment-avatarimg" src="{{ review.commenter.avatarURL }}" />
-                            {% if review.canDelete %}<form method="POST" accept-charset="UTF-8">{% endif %}
-                                <p class="commentheader">
-                                    {% if review.canDelete %}
-                                        <span style="float: right; display: block;">
-                                            <input type="hidden" name="action" value="delete-comment" />
-                                            <input type="hidden" name="id" value="{{ review.id }}" />
-                                            <input type="submit" value="Delete" />
-                                        </span>
-                                    {% endif %}
-                                    <strong>Reviewer:</strong> <a href="/user/{{ review.commenter.UserId }}/">{{ review.commenter.DisplayName }}</a>{% autoescape false %}{{ review.stars }}{% endautoescape %}<br />
-                                    <strong>Date:</strong> {{ review.date }}{% if review.ChapterId > 0 %} <strong>Chapter:</strong> {{ review.chapterTitle }}{% endif %}
-                                </p>
-                            {% if review.canDelete %}</form>{% endif %}
-                            <div class="commenttext">
-                            {% autoescape false %}{{ review.ReviewText }}{% endautoescape %}
-                            </div>
-                            {% if review.AuthorResponseText|length > 0 %}
-                                <div class="commentresponse">
-                                    Author's Response:<br />
-                                    {% autoescape false %}{{ review.AuthorResponseText }}{% endautoescape %}
-                                </div>
-                            {% elseif story.AuthorUserId == user.UserId %}
-                                <input class="authorresponsebutton" type="button" value="Respond" />
-                                <input type="hidden" value="{{ review.ReviewId }}" />
-                            {% endif %}
-                        </li>
+                        {{ block('review_post_block') }}
                     {% endfor %}
                 </ul>
                 <span class="comment-iterator">{% autoescape false %}{{ reviewIterator }}{% endautoescape %}</span>

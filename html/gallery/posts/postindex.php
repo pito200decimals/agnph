@@ -4,6 +4,7 @@
 include_once("../../header.php");
 include_once(SITE_ROOT."gallery/includes/functions.php");
 include_once(SITE_ROOT."includes/util/html_funcs.php");
+include_once(SITE_ROOT."includes/util/listview.php");
 
 if (isset($_GET['page']) && is_numeric($_GET['page']) && ((int)$_GET['page']) > 0) {
     $page = $_GET['page'];
@@ -84,6 +85,7 @@ function CreatePageIterator($searchterms, $page, $posts_per_page) {
                         $url = "/gallery/post/";
                     }
                 }
+                $url = DefaultCreateIteratorLinkFn($i);
                 return "<a href='$url'>$txt</a>";
             }, true);
         return $iterator_html;

@@ -79,7 +79,7 @@
                 {# <a id="logo" href="/"><img src="/images/logo.png" /></a> #}
                 <ul class="navigation_left">
                     <li{% if nav_section=="home" %} class="selected-nav"{% endif %}><a href="/">Home</a></li>
-                    <li{% if nav_section=="forums" %} class="selected-nav"{% endif %}><a href="/forums/">Forums</a></li>
+                    <li{% if nav_section=="forums" %} class="selected-nav"{% endif %}><a href="/forums/board/">Forums</a></li>
                     <li{% if nav_section=="gallery" %} class="selected-nav"{% endif %}><a href="/gallery/post/">Gallery</a></li>
                     <li{% if nav_section=="fics" %} class="selected-nav"{% endif %}><a href="/fics/">Fics</a></li>
                     <li{% if nav_section=="user" %} class="selected-nav"{% endif %}><a href="/user/list/">Users</a></li>

@@ -15,9 +15,7 @@ if (isset($_GET['search'])) {
 }
 
 $pools = array();
-CollectItems(GALLERY_POOLS_TABLE, "$whereClause ORDER BY Name ASC", $pools, GALLERY_LIST_ITEMS_PER_PAGE, $iterator, function($i) {
-    return "/gallery/pools/?page=$i";
-}, "No pools found.");
+CollectItems(GALLERY_POOLS_TABLE, "$whereClause ORDER BY Name ASC", $pools, GALLERY_LIST_ITEMS_PER_PAGE, $iterator, "No pools found.");
 
 if (sizeof($pools) > 0) {
     // Compute pool search names.

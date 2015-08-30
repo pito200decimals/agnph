@@ -274,8 +274,14 @@ function AddUserPermissions(&$post, $user) {
     }
     // Add perms for all comments.
     foreach ($post['comments'] as &$comment) {
+        $comment['actions'] = array();
         if (CanUserDeleteGalleryComment($user, $comment)) {
-            $comment['canDelete'] = true;
+            $comment['actions'][] = array(
+                // "url" => "",
+                "action" => "delete-comment",
+                "label" => "Delete",
+                "confirmMsg" => "Are you sure you want to delete this comment?"
+                );
         }
     }
 }

@@ -20,14 +20,7 @@ $search_clause .= " AND EXISTS(SELECT 1 FROM ".FICS_STORY_TABLE." S WHERE T.User
 include_once(SITE_ROOT."includes/util/listview.php");
 
 $authors = array();
-CollectItems(USER_TABLE, "$search_clause ORDER BY DisplayName ASC", $authors, FICS_LIST_ITEMS_PER_PAGE, $iterator, function($i) use ($prefix) {
-    if (mb_strlen($prefix) > 0) {
-        $escaped_prefix = urlencode($prefix);
-        return strtok($_SERVER["REQUEST_URI"],'?')."?prefix=$escaped_prefix&page=$i";
-    } else {
-        return strtok($_SERVER["REQUEST_URI"],'?')."?page=$i";
-    }
-}, "No authors found.");
+CollectItems(USER_TABLE, "$search_clause ORDER BY DisplayName ASC", $authors, FICS_LIST_ITEMS_PER_PAGE, $iterator, "No authors found.");
 
 $author_ids = array_map(function($author) {
     return $author['UserId'];

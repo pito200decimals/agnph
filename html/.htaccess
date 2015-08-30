@@ -17,16 +17,22 @@ RewriteRule ^recover/success/?$ /user/recover/recover_account_success.php
 RewriteRule ^timezone/?$ /timezone.php
 
 # Rewrites for forums pages
-RewriteRule ^forums/thread/(\d+)/?$ /forums/thread/viewthread.php?t=$1
-RewriteRule ^forums/thread/(\d+)/(\d+)/?$ /forums/thread/viewthread.php?t=$1&offset=$2
-RewriteRule ^forums/board/(\d+)/?$ /forums/viewboard.php?b=$1
-RewriteRule ^forums/board/(\d+)/(\d+)/?$ /forums/viewboard.php?b=$1&offset=$2
-RewriteRule ^forums/?$ /forums/viewboard.php
-RewriteRule ^forums/create/(\d+)/?$ /forums/compose.php?action=create&board=$1
-RewriteRule ^forums/reply/(\d+)/?$ /forums/compose.php?action=reply&thread=$1
-RewriteRule ^forums/edit/(\d+)/?$ /forums/compose.php?action=edit&post=$1
-RewriteRule ^forums/delete/?$ /forums/delete.php
-RewriteRule ^forums/markallread/(\d+)/?$ /forums/mark_all_read.php?b=$1
+#RewriteRule ^forums/thread/(\d+)/?$ /forums/thread/viewthread.php?t=$1
+#RewriteRule ^forums/thread/(\d+)/(\d+)/?$ /forums/thread/viewthread.php?t=$1&offset=$2
+#RewriteRule ^forums/board/(\d+)/?$ /forums/viewboard.php?b=$1
+#RewriteRule ^forums/board/(\d+)/(\d+)/?$ /forums/viewboard.php?b=$1&offset=$2
+#RewriteRule ^forums/?$ /forums/viewboard.php
+#RewriteRule ^forums/create/(\d+)/?$ /forums/compose.php?action=create&board=$1
+#RewriteRule ^forums/reply/(\d+)/?$ /forums/compose.php?action=reply&thread=$1
+#RewriteRule ^forums/edit/(\d+)/?$ /forums/compose.php?action=edit&post=$1
+#RewriteRule ^forums/delete/?$ /forums/delete.php
+#RewriteRule ^forums/markallread/(\d+)/?$ /forums/mark_all_read.php?b=$1
+
+RewriteRule ^forums/board/?$ /forums/view_board.php?board=-1
+# Is this needed?
+#RewriteRule ^forums/board/(\d+)/?$ /forums/view_board.php?board=$1&sort=lastpost&order=desc [QSA]
+RewriteRule ^forums/board/([^0-9][^/]*)/?$ /forums/view_board.php?boardname=$1&sort=lastpost&order=desc [QSA]
+RewriteRule ^forums/thread/(\d+)/?$ /forums/view_thread.php?thread=$1 [QSA]
 
 # Rewrites for accounts section
 RewriteRule ^user/(\d+)/?$ /user/profile.php?uid=$1
@@ -59,7 +65,7 @@ RewriteRule ^gallery/pools/create/?$ /gallery/pools/create.php
 RewriteRule ^gallery/pools/delete/?$ /gallery/pools/delete.php
 RewriteRule ^gallery/post/status/?$ /gallery/posts/changestatus.php
 RewriteRule ^gallery/post/show/(\d+)/history/?$ /gallery/posts/tag_history.php?post=$1 [QSA]
-RewriteRule ^gallery/tags/?$ /gallery/tags/tags.php [QSA]
+RewriteRule ^gallery/tags/?$ /gallery/tags/tags.php?sort=name&order=asc [QSA]
 
 #Rewrites for fics pages
 RewriteRule ^fics/?$ /fics/index.php
@@ -71,7 +77,7 @@ RewriteRule ^fics/edit/(\d+)/?$ /fics/edit_story.php?action=edit&sid=$1
 RewriteRule ^fics/create/(\d+)/(\d+)/?$ /fics/edit_chapter.php?action=create&sid=$1&chapternum=$2
 RewriteRule ^fics/edit/(\d+)/(\d+)/?$ /fics/edit_chapter.php?action=edit&sid=$1&chapternum=$2
 RewriteRule ^fics/story/chapter/order/?$ /fics/reorder_chapter.php
-RewriteRule ^fics/tags/?$ /fics/tags.php [QSA]
+RewriteRule ^fics/tags/?$ /fics/tags.php?sort=name&order=asc [QSA]
 RewriteRule ^fics/authors/?$ /fics/authorindex.php [QSA]
 RewriteRule ^fics/delete/(\d+)/?$ /fics/delete_story.php?sid=$1&action=delete&type=story
 RewriteRule ^fics/delete/(\d+)/(\d+)/?$ /fics/delete_story.php?sid=$1&action=delete&type=chapter&index=$2
@@ -79,7 +85,7 @@ RewriteRule ^fics/undelete/(\d+)/?$ /fics/delete_story.php?sid=$1&action=undelet
 RewriteRule ^fics/favorite/?$ /fics/edit_favorites.php
 
 #Rewrites for user pages.
-RewriteRule ^user/list/?$ /user/list.php [QSA]
+RewriteRule ^user/list/?$ /user/list.php?sort=name&order=asc [QSA]
 
 #Rewrites for admin pages
 RewriteRule ^admin/?$ /admin/site/site.php

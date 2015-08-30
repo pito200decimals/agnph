@@ -23,7 +23,6 @@ if (isset($_GET['search'])) {
     $search_clause = "Usermode=1";
 }
 
-$reverse_order_param = "desc";
 if (isset($_GET['sort'])) {
     $order_asc = true;
     if (isset($_GET['order'])) {
@@ -36,14 +35,12 @@ if (isset($_GET['sort'])) {
     switch (mb_strtolower($_GET['sort'])) {
         case "status":
             $sort = "LastVisitTime";
-            $order_asc = !$order_asc;
             break;
         case "name":
             $sort = "DisplayName";
             break;
         case "position":
             $sort = "CHAR_LENGTH(Permissions)";
-            $order_asc = !$order_asc;
             break;
         case "register":
             $sort = "JoinTime";
@@ -53,7 +50,6 @@ if (isset($_GET['sort'])) {
             break;
     }
     $order = ($order_asc ? "ASC" : "DESC");
-    $reverse_order_param = ($order_asc ? "desc" : "asc");
     $order_clause = "$sort $order";
 }
 
@@ -80,11 +76,11 @@ $vars['search'] = $search;
 if (isset($_GET['sort'])) $vars['sortParam'] = $_GET['sort'];
 if (isset($_GET['order'])) $vars['orderParam'] = $_GET['order'];
 $vars['iterator'] = $iterator;
-// Get column sort URL's.
-$vars['statusSortUrl'] = GetSortURL("status");
-$vars['nameSortUrl'] = GetSortURL("name");
-$vars['positionSortUrl'] = GetSortURL("position");
-$vars['registerSortUrl'] = GetSortURL("register");
+// Get column sort URL's. Resets page offset.
+$vars['statusSortUrl'] = GetURLForSortOrder("status", "desc");
+$vars['nameSortUrl'] = GetURLForSortOrder("name", "asc");
+$vars['positionSortUrl'] = GetURLForSortOrder("position", "desc");
+$vars['registerSortUrl'] = GetURLForSortOrder("register", "desc");
 
 // This is how to output the template.
 RenderPage("user/list.tpl");
@@ -93,21 +89,20 @@ return;
 // Gets the sorting URL when clicking column headers. Resets the pagination offset when resorting.
 function GetSortURL($sort) {
     $base_sort_url = "/user/list/?";
-    if (isset($_GET['search'])) $base_sort_url .= "search=".urlencode($_GET['search'])."&";
+    foreach ($_GET as $key => $value) {
+        $base_sort_url .= "$key=".urlencode($value)."&";
+    }
     $base_sort_url .= "sort=".urlencode($sort);
     // Okay to not use multibyte string manipulation here.
     if (isset($_GET['sort']) && strtolower($_GET['sort']) == strtolower($sort)) {
-        if (isset($_GET['order'])) {
-            if (strtolower($_GET['order']) == "asc") {
-                $base_sort_url .= "&order=desc";
-            } else {
-                $base_sort_url .= "&order=asc";
-            }
+        // Same sort type, reverse direction.
+        if (isset($_GET['order']) && strtolower($_GET['order']) == "desc") {
+            $base_sort_url .= "&order=asc";
         } else {
-            // Currently in ascending order, move to descending order.
             $base_sort_url .= "&order=desc";
         }
-    } else if (!isset($_GET['sort']) && $sort == "register") {
+    } else if (!isset($_GET['sort'])) {
+        // Different sort type, use default descending order.
         $base_sort_url .= "&order=desc";
     }
     return $base_sort_url;

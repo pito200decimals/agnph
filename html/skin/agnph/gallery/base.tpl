@@ -15,6 +15,4 @@
 {% endblock %}
 
 {% block content %}
-    {% block gallerycontent %}
-    {% endblock %}
 {% endblock %}

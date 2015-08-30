@@ -28,7 +28,8 @@ define("FICS_USER_FAVORITES_TABLE", "fics_user_fav");
 define("USER_MAILBOX_TABLE", "user_mail");
 
 // Forums tables.
-define("FORUMS_LOBBY_TABLE", "forums_lobbies");
+define("FORUMS_LOBBY_TABLE", "forums_lobbies");  // TODO: Remove
+define("FORUMS_BOARD_TABLE", "forums_boards");
 define("FORUMS_POST_TABLE", "forums_posts");
 define("FORUMS_UNREAD_POST_TABLE", "forums_unread_post");
 
@@ -60,7 +61,7 @@ define("DEFAULT_PAGE_ITERATOR_SIZE", 2);  // 2 => 1 ... 5 6 [7] 8 9 ... 12
 define("NO_HTML_TAGS", "");
 define("DEFAULT_ALLOWED_TAGS", "a[href],p[style],span[style],b,u,i,strong,em,ol,ul,li,center,hr,br,div,pre,small");  // For Forums, Fics and Bios.
 define("DEFAULT_GALLERY_POSTS_PER_PAGE", 45);  // Customizable.
-define("DEFAULT_GALLERY_PAGE_ITERATOR_SIZE", 2);
+define("DEFAULT_GALLERY_PAGE_ITERATOR_SIZE", 2);  // Used in gallery post index page.
 define("MAX_GALLERY_SEARCH_TERMS", 6);
 define("MAX_FICS_SEARCH_TERMS", 6);
 define("GALLERY_LIST_ITEMS_PER_PAGE", 50);

@@ -120,7 +120,12 @@ if ($action == "comment" || $action == "review") {
 } else if ($action == "delete-comment" && isset($comment)) {
     $cid = $comment['ReviewId'];  // Get database value.
     sql_query("DELETE FROM ".FICS_REVIEW_TABLE." WHERE ReviewId=$cid;");
-    PostSessionBanner("Comment deleted", "green");
+    UpdateStoryStats($story['StoryId']);
+    if ($comment['IsReview']) {
+        PostSessionBanner("Review deleted", "green");
+    } else {
+        PostSessionBanner("Comment deleted", "green");
+    }
     header("Location: ".$_SERVER['HTTP_REFERER']);
     exit();
 }

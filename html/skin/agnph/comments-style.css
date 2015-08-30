@@ -51,3 +51,8 @@
     text-decoration: none;
     background-color: rgb(0,255,0);
 }
+.edit-comment-form {
+    float: right;
+    display: block;
+    margin: 5px;
+}

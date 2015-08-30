@@ -5,25 +5,35 @@
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/gallery/style.css" />
 {% endblock %}
 
+{% block sortArrow %}
+    {% if orderParam == "desc" %}
+        ▼
+    {% else %}
+        ▲
+    {% endif %}
+{% endblock %}
+
 {% block content %}
     <h3>Tags</h3>
-    <form action="/gallery/tags/" accept-charset="UTF-8">
-        <label>Search for Tags:</label><input class="search" name="prefix" type="text" value="{{ searchPrefix }}" required/>
+    <form method="GET" accept-charset="UTF-8">
+        <input type="hidden" name="sort" value="{{ sortParam }}" />
+        <input type="hidden" name="order" value="{{ orderParam }}" />
+        <label>Search for Tags:</label><input class="search" name="search" type="text" value="{{ search }}" required/>
     </form>
     {% if tags|length > 0 %}
         {# Display tag index. #}
         <table class="list-table">
             <thead>
                 <tr>
-                    <td><strong>Name</strong></td>
-                    <td><strong>Type</strong></td>
-                    <td><strong>Count</strong></td>
+                    <td><strong><a href="{{ nameSortUrl }}">Name</a></strong>{% if sortParam == "name" %}{{ block('sortArrow') }}{% endif %}</td>
+                    <td><strong><a href="{{ typeSortUrl }}">Type</a></strong>{% if sortParam == "type" %}{{ block('sortArrow') }}{% endif %}</td>
+                    <td><strong><a href="{{ countSortUrl }}">Count</a></strong>{% if sortParam == "count" %}{{ block('sortArrow') }}{% endif %}</td>
                 </tr>
             </thead>
             <tbody>
                 {% for tag in tags %}
                     <tr>
-                        <td><strong><a class="{{ tag.typeClass }}" href="/gallery/post/?search={{ tag.Name }}">{{ tag.Name }}</a></strong></td>
+                        <td><strong><a class="{{ tag.typeClass }}" href="/gallery/post/?search={{ tag.Name }}">{{ tag.Name|url_encode }}</a></strong></td>
                         <td>{{ tag.typeName }}{% if tag.EditLocked %} (locked){% endif %}</td>
                         <td>{{ tag.tagCounts }}</td>
                     </tr>
