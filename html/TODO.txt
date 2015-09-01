@@ -2,10 +2,12 @@ TODOs
 (* = Required for launch, - = Normal priority, X = Scrapped)
 
 == FORUMS ==
-* Re-check forums functionality (Might need a complete re-do)
-* Admin lock/move threads
-- Reply-to
-- Spoiler tags
+* Admin move threads
+* Quoting
+* Spoiler tags
+* Unread messages
+- Restricted user perms
+- Link up news forum to other index pages?
 
 == GALLERY ==
 - Gallery mass tag edits

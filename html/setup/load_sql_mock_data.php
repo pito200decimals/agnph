@@ -40,11 +40,11 @@ do_or_die(sql_query(
 // Forums settings.
 do_or_die(sql_query(
     "INSERT INTO ".FORUMS_USER_PREF_TABLE."
-    (UserId, Signature)
+    (UserId, Signature, ForumsPermissions)
     VALUES
-    (1, 'Sig of User1'),
-    (2, 'Sig of User2'),
-    (3, 'Sig of User3');"));
+    (1, 'Sig of User1', 'A'),
+    (2, 'Sig of User2', 'N'),
+    (3, 'Sig of User3', 'N');"));
 do_or_die(sql_query(
    "INSERT INTO ".GALLERY_USER_PREF_TABLE."
     (UserId, GalleryPermissions)

@@ -111,7 +111,8 @@ do_or_die(sql_query(
         ParentId INT(11) NOT NULL,
         Name VARCHAR(64) NOT NULL,
         Description VARCHAR(512) NOT NULL,
-        RestrictedLobby TINYINT(1) DEFAULT 0 NOT NULL,
+        PrivateBoard TINYINT(1) DEFAULT 0 NOT NULL,
+        Locked TINYINT(1) DEFAULT 0 NOT NULL,
         BoardSortOrder INT(11) DEFAULT 0 NOT NULL,
         PRIMARY KEY(BoardId)
     ) DEFAULT CHARSET=utf8;"));
@@ -121,7 +122,7 @@ do_or_die(sql_query(
         PostId INT(11) UNSIGNED AUTO_INCREMENT,
         UserId INT(11) NOT NULL,
         Title VARCHAR(256) NOT NULL,
-        Text TEXT(131072),
+        Text TEXT(".MAX_FORUMS_POST_LENGTH."),
         PostDate INT(11) NOT NULL,
         EditDate INT(11) DEFAULT 0 NOT NULL,
         ParentId INT(11) NOT NULL,
@@ -130,6 +131,7 @@ do_or_die(sql_query(
         Views INT(11) NOT NULL,
         LastPostDate INT(11) NOT NULL,
         Sticky TINYINT(1) DEFAULT 0 NOT NULL,
+        Locked TINYINT(1) DEFAULT 0 NOT NULL,
         PRIMARY KEY(PostId)
     ) DEFAULT CHARSET=utf8;"));
 // User preferences specific to the forums section.
@@ -140,7 +142,7 @@ do_or_die(sql_query(
         SeenPostsUpToId INT(11) DEFAULT 0 NOT NULL,
         ForumThreadsPerPage INT(11) DEFAULT ".DEFAULT_FORUM_THREADS_PER_PAGE.",
         ForumPostsPerPage INT(11) DEFAULT ".DEFAULT_FORUM_POSTS_PER_PAGE.",
-        ForumsPermissions CHAR(1) NOT NULL,".  // A = Allowed to sticky posts. TODO: Enforce.
+        ForumsPermissions CHAR(1) DEFAULT 'N' NOT NULL,".  // N - Normal user, A - Admin
        "PRIMARY KEY(UserId)
     ) DEFAULT CHARSET=utf8;"));
 // Table containing rows of tuples of (UserId, PostId).

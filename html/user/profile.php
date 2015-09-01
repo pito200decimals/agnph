@@ -48,10 +48,16 @@ if (isset($user)) {
         if ($user['UserId'] == $profile_user['UserId']) {
             // Don't allow admins to revoke their own admin status by accident.
         } else {
-            AddAdminActionLink($admin_links, array("site-A", "gallery=N", "fics=N"), "Revoke Site Administrator");
+            AddAdminActionLink($admin_links, array("site-A", "forums=N", "gallery=N", "fics=N"), "Revoke Site Administrator");
         }
     } else {
-        AddAdminActionLink($admin_links, array("site=A", "gallery=A", "fics=A"), "Make Site Administrator");
+        AddAdminActionLink($admin_links, array("site=A", "forums=A", "gallery=A", "fics=A"), "Make Site Administrator");
+        // Forums options.
+        if ($profile_user['ForumsPermissions'] == 'N') {
+            AddAdminActionLink($admin_links, array("site+R", "forums=A"), "Make Forums Moderator");
+        } else if ($profile_user['ForumsPermissions'] == 'A') {
+            AddAdminActionLink($admin_links, array("site-R", "forums=N"), "Revoke Forums Moderator");
+        }
         // Gallery options.
         if ($profile_user['GalleryPermissions'] == 'R') {
             AddAdminActionLink($admin_links, array("gallery=N"), "Unrestrict Gallery Edits");

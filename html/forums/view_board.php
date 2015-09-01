@@ -31,9 +31,9 @@ if ($board_id == -1) {
     }
     if (sizeof($board['childBoards']) == 0) {
         // Fetch and display threads.
-        $items_per_page = DEFAULT_FORUM_THREADS_PER_PAGE;  // TODO: Get user preferences here.
+        $items_per_page = GetThreadsPerPageInBoard();
         $sort_order = GetThreadSortOrder();
-        CollectItems(FORUMS_POST_TABLE, "WHERE ParentId=$board_id AND IsThread=1 ORDER BY $sort_order", $threads, $items_per_page, $iterator);
+        CollectItems(FORUMS_POST_TABLE, "WHERE ParentId=$board_id AND IsThread=1 ORDER BY Sticky DESC, $sort_order", $threads, $items_per_page, $iterator);
         InitPosters($threads);
         $vars['board'] = $board;
         $vars['threads'] = $threads;

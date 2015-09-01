@@ -1,0 +1,61 @@
+{% extends 'forums/base.tpl' %}
+
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/forums/style.css" />
+    <style>
+    </style>
+{% endblock %}
+{% block scripts %}
+    <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            tinymce.init({
+                selector: "textarea#compose",
+                plugins: [ "paste", "link", "autoresize", "hr", "code", "contextmenu", "emoticons", "image", "textcolor" ],
+                target_list: [ {title: 'New page', value: '_blank'} ],
+                toolbar: "undo redo | bold italic underline | bullist numlist | link",
+                contextmenu: "image link | hr",
+                autoresize_max_height: 150,
+                resize: false,
+                menubar: false
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    {% if board %}
+        <h3>Posting to board: {{ board.Name }}</h3>
+    {% elseif thread %}
+        <h3>Replying to thread: {{ post.Title }}</h3>
+    {% elseif post %}
+        <h3>Editing post: {{ post.Title }}</h3>
+    {% endif %}
+    <form method="POST" accept-encoding="UTF-8">
+        <input type="hidden" name="action" value="{{ action }}" />
+        <input type="hidden" name="id" value="{{ id }}" />
+        Title: <input type="text" name="title" value="
+            {% if POST.title %}
+                {{ POST.title }}
+            {% elseif post.Title %}
+                {{ post.Title }}
+            {% elseif thread.Title %}
+                RE: {{ thread.Title }}
+            {% endif %}" required />
+        <textarea id="compose" name="text">
+            {% autoescape false %}
+                {% if POST.text %}
+                    {{ POST.text }}
+                {% elseif post.Text %}
+                    {{ post.Text }}
+                {% endif %}
+            {% endautoescape %}
+        </textarea>
+        {# TODO: Include options like title, sticky, etc #}
+        {% if canLockOrSticky %}
+            <input type="checkbox" name="sticky" value="sticky" {% if POST.sticky %}checked {% elseif post.Sticky %}checked {% endif %}/> Sticky Thread<br />
+            <input type="checkbox" name="locked" value="locked" {% if POST.locked %}checked {% elseif post.Locked %}checked {% endif %}/> Lock Thread<br />
+        {% endif %}
+        <input type="submit" value="Save" />
+    </form>
+{% endblock %}

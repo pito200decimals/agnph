@@ -61,6 +61,8 @@ if (!isset($_SESSION['banner_notifications'])) {
 } else {
     $vars['banner_notifications'] = array();
 }
+$vars['GET'] = $_GET;
+$vars['POST'] = $_POST;
 
 FetchUserHeaderVars();
 SetHeaderHighlight();

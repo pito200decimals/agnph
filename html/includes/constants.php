@@ -70,6 +70,7 @@ define("DEFAULT_FICS_STORIES_PER_PAGE", 15);  // Customizable.
 define("DEFAULT_FICS_COMMENTS_PER_PAGE", 10);
 define("FICS_LIST_ITEMS_PER_PAGE", 50);
 define("USERS_LIST_ITEMS_PER_PAGE", 50);
+define("MAX_FORUMS_POST_LENGTH", 131072);
 
 // General constants.
 // Site-related

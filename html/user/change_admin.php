@@ -27,14 +27,17 @@ $success = false;
 // TODO: Update when other sections permissions are finalized.
 $ACTION_TABLE = array(
     "site" => USER_TABLE,
+    "forums" => FORUMS_USER_PREF_TABLE,
     "gallery" => GALLERY_USER_PREF_TABLE,
     "fics" => FICS_USER_PREF_TABLE);
 $ACTION_KEYS = array(
     "site" => "Permissions",
+    "forums" => "ForumsPermissions",
     "gallery" => "GalleryPermissions",
     "fics" => "FicsPermissions");
 $ALLOWED_CHARS = array(
     "site" => "ARGFOIM",
+    "forums" => "AN",
     "gallery" => "ACNR",
     "fics" => "AN");
 foreach ($actions as $action) {

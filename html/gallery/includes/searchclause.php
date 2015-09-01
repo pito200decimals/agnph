@@ -13,6 +13,7 @@
 // status:{deleted/flagged/pending/none} (If omitted, defaults to -status:deleted)
 // pool:{PoolId}
 // file:{jpg, webm, etc}
+// source:
 //
 // === Not implemented yet ===
 // comments:
@@ -145,10 +146,18 @@ function CreateSQLClauseFromFilter($filter) {
             if (mb_strtolower($pool) == "none" || !is_numeric($pool) || $pool <= 0) return "FALSE";  // Don't let searching for all non-pool posts.
             $escaped_pool = sql_escape($pool);
             return "T.ParentPoolId='$escaped_pool'";
-        } else if (startsWitH($filter, "file:")) {
+        } else if (startsWith($filter, "file:")) {
             $file_type = mb_substr($filter, 5);
             $escaped_file_type = sql_escape($file_type);
             return "T.Extension='$escaped_file_type'";
+        } else if (startsWith($filter, "source:")) {
+            $source = mb_substr($filter, 7);
+            if (mb_strlen($source) > 0) {
+                $escaped_source = sql_escape($source);
+                return "UPPER(T.Source) LIKE UPPER('%$escaped_source%')";
+            } else {
+                return "FALSE";
+            }
         } else {
             // Fallback on normal search clauses.
             return CreateSQLClauseFromTerm($filter);

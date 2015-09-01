@@ -2,8 +2,6 @@
 // Views a thread.
 // URL: /forums/thread/{thread-id}/ => view_thread.php?thread=-1
 
-define("DEBUG", true);
-
 include_once("../header.php");
 include_once(SITE_ROOT."forums/includes/functions.php");
 include_once(SITE_ROOT."includes/util/user.php");
@@ -18,7 +16,8 @@ if ($thread == null) {
     RenderErrorPage("Thread not found");
 }
 $tid = $thread['ThreadId'];
-$threads_per_page = DEFAULT_FORUM_THREADS_PER_PAGE;  // TODO: Get user setting.
+$threads_per_page = GetPostsPerPageInThread();
+// TODO: Remove order by IsThread.
 CollectItems(FORUMS_POST_TABLE, "WHERE (PostId=$tid AND IsThread=1) OR (ParentId=$tid AND IsThread=0) ORDER BY IsThread DESC, PostDate ASC, PostId ASC", $posts, $threads_per_page, $iterator, "Thread not found");
 
 InitPosters($posts);
@@ -31,7 +30,12 @@ foreach ($posts as &$post) {
     if (isset($user)) {
         $post['actions'] = array();
         if (CanUserEditForumsPost($user, $thread, $post)) {
-            // TODO: Edit action.
+            $post['actions'][] = array(
+                "url" => "/forums/compose/",
+                "action" => "edit",  // parameter id is already the post id.
+                "method" => "GET",
+                "label" => "Edit"
+                );
         }
         if (CanUserDeleteForumsPost($user, $thread, $post)) {
             $post['actions'][] = array(
@@ -43,6 +47,7 @@ foreach ($posts as &$post) {
         }
     }
     $post['text'] = "<div>".$post['Text']."</div><hr /><div class='signature'>".$post['user']['Signature']."</div>";
+    $post['anchor'] = "p".$post['PostId'];
 }
 $vars['thread'] = $thread;
 GetBoard($thread['ParentBoardId'], $board);
@@ -76,6 +81,13 @@ function HandlePost() {
                     if (CanUserDeleteForumsPost($user, $thread, $post)) {
                         // Delete post here.
                         sql_query("DELETE FROM ".FORUMS_POST_TABLE." WHERE PostId=$id;");
+                        if ($post['IsThread'] == 0) {
+                            // Update thread stats.
+                            UpdateThreadStats($post['ParentId']);
+                        } else {
+                            // Thread was deleted, update board stats.
+                            UpdateBoardStats($post['ParentId']);
+                        }
                         if (sizeof($posts) == 1) {
                             // Deleting only post on page.
                             if (isset($_GET['page']) && $_GET['page'] > 0) {

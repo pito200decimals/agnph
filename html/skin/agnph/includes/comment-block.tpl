@@ -6,10 +6,11 @@
 
 {% block comment %}
     <li class="comment">
+        {% if comment.anchor %}<a name="{{ comment.anchor }}" />{% endif %}
         <img class="comment-avatarimg" src="{{ comment.user.avatarURL }}" />
         <div class="commentheader">
             {% for action in comment.actions|reverse %}
-                <form {% if action.url %}action="{{ action.url }}" {% endif %}class="edit-comment-form" method="POST" accept-charset="UTF-8">
+                <form {% if action.url %}action="{{ action.url }}" {% endif %}class="edit-comment-form" method="{% if action.method %}{{ action.method }}{% else %}POST{% endif %}" accept-charset="UTF-8">
                     <input type="hidden" name="action" value="{{ action.action }}" />
                     <input type="hidden" name="id" value="{{ comment.id }}" />
                     <input type="submit" value="{{ action.label }}" {% if action.confirmMsg %}onclick="return confirm('{{ action.confirmMsg }}');" {% endif %}/>

@@ -23,7 +23,7 @@
         <tbody>
             {% for thread in threads %}
                 <tr>
-                    <td>Unread?</td>
+                    <td>{% if thread.Sticky %}[STICKY]{% endif %}{% if thread.Locked %}[LOCKED]{% endif %}</td>
                     <td>
                         <a href="/forums/thread/{{ thread.PostId }}/">{{ thread.Title }}</a><br />
                         Started by <a href="/user/{{ thread.user.UserId }}/">{{ thread.user.DisplayName }}</a>

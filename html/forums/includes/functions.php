@@ -4,27 +4,48 @@
 include_once(SITE_ROOT."includes/util/user.php");
 include_once(SITE_ROOT."includes/util/table_data.php");
 
+// TODO: Overall, permissions for restricted users.
 function CanGuestViewBoard($board) {
+    if ($board['PrivateBoard'] == 1) return false;
     return true;
 }
 function CanUserViewBoard($user, $board) {
+    if (!IsUserActivated($user)) return false;
+    if ($user['ForumsPermissions'] == 'A') return true;
+    if ($board['PrivateBoard'] == 1) return false;
     return true;
 }
-function CanUserCreateThread($user, $lobby) {
+function CanUserCreateThread($user, $board) {
+    if (!IsUserActivated($user)) return false;
+    if (isset($board['childBoards']) && sizeof($board['childBoards']) > 0) return false;  // Can't post to top-level boards.
+    if ($user['ForumsPermissions'] == 'A') return true;
+    if ($board['PrivateBoard'] == 1) return false;
+    if ($board['Locked'] == 1) return false;
     return true;
 }
 function CanUserPostToThread($user, $thread) {
+    if (!IsUserActivated($user)) return false;
+    if ($user['ForumsPermissions'] == 'A') return true;
+    if ($thread['Locked']) return false;
     return true;
 }
 function CanUserEditForumsPost($user, $thread, $post) {
-    return $user['UserId'] == $post['user']['UserId'];
+    if (!IsUserActivated($user)) return false;
+    if ($user['ForumsPermissions'] == 'A') return true;
+    if ($user['UserId'] == $post['UserId']) return true;
+    return false;
 }
 function CanUserDeleteForumsPost($user, $thread, $post) {
     if ($post['IsThread'] == 1 && sizeof($thread['posts']) > 1) return false;
-    return $user['UserId'] == $post['user']['UserId'];
+    if (!IsUserActivated($user)) return false;
+    if ($user['ForumsPermissions'] == 'A') return true;
+    if ($user['UserId'] == $post['UserId']) return true;
+    return false;
 }
-function CanUserStickyThread($user, $board, $thread) {
-    return true;
+function CanUserLockOrStickyThread($user) {
+    if (!IsUserActivated($user)) return false;
+    if ($user['ForumsPermissions'] == 'A') return true;
+    return false;
 }
 
 // Fetches the board if it exists. Returns true if the board was found.
@@ -82,7 +103,8 @@ function FetchThread($thread_id) {
         'Replies' => $row['Replies'],
         'Views' => $row['Views'],
         'LastPostDate' => $row['LastPostDate'],
-        'Sticky' => $row['Sticky']);
+        'Sticky' => $row['Sticky'],
+        'Locked' => $row['Locked']);
     return $thread;
 }
 
@@ -103,5 +125,47 @@ function InitPosters(&$posts) {
     }
     return false;
 }
+
+function GetPostsInThread($thread_or_tid) {
+    if (is_array($thread_or_tid)) return GetPostsInThread($thread_or_tid['ThreadId']);
+    $tid = (int)$thread_or_tid;
+    // TODO: Remove order by IsThread.
+    if (!sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE (PostId=$tid AND IsThread=1) OR (ParentId=$tid AND IsThread=0) ORDER BY IsThread DESC, PostDate ASC, PostId ASC;", 1)) return null;
+    $ret = array();
+    while ($row = $result->fetch_assoc()) {
+        $ret[] = $row;
+    }
+    return $ret;
+}
+
+function GetThreadsPerPageInBoard() {
+    global $user;
+    if (isset($user)) {
+        return $user['ForumThreadsPerPage'];
+    }
+    return DEFAULT_FORUM_THREADS_PER_PAGE;
+}
+
+function GetPostsPerPageInThread() {
+    global $user;
+    if (isset($user)) {
+        return $user['ForumPostsPerPage'];
+    }
+    return DEFAULT_FORUM_POSTS_PER_PAGE;
+}
+
+function UpdateThreadStats($tid) {
+    // Update # of replies, and last post date.
+    if (!sql_query_into($result, "SELECT COUNT(*) AS C FROM ".FORUMS_POST_TABLE." WHERE (PostId=$tid AND IsThread=1) OR (ParentId=$tid AND IsThread=0);", 1)) return;
+    $replies = $result->fetch_assoc()['C'];
+    if (!sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE (PostId=$tid AND IsThread=1) OR (ParentId=$tid AND IsThread=0) ORDER BY PostDate DESC, PostId DESC LIMIT 1;", 1)) return;
+    $lastDate = $result->fetch_assoc()['PostDate'];
+    sql_query("UPDATE ".FORUMS_POST_TABLE." SET Replies=$replies, LastPostDate=$lastDate WHERE PostId=$tid;");
+}
+
+function UpdateBoardStats($bid) {
+    // TODO, when stats are supported for boards.
+}
+
 
 ?>
