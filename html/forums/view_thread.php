@@ -22,6 +22,11 @@ CollectItems(FORUMS_POST_TABLE, "WHERE (PostId=$tid AND IsThread=1) OR (ParentId
 
 InitPosters($posts);
 $thread['posts'] = &$posts;
+if (isset($user)) {
+    $unread_post_ids = GetMixedUnreadPostIds($user);
+    $maybe_read_up_to = $user['MaybeReadUpTo'];  // First index after end of mixed region. This and all indices after are all unread.
+}
+$unread_ids = array();
 foreach ($posts as &$post) {
     $post['id'] = $post['PostId'];
     $post['date'] = FormatDate($post['PostDate'], FORUMS_DATE_FORMAT);
@@ -48,6 +53,12 @@ foreach ($posts as &$post) {
     }
     $post['text'] = "<div>".$post['Text']."</div><hr /><div class='signature'>".$post['user']['Signature']."</div>";
     $post['anchor'] = "p".$post['PostId'];
+    if (isset($user)) {
+        if ($post['PostId'] >= $maybe_read_up_to || in_array($post['PostId'], $unread_post_ids)) {
+            $post['unread'] = true;  // Not used, but may be useful in the future.
+            $unread_ids[] = $post['PostId'];
+        }
+    }
 }
 $vars['thread'] = $thread;
 GetBoard($thread['ParentBoardId'], $board);
@@ -60,7 +71,13 @@ $vars['iterator'] = $iterator;
 
 HandlePost();  // Handle post this late so we have thread already initialized.
 
+// Update view count.
 UpdateStatistics($thread);
+
+// Mark posts as read.
+if (isset($user)) {
+    MarkPostsAsRead($user, $unread_ids);
+}
 
 RenderPage("forums/view_thread.tpl");
 return;
@@ -88,6 +105,7 @@ function HandlePost() {
                             // Thread was deleted, update board stats.
                             UpdateBoardStats($post['ParentId']);
                         }
+                        sql_query("DELETE FROM ".FORUMS_UNREAD_POST_TABLE." WHERE PostId=$id;");
                         if (sizeof($posts) == 1) {
                             // Deleting only post on page.
                             if (isset($_GET['page']) && $_GET['page'] > 0) {
@@ -96,26 +114,26 @@ function HandlePost() {
                                 $page = $_GET['page'];
                                 if ($page == 1) {
                                     header("Location: /forums/thread/".$thread['ThreadId']."/");
-                                    return;
+                                    exit();
                                 } else {
                                     header("Location: /forums/thread/".$thread['ThreadId']."/?page=".($page - 1));
-                                    return;
+                                    exit();
                                 }
                             } else {
                                 // Whole thread was deleted, go back to board.
                                 PostSessionBanner("Thread deleted", "green");
                                 header("Location: /forums/board/".urlencode(mb_strtolower($board['Name']))."/");
-                                return;
+                                exit();
                             }
                         } else {
                             PostSessionBanner("Post deleted", "green");
                             header("Location: ".$_SERVER['REQUEST_URI']);
-                            return;
+                            exit();
                         }
                     } else {
                         PostSessionBanner("Not authorized to delete post", "red");
                         header("Location: ".$_SERVER['REQUEST_URI']);
-                        return;
+                        exit();
                     }
                 }
                 break;

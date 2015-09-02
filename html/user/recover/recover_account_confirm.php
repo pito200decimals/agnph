@@ -8,12 +8,12 @@ include_once(SITE_ROOT."includes/util/sql.php");
 
 if (isset($user)) {
     header("Location: /");
-    return;
+    exit();
 }
 
 if (!isset($_SESSION['recovery_email'])) {
     header("Location: /recover/");
-    return;
+    exit();
 }
 $vars['email'] = $_SESSION['recovery_email'];
 RenderPage("user/recover_confirm.tpl");

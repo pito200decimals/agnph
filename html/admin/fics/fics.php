@@ -33,7 +33,7 @@ if (isset($_POST['min-word-count'])) {
 if ($changed) {
     PostSessionBanner("Settings changed", "green");
     header("Location: ".$_SERVER['REQUEST_URI']);
-    return;
+    exit();
 }
 
 // Get settings from table, and populate fields.

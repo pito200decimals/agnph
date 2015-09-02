@@ -24,8 +24,10 @@ if (isset($_SESSION['auth_row'])) {
     PrepareAllUserTables($registered_user) or RenderErrorPage("Failed to complete registration. Please contact an AGNPH administrator for help");
     ForceLogin($uid);
     header("Location: /");
+    exit();
 } else {
     header("Location: /register/confirm/");
+    exit();
 }
 return;
 

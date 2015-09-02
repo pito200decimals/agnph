@@ -23,6 +23,7 @@ if ($board_id == -1) {
     $board = array();
     $board['BoardId'] = -1;
     InitBoardChildren($board);
+    if (isset($user)) TagBoardsAsUnread($user, $board);
     $vars['isRoot'] = true;
 } else if (GetBoard($board_id, $board)) {
     $board_id = $board['BoardId'];  // Get db value.
@@ -35,6 +36,7 @@ if ($board_id == -1) {
         $sort_order = GetThreadSortOrder();
         CollectItems(FORUMS_POST_TABLE, "WHERE ParentId=$board_id AND IsThread=1 ORDER BY Sticky DESC, $sort_order", $threads, $items_per_page, $iterator);
         InitPosters($threads);
+        if (isset($user)) TagThreadsAsUnread($user, $threads);
         $vars['board'] = $board;
         $vars['threads'] = $threads;
         $vars['iterator'] = $iterator;

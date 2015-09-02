@@ -127,7 +127,7 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
     UpdatePost("rating:$rating source:$source parent:$parent_post_id ".$_POST['tags'], $post_id, $user);
     UpdatePostDescription($post_id, $_POST['description'], $user);
     header("Location: /gallery/post/show/$post_id/");
-    return;
+    exit();
 }
 
 RenderPage("gallery/upload.tpl");
@@ -155,7 +155,7 @@ function GoToExistingFile($md5) {
     sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE Md5='$md5';", 1) or RenderErrorPage("Error while uploading file.");
     $id = $result->fetch_assoc()['PostId'];
     header("Location: /gallery/post/show/$id/");
-    return;
+    exit();
 }
 
 function GetExtensionFromURL($url) {

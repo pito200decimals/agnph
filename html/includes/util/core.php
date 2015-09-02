@@ -55,6 +55,13 @@ function contains($haystack, $needle) {
     return mb_strpos($haystack, $needle) !== FALSE;
 }
 
+function array_first($array) {
+    return reset($array);
+}
+function array_last($array) {
+    return end($array);
+}
+
 // Cookie processing functions.
 function CookiesExist() {
     return isset($_COOKIE[UID_COOKIE]) && isset($_COOKIE[SALT_COOKIE]);

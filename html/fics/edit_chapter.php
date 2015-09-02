@@ -9,7 +9,7 @@ if (isset($_POST) && isset($_POST['sid']) && isset($_POST['chapternum'])) {
     include_once(SITE_ROOT."fics/save_chapter_changes.php");
     if (isset($success) && $success && isset($sid) && $sid > 0) {
         header("Location: /fics/edit/$sid/");
-        return;
+        exit();
     } else {
         unset($success);
         if (isset($errmsg)) PostBanner($errmsg, "red");

@@ -60,7 +60,17 @@
                     {% if user %}
                         <noscript><li><a href="/logout/">Log out</a></li></noscript>
                         {# TODO: Mail notifications #}
-                        <li class="navigation_left"><a id="mail_icon" href="/user/{{ user.UserId }}/mail/"><img src="/images/message.png" /></a></li>
+                        <li class="navigation_left">
+                            <a id="mail_icon" href="/user/{{ user.UserId }}/mail/">
+                            {% if unread_message_count > 0 %}
+                                {% if unread_message_count <= 9 %}
+                                    <img src="/images/message-unread-{{ unread_message_count }}.png" />
+                                {% else %}
+                                    <img src="/images/message-unread-9+.png" />
+                                {% endif %}
+                            {% else %}
+                                <img src="/images/message.png" />
+                            {% endif %}</a></li>
                         <li id="account_link">
                             <a href="/user/{{ user.UserId }}/"><img src="{{ user.avatarURL }}" />{{ user.DisplayName }}</a>
                             <ul id="account_dropdown" class="" hidden>

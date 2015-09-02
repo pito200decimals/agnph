@@ -332,7 +332,7 @@ if (isset($_POST['display-name']) &&
 
     // Redirect user.
     header("Location: /user/$uid/preferences/");
-    return;
+    exit();
 }
 
 /////////////////////////////////////////

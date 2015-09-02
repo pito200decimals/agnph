@@ -9,7 +9,7 @@ include_once(SITE_ROOT."includes/auth/email_auth.php");
 
 if (isset($user)) {
     header("Location: /");
-    return;
+    exit();
 }
 
 if (isset($_POST['email']) &&
@@ -31,7 +31,7 @@ if (isset($_POST['email']) &&
                 if (SendRecoveryEmail($email, $username, false, true, $code)) {
                     $_SESSION['recovery_email'] = $email;
                     header("Location: /recover/confirm/");
-                    return;
+                    exit();
                 } else {
                     PostBanner("Error sending confirmation email, please try again later", "red");
                 }

@@ -41,15 +41,15 @@ function DoRedirect() {
     // Redirect to another admin control panel page.
     if ($vars['canAdminForums']) {
         header("Location: /admin/forums/");
-        return;
+        exit();
     }
     if ($vars['canAdminGallery']) {
         header("Location: /admin/gallery/");
-        return;
+        exit();
     }
     if ($vars['canAdminFics']) {
         header("Location: /admin/fics/");
-        return;
+        exit();
     }
     RenderErrorPage("Not authorized to access this page");
 }

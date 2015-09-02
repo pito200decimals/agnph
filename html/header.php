@@ -66,6 +66,7 @@ $vars['POST'] = $_POST;
 
 FetchUserHeaderVars();
 SetHeaderHighlight();
+GetUnreadPMCount();
 
 
 function FetchUserHeaderVars() {
@@ -93,5 +94,15 @@ function FetchUserHeaderVars() {
     $vars['skinDir'] = "/skin/$skin";  // TODO: Fix CSS paths with baseSkinDir.
     $loader = new Twig_Loader_Filesystem(array(__DIR__."/skin/$skin/", __DIR__."/skin/".BASE_SKIN."/"));
     $twig = new Twig_Environment($loader);
+}
+
+function GetUnreadPMCount() {
+    global $user, $vars;
+    if (isset($user)) {
+        $uid = $user['UserId'];
+        if (sql_query_into($result, "SELECT COUNT(*) AS C FROM ".USER_MAILBOX_TABLE." WHERE RecipientUserId=$uid AND Status='U';", 1)) {
+            $vars['unread_message_count'] = $result->fetch_assoc()['C'];
+        }
+    }
 }
 ?>

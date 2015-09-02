@@ -18,7 +18,7 @@ $name = mb_substr($name, 0, MAX_POOL_NAME_LENGTH);
 if (mb_strlen($name) < MIN_POOL_PREFIX_LENGTH) {
     PostSessionBanner("Invalid pool name", "red");
     header("Location: ".$_SERVER['HTTP_REFERER']);
-    return;
+    exit();
 }
 $escaped_name = sql_escape($name);
 // If there's a duplicate name, go to that page.
@@ -27,14 +27,14 @@ if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $search_name = ToSearchNameString($row['Name']);
     header("Location: /gallery/post/?search=".urlencode("pool:$search_name"));
-    return;
+    exit();
 }
 
 $user_id = $user['UserId'];
 if (!sql_query("INSERT INTO ".GALLERY_POOLS_TABLE." (Name, CreatorUserId) VALUES ('$escaped_name', $user_id);")) RenderErrorPage("An error occurred, please try again later.");
 PostSessionBanner("Pool created", "green");
 header("Location: ".$_SERVER['HTTP_REFERER']);
-return;
+exit();
 
 function ToSearchNameString($name) {
     $name = str_replace(" ", "_", $name);

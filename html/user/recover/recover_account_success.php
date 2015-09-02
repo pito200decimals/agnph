@@ -33,6 +33,7 @@ if (isset($_SESSION['auth_row'])) {
     return;
 } else {
     header("Location: /recover/confirm/");
+    exit();
 }
 return;
 ?>

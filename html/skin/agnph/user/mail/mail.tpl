@@ -42,7 +42,8 @@
                 {% endfor %}
             {% else %}
                 <tr>
-                    <td colspan="5">No messages found</td>
+                    <td colspan="1">No messages found</td>
+                    <td colspan="4"></td>
                 </tr>
             {% endif %}
         </tbody>

@@ -20,6 +20,7 @@
         {% for board in board.childBoards %}
             <li>
                 <h4 class="board-title"><a href="/forums/board/{{ board.Name|lower|url_encode }}/">{{ board.Name }}</a></h4>
+                {% if board.unread %}[UNREAD]{% endif %}
                 <span>{{ board.Description }}</span>
             </li>
         {% endfor %}

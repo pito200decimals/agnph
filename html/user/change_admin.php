@@ -77,5 +77,5 @@ if ($success) {
 }
 
 header("Location: ".$_SERVER['HTTP_REFERER']);
-return;
+exit();
 ?>

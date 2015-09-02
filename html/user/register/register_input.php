@@ -12,7 +12,7 @@ include_once(SITE_ROOT."includes/auth/email_auth.php");
 
 if (isset($user)) {
     header("Location: /");
-    return;
+    exit();
 }
 if (isset($_POST['username']) &&
     isset($_POST['email']) &&

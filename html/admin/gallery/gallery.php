@@ -19,7 +19,7 @@ $changed = false;
 // TODO: Try saving settings, if posted.
 if ($changed) {
     header("Location: ".$_SERVER['REQUEST_URI']);
-    return;
+    exit();
 }
 
 // Get settings from table, and populate fields.

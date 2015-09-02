@@ -46,7 +46,7 @@ if (isset($_POST['confirm'])) {
                         sql_query("UPDATE ".FICS_CHAPTER_TABLE." SET ApprovalStatus='D' WHERE ParentStoryId=$sid AND ChapterId=$cid;");
                         UpdateStoryStats($sid);  // Update views, reviews, word count, chapter order.
                         header("Location: /fics/edit/$sid/");
-                        return;
+                        exit();
                     } else {
                         RenderErrorPage("Unable to delete chapter");
                     }
@@ -59,12 +59,12 @@ if (isset($_POST['confirm'])) {
         } else {
             sql_query("UPDATE ".FICS_STORY_TABLE." SET ApprovalStatus='D' WHERE StoryId=$sid;");
             header("Location: /fics/browse/");
-            return;
+            exit();
         }
     } else if ($_GET['action'] == "undelete" && CanUserUndeleteStory($story, $user)) {
         sql_query("UPDATE ".FICS_STORY_TABLE." SET ApprovalStatus='A' WHERE StoryId=$sid;");
         header("Location: /fics/story/$sid/");
-        return;
+        exit();
     } else {
         RenderErrorPage("Not authorized to modify story");
     }

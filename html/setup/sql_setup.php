@@ -139,8 +139,8 @@ do_or_die(sql_query(
     "CREATE TABLE ".FORUMS_USER_PREF_TABLE." (
         UserId INT(11) NOT NULL,
         Signature VARCHAR(".MAX_FORUMS_SIGNATURE_LENGTH.") DEFAULT '' NOT NULL,
-        SeenPostsUpToId INT(11) DEFAULT 0 NOT NULL,
-        ForumThreadsPerPage INT(11) DEFAULT ".DEFAULT_FORUM_THREADS_PER_PAGE.",
+        MaybeReadUpTo INT(11) DEFAULT 0 NOT NULL,".  // Index after last read post. This an all posts after are all unread.
+       "ForumThreadsPerPage INT(11) DEFAULT ".DEFAULT_FORUM_THREADS_PER_PAGE.",
         ForumPostsPerPage INT(11) DEFAULT ".DEFAULT_FORUM_POSTS_PER_PAGE.",
         ForumsPermissions CHAR(1) DEFAULT 'N' NOT NULL,".  // N - Normal user, A - Admin
        "PRIMARY KEY(UserId)

@@ -14,7 +14,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     include_once(SITE_ROOT."includes/auth/login.php");
     if (isset($user)) {
         header("Location: /");
-        return;
+        exit();
     } else {
         if (isset($user_banned) && $user_banned) {
             $msg = "Your account has been banned";
@@ -39,7 +39,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 
 if (isset($user)) {
     header("Location: /");
-    return;
+    exit();
 }
 
 RenderPage("login.tpl");

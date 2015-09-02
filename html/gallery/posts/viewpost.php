@@ -74,7 +74,7 @@ if (isset($_POST['action'])) {
         }
         // For all POST actions, redirect to this same page.
         header("Location: " . $_SERVER['REQUEST_URI']);
-        return;
+        exit();
     }
 }
 

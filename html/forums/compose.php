@@ -123,6 +123,7 @@ function HandleCreateThread() {
         $pid = sql_last_id();
         // TODO: Update board stats.
         PostSessionBanner("Thread created", "green");
+        MarkPostsAsRead($user, array($pid));
         GoToForumPost($pid);
     } else {
         PostBanner("Invalid", "red");
@@ -150,6 +151,7 @@ function HandleReplyThread() {
         UpdateThreadStats($tid);
         // TODO: Update board stats.
         PostSessionBanner("Reply posted", "green");
+        MarkPostsAsRead($user, array($pid));
         GoToForumPost($pid);
     } else {
         PostBanner("Invalid", "red");
@@ -207,7 +209,10 @@ function GetSanitizedText($text) {
 
 function GoToForumPost($pid) {
     $posts_per_page = GetPostsPerPageInThread();
-    sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId=$pid;", 1) or header("Location: /forums/");
+    if (!sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId=$pid;", 1)) {
+        header("Location: /forums/");
+        exit();
+    }
     $post = $result->fetch_assoc();
     if ($post['IsThread'] == 1) {
         $tid = $post['PostId'];

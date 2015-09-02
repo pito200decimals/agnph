@@ -61,5 +61,5 @@ switch ($action) {
 }
 
 header("Location: ".$_SERVER['HTTP_REFERER']);
-return;
+exit();
 ?>

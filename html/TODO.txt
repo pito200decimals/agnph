@@ -6,6 +6,7 @@ TODOs
 * Quoting
 * Spoiler tags
 * Unread messages
+    - Mark all as unread button
 - Restricted user perms
 - Link up news forum to other index pages?
 
@@ -62,6 +63,7 @@ X Breakdown of views per-chapter
 == ACCOUNT ==
 * Mailbox/PM system
     - Add unread-message notification to both account tab and inbox tab.
+        X Potentially handle thread grouping
     X Support message deletion? For now, no.
     - Should add user blacklisting?
         - Offending users can be banned.

@@ -58,6 +58,7 @@ if ($action == "send") {
             ($suid, $ruid, $pmid, $now, '$escaped_title', '$escaped_message');") or RenderErrorPage("Unable to send message");
         PostMailSessionBanner("Message sent");
         header("Location: /user/$uid/mail/");
+        exit();
     } else if (isset($_POST['to']) &&
         isset($_POST['ruid']) &&
         is_numeric($_POST['ruid']) &&
@@ -85,6 +86,7 @@ if ($action == "send") {
 
         PostMailSessionBanner("Message sent");
         header("Location: /user/$uid/mail/");
+        exit();
     } else {
         RenderErrorPage("Unable to send message");
     }

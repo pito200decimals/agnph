@@ -9,6 +9,7 @@ if (isset($_POST) && isset($_POST['sid'])) {
     include_once(SITE_ROOT."fics/save_story_changes.php");
     if (isset($success) && $success && isset($sid) && $sid > 0) {
         header("Location: /fics/story/$sid/");
+        exit();
     } else {
         unset($success);
         if (isset($errmsg)) PostBanner($errmsg, "red");

@@ -14,7 +14,7 @@ if (isset($_GET['code'])) {
             $url = $event['Redirect'];
             $_SESSION['auth_row'] = $event;
             header("Location: $url");
-            return;
+            exit();
         }
     }
 }

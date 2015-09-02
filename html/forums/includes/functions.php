@@ -109,6 +109,7 @@ function FetchThread($thread_id) {
 }
 
 function InitPosters(&$posts) {
+    if (sizeof($posts) == 0) return true;
     $user_ids = array();
     foreach ($posts as $post) {
         $user_ids[] = $post['UserId'];
@@ -165,6 +166,104 @@ function UpdateThreadStats($tid) {
 
 function UpdateBoardStats($bid) {
     // TODO, when stats are supported for boards.
+}
+
+function GetMixedUnreadPostIds($user) {
+    $ret = array();
+    if (sql_query_into($result, "SELECT * FROM ".FORUMS_UNREAD_POST_TABLE." WHERE UserId=".$user['UserId'].";", 1)) {
+        while ($row = $result->fetch_assoc()) {
+            $pid = $row['PostId'];
+            $ret[$pid] = $pid;
+        }
+    }
+    return $ret;
+}
+
+function MarkPostsAsRead($user, $post_ids) {
+    $uid = $user['UserId'];
+    if (sizeof($post_ids) == 0) return;
+    $post_ids = array_values($post_ids);
+    sort($post_ids);
+    $last_id = array_last($post_ids);
+    $max_index = $user['MaybeReadUpTo'];
+    $inserts = array();
+    if ($max_index <= $last_id) {
+        // Need to increment $max_index, and add a bunch of values to table.
+        $new_max_index = $last_id + 1;
+        sql_query("UPDATE ".FORUMS_USER_PREF_TABLE." SET MaybeReadUpTo=$new_max_index WHERE UserId=$uid;");
+        // Also update unread post table.
+        $joined_post_ids = implode(",", $post_ids);
+        sql_query("INSERT INTO ".FORUMS_UNREAD_POST_TABLE."
+            SELECT $uid, PostId FROM ".FORUMS_POST_TABLE."
+            WHERE $max_index <= PostId
+                AND PostId < $new_max_index
+                AND PostId NOT IN ($joined_post_ids);");
+    }
+    // Now, update all indices < $max_index.
+    $delete_joined = implode(",", $post_ids);
+    sql_query("DELETE FROM ".FORUMS_UNREAD_POST_TABLE." WHERE UserId=$uid AND PostId IN ($delete_joined);");
+}
+
+function MarkAllAsRead($user) {
+    if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." ORDER BY PostId DESC LIMIT 1;", 1)) {
+        $pid = $result->fetch_assoc()['PostId'];
+        sql_query("DELETE FROM ".FORUMS_UNREAD_POST_TABLE." WHERE UserId=$uid;");
+        sql_query("UPDATE ".FORUMS_USER_PREF_TABLE." SET MaybeReadUpTo=".($pid + 1)." WHERE UserId=$uid;");
+    }
+}
+
+function TagThreadsAsUnread($user, &$thread_posts) {
+    $uid = $user['UserId'];
+    $tids = array_map(function($thread) { return $thread['PostId']; }, $thread_posts);
+    $joined_tids = implode(",", $tids);
+    $maybe_read_up_to = $user['MaybeReadUpTo'];
+    if (!sql_query_into($result,
+        "SELECT * FROM ".FORUMS_POST_TABLE." T WHERE
+            IsThread=1 AND PostId IN ($joined_tids) AND
+            EXISTS(SELECT 1 FROM ".FORUMS_POST_TABLE." S WHERE
+                (S.PostId=T.PostId OR (S.ParentId=T.PostId AND S.IsThread=0)) AND
+                (S.PostId >= $maybe_read_up_to OR EXISTS(SELECT 1 FROM ".FORUMS_UNREAD_POST_TABLE." U WHERE U.UserId=$uid AND U.PostId=S.PostId)));", 1)) return;
+    $unread_tids = array();
+    while ($row = $result->fetch_assoc()) {
+        $tid = $row['PostId'];
+        $unread_tids[$tid] = true;
+    }
+    foreach ($thread_posts as &$thread) {
+        $thread['unread'] = isset($unread_tids[$thread['PostId']]);
+    }
+}
+
+function TagBoardsAsUnread($user, &$board) {
+    $uid = $user['UserId'];
+    $maybe_read_up_to = $user['MaybeReadUpTo'];
+    if (!sql_query_into($result,
+        "SELECT ParentId FROM ".FORUMS_POST_TABLE." T WHERE
+            IsThread=1 AND
+            EXISTS(SELECT 1 FROM ".FORUMS_POST_TABLE." S WHERE
+                (S.PostId=T.PostId OR (S.ParentId=T.PostId AND S.IsThread=0)) AND
+                (S.PostId >= $maybe_read_up_to OR EXISTS(SELECT 1 FROM ".FORUMS_UNREAD_POST_TABLE." U WHERE U.UserId=$uid AND U.PostId=S.PostId)));", 1)) return;
+    $unread_board_ids = array();
+    while ($row = $result->fetch_assoc()) {
+        $bid = $row['ParentId'];
+        $unread_board_ids[$bid] = true;
+    }
+    $MarkBoardRecursive = function (&$board) use ($unread_board_ids, &$MarkBoardRecursive) {
+        $bid = $board['BoardId'];
+        $has_unread = false;
+        if (isset($unread_board_ids[$bid])) $has_unread = true;
+        if (!$has_unread && isset($board['childBoards'])) {
+            foreach ($board['childBoards'] as &$b) {
+                if ($MarkBoardRecursive($b)) {
+                    $has_unread = true;
+                }
+            }
+        }
+        if ($has_unread) {
+            $board['unread'] = true;
+        }
+        return $has_unread;
+    };
+    $MarkBoardRecursive($board);
 }
 
 

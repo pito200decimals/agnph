@@ -15,7 +15,7 @@ for ($i = 0; $i < MAX_TRIES; $i++) {
     if (sql_query_into($result, "SELECT PostId from ".GALLERY_POST_TABLE." WHERE PostId=$rand_pid AND Status<>'D' LIMIT 1;", 1)) {
         $pid = $result->fetch_assoc()['PostId'];
         header("Location: /gallery/post/show/$pid/");
-        return;
+        exit();
     }
 }
 RenderErrorPage("Post not found");

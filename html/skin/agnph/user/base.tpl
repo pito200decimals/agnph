@@ -12,7 +12,7 @@
         <li><a href="/user/{{ profile.user.UserId }}/fics/">Fics</a></li>
         <li><a href="/user/{{ profile.user.UserId }}/oekaki/">Oekaki</a></li>
         {% if user and profile.user.UserId == user.UserId %}
-        <li><a href="/user/{{ user.UserId }}/mail/">Messages{% if unreadMessages %} <span class="unread-messages">({{ unreadMessages }})</span>{% endif %}</a></li>
+        <li><a href="/user/{{ user.UserId }}/mail/">Messages{% if unread_message_count > 0 %} <span class="unread-messages">({{ unread_message_count }})</span>{% endif %}</a></li>
         <li><a href="/user/{{ user.UserId }}/preferences/">Preferences</a></li>
         {% endif %}
     </ul>

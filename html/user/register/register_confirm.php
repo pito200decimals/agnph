@@ -10,12 +10,12 @@ include_once(SITE_ROOT."includes/util/file.php");
 
 if (isset($user)) {
     header("Location: /");
-    return;
+    exit();
 }
 
 if (!isset($_SESSION['register_email'])) {
     header("Location: /register/");
-    return;
+    exit();
 }
 $vars['email'] = $_SESSION['register_email'];
 // This is how to output the template.
