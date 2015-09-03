@@ -1,5 +1,21 @@
 <?php
 // Included php file for handling searches in the fics section.
+//
+// == Search filters implemented so far ==
+// order:rating
+// order:score
+// order:{views|reads}
+// order:{words|length}
+// order:chapters
+// order:reviews
+// order:published
+// order:featured
+// {completed|complete|completed:yes|completed:true|not_completed|incomplete|completed:no|completed:false}
+// rating:{g|pg|pg-13|r|xxx}
+// {featured|is_featured|featured:yes|featured:true|not_featured|featured:no|featured:false}
+// featured:{gold|silver|bronze}
+// status:{p|a|d}
+// fav:{user|me}
 
 include_once(SITE_ROOT."includes/constants.php");
 include_once(SITE_ROOT."includes/util/core.php");
@@ -51,6 +67,9 @@ function GetOrdering($search_term) {
         return "NumReviews DESC";
     } else if (startsWith($search_term, "order:published")) {
         return "DateCreated DESC";
+    } else if (startsWith($search_term, "order:featured") ||
+        startsWith($search_term, "order:ribbon")) {
+        return "(CASE WHEN Featured='".FICS_NOT_FEATURED."' THEN 0 ELSE 1 END) DESC, Featured ASC";
     } else {
         return "";
     }
@@ -71,8 +90,8 @@ function GetFicsBlacklistClauses($terms) {
 
 function GetClause($search_term) {
     global $user;
-    $order = GetOrdering($search_term);
-    if (mb_strlen($order) > 0) {
+    if (mb_strlen(GetOrdering($search_term)) > 0) {
+        // Don't create an AND clause for an order filter.
         return "";
     }
     if (mb_substr($search_term, 0, 1) == "-") {
@@ -103,6 +122,9 @@ function GetClause($search_term) {
     if ($lower_term == "not_featured" ||
         $lower_term == "featured:no" ||
         $lower_term == "featured:false") return "Featured='".FICS_NOT_FEATURED."'";
+    if ($lower_term == "featured:gold") return "Featured='G' OR Featured='g'";
+    if ($lower_term == "featured:silver") return "Featured='S' OR Featured='s'";
+    if ($lower_term == "featured:bronze") return "Featured='Z' OR Featured='z'";
     if (startsWith($lower_term, "status:p")) {
         return "ApprovalStatus='P'";
     } else if (startsWith($lower_term, "status:a")) {

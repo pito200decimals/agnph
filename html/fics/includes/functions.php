@@ -105,7 +105,7 @@ function FillStoryInfo(&$story) {
         break;
     }
 
-    $story['tags'] = GetTagsInfo(GetTagsIdsForStory($story['StoryId']));
+    $story['tags'] = GetTagsById(FICS_TAG_TABLE, GetTagsIdsForStory($story['StoryId']));
 
     $story['DateCreated'] = FormatDate($story['DateCreated'], FICS_DATE_FORMAT);
     $story['DateUpdated'] = FormatDate($story['DateUpdated'], FICS_DATE_FORMAT);
@@ -174,19 +174,6 @@ function GetTagsIdsForStory($sid) {
     $ret = array();
     while ($row = $result->fetch_assoc()) {
         $ret[] = $row['TagId'];
-    }
-    return $ret;
-}
-
-// Gets info about tags, indexed by tag id.
-function GetTagsInfo($tag_id_array) {
-    if (sizeof($tag_id_array) == 0) return array();
-    $joined = implode(",", $tag_id_array);
-    if (!sql_query_into($result, "SELECT * FROM ".FICS_TAG_TABLE." WHERE TagId IN ($joined) ORDER BY Name;", 1)) return array();
-    $ret = array();
-    while ($row = $result->fetch_assoc()) {
-        $row['class'] = mb_strtolower($row['Type'])."typetag";
-        $ret[$row['TagId']] = $row;
     }
     return $ret;
 }

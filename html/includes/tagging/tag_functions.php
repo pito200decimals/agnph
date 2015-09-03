@@ -41,11 +41,14 @@ function GetTagStringTokens($tag_string) {
 function GetTagsById($tag_table_name, $tag_ids) {
     if (sizeof($tag_ids) == 0) return array();
     $joined = implode(",", array_map(function($id) { return "'".sql_escape($id)."'"; }, $tag_ids));
-    $sql = "SELECT * FROM $tag_table_name WHERE TagId IN ($joined);";
+    $sql = "SELECT * FROM $tag_table_name WHERE TagId IN ($joined) ORDER BY Name DESC;";
     $ret = array();
     if (!sql_query_into($result, $sql, 0)) return null;
     while ($row = $result->fetch_assoc()) {
-        $ret[$row['TagId']] = $row;
+        $row['displayName'] = TagNameToDisplayName($row['Name']);
+        $row['quotedName'] = contains($row['Name'], ":") ? "\"".$row['Name']."\"" : $row['Name'];
+        $tid = $row['TagId'];
+        $ret[$tid] = $row;
     }
     return $ret;
 }
@@ -89,6 +92,8 @@ function GetTagsByName($tag_table_name, $tag_names, $create_new = false, $user_i
         $ret = array();
         if (!sql_query_into($result, "SELECT * FROM $tag_table_name WHERE Name IN ($joined);", 0)) return array();  // Return empty on error, or none found.
         while ($row = $result->fetch_assoc()) {
+            $row['displayName'] = TagNameToDisplayName($row['Name']);
+            $row['quotedName'] = contains($row['Name'], ":") ? "\"".$row['Name']."\"" : $row['Name'];
             $tid = $row['TagId'];
             $ret[$tid] = $row;
         }
@@ -157,7 +162,10 @@ function GetAliasedAndImpliedTags($tag_table_name, $alias_table_name, $implicati
     $joined = implode(", ", $new_ids);
     if (sizeof($new_ids) > 0 && sql_query_into($result, "SELECT * FROM $tag_table_name WHERE TagId IN ($joined);", 1)) {
         while ($row = $result->fetch_assoc()) {
-            $ret[$row['TagId']] = $row;
+            $row['displayName'] = TagNameToDisplayName($row['Name']);
+            $row['quotedName'] = contains($row['Name'], ":") ? "\"".$row['Name']."\"" : $row['Name'];
+            $tid = $row['TagId'];
+            $ret[$tid] = $row;
         }
     }
     foreach ($tag_ids as $tid) {

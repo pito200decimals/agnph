@@ -86,7 +86,7 @@
             <tbody>
                 {% for pool in pools %}
                     <tr>
-                        <td><div><a href="/gallery/post/?search={{ pool.searchName }}">{{ pool.Name }}</a></div></td>
+                        <td><div><a href="/gallery/post/?search={{ pool.searchName|url_encode }}">{{ pool.Name }}</a></div></td>
                         <td><div>{{ pool.count }}</div></td>
                         <td><div><a href="/user/{{ pool.creator.UserId }}/gallery/">{{ pool.creator.DisplayName }}</a></div></td>
                         {% if canEditPools %}<td><div>

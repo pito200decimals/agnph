@@ -70,7 +70,7 @@
                                 <ul class="taglist">
                                     {% for tag in category.tags %}
                                         <li class="tag">
-                                            <a href="/gallery/post/?search={{ tag.Name|url_encode }}" class="{{ tag.Type|lower }}typetag">{{ tag.displayName }}</a>
+                                            <a href="/gallery/post/?search={{ tag.quotedName|url_encode }}" class="{{ tag.Type|lower }}typetag">{{ tag.displayName }}</a>
                                         </li>
                                     {% endfor %}
                                 </ul>
@@ -222,7 +222,7 @@
             </div>
             {% if post.Status!="D" %}
                 {# Only render image if status is not deleted #}
-                <p>
+                <div>
                     {% if post.Extension == "swf" %}
                         {# Some messy scaling calculations :( #}
                         <div style="position:relative;padding-bottom:{{ post.Height * 100 / post.Width }}%;padding-top:0px;height:0;overflow:hidden;">
@@ -240,7 +240,7 @@
                             <a href="{{ post.downloadUrl }}"><img class="preview-img" src="{{ post.previewUrl }}" /></a>
                         {% endif %}
                     {% endif %}
-                </p>
+                </div>
                 {% if post.Description|length > 0 %}
                     <div class="post-description">
                         <h4>Description</h4>

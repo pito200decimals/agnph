@@ -145,14 +145,7 @@ function GetTags($post) {
     while ($row = $result->fetch_assoc()) {
         $allTagIds[] = $row['TagId'];
     }
-    $allTags = array();
-    if (sizeof($allTagIds) > 0) {
-        if (!sql_query_into($result, "SELECT * FROM ".GALLERY_TAG_TABLE." WHERE TagId IN (".implode(",", $allTagIds).");", 1)) return null;
-        while ($row = $result->fetch_assoc()) {
-            $allTags[] = $row;
-        }
-    }
-    return $allTags;
+    return GetTagsById(GALLERY_TAG_TABLE, $allTagIds);
 }
 
 function ToTagNameString($allTags) {
@@ -171,7 +164,6 @@ function ToTagCategorized($allTags) {
         $category['tags'] = array();
         foreach ($allTags as $tag) {
             if ($tag['Type'] == $char) {
-                $tag['displayName'] = TagNameToDisplayName($tag['Name']);
                 $category['tags'][] = $tag;
             }
         }

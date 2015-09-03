@@ -46,6 +46,8 @@ if (defined("TAG_ITEM_TABLE")) {
 }
 
 foreach ($tags as &$tag) {
+    $tag['displayName'] = TagNameToDisplayName($tag['Name']);
+    $tag['quotedName'] = contains($tag['Name'], ":") ? "\"".$tag['Name']."\"" : $tag['Name'];
     $tag['tagCounts'] = $tag['ItemCount'];
     $tag['typeName'] = $TAG_TYPE_MAP[$tag['Type']];
     $tag['typeClass'] = mb_strtolower($tag['Type'])."typetag tagname";

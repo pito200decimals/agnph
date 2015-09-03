@@ -23,7 +23,6 @@
                 {% if comment.unread %}
                     [UNREAD]
                 {% endif %}
-                {{ comment.id }}
                 {{ block('comment') }}
             {% endfor %}
         </ul>
