@@ -51,9 +51,10 @@ if ($action == "edit") {
         return;
     }
     if (!CanUserEditStory($story, $user)) RenderErrorPage("Not authorized to edit story");
+    FillStoryInfo($story);
     $chapters = GetChaptersInfo($sid) or RenderErrorPage("Story not found");
     $story['tagstring'] = implode(" ", array_map(function($tag) { return $tag['Name']; }, $story['tags']));
-    $vars['story'] = $story;
+    $vars['story'] = $story;  // For story block.
     $vars['chapters'] = &$chapters;
     // Assign chapter hashes.
     foreach ($chapters as &$chapter) {
@@ -62,7 +63,10 @@ if ($action == "edit") {
 } else {
     if (!CanUserCreateStory($user)) RenderErrorPage("Not authorized to create a story");
     $story = array(
-        "StoryId" => -1
+        "StoryId" => -1,
+        "author" => $user,
+        "coauthors" => array(),
+        "AuthorUserId" => $user['UserId']
     );
     $chapter = array();
     $vars['chapter'] = &$chapter;
@@ -72,6 +76,14 @@ if ($action == "edit") {
 if (isset($fill_from_post) && $fill_from_post) {
     // Modify story object to take in errored fields.
     if (isset($title)) $story['Title'] = $title;
+    if (isset($author_uid)) {
+        $story['AuthorUserId'] = $author_uid;
+        LoadSingleTableEntry(array(USER_TABLE), "UserId", $author_uid, $story['author']);
+    }
+    if (isset($coauthor_ids)) {
+        $story['CoAuthors'] = implode(",", $coauthor_ids);
+        LoadTableData(array(USER_TABLE), "UserId", $coauthor_ids, $story['coauthors']);
+    }
     if (isset($summary)) $story['Summary'] = $summary;
     if (isset($rating)) $story['Rating'] = $rating;
     if (isset($completed)) $story['Completed'] = $completed;
@@ -84,6 +96,8 @@ if (isset($fill_from_post) && $fill_from_post) {
     if (isset($chapterendnotes)) $vars['chapterendnotes'] = $chapterendnotes;
 }
 $vars['formstory'] = $story;
+$vars['canSetAuthor'] = CanUserChooseAnyAuthor($user);
+$vars['canSetCoAuthors'] = CanUserSetCoAuthors($story, $user);
 
 RenderPage("fics/edit/editstory.tpl");
 return;

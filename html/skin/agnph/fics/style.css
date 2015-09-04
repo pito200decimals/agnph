@@ -18,11 +18,26 @@
     padding: 5px;
     background-color: rgb(191,223,255);
 }
-.storyblockheader p {
+.storyblockheader div {
     margin: 5px;
 }
 .storyblockheader .title {
     font-size: 150%;
+}
+.storyblockheader .author-list {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+    display: inline;
+}
+.storyblockheader .author-list li {
+    display: inline;
+}
+.storyblockheader .author-list .author {
+}
+.storyblockheader .author-list .coauthor {
+    font-style: italic;
+    font-size: 80%;
 }
 .stars {
     padding: 5px;

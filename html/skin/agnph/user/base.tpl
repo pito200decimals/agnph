@@ -18,6 +18,27 @@
     </ul>
 {% endblock %}
 
+{% block admin_link_block %}
+    {% for link in adminLinks %}
+        {% if link == "break" %}
+            <br />
+        {% else %}
+            <li>
+                <form id="{{ link.formId }}-form" action="/user/{{ profile.user.UserId }}/admin/" method="POST" accept-encoding="UTF-8" hidden>
+                    {% for action in link.actions %}
+                        <input type="hidden" name="action[]" value="{{ action }}" />
+                    {% endfor %}
+                </form>
+                <a href="/user/{{ profile.user.UserId }}/admin/" onclick="document.getElementById('{{ link.formId }}-form').submit();return false;">
+                    {% autoescape false %}
+                        {{ link.text|replace({' ': '&nbsp;'}) }}  {# Ensure that each action is only one line #}
+                    {% endautoescape %}
+                </a>
+            </li>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+
 {% block content %}
     {{ block('banner') }}
     <div class="userpage">

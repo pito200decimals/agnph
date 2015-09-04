@@ -11,49 +11,76 @@ include_once(SITE_ROOT."includes/util/user.php");
 include_once(SITE_ROOT."includes/comments/comments_functions.php");
 
 function CanUserCreateStory($user) {
-    // Only registered users.
     if (!IsUserActivated($user)) return false;
+    if ($user['FicsPermissions'] == 'R') return false;
     return true;
 }
 function CanUserEditStory($story, $user) {
-    // Only author and admins.
     if (!IsUserActivated($user)) return false;
-    return $user['UserId'] == $story['AuthorUserId'] || $user['FicsPermissions'] == 'A';
+    if ($user['FicsPermissions'] == 'R') return false;
+    if ($user['FicsPermissions'] == 'A') return true;
+    if ($user['UserId'] == $story['AuthorUserId']) return true;
+    if (in_array($user['UserId'], explode(",", $story['CoAuthors']))) return true;
+    return false;
+}
+function CanUserChooseAnyAuthor($user) {
+    if (!IsUserActivated($user)) return false;
+    if ($user['FicsPermissions'] == 'A') return true;
+    return false;
+}
+function CanUserSetCoAuthors($story, $user) {
+    if (!IsUserActivated($user)) return false;
+    if ($user['FicsPermissions'] == 'R') return false;
+    if ($user['FicsPermissions'] == 'A') return true;
+    if ($user['UserId'] == $story['AuthorUserId']) return true;
+    if ($story['StoryId'] == -1) return true;  // Can set on creating story.
+    return false;
 }
 function CanUserDeleteStory($story, $user) {
     if (!IsUserActivated($user)) return false;
-    return $user['UserId'] == $story['AuthorUserId'] || $user['FicsPermissions'] == 'A';
+    if ($user['FicsPermissions'] == 'R') return false;
+    if ($user['FicsPermissions'] == 'A') return true;
+    if ($user['UserId'] == $story['AuthorUserId']) return true;
+    return false;
 }
 function CanUserUndeleteStory($story, $user) {
     if (!IsUserActivated($user)) return false;
-    return $user['FicsPermissions'] == 'A';
+    if ($user['FicsPermissions'] == 'A') return true;
+    return false;
 }
 function CanUserSearchDeletedStories($user) {
     if (!IsUserActivated($user)) return false;
-    return $user['FicsPermissions'] == 'A';
+    if ($user['FicsPermissions'] == 'A') return true;
+    return false;
 }
 function CanUserComment($user) {
     if (!IsUserActivated($user)) return false;
+    if ($user['FicsPermissions'] == 'R') return false;
     return true;
 }
 function CanUserDeleteComment($user, $comment) {
     if (!IsUserActivated($user)) return false;
+    if ($user['FicsPermissions'] == 'R') return false;
     if ($user['FicsPermissions'] == 'A') return true;
     // TODO: Allow users to delete their own comments?
     // if ($user['UserId'] == $comment['UserId']) return true;
+    if ($user['UserId'] == $story['AuthorUserId']) return true;
     return false;
 }
 function CanUserReview($user) {
     if (!IsUserActivated($user)) return false;
+    if ($user['FicsPermissions'] == 'R') return false;
     return true;
 }
 function CanUserCreateFicsTags($user) {
     if (!IsUserActivated($user)) return false;
+    if ($user['FicsPermissions'] == 'R') return false;
     return true;
 }
 function CanUserFeatureStory($story, $user) {
     if (!IsUserActivated($user)) return false;
-    return $user['FicsPermissions'] == 'A';
+    if ($user['FicsPermissions'] == 'A') return true;
+    return false;
 }
 
 // General path functions.
@@ -284,6 +311,7 @@ function UpdateStoryStats($sid) {
 
 function ChapterWordCount($content) {
     $stripped = SanitizeHTMLTags($content, "");
+    $stripped = str_replace("\xC2\xA0", " ", $stripped);  // No multi-byte okay here.
     $words = explode(" ", $stripped);
     $words = array_filter($words, function($word) {
         return mb_strlen($word) > 0;

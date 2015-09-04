@@ -21,9 +21,6 @@
         });
         $(document).ready(function() {
             {# Set up ajax lookups #}
-            $('#to-field').keyup(function() {
-                var name = $(this).val();
-            });
             $('#to-field').autocomplete({
                 serviceUrl: '/user/find_user_ajax.php',
                 onSelect: function(suggestion) {

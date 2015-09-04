@@ -216,6 +216,10 @@ function ClauseForAuthor($author_display_name) {
     }
     if (sizeof($user_ids) == 0) return null;  // Should never happen, but just in case.
     $joined_ids = implode(",", $user_ids);
-    return "AuthorUserId IN ($joined_ids)";
+    $clauses = array_map(function($id) {
+        return "INSTR(CONCAT(',', CoAuthors, ','), ',$id,') <> 0";
+    }, $user_ids);
+    $clauses[] = "AuthorUserId IN ($joined_ids)";
+    return implode(" OR ", $clauses);
 }
 ?>

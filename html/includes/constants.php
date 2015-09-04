@@ -157,6 +157,7 @@ define("FICS_WELCOME_MESSAGE_KEY", "FicsWelcomeMessage");
 define("DEFAULT_FICS_WELCOME_MESSAGE", "");
 define("FICS_PROFILE_SHOW_NUM_STORIES", 3);
 define("FICS_PROFILE_SHOW_NUM_FAVORITES", 3);
+define("FICS_MAX_NUM_COAUTHORS", 3);
 
 // Account-related.
 define("USERLIST_DATE_FORMAT", "Y-m-d");

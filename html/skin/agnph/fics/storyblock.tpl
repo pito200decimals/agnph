@@ -19,23 +19,30 @@
                 {% elseif story.Featured=="z" %}
                     <img class="ribbon" src="/images/bronzeribbon_old.gif" />
                 {% endif %}
-                <p class="mininfo">
+                <div class="mininfo">
                     <span class="title">
                         <a href="/fics/story/{{ story.StoryId }}/">{{ story.Title }}</a>
                     </span>
                     by
-                    <span class="author">
-                        <a href="/user/{{ story.author.UserId }}/fics/">{{ story.author.DisplayName }}</a>
-                    </span>
+                    <ul class="author-list">
+                        <li class="author">
+                            <a href="/user/{{ story.author.UserId }}/fics/">{{ story.author.DisplayName }}</a>
+                        </li>
+                        {% for author in story.coauthors %}
+                            <li class="coauthor">
+                                <a href="/user/{{ author.UserId }}/fics/">{{ author.DisplayName }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
                     <span class="stars">{% autoescape false %}{{ story.stars }}{% endautoescape %}</span>
-                </p>
-                <p>
+                </div>
+                <div>
                     <span class="rating">Rated: {{ story.rating }}</span>
                     <span class="stars">{% autoescape false %}{{ story.stars }}{% endautoescape %}</span>
                     {% if not story.shortDesc %}
                     {% if story.NumReviews > 0 %}<span class="reviews">[<a href="/fics/story/{{ story.StoryId }}/?reviews#reviews">Reviews: {{ story.NumReviews }}</a>]</span>{% endif %}
                     {% endif %}
-                </p>
+                </div>
             </div>
             <div class="storyblockinfo">
                 <div class="summary{% if restrictSummaryHeight %} summary-box{% endif %}">

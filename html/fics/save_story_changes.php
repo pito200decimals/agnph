@@ -13,6 +13,10 @@ if (!isset($_POST['sid'])) return;
 $sid = $_POST['sid'];
 if (!isset($_POST['title'])) return;
 $title = SanitizeHTMLTags($_POST['title'], DEFAULT_ALLOWED_TAGS);
+if (!isset($_POST['author'])) return;
+$author_uid = $_POST['author'];
+if (!isset($_POST['coauthors'])) $coauthor_ids = array();
+else $coauthor_ids = $_POST['coauthors'];
 if (!isset($_POST['summary'])) return;
 $summary = SanitizeHTMLTags($_POST['summary'], DEFAULT_ALLOWED_TAGS);
 if (!isset($_POST['rating'])) return;
@@ -28,6 +32,10 @@ $tagstring = CleanTagString($_POST['tags']);
 if (!is_numeric($sid)) return;
 if (mb_strlen($title) == 0) {
     $errmsg = "Invalid Story Title";
+}
+if (!is_numeric($author_uid)) return;
+foreach ($coauthor_ids as $id) {
+    if (!is_numeric($id)) return;
 }
 if ($rating == '1') {
     $rating = 'G';
@@ -72,11 +80,30 @@ if ($sid > 0) {
     $story = GetStory($sid);
     if ($story == null) return;
     if (!CanUserEditStory($story, $user)) RenderErrorPage("Not authorized to edit story");
+    if (!CanUserChooseAnyAuthor($user)) $author_uid = $user['UserId'];
     $sid = $story['StoryId'];
     $sets = array();
     if ($title != $story['Title']) {
         $escaped_title = sql_escape($title);
         $sets[] = "Title='$escaped_title'";
+    }
+    if (!$author_uid != $story['StoryId']) {
+        // See if user actually exists.
+        if (LoadSingleTableEntry(array(USER_TABLE), "UserId", $author_uid, $author)) {
+            $sets[] = "AuthorUserId=".$author['UserId'];
+        }
+    }
+    // Validate coauthors.
+    if (CanUserSetCoAuthors($story, $user) &&
+        sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId<>".$user['UserId']." AND UserId IN (".implode(",", $coauthor_ids).") LIMIT ".FICS_MAX_NUM_COAUTHORS.";", 0)) {
+        $coauthor_ids = array();
+        while ($row = $result->fetch_assoc()) {
+            $coauthor_ids[] = $row['UserId'];
+        }
+        $coauthors = implode(",", $coauthor_ids);
+        if ($coauthors != $story['CoAuthors']) {
+            $sets[] = "CoAuthors='$coauthors'";
+        }
     }
     if ($summary != $story['Summary']) {
         $escaped_summary = sql_escape($summary);
@@ -88,7 +115,7 @@ if ($sid > 0) {
     if ($completed != $story['Completed']) {
         $sets[] = "Completed=$completed";
     }
-    if (CanUserFeatureStory($story, $user)) {
+    if (CanUserFeatureStory($story, $user) && isset($_POST['featured'])) {
         $feature = $_POST['featured'];
         // Strlen and strpos because we store CHAR(1).
         if (strlen($feature) == 1 && strpos(FICS_NOT_FEATURED."FGSZfgsz", $feature) !== FALSE) {
@@ -114,6 +141,22 @@ if ($sid > 0) {
     return;
 } else {
     if (!CanUserCreateStory($user)) RenderErrorPage("Not authorized to create a story");
+    // Validate author.
+    if (CanUserChooseAnyAuthor($user) && LoadSingleTableEntry(array(USER_TABLE), "UserId", $author_uid, $author)) {
+        $author_uid = $author['UserId'];
+    } else {
+        $author_uid = $user['UserId'];
+    }
+    // Validate coauthors. Don't check perms, since you can always set coauthors on your new story.
+    if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId<>$author_uid AND UserId IN (".implode(",", $coauthor_ids).") LIMIT ".FICS_MAX_NUM_COAUTHORS.";", 0)) {
+        $coauthor_ids = array();
+        while ($row = $result->fetch_assoc()) {
+            $coauthor_ids[] = $row['UserId'];
+        }
+        $escaped_coauthors = sql_escape(implode(",", $coauthor_ids));
+    } else {
+        $escaped_coauthors = "";
+    }
     // Create new story.
     $escaped_title = sql_escape($title);
     $escaped_summary = sql_escape($summary);
@@ -124,7 +167,7 @@ if ($sid > 0) {
     $min_word_count = GetSiteSetting(FICS_CHAPTER_MIN_WORD_COUNT_KEY, DEFAULT_FICS_CHAPTER_MIN_WORD_COUNT);
     if ($min_word_count > 0) {
         if ($word_count < $min_word_count) {
-            $errmsg = "Chapter must be at least $min_word_count words long.";
+            $errmsg = "Chapter must be at least $min_word_count words long. Current length: $word_count words";
             return;
         }
     }
@@ -133,9 +176,9 @@ if ($sid > 0) {
     if ($completed) $completed = "true";
     else $completed = "false";
     $success = sql_query("INSERT INTO ".FICS_STORY_TABLE."
-        (AuthorUserId, DateCreated, DateUpdated, Title, Summary, Rating, Completed, ChapterCount, WordCount)
+        (AuthorUserId, Coauthors, DateCreated, DateUpdated, Title, Summary, Rating, Completed, ChapterCount, WordCount)
         VALUES
-        ($uid, $now, $now, '$escaped_title', '$escaped_summary', '$rating', $completed, $chapter_count, $word_count);");
+        ($author_uid, '$escaped_coauthors', $now, $now, '$escaped_title', '$escaped_summary', '$rating', $completed, $chapter_count, $word_count);");
     if (!$success) return;
     $sid = sql_last_id();
     $escaped_chap_title = sql_escape($chaptertitle);

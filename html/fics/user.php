@@ -16,6 +16,7 @@ $profile_user = &$vars['profile']['user'];
 $profile_uid = $profile_user['UserId'];
 $profile_user['admin'] = GetAdminBadge($profile_user);
 
+// Don't count coauthors for stories uploaded.
 sql_query_into($result, "SELECT count(*) FROM ".FICS_STORY_TABLE." WHERE AuthorUserId=$profile_uid AND ApprovalStatus='A';", 1) or RenderErrorPage("Failed to fetch user profile");
 $profile_user['numStoriesUploaded'] = $result->fetch_assoc()['count(*)'];
 sql_query_into($result, "SELECT count(*) FROM ".FICS_REVIEW_TABLE." R WHERE
@@ -30,7 +31,7 @@ $profile_user['numFavorites'] = $result->fetch_assoc()['count(*)'];
 
 // Get some recent stories.
 $stories = array();
-if (sql_query_into($result, "SELECT * FROM ".FICS_STORY_TABLE." WHERE AuthorUserId=$profile_uid AND ApprovalStatus='A' ORDER BY DateUpdated DESC, DateCreated DESC, StoryId DESC LIMIT ".FICS_PROFILE_SHOW_NUM_STORIES.";", 1)) {
+if (sql_query_into($result, "SELECT * FROM ".FICS_STORY_TABLE." WHERE (AuthorUserId=$profile_uid OR INSTR(CONCAT(',', CoAuthors, ','), ',$profile_uid,') <> 0) AND ApprovalStatus='A' ORDER BY DateUpdated DESC, DateCreated DESC, StoryId DESC LIMIT ".FICS_PROFILE_SHOW_NUM_STORIES.";", 1)) {
     while ($story = $result->fetch_assoc()) {
         FillStoryInfo($story);
         $story['shortDesc'] = true;
@@ -58,7 +59,11 @@ $vars['showFavorites'] = ($profile_user['PrivateFicsFavorites'] != 1 || (isset($
 $admin_links = array();
 if (!contains($profile_user['Permissions'], 'A')) {
     // Fics options.
-    if ($profile_user['FicsPermissions'] == 'N') {
+    if ($profile_user['FicsPermissions'] == 'R') {
+        AddAdminActionLink($admin_links, array("fics=N"), "Unrestrict Fics Edits");
+        AddAdminActionLink($admin_links, array("site+F", "fics=A"), "Make Fics Administrator");
+    } else if ($profile_user['FicsPermissions'] == 'N') {
+        AddAdminActionLink($admin_links, array("fics=R"), "Restrict Fics Edits");
         AddAdminActionLink($admin_links, array("site+F", "fics=A"), "Make Fics Administrator");
     } else if ($profile_user['FicsPermissions'] == 'A') {
         AddAdminActionLink($admin_links, array("site-F", "fics=N"), "Revoke Fics Administrator");

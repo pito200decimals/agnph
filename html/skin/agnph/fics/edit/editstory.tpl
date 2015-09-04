@@ -10,29 +10,26 @@
 
 {% block scripts %}
     <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
-    {% if create or not chapters %}
-        <script type="text/javascript">
-            $(document).ready(function() {
-                {##### This and CheckTags are duplicated below #####}
-                $("#tagbox").keyup(function() {
-                    CheckTags(this.value);
-                });
-                CheckTags($("#tagbox").val());
+    <script>
+        $(document).ready(function() {
+            $("#tagbox").keyup(function() {
+                CheckTags(this.value);
             });
-            function CheckTags(value) {
-                if (!(value.toLowerCase().indexOf("{# fe #}male") > -1 ||
-                      value.toLowerCase().indexOf("herm") > -1 ||
-                      value.toLowerCase().indexOf("sexless") > -1)) {
-                    $("#gender-warning").show();
-                } else {
-                    $("#gender-warning").hide()
-                }
+            CheckTags($("#tagbox").val());
+        });
+        function CheckTags(value) {
+            if (!(value.toLowerCase().indexOf("{# fe #}male") > -1 ||
+                  value.toLowerCase().indexOf("herm") > -1 ||
+                  value.toLowerCase().indexOf("sexless") > -1)) {
+                $("#gender-warning").show();
+            } else {
+                $("#gender-warning").hide()
             }
-        </script>
-    {% endif %}
+        }
+    </script>
     {% if not create and chapters %}
         <script src="{{ skinDir }}/scripts/jquery.sortable.js"></script>
-        <script type="text/javascript">
+        <script>
             $(document).ready(function() {
                 $('.sortable').sortable().bind('sortupdate', Update);
                 $(".reorder_hint").removeClass("hidden");
@@ -44,21 +41,7 @@
                         return false;
                     }
                 });
-                {##### This and CheckTags are duplicated above #####}
-                $("#tagbox").keyup(function() {
-                    CheckTags(this.value);
-                });
-                CheckTags($("#tagbox").val());
             });
-            function CheckTags(value) {
-                if (!(value.toLowerCase().indexOf("{# fe #}male") > -1 ||
-                      value.toLowerCase().indexOf("herm") > -1 ||
-                      value.toLowerCase().indexOf("sexless") > -1)) {
-                    $("#gender-warning").show();
-                } else {
-                    $("#gender-warning").hide()
-                }
-            }
             function Update() {
                 $('.sortable').sortable('destroy');
                 $('.sortable').removeAttr("style");
@@ -142,6 +125,75 @@
             {{ block('chapterMCESetup') }}
         {% endif %}
     </script>
+    {% if canSetAuthor or canSetCoAuthors %}
+        <script src="{{ skinDir }}/scripts/jquery.autocomplete.min.js"></script>
+    {% endif %}
+    <script>
+        $(document).ready(function() {
+            {# Set up ajax lookups #}
+            {% if canSetAuthor %}
+                $('#author-field').autocomplete({
+                    serviceUrl: '/user/find_user_ajax.php',
+                    onSelect: function(suggestion) {
+                        $('#author').val(suggestion.data);
+                    },
+                    onInvalidateSelection: function() {
+                        $('#author').val("");
+                    },
+                    showNoSuggestionNotice: true,
+                    tabDisabled: true,
+                    autoSelectFirst: true
+                }).blur(function() {
+                    if ($('#author').val() == "") {
+                        $('#author-field').val("");
+                    }
+                }).keydown(function(event) {
+                    {# Prevent submit on enter press #}
+                    if (event.keyCode == 13) {
+                        event.preventDefault();
+                        return false;
+                    }
+                });
+            {% endif %}
+            {% if canSetCoAuthors %}
+                $('#coauthor-field').autocomplete({
+                    serviceUrl: '/user/find_user_ajax.php',
+                    onSelect: function(suggestion) {
+                        AddCoauthor(suggestion);
+                        $('#coauthor-field').val("");
+                    },
+                    showNoSuggestionNotice: true,
+                    tabDisabled: true,
+                    autoSelectFirst: true
+                }).blur(function() {
+                    $('#coauthor-field').val("");
+                }).keydown(function(event) {
+                    {# Prevent submit on enter press #}
+                    if (event.keyCode == 13) {
+                        event.preventDefault();
+                        return false;
+                    }
+                });
+            {% endif %}
+            {% for coauthor in formstory.coauthors %}
+                AddCoauthor({ value: "{{ coauthor.DisplayName }}", data: {{ coauthor.UserId }} });
+            {% endfor %}
+        });
+        function AddCoauthor(suggestion) {
+            var elem = $('<li></li>');
+            elem.append($('<input type="hidden" name="coauthors[]" value="'+suggestion.data+'" />')).append($('<span>'+suggestion.value+'</span>'));
+            {% if canSetCoAuthors %}
+                var close = $('<a class="remove-coauthor-button">X</a>');
+                close.click(function(e) {
+                    e.stopPropagation();
+                    close.parent().remove();
+                    return false;
+                });
+                elem.append(close);
+            {% endif %}
+            $('#coauthor-list').append(elem);
+        }
+    </script>
 {% endblock %}
 
 {% block content %}
@@ -156,21 +208,36 @@
     {# Autocomplete off so that hidden inputs in the chapter ordering section don't autofill with previous values #}
     <form method="POST" autocomplete="off" accept-charset="UTF-8">
         <input type="hidden" name="sid" value="{% if create %}-1{% else %}{{ formstory.StoryId }}{% endif %}" />
-        <p>
+        <div class="form-block">
             <label>Title:</label>
             <input type="text" name="title" value="{{ formstory.Title }}" />
-        </p>
-        {# TODO: Coauthors #}
-        <p>
+        </div>
+        {% if canSetAuthor %}
+            <div class="form-block">
+                <input type="hidden" id="author" name="author" value="{{ formstory.author.UserId }}" />
+                <label>Author:</label><input type="text" id="author-field" name="author-field" value="{{ formstory.author.DisplayName }}" />
+            </div>
+        {% else %}
+            <input type="hidden" id="author" name="author" value="{{ user.UserId }}" />
+        {% endif %}
+        <div class="form-block">
+            <label>Co-Authors:</label>
+            {% if canSetCoAuthors %}
+                <input type="text" id="coauthor-field" name="coauthor-field" value="" />
+            {% endif %}
+            <ul id="coauthor-list">
+            </ul>
+        </div>
+        <div class="form-block">
             <label>Summary:</label>
             <textarea id="summary" name="summary">
                 {% autoescape false %}
                     {{ formstory.Summary }}
                 {% endautoescape %}
             </textarea>
-        </p>
-        <p>
-            <label>Rating: </label>
+        </div>
+        <div class="form-block">
+            <label>Rating:</label>
             <select name="rating">
                 {# Obfuscate database values #}
                 <option value="1"{% if not formstory or formstory.Rating == 'G' %} selected{% endif %}>G</option>
@@ -198,23 +265,23 @@
                     <option value="z"{% if formstory.Featured=="z" %} selected{% endif %}>Retired Bronze</option>
                 </select>
             {% endif %}
-        </p>
+        </div>
         {# TODO: Admin Approval? #}
-        <p>
+        <div class="form-block">
             <label>Story Notes:</label>
             <textarea id="notes" name="notes">
                 {% autoescape false %}
                     {{ formstory.StoryNotes }}
                 {% endautoescape %}
             </textarea>
-        </p>
-        <p>
+        </div>
+        <div class="form-block">
             <label>Story Tags:</label><br />
             <textarea id="tagbox" class="tagbox" name="tags">
                 {{ formstory.tagstring }}
             </textarea>
             <span id="gender-warning" class="tag-warning"><br />Tags should include the character's gender or pairing (e.g. Female, Male/Female, Sexless)</span>
-        </p>
+        </div>
 
         {% if edit and chapters %}
             <input type="submit" name="save" value="Save Changes" />

@@ -84,20 +84,7 @@
             {% if adminLinks|length > 0 %}
                 <br />
             {% endif %}
-            {% for link in adminLinks %}
-                <li>
-                    <form id="{{ link.formId }}-form" action="/user/{{ profile.user.UserId }}/admin/" method="POST" accept-encoding="UTF-8" hidden>
-                        {% for action in link.actions %}
-                            <input type="hidden" name="action[]" value="{{ action }}" />
-                        {% endfor %}
-                    </form>
-                    <a href="/user/{{ profile.user.UserId }}/admin/" onclick="document.getElementById('{{ link.formId }}-form').submit();return false;">
-                        {% autoescape false %}
-                            {{ link.text|replace({' ': '&nbsp;'}) }}  {# Ensure that each action is only one line #}
-                        {% endautoescape %}
-                    </a>
-                </li>
-            {% endfor %}
+            {{ block('admin_link_block') }}
             {% if banLinks|length > 0 %}
                 <br />
                 <script>

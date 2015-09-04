@@ -123,4 +123,7 @@ function AddAdminActionLink(&$admin_links, $actions, $text) {
     $link['text'] = $text;
     $admin_links[] = $link;
 }
+function AddAdminActionLinkBreak(&$admin_links) {
+    $admin_links[] = "break";
+}
 ?>

@@ -37,9 +37,9 @@ $ACTION_KEYS = array(
     "fics" => "FicsPermissions");
 $ALLOWED_CHARS = array(
     "site" => "ARGFOIM",
-    "forums" => "AN",
+    "forums" => "AN",  // TODO: Forums restricted permissions.
     "gallery" => "ACNR",
-    "fics" => "AN");
+    "fics" => "ANR");
 foreach ($actions as $action) {
     foreach ($ACTION_TABLE as $prefix => $table) {
         if (startsWith($action, $prefix)) {

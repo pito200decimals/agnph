@@ -44,3 +44,35 @@ form hr {
 .chapter-row span {
     margin-right: 15px;
 }
+
+.form-block {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+#coauthor-list {
+    list-style: none;
+    padding: 0px;
+}
+
+#coauthor-list > li {
+    display: inline;
+    padding: 0px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+#coauthor-list > li > span {
+    margin: 5px;
+}
+
+.remove-coauthor-button {
+    cursor: pointer;
+}
+
+/* For autocomplete */
+.autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
+.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; cursor: pointer; }
+.autocomplete-selected { background: #F0F0F0; }
+.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+.autocomplete-group { padding: 2px 5px; }
+.autocomplete-group strong { display: block; border-bottom: 1px solid #000; }

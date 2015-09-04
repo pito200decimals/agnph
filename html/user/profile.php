@@ -52,12 +52,14 @@ if (isset($user)) {
         }
     } else {
         AddAdminActionLink($admin_links, array("site=A", "forums=A", "gallery=A", "fics=A"), "Make Site Administrator");
+        AddAdminActionLinkBreak($admin_links);
         // Forums options.
         if ($profile_user['ForumsPermissions'] == 'N') {
             AddAdminActionLink($admin_links, array("site+R", "forums=A"), "Make Forums Moderator");
         } else if ($profile_user['ForumsPermissions'] == 'A') {
             AddAdminActionLink($admin_links, array("site-R", "forums=N"), "Revoke Forums Moderator");
         }
+        AddAdminActionLinkBreak($admin_links);
         // Gallery options.
         if ($profile_user['GalleryPermissions'] == 'R') {
             AddAdminActionLink($admin_links, array("gallery=N"), "Unrestrict Gallery Edits");
@@ -73,8 +75,13 @@ if (isset($user)) {
         } else if ($profile_user['GalleryPermissions'] == 'A') {
             AddAdminActionLink($admin_links, array("site-G", "gallery=N"), "Revoke Gallery Administrator");
         }
+        AddAdminActionLinkBreak($admin_links);
         // Fics options.
-        if ($profile_user['FicsPermissions'] == 'N') {
+        if ($profile_user['FicsPermissions'] == 'R') {
+            AddAdminActionLink($admin_links, array("fics=N"), "Unrestrict Fics Edits");
+            AddAdminActionLink($admin_links, array("site+F", "fics=A"), "Make Fics Administrator");
+        } else if ($profile_user['FicsPermissions'] == 'N') {
+            AddAdminActionLink($admin_links, array("fics=R"), "Restrict Fics Edits");
             AddAdminActionLink($admin_links, array("site+F", "fics=A"), "Make Fics Administrator");
         } else if ($profile_user['FicsPermissions'] == 'A') {
             AddAdminActionLink($admin_links, array("site-F", "fics=N"), "Revoke Fics Administrator");
