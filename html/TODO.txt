@@ -2,14 +2,13 @@ TODOs
 (* = Required for launch, - = Normal priority, X = Scrapped)
 
 == FORUMS ==
-* Admin move threads
 * Quoting
 * Spoiler tags
-* Unread messages
-    - Mark all as unread button
-- Restricted user perms
+* More board management (create, move, group)
+    - Admin control panel
 - Link up news forum to other index pages?
     - Optional large first posts in a thread?
+- Search?
 
 == GALLERY ==
 - Gallery mass tag edits

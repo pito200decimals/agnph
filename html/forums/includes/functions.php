@@ -17,8 +17,8 @@ function CanUserViewBoard($user, $board) {
 }
 function CanUserCreateThread($user, $board) {
     if (!IsUserActivated($user)) return false;
-    if (isset($board['childBoards']) && sizeof($board['childBoards']) > 0) return false;  // Can't post to top-level boards.
     if ($user['ForumsPermissions'] == 'A') return true;
+    if (isset($board['childBoards']) && sizeof($board['childBoards']) > 0) return false;  // Can't post to top-level boards (Although admins can move posts to them).
     if ($board['PrivateBoard'] == 1) return false;
     if ($board['Locked'] == 1) return false;
     return true;
@@ -27,6 +27,7 @@ function CanUserPostToThread($user, $thread) {
     if (!IsUserActivated($user)) return false;
     if ($user['ForumsPermissions'] == 'A') return true;
     if ($thread['Locked']) return false;
+    // Don't check board locked status, as users can still reply to threads in locked boards.
     return true;
 }
 function CanUserEditForumsPost($user, $thread, $post) {
@@ -48,6 +49,11 @@ function CanUserLockOrStickyThread($user) {
     return false;
 }
 function CanUserMoveThread($user) {
+    if (!IsUserActivated($user)) return false;
+    if ($user['ForumsPermissions'] == 'A') return true;
+    return false;
+}
+function CanUserLockBoard($user, $board) {  // Also for marking boards as admin-only private.
     if (!IsUserActivated($user)) return false;
     if ($user['ForumsPermissions'] == 'A') return true;
     return false;
@@ -173,7 +179,7 @@ function GetPostsPerPageInThread() {
 
 function UpdateThreadStats($tid) {
     // Update # of replies, and last post date.
-    if (!sql_query_into($result, "SELECT COUNT(*) AS C FROM ".FORUMS_POST_TABLE." WHERE (PostId=$tid AND IsThread=1) OR (ParentId=$tid AND IsThread=0);", 1)) return;
+    if (!sql_query_into($result, "SELECT COUNT(*) AS C FROM ".FORUMS_POST_TABLE." WHERE (ParentId=$tid AND IsThread=0);", 1)) return;
     $replies = $result->fetch_assoc()['C'];
     if (!sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE (PostId=$tid AND IsThread=1) OR (ParentId=$tid AND IsThread=0) ORDER BY PostDate DESC, PostId DESC LIMIT 1;", 1)) return;
     $lastDate = $result->fetch_assoc()['PostDate'];

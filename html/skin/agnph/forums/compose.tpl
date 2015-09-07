@@ -3,6 +3,9 @@
 {% block styles %}
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/forums/style.css" />
     <style>
+        .form-block {
+            margin: 5px;
+        }
     </style>
 {% endblock %}
 {% block scripts %}
@@ -34,35 +37,33 @@
     <form method="POST" accept-encoding="UTF-8">
         <input type="hidden" name="action" value="{{ action }}" />
         <input type="hidden" name="id" value="{{ id }}" />
-        Title: <input type="text" name="title" value="
-            {% if POST.title %}
-                {{ POST.title }}
-            {% elseif post.Title %}
-                {{ post.Title }}
-            {% elseif thread.Title %}
-                RE: {{ thread.Title }}
-            {% endif %}" required />
-        <textarea id="compose" name="text">
-            {% autoescape false %}
-                {% if POST.text %}
-                    {{ POST.text }}
-                {% elseif post.Text %}
-                    {{ post.Text }}
-                {% endif %}
-            {% endautoescape %}
-        </textarea>
-        {# TODO: Include options like title, sticky, etc #}
-        {% if canLockOrSticky %}
-            <input type="checkbox" name="sticky" value="sticky" {% if POST.sticky %}checked {% elseif post.Sticky %}checked {% endif %}/> Sticky Thread<br />
-            <input type="checkbox" name="locked" value="locked" {% if POST.locked %}checked {% elseif post.Locked %}checked {% endif %}/> Lock Thread<br />
-        {% endif %}
-        {% if canMoveThread %}
-            <select name="move-board">
-                {% for board in allBoards %}
-                    <option value="{{ board.BoardId }}"{% if board.BoardId == post.ParentId %} selected{% endif %}>{% if board.depth > 0 %}{% for depth in 0..board.depth %}&nbsp;&nbsp;{% endfor %}{% endif %}{{ board.Name }}</option>
-                {% endfor %}
-            </select>
-        {% endif %}
+        <div class="form-block">
+            Title: <input type="text" name="title" value="{% if POST.title %}{{ POST.title }}{% elseif post.Title %}{{ post.Title }}{% elseif thread.Title %}RE: {{ thread.Title }}{% endif %}" required />
+        </div>
+        <div class="form-block">
+            <textarea id="compose" name="text">
+                {% autoescape false %}
+                    {% if POST.text %}
+                        {{ POST.text }}
+                    {% elseif post.Text %}
+                        {{ post.Text }}
+                    {% endif %}
+                {% endautoescape %}
+            </textarea>
+        </div>
+        <div class="form-block">
+            {% if canLockOrSticky %}
+                <input type="checkbox" name="sticky" value="sticky" {% if POST.sticky %}checked {% elseif post.Sticky %}checked {% endif %}/> Sticky Thread<br />
+                <input type="checkbox" name="locked" value="locked" {% if POST.locked %}checked {% elseif post.Locked %}checked {% endif %}/> Lock Thread<br />
+            {% endif %}
+            {% if canMoveThread %}
+                <select name="move-board">
+                    {% for board in allBoards %}
+                        <option value="{{ board.BoardId }}"{% if board.BoardId == post.ParentId %} selected{% endif %}>{% if board.depth > 0 %}{% for depth in 0..board.depth %}&nbsp;&nbsp;{% endfor %}{% endif %}{{ board.Name }}</option>
+                    {% endfor %}
+                </select>
+            {% endif %}
+        </div>
         <input type="submit" value="Save" />
     </form>
 {% endblock %}

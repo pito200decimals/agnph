@@ -6,5 +6,9 @@
     {% if board.BoardId != -1 %}
         <h3>{{ board.Name }}</h3>
     {% endif %}
+    {{ block('banner') }}
     {{ block('threadList') }}
+    {{ block('actionbar') }}
+    <hr />
+    {{ block('help_block') }}
 {% endblock %}

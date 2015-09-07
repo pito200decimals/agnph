@@ -16,8 +16,15 @@
 {% block content %}
     <h3>{{ thread.Title }}</h3>
     {{ block('banner') }}
-    <a href="/forums/compose/?action=reply&id={{ thread.ThreadId }}">Reply (TODO)</a>
     {% if thread.posts|length > 0 %}
+        {% if user %}
+            <ul class="forums-actionbar">
+                {% if canReply %}
+                    <li><a href="/forums/compose/?action=reply&id={{ thread.ThreadId }}">Reply</a></li>
+                {% endif %}
+            </ul>
+        {% endif %}
+        <div class="Clear">&nbsp;</div>
         <ul class="comment-list">
             {% for comment in thread.posts %}
                 {{ block('comment') }}

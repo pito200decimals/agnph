@@ -61,6 +61,10 @@ foreach ($posts as &$post) {
     }
 }
 $vars['thread'] = $thread;
+if (isset($user)) {
+    // Set up permissions.
+    $vars['canReply'] = CanUserPostToThread($user, $thread);
+}
 GetBoard($thread['ParentBoardId'], $board);
 // Create a fake "board" for this thread in the breadcrumb.
 $vars['board'] = array(

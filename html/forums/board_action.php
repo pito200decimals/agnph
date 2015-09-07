@@ -1,5 +1,6 @@
 <?php
-// Composes/edits a post/thread.
+// Handles a POST action on a board.
+// URL: /forums/board/{board-name}/
 // URL: /forums/compose/?action={action}&id={id}
 
 include_once("../header.php");
@@ -164,15 +165,15 @@ function HandleEditPost() {
     global $user, $vars;
     if (isset($_POST['title']) &&
         isset($_POST['text'])) {
-
+        
         $sets = array();
         $sanitizedText = GetSanitizedTextTruncated($_POST['text'], MAX_FORUMS_POST_LENGTH);
         $escaped_title = sql_escape($_POST['title']);
         $sets[] = "Title='$escaped_title'";
-
+        
         $escaped_text = sql_escape($sanitizedText);
         $sets[] = "Text='$escaped_text'";
-
+        
         if (CanUserLockOrStickyThread($user)) {
             $sticky = isset($_POST['sticky']) ? "1" : "0";
             $locked = isset($_POST['locked']) ? "1" : "0";

@@ -27,6 +27,7 @@ if ($board_id == -1) {
     if (isset($user)) TagBoardsAsUnread($user, $board);
     $vars['isRoot'] = true;
 } else if (GetBoard($board_id, $board)) {  // Also gets children.
+    HandlePost($board);
     $board_id = $board['BoardId'];  // Get db value.
     if (!(CanGuestViewBoard($board) || (isset($user) && CanUserViewBoard($user, $board)))) {
         RenderErrorPage("Board not found");  // Insufficient permissions.
@@ -50,6 +51,11 @@ if ($board_id == -1) {
     $vars['repliesSortUrl'] = GetURLForSortOrder("replies", "desc");
     $vars['viewsSortUrl'] = GetURLForSortOrder("views", "desc");
     $vars['lastpostSortUrl'] = GetURLForSortOrder("lastpost", "desc");
+    if (isset($user)) {
+        // Set up permissions.
+        $vars['canCreateThread'] = CanUserCreateThread($user, $board);
+        $vars['canLockBoard'] = CanUserLockBoard($user, $board);
+    }
 } else {
     RenderErrorPage("Board not found");
 }
@@ -119,6 +125,39 @@ function GetSortURL($board, $sort) {
         $base_sort_url .= "&order=desc";
     }
     return $base_sort_url;
+}
+
+function HandlePost($board) {
+    global $user;
+    if (!isset($_POST['action'])) return;
+    $action = $_POST['action'];
+    if (!isset($user)) return;
+    if (!CanUserLockBoard($user, $board)) {
+        RenderErrorPage("Not authorized to perform this action");
+    }
+    $bid = $board['BoardId'];
+    switch ($action) {
+        case "lock":
+            sql_query("UPDATE ".FORUMS_BOARD_TABLE." SET Locked=1 WHERE BoardId=$bid;");
+            PostSessionBanner("Board locked", "green");
+            break;
+        case "unlock":
+            sql_query("UPDATE ".FORUMS_BOARD_TABLE." SET Locked=0 WHERE BoardId=$bid;");
+            PostSessionBanner("Board unlocked", "green");
+            break;
+        case "mark-private":
+            sql_query("UPDATE ".FORUMS_BOARD_TABLE." SET PrivateBoard=1 WHERE BoardId=$bid;");
+            PostSessionBanner("Board marked private", "green");
+            break;
+        case "mark-public":
+            sql_query("UPDATE ".FORUMS_BOARD_TABLE." SET PrivateBoard=0 WHERE BoardId=$bid;");
+            PostSessionBanner("Board marked public", "green");
+            break;
+        default:
+            return;
+    }
+    header("Location: ".$_SERVER['HTTP_REFERER']);
+    exit();
 }
 
 ?>

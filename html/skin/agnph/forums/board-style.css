@@ -25,7 +25,7 @@
 }
 .board-stats {
     width: 15%;
-    font-size: 75%;
+    font-size: 80%;
 }
 .board-stats ul {
     list-style: none;
@@ -34,7 +34,7 @@
 }
 .lastpost {
     width: 24%;
-    font-size: 75%;
+    font-size: 80%;
 }
 .lastpost ul {
     list-style: none;
@@ -42,7 +42,7 @@
     margin: 0px;
 }
 .list-table tbody tr td:not(.lastpost) {
-    font-size: 75%;
+    font-size: 80%;
 }
 .list-table .status img {
     max-height: 30px;

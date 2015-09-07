@@ -33,8 +33,8 @@
                     </td>
                     <td class="board-stats">
                         <ul>
-                            <li>Posts: {{ board.NumPosts }}</li>
-                            <li>Threads: {{ board.NumThreads }}</li>
+                            <li>{{ board.NumPosts }} posts</li>
+                            <li>{{ board.NumThreads }} threads</li>
                         </ul>
                     </td>
                     <td class="lastpost">
@@ -55,6 +55,7 @@
 {% use 'forums/view_board_threadlist.tpl' %}
 
 {% block content %}
+    {{ block('banner') }}
     {% if board.BoardId == -1 %}
         {% for board in board.childBoards %}
             {{ _self.boardgroup(board, true) }}
@@ -63,10 +64,9 @@
         {{ _self.boardgroup(board, false) }}
     {% endif %}
     {% if threads|length > 0 %}
-        <hr />
         {{ block('threadList') }}
     {% endif %}
-    <p>
-    TODO: Help block
-    </p>
+    {{ block('actionbar') }}
+    <hr />
+    {{ block('help_block') }}
 {% endblock %}

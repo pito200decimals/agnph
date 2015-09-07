@@ -28,12 +28,15 @@ RewriteRule ^timezone/?$ /timezone.php
 #RewriteRule ^forums/delete/?$ /forums/delete.php
 #RewriteRule ^forums/markallread/(\d+)/?$ /forums/mark_all_read.php?b=$1
 
+# TODO: Adjust this rewrite rule for "forums/"
+RewriteRule ^forums/?$ /forums/view_board.php?board=-1
 RewriteRule ^forums/board/?$ /forums/view_board.php?board=-1
 # Is this needed?
 #RewriteRule ^forums/board/(\d+)/?$ /forums/view_board.php?board=$1&sort=lastpost&order=desc [QSA]
 RewriteRule ^forums/board/([^0-9][^/]*)/?$ /forums/view_board.php?boardname=$1&sort=lastpost&order=desc [QSA]
 RewriteRule ^forums/thread/(\d+)/?$ /forums/view_thread.php?thread=$1 [QSA]
 RewriteRule ^forums/compose/?$ /forums/compose.php [QSA]
+RewriteRule ^forums/mark-all-read/?$ /forums/mark_all_read.php [QSA]
 
 # Rewrites for accounts section
 RewriteRule ^user/(\d+)/?$ /user/profile.php?uid=$1

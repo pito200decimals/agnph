@@ -5,3 +5,33 @@ ul.breadcrumb {
 ul.breadcrumb li {
     display: inline;
 }
+ul.forums-actionbar {
+    display: block;
+    float: right;
+    padding: 10px;
+    list-style: none;
+    margin: 0px;
+}
+ul.forums-actionbar li {
+    float: right;
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 80%;
+}
+.help-block {
+    padding: 10px;
+    background-color: rgb(170,200,255);
+    border-radius: 15px;
+    font-size: 80%;
+}
+.help-block ul {
+    list-style: none;
+    padding: 0px;
+}
+.help-block img {
+    max-height: 30px;
+}
+.icon {
+    max-height: 12px;
+    max-width: 12px;
+}
