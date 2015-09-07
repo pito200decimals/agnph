@@ -5,6 +5,7 @@ include_once("../includes/config.php");
 include_once("../includes/constants.php");
 include_once("../includes/util/core.php");
 include_once("../includes/util/sql.php");
+include_once("../forums/includes/functions.php");
 include_once("../gallery/includes/image.php");
 include_once("../includes/util/file.php");
 include_once("../gallery/includes/functions.php");
@@ -82,16 +83,16 @@ function rand_date() {
 // Populate some threads
 do_or_die(sql_query(
     "INSERT INTO ".FORUMS_BOARD_TABLE."
-    (BoardId, ParentId, Name, Description)
+    (BoardId, ParentId, Name, Description, BoardSortOrder)
     VALUES
-    (1, -1, 'General Lobby', 'General Lobby Description'),
-    (2, -1, 'Creative Lobby', 'Creative Lobby Description'),
-    (3, -1, 'Other Lobby', 'Other Lobby Description'),
-    (4, 1, 'News', 'News Description'),
-    (5, 1, 'Support', 'Support Description'),
-    (6, 2, 'Writing', 'Writing Description'),
-    (7, 2, 'Art', 'Art Description'),
-    (8, 3, 'Links', 'Links Description');"));
+    (1, -1, 'General Lobby', 'General Lobby Description', 0),
+    (2, -1, 'Creative Lobby', 'Creative Lobby Description', 1),
+    (3, -1, 'Other Lobby', 'Other Lobby Description', 2),
+    (4, 1, 'News', 'News Description', 0),
+    (5, 1, 'Support', 'Support Description', 1),
+    (6, 2, 'Writing', 'Writing Description', 0),
+    (7, 2, 'Art', 'Art Description', 1),
+    (8, 3, 'Links', 'Links Description', 0);"));
 do_or_die(sql_query(
     "INSERT INTO ".FORUMS_POST_TABLE."
     (PostId, UserId, PostDate, ParentId, IsThread, Title, Text)
@@ -107,7 +108,20 @@ do_or_die(sql_query(
     (9, 1, ".rand_date().", 1, 0, 'RE: Title of thread 1', 'Content of post 9'),
     (10, 2, ".rand_date().", 1, 0, 'RE: Title of thread 1', 'Content of post 10'),
     (11, 3, ".rand_date().", 4, 1, 'Title of thread 2', 'Content of post 11'),
-    (12, 1, ".rand_date().", 5, 1, 'Title of thread 3', 'Content of post 12');"));
+    (12, 1, ".rand_date().", 5, 1, 'Title of thread 3', 'Content of post 12'),
+    (13, 1, ".rand_date().", 1, 1, 'Title of thread 4', 'Content of post 13');"));
+UpdateThreadStats(1);
+UpdateThreadStats(11);
+UpdateThreadStats(12);
+UpdateThreadStats(13);
+UpdateBoardStats(1);
+UpdateBoardStats(2);
+UpdateBoardStats(3);
+UpdateBoardStats(4);
+UpdateBoardStats(5);
+UpdateBoardStats(6);
+UpdateBoardStats(7);
+UpdateBoardStats(8);
 
 function WriteBio($uid, $bio) {
     $file = fopen("../user/data/bio/$uid.txt", "w");

@@ -1,0 +1,49 @@
+.board-group {
+    width: 100%;
+    padding: 10px;
+    border-spacing: 2px;
+    background-color: rgb(170,200,255);
+    margin-bottom: 5px;
+    border-radius: 15px;
+}
+.board-group-title {
+    font-weight: bold;
+    font-size: 110%;
+}
+.board-row {
+}
+.board-row td {
+    padding: 5px;
+    background-color: rgb(191,223,255);
+}
+.status {
+    width: 6%;
+    text-align: center;
+}
+.board-desc {
+
+}
+.board-stats {
+    width: 15%;
+    font-size: 75%;
+}
+.board-stats ul {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+}
+.lastpost {
+    width: 24%;
+    font-size: 75%;
+}
+.lastpost ul {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+}
+.list-table tbody tr td:not(.lastpost) {
+    font-size: 75%;
+}
+.list-table .status img {
+    max-height: 30px;
+}

@@ -328,8 +328,8 @@ a:hover {
         min-height: inherit;
     }
     #site-navbar-container {
-            width: 100%;
-            min-width: 100%;
+        width: 100%;
+        min-width: 100%;
     }
     .iterator a {
         padding: 13px 18px;

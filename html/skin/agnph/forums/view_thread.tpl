@@ -20,9 +20,6 @@
     {% if thread.posts|length > 0 %}
         <ul class="comment-list">
             {% for comment in thread.posts %}
-                {% if comment.unread %}
-                    [UNREAD]
-                {% endif %}
                 {{ block('comment') }}
             {% endfor %}
         </ul>

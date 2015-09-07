@@ -23,39 +23,48 @@ if ($board_id == -1) {
     $board = array();
     $board['BoardId'] = -1;
     InitBoardChildren($board);
+    FillBoardLastPostStats($board);
     if (isset($user)) TagBoardsAsUnread($user, $board);
     $vars['isRoot'] = true;
-} else if (GetBoard($board_id, $board)) {
+} else if (GetBoard($board_id, $board)) {  // Also gets children.
     $board_id = $board['BoardId'];  // Get db value.
     if (!(CanGuestViewBoard($board) || (isset($user) && CanUserViewBoard($user, $board)))) {
         RenderErrorPage("Board not found");  // Insufficient permissions.
     }
-    if (sizeof($board['childBoards']) == 0) {
-        // Fetch and display threads.
-        $items_per_page = GetThreadsPerPageInBoard();
-        $sort_order = GetThreadSortOrder();
-        CollectItems(FORUMS_POST_TABLE, "WHERE ParentId=$board_id AND IsThread=1 ORDER BY Sticky DESC, $sort_order", $threads, $items_per_page, $iterator);
-        InitPosters($threads);
-        if (isset($user)) TagThreadsAsUnread($user, $threads);
-        $vars['board'] = $board;
-        $vars['threads'] = $threads;
-        $vars['iterator'] = $iterator;
-        if (isset($_GET['sort'])) $vars['sortParam'] = $_GET['sort'];
-        if (isset($_GET['order'])) $vars['orderParam'] = $_GET['order'];
-        $vars['titleSortUrl'] = GetURLForSortOrder("title", "asc");
-        $vars['repliesSortUrl'] = GetURLForSortOrder("replies", "desc");
-        $vars['viewsSortUrl'] = GetURLForSortOrder("views", "desc");
-        $vars['lastpostSortUrl'] = GetURLForSortOrder("lastpost", "desc");
-        RenderPage("forums/view_board_threads.tpl");
-        return;
+    FillBoardLastPostStats($board);
+    if (isset($user)) TagBoardsAsUnread($user, $board);
+    // Fetch and display threads.
+    $items_per_page = GetThreadsPerPageInBoard();
+    $sort_order = GetThreadSortOrder();
+    CollectItems(FORUMS_POST_TABLE, "WHERE ParentId=$board_id AND IsThread=1 ORDER BY Sticky DESC, $sort_order", $threads, $items_per_page, $iterator);
+    InitPosters($threads);
+    if (isset($user)) TagThreadsAsUnread($user, $threads);
+    foreach ($threads as &$thread) {
+        $thread['lastPost'] = GetLastPostInThread($thread['PostId']);
     }
+    $vars['threads'] = $threads;
+    $vars['iterator'] = $iterator;
+    if (isset($_GET['sort'])) $vars['sortParam'] = $_GET['sort'];
+    if (isset($_GET['order'])) $vars['orderParam'] = $_GET['order'];
+    $vars['titleSortUrl'] = GetURLForSortOrder("title", "asc");
+    $vars['repliesSortUrl'] = GetURLForSortOrder("replies", "desc");
+    $vars['viewsSortUrl'] = GetURLForSortOrder("views", "desc");
+    $vars['lastpostSortUrl'] = GetURLForSortOrder("lastpost", "desc");
 } else {
     RenderErrorPage("Board not found");
 }
 // Show lobby of boards.
 $vars['board'] = $board;
-RenderPage("forums/view_board_boards.tpl");
+if (sizeof($board['childBoards']) == 0) {
+    RenderPage("forums/view_board_threads.tpl");
+} else {
+    RenderPage("forums/view_board_boards.tpl");
+}
 return;
+
+function GetBoardStats(&$boardTree) {
+
+}
 
 function GetThreadSortOrder() {
     $order_clause = "EditDate DESC";

@@ -73,7 +73,7 @@ function UnsetCookies() {
 }
 
 
-function FormatDate($epoch, $format = FORUMS_DATE_FORMAT) {
+function FormatDate($epoch, $format = DEFAULT_DATE_FORMAT) {
     global $user;
     $offset = 0;
     if (isset($user)) {

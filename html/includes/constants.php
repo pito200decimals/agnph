@@ -100,6 +100,7 @@ define("BASE_SKIN", "agnph");
 define("REGISTER_DISCLAIMER_KEY", "RegisterDisclaimer");
 define("SHORT_BAN_DURATION_KEY", "UserShortBanDuration");
 define("DEFAULT_SHORT_BAN_DURATION", 7 * 24 * 60 * 60);  // 7 days.
+define("DEFAULT_DATE_FORMAT", "Y-m-d H:i:s");
 // Site security-related timeouts.
 define("REGISTER_ACCOUNT_HUMAN_READABLE_STRING", "24 hours");  // 24 hours.
 define("REGISTER_ACCOUNT_SQL_EVENT_DURATION", "24 HOUR");
@@ -110,7 +111,7 @@ define("DEFAULT_EMAIL_EXPIRE_TIMESTAMP_DURATION", 15*60);
 define("ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE", 7 * 24 * 60 * 60);  // 7 days.
 
 // Forums-related
-define("FORUMS_DATE_FORMAT", "Y-m-d H:i:s");
+define("FORUMS_DATE_FORMAT", "M d, Y h:i:s A");
 define("MAX_FORUMS_SIGNATURE_LENGTH", 1024);
 define("MAX_FORUMS_THREADS_PER_PAGE", 100);
 define("MAX_FORUMS_POSTS_PER_PAGE", 50);

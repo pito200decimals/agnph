@@ -114,6 +114,10 @@ do_or_die(sql_query(
         PrivateBoard TINYINT(1) DEFAULT 0 NOT NULL,
         Locked TINYINT(1) DEFAULT 0 NOT NULL,
         BoardSortOrder INT(11) DEFAULT 0 NOT NULL,
+        NumPosts INT(11) NOT NULL,
+        NumThreads INT(11) NOT NULL,
+        LastPostId INT(11) NOT NULL,
+        LastPostDate INT(11) NOT NULL,
         PRIMARY KEY(BoardId)
     ) DEFAULT CHARSET=utf8;"));
 // Post table. Contains both threads and posts. Threads are equal to the first post in the thread.

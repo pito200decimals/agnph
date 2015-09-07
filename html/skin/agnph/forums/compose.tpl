@@ -56,6 +56,13 @@
             <input type="checkbox" name="sticky" value="sticky" {% if POST.sticky %}checked {% elseif post.Sticky %}checked {% endif %}/> Sticky Thread<br />
             <input type="checkbox" name="locked" value="locked" {% if POST.locked %}checked {% elseif post.Locked %}checked {% endif %}/> Lock Thread<br />
         {% endif %}
+        {% if canMoveThread %}
+            <select name="move-board">
+                {% for board in allBoards %}
+                    <option value="{{ board.BoardId }}"{% if board.BoardId == post.ParentId %} selected{% endif %}>{% if board.depth > 0 %}{% for depth in 0..board.depth %}&nbsp;&nbsp;{% endfor %}{% endif %}{{ board.Name }}</option>
+                {% endfor %}
+            </select>
+        {% endif %}
         <input type="submit" value="Save" />
     </form>
 {% endblock %}

@@ -9,6 +9,7 @@ TODOs
     - Mark all as unread button
 - Restricted user perms
 - Link up news forum to other index pages?
+    - Optional large first posts in a thread?
 
 == GALLERY ==
 - Gallery mass tag edits
@@ -30,6 +31,7 @@ X Custom swf/webm thumbs when parent is set to image.
 == FICS ==
 - Index page, including news and featured stories, perhaps random selection
 - RSS Feed?
+- Fix stars spacing CSS
 X Author/Story following?
 X Ability to subscribe for email/PM notifications (for your stories and watching others)
 X Breakdown of views per-chapter

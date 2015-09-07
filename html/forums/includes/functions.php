@@ -47,9 +47,15 @@ function CanUserLockOrStickyThread($user) {
     if ($user['ForumsPermissions'] == 'A') return true;
     return false;
 }
+function CanUserMoveThread($user) {
+    if (!IsUserActivated($user)) return false;
+    if ($user['ForumsPermissions'] == 'A') return true;
+    return false;
+}
 
 // Fetches the board if it exists. Returns true if the board was found.
 function GetBoard($board_id, &$ret_board) {
+    // TODO: Reduce # of sql queries.
     global $user;
     $escaped_board_id = sql_escape($board_id);
     if (sql_query_into($result, "SELECT * FROM ".FORUMS_BOARD_TABLE." WHERE BoardId='$escaped_board_id';", 1)) {
@@ -68,20 +74,30 @@ function GetBoard($board_id, &$ret_board) {
 }
 
 function InitBoardChildren(&$board) {
+    // TODO: Reduce # of sql queries.
     global $user;
     $board_id = $board['BoardId'];
     $childBoards = array();
     if (sql_query_into($result, "SELECT * FROM ".FORUMS_BOARD_TABLE." WHERE ParentId=$board_id ORDER BY BoardSortOrder ASC, BoardId ASC;", 1)) {
         while ($row = $result->fetch_assoc()) {
             if (CanGuestViewBoard($row) || (isset($user) && CanUserViewBoard($user, $row))) {
-                InitBoardChildren($row);
                 $childBoards[] = $row;
             }
+        }
+        usort($childBoards, function($b1, $b2) {
+            $order = $b1['BoardSortOrder'] - $b2['BoardSortOrder'];
+            if ($order != 0) return $order;
+            return strcmp($b1['Name'], $b2['Name']);
+        });
+        foreach ($childBoards as &$cb) {
+            InitBoardChildren($cb);
         }
     }
     $board['childBoards'] = $childBoards;
 }
+
 function InitBoardParents(&$board) {
+    // TODO: Reduce # of sql queries.
     $parent_id = $board['ParentId'];
     if ($parent_id != -1 && sql_query_into($result, "SELECT * FROM ".FORUMS_BOARD_TABLE." WHERE BoardId=$parent_id;", 1)) {
         $parent = $result->fetch_assoc();
@@ -166,6 +182,101 @@ function UpdateThreadStats($tid) {
 
 function UpdateBoardStats($bid) {
     // TODO, when stats are supported for boards.
+    $numPosts = 0;
+    $numThreads = 0;
+    $lastPostId = -1;
+    $lastPostDate = 0;
+    // Get stats from threads.
+    if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE IsThread=1 AND ParentId=$bid;", 1)) {
+        $threads = array();
+        while ($row = $result->fetch_assoc()) {
+            $tid = $row['PostId'];
+            $threads[] = $tid;
+            $numThreads++;
+        }
+        $joined = implode(",", $threads);
+        if (sizeof($threads) > 0 && sql_query_into($result, "SELECT COUNT(*) AS C FROM ".FORUMS_POST_TABLE." WHERE IsThread=0 AND ParentId IN ($joined);")) {
+            $numPosts += $result->fetch_assoc()['C'];
+        }
+        $numPosts += $numThreads;
+        if (sizeof($threads) > 0 && sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE (IsThread=1 AND PostId IN ($joined)) OR (IsThread=0 AND ParentId IN ($joined)) ORDER BY PostDate DESC LIMIT 1;", 1)) {
+            $row = $result->fetch_assoc();
+            $lastPostId = (int)$row['PostId'];
+            $lastPostDate = (int)$row['PostDate'];
+        }
+    }
+    // Get stats from boards.
+    $currBoard = null;
+    if (sql_query_into($result, "SELECT * FROM ".FORUMS_BOARD_TABLE." WHERE BoardId=$bid OR ParentId=$bid;", 1)) {
+        while ($row = $result->fetch_assoc()) {
+            if ($row['BoardId'] == $bid) {
+                $currBoard = $row;
+            } else {
+                $numPosts += $row['NumPosts'];
+                $numThreads += $row['NumThreads'];
+            }
+            if ((int)$row['LastPostDate'] > $lastPostDate) {
+                $lastPostId = (int)$row['LastPostId'];
+                $lastPostDate = (int)$row['LastPostDate'];
+            }
+        }
+    }
+    sql_query("UPDATE ".FORUMS_BOARD_TABLE." SET NumPosts=$numPosts, NumThreads=$numThreads, LastPostId=$lastPostId, LastPostDate=$lastPostDate WHERE BoardId=$bid;");
+    // Update parent as well
+    if ($currBoard != null) {
+        UpdateBoardStats($currBoard['ParentId']);
+    }
+}
+
+function FillBoardLastPostStats(&$board) {
+    $lastPost = null;
+    if (isset($board['childBoards'])) {
+        foreach ($board['childBoards'] as &$cb) {
+            FillBoardLastPostStats($cb);
+            if ($board['BoardId'] != -1 && $cb['LastPostId'] == $board['LastPostId']) {
+                $lastPost = $cb['lastPost'];
+            }
+        }
+    }
+    if ($lastPost == null && $board['BoardId'] != -1) {
+        // Wasn't one of the child post stats, fetch it normally.
+        $last_id = $board['LastPostId'];
+        if ($last_id != -1) {
+            $lastPost = GetLastPost($last_id);
+        }
+    }
+    $board['lastPost'] = $lastPost;
+}
+
+function GetLastPost($pid) {
+    $lastPost = null;
+    if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId=$pid;", 1)) {
+        $post = $result->fetch_assoc();
+        // Get poster.
+        $posts = array();
+        $posts[] = &$post;
+        InitPosters($posts);
+        // Get formatted date.
+        $post['date'] = FormatDate($post['PostDate'], FORUMS_DATE_FORMAT);
+        // Get link.
+        $tid = ($post['IsThread'] == 1 ? $post['PostId'] : $post['ParentId']);
+        $posts_per_page = GetPostsPerPageInThread();
+        if (sql_query_into($result, "SELECT COUNT(*) AS C FROM ".FORUMS_POST_TABLE." WHERE (IsThread=1 AND PostId=$tid) OR (IsThread=0 AND ParentId=$tid);", 1)) {
+            // Only care about count, as last post is always the last one.
+            $count = $result->fetch_assoc()['C'];
+            $page = floor((int)($count + $posts_per_page - 1) / (int)$posts_per_page);
+            $post['url'] = "/forums/thread/$tid/?page=$page#p$pid";
+        }
+        $lastPost = $post;
+    }
+    return $lastPost;
+}
+
+function GetLastPostInThread($tid) {
+    if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE (IsThread=1 AND PostId=$tid) OR (IsThread=0 AND ParentId=$tid) ORDER BY PostDate DESC LIMIT 1;", 1)) {
+        return GetLastPost($result->fetch_assoc()['PostId']);
+    }
+    return null;
 }
 
 function GetMixedUnreadPostIds($user) {
@@ -251,7 +362,7 @@ function TagBoardsAsUnread($user, &$board) {
         $bid = $board['BoardId'];
         $has_unread = false;
         if (isset($unread_board_ids[$bid])) $has_unread = true;
-        if (!$has_unread && isset($board['childBoards'])) {
+        if (isset($board['childBoards'])) {
             foreach ($board['childBoards'] as &$b) {
                 if ($MarkBoardRecursive($b)) {
                     $has_unread = true;
