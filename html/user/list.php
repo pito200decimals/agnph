@@ -22,6 +22,7 @@ if (isset($_GET['search'])) {
 } else {
     $search_clause = "Usermode=1";
 }
+// TODO: Hide un-recovered accounts?
 
 if (isset($_GET['sort'])) {
     $order_asc = true;

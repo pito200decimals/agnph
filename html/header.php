@@ -48,6 +48,7 @@ if (isset($user)) {
 }
 
 $vars['debug'] = DEBUG;
+$vars['version'] = VERSION;
 
 // Template engine includes.
 include_once(__DIR__."/../lib/Twig/Autoloader.php");

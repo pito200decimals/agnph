@@ -22,7 +22,7 @@
         $(document).ready(function() {
             {# Set up ajax lookups #}
             $('#to-field').autocomplete({
-                serviceUrl: '/user/find_user_ajax.php',
+                serviceUrl: '/user/search/',
                 onSelect: function(suggestion) {
                     $('#ruid-field').val(suggestion.data);
                 },

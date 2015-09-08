@@ -44,6 +44,11 @@ if ($action == "send") {
             RenderErrorPage("Unable to send message");
         }
 
+        // Ensure recipient exists (Don't send to accounts that have been imported.
+        if (!sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId=$ruid AND Usermode<>0 AND RegisterIP<>'';", 1)) {
+            RenderErrorPage("User does not exist");
+        }
+
         $pmid = $msg['Id'];  // Also equal to $rid.
         $escaped_message = sql_escape($message);
         $now = time();

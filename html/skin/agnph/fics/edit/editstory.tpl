@@ -133,7 +133,7 @@
             {# Set up ajax lookups #}
             {% if canSetAuthor %}
                 $('#author-field').autocomplete({
-                    serviceUrl: '/user/find_user_ajax.php',
+                    serviceUrl: '/user/search/',
                     onSelect: function(suggestion) {
                         $('#author').val(suggestion.data);
                     },
@@ -157,7 +157,7 @@
             {% endif %}
             {% if canSetCoAuthors %}
                 $('#coauthor-field').autocomplete({
-                    serviceUrl: '/user/find_user_ajax.php',
+                    serviceUrl: '/user/search/',
                     onSelect: function(suggestion) {
                         AddCoauthor(suggestion);
                         $('#coauthor-field').val("");

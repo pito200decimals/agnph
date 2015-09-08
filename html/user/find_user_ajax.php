@@ -15,7 +15,8 @@ if (!isset($_GET['query']) || mb_strlen($_GET['query']) < MIN_USER_LOOKUP_PREFIX
 }
 
 $escaped_prefix = sql_escape($_GET['query']);
-if (!sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UPPER(DisplayName) LIKE UPPER('%$escaped_prefix%') ORDER BY DisplayName LIMIT 5;", 0)) {
+$where = "UPPER(DisplayName) LIKE UPPER('%$escaped_prefix%') AND Usermode=1 AND RegisterIP<>''";
+if (!sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE $where ORDER BY DisplayName LIMIT 5;", 0)) {
     AJAXErr();
 }
 $elems = array();

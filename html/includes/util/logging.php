@@ -31,4 +31,14 @@ function RecordUserIP(&$user) {
     }
 }
 
+function LogAction($action) {
+    global $user;
+    if (isset($user)) {
+        $uid = $user['UserId'];
+        $timestamp = time();
+        $escaped_action = sql_escape($action);
+        sql_query("INSERT INTO ".SITE_LOGGING_TABLE." (UserId, Timestamp, Action) VALUES ($uid, $timestamp, '$escaped_action');");
+    }
+}
+
 ?>

@@ -119,25 +119,28 @@
 {% endblock %}
 
 {% block usercontent %}
-    <div class="infoblock">
-        <h3>Bio</h3>
-        <div id="bio-container">
-            {% autoescape false %}
-                {{ profile.user.bio }}
-            {% endautoescape %}
-        </div>
-        {% if canEditBio %}
-            <div id="edit-bio-container">
-                <textarea id="edit-bio-text">
-                    {% autoescape false %}
-                        {{ profile.user.bio }}
-                    {% endautoescape %}
-                </textarea>
+    {% if profile.user.hasBio or canEditBio %}
+        <div class="infoblock">
+            <h3>Bio</h3>
+            <div id="bio-container">
+                {% autoescape false %}
+                    {{ profile.user.bio }}
+                {% endautoescape %}
             </div>
-            <input id="edit-bio-button" class="edit-info-button" type="button" value="Edit" />
-        {% endif %}
-        <div class="Clear">&nbsp;</div>
-    </div>
+            {% if canEditBio %}
+                <div id="edit-bio-container">
+                    <textarea id="edit-bio-text">
+                        {% autoescape false %}
+                            {{ profile.user.bio }}
+                        {% endautoescape %}
+                    </textarea>
+                </div>
+                <input id="edit-bio-button" class="edit-info-button" type="button" value="Edit" />
+            {% endif %}
+            <div class="Clear">&nbsp;</div>
+        </div>
+    {% endif %}
+    {% if profile.user.hasBasicInfo %}
     <div class="infoblock">
         <h3>Basic Info</h3>
         <ul id="basic-info">
@@ -160,6 +163,7 @@
         {% endif %}
         <div class="Clear">&nbsp;</div>
     </div>
+    {% endif %}
     <div class="infoblock">
         <h3>User Statistics</h3>
         <ul id="basic-info">

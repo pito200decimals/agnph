@@ -17,6 +17,7 @@ $uid = $profile_user['UserId'];
 $file_path = SITE_ROOT."user/data/bio/$uid.txt";
 read_file($file_path, $bio_contents) or RenderErrorPage("Error loading profile.");
 $profile_user['bio'] = $bio_contents;
+$profile_user['hasBio'] = (mb_strlen($bio_contents) > 0);
 $profile_user['admin'] = GetAdminBadge($profile_user);
 $profile_user['birthday'] = DateStringToReadableString($profile_user['DOB']);
 // TODO: Show timezone?
@@ -37,11 +38,16 @@ if (isset($user)) {
     $vars['canEditBasicInfo'] = CanUserEditBasicInfo($user, $profile_user);
     $vars['canSeePrivateInfo'] = CanUserSeePrivateInfo($user, $profile_user);
     $vars['canSeeAdminInfo'] = CanUserSeeAdminInfo($user);
-    if (mb_strlen($profile_user['RegisterIP']) == 0 || mb_strpos($profile_user['KnownIPs'], $profile_user['RegisterIP']) !== FALSE) {
-        $profile_user['ips'] = $profile_user['KnownIPs'];
+    // Set up known access IPs.
+    if (mb_strlen($profile_user['KnownIPs']) == 0) {
+        $ips = array();
     } else {
-        $profile_user['ips'] = $profile_user['RegisterIP'].",".$profile_user['KnownIPs'];
+        $ips = explode(",", $profile_user['KnownIPs']);
     }
+    if (mb_strlen($profile_user['RegisterIP']) > 0 && mb_strpos($profile_user['KnownIPs'], $profile_user['RegisterIP']) === FALSE) {
+        $ips[] = $profile_user['RegisterIP'];
+    }
+    $profile_user['ips'] = implode(",", $ips);
     // Set up global admin links.
     $admin_links = array();
     if (contains($profile_user['Permissions'], 'A')) {
@@ -140,6 +146,14 @@ if (isset($user)) {
         }
     }
 }
+
+$profile_user['hasBasicInfo'] = (
+    $profile_user['ShowDOB'] ||
+    mb_strlen($profile_user['Species']) ||
+    mb_strlen($profile_user['Title']) ||
+    mb_strlen($profile_user['Location']) ||
+    mb_strlen($profile_user['gender']) ||
+    (isset($vars['canSeePrivateInfo']) && $vars['canSeePrivateInfo']));
 
 // This is how to output the template.
 RenderPage("user/profile.tpl");

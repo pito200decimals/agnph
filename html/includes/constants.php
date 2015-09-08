@@ -28,7 +28,6 @@ define("FICS_USER_FAVORITES_TABLE", "fics_user_fav");
 define("USER_MAILBOX_TABLE", "user_mail");
 
 // Forums tables.
-define("FORUMS_LOBBY_TABLE", "forums_lobbies");  // TODO: Remove
 define("FORUMS_BOARD_TABLE", "forums_boards");
 define("FORUMS_POST_TABLE", "forums_posts");
 define("FORUMS_UNREAD_POST_TABLE", "forums_unread_post");
@@ -75,6 +74,7 @@ define("MAX_FORUMS_POST_LENGTH", 131072);
 // General constants.
 // Site-related
 define("SITE_DOMAIN", "http://agnph.cloudapp.net");  // TODO: Change on live site.
+define("VERSION", "0.9.1");
 define("MIN_USERNAME_LENGTH", 3);  // Also present in register.tpl
 define("MAX_USERNAME_LENGTH", 24);  // Also present in register.tpl
 define("MIN_PASSWORD_LENGTH", 4);  // Also present in register.tpl
@@ -101,6 +101,7 @@ define("REGISTER_DISCLAIMER_KEY", "RegisterDisclaimer");
 define("SHORT_BAN_DURATION_KEY", "UserShortBanDuration");
 define("DEFAULT_SHORT_BAN_DURATION", 7 * 24 * 60 * 60);  // 7 days.
 define("DEFAULT_DATE_FORMAT", "Y-m-d H:i:s");
+define("IMPORTED_ACCOUNT_USERNAME_SUFFIX", "-imported");  // Normal usernames can't have hyphens.
 // Site security-related timeouts.
 define("REGISTER_ACCOUNT_HUMAN_READABLE_STRING", "24 hours");  // 24 hours.
 define("REGISTER_ACCOUNT_SQL_EVENT_DURATION", "24 HOUR");

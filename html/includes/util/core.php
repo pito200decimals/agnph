@@ -177,6 +177,8 @@ function SetHeaderHighlight() {
         $vars['nav_section'] = "mail";
     } else if (preg_match("#^/user/\d+.*$#", $url)) {
         $vars['nav_section'] = "user";
+    } else if (startsWith($url, "/user/account/link")) {
+        $vars['nav_section'] = "link_account";
     } else if (startsWith($url, "/about")) {
         $vars['nav_section'] = "about";
     } else if (startsWith($url, "/admin")) {

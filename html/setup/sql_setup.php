@@ -26,10 +26,8 @@ include_once(SITE_ROOT."gallery/includes/functions.php");
 sql_query("DROP TABLE ".USER_TABLE.";");
 sql_query("DROP TABLE ".USER_MAILBOX_TABLE.";");
 sql_query("DROP TABLE ".SITE_LOGGING_TABLE.";");
-sql_query("DROP TABLE site_text;");  // TODO: Remove.
 sql_query("DROP TABLE ".SITE_SETTINGS_TABLE.";");
 sql_query("DROP TABLE ".SECURITY_EMAIL_TABLE.";");
-sql_query("DROP TABLE ".FORUMS_LOBBY_TABLE.";");  // TODO: Remove.
 sql_query("DROP TABLE ".FORUMS_BOARD_TABLE.";");
 sql_query("DROP TABLE ".FORUMS_POST_TABLE.";");
 sql_query("DROP TABLE ".FORUMS_USER_PREF_TABLE.";");
@@ -54,7 +52,7 @@ sql_query("DROP TABLE ".FICS_USER_PREF_TABLE.";");
 sql_query("DROP TABLE ".FICS_USER_FAVORITES_TABLE.";");
 sql_query("DROP TABLE ".FICS_TAG_ALIAS_TABLE.";");
 sql_query("DROP TABLE ".FICS_TAG_IMPLICATION_TABLE.";");
-sql_query("DROP TABLE fics_settings;");  // TODO: Remove.
+// NOTE: If you add another user table, make sure to update account migration.
 sql_query("DELETE FROM mysql.event");
 
 // Main user data table. General information that is shared between sections.
@@ -65,8 +63,8 @@ do_or_die(sql_query(
        "UserName VARCHAR(".MAX_USER_NAME_LENGTH.") UNIQUE NOT NULL,
         DisplayName VARCHAR(".MAX_DISPLAY_NAME_LENGTH.") NOT NULL,
         Email VARCHAR(64) NOT NULL,
-        Password CHAR(32) NOT NULL,
-        Usermode INT(11) DEFAULT 0 NOT NULL,".  // -1=Banned, 0=Unactivated, 1=User. Unactivated users do not have anything besides this table entry.
+        Password CHAR(40) NOT NULL,".  // Requires 32 for md5, 40 for sha1 (SMF import)
+       "Usermode INT(11) DEFAULT 0 NOT NULL,".  // -1=Banned, 0=Unactivated, 1=User. Unactivated users do not have anything besides this table entry.
        "Permissions VARCHAR(8) NOT NULL,".  // String of characters, A=Super Admin, R=Forums, G=Gallery, F=Fics, O=Oekaki, I=IRC, M=Minecraft
        "BanReason VARCHAR(256) NOT NULL,
         BanExpireTime INT(11) NOT NULL,".  // Timestamp when ban is lifted. -1 for infinite bans.
@@ -88,7 +86,11 @@ do_or_die(sql_query(
         DisplayNameChangeTime INT(11) DEFAULT 0 NOT NULL,
         RegisterIP VARCHAR(50) NOT NULL,".  // RegisterIP will be empty-string if the user was imported from the old site software.
        "KnownIPs VARCHAR(512) NOT NULL,".  // Allocate 45 + 1 characters for each IP address. Store the past 10 addresses comma-separated.
-       "PRIMARY KEY(UserId)
+       "ImportForumsPassword VARCHAR(40) NOT NULL,
+        ImportGalleryPassword VARCHAR(32) NOT NULL,
+        ImportFicsPassword VARCHAR(32) NOT NULL,
+        ImportOekakiPassword VARCHAR(32) NOT NULL,
+        PRIMARY KEY(UserId)
     ) DEFAULT CHARSET=utf8;"));
 do_or_die(sql_query("SET GLOBAL event_scheduler = ON;"));  // Turn on cleanup scheduler.
 // User biography is stored in text files at /user/bio/{UserId}.txt

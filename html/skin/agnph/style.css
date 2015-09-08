@@ -170,9 +170,11 @@ a:hover {
     padding: 5px;
     display:block;
     text-align:center;
+    font-size: 80%;
 }
 #footer span {
-    display:block;
+    display: inline-block;
+    max-width: 800px;
 }
 #content {
 }

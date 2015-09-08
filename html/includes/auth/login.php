@@ -8,7 +8,7 @@ include_once(__DIR__."/../../header.php");
 // Either way, cookies are set/unset in some way.
 function Login($username, $password) {
     $escapedName = sql_escape($username);
-    if (!sql_query_into($result, "SELECT UserID,UserName,Email,Password FROM ".USER_TABLE." WHERE (UPPER(UserName)=UPPER('$escapedName') OR UPPER(Email)=UPPER('$escapedName')) AND Usermode<>0 LIMIT 1;", 1)) {
+    if (!sql_query_into($result, "SELECT UserID,UserName,Email,Password FROM ".USER_TABLE." WHERE (UPPER(UserName)=UPPER('$escapedName') OR UPPER(Email)=UPPER('$escapedName')) AND Usermode<>0 AND RegisterIP<>'' LIMIT 1;", 1)) {
         return false;
     }
     $usr = $result->fetch_assoc();

@@ -127,7 +127,10 @@
             <div class="Clear" style="display: block">&nbsp;</div>
         </div>
         <div id="footer">
-            <span><small>Copyright AGNPH 2015</small></span>
+            <div><span>© 1996-2015 AGNPH</span> | <span>v{{ version }}</span></div>
+            {# TODO: Links #}
+            <div><span><a href="">Terms of Service</a></span> | <span><a href="">Rules</a></span> | <span><a href="">Contact Us</a></span></div>
+            <div><span><small>All fanworks within are based on Pokémon. Pokémon © Nintendo/Creatures, Inc./GAME FREAK/The Pokémon Company. All work contained within this website are user-submitted, fan-made contributions. No copyright infringement is intended.</small></span></div>
         </div>
     </body>
 </html>

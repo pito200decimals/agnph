@@ -14,6 +14,7 @@ if (!LoadAllUserPreferences($profile_id, $profile_user, true)) RenderErrorPage("
 $profile_user['avatarURL'] = GetAvatarURL($profile_user);
 switch ($profile_user['Gender']) {
     case 'U':
+        $profile_user['gender'] = "";
         break;
     case 'M':
         $profile_user['gender'] = "Male";
