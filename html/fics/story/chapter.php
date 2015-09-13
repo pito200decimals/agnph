@@ -92,8 +92,10 @@ if (isset($user) && CanUserReview($user)) {
 // Increment view count only if not explicitly viewing comments/reviews.
 if (!(isset($_GET['reviews']) || isset($_GET['offset']))) {
     $cid = $chapter['ChapterId'];
-    sql_query("UPDATE ".FICS_CHAPTER_TABLE." SET Views=Views+1 WHERE ChapterId=$cid;");
-    sql_query("UPDATE ".FICS_STORY_TABLE." SET Views=Views+1 WHERE StoryId=$sid;");
+    if (!IsMaintenanceMode()) {
+        sql_query("UPDATE ".FICS_CHAPTER_TABLE." SET Views=Views+1 WHERE ChapterId=$cid;");
+        sql_query("UPDATE ".FICS_STORY_TABLE." SET Views=Views+1 WHERE StoryId=$sid;");
+    }
 }
 
 RenderPage("fics/story/chapter.tpl");

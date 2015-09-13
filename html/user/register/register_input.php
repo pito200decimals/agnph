@@ -10,6 +10,8 @@ include_once(SITE_ROOT."includes/util/html_funcs.php");
 include_once(SITE_ROOT."includes/util/date.php");
 include_once(SITE_ROOT."includes/auth/email_auth.php");
 
+if (IsMaintenanceMode()) PostBanner("Site is in read-only mode, account registration has been disabled", "red", false);
+
 if (isset($user)) {
     header("Location: /");
     exit();
@@ -21,6 +23,7 @@ if (isset($_POST['username']) &&
     isset($_POST['password-confirm']) &&
     isset($_POST['bday']) &&
     isset($_POST['captcha'])) {
+    if (!CanPerformSitePost()) MaintenanceError();
     $success = true;
     // Check username format.
     $username = mb_strtolower($_POST['username']);

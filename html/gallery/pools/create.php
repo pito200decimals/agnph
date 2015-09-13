@@ -8,6 +8,7 @@ if (!isset($user) || !CanUserCreateOrDeletePools($user)) {
     RenderErrorPage("Not authroized to create image pools");
 }
 if (!isset($_POST['search'])) InvalidURL();
+if (!CanPerformSitePost()) MaintenanceError();
 
 $name = $_POST['search'];
 // Strip out _ so that this can be searched for.

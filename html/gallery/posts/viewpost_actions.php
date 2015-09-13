@@ -23,6 +23,7 @@ function HandleEditAction($post) {
         InsufficientPermissionBanner();
         return;
     }
+    if (!CanPerformSitePost()) MaintenanceError();
     if (!isset($_POST) ||
         !isset($_POST['rating']) ||
         mb_strlen($_POST['rating']) != 1 ||

@@ -18,6 +18,7 @@ if (!QuickCanUserUpload($user)) {
     RenderErrorPage("You have reached your upload limit. Please wait for your pending uploads to be approved.");
     return;
 }
+if (!CanPerformSitePost()) MaintenanceError();
 
 if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) || empty($_FILES['file']['name'])) || isset($_POST['source'])) &&
     isset($_POST['tags']) &&

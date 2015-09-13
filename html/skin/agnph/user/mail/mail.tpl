@@ -19,6 +19,12 @@
 {% block usercontent %}
     <h3>Messages</h3>
     {# Display message list. #}
+    <div class="action-bar">
+        <form id="mark-read-form" method="POST" accept-encoding="UTF-8">
+            <input type="hidden" name="action" value="mark-all-read" />
+        </form>
+        <a href="" onclick="document.getElementById('mark-read-form').submit();return false;">Mark All as Read</a>
+    </div>
     <table class="list-table">
         <thead>
             <tr>
@@ -26,18 +32,16 @@
                 <td><div><strong>Date</strong></div></td>
                 <td><div><strong>Subject</strong></div></td>
                 <td><div><strong>To/From</strong></div></td>
-                <td><div><input name="select-all" type="checkbox" /></div></td>
             </tr>
         </thead>
         <tbody>
             {% if messages|length > 0 %}
                 {% for message in messages %}
                     <tr class="{% if message.Status == 'U' %}unread{% endif %}">
-                        <td><div>{% if message.inbox %}INBOX_ICON{% elseif message.outbox %}OUTBOX_ICON{% endif %} {% if message.count > 1 %}({{ message.count }}){% endif %}</div></td>
+                        <td><div>{% if message.inbox %}<img class="mail-icon" src="/images/inbox_icon.png" />{% elseif message.outbox %}<img class="mail-icon" src="/images/outbox_icon.png" />{% endif %} {% if message.count > 1 %}({{ message.count }}){% endif %}</div></td>
                         <td><div>{{ message.date }}</div></td>
                         <td><div><a href="/user/{{ profile.user.UserId }}/mail/message/{{ message.Id }}/">{{ message.Title }}</a></div></td>
                         <td><div><a href="/user/{{ message.toFromUser.UserId }}/">{{ message.toFromUser.DisplayName }}</a></div></td>
-                        <td><div><input type="checkbox" name="" /></div></td>
                     </tr>
                 {% endfor %}
             {% else %}

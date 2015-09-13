@@ -67,7 +67,9 @@ CollectItems(USER_TABLE, "WHERE $search_clause ORDER BY $order_clause", $account
 $now = time();
 foreach ($accounts as &$account) {
     $account['dateJoined'] = FormatDate($account['JoinTime'], USERLIST_DATE_FORMAT);
-    if ($account['LastVisitTime'] + CONSIDERED_ONLINE_DURATION > $now) $account['online'] = true;
+    if ($account['LastVisitTime'] + CONSIDERED_ONLINE_DURATION > $now && !$account['HideOnlineStatus']) {
+        $account['online'] = true;
+    }
     $account['administrator'] = (strlen($account['Permissions']) > 0);  // TODO: Also use this field to display un-recovered accounts?
     $account['avatarURL'] = GetAvatarURL($account);
 }

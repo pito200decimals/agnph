@@ -8,7 +8,7 @@ include_once(SITE_ROOT."includes/tagging/tag_functions.php");
 if (!isset($user)) {
     return;
 }
-
+if (!CanPerformSitePost()) MaintenanceError();
 if (!isset($_POST['sid'])) return;
 $sid = $_POST['sid'];
 if (!isset($_POST['title'])) return;

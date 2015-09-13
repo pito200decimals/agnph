@@ -13,8 +13,24 @@ ComputePageAccess($user);
 if (!$vars['canAdminSite']) {
     DoRedirect();
 }
+$vars['is_maintenance_mode'] = IsMaintenanceMode();
 
-RenderPage("admin/base.tpl");
+if (isset($_POST['submit'])) {
+    HandlePost();
+    PostSessionBanner("Settings changed", "green");
+    header("Location: ".$_SERVER['HTTP_REFERER']);
+    exit();
+}
+
+RenderPage("admin/site/site.tpl");
 return;
 
+function HandlePost() {
+    if (isset($_POST['maintenance-mode'])) {
+        SetSiteSetting(MAINTENANCE_MODE_KEY, "true");
+    } else {
+        SetSiteSetting(MAINTENANCE_MODE_KEY, "false");
+    }
+    
+}
 ?>

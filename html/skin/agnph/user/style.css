@@ -49,6 +49,10 @@
     border-radius: 5px;
     margin-top: 5px;
 }
+.expand-click {
+    padding-top: 5px;
+    cursor: pointer;
+}
 
 ul#basic-info {
     list-style: none;
@@ -73,7 +77,6 @@ ul#basic-info li {
 
 .twiddle {
     float: left;
-    cursor: pointer;
     display: block;
     width: 20px;
     text-align: center;

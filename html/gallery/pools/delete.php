@@ -8,6 +8,7 @@ if (!isset($user) || !CanUserCreateOrDeletePools($user)) {
     RenderErrorPage("Not authroized to delete image pools");
 }
 if (!isset($_POST['pool'])) InvalidURL();
+if (!CanPerformSitePost()) MaintenanceError();
 
 $pool_id = $_POST['pool'];
 $escaped_pool_id = $pool_id;

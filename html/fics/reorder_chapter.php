@@ -10,6 +10,7 @@ include_once(SITE_ROOT."fics/includes/functions.php");
 if (!isset($user)) {
     AJAXErr();
 }
+if (!CanPerformSitePost()) AJAXErr();
 CheckNumericAndSave('sid', $sid);
 CheckNumericAndSave('oldnum', $oldchapternum);
 CheckNumericAndSave('newnum', $newchapternum);

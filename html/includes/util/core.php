@@ -118,14 +118,17 @@ function GetWithDefault($array, $key, $default) {
 }
 
 // Gets or sets a site setting value.
-function GetSiteSetting($key, $default_value) {
-    if (sql_query_into($result, "SELECT * FROM ".SITE_SETTINGS_TABLE.";", 1)) {
-        while ($row = $result->fetch_assoc()) {
-            if ($row['Name'] == $key) {
-                return $row['Value'];
+function GetSiteSetting($key, $default_value, $fresh=false) {
+    static $data_table = null;
+    if ($data_table == null || $fresh) {
+        $data_table = array();
+        if (sql_query_into($result, "SELECT * FROM ".SITE_SETTINGS_TABLE.";", 1)) {
+            while ($row = $result->fetch_assoc()) {
+                $data_table[$row['Name']] = $row['Value'];
             }
         }
     }
+    if (isset($data_table[$key])) return $data_table[$key];
     return $default_value;
 }
 function SetSiteSetting($key, $value) {
@@ -158,6 +161,27 @@ function InvalidURL() {
     header("HTTP/1.0 404 Not Found");
     // TODO: Custom 404 page here.
     exit();
+}
+
+function MaintenanceError() {
+    RenderErrorPage("Site is in read-only mode");
+}
+
+function IsMaintenanceMode() {
+    return (GetSiteSetting(MAINTENANCE_MODE_KEY, "false") == "true");
+}
+
+function CanPerformSitePost() {
+    global $user;
+    if (!isset($user)) return false;
+    if (contains($user['Permissions'], 'A')) return true;
+    if (IsMaintenanceMode()) return false;
+    return true;
+}
+function CanLogin($user) {
+    if (contains($user['Permissions'], 'A')) return true;
+    if (IsMaintenanceMode()) return false;
+    return true;
 }
 
 function SetHeaderHighlight() {

@@ -2,13 +2,14 @@
 // Page for logging in to a user's account.
 // URL: /login/ => /login.php
 
-define("SITE_ROOT",  __DIR__."/");
+include ("header.php");
 
 // TODO: Remove after site testing is complete.
 if (isset($_GET['debug']) && $_GET['debug'] == true) {
     $_POST['username'] = "User1";
     $_POST['password'] = "Password 1";
 }
+if (IsMaintenanceMode()) PostBanner("Site is in read-only mode, login has been disabled", "red", false);
 
 if (isset($_POST['username']) && isset($_POST['password'])) {
     include_once(SITE_ROOT."includes/auth/login.php");

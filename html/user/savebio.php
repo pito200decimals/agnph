@@ -20,6 +20,7 @@ if (!isset($user) || !CanUserEditBio($user, $profile_user)) {
     AJAXErr();
 }
 if (!isset($_POST['bio'])) AJAXErr();
+if (!CanPerformSitePost()) AJAXErr();
 
 $input = $_POST['bio'];
 $sanitized_input = SanitizeHTMLTags($input, DEFAULT_ALLOWED_TAGS);

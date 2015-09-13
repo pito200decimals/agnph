@@ -75,6 +75,7 @@ $vars['iterator'] = $iterator;
 
 HandlePost();  // Handle post this late so we have thread already initialized.
 
+
 // Update view count.
 UpdateStatistics($thread);
 
@@ -88,6 +89,7 @@ return;
 
 function HandlePost() {
     global $user, $board, $thread, $posts;
+    if (!CanPerformSitePost()) MaintenanceError();
     if (isset($user) && isset($_POST['action']) && isset($_POST['id']) && is_numeric($_POST['id'])) {
         // Try to perform action.
         $action_done = false;
@@ -157,6 +159,8 @@ function GetPostsById($posts) {
 }
 
 function UpdateStatistics($thread) {
-    sql_query("UPDATE ".FORUMS_POST_TABLE." SET Views=Views+1 WHERE PostId=".$thread['ThreadId'].";");
+    if (!IsMaintenanceMode()) {
+        sql_query("UPDATE ".FORUMS_POST_TABLE." SET Views=Views+1 WHERE PostId=".$thread['ThreadId'].";");
+    }
 }
 ?>

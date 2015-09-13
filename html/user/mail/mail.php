@@ -22,6 +22,17 @@ if (!CanUserViewPMs($user, $profile_user)) {
 }
 
 $uid = $profile_user['UserId'];
+if (isset($_POST['action'])) {
+    if (!CanPerformSitePost()) MaintenanceError();
+    switch ($_POST['action']) {
+        case "mark-all-read":
+            sql_query("UPDATE ".USER_MAILBOX_TABLE." SET Status='R' WHERE RecipientUserId=$uid AND Status='U';");
+            header("Location: ".$_SERVER['HTTP_REFERER']);
+            exit();
+        default:
+            break;
+    }
+}
 $messages = GetMessages($profile_user);
 if ($user['GroupMailboxThreads']) {
     // Bundle together messages of the same conversation.

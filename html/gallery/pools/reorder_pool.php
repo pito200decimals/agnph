@@ -10,6 +10,7 @@ if (!isset($user) || !CanUserChangePoolOrdering($user)) {
 if (!isset($_GET['pid']) || !is_numeric($_GET['pid']) || $_GET['pid'] <= 0 || !isset($_POST['values'])) {
     AJAXErr();
 }
+if (!CanPerformSitePost()) AJAXErr();
 
 foreach ($_POST['values'] as $elem) {
     $post_id = sql_escape($elem['postid']);

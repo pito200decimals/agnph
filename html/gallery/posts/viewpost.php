@@ -24,6 +24,7 @@ $post = GetPost($pid) or RenderErrorPage("Post not found");
 
 // Process actions.
 if (isset($_POST['action'])) {
+    if (!CanPerformSitePost()) MaintenanceError();
     // Post actions cannot occur when not logged in.
     if (!isset($user)) {
         PostBanner("Must be logged in to perform action", "red");
@@ -127,7 +128,9 @@ if (isset($user)) {
 $post['NumViews']++;
 $vars['post'] = &$post;
 RenderPage("gallery/posts/viewpost.tpl");
-sql_query("UPDATE ".GALLERY_POST_TABLE." SET NumViews = NumViews + 1 WHERE PostId=$pid;");
+if (!IsMaintenanceMode()) {
+    sql_query("UPDATE ".GALLERY_POST_TABLE." SET NumViews = NumViews + 1 WHERE PostId=$pid;");
+}
 return;
 
 function GetPost(&$pid) {

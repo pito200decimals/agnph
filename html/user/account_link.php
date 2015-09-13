@@ -35,70 +35,44 @@ function success($msg) {
 }
 
 function HandlePost() {
+    if (!CanPerformSitePost()) MaintenanceError();
     $service = $_POST['service'];
     switch ($service) {
         case "forums":
-            HandleForumsPost();
+            ProcessPost("SMF_sha", "forums", "ImportForumsPassword");
             break;
         case "gallery":
-            HandleGalleryPost();
+            // HandleGalleryPost();
             break;
         case "fics":
-            HandleFicsPost();
+            ProcessPost(function ($u, $p) { return md5($p); }, "fics", "ImportFicsPassword");
             break;
         case "oekaki":
+            ProcessPost(function($u, $p) { return crypt($p, OEKAKI_CRYPT_SALT); }, "oekaki", "ImportOekakiPassword");
             break;
         default:
             return;
     }
 }
 
-function HandleForumsPost() {
-    if (isset($_POST['forums-username']) && isset($_POST['forums-password'])) {
+function ProcessPost($hash_fn, $section, $field) {
+    if (isset($_POST["$section-username"]) && isset($_POST["$section-password"])) {
         // Password is simply md5-hashed in database.
-        $username = $_POST['forums-username'];
+        $username = $_POST["$section-username"];
         $escaped_username = sql_escape($username);
-        $password = $_POST['forums-password'];
-        $hashed_password = SMF_sha($password, $username);
+        $password = $_POST["$section-password"];
+        $hashed_password = $hash_fn($username, $password);
         if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UPPER(Username)=UPPER('$escaped_username".IMPORTED_ACCOUNT_USERNAME_SUFFIX."') AND RegisterIP='' LIMIT 1;", 1)) {
-            $fics_user = $result->fetch_assoc();
-            $expected_hashed_password = $fics_user['ImportForumsPassword'];
+            $old_user = $result->fetch_assoc();
+            $expected_hashed_password = $old_user[$field];
             if ($hashed_password == $expected_hashed_password) {
-                MigrateAccount($fics_user['UserId']);
-                success("Account linked successfully");
-            } else {
-                err("Invalid password (Got $hashed_password, expected $expected_hashed_password)");
-            }
-        } else {
-            err("Forums account not found");
-        }
-    } else {
-        // Invalid parameters, return and raise error later.
-    }
-}
-
-function HandleGalleryPost() {
-
-}
-
-function HandleFicsPost() {
-    if (isset($_POST['fics-username']) && isset($_POST['fics-password'])) {
-        // Password is simply md5-hashed in database.
-        $username = $_POST['fics-username'];
-        $escaped_username = sql_escape($username);
-        $password = $_POST['fics-password'];
-        $hashed_password = md5($password);
-        if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UPPER(Username)=UPPER('$escaped_username".IMPORTED_ACCOUNT_USERNAME_SUFFIX."') AND RegisterIP='' LIMIT 1;", 1)) {
-            $fics_user = $result->fetch_assoc();
-            $expected_hashed_password = $fics_user['ImportFicsPassword'];
-            if ($hashed_password == $expected_hashed_password) {
-                MigrateAccount($fics_user['UserId']);
+                MigrateAccount($old_user['UserId']);
                 success("Account linked successfully");
             } else {
                 err("Invalid password");
             }
         } else {
-            err("Fics account not found");
+            err(ucfirst($section)." account not found");
         }
     } else {
         // Invalid parameters, return and raise error later.
@@ -186,7 +160,7 @@ function un_htmlspecialchars($string) {
 		$translation = array_flip(get_html_translation_table(HTML_SPECIALCHARS, ENT_QUOTES)) + array('&#039;' => '\'', '&nbsp;' => ' ');
 	return strtr($string, $translation);
 }
-function SMF_sha($post_password, $member_name) {
+function SMF_sha($member_name, $post_password) {
     return sha1(strtolower($member_name) . un_htmlspecialchars($post_password));
 }
 

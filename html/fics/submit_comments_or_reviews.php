@@ -7,6 +7,7 @@ include_once(SITE_ROOT."includes/util/sql.php");
 include_once(SITE_ROOT."includes/util/html_funcs.php");
 
 if (!isset($user)) return;
+if (!CanPerformSitePost()) MaintenanceError();
 if (!isset($_POST['action'])) return;
 $action = $_POST['action'];
 if ($action == "comment") {

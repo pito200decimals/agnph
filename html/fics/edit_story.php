@@ -5,6 +5,8 @@ include_once("../header.php");
 include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."fics/includes/functions.php");
 
+if (!CanPerformSitePost()) MaintenanceError();
+
 if (isset($_POST) && isset($_POST['sid'])) {
     include_once(SITE_ROOT."fics/save_story_changes.php");
     if (isset($success) && $success && isset($sid) && $sid > 0) {

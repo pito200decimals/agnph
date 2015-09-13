@@ -44,7 +44,15 @@ function AddMessageMetadata(&$messages, $user) {
             $message['Status'] = 'R';
         }
         // Format for template.
-        $message['date'] = FormatDate($message['Timestamp'], PROFILE_DATE_TIME_FORMAT);
+        $elapsed_time = time() - $message['Timestamp'];
+        if ($elapsed_time < 12 * 60 * 60) {  // Less than 12 hours.
+            $format = PROFILE_MAIL_DATE_FORMAT_SHORT;
+        } else if ($elapsed_time < 6 * 30 * 24 * 60 * 60) {  // Less than 6 months.
+            $format = PROFILE_MAIL_DATE_FORMAT_LONG;
+        } else {  // Longer than 6 months.
+            $format = PROFILE_MAIL_DATE_FORMAT_VERY_LONG;
+        }
+        $message['date'] = FormatDate($message['Timestamp'], $format);
         $message['user'] = $all_users[$message['SenderUserId']];
         $message['title'] = $message['Title'];
         $message['text'] = $message['Content'];

@@ -11,5 +11,6 @@ $dbhost = "localhost";
 $dbuser = "";  // Don't show this in github :)
 $dbpass = "";  // Don't show this in github :)
 $dbname = "agnph";
+define("OEKAKI_CRYPT_SALT", "");  // Don't show this in github :)
 
 ?>

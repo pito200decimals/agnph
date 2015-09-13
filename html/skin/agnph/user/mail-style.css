@@ -18,6 +18,13 @@
     display: inline-block;
     width: 80px;
 }
+.mail-icon {
+    max-height: 16px;
+}
+.action-bar {
+    float: right;
+    margin: 5px;
+}
 
 /* For autocomplete */
 .autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }

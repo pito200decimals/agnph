@@ -39,10 +39,12 @@ do_or_die(sql_query(
     (2, 'User2', 'User2', 'user2@example.com', '".md5("Password 2")."', 1, '2006-05-04', 'F', 'Hungry Resident', 'Totodile', $now, $now, '127.0.0.1'),
     (3, 'User3', 'User3', 'user3@example.com', '".md5("Password 3")."', 1, '2009-08-07', '', 'Generic Title', 'Chikorita', $now, $now, '127.0.0.1'),
     (4, 'User4-imported', 'User4', 'user4@example.com', '".md5("Password 4")."', 1, '2009-08-07', '', '', '', $now, $now, ''),
-    (5, 'User5-imported', 'User5', 'user5@example.com', '".md5("Password 5")."', 1, '2009-08-07', '', '', '', $now, $now, '');"));
+    (5, 'User5-imported', 'User5', 'user5@example.com', '".md5("Password 5")."', 1, '2009-08-07', '', '', '', $now, $now, ''),
+    (6, 'User6-imported', 'User6', 'user6@example.com', '".md5("Password 6")."', 1, '2009-08-07', '', '', '', $now, $now, '');"));
 // Note: Imported users have a password set, but should not be able to log in.
 do_or_die(sql_query("UPDATE ".USER_TABLE." SET ImportForumsPassword='96c2fd2d4063c6b7d330b4216c2ee3cc7f01da6e' WHERE UserId=4;"));  // For testing forums import (Password="Password 4").
 do_or_die(sql_query("UPDATE ".USER_TABLE." SET ImportFicsPassword='".md5("Password 5")."' WHERE UserId=5;"));  // For testing fics import.
+do_or_die(sql_query("UPDATE ".USER_TABLE." SET ImportOekakiPassword='poJkyds5BIxl2' WHERE UserId=6;"));  // For testing oekaki import.
 // Forums settings.
 do_or_die(sql_query(
     "INSERT INTO ".FORUMS_USER_PREF_TABLE."
@@ -223,7 +225,7 @@ CreateTag("flygon", "S");
 CreateTag("solo", "G");
 CreateTag("floatzel", "S");
 
-//*
+/*
 CreateGalleryPost("c3024ba611837d85397d9661aec12840", "jpg", array("harlem", "umbreon", "quilava", "male"), "e");
 CreateGalleryPost("16f7fdb2e63740e6dbf524e137899433", "png", array("syntex", "quilava", "raichu", "male"), "s");
 CreateGalleryPost("0f80621ad5be140be8e3077bea316b06", "jpg", array("eroborus", "quilava", "dewott", "male"), "q");
@@ -238,8 +240,8 @@ CreateGalleryPost("ab907b0d22fdcba201a4fba3d20aef5b", "jpg", array("umbreon","fl
 CreateGalleryPost("85bb9ecdbbdbbbde574a5a8ae6798329", "jpg", array("umbreon","flareon","male","female"), "e", 11);
 CreateGalleryPost("ba395299b5abdaaabb99938ab249283c", "jpg", array("umbreon","flareon","male","female"), "e", 11);
 CreateGalleryPost("a096c523ac2044bc6ed13f069f474bf9", "jpg", array("flygon","male", "solo"));
-// */
 CreateGalleryPost("b4778c99464f01b56d8c3611143aad6f", "jpg", array("typhlosion","floatzel","male", "female"));
+// */
 
 function CreateLotsOfFakeGallery($n) {
     for ($p = 0; $p < $n; $p+=100) {

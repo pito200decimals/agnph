@@ -75,6 +75,7 @@ do_or_die(sql_query(
         Species VARCHAR(32) NOT NULL,
         DOB CHAR(10) NOT NULL,".  // Format: MM/DD/YYYY
        "ShowDOB TINYINT(1) DEFAULT 0,
+        HideOnlineStatus TINYINT(1) DEFAULT 0,
         Gender CHAR(1) DEFAULT 'U',".  // U=Unspecified, M=Male, F=Female, O=Other
        "GroupMailboxThreads TINYINT(1) DEFAULT 1,
         AvatarPostId INT(11) DEFAULT -1,".  // Format: Post ID in gallery.
@@ -375,7 +376,8 @@ do_or_die(sql_query(
        "UserId INT(11) NOT NULL,
         Timestamp INT(11) NOT NULL,
         Action TEXT(256) NOT NULL,
-        PRIMARY KEY(Id, UserId, Timestamp)
+        Verbosity INT(11) NOT NULL,".  // Important actions = 1, Minor actions = 2.
+       "PRIMARY KEY(Id, UserId, Timestamp)
     ) DEFAULT CHARSET=utf8;"));
 
 

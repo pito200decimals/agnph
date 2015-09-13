@@ -9,6 +9,8 @@ include_once("../header.php");
 include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."fics/includes/functions.php");
 
+if (!CanPerformSitePost()) MaintenanceError();
+
 if (!isset($user)) {
     RenderErrorPage("Not authorized to modify story");
     return;

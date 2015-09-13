@@ -7,6 +7,8 @@ include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."includes/util/sql.php");
 include_once(SITE_ROOT."includes/auth/email_auth.php");
 
+if (IsMaintenanceMode()) PostBanner("Site is in read-only mode, account recovery has been disabled", "red", false);
+
 if (isset($user)) {
     header("Location: /");
     exit();
@@ -15,6 +17,7 @@ if (isset($user)) {
 if (isset($_POST['email']) &&
     isset($_POST['password']) &&
     isset($_POST['password-confirm'])) {
+    if (!CanPerformSitePost()) MaintenanceError();
     $vars['email'] = $_POST['email'];
     $email = mb_strtolower($_POST['email']);
     $password = $_POST['password'];

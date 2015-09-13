@@ -44,6 +44,11 @@ function AuthenticateUser($uid, $salt) {
         unset($user);
         return false;
     }
+    if (!CanLogin($user)) {  // Disable logins when in site maintenance mode.
+        $user = null;
+        unset($user);
+        return false;
+    }
     debug("User has been authenticated!");
     debug($user);
     return true;

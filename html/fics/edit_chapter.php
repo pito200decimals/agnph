@@ -5,6 +5,7 @@ include_once("../header.php");
 include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."fics/includes/functions.php");
 
+if (!CanPerformSitePost()) MaintenanceError();
 if (isset($_POST) && isset($_POST['sid']) && isset($_POST['chapternum'])) {
     include_once(SITE_ROOT."fics/save_chapter_changes.php");
     if (isset($success) && $success && isset($sid) && $sid > 0) {

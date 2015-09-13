@@ -13,7 +13,7 @@
         <li><a href="/user/{{ profile.user.UserId }}/oekaki/">Oekaki</a></li>
         {% if user and profile.user.UserId == user.UserId %}
         <li><a href="/user/{{ user.UserId }}/mail/">Messages{% if unread_message_count > 0 %} <span class="unread-messages">({{ unread_message_count }})</span>{% endif %}</a></li>
-        <li><a href="/user/{{ user.UserId }}/preferences/">Preferences</a></li>
+        <li><a href="/user/{{ user.UserId }}/preferences/">Settings</a></li>
         {% endif %}
     </ul>
 {% endblock %}
@@ -47,6 +47,11 @@
                 {% block profile_sidepanel %}
                     <div class="sidepanel-section">
                         <img class="profile-avatarimg" src="{{ profile.user.avatarURL }}" />
+                        {% if profile.user.online %}
+                            <img class="status-icon" src="/images/user-online.png" /><small>Online</small>
+                        {% else %}
+                            <img class="status-icon"  src="/images/user-offline.png" /><small>Offline</small>
+                        {% endif %}
                     </div>
                     {# Other actions to perform on this user #}
                     <div class="sidepanel-section">

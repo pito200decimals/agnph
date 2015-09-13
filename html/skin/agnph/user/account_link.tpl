@@ -30,7 +30,7 @@
     <h3>Account Recovery Console</h3>
     {{ block('banner') }}
     <p>
-        This console will allow you to combine your old, imported AGNPH account with your current new account.
+        In late 2015, AGNPH moved to a new software system. If you had an old account prior to this migration, you can migrate it and all of its data to your current account using this console.
     </p>
     <div class="step">
         <p>
@@ -39,7 +39,7 @@
         <input class="service-select" type="radio" name="service" value="forums" /> Forums<br />
         <input class="service-select" type="radio" name="service" value="gallery" disabled /> Gallery<br />
         <input class="service-select" type="radio" name="service" value="fics" /> Fics<br />
-        <input class="service-select" type="radio" name="service" value="oekaki" disabled /> Oekaki<br />
+        <input class="service-select" type="radio" name="service" value="oekaki" /> Oekaki<br />
     </div>
     <div id="step-2-forums" class="step step-2">
         <p>
@@ -71,6 +71,17 @@
             <input type="hidden" name="service" value="fics" />
             <label>Username:</label><input type="text" name="fics-username" value="" /><br />
             <label>Password:</label><input type="password" name="fics-password" value="" /><br />
+            <input type="submit" value="Recover" />
+        </form>
+    </div>
+    <div id="step-2-oekaki" class="step step-2">
+        <p>
+            Enter your oekaki username and password:
+        </p>
+        <form method="POST" accept-encoding="UTF-8">
+            <input type="hidden" name="service" value="oekaki" />
+            <label>Username:</label><input type="text" name="oekaki-username" value="" /><br />
+            <label>Password:</label><input type="password" name="oekaki-password" value="" /><br />
             <input type="submit" value="Recover" />
         </form>
     </div>

@@ -7,7 +7,7 @@ include_once(SITE_ROOT."includes/util/file.php");
 if (!isset($user)) {
     return;
 }
-
+if (!CanPerformSitePost()) MaintenanceError();
 if (!isset($_POST['sid'])) return;
 $sid = $_POST['sid'];
 if (!isset($_POST['chapternum'])) return;

@@ -21,6 +21,7 @@ if (!isset($_GET['action'])) {
 }
 $action = $_GET['action'];
 if ($action == "send") {
+    if (!CanPerformSitePost()) MaintenanceError();
     if (!CanUserSendPMsForUser($user, $profile_user)) RenderErrorPage("Not authorized to send messages");
     if (!isset($_POST['message'])) RenderErrorPage("Unable to send message");
     $message = $_POST['message'];

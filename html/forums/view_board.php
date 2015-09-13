@@ -128,6 +128,7 @@ function GetSortURL($board, $sort) {
 }
 
 function HandlePost($board) {
+    if (!CanPerformSitePost()) MaintenanceError();
     global $user;
     if (!isset($_POST['action'])) return;
     $action = $_POST['action'];

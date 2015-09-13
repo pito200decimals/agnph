@@ -7,6 +7,7 @@ if (!isset($user) || !isset($_POST) || !isset($_POST['action'])) {
     RenderErrorPage("Invalid action");
     return;
 }
+if (!CanPerformSitePost()) MaintenanceError();
 $now = time();
 $uid = $user['UserId'];
 $action = $_POST['action'];

@@ -92,6 +92,7 @@ function GetPostObject($action, $params) {
 }
 
 function HandlePost() {
+    if (!CanPerformSitePost()) MaintenanceError();
     $action = ValidParams($_POST);
     if (!$action) return;
     GetPostObject($action, $_POST);

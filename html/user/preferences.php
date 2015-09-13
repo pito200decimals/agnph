@@ -37,6 +37,7 @@ if (isset($_POST['display-name']) &&
     isset($_POST['fics-stories-per-page']) &&
     isset($_POST['fics-tag-blacklist']) &&
     isset($_POST['oekaki-posts-per-page'])) {
+    if (!CanPerformSitePost()) MaintenanceError();
     $settings_changed = false;
     // Handle post submit.
     $user_table_sets = array();
@@ -126,6 +127,36 @@ if (isset($_POST['display-name']) &&
         $escaped_location = sql_escape($_POST['location']);
         $user_table_sets[] = "Location='$escaped_location'";
     }
+    // Timezone
+    if (isset($_POST['auto-detect-timezone'])) {
+        if ($user['AutoDetectTimezone'] != 1) {
+            $user_table_sets[] = "AutoDetectTimezone=1";
+        }
+    } else {
+        if ($user['AutoDetectTimezone'] != 0) {
+            $user_table_sets[] = "AutoDetectTimezone=0";
+        }
+        $timezone = ParseGMTTimeZoneToFloat($_POST['timezone']);
+        if ($timezone != null && $timezone != $profile_user['Timezone']) {
+            $user_table_sets[] = "Timezone=$timezone";
+        }
+    }
+    // Handle avatar.
+    ProcessAvatarUpload($user_table_sets);
+    // GroupMailboxThreads
+    $group_mailbox = isset($_POST['group-pm']);
+    if ($group_mailbox != $profile_user['GroupMailboxThreads']) {
+        $user_table_sets[] = "GroupMailboxThreads=".($group_mailbox ? "TRUE" : "FALSE");
+    }
+    // HideOnlineStatus
+    $hide_online = isset($_POST['hide-online']);
+    if ($hide_online != $profile_user['HideOnlineStatus']) {
+        $user_table_sets[] = "HideOnlineStatus=".($hide_online ? "TRUE" : "FALSE");
+    }
+    if (sizeof($user_table_sets) > 0) {
+        sql_query("UPDATE ".USER_TABLE." SET ".implode(", ", $user_table_sets)." WHERE UserId=".$profile_user['UserId'].";");
+        $settings_changed = true;
+    }
     // Email/Password.
     $stop_change_email_password = false;
     $email = $profile_user['Email'];
@@ -183,31 +214,6 @@ if (isset($_POST['display-name']) &&
         }
     } else {
         // The user did not change email or password.
-    }
-    // Timezone
-    if (isset($_POST['auto-detect-timezone'])) {
-        if ($user['AutoDetectTimezone'] != 1) {
-            $user_table_sets[] = "AutoDetectTimezone=1";
-        }
-    } else {
-        if ($user['AutoDetectTimezone'] != 0) {
-            $user_table_sets[] = "AutoDetectTimezone=0";
-        }
-        $timezone = ParseGMTTimeZoneToFloat($_POST['timezone']);
-        if ($timezone != null && $timezone != $profile_user['Timezone']) {
-            $user_table_sets[] = "Timezone=$timezone";
-        }
-    }
-    // GroupMailboxThreads
-    $group_mailbox = isset($_POST['group-pm']);
-    if ($group_mailbox != $profile_user['GroupMailboxThreads']) {
-        $user_table_sets[] = "GroupMailboxThreads=".($group_mailbox ? "TRUE" : "FALSE");
-    }
-    // Handle avatar.
-    ProcessAvatarUpload($user_table_sets);
-    if (sizeof($user_table_sets) > 0) {
-        sql_query("UPDATE ".USER_TABLE." SET ".implode(", ", $user_table_sets)." WHERE UserId=".$profile_user['UserId'].";");
-        $settings_changed = true;
     }
 
     $forums_table_sets = array();

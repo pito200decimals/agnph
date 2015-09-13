@@ -17,6 +17,7 @@ if (!isset($_GET['pool']) || !is_numeric($_GET['pool']) || $_GET['pool'] <= 0) {
 if (!isset($_POST['action']) || !($_POST['action'] == "add" || $_POST['action'] == "remove")) {
     AJAXErr();
 }
+if (!CanPerformSitePost()) AJAXErr();
 
 $escaped_post_id = $_GET['post'];
 $escaped_pool_id = $_GET['pool'];

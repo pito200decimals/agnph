@@ -5,7 +5,7 @@
 include_once("includes/auth/auth.php");
 
 if (isset($_POST['offset'])) {
-    if (isset($user)) {
+    if (isset($user) && CanPerformSitePost()) {
         // Store offset in user data only if flag is set.
         if ($user['AutoDetectTimezone']) {
             $uid = $user['UserId'];
