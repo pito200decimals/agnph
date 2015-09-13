@@ -62,7 +62,19 @@
             </div>
             <div class="profile-content">
                 <h2>{{ profile.user.DisplayName }}</h2>
-                {% if profile.user.admin|length > 0 %}<div>{{ profile.user.admin }}</div>{% endif %}
+                <ul class="admin-badges">
+                    {% for badge in profile.user.admin %}
+                        <li>
+                            {% if badge.src %}
+                                <img class="{{ badge.class }}" src="{{ badge.src }}" />
+                            {% elseif badge.html %}
+                                {% autoescape false %}{{ badge.html }}{% endautoescape %}
+                            {% else %}
+                                <span class="{{ badge.class }}">{{ badge.name }}</span>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
                 {% block usercontent %}
                 {% endblock %}
             </div>

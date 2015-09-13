@@ -9,6 +9,7 @@ include_once(SITE_ROOT."includes/util/html_funcs.php");
 include_once(SITE_ROOT."includes/util/file.php");
 include_once(SITE_ROOT."includes/util/user.php");
 include_once(SITE_ROOT."includes/comments/comments_functions.php");
+include_once(SITE_ROOT."user/includes/functions.php");
 
 function CanUserCreateStory($user) {
     if (!IsUserActivated($user)) return false;
@@ -242,7 +243,8 @@ function GetReviews($sid) {
     if ($users != null) {
         foreach ($reviews as &$review) {
             $uid = $review['ReviewerUserId'];
-            $review['commenter'] = $users[$uid];
+            $usr = $users[$uid];
+            $review['commenter'] = $usr;
         }
     }
     return $reviews;

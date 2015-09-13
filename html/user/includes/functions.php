@@ -92,16 +92,37 @@ function GetAdminBadge($profile_user) {
         return "";
     }
     $ret = array();
-    if (mb_strpos($profile_user['Permissions'], 'A') !== FALSE) return "Site Administrator";
-    if (mb_strpos($profile_user['Permissions'], 'R') !== FALSE) $ret[] = "Forums Moderator";
-    if (mb_strpos($profile_user['Permissions'], 'G') !== FALSE) $ret[] = "Gallery Administrator";
-    if (mb_strpos($profile_user['Permissions'], 'F') !== FALSE) $ret[] = "Fics Administrator";
-    if (mb_strpos($profile_user['Permissions'], 'O') !== FALSE) $ret[] = "Oekaki Administrator";
-    if (mb_strpos($profile_user['Permissions'], 'I') !== FALSE) $ret[] = "IRC Moderator";
-    if (mb_strpos($profile_user['Permissions'], 'M') !== FALSE) $ret[] = "Minecraft Moderator";
-    if (mb_strpos($profile_user['GalleryPermissions'], 'C') !== FALSE) $ret[] = "Gallery Contributor";
-    if (sizeof($ret) == 0) return "";
-    return implode(",", $ret);
+    $AddBadge = function($name) use (&$ret) {
+        $ret[] = array(
+            "name" => $name,
+            "class" => "badge"
+        );
+    };
+    $AddBadgeImage = function($src) use (&$ret) {
+        $ret[] = array(
+            "src" => $src,
+            "class" => "badge"
+        );
+    };
+    if (mb_strpos($profile_user['Permissions'], 'A') !== FALSE) $AddBadgeImage("/images/site_admin.gif");
+    if (mb_strpos($profile_user['Permissions'], 'R') !== FALSE) $AddBadge("Forums Moderator");
+    if (mb_strpos($profile_user['Permissions'], 'G') !== FALSE) $AddBadgeImage("/images/gallery_admin.gif");
+    if (mb_strpos($profile_user['Permissions'], 'F') !== FALSE) $AddBadgeImage("/images/fics_admin.gif");
+    if (mb_strpos($profile_user['Permissions'], 'O') !== FALSE) $AddBadge("Oekaki Administrator");
+    if (mb_strpos($profile_user['Permissions'], 'I') !== FALSE) $AddBadgeImage("/images/irc_admin.gif");
+    if (mb_strpos($profile_user['Permissions'], 'M') !== FALSE) $AddBadge("Minecraft Moderator");
+    if (isset($profile_user['GalleryPermissions']) && mb_strpos($profile_user['GalleryPermissions'], 'C') !== FALSE) $AddBadge("Gallery Contributor");
+    if (startsWith($profile_user['UserName'], IMPORTED_ACCOUNT_USERNAME_PREFIX)) $AddBadge("Inactive User");
+    if (sizeof($ret) == 0) $AddBadge("User");
+    return $ret;
+}
+// TODO: Actually use this in comments, reviews, forum/oekaki posts and PMs.
+function GetPostVisibleBadge($profile_user) {
+    $badges = array_filter(GetAdminBadge($profile_user), function($badge) {
+        return isset($badge['src']);
+    });
+    if (sizeof($badges) == 0) return null;
+    else return reset($badges);
 }
 
 // Actions is a list of actions, each a string of the form "site+A", "gallery=C", etc.

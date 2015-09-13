@@ -56,7 +56,7 @@
                             {% endif %}
                         </td>
                         <td><a href="/user/{{ account.UserId }}/">{{ account.DisplayName }}</a></td>
-                        <td>{% if account.administrator %}Administrator{% else %}User{% endif %}</td>
+                        <td>{% if account.administrator %}Administrator{% elseif account.inactive %}Inactive User{% else %}User{% endif %}</td>
                         <td><span class="omit-mobile">{{ account.dateJoined }}</span></td>
                     </tr>
                 {% endfor %}

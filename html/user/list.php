@@ -33,25 +33,24 @@ if (isset($_GET['sort'])) {
             $order_asc = false;
         }
     }
+    $order = ($order_asc ? "ASC" : "DESC");
     switch (mb_strtolower($_GET['sort'])) {
         case "status":
-            $sort = "LastVisitTime";
+            $order_clause = "LastVisitTime $order, DisplayName $order";
             break;
         case "name":
-            $sort = "DisplayName";
+            $order_clause = "DisplayName $order";
             break;
         case "position":
-            $sort = "CHAR_LENGTH(Permissions)";
+            $order_clause = "CHAR_LENGTH(Permissions) $order, CASE WHEN UserName LIKE '".IMPORTED_ACCOUNT_USERNAME_PREFIX."%' THEN 0 ELSE 1 END $order, DisplayName $order";
             break;
         case "register":
-            $sort = "JoinTime";
+            $order_clause = "JoinTime $order, DisplayName $order";
             break;
         default:
-            $sort = "DisplayName";
+            $order_clause = "DisplayName $order";
             break;
     }
-    $order = ($order_asc ? "ASC" : "DESC");
-    $order_clause = "$sort $order";
 }
 
 $accounts = array();
@@ -70,7 +69,8 @@ foreach ($accounts as &$account) {
     if ($account['LastVisitTime'] + CONSIDERED_ONLINE_DURATION > $now && !$account['HideOnlineStatus']) {
         $account['online'] = true;
     }
-    $account['administrator'] = (strlen($account['Permissions']) > 0);  // TODO: Also use this field to display un-recovered accounts?
+    $account['administrator'] = (strlen($account['Permissions']) > 0);
+    $account['inactive'] = startsWith($account['UserName'], IMPORTED_ACCOUNT_USERNAME_PREFIX);
     $account['avatarURL'] = GetAvatarURL($account);
 }
 

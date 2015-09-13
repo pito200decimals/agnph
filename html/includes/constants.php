@@ -167,7 +167,7 @@ define("FICS_PROFILE_SHOW_NUM_FAVORITES", 3);
 define("FICS_MAX_NUM_COAUTHORS", 3);
 
 // Account-related.
-define("USERLIST_DATE_FORMAT", "Y-m-d");
+define("USERLIST_DATE_FORMAT", "M j Y");
 define("REFRESH_ONLINE_TIMEOUT", 5 * 60);  // 5 minutes.
 define("CONSIDERED_ONLINE_DURATION", 15 * 60);  // 15 minutes.
 

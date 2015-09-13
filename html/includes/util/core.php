@@ -195,6 +195,8 @@ function SetHeaderHighlight() {
         $vars['nav_section'] = "gallery";
     } else if (startsWith($url, "/fics")) {
         $vars['nav_section'] = "fics";
+    } else if (startsWith($url, "/user/list")) {
+        $vars['nav_section'] = "user";
     } else if (preg_match("#^/user/\d+/preferences.*$#", $url)) {
         $vars['nav_section'] = "account_preferences";
     } else if (preg_match("#^/user/\d+/mail.*$#", $url)) {

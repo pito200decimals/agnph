@@ -89,6 +89,22 @@ ul#basic-info li {
     font-weight: bold;
     color: rgb(255,95,0);
 }
+.admin-badges {
+    list-style: none;
+    padding: 0px;
+    display: block;
+}
+.admin-badges > li {
+    display: inline-block;
+    margin: 0px;
+    padding: 0px;
+}
+img.badge {
+}
+span.badge {
+    display: inline-block;
+    margin-bottom: 3px;
+}
 
 @media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
     .userpage {

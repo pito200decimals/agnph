@@ -59,19 +59,15 @@ X Breakdown of views per-chapter
 
 == ACCOUNT ==
 * Mailbox/PM system
-    - Add unread-message notification to both account tab and inbox tab.
-        X Potentially handle thread grouping
+    - Integration with help ticket system
+    X Update unread-message-count to handle inbox thread grouping
     X Support message deletion? For now, no.
-    - Should add user blacklisting?
-        - Offending users can be banned.
 * Account merge/import system.
     - Still need to do gallery, but other sections complete.
 - Global user action logging
 - Non-user IP tracking (DoS investigating, user demographic statistics, etc?)
     - Show statistic about # of guests browsing? (not including bots?)
-- Perhaps a badge/text to tell users this account was created for archive and hasn't logged in before?
-    - Shouldn't be a problem if imported usernames have prefix/suffix
-- Display section permissions (better badge icons)
+- Display section permissions (better badge icons) [PARTIALLY DONE]
 - Give admins ability to ban until a user turns 18
     - Possibly not automatic, should notify/ticket when a user sets birthday to invlaid value
 X Enable login via display name???

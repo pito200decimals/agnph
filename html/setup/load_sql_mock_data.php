@@ -38,9 +38,9 @@ do_or_die(sql_query(
     (1, 'User1', 'User1', 'user1@example.com', '".md5("Password 1")."', 1, '2003-02-01', 'A', 'Most Awesome Cyndaquil', 'Cyndaquil', $now, $now, '127.0.0.1'),
     (2, 'User2', 'User2', 'user2@example.com', '".md5("Password 2")."', 1, '2006-05-04', 'F', 'Hungry Resident', 'Totodile', $now, $now, '127.0.0.1'),
     (3, 'User3', 'User3', 'user3@example.com', '".md5("Password 3")."', 1, '2009-08-07', '', 'Generic Title', 'Chikorita', $now, $now, '127.0.0.1'),
-    (4, 'User4-imported', 'User4', 'user4@example.com', '".md5("Password 4")."', 1, '2009-08-07', '', '', '', $now, $now, ''),
-    (5, 'User5-imported', 'User5', 'user5@example.com', '".md5("Password 5")."', 1, '2009-08-07', '', '', '', $now, $now, ''),
-    (6, 'User6-imported', 'User6', 'user6@example.com', '".md5("Password 6")."', 1, '2009-08-07', '', '', '', $now, $now, '');"));
+    (4, 'imported-User4', 'User4', 'user4@example.com', '".md5("Password 4")."', 1, '2009-08-07', '', '', '', $now, $now, ''),
+    (5, 'imported-User5', 'User5', 'user5@example.com', '".md5("Password 5")."', 1, '2009-08-07', '', '', '', $now, $now, ''),
+    (6, 'imported-User6', 'User6', 'user6@example.com', '".md5("Password 6")."', 1, '2009-08-07', '', '', '', $now, $now, '');"));
 // Note: Imported users have a password set, but should not be able to log in.
 do_or_die(sql_query("UPDATE ".USER_TABLE." SET ImportForumsPassword='96c2fd2d4063c6b7d330b4216c2ee3cc7f01da6e' WHERE UserId=4;"));  // For testing forums import (Password="Password 4").
 do_or_die(sql_query("UPDATE ".USER_TABLE." SET ImportFicsPassword='".md5("Password 5")."' WHERE UserId=5;"));  // For testing fics import.
