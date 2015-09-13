@@ -53,8 +53,7 @@ X Breakdown of views per-chapter
 - API, at least for gallery similar to Ouroboros?
 - All CSS
 - Multiple themes?
-- Theme switcher
-    - Better skin fallback code
+X Theme switcher for guests?
 - Admin ticket system
 
 == ACCOUNT ==

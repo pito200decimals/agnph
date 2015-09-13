@@ -31,6 +31,7 @@ if (isset($_POST['display-name']) &&
     isset($_POST['password']) &&
     isset($_POST['password-confirm']) &&
     isset($_POST['timezone']) &&
+    isset($_POST['skin']) &&
     isset($_POST['signature']) &&
     isset($_POST['gallery-posts-per-page']) &&
     isset($_POST['gallery-tag-blacklist']) &&
@@ -152,6 +153,15 @@ if (isset($_POST['display-name']) &&
     $hide_online = isset($_POST['hide-online']);
     if ($hide_online != $profile_user['HideOnlineStatus']) {
         $user_table_sets[] = "HideOnlineStatus=".($hide_online ? "TRUE" : "FALSE");
+    }
+    // Skin
+    if ($_POST['skin'] != $profile_user['Skin']) {
+        if (contains($_POST['skin'], ".") || contains($_POST['skin'], "/") || contains($_POST['skin'], "\\")) {
+            PostErrorMessage("Invalid site skin");
+        } else {
+            $escaped_skin = sql_escape(mb_strtolower($_POST['skin']));
+            $user_table_sets[] = "Skin='$escaped_skin'";
+        }
     }
     if (sizeof($user_table_sets) > 0) {
         sql_query("UPDATE ".USER_TABLE." SET ".implode(", ", $user_table_sets)." WHERE UserId=".$profile_user['UserId'].";");
@@ -360,6 +370,9 @@ if (isset($user)) {
         $profile_user['ips'] = $profile_user['RegisterIP'].",".$profile_user['KnownIPs'];
     }
 }
+
+// Set up skins.
+$vars['availableSkins'] = array_map("basename", array_filter(glob(SITE_ROOT."skin/*"), "is_dir"));
 
 // This is how to output the template.
 RenderPage("user/preferences.tpl");

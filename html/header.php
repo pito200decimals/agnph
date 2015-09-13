@@ -88,13 +88,21 @@ function FetchUserHeaderVars() {
     // User skin preferences.
     if (isset($user)) {
         $skin = $user['Skin'];
+    } else if (isset($_SESSION['Skin'])) {
+        $skin = $_SESSION['Skin'];
     } else {
         $skin = DEFAULT_SKIN;
+        $_SESSION['Skin'] = $skin;
     }
+    // Check for malformed value. Do not allow dots or slashes.
+    if (contains($skin, ".") || contains($skin, "/") || contains($skin, "\\")) {
+        $skin = DEFAULT_SKIN;
+    }
+    $skin = mb_strtolower($skin);
     $vars['skin'] = $skin;
 
-    // Use these paths to load template assets.
-    $skin_dirs = array("/skin/$skin/", "/skin/".BASE_SKIN."/");
+    // Use these paths to load template assets. If an expected skin directory does not exist, use base skin directory.
+    $skin_dirs = array_filter(array("/skin/$skin/", "/skin/".BASE_SKIN."/"), function($path) { return file_exists(__DIR__.$path); });
     $tpl_base_dirs = array_map(function($path) { return __DIR__.$path; }, $skin_dirs);
 
     $loader = new Twig_Loader_Filesystem($tpl_base_dirs);

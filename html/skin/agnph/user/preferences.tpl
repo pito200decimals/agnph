@@ -84,6 +84,11 @@
             <ul id="basic-info">
                 <li><span class="basic-info-label">Group PM's:</span>           <span><input type="checkbox" name="group-pm" value="group"{% if profile.user.GroupMailboxThreads %} checked{% endif %} /></span></li>
                 <li><span class="basic-info-label">Hide online status:</span>   <span><input type="checkbox" name="hide-online" value="hide"{% if profile.user.HideOnlineStatus %} checked{% endif %} /></span></li>
+                <li><span class="basic-info-label">Site skin:</span>            <span><select name="skin">
+                    {% for skinName in availableSkins %}
+                        <option value="{{ skinName }}"{% if skin == skinName %} selected{% endif %}>{{ skinName }}</option>
+                    {% endfor %}
+                </select></span></li>
             </ul>
         </div>
         <div class="infoblock">
