@@ -10,6 +10,7 @@
 {% endblock %}
 
 {% block scripts %}
+    {{ parent() }}
 {% endblock %}
 
 {% use 'fics/storyblock.tpl' %}

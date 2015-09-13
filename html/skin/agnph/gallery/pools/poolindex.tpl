@@ -36,6 +36,7 @@
 {% endblock %}
 
 {% block scripts %}
+    {{ parent() }}
     <script type="text/javascript">
         $(document).ready(function() {
             $("#actionbar ul").show();

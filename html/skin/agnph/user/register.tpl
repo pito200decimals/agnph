@@ -33,6 +33,7 @@
 {% endblock %}
 
 {% block scripts %}
+    {{ parent() }}
     <script type="text/javascript">
         function refresh() {
             $('#captcha-img').attr("src", "/register/captcha/?timestamp=" + new Date().getTime());

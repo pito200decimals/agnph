@@ -6,6 +6,7 @@
 {% endblock %}
 
 {% block scripts %}
+    {{ parent() }}
     {#
     <script type="text/javascript">
         function is_touch_device() {

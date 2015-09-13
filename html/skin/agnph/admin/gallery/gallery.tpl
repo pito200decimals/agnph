@@ -25,6 +25,7 @@
 {% endblock %}
 
 {% block scripts %}
+    {{ parent() }}
 {% endblock %}
 
 {% block content %}

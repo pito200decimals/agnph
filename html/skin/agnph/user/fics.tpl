@@ -14,6 +14,7 @@
 {% endblock %}
 
 {% block scripts %}
+    {{ parent() }}
 {% endblock %}
 
 {% block sidebar %}

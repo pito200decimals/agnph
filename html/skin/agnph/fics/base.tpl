@@ -21,6 +21,4 @@
 {% endblock %}
 
 {% block content %}
-    {% block ficscontent %}
-    {% endblock %}
 {% endblock %}

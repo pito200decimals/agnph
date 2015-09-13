@@ -59,10 +59,10 @@ function ProcessPost($hash_fn, $section, $field) {
     if (isset($_POST["$section-username"]) && isset($_POST["$section-password"])) {
         // Password is simply md5-hashed in database.
         $username = $_POST["$section-username"];
-        $escaped_username = sql_escape($username);
+        $escaped_username = sql_escape(IMPORTED_ACCOUNT_USERNAME_PREFIX.$username);
         $password = $_POST["$section-password"];
         $hashed_password = $hash_fn($username, $password);
-        if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UPPER(Username)=UPPER('$escaped_username".IMPORTED_ACCOUNT_USERNAME_SUFFIX."') AND RegisterIP='' LIMIT 1;", 1)) {
+        if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UPPER(Username)=UPPER('$escaped_username') AND RegisterIP='' LIMIT 1;", 1)) {
             $old_user = $result->fetch_assoc();
             $expected_hashed_password = $old_user[$field];
             if ($hashed_password == $expected_hashed_password) {

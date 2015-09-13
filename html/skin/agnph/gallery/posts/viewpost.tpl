@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block scripts %}
+    {{ parent() }}
     {% if post.canEdit %}
         <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
         <script src="{{ skinDir }}/gallery/posts/viewpost-script.php?pi={{ post.PostId }}&ppi={{ post.ParentPoolId }}{% if user and user.NavigateGalleryPoolsWithKeyboard %}&keynav=1{% endif %}"></script>

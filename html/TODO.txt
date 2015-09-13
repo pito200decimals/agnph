@@ -55,7 +55,6 @@ X Breakdown of views per-chapter
 - Multiple themes?
 - Theme switcher
     - Better skin fallback code
-- SQL Table prefixes?
 - Admin ticket system
 
 == ACCOUNT ==
@@ -67,23 +66,17 @@ X Breakdown of views per-chapter
         - Offending users can be banned.
 * Account merge/import system.
     - Still need to do gallery, but other sections complete.
-- Allow users to hide online status
 - Global user action logging
 - Non-user IP tracking (DoS investigating, user demographic statistics, etc?)
     - Show statistic about # of guests browsing? (not including bots?)
-- Ensure registered but un-activated users don't 'exist' (as they could be deleted at any time)
 - Perhaps a badge/text to tell users this account was created for archive and hasn't logged in before?
     - Shouldn't be a problem if imported usernames have prefix/suffix
 - Display section permissions (better badge icons)
-- Prevent account username/displayname from starting with a digit
-- Enable login via display name???
-- Change timezone selection to dropdown options
-    - Allow DST auto-toggle?
-- Online indicator by username in profile
-X Allow user account deletion?
-    - Messy, but doable now that account import is done.
 - Give admins ability to ban until a user turns 18
     - Possibly not automatic, should notify/ticket when a user sets birthday to invlaid value
+X Enable login via display name???
+X Allow user account deletion?
+    - Messy, but doable now that account import is done.
 
 
 == Things to remember when setting up site ==
@@ -94,3 +87,10 @@ X Allow user account deletion?
 - Suppress PHP logging on errors.
 - When importing accounts, add prefix/suffix to usernames to avoid duplicates when users re-register.
 - set import crypt salt.
+
+== Things to ensure when end-to-end testing site ==
+- Ensure registered but un-activated users don't 'exist' (as they could be deleted at any time)
+
+== Things to do when importing accounts ==
+- Prevent account username/displayname from starting with a digit
+- Add prefix to all usernames

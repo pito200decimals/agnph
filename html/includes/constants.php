@@ -105,7 +105,7 @@ define("REGISTER_DISCLAIMER_KEY", "RegisterDisclaimer");
 define("SHORT_BAN_DURATION_KEY", "UserShortBanDuration");
 define("DEFAULT_SHORT_BAN_DURATION", 7 * 24 * 60 * 60);  // 7 days.
 define("DEFAULT_DATE_FORMAT", "Y-m-d H:i:s");
-define("IMPORTED_ACCOUNT_USERNAME_SUFFIX", "-imported");  // Normal usernames can't have hyphens.
+define("IMPORTED_ACCOUNT_USERNAME_PREFIX", "imported-");  // Normal usernames can't have hyphens.
 define("MAINTENANCE_MODE_KEY", "MaintenanceMode");
 // Site security-related timeouts.
 define("REGISTER_ACCOUNT_HUMAN_READABLE_STRING", "24 hours");  // 24 hours.

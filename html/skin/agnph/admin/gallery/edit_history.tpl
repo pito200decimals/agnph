@@ -30,6 +30,7 @@
 {% endblock %}
 
 {% block scripts %}
+    {{ parent() }}
     <script>
         $(document).ready(function() {
             $("#revert-all-box").change(function() {

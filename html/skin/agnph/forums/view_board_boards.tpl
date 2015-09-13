@@ -54,6 +54,13 @@
 
 {% use 'forums/view_board_threadlist.tpl' %}
 
+{% block scripts %}
+    {{ parent() }}
+    {% if not user or user.AutoDetectTimezone %}
+        <script src="{{ skinDir }}/timezone.js"></script>
+    {% endif %}
+{% endblock %}
+
 {% block content %}
     {{ block('banner') }}
     {% if board.BoardId == -1 %}

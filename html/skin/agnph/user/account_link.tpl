@@ -16,6 +16,7 @@
 {% endblock %}
 
 {% block scripts %}
+    {{ parent() }}
     <script>
         $(document).ready(function() {
             $(".service-select").click(function() {

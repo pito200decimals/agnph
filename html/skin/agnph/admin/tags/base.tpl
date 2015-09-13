@@ -1,6 +1,7 @@
 {% extends 'admin/base.tpl' %}
 
 {% block scripts %}
+    {{ parent() }}
     <script>
         var tag_data = null;
         $(document).ready(function() {

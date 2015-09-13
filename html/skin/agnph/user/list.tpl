@@ -6,6 +6,13 @@
     <link rel="stylesheet" type="text/css" href="{{ skinDir }}/user/userlist-style.css" />
 {% endblock %}
 
+{% block scripts %}
+    {{ parent() }}
+    {% if not user or user.AutoDetectTimezone %}
+        <script src="{{ skinDir }}/timezone.js"></script>
+    {% endif %}
+{% endblock %}
+
 {% block sortArrow %}
     {% if orderParam == "desc" %}
         ▼

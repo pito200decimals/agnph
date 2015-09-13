@@ -9,6 +9,7 @@
     </style>
 {% endblock %}
 {% block scripts %}
+    {{ parent() }}
     <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
     <script>
         $(document).ready(function() {

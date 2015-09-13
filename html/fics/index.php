@@ -4,7 +4,7 @@
 include_once("../header.php");
 //include_once(SITE_ROOT."fics/includes/functions.php");
 
-RenderPage("fics/base.tpl");
+RenderPage("fics/index.tpl");
 return;
 
 ?>

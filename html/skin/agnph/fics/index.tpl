@@ -1,4 +1,4 @@
-{% extends "base.tpl" %}
+{% extends 'fics/base.tpl' %}
 
 {% block scripts %}
     {{ parent() }}
@@ -8,5 +8,4 @@
 {% endblock %}
 
 {% block content %}
-Site Index!
 {% endblock %}

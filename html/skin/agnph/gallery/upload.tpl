@@ -6,34 +6,35 @@
 {% endblock %}
 
 {% block scripts %}
-<script type="text/javascript">
-$(document).ready(function() {
-    function ResetImage() {
-        var file = $("#imgbrowse")[0];
-        if (file.files && file.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function() {
-                $("#previewimg").attr("src", reader.result);
-                $("#previewpanel").removeAttr("style");
-            };
-            reader.onerror = function() {
-                $("#previewimg").attr("src", $("#imgsource").val());
-                $("#previewpanel").removeAttr("style");
-            };
-            reader.readAsDataURL(file.files[0]);
-            return;
+    {{ parent() }}
+    <script type="text/javascript">
+    $(document).ready(function() {
+        function ResetImage() {
+            var file = $("#imgbrowse")[0];
+            if (file.files && file.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function() {
+                    $("#previewimg").attr("src", reader.result);
+                    $("#previewpanel").removeAttr("style");
+                };
+                reader.onerror = function() {
+                    $("#previewimg").attr("src", $("#imgsource").val());
+                    $("#previewpanel").removeAttr("style");
+                };
+                reader.readAsDataURL(file.files[0]);
+                return;
+            }
+            $("#previewimg").attr("src", $("#imgsource").val());
+            $("#previewpanel").removeAttr("style");
         }
-        $("#previewimg").attr("src", $("#imgsource").val());
-        $("#previewpanel").removeAttr("style");
-    }
-    $("#previewpanel").hide();
-    $("#imgbrowse").on("change mousedown", ResetImage);
-    $("#imgsource").on("change", ResetImage);
-    $("#previewimg").error(function() {
         $("#previewpanel").hide();
+        $("#imgbrowse").on("change mousedown", ResetImage);
+        $("#imgsource").on("change", ResetImage);
+        $("#previewimg").error(function() {
+            $("#previewpanel").hide();
+        });
     });
-});
-</script>
+    </script>
 {% endblock %}
 
 {% block content %}

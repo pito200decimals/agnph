@@ -6,6 +6,10 @@
 {% endblock %}
 
 {% block scripts %}
+    {{ parent() }}
+    {% if not user or user.AutoDetectTimezone %}
+        <script src="{{ skinDir }}/timezone.js"></script>
+    {% endif %}
     {% if cansort %}
         <script src="{{ skinDir }}/scripts/jquery.sortable.js"></script>
         <script type="text/javascript">
