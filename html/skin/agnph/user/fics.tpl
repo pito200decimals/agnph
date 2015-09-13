@@ -1,8 +1,8 @@
 {% extends "user/base.tpl" %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/user/style.css" />
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/fics/style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/user/style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/fics/style.css') }}" />
     <style>
         .story-list {
             padding: 0px;

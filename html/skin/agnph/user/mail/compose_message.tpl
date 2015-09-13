@@ -1,14 +1,14 @@
 {% extends "user/base.tpl" %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/user/style.css" />
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/user/mail-style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/user/style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/user/mail-style.css') }}" />
 {% endblock %}
 
 {% block scripts %}
     {{ parent() }}
     <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
-    <script src="{{ skinDir }}/scripts/jquery.autocomplete.min.js"></script>
+    <script src="{{ asset('/scripts/jquery.autocomplete.min.js') }}"></script>
     <script type="text/javascript">
         tinymce.init({
             selector: "textarea#message",

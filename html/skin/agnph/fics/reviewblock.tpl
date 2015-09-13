@@ -121,7 +121,9 @@
                         {{ block('comment') }}
                     {% endfor %}
                 </ul>
-                <span class="comment-iterator">{% autoescape false %}{{ commentIterator }}{% endautoescape %}</span>
+                <div class="iterator">
+                    {% autoescape false %}{{ commentIterator }}{% endautoescape %}
+                </div>
             {% else %}
                 <span class="no-comments">No comments posted</span>
             {% endif %}
@@ -144,7 +146,9 @@
                         {{ block('review_post_block') }}
                     {% endfor %}
                 </ul>
-                <span class="comment-iterator">{% autoescape false %}{{ reviewIterator }}{% endautoescape %}</span>
+                <div class="iterator">
+                    {% autoescape false %}{{ reviewIterator }}{% endautoescape %}
+                </div>
             {% else %}
                 <span class="no-comments">No reviews posted</span>
             {% endif %}

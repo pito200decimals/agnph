@@ -1,7 +1,7 @@
 {% extends 'forums/base.tpl' %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/forums/style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/forums/style.css') }}" />
     <style>
         .form-block {
             margin: 5px;

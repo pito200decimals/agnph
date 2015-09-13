@@ -1,15 +1,15 @@
 {% extends 'base.tpl' %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/list-style.css" />
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/user/style.css" />
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/user/userlist-style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/list-style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/user/style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/user/userlist-style.css') }}" />
 {% endblock %}
 
 {% block scripts %}
     {{ parent() }}
     {% if not user or user.AutoDetectTimezone %}
-        <script src="{{ skinDir }}/timezone.js"></script>
+        <script src="{{ asset('timezone.js') }}"></script>
     {% endif %}
 {% endblock %}
 

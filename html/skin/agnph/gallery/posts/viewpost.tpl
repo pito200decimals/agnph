@@ -1,16 +1,16 @@
 {% extends 'gallery/base.tpl' %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/gallery/style.css" />
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/gallery/viewpost-style.css" />
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/comments-style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/viewpost-style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/comments-style.css') }}" />
 {% endblock %}
 
 {% block scripts %}
     {{ parent() }}
     {% if post.canEdit %}
         <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
-        <script src="{{ skinDir }}/gallery/posts/viewpost-script.php?pi={{ post.PostId }}&ppi={{ post.ParentPoolId }}{% if user and user.NavigateGalleryPoolsWithKeyboard %}&keynav=1{% endif %}"></script>
+        <script src="/gallery/post/view-script/?pi={{ post.PostId }}&ppi={{ post.ParentPoolId }}{% if user and user.NavigateGalleryPoolsWithKeyboard %}&keynav=1{% endif %}"></script>
     {% endif %}
 {% endblock %}
 
@@ -294,7 +294,9 @@
                     </div>
                 {% endif %}
                 {% if post.comments|length > 0 %}
-                    <span class="comment-iterator">{% autoescape false %}{{ commentIterator }}{% endautoescape %}</span>
+                    <div class="iterator">
+                        {% autoescape false %}{{ commentIterator }}{% endautoescape %}
+                    </div>
                 {% endif %}
             </div>
         </div>

@@ -1,8 +1,8 @@
 {% extends 'fics/base.tpl' %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/fics/style.css" />
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/fics/storyindex-style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/fics/style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/fics/storyindex-style.css') }}" />
 {% endblock %}
 
 {% block scripts %}

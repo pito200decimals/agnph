@@ -1,8 +1,8 @@
 {% extends 'fics/base.tpl' %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/fics/style.css" />
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/fics/edit-style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/fics/style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/fics/edit-style.css') }}" />
 {% endblock %}
 
 {% use 'fics/storyblock.tpl' %}
@@ -29,7 +29,7 @@
         }
     </script>
     {% if not create and chapters %}
-        <script src="{{ skinDir }}/scripts/jquery.sortable.js"></script>
+        <script src="{{ asset('/scripts/jquery.sortable.js') }}"></script>
         <script>
             $(document).ready(function() {
                 $('.sortable').sortable().bind('sortupdate', Update);
@@ -127,7 +127,7 @@
         {% endif %}
     </script>
     {% if canSetAuthor or canSetCoAuthors %}
-        <script src="{{ skinDir }}/scripts/jquery.autocomplete.min.js"></script>
+        <script src="{{ asset('/scripts/jquery.autocomplete.min.js') }}"></script>
     {% endif %}
     <script>
         $(document).ready(function() {

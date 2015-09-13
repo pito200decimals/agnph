@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/gallery/style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/style.css') }}" />
     <style>
         #tag-container label {
             display: inline-block;

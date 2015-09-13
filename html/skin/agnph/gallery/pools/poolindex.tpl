@@ -1,38 +1,9 @@
 {% extends 'gallery/base.tpl' %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/list-style.css" />
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/gallery/style.css" />
-    <style>
-        #actionbar {
-            display: block;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-        #action-list {
-            list-style: none;
-            padding: 0px;
-            margin: 0px;
-        }
-        #pool-search {
-            display: inline;
-        }
-        #pool-search input {
-            float: right;
-            margin: 0px;
-            margin-top: -4px;
-        }
-        #newpanel {
-            padding: 5px;
-            display: inline-block;
-        }
-        .floatactionpanel {
-            position: absolute;
-            border: 1px solid rgb(0,0,0);
-            background-color: rgb(63, 127, 255);
-            box-shadow: 5px 5px 8px #07162D;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{{ asset('/list-style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/poolindex-style.css') }}" />
 {% endblock %}
 
 {% block scripts %}

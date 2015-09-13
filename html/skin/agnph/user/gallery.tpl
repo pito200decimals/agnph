@@ -1,9 +1,9 @@
 {% extends "user/base.tpl" %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/user/style.css" />
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/gallery/style.css" />
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/gallery/postindex-style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/user/style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/postindex-style.css') }}" />
 {% endblock %}
 
 {% block scripts %}

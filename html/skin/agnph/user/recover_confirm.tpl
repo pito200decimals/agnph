@@ -1,8 +1,8 @@
 {% extends 'base.tpl' %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/user/style.css" />
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/user/recover-style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/user/style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/user/recover-style.css') }}" />
     <style>
         h4 {
             text-align: center;

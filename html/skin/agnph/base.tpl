@@ -33,11 +33,11 @@
             <title>AGNPH</title>
         {% endblock %}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-        <script src="{{ skinDir }}/base.js"></script>
+        <script src="{{ asset('/base.js') }}"></script>
         {% block scripts %}
             {# Custom page scripts go here #}
         {% endblock %}
-        <link rel="stylesheet" type="text/css" href="{{ skinDir }}/style.css" />
+        <link rel="stylesheet" type="text/css" href="{{ asset('/style.css') }}" />
         {% block styles %}
             {# Custom page styles go here #}
         {% endblock %}

@@ -1,7 +1,7 @@
 {% extends 'fics/base.tpl' %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/fics/style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/fics/style.css') }}" />
     <style>
         .delete {
             margin: 10px;

@@ -1,9 +1,9 @@
 {% extends 'fics/base.tpl' %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/fics/style.css" />
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/fics/story/story-style.css" />
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/comments-style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/fics/style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/fics/story/story-style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/comments-style.css') }}" />
 {% endblock %}
 
 {% use 'fics/storyblock.tpl' %}

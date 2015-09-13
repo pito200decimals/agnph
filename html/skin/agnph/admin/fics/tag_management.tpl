@@ -8,8 +8,7 @@
 {% endblock %}
 
 {% block styles %}
-    {#<link rel="stylesheet" type="text/css" href="{{ skinDir }}/admin/style.css" />#}
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/fics/style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/fics/style.css') }}" />
     <style>
         #tag-container label {
             display: inline-block;

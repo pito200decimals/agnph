@@ -92,9 +92,24 @@ function FetchUserHeaderVars() {
         $skin = DEFAULT_SKIN;
     }
     $vars['skin'] = $skin;
-    $vars['skinDir'] = "/skin/$skin";  // TODO: Fix CSS paths with baseSkinDir.
-    $loader = new Twig_Loader_Filesystem(array(__DIR__."/skin/$skin/", __DIR__."/skin/".BASE_SKIN."/"));
+
+    // Use these paths to load template assets.
+    $skin_dirs = array("/skin/$skin/", "/skin/".BASE_SKIN."/");
+    $tpl_base_dirs = array_map(function($path) { return __DIR__.$path; }, $skin_dirs);
+
+    $loader = new Twig_Loader_Filesystem($tpl_base_dirs);
     $twig = new Twig_Environment($loader);
+    $asset_fn = new Twig_SimpleFunction('asset', function($path) use ($skin_dirs) {
+        foreach ($skin_dirs as $base) {
+            $full_path = $base.$path;
+            if (endsWith($base, '/') && startsWith($path, '/')) {
+                $full_path = substr($base, 0, strlen($base) - 1).$path;
+            }
+            if (file_exists(__DIR__.$full_path)) return $full_path;
+        }
+        return $path;
+    });
+    $twig->addFunction($asset_fn);
 }
 
 function GetUnreadPMCount() {

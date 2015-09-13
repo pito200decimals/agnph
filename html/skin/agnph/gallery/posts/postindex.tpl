@@ -1,17 +1,17 @@
 {% extends 'gallery/base.tpl' %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/gallery/style.css" />
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/gallery/postindex-style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/postindex-style.css') }}" />
 {% endblock %}
 
 {% block scripts %}
     {{ parent() }}
     {% if not user or user.AutoDetectTimezone %}
-        <script src="{{ skinDir }}/timezone.js"></script>
+        <script src="{{ asset('timezone.js') }}"></script>
     {% endif %}
     {% if cansort %}
-        <script src="{{ skinDir }}/scripts/jquery.sortable.js"></script>
+        <script src="{{ asset('/scripts/jquery.sortable.js') }}"></script>
         <script type="text/javascript">
             $(document).ready(function() {
                 $('.sortable').sortable().bind('sortupdate', Update);

@@ -1,8 +1,8 @@
 {% extends 'gallery/base.tpl' %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/gallery/style.css" />
-    <link rel="stylesheet" type="text/css" href="{{ skinDir }}/gallery/upload-style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/upload-style.css') }}" />
 {% endblock %}
 
 {% block scripts %}
