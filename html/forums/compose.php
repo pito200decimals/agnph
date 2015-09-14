@@ -184,21 +184,33 @@ function HandleEditPost() {
             // Assume "move-board" will not be set on non-threads (as only authenticated administrators can do this anyways).
             $new_bid = (int)$_POST['move-board'];
             $escaped_bid = sql_escape($new_bid);
-            $sets[] = "ParentId='$escaped_bid'";
+            $uid = $user['UserId'];
+            $name = $user['DisplayName'];
+            $title = $_POST['title'];
+            if (sql_query_into($result, "SELECT * FROM ".FORUMS_BOARD_TABLE." WHERE BoardId=$new_bid;", 1)) {
+                $board = $result->fetch_assoc();
+                $boardname = $board['Name'];
+                $sets[] = "ParentId='$escaped_bid'";
+                LogAction("<strong><a href='/user/$uid/'>$name</a></strong> moved thread <strong>$title</strong> to board <strong>$boardname</strong>", "R");
+            } else {
+                PostSessionBanner("Board does not exist", "red");
+            }
         }
         $now = time();
         $uid = $user['UserId'];
         $pid = $vars['id'];
-        sql_query("UPDATE ".FORUMS_POST_TABLE." SET ".implode(",", $sets)." WHERE PostId=$pid;");
-        UpdateThreadStats($vars['post']['ParentId']);
-        UpdateBoardStats($vars['thread']['ParentId']);
-        if (isset($new_bid)) {
-            UpdateBoardStats($new_bid);
+        if (sizeof($sets) > 0) {
+            sql_query("UPDATE ".FORUMS_POST_TABLE." SET ".implode(",", $sets)." WHERE PostId=$pid;");
+            UpdateThreadStats($vars['post']['ParentId']);
+            UpdateBoardStats($vars['thread']['ParentId']);
+            if (isset($new_bid)) {
+                UpdateBoardStats($new_bid);
+            }
+            PostSessionBanner("Saved post changes", "green");
         }
-        PostSessionBanner("Saved post changes", "green");
         GoToForumPost($pid);
     } else {
-        PostBanner("Invalid", "red");
+        PostBanner("Invalid action", "red");
     }
 }
 

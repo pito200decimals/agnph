@@ -104,6 +104,10 @@ if ($action == "edit") {
     
     // Update story word count. Just do a full count, hopefully it's not too expensive.
     UpdateStoryStats($sid);
+    $username = $user['DisplayName'];
+    $chaptertitle = htmlspecialchars($chaptertitle);
+    $storyTitle = htmlspecialchars($story['Title']);
+    LogVerboseAction("<strong><a href='/user/$uid/'>$username</a></strong> edited chapter <strong>$chaptertitle</strong> ($cid) in story <strong><a href='/fics/story/$sid/'>$storyTitle</a></strong>", "F");
     return;
 } else if ($action == "create") {
     // Create new chapter.
@@ -129,6 +133,10 @@ if ($action == "edit") {
     
     // Update story word count. Just do a full count, hopefully it's not too expensive.
     UpdateStoryStats($sid);
+    $username = $user['DisplayName'];
+    $chaptertitle = htmlspecialchars($chaptertitle);
+    $storyTitle = htmlspecialchars($story['Title']);
+    LogVerboseAction("<strong><a href='/user/$uid/'>$username</a></strong> added chapter <strong>$chaptertitle</strong> ($cid) to story <strong><a href='/fics/story/$sid/'>$storyTitle</a></strong>", "F");
     return;
 } else {
     return;

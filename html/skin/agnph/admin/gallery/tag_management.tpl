@@ -6,10 +6,12 @@
         <li id="selected-gallery-tab"><a href="/admin/gallery/tags/">Tags</a></li>
         <li><a href="/admin/gallery/edit-history/">Edit History</a></li>
         <li><a href="/admin/gallery/description-history/">Description History</a></li>
+        <li><a href="/admin/gallery/log/">Log</a></li>
     </ul>
 {% endblock %}
 
 {% block styles %}
+    {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/style.css') }}" />
     <style>
         #tag-container label {

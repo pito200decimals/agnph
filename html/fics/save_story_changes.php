@@ -132,6 +132,12 @@ if ($sid > 0) {
         // Don't update DateUpdated. Don't want to bump stories.
         $sets = implode(",", $sets);
         $success = sql_query("UPDATE ".FICS_STORY_TABLE." SET $sets WHERE StoryId=$sid;");
+        if ($success) {
+            $uid = $user['UserId'];
+            $username = $user['DisplayName'];
+            $storyTitle = htmlspecialchars($title);
+            LogAction("<strong><a href='/user/$uid/'>$username</a></strong> edited story <strong><a href='/fics/story/$sid/'>$storyTitle</a></strong>", "F");
+        }
     } else {
         // Nothing to change.
         $success = true;
@@ -202,6 +208,10 @@ if ($sid > 0) {
         sql_query("DELETE FROM ".FICS_STORY_TABLE." WHERE StoryId=$sid;");
         return;
     }
+
+    $username = $user['DisplayName'];
+    $storyTitle = htmlspecialchars($title);
+    LogAction("<strong><a href='/user/$uid/'>$username</a></strong> created story <strong><a href='/fics/story/$sid/'>$storyTitle</a></strong>", "F");
 }
 
 // Changes tags for the story, and updates tag types.

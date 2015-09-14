@@ -376,7 +376,8 @@ do_or_die(sql_query(
        "UserId INT(11) NOT NULL,
         Timestamp INT(11) NOT NULL,
         Action TEXT(256) NOT NULL,
-        Verbosity INT(11) NOT NULL,".  // Important actions = 1, Minor actions = 2.
+        Section CHAR(1) NOT NULL,".  // ''=Site, R=Forums, G=Gallery, F=Fics, O=Oekaki (Site lists all sections as well).
+       "Verbosity INT(11) NOT NULL,".  // Important actions = 1, Minor actions = 2.
        "PRIMARY KEY(Id, UserId, Timestamp)
     ) DEFAULT CHARSET=utf8;"));
 

@@ -31,6 +31,11 @@ switch ($action) {
         $escaped_reason = sql_escape(SanitizeHTMLTags($_POST['reason'], ""));  // Remove tags.
         if (sql_query("UPDATE ".USER_TABLE." SET Usermode=-1, BanReason='$escaped_reason', BanExpireTime=-1 WHERE UserId=$puid;")) {
             PostSessionBanner("User permanently banned", "green");
+            $uid = $user['UserId'];
+            $username = $user['DisplayName'];
+            $puid = $profile_user['UserId'];
+            $pusername = $profile_user['DisplayName'];
+            LogAction("<strong><a href='/user/$uid/'>$username</a></strong> permanently banned user <strong><a href='/user/$puid/'>$pusername</a></strong>", "");
         } else {
             PostSessionBanner("Failed to set permanent ban", "red");
         }
@@ -40,7 +45,13 @@ switch ($action) {
         if (isset($_POST['duration']) && is_numeric($_POST['duration'])) {
             $expire_time = time() + (int)$_POST['duration'];
             if (sql_query("UPDATE ".USER_TABLE." SET Usermode=-1, BanReason='$escaped_reason', BanExpireTime=$expire_time WHERE UserId=$puid;")) {
-                PostSessionBanner("User banned for ".FormatDuration((int)$_POST['duration']), "green");
+                $duration = FormatDuration((int)$_POST['duration']);
+                PostSessionBanner("User banned for $duration", "green");
+                $uid = $user['UserId'];
+                $username = $user['DisplayName'];
+                $puid = $profile_user['UserId'];
+                $pusername = $profile_user['DisplayName'];
+                LogAction("<strong><a href='/user/$uid/'>$username</a></strong> temporariliy banned user <strong><a href='/user/$puid/'>$pusername</a></strong> ($duration)", "");
             } else {
                 PostSessionBanner("Failed to set temporary ban", "red");
             }
@@ -50,6 +61,11 @@ switch ($action) {
         break;
     case "unban":
         if (sql_query("UPDATE ".USER_TABLE." SET Usermode=1 WHERE UserId=$puid;")) {
+            $uid = $user['UserId'];
+            $username = $user['DisplayName'];
+            $puid = $profile_user['UserId'];
+            $pusername = $profile_user['DisplayName'];
+            LogAction("<strong><a href='/user/$uid/'>$username</a></strong> manually lifted ban on user <strong><a href='/user/$puid/'>$pusername</a></strong>", "");
             PostSessionBanner("User ban lifted", "green");
         } else {
             PostSessionBanner("Failed to lift ban", "red");

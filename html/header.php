@@ -27,6 +27,7 @@ include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."includes/util/sql.php");
 include_once(SITE_ROOT."includes/util/logging.php");
 include_once(SITE_ROOT."includes/util/user.php");
+include_once(SITE_ROOT."includes/util/logging.php");
 // Authenticate logged-in user.
 include_once(SITE_ROOT."includes/auth/auth.php");
 

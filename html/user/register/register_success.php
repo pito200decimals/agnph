@@ -48,10 +48,17 @@ function PrepareAllUserTables($user) {
     // Create Fics table entry.
     if ($success) $success = sql_query("INSERT INTO ".FICS_USER_PREF_TABLE." (UserId) VALUES ($uid);");
 
+    // TODO: Create Oekaki entry
+
+    // Mark user as registered.
     if ($success) $success = sql_query("UPDATE ".USER_TABLE." SET Usermode=1 WHERE UserId=$uid;");
 
-    // TODO: Create Oekaki entry
-    // TODO: Log action
+    if ($success) {
+        // Note: Username and display name are the same at this point when activating a newly-registered account.
+        $username = $user['DisplayName'];
+        $ip = $user['RegisterIP'];
+        LogAction("<strong><a href='/user/$uid/'>$username</a></strong> activated new account", "");
+    }
     return $success;
 }
 ?>

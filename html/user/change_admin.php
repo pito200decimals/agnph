@@ -74,6 +74,11 @@ foreach ($actions as $action) {
 
 if ($success) {
     PostSessionBanner("Permissions changed", "green");
+    $uid = $user['UserId'];
+    $username = $user['DisplayName'];
+    $puid = $profile_user['UserId'];
+    $pusername = $profile_user['DisplayName'];
+    LogAction("<strong><a href='/user/$uid/'>$username</a></strong> changed privileges of user <strong><a href='/user/$puid/'>$pusername</a></strong>", "");
 }
 
 header("Location: ".$_SERVER['HTTP_REFERER']);

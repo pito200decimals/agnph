@@ -3,10 +3,12 @@
 {% block sub_section_navigation %}
     <ul class="section-nav">
         <li id="selected-site-tab"><a href="/admin/">Settings</a></li>
+        <li><a href="/admin/log/">Log</a></li>
     </ul>
 {% endblock %}
 
 {% block styles %}
+    {{ parent() }}
     <style>
         td {
             vertical-align: top;

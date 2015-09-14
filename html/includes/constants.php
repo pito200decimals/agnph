@@ -71,6 +71,7 @@ define("DEFAULT_FICS_COMMENTS_PER_PAGE", 10);
 define("FICS_LIST_ITEMS_PER_PAGE", 50);
 define("USERS_LIST_ITEMS_PER_PAGE", 50);
 define("MAX_FORUMS_POST_LENGTH", 131072);
+define("ADMIN_LOG_ENTRIES_PER_PAGE", 50);
 
 // General constants.
 // Site-related

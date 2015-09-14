@@ -141,8 +141,11 @@ function HandlePostSuccess($username, $email, $password, $bday) {
             DELETE FROM ".USER_TABLE." WHERE UserId=$uid AND Usermode=0;");
     }
     if ($success) $success = SendValidationEmailLink($uid, $username, $email, $register_time);
-    // TODO: Log action
     if (!$success) ShowErrorBanner("Error creating account, please try again later");
+    if ($success) {
+        $ip = $_SERVER['REMOTE_ADDR'];
+        LogAction("<strong><a href='/user/$uid/'>$username</a></strong> registered from IP address $ip", "");
+    }
     return $success;
 }
 

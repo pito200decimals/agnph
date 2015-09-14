@@ -127,6 +127,9 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
     // Append rating and stuff before tags, so that tags can override the other fields.
     UpdatePost("rating:$rating source:$source parent:$parent_post_id ".$_POST['tags'], $post_id, $user);
     UpdatePostDescription($post_id, $_POST['description'], $user);
+    $uid = $user['UserId'];
+    $username = $user['DisplayName'];
+    LogVerboseAction("<strong><a href='/user/$uid/'>$username</a></strong> uploaded <strong><a href='/gallery/post/show/$pid/'>post #$pid</a></strong>", "G");
     header("Location: /gallery/post/show/$post_id/");
     exit();
 }

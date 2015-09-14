@@ -47,6 +47,11 @@ if (isset($_POST['confirm'])) {
                     if ($db_hash == $_POST['id']) {
                         sql_query("UPDATE ".FICS_CHAPTER_TABLE." SET ApprovalStatus='D' WHERE ParentStoryId=$sid AND ChapterId=$cid;");
                         UpdateStoryStats($sid);  // Update views, reviews, word count, chapter order.
+                        $uid = $user['UserId'];
+                        $username = $user['DisplayName'];
+                        $chapterTitle = htmlspecialchars($chapter['Title']);
+                        $storyTitle = htmlspecialchars($story['Title']);
+                        LogAction("<strong><a href='/user/$uid/'>$username</a></strong> deleted chapter <strong>$chapterTitle</strong> ($cid) from story <strong><a href='/fics/story/$sid/'>$storyTitle</a></strong>", "F");
                         header("Location: /fics/edit/$sid/");
                         exit();
                     } else {
@@ -60,11 +65,19 @@ if (isset($_POST['confirm'])) {
             }
         } else {
             sql_query("UPDATE ".FICS_STORY_TABLE." SET ApprovalStatus='D' WHERE StoryId=$sid;");
+            $uid = $user['UserId'];
+            $username = $user['DisplayName'];
+            $storyTitle = htmlspecialchars($story['Title']);
+            LogAction("<strong><a href='/user/$uid/'>$username</a></strong> deleted story <strong><a href='/fics/story/$sid/'>$storyTitle</a></strong>", "F");
             header("Location: /fics/browse/");
             exit();
         }
     } else if ($_GET['action'] == "undelete" && CanUserUndeleteStory($story, $user)) {
         sql_query("UPDATE ".FICS_STORY_TABLE." SET ApprovalStatus='A' WHERE StoryId=$sid;");
+        $uid = $user['UserId'];
+        $username = $user['DisplayName'];
+        $storyTitle = htmlspecialchars($story['Title']);
+        LogAction("<strong><a href='/user/$uid/'>$username</a></strong> un-deleted story <strong><a href='/fics/story/$sid/'>$storyTitle</a></strong>", "F");
         header("Location: /fics/story/$sid/");
         exit();
     } else {

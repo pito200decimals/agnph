@@ -31,13 +31,18 @@ function RecordUserIP(&$user) {
     }
 }
 
-function LogAction($action) {
+function LogVerboseAction($action, $section) {
+    LogAction($action, $section, 2);
+}
+
+function LogAction($action, $section, $verbosity=1) {
     global $user;
     if (isset($user)) {
         $uid = $user['UserId'];
         $timestamp = time();
         $escaped_action = sql_escape($action);
-        sql_query("INSERT INTO ".SITE_LOGGING_TABLE." (UserId, Timestamp, Action) VALUES ($uid, $timestamp, '$escaped_action');");
+        $escaped_section = sql_escape($section);
+        sql_query("INSERT INTO ".SITE_LOGGING_TABLE." (UserId, Timestamp, Action, Section, Verbosity) VALUES ($uid, $timestamp, '$escaped_action', '$escaped_section', $verbosity);");
     }
 }
 

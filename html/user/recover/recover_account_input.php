@@ -28,10 +28,12 @@ if (isset($_POST['email']) &&
             $usr = $result->fetch_assoc();
             $username = $usr['Username'];
             $redirect = "/recover/success/";
-            // TODO: Logging.
             $code = CreateCodeEntry($email, "account_recovery", $usr['UserId'].",".$email.",".md5($password), $redirect);
             if ($code !== FALSE) {
                 if (SendRecoveryEmail($email, $username, false, true, $code)) {
+                    $uid = $usr['UserId'];
+                    $ip = $_SERVER['REMOTE_ADDR'];
+                    LogAction("<strong><a href='/user/$uid/'>$username</a></strong> requested a password reset from IP $ip", "");
                     $_SESSION['recovery_email'] = $email;
                     header("Location: /recover/confirm/");
                     exit();

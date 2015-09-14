@@ -41,12 +41,10 @@ X Breakdown of views per-chapter
 * Splash for Disclaimer/Warning/Age gate.
 * Oekaki section
 * Admin site management (Ongoing)
-* Timezone/date management
-    - Should detect on home page, registration, or every page?
 * General help pages
 * General about section, admin bios, etc.
 - Link news from forums to each section/home page?
-- Global site statistics (including user action logging?)
+- Global site statistics?
 - Polls?
 - Way to push notifications and site updates to users (via PM system?)
     - Include welcome message, and account migration message on registration.
@@ -63,7 +61,6 @@ X Theme switcher for guests?
     X Support message deletion? For now, no.
 * Account merge/import system.
     - Still need to do gallery, but other sections complete.
-- Global user action logging
 - Non-user IP tracking (DoS investigating, user demographic statistics, etc?)
     - Show statistic about # of guests browsing? (not including bots?)
 - Display section permissions (better badge icons) [PARTIALLY DONE]

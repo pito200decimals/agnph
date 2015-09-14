@@ -124,6 +124,8 @@ function HandleDeleteAction($post) {
         ErrorBanner();
         return;
     }
+    $username = $user['DisplayName'];
+    LogAction("<strong><a href='/user/$uid/'>$username</a></strong> deleted <strong><a href='/gallery/post/show/$pid/'>post #$pid</a></strong>", "G");
     // Remove from user favorites. Don't check for errors since we can't do anything.
     // TODO: Move favorites to parent post?
     sql_query("DELETE FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE PostId=$pid;");
@@ -139,11 +141,14 @@ function HandleUndeleteAction($post) {
         InvalidActionBanner();
         return;
     }
+    $uid = $user['UserId'];
     $pid = $post['PostId'];
     if (!sql_query("UPDATE ".GALLERY_POST_TABLE." SET Status='A' WHERE PostId=$pid;")) {
         ErrorBanner();
         return;
     }
+    $username = $user['DisplayName'];
+    LogAction("<strong><a href='/user/$uid/'>$username</a></strong> un-deleted <strong><a href='/gallery/post/show/$pid/'>post #$pid</a></strong>", "G");
     PostSessionBanner("Post undeleted", "green");
 }
 function HandleAddCommentAction($post) {
@@ -246,6 +251,9 @@ function HandleRegenThumbnailsAction($post) {
         return;
     }
     CreateThumbnailFile($post['Md5'], $post['Extension']);
+    $uid = $user['UserId'];
+    $username = $user['DisplayName'];
+    LogAction("<strong><a href='/user/$uid/'>$username</a></strong> regenerated thumbnail for <strong><a href='/gallery/post/show/$pid/'>post #$pid</a></strong>", "G");
     PostSessionBanner("Thumbnail created", "green");
 }
 ?>

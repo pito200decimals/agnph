@@ -83,6 +83,7 @@ function MigrateAccount($uid) {
     global $user;
     $new_uid = $user['UserId'];
     LoadSingleTableEntry(array(USER_TABLE), "UserId", $uid, $old_user);
+    if (!isset($old_user)) RenderErrorPage("Account not found");
 
     $update_mapping = array(
         SITE_LOGGING_TABLE => "UserId",
@@ -142,11 +143,11 @@ function MigrateAccount($uid) {
             sql_query("UPDATE ".FICS_STORY_TABLE." SET Coauthors='$new_coauthors' WHERE StoryId=$sid;");
         }
     }
-    if (isset($old_user)) {
-        LogAction("Migrated acrhive account $uid(".$old_user['DisplayName'].") to user account $new_uid(".$user['DisplayName'].")");
-    } else {
-        LogAction("Migrated acrhive account $uid(?ERR?) to user account $new_uid(".$user['DisplayName'].")");
-    }
+    $user_uid = $user['UserId'];
+    $user_username = $user['DisplayName'];
+    $account_uid = $old_user['UserId'];;
+    $account_username = $old_user['DisplayName'];
+    LogAction("<strong><a href='/user/$user_uid/'>$user_username</a></strong> imported old account <strong><a href='/user/$account_uid/'>$account_username</a></strong>", "");
 }
 
 ///////////////////////////////////

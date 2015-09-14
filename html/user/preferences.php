@@ -80,9 +80,11 @@ if (isset($_POST['display-name']) &&
                     $valid_name = false;
                 }
                 if ($valid_name) {
-                    // TODO: Log change.
                     $user_table_sets[] = "DisplayName='$escaped_display_name'";
                     $user_table_sets[] = "DisplayNameChangeTime=$now";
+                    $username = $user['DisplayName'];
+                    $newUsername = $display_name;
+                    LogAction("<strong><a href='/user/$uid/'>$username</a></strong> changed names to <strong>$newUsername</strong>", "");
                 }
             }
         }
@@ -106,6 +108,9 @@ if (isset($_POST['display-name']) &&
         $dob = ParseDate($_POST['dob']);
         if ($dob) {
             $user_table_sets[] = "DOB='".sql_escape($dob)."'";
+            $username = $user['DisplayName'];
+            $log_dob = htmlspecialchars($_POST['dob']);
+            LogAction("<strong><a href='/user/$uid/'>$username</a></strong> changed birthday to <strong>$log_dob</strong>", "");
         }
     }
     // ShowDOB
@@ -202,6 +207,11 @@ if (isset($_POST['display-name']) &&
         }
         // Allow unverified changes for administrators, if they're not changing their own account (for security reasons).
         if ($user['UserId'] != $profile_user['UserId'] && CanUserChangeEmailAndPasswordWithoutVerification($user, $profile_user)) {
+            $uuid = $user['UserId'];
+            $username = $user['DisplayName'];
+            $puid = $uid;
+            $pusername = $profile_user['DisplayName'];
+            LogAction("<strong><a href='/user/$uuid/'>$username</a></strong> forced an email/password change for account <strong><a href='/user/$puid/'>$pusername</a></strong>", "");
             ChangeEmailPassword($profile_user['UserId'], $email, $pass, false /* confirmation email */, false /* force login */);
             PostConfirmMessage("User $detailed_desc changed");
         } else {
@@ -214,6 +224,11 @@ if (isset($_POST['display-name']) &&
             if ($code !== FALSE) {
                 if (SendRecoveryEmail($old_email, $username, $email_changed, $pass_changed, $code)) {
                     debug("Email sent, with uid=".$profile_user['UserId'].", email=".$email.", pass_md5=".$pass);
+                    $uuid = $user['UserId'];
+                    $username = $user['DisplayName'];
+                    $puid = $uid;
+                    $pusername = $profile_user['DisplayName'];
+                    LogAction("<strong><a href='/user/$uuid/'>$username</a></strong> requested an email/password change", "");
                     PostConfirmMessage("To finish changing your $detailed_desc, please click the link in the email sent to ".$profile_user['Email']);
                 } else {
                     $vars['error'] = "Error sending confirmation email, please try again later";

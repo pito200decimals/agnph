@@ -33,6 +33,10 @@ if ($result->num_rows > 0) {
 
 $user_id = $user['UserId'];
 if (!sql_query("INSERT INTO ".GALLERY_POOLS_TABLE." (Name, CreatorUserId) VALUES ('$escaped_name', $user_id);")) RenderErrorPage("An error occurred, please try again later.");
+$uid = $user['UserId'];
+$username = $user['DisplayName'];
+$name = htmlspecialchars($name);
+LogAction("<strong><a href='/user/$uid/'>$username</a></strong> created pool <strong>$name</strong>", "G");
 PostSessionBanner("Pool created", "green");
 header("Location: ".$_SERVER['HTTP_REFERER']);
 exit();

@@ -28,7 +28,9 @@ if (isset($_SESSION['auth_row'])) {
         $detailed_desc = "password";
     }
     ChangeEmailPassword($uid, $email, $password_md5) or RenderErrorPage("Failed to change $detailed_desc, please try again later");
-    // TODO: Re-compute headers.
+    $uid = $usr['UserId'];
+    $username = $usr['DisplayName'];
+    LogAction("<strong><a href='/user/$uid/'>$username</a></strong> password reset confirmed", "");
     RenderPage("user/recover_success.tpl");
     return;
 } else {
