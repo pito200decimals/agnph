@@ -137,7 +137,7 @@ function FillStoryInfo(&$story) {
 
     $story['DateCreated'] = FormatDate($story['DateCreated'], FICS_DATE_FORMAT);
     $story['DateUpdated'] = FormatDate($story['DateUpdated'], FICS_DATE_FORMAT);
-    $story['stars'] = GetStarsHTML($story['TotalStars'], $story['TotalRatings']);
+    $story['stars'] = GetStars($story['TotalStars'], $story['TotalRatings']);
 
     global $user;
     // Set up permissions.
@@ -176,7 +176,7 @@ function GetChaptersInfo($sid) {
         $cid = $row['ChapterId'];
         $hash = GetHashForChapter($sid, $cid);
         $row['hash'] = $hash;
-        $row['stars'] = GetStarsHTML($row['TotalStars'], $row['TotalRatings']);
+        $row['stars'] = GetStars($row['TotalStars'], $row['TotalRatings']);
         $chapters[] = $row;
     }
     return $chapters;
@@ -223,7 +223,7 @@ function GetReviews($sid) {
         $ids[] = $row['ReviewerUserId'];
         $row['date'] = FormatDate($row['ReviewDate'], FICS_DATE_FORMAT);
         if ($row['IsReview'] && $row['ReviewScore'] > 0) {
-            $row['stars'] = GetStarsHTML($row['ReviewScore'], 1);
+            $row['stars'] = GetStars($row['ReviewScore'], 1);
         }
         $row['id'] = $row['ReviewId'];
         // Initialize possible actions.
@@ -325,18 +325,20 @@ function GetHashForChapter($sid, $cid) {
     return md5("$sid.$cid");
 }
 
-function GetStarsHTML($totalStars, $numReviews) {
-    $stars = "";
+function GetStars($totalStars, $numReviews) {
+    $stars = array();
     if ($numReviews > 0) {
         $averageStars = round($totalStars / $numReviews);
         for ($i = 1; $i < $averageStars; $i += 2) {
-            $stars .= "<img src='/images/star.gif' />";
+            $stars[] = "full";
         }
         if ($i == $averageStars) {
             // Also add a half-star.
-            $stars .= "<img src='/images/starhalf.gif' />";
+            $stars[] = "half";
         }
     }
+    // $stars .= "<img src='/images/star.gif' />";
+    // $stars .= "<img src='/images/starhalf.gif' />";
     return $stars;
 }
 

@@ -18,7 +18,8 @@ function CanUserViewBoard($user, $board) {
 function CanUserCreateThread($user, $board) {
     if (!IsUserActivated($user)) return false;
     if ($user['ForumsPermissions'] == 'A') return true;
-    if (isset($board['childBoards']) && sizeof($board['childBoards']) > 0) return false;  // Can't post to top-level boards (Although admins can move posts to them).
+    // TODO: Determine if this is desired.
+    // if (isset($board['childBoards']) && sizeof($board['childBoards']) > 0) return false;  // Can't post to top-level boards (Although admins can move posts to them).
     if ($board['PrivateBoard'] == 1) return false;
     if ($board['Locked'] == 1) return false;
     return true;
@@ -53,7 +54,7 @@ function CanUserMoveThread($user) {
     if ($user['ForumsPermissions'] == 'A') return true;
     return false;
 }
-function CanUserLockBoard($user, $board) {  // Also for marking boards as admin-only private.
+function CanUserAdminBoard($user, $board) {  // Also for marking boards as admin-only private.
     if (!IsUserActivated($user)) return false;
     if ($user['ForumsPermissions'] == 'A') return true;
     return false;
@@ -323,6 +324,7 @@ function MarkPostsAsRead($user, $post_ids) {
 
 function MarkAllAsRead($user) {
     if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." ORDER BY PostId DESC LIMIT 1;", 1)) {
+        $uid = $user['UserId'];
         $pid = $result->fetch_assoc()['PostId'];
         sql_query("DELETE FROM ".FORUMS_UNREAD_POST_TABLE." WHERE UserId=$uid;");
         sql_query("UPDATE ".FORUMS_USER_PREF_TABLE." SET MaybeReadUpTo=".($pid + 1)." WHERE UserId=$uid;");
@@ -383,5 +385,27 @@ function TagBoardsAsUnread($user, &$board) {
     $MarkBoardRecursive($board);
 }
 
+function GetOrderedBoardTree($include_root=false) {
+    $root = array(
+        "Name" => "Root",
+        "BoardId" => -1
+    );
+    InitBoardChildren($root);
+    $ret = array();
+    RecursivelyFillBoardList($ret, $root, ($include_root ? 0 : -1));
+    return $ret;
+}
 
+function RecursivelyFillBoardList(&$list, $board, $depth) {
+    global $user;
+    if (CanUserViewBoard($user, $board)) {
+        if ($depth >= 0) {
+            $board['depth'] = $depth;
+            $list[] = $board;
+        }
+        foreach ($board['childBoards'] as $cb) {
+            RecursivelyFillBoardList($list, $cb, $depth + 1);
+        }
+    }
+}
 ?>

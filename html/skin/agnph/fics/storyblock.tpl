@@ -34,11 +34,27 @@
                             </li>
                         {% endfor %}
                     </ul>
-                    <span class="stars">{% autoescape false %}{{ story.stars }}{% endautoescape %}</span>
+                    <span class="stars">
+                        {% for star in story.stars %}
+                            {% if star == "half" %}
+                                <img src='/images/starhalf.gif' />
+                            {% elseif star == "full" %}
+                                <img src='/images/star.gif' />
+                            {% endif %}
+                        {% endfor %}
+                    </span>
                 </div>
                 <div>
                     <span class="rating">Rated: {{ story.rating }}</span>
-                    <span class="stars">{% autoescape false %}{{ story.stars }}{% endautoescape %}</span>
+                    <span class="stars">
+                        {% for star in story.stars %}
+                            {% if star == "half" %}
+                                <img src='/images/starhalf.gif' />
+                            {% elseif star == "full" %}
+                                <img src='/images/star.gif' />
+                            {% endif %}
+                        {% endfor %}
+                    </span>
                     {% if not story.shortDesc %}
                     {% if story.NumReviews > 0 %}<span class="reviews">[<a href="/fics/story/{{ story.StoryId }}/?reviews#reviews">Reviews: {{ story.NumReviews }}</a>]</span>{% endif %}
                     {% endif %}

@@ -58,19 +58,22 @@
                 {# float right goes before normal nav, so it positions correctly #}
                 <ul class="navigation_right">
                     {% if user %}
-                        <noscript><li><a href="/logout/">Log out</a></li></noscript>
-                        {# TODO: Mail notifications #}
+<noscript>
+                        <li class="navigation_left"><a href="/logout/">Log out</a></li>
+</noscript>
                         <li class="navigation_left">
                             <a id="mail_icon" href="/user/{{ user.UserId }}/mail/">
-                            {% if unread_message_count > 0 %}
-                                {% if unread_message_count <= 9 %}
-                                    <img src="/images/message-unread-{{ unread_message_count }}.png" />
+                                {% if unread_message_count > 0 %}
+                                    {% if unread_message_count <= 9 %}
+                                        <img src="/images/message-unread-{{ unread_message_count }}.png" />
+                                    {% else %}
+                                        <img src="/images/message-unread-9+.png" />
+                                    {% endif %}
                                 {% else %}
-                                    <img src="/images/message-unread-9+.png" />
+                                    <img src="/images/message.png" />
                                 {% endif %}
-                            {% else %}
-                                <img src="/images/message.png" />
-                            {% endif %}</a></li>
+                            </a>
+                        </li>
                         <li id="account_link">
                             <a href="/user/{{ user.UserId }}/"><img src="{{ user.avatarURL }}" />{{ user.DisplayName }}</a>
                             <ul id="account_dropdown" class="" hidden>

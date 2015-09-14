@@ -30,10 +30,10 @@
 {% block content %}
     {% if board %}
         <h3>Posting to board: {{ board.Name }}</h3>
-    {% elseif thread %}
-        <h3>Replying to thread: {{ post.Title }}</h3>
     {% elseif post %}
         <h3>Editing post: {{ post.Title }}</h3>
+    {% elseif thread %}
+        <h3>Replying to thread: {{ thread.Title }}</h3>
     {% endif %}
     <form method="POST" accept-encoding="UTF-8">
         <input type="hidden" name="action" value="{{ action }}" />
@@ -60,7 +60,7 @@
             {% if canMoveThread %}
                 <select name="move-board">
                     {% for board in allBoards %}
-                        <option value="{{ board.BoardId }}"{% if board.BoardId == post.ParentId %} selected{% endif %}>{% if board.depth > 0 %}{% for depth in 0..board.depth %}&nbsp;&nbsp;{% endfor %}{% endif %}{{ board.Name }}</option>
+                        <option value="{{ board.BoardId }}"{% if board.BoardId == post.ParentId %} selected{% endif %}>{% if board.depth > 0 %}{% for depth in 1..board.depth %}&nbsp;&nbsp;{% endfor %}{% endif %}{{ board.Name }}</option>
                     {% endfor %}
                 </select>
             {% endif %}

@@ -4,11 +4,11 @@ TODOs
 == FORUMS ==
 * Quoting
 * Spoiler tags
-* More board management (create, move, group)
-    - Admin control panel
+- Admin control panel?
 - Link up news forum to other index pages?
     - Optional large first posts in a thread?
 - Search?
+    - Profile user subpage for forums
 
 == GALLERY ==
 - Gallery mass tag edits
@@ -30,7 +30,6 @@ X Custom swf/webm thumbs when parent is set to image.
 == FICS ==
 - Index page, including news and featured stories, perhaps random selection
 - RSS Feed?
-- Fix stars spacing CSS
 X Author/Story following?
 X Ability to subscribe for email/PM notifications (for your stories and watching others)
 X Breakdown of views per-chapter
@@ -65,7 +64,7 @@ X Theme switcher for guests?
     - Show statistic about # of guests browsing? (not including bots?)
 - Display section permissions (better badge icons) [PARTIALLY DONE]
 - Give admins ability to ban until a user turns 18
-    - Possibly not automatic, should notify/ticket when a user sets birthday to invlaid value
+    - Possibly not automatic, should notify/ticket when a user sets birthday to invalid value
 X Enable login via display name???
 X Allow user account deletion?
     - Messy, but doable now that account import is done.

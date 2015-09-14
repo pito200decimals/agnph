@@ -25,7 +25,7 @@ if ($board_id == -1) {
     InitBoardChildren($board);
     FillBoardLastPostStats($board);
     if (isset($user)) TagBoardsAsUnread($user, $board);
-    $vars['isRoot'] = true;
+    HandlePost($board);
 } else if (GetBoard($board_id, $board)) {  // Also gets children.
     HandlePost($board);
     $board_id = $board['BoardId'];  // Get db value.
@@ -51,13 +51,16 @@ if ($board_id == -1) {
     $vars['repliesSortUrl'] = GetURLForSortOrder("replies", "desc");
     $vars['viewsSortUrl'] = GetURLForSortOrder("views", "desc");
     $vars['lastpostSortUrl'] = GetURLForSortOrder("lastpost", "desc");
-    if (isset($user)) {
-        // Set up permissions.
-        $vars['canCreateThread'] = CanUserCreateThread($user, $board);
-        $vars['canLockBoard'] = CanUserLockBoard($user, $board);
-    }
 } else {
     RenderErrorPage("Board not found");
+}
+if (isset($user)) {
+    // Set up permissions.
+    $vars['canCreateThread'] = CanUserCreateThread($user, $board);
+    $vars['canAdminBoard'] = CanUserAdminBoard($user, $board);
+    if ($vars['canAdminBoard']) {
+        $vars['allBoards'] = GetOrderedBoardTree(true);
+    }
 }
 // Show lobby of boards.
 $vars['board'] = $board;
@@ -133,28 +136,173 @@ function HandlePost($board) {
     if (!isset($_POST['action'])) return;
     $action = $_POST['action'];
     if (!isset($user)) return;
-    if (!CanUserLockBoard($user, $board)) {
+    if (!CanUserAdminBoard($user, $board)) {
         RenderErrorPage("Not authorized to perform this action");
     }
     $bid = $board['BoardId'];
+    // TODO: Decide if logging is desired here.
     switch ($action) {
         case "lock":
+            if ($board['BoardId'] == -1) break;
             sql_query("UPDATE ".FORUMS_BOARD_TABLE." SET Locked=1 WHERE BoardId=$bid;");
             PostSessionBanner("Board locked", "green");
             break;
         case "unlock":
+            if ($board['BoardId'] == -1) break;
             sql_query("UPDATE ".FORUMS_BOARD_TABLE." SET Locked=0 WHERE BoardId=$bid;");
             PostSessionBanner("Board unlocked", "green");
             break;
         case "mark-private":
+            if ($board['BoardId'] == -1) break;
             sql_query("UPDATE ".FORUMS_BOARD_TABLE." SET PrivateBoard=1 WHERE BoardId=$bid;");
             PostSessionBanner("Board marked private", "green");
             break;
         case "mark-public":
+            if ($board['BoardId'] == -1) break;
             sql_query("UPDATE ".FORUMS_BOARD_TABLE." SET PrivateBoard=0 WHERE BoardId=$bid;");
             PostSessionBanner("Board marked public", "green");
             break;
+        case "move-board":
+            if ($board['BoardId'] == -1) break;
+            $pid = $_POST['parent-board'];
+            $success = true;
+            if ($pid == -1) {
+                // Leave as root.
+            } else if (sql_query_into($result, "SELECT * FROM ".FORUMS_BOARD_TABLE." WHERE BoardId=$pid;", 1)) {
+                $pid = $result->fetch_assoc()['BoardId'];
+            } else {
+                PostSessionBanner("Error moving board", "red");
+                break;
+            }
+            // Re-compute old placement.
+            $old_pid = $board['ParentId'];
+            if (sql_query_into($result, "SELECT * FROM ".FORUMS_BOARD_TABLE." WHERE ParentId=$old_pid ORDER BY BoardSortOrder ASC;", 1)) {
+                $new_id_order_mapping = array();
+                $index = 0;
+                while ($row = $result->fetch_assoc()) {
+                    if ($row['BoardId'] == $bid) continue;
+                    $new_id_order_mapping[$row['BoardId']] = $index;
+                    $index++;
+                }
+            } else {
+                PostSessionBanner("Error moving board", "red");
+                break;
+            }
+            // Compute new placement.
+            if (sql_query_into($result, "SELECT COUNT(*) AS C FROM ".FORUMS_BOARD_TABLE." WHERE ParentId=$pid;", 1)) {
+                $index = $result->fetch_assoc()['C'];  // Place at end.
+            } else {
+                PostSessionBanner("Error moving board", "red");
+                break;
+            }
+            // Apply both order updates at the same time.
+            sql_query("UPDATE ".FORUMS_BOARD_TABLE." SET ParentId=$pid, BoardSortOrder=$index WHERE BoardId=$bid;");
+            foreach ($new_id_order_mapping as $id => $order) {
+                sql_query("UPDATE ".FORUMS_BOARD_TABLE." SET BoardSortOrder=$order WHERE BoardId=$id;");
+            }
+            PostSessionBanner("Board moved", "green");
+            break;
+        case "create":
+            if (!isset($_POST['name']) || !isset($_POST['description'])) {
+                PostSessionBanner("Error creating board", "red");
+                break;
+            }
+            $name = $_POST['name'];
+            $description = $_POST['description'];
+            // Only allow alpha-numeric and spaces.
+            if (!preg_match("/^[A-Za-z0-9 ]+$/", $name)) {
+                PostSessionBanner("Error creating board", "red");
+                break;
+            }
+            // Compute new placement.
+            if (sql_query_into($result, "SELECT COUNT(*) AS C FROM ".FORUMS_BOARD_TABLE." WHERE ParentId=$bid;", 1)) {
+                $index = $result->fetch_assoc()['C'];  // Place at end.
+            } else {
+                PostSessionBanner("Error creating board", "red");
+                break;
+            }
+            $escaped_name = sql_escape($name);
+            $escaped_description = sql_escape($description);
+            if (sql_query_into($result, "SELECT COUNT(*) AS C FROM ".FORUMS_BOARD_TABLE." WHERE Name='$escaped_name';", 1)) {
+                if ($result->fetch_assoc()['C'] > 0) {
+                    PostSessionBanner("Board name already exists", "red");
+                    break;
+                }
+            } else {
+                PostSessionBanner("Error creating board", "red");
+                break;
+            }
+            sql_query("INSERT INTO ".FORUMS_BOARD_TABLE." (ParentId, Name, Description, BoardSortOrder) VALUES ($bid, '$escaped_name', '$escaped_description', $index);");
+            // Manually redirect to new board.
+            $final_url = "/forums/board/".urlencode($name)."/";
+            header("Location: $final_url");
+            exit();
+        case "delete":
+            if ($board['BoardId'] == -1) break;
+            if (!sql_query_into($result, "SELECT COUNT(*) AS C FROM ".FORUMS_BOARD_TABLE." WHERE ParentId=$bid;", 1)) {
+                PostSessionBanner("Error deleting board", "red");
+                break;
+            }
+            if ($result->fetch_assoc()['C'] > 0) {
+                PostSessionBanner("Board must contain no children before deleting", "red");
+                break;
+            }
+            if (!sql_query_into($result, "SELECT COUNT(*) AS C FROM ".FORUMS_POST_TABLE." WHERE IsThread=1 AND ParentId=$bid;", 1)) {
+                PostSessionBanner("Error deleting board", "red");
+                break;
+            }
+            if ($result->fetch_assoc()['C'] > 0) {
+                PostSessionBanner("Board must contain no threads before deleting", "red");
+                break;
+            }
+            $pid = $board['ParentId'];
+            if (sql_query_into($result, "SELECT * FROM ".FORUMS_BOARD_TABLE." WHERE ParentId=$pid ORDER BY BoardSortOrder ASC;", 1)) {
+                $index = 0;
+                while ($row = $result->fetch_assoc()) {
+                    if ($row['BoardId'] == $bid) continue;
+                    sql_query("UPDATE ".FORUMS_BOARD_TABLE." SET BoardSortOrder=$index WHERE BoardId=".$row['BoardId'].";");
+                    $index++;
+                }
+            } else {
+                PostSessionBanner("Error deleting board", "red");
+                break;
+            }
+            sql_query("DELETE FROM ".FORUMS_BOARD_TABLE." WHERE BoardId=$bid;");
+            // Manually redirect to parent board.
+            if ($pid == -1) {
+                $final_url = "/forums/board/";
+            } else if (sql_query_into($result, "SELECT * FROM ".FORUMS_BOARD_TABLE." WHERE BoardId=$pid;", 1)) {
+                $parentName = $result->fetch_assoc()['Name'];
+                $final_url = "/forums/board/".urlencode($parentName)."/";
+            }
+            header("Location: $final_url");
+            exit();
+        case "rename":
+            if ($board['BoardId'] == -1) break;
+            if (!isset($_POST['name']) || !isset($_POST['description'])) {
+                PostSessionBanner("Error renaming board", "red");
+                break;
+            }
+            $name = $_POST['name'];
+            $description = $_POST['description'];
+            // Only allow alpha-numeric and spaces.
+            if (!preg_match("/^[A-Za-z0-9 ]+$/", $name)) {
+                PostSessionBanner("Error renaming board", "red");
+                break;
+            }
+            $escaped_name = sql_escape($name);
+            if ($description == "") {
+                sql_query("UPDATE ".FORUMS_BOARD_TABLE." SET Name='$escaped_name' WHERE BoardId=$bid;");
+            } else {
+                $escaped_description = sql_escape($description);
+                sql_query("UPDATE ".FORUMS_BOARD_TABLE." SET Name='$escaped_name', Description='$escaped_description' WHERE BoardId=$bid;");
+            }
+            // Manually redirect to new board name.
+            $final_url = "/forums/board/".urlencode($name)."/";
+            header("Location: $final_url");
+            exit();
         default:
+            // Not a valid POST.
             return;
     }
     header("Location: ".$_SERVER['HTTP_REFERER']);

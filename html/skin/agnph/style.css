@@ -75,7 +75,7 @@ a:hover {
     padding: 5px 15px;
     font-weight: bold;
 }
-.site-navbar > div > ul > li > a {
+.site-navbar > div > ul li > a {
     display: block;
 }
 .navigation_left li {

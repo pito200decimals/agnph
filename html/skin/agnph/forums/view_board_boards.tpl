@@ -70,7 +70,8 @@
     {% else %}
         {{ _self.boardgroup(board, false) }}
     {% endif %}
-    {% if threads|length > 0 %}
+    {# TODO: Determine if these should be visible when there are no threads #}
+    {% if board.BoardId != -1 %}
         {{ block('threadList') }}
     {% endif %}
     {{ block('actionbar') }}

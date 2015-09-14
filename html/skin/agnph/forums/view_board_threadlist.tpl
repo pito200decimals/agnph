@@ -15,7 +15,6 @@
             {% endif %}
         </ul>
     {% endif %}
-    {% if threads|length > 0 %}
         <table class="list-table">
             <thead>
                 <tr>
@@ -26,41 +25,47 @@
                 </tr>
             </thead>
             <tbody>
-                {% for thread in threads %}
+                {% if threads|length > 0 %}
+                    {% for thread in threads %}
+                        <tr>
+                            <td class="status">
+                                {% if thread.unread %}
+                                    <img src="/images/unread-board.png" />
+                                {% else %}
+                                    <img src="/images/read-board.png" />
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if thread.Sticky %}<img class="icon" src="/images/sticky.gif" />{% endif %}
+                                {% if thread.Locked %}<img class="icon" src="/images/locked.png" />{% endif %}
+                                <a href="/forums/thread/{{ thread.PostId }}/">{{ thread.Title }}</a><br />
+                                Started by <a href="/user/{{ thread.user.UserId }}/">{{ thread.user.DisplayName }}</a>
+                            </td>
+                            <td>
+                                {{ thread.Replies }} replies<br />
+                                {{ thread.Views }} views
+                            </td>
+                            <td class="lastpost">
+                                {% if thread.lastPost %}
+                                    <ul>
+                                        <li>{{ thread.lastPost.date }}</li>
+                                        <li>by <a href="/user/{{ thread.lastPost.user.UserId }}/">{{ thread.lastPost.user.DisplayName }}</a></li>
+                                    </ul>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
                     <tr>
-                        <td class="status">
-                            {% if thread.unread %}
-                                <img src="/images/unread-board.png" />
-                            {% else %}
-                                <img src="/images/read-board.png" />
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if thread.Sticky %}<img class="icon" src="/images/sticky.gif" />{% endif %}
-                            {% if thread.Locked %}<img class="icon" src="/images/locked.png" />{% endif %}
-                            <a href="/forums/thread/{{ thread.PostId }}/">{{ thread.Title }}</a><br />
-                            Started by <a href="/user/{{ thread.user.UserId }}/">{{ thread.user.DisplayName }}</a>
-                        </td>
-                        <td>
-                            {{ thread.Replies }} replies<br />
-                            {{ thread.Views }} views
-                        </td>
-                        <td class="lastpost">
-                            {% if thread.lastPost %}
-                                <ul>
-                                    <li>{{ thread.lastPost.date }}</li>
-                                    <li>by <a href="/user/{{ thread.lastPost.user.UserId }}/">{{ thread.lastPost.user.DisplayName }}</a></li>
-                                </ul>
-                            {% endif %}
-                        </td>
+                        <td class="status"></td>
+                        <td></td>
+                        <td>No threads found</td>
+                        <td class="lastpost"></td>
                     </tr>
-                {% endfor %}
+                {% endif %}
             </tbody>
         </table>
         <div class="iterator">
             {% autoescape false %}{{ iterator }}{% endautoescape %}
         </div>
-    {% else %}
-        No threads found
-    {% endif %}
 {% endblock %}

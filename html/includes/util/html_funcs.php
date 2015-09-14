@@ -84,12 +84,15 @@ function RenderErrorPage($message = "Error") {
     exit();
 }
 
+$TIDY_HTML_SKIP_SPACES_BETWEEN_SINGLE_TAGS = array("img");
+
 // Returns properly-indented HTML.
 function TidyHTML($html) {
+    global $TIDY_HTML_SKIP_SPACES_BETWEEN_SINGLE_TAGS;
     function Tabs($indent) {
         $tabs = "";
         for ($i = 0; $i < $indent; $i++) {
-            $tabs .= "    ";
+            $tabs .= "  ";
         }
         return $tabs;
     }
@@ -98,6 +101,7 @@ function TidyHTML($html) {
     $ret = "";
     $indent = 0;
     $iter = 0;
+    $lastOpenCloseTag = null;
     while (mb_strlen($html) > 0) {
         $iter++;
         if ($iter > 10000) {
@@ -109,16 +113,19 @@ function TidyHTML($html) {
             $tabs = Tabs($indent);
             $ret .= $tabs.$match[1]."\n";
             $html = $match[2];
+            $lastOpenCloseTag = null;
         } else if (mb_ereg("^(<([^/][^>]*[^/]|[^>/]+)>)([^<>]*)(</[^>]+>)(.*)$", $html, $match)) {
             // Tag with only text in it.
             $tabs = Tabs($indent);
             $ret .= $tabs.$match[1].trim($match[3]).$match[4]."\n";
             $html = $match[5];
+            $lastOpenCloseTag = null;
         } else if (mb_ereg("^([^<]+)(<.*)$", $html, $match)) {
             // Text.
             $tabs = Tabs($indent);
             $ret .= $tabs.trim($match[1])."\n";
             $html = $match[2];
+            $lastOpenCloseTag = null;
         } elseif (mb_ereg("^([^<]*)(</[^>]+>)(.*)$", $html, $match)) {
             // Close tag.
             $indent--;
@@ -126,30 +133,42 @@ function TidyHTML($html) {
             if (mb_strlen($match[1]) > 0) $ret .= $tabs.$match[1]."\n";
             $ret .= $tabs.$match[2]."\n";
             $html = $match[3];
+            $lastOpenCloseTag = null;
         } elseif (mb_ereg("^([^<]*)(<\\?[^>]+>)(.*)$", $html, $match)) {
             // xml
             $tabs = Tabs($indent);
             if (mb_strlen($match[1]) > 0) $ret .= $tabs.$match[1]."\n";
             $ret .= $tabs.$match[2]."\n";
             $html = $match[3];
+            $lastOpenCloseTag = null;
         } elseif (mb_ereg("^([^<]*)(<![^>]+>)(.*)$", $html, $match)) {
             // DOCTYPE
             $tabs = Tabs($indent);
             if (mb_strlen($match[1]) > 0) $ret .= $tabs.$match[1]."\n";
             $ret .= $tabs.$match[2]."\n";
             $html = $match[3];
-        } elseif (mb_ereg("^([^<]*)(<[^>]+/>)(.*)$", $html, $match)) {
+            $lastOpenCloseTag = null;
+        } elseif (mb_ereg("^([^<]*)(<([^ />]+)( [^>]*)?/>)(.*)$", $html, $match)) {
             // OpenClose tag.
             $tabs = Tabs($indent);
+            $tagName = $match[3];
+            if ($lastOpenCloseTag != null) {
+                if ($lastOpenCloseTag == $tagName && in_array($tagName, $TIDY_HTML_SKIP_SPACES_BETWEEN_SINGLE_TAGS)) {
+                    $tabs = "";
+                    $ret = mb_substr($ret, 0, mb_strlen($ret) - 1);  // Erase trailing newline.
+                }
+            }
+            $lastOpenCloseTag = $tagName;
             if (mb_strlen($match[1]) > 0) $ret .= $tabs.$match[1]."\n";
             $ret .= $tabs.$match[2]."\n";
-            $html = $match[3];
+            $html = $match[5];
         } elseif (mb_ereg("^([^<]*)(<[^>]+>)(.*)$", $html, $match)) {
             // Open tag.
             $tabs = Tabs($indent);
             if (mb_strlen($match[1]) > 0) $ret .= $tabs.$match[1]."\n";
             $ret .= $tabs.$match[2]."\n";
             $html = $match[3];
+            $lastOpenCloseTag = null;
             $indent++;
         } else {
             // Catch-all and quit.
