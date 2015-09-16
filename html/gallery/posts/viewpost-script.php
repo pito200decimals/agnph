@@ -1,5 +1,6 @@
 <?php
 // Script for the javascript on the viewpost page.
+include_once("../../includes/constants.php");
 if (!isset($_GET['pi']) || !isset($_GET['ppi'])) die();
 $postId = $_GET['pi'];
 $parentPoolId = $_GET['ppi'];
@@ -30,7 +31,132 @@ $(document).ready(function() {
     <?php } ?>
     SetupFlag();
     SetupComments();
+    SetupEdit();
 });
+function prefix(input) {
+    var index = input.indexOf(":");
+    if (index > -1) {
+        return input.substring(0, index);
+    } else {
+        return "";
+    }
+}
+function suffix(input) {
+    var index = input.indexOf(":");
+    if (index > -1) {
+        input = input.substring(index + 1);
+    }
+    return input;
+}
+function getExistingTag(tag) {
+    suf = suffix(tag);
+    var t = $('#edit-taglist li').filter(function(i,e) {
+        tstr = suffix(e.innerHTML);
+        return tstr == suf;
+    });
+    if (t.length == 0) return null;
+    else return t;
+}
+function hasTag(tag) {
+    return getExistingTag(tag) != null;
+}
+function SetupEdit() {
+    if ($('#edit-taglist').length > 0) {
+        $('#tag-input').autocomplete({
+            serviceUrl: '/gallery/tagsearch/',
+            onSelect: function(suggestion) {
+                AddTag(suggestion.data.type);
+            },
+            transformResult: function(response, originalQuery) {
+                response = JSON.parse(response);
+                var remaining = $.grep(response.suggestions, function(tagData) {
+                        return !hasTag(tagData.value);
+                    });
+                return {
+                    suggestions: remaining
+                };
+            },
+            showNoSuggestionNotice: true,
+            tabDisabled: true,
+            triggerSelectOnValidInput: false
+        }).keydown(function(event) {
+            if (event.keyCode == 13 || event.keyCode == 32) {
+                AddTag(null);
+                event.preventDefault();
+                return false;
+            }
+        });
+        $('#edit-taglist li').click(function() {
+            RemoveTag($(this));
+        });
+    }
+}
+function AddTag(type) {
+    var tag = $('#tag-input').val().toLowerCase();
+    if (tag.length == 0) return;
+    $('#tag-input').val("");
+    var pre = prefix(tag);
+    var suf = suffix(tag);
+    var preclass = null;
+    if (pre != null) {
+    <?php
+        foreach ($GALLERY_TAG_TYPES as $letter => $name) {
+            $lower_letter_class = strtolower($letter)."typetag";
+            $lower_name = strtolower($name);
+            echo <<<EOF
+if (pre.toLowerCase() == '$lower_name') {
+    preclass = '$lower_letter_class';
+}
+EOF
+;
+        }
+    ?>
+    }
+    if (hasTag(suf)) {
+        var existing_tag = getExistingTag(suf);
+        if (preclass == null || existing_tag.hasClass(preclass)) return;
+        existing_tag.detach();
+    }
+    var elem = $('<li>'+tag+'</li>');
+    $('#edit-taglist').append(elem);
+    elem.click(function() {
+        RemoveTag($(this));
+    });
+    if (preclass != null) {
+        elem.addClass(preclass);
+        return;
+    }
+    if(type != null) {
+        elem.addClass(type+"typetag");
+        return;
+    }
+    $.ajax('/gallery/tagsearch/', {
+        data: { query: tag },
+        success: function(val) {
+            type = 'g'
+            if (val.suggestions.length > 0) {
+                for (i=0; i < val.suggestions.length; i++) {
+                    if (val.suggestions[i].value == tag) {
+                        type = val.suggestions[i].data.type;
+                        break;
+                    }
+                }
+            }
+            elem.removeClass().addClass(type+"typetag");
+        }
+    });
+}
+function OnEditSubmit() {
+    if ($('#edit-taglist').length > 0) {
+        var tags = $('#edit-taglist li').map(function(i, opt) {
+            return $(opt).text();
+        }).toArray().join(' ');
+        $('#tags').val(tags);
+    }
+}
+function RemoveTag(elem) {
+    elem.detach();
+}
 function SetupFlag() {
     $("#flagaction").click(function() {
         $(".flageditbox").toggle();

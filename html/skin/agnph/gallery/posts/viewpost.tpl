@@ -10,6 +10,7 @@
     {{ parent() }}
     {% if post.canEdit %}
         <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
+        <script src="{{ asset('/scripts/jquery.autocomplete.min.js') }}"></script>
         <script src="/gallery/post/view-script/?pi={{ post.PostId }}&ppi={{ post.ParentPoolId }}{% if user and user.NavigateGalleryPoolsWithKeyboard %}&keynav=1{% endif %}"></script>
     {% endif %}
 {% endblock %}
@@ -253,14 +254,27 @@
                 </p>
                 <div class="posteditbox">
                     <a id="editanchor">&nbsp;</a>
-                    <form method="POST" accept-charset="UTF-8">
+                    <form method="POST" accept-charset="UTF-8" onsubmit="OnEditSubmit()">
                         <input type="hidden" name="action" value="edit" />
                         <label class="formlabel">Rating</label>         <input name="rating" type="radio"{% if post.Rating=='e' %} checked{% endif %} value="e" /><label>Explicit</label>
                                                                         <input name="rating" type="radio"{% if post.Rating=='q' %} checked{% endif %} value="q" /><label>Questionable</label>
                                                                         <input name="rating" type="radio"{% if post.Rating=='s' %} checked{% endif %} value="s" /><label>Safe</label><br />
-                        <label class="formlabel">Parent</label>         <input id="parent" class="textbox" type="textbox" name="parent" value="{% if post.ParentPostId!=-1 %}{{ post.ParentPostId }}{% endif %}" /><br />
-                        <label class="formlabel">Source</label>         <input id="imgsource" class="textbox" type="textbox" size=35 name="source" value="{{ post.Source }}" /><br />
-                        <label class="formlabel">Tags</label>           <textarea id="tags" class="textbox" name="tags">{{ post.tagstring }}</textarea><br />
+                        <label class="formlabel">Parent</label>         <input id="parent" class="textbox" type="text" name="parent" value="{% if post.ParentPostId!=-1 %}{{ post.ParentPostId }}{% endif %}" /><br />
+                        <label class="formlabel">Source</label>         <input id="imgsource" class="textbox" type="text" size=35 name="source" value="{{ post.Source }}" /><br />
+                        {#<label class="formlabel">Tags</label>           <textarea id="tags" class="textbox" name="tags">{{ post.tagstring }}</textarea><br />#}
+                        {% if fancyTagEdit %}
+                            <label class="formlabel">Tags</label>       <ul id="edit-taglist">
+                                                                            {% for category in post.tagCategories %}
+                                                                                {% for tag in category.tags %}
+                                                                                    <li class="{{ tag.Type|lower }}typetag">{{ tag.Name }}</li>
+                                                                                {% endfor %}
+                                                                            {% endfor %}
+                                                                        </ul>
+                                                                        <textarea id="tags" class="" name="tags" hidden>{{ post.tagstring }}</textarea><br />
+                            <label class="formlabel">&nbsp;</label>     <input id="tag-input" type="text" class="textbox" /><br />
+                        {% else %}
+                            <label class="formlabel">Tags</label>       <textarea id="tags" class="" name="tags">{{ post.tagstring }}</textarea><br />
+                        {% endif %}
                         <label class="formlabel">Description</label>    <textarea id="desc" class="textbox" name="description">{{ post.Description }}</textarea><br />
                         <br />
                         <input type="submit" value="Save Changes" />

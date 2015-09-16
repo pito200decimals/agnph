@@ -150,6 +150,23 @@ textarea {
 .textbox {
     width: 400px;
 }
+#edit-taglist {
+    display: inline-block;
+    border: 1px solid black;
+    margin: 5px;
+    width: 400px;
+    min-height: 50px;
+    padding: 0px;
+    list-style: none;
+}
+#edit-taglist > li {
+    font-weight: bold;
+    display: inline-block;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 5px;
+    cursor: pointer;
+}
 
 /* Comments */
 #commentform {
@@ -207,3 +224,13 @@ textarea {
         display: block;
     }
 }
+
+
+
+/* For autocomplete */
+.autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
+.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; cursor: pointer}
+.autocomplete-selected { background: #F0F0F0; }
+.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+.autocomplete-group { padding: 2px 5px; }
+.autocomplete-group strong { display: block; border-bottom: 1px solid #000; }

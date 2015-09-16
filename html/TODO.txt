@@ -20,6 +20,11 @@ TODOs
 - Some sort of tag exploration feature, perhaps tag cloud?
 - Search by newly-tagged
 - "Popular" recent posts, maybe by # of views in last day/week/month?
+- Upload date on mouse hover
+- Update pool select to use autocomplete
+- Tags: none when no tags
+- Enable fancy tagging
+    - Add X to remove tag
 X Gallery linking to source on delete
 X Collapse adjacent image pools
 X IP address tracking for uploads (Do we need this, since user is tracked?)

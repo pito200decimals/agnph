@@ -128,6 +128,7 @@ function GetSiteSetting($key, $default_value, $fresh=false) {
             }
         }
     }
+    debug($data_table);
     if (isset($data_table[$key])) return $data_table[$key];
     return $default_value;
 }

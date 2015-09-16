@@ -131,11 +131,11 @@ function GetSortURL($board, $sort) {
 }
 
 function HandlePost($board) {
-    if (!CanPerformSitePost()) MaintenanceError();
     global $user;
     if (!isset($_POST['action'])) return;
     $action = $_POST['action'];
     if (!isset($user)) return;
+    if (!CanPerformSitePost()) MaintenanceError();
     if (!CanUserAdminBoard($user, $board)) {
         RenderErrorPage("Not authorized to perform this action");
     }
