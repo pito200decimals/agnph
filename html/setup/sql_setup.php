@@ -192,7 +192,7 @@ do_or_die(sql_query(
         FlagReason VARCHAR(".MAX_GALLERY_POST_FLAG_REASON_LENGTH.") NOT NULL,
         PRIMARY KEY(PostId)
     ) DEFAULT CHARSET=utf8;"));
-// Tag Types: A=Artist, C=Character, D=Copyright, G=General, S=Species (D is copyright for ordering reasons).
+// Tag Types: A=Artist, B=Copyright, C=Character, D=Species, M=General
 CreateItemTagTables(GALLERY_TAG_TABLE, GALLERY_POST_TAG_TABLE, GALLERY_TAG_ALIAS_TABLE, GALLERY_TAG_IMPLICATION_TABLE, "PostId");
 // History of tag edits for a given post.
 do_or_die(sql_query(
@@ -246,6 +246,7 @@ do_or_die(sql_query(
         GalleryTagBlacklist TEXT(512) NOT NULL,
         NavigateGalleryPoolsWithKeyboard TINYINT(1) DEFAULT 0,
         PrivateGalleryFavorites TINYINT(1) DEFAULT 0,
+        PlainGalleryTagging TINYINT(1) DEFAULT 0,
         PRIMARY KEY(UserId)
     ) DEFAULT CHARSET=utf8;"));
 // User favorites for gallery section.
@@ -318,7 +319,7 @@ do_or_die(sql_query(
         IsComment TINYINT(1) NOT NULL,
         PRIMARY KEY(ReviewId)
     ) DEFAULT CHARSET=utf8;"));
-// Tag Types: C - Category, S - Species, W - Warning, H - Character, R - Series, G - General
+// Tag Types: A - Category, B - Series, C - Character, D - Species, M - General, Z - Warning
 CreateItemTagTables(FICS_TAG_TABLE, FICS_STORY_TAG_TABLE, FICS_TAG_ALIAS_TABLE, FICS_TAG_IMPLICATION_TABLE, "StoryId");
 do_or_die(sql_query(
    "CREATE TABLE ".FICS_USER_PREF_TABLE." (
@@ -328,6 +329,7 @@ do_or_die(sql_query(
        "FicsStoriesPerPage INT(11) DEFAULT ".DEFAULT_FICS_STORIES_PER_PAGE.",
         FicsTagBlacklist TEXT(512) NOT NULL,
         PrivateFicsFavorites TINYINT(1) DEFAULT 0,
+        PlainFicsTagging TINYINT(1) DEFAULT 0,
         PRIMARY KEY(UserId)
     ) DEFAULT CHARSET=utf8;"));
 // Table holding user story favorites.
@@ -397,7 +399,7 @@ function CreateItemTagTables($tag_table_name, $item_tag_table_name, $alias_table
         "CREATE TABLE $tag_table_name (
             TagId INT(11) UNSIGNED AUTO_INCREMENT,
             Name VARCHAR(".MAX_TAG_NAME_LENGTH.") NOT NULL,
-            Type CHAR(1) DEFAULT 'G',".
+            Type CHAR(1) DEFAULT 'M',".
            "EditLocked TINYINT(1) DEFAULT FALSE,
             AddLocked TINYINT(1) DEFAULT FALSE,
             CreatorUserId INT(11) NOT NULL,

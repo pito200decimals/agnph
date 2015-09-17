@@ -303,6 +303,16 @@ if (isset($_POST['display-name']) &&
             $gallery_table_sets[] = "NavigateGalleryPoolsWithKeyboard=FALSE";
         }
     }
+    // Gallery plain tagging UI.
+    if (isset($_POST['gallery-plain-tagging'])) {
+        if (!$profile_user['PlainGalleryTagging']) {
+            $gallery_table_sets[] = "PlainGalleryTagging=TRUE";
+        }
+    } else {
+        if ($profile_user['PlainGalleryTagging']) {
+            $gallery_table_sets[] = "PlainGalleryTagging=FALSE";
+        }
+    }
     // Gallery hide favorites
     if (isset($_POST['gallery-hide-favorites'])) {
         if (!$profile_user['PrivateGalleryFavorites']) {
@@ -337,6 +347,16 @@ if (isset($_POST['display-name']) &&
     if ($_POST['fics-tag-blacklist'] != $profile_user['FicsTagBlacklist']) {
         $escaped_blacklist = sql_escape($_POST['fics-tag-blacklist']);
         $fics_table_sets[] = "FicsTagBlacklist='$escaped_blacklist'";
+    }
+    // Fics plain tagging UI.
+    if (isset($_POST['fics-plain-tagging'])) {
+        if (!$profile_user['PlainFicsTagging']) {
+            $fics_table_sets[] = "PlainFicsTagging=TRUE";
+        }
+    } else {
+        if ($profile_user['PlainFicsTagging']) {
+            $fics_table_sets[] = "PlainFicsTagging=FALSE";
+        }
     }
     // Fics hide favorites
     if (isset($_POST['fics-hide-favorites'])) {

@@ -268,7 +268,7 @@ define("NUM_REVIEWS", "COUNT(CASE WHEN IsReview THEN 1 ELSE NULL END)");
 // Does a full refresh on story stats. Updates ChapterCount, WordCount, TotalReviewStars, TotalReviews, and ChapterItemOrder
 function UpdateStoryStats($sid) {
     $escaped_sid = sql_escape($sid);
-    $chapters = GetChaptersInfo($sid);
+    $chapters = GetChaptersInfo($sid) or RenderErrorPage("Story not found");
     $chapcount = 0;
     $wordcount = 0;
     $viewcount = 0;

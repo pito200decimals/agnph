@@ -8,10 +8,39 @@
 
 {% block scripts %}
     {{ parent() }}
+    <script>
+        var pi = {{ post.PostId }};
+        var ppi = {{post.ParentPoolId }};
+        var tag_search_url = '/gallery/tagsearch/';
+        function GetPreclass(pre) {
+            var preclass = null;
+            if (pre.toLowerCase() == 'artist') {
+                preclass = 'atypetag';
+            }
+            if (pre.toLowerCase() == 'copyright') {
+                preclass = 'btypetag';
+            }
+            if (pre.toLowerCase() == 'character') {
+                preclass = 'ctypetag';
+            }
+            if (pre.toLowerCase() == 'species') {
+                preclass = 'dtypetag';
+            }
+            if (pre.toLowerCase() == 'general') {
+                preclass = 'mtypetag';
+            }
+            return preclass;
+        }
+    </script>
+    <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
+    <script src="{{ asset('/scripts/gallery.js') }}"></script>
     {% if post.canEdit %}
-        <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
         <script src="{{ asset('/scripts/jquery.autocomplete.min.js') }}"></script>
-        <script src="/gallery/post/view-script/?pi={{ post.PostId }}&ppi={{ post.ParentPoolId }}{% if user and user.NavigateGalleryPoolsWithKeyboard %}&keynav=1{% endif %}"></script>
+        <script src="{{ asset('/scripts/gallery-edit.js') }}"></script>
+        <script src="{{ asset('/scripts/tag-complete.js') }}"></script>
+    {% endif %}
+    {% if user and user.NavigateGalleryPoolsWithKeyboard %}
+        <script src="{{ asset('/scripts/gallery-keyboard.js') }}"></script>
     {% endif %}
 {% endblock %}
 
@@ -170,13 +199,10 @@
                             {% endif %}
                             {% if post.canModifyPool %}
                                 <li>
-                                    <a id="poolaction" href="#"></a><span id="poolactionworking" hidden>
-                                    <small>Processing...</small></span>
+                                    <a id="poolaction" href="#"></a>
+                                    <span id="poolactionworking" hidden><img src="/images/spinner.gif" /></span>
                                     <div class="pooleditbox">
-                                        <label>Search for Pool:</label><br />
-                                        <input id="pooleditfield" type="text" />
-                                        <ul id="poolautocomplete">
-                                        </ul>
+                                        <input id="pool-edit-field" type="text" class="search" required />
                                     </div>
                                 </li>
                             {% endif %}
@@ -250,7 +276,7 @@
                     </div>
                 {% endif %}
                 <p>
-                    {% if user.UserId > 0 %}<a href="/gallery/post/show/{{ post.PostId }}/" onclick="return toggleEdit();">Edit</a> | {% endif %}<a href="{{ post.downloadUrl }}">Download</a>
+                    {% if user.UserId > 0 %}<a href="/gallery/post/show/{{ post.PostId }}/" onclick="return toggleEdit();">Edit</a> | {% endif %}<a id="download-link" href="{{ post.downloadUrl }}">Download</a>
                 </p>
                 <div class="posteditbox">
                     <a id="editanchor">&nbsp;</a>
@@ -261,19 +287,20 @@
                                                                         <input name="rating" type="radio"{% if post.Rating=='s' %} checked{% endif %} value="s" /><label>Safe</label><br />
                         <label class="formlabel">Parent</label>         <input id="parent" class="textbox" type="text" name="parent" value="{% if post.ParentPostId!=-1 %}{{ post.ParentPostId }}{% endif %}" /><br />
                         <label class="formlabel">Source</label>         <input id="imgsource" class="textbox" type="text" size=35 name="source" value="{{ post.Source }}" /><br />
-                        {#<label class="formlabel">Tags</label>           <textarea id="tags" class="textbox" name="tags">{{ post.tagstring }}</textarea><br />#}
-                        {% if fancyTagEdit %}
-                            <label class="formlabel">Tags</label>       <ul id="edit-taglist">
-                                                                            {% for category in post.tagCategories %}
-                                                                                {% for tag in category.tags %}
-                                                                                    <li class="{{ tag.Type|lower }}typetag">{{ tag.Name }}</li>
-                                                                                {% endfor %}
-                                                                            {% endfor %}
-                                                                        </ul>
-                                                                        <textarea id="tags" class="" name="tags" hidden>{{ post.tagstring }}</textarea><br />
+                        {% if not user.PlainGalleryTagging %}
+                            <script>
+                                $(document).ready(function() {
+                                    {% for category in post.tagCategories %}
+                                        {% for tag in category.tags %}
+                                            AddTag('{{ tag.Name }}', '{{ tag.Type|lower }}');
+                                        {% endfor %}
+                                    {% endfor %}
+                                });
+                            </script>
+                            <label class="formlabel">Tags</label>       <ul id="edit-taglist"></ul><textarea id="tags" class="" name="tags" hidden>{{ post.tagstring }}</textarea><br />
                             <label class="formlabel">&nbsp;</label>     <input id="tag-input" type="text" class="textbox" /><br />
                         {% else %}
-                            <label class="formlabel">Tags</label>       <textarea id="tags" class="" name="tags">{{ post.tagstring }}</textarea><br />
+                            <label class="formlabel">Tags</label>       <textarea id="tags" class="textbox" name="tags">{{ post.tagstring }}</textarea><br />
                         {% endif %}
                         <label class="formlabel">Description</label>    <textarea id="desc" class="textbox" name="description">{{ post.Description }}</textarea><br />
                         <br />

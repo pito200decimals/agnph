@@ -31,20 +31,25 @@
     font-weight: bold;
 }
 
+/*artist*/
 .atypetag {
     color: rgb(242,172,8);
 }
+/*copyright*/
+.btypetag {
+    color: rgb(221,0,204);
+}
+/*character*/
 .ctypetag {
     color: rgb(0,170,188);
 }
+/*species*/
 .dtypetag {
-    color: rgb(221,0,204);
-}
-.gtypetag {
-    color: rgb(0,0,102);
-}
-.stypetag {
     color: rgb(237,93,31);
+}
+/*general*/
+.mtypetag {
+    color: rgb(0,0,102);
 }
 
 .pscore {

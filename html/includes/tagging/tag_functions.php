@@ -41,7 +41,7 @@ function GetTagStringTokens($tag_string) {
 function GetTagsById($tag_table_name, $tag_ids) {
     if (sizeof($tag_ids) == 0) return array();
     $joined = implode(",", array_map(function($id) { return "'".sql_escape($id)."'"; }, $tag_ids));
-    $sql = "SELECT * FROM $tag_table_name WHERE TagId IN ($joined) ORDER BY Name DESC;";
+    $sql = "SELECT * FROM $tag_table_name WHERE TagId IN ($joined) ORDER BY Type ASC, Name ASC;";
     $ret = array();
     if (!sql_query_into($result, $sql, 0)) return null;
     while ($row = $result->fetch_assoc()) {
@@ -78,6 +78,7 @@ function GetTagsByName($tag_table_name, $tag_names, $create_new = false, $user_i
 
     // Start of function GetTagsByName.
     $tag_names = array_map("SanitizeTagName", $tag_names);
+    $tag_names = array_unique($tag_names);
     if ($create_new) {
         $ret = GetTagsByName($tag_table_name, $tag_names, false, $user_id);
         if ($ret == null) $ret = array();

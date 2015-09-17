@@ -123,6 +123,7 @@
                 <li><span class="basic-info-label">Posts per Page:</span><span><input type="text" name="gallery-posts-per-page" value="{{ profile.user.GalleryPostsPerPage }}" /></span></li>
                 <li><span class="basic-info-label">Tag Blacklist:</span><br /><span><textarea name="gallery-tag-blacklist">{{ profile.user.GalleryTagBlacklist }}</textarea></span></li>
                 <li><span class="basic-info-label">Enable keyboard pool navigation:</span><span><input type="checkbox" name="gallery-enable-keyboard" value="1" {% if profile.user.NavigateGalleryPoolsWithKeyboard %}checked {% endif %}/></span></li>
+                <li><span class="basic-info-label">Disable tagging UI:</span><span><input type="checkbox" name="gallery-plain-tagging" value="1" {% if profile.user.PlainGalleryTagging %}checked {% endif %}/></span></li>
                 <li><span class="basic-info-label">Private Favorites:</span><span><input type="checkbox" name="gallery-hide-favorites" value="1" {% if profile.user.PrivateGalleryFavorites %}checked {% endif %}/></span></li>
             </ul>
         </div>
@@ -134,6 +135,7 @@
             <ul id="basic-info">
                 <li><span class="basic-info-label">Stories per Page:</span><span><input type="text" name="fics-stories-per-page" value="{{ profile.user.FicsStoriesPerPage }}" /></span></li>
                 <li><span class="basic-info-label">Tag Blacklist:</span><br /><span><textarea name="fics-tag-blacklist">{{ profile.user.FicsTagBlacklist }}</textarea></span></li>
+                <li><span class="basic-info-label">Disable tagging UI:</span><span><input type="checkbox" name="fics-plain-tagging" value="1" {% if profile.user.PlainFicsTagging %}checked {% endif %}/></span></li>
                 <li><span class="basic-info-label">Private Favorites:</span><span><input type="checkbox" name="fics-hide-favorites" value="1" {% if profile.user.PrivateFicsFavorites %}checked {% endif %}/></span></li>
             </ul>
         </div>

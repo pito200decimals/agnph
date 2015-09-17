@@ -124,12 +124,12 @@ define("MAX_FORUMS_THREADS_PER_PAGE", 100);
 define("MAX_FORUMS_POSTS_PER_PAGE", 50);
 
 // Gallery-related
-$GALLERY_TAG_TYPES = array(
+$GALLERY_TAG_TYPES = array(  // Note: Present in edit-post template and CSS.
     "A" => "Artist",
+    "B" => "Copyright",
     "C" => "Character",
-    "D" => "Copyright",
-    "G" => "General",
-    "S" => "Species");
+    "D" => "Species",
+    "M" => "General");
 define("GALLERY_THUMB_FILE_EXTENSION", "png");  // Don't change once gallery starts indexing.
 define("MAX_IMAGE_THUMB_SIZE", 200);
 define("MAX_IMAGE_PREVIEW_SIZE", 1200);
@@ -146,13 +146,13 @@ define("GALLERY_ADMIN_TAG_ALIAS_CHANGE_LIMIT", 1000);  // Max # of posts to edit
 define("MAX_GALLERY_POST_DESCRIPTION_LENGTH", 1024);
 
 // Fics-related
-$FICS_TAG_TYPES = array(
-    "C" => "Category",
-    "S" => "Species",
-    "W" => "Warning",
-    "H" => "Character",
-    "R" => "Series",
-    "G" => "General");
+$FICS_TAG_TYPES = array(  // Note: Present in edit-story template and CSS.
+    "A" => "Category",
+    "B" => "Series",
+    "C" => "Character",
+    "D" => "Species",
+    "M" => "General",
+    "Z" => "Warning");
 define("FICS_DATE_FORMAT", "M j Y");
 define("MIN_FICS_TITLE_SUMMARY_SEARCH_STRING_SIZE", 3);
 define("MAX_FICS_POSTS_PER_PAGE", 100);

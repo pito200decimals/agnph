@@ -11,32 +11,38 @@
 {% block scripts %}
     {{ parent() }}
     <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $("#tagbox").keyup(function() {
-                CheckTags(this.value);
-            });
-            CheckTags($("#tagbox").val());
-        });
-        function CheckTags(value) {
-            if (!(value.toLowerCase().indexOf("{# fe #}male") > -1 ||
-                  value.toLowerCase().indexOf("herm") > -1 ||
-                  value.toLowerCase().indexOf("sexless") > -1)) {
-                $("#gender-warning").show();
-            } else {
-                $("#gender-warning").hide()
-            }
-        }
-    </script>
     {% if not create and chapters %}
         <script src="{{ asset('/scripts/jquery.sortable.js') }}"></script>
         <script>
+            var tag_search_url = '/fics/tagsearch/';
+            function GetPreclass(pre) {
+                var preclass = null;
+                if (pre.toLowerCase() == 'category') {
+                    preclass = 'atypetag';
+                }
+                if (pre.toLowerCase() == 'series') {
+                    preclass = 'btypetag';
+                }
+                if (pre.toLowerCase() == 'character') {
+                    preclass = 'ctypetag';
+                }
+                if (pre.toLowerCase() == 'species') {
+                    preclass = 'dtypetag';
+                }
+                if (pre.toLowerCase() == 'general') {
+                    preclass = 'mtypetag';
+                }
+                if (pre.toLowerCase() == 'warning') {
+                    preclass = 'ztypetag';
+                }
+                return preclass;
+            }
             $(document).ready(function() {
                 $('.sortable').sortable().bind('sortupdate', Update);
                 $(".reorder_hint").removeClass("hidden");
                 $('.sortable').removeAttr("style");
                 $('.sortable').css("cursor", "ns-resize");
-                $("#tagbox").keydown(function(e) {
+                $("#tags").keydown(function(e) {
                     if (e.keyCode == 13) {
                         $(this.form).submit();
                         return false;
@@ -100,6 +106,7 @@
                 }
             }
         </script>
+        <script src="{{ asset('/scripts/tag-complete.js') }}"></script>
     {% endif %}
     <script type="text/javascript">
         tinymce.init({
@@ -207,7 +214,7 @@
     {% endif %}
     {{ block('banner') }}
     {# Autocomplete off so that hidden inputs in the chapter ordering section don't autofill with previous values #}
-    <form method="POST" autocomplete="off" accept-charset="UTF-8">
+    <form method="POST" autocomplete="off" accept-charset="UTF-8" onsubmit="OnEditSubmit()">
         <input type="hidden" name="sid" value="{% if create %}-1{% else %}{{ formstory.StoryId }}{% endif %}" />
         <div class="form-block">
             <label>Title:</label>
@@ -278,9 +285,20 @@
         </div>
         <div class="form-block">
             <label>Story Tags:</label><br />
-            <textarea id="tagbox" class="tagbox" name="tags">
-                {{ formstory.tagstring }}
-            </textarea>
+            {% if not user.PlainFicsTagging %}
+                <script>
+                    $(document).ready(function() {
+                        {% for tag in story.tags %}
+                            AddTag('{{ tag.Name }}', '{{ tag.Type|lower }}');
+                        {% endfor %}
+                    });
+                </script>
+                <ul id="edit-taglist"></ul>
+                <textarea id="tags" class="" name="tags" hidden>{{ post.tagstring }}</textarea><br />
+                <input id="tag-input" type="text" class="textbox" /><br />
+            {% else %}
+                <textarea id="tags" class="tagbox" name="tags">{{ formstory.tagstring }}</textarea>
+            {% endif %}
             <span id="gender-warning" class="tag-warning"><br />Tags should include the character's gender or pairing (e.g. Female, Male/Female, Sexless)</span>
         </div>
 

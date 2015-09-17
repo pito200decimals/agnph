@@ -72,8 +72,7 @@
                                 <ul class="taglist">
                                     {% for tag in story.tags %}
                                         <li>
-                                            {# TODO: Link to search page #}
-                                            <a href="/fics/browse/?search={{ tag.quotedName|url_encode }}"><span class="{{ tag.class }}">{{ tag.displayName }}</span></a>
+                                            <a href="/fics/browse/?search={{ tag.quotedName|url_encode }}"><span class="{{ tag.Type|lower }}typetag">{{ tag.displayName }}</span></a>
                                         </li>
                                     {% endfor %}
                                 </ul>

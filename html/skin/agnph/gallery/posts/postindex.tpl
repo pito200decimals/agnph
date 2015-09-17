@@ -7,8 +7,13 @@
 
 {% block scripts %}
     {{ parent() }}
+    {# This is the homepage, so set timezone here #}
     {% if not user or user.AutoDetectTimezone %}
         <script src="{{ asset('timezone.js') }}"></script>
+    {% endif %}
+
+    {% if user and user.NavigateGalleryPoolsWithKeyboard %}
+        <script src="{{ asset('/scripts/gallery-keyboard.js') }}"></script>
     {% endif %}
     {% if cansort %}
         <script src="{{ asset('/scripts/jquery.sortable.js') }}"></script>

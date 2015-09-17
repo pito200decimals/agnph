@@ -178,6 +178,7 @@ function CreateTag($tag_name, $tag_type) {
 
 function CreateGalleryPost($md5, $ext, $tag_names, $rating="e", $parentPostId="-1", $status="A") {
     static $index = 1;
+    prep_file($md5, $ext);
     $tag_ids = array();
     $joined = implode(",", array_map(function($name) { return "'".sql_escape($name)."'"; }, $tag_names));
     do_or_die(sql_query_into($result, "SELECT TagId FROM ".GALLERY_TAG_TABLE." WHERE Name in ($joined);"));
@@ -197,33 +198,32 @@ function CreateGalleryPost($md5, $ext, $tag_names, $rating="e", $parentPostId="-
             VALUES
             ($index, $tag_id);"));
     }
-    prep_file($md5, $ext);
     $index++;
 }
 
 CreateTag("harlem", "A");
-CreateTag("umbreon", "S");
-CreateTag("quilava", "S");
+CreateTag("umbreon", "D");
+CreateTag("quilava", "D");
 CreateTag("syntex", "A");
-CreateTag("raichu", "S");
+CreateTag("raichu", "D");
 CreateTag("eroborus", "A");
-CreateTag("dewott", "S");
-CreateTag("typhlosion", "S");
+CreateTag("dewott", "D");
+CreateTag("typhlosion", "D");
 CreateTag("ahseo", "A");
 CreateTag("redraptor16", "A");
-CreateTag("charizard", "S");
+CreateTag("charizard", "D");
 CreateTag("evalion", "A");
 CreateTag("doneru", "A");
-CreateTag("male", "G");
-CreateTag("female", "G");
-CreateTag("lucario", "S");
-CreateTag("human", "S");
-CreateTag("animated", "G");
+CreateTag("male", "M");
+CreateTag("female", "M");
+CreateTag("lucario", "D");
+CreateTag("human", "D");
+CreateTag("animated", "M");
 CreateTag("koba", "A");
-CreateTag("flareon", "S");
-CreateTag("flygon", "S");
-CreateTag("solo", "G");
-CreateTag("floatzel", "S");
+CreateTag("flareon", "D");
+CreateTag("flygon", "D");
+CreateTag("solo", "M");
+CreateTag("floatzel", "D");
 
 //*
 CreateGalleryPost("c3024ba611837d85397d9661aec12840", "jpg", array("harlem", "umbreon", "quilava", "male"), "e");
@@ -319,6 +319,7 @@ AddChapter(2, 1, "Chapter 1 title", "BEGIN", "CONTENT 1", "END");
 AddChapter(3, 1, "Chapter 1 title", "BEGIN", "CONTENT 1", "END");
 AddChapter(4, 1, "Chapter 1 title", "BEGIN", "CONTENT 1", "END");
 AddChapter(5, 1, "Chapter 1 title", "BEGIN", "CONTENT 1", "END");
+AddChapter(6, 1, "Chapter 1 title", "BEGIN", "CONTENT 1", "END");
 
 function AddReview($sid, $cid, $uid, $text, $score) {
     $escaped_text = sql_escape($text);
@@ -379,6 +380,7 @@ AddTagsToStory(2, array("Typhlosion", "Cyndaquil"));
 AddTagsToStory(3, array("Quilava", "Eevee", "Cyndaquil"));
 AddTagsToStory(4, array("straight"));
 AddTagsToStory(5, array("Quilava", "Typhlosion", "Cyndaquil"));
+AddTagsToStory(6, array("ash", "action_adventure"));
 
 function CreatePM($sender_id, $recipient_id, $subject, $text, $parent = -1) {
     $now = time();

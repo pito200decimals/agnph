@@ -19,8 +19,8 @@ if (!isset($_POST['action']) || !($_POST['action'] == "add" || $_POST['action'] 
 }
 if (!CanPerformSitePost()) AJAXErr();
 
-$escaped_post_id = $_GET['post'];
-$escaped_pool_id = $_GET['pool'];
+$escaped_post_id = sql_escape($_GET['post']);
+$escaped_pool_id = sql_escape($_GET['pool']);
 if ($_POST['action'] == "add") {
     sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE PostId='$escaped_post_id';", 1) or AJAXErr();
     $post = $result->fetch_assoc();
@@ -32,6 +32,12 @@ if ($_POST['action'] == "add") {
     $desired_index = $num_posts_in_pool + 1;  // 1-indexed.
     // Append to end of pool.
     sql_query("UPDATE ".GALLERY_POST_TABLE." SET ParentPoolId='$escaped_pool_id', PoolItemOrder='$desired_index' WHERE PostId='$escaped_post_id';") or AJAXErr();
+    $uid = $user['UserId'];
+    $pid = $post['PostId'];
+    $username = $user['DisplayName'];
+    $pool_name = $pool['Name'];
+    $pool_id = $pool['PoolId'];
+    LogAction("<strong><a href='/user/$uid/'>$username</a></strong> added <strong><a href='/gallery/post/show/$pid/'>post #$pid</a></strong> to pool <strong><a href='/gallery/pool/$pool_id/'>$pool_name</a></strong>", "G");
 } else if ($_POST['action'] == "remove") {
     sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE PostId='$escaped_post_id';", 1) or AJAXErr();
     $post = $result->fetch_assoc();
@@ -39,13 +45,23 @@ if ($_POST['action'] == "add") {
     sql_query("UPDATE ".GALLERY_POST_TABLE." SET ParentPoolId='-1' WHERE PostId='$escaped_post_id';") or AJAXErr();
     // Now try to update ordering, don't error on error.
     $removed_item_order = $post['PoolItemOrder'];
-    sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE ParentPoolId='$escaped_pool_id' ORDER BY PoolItemOrder;", 0) or die();  // Successful return.
-    $index = 1;  // 1-indexed
-    while ($row = $result->fetch_assoc()) {
-        if ($row['PoolItemOrder'] != $index) {
-            sql_query("UPDATE ".GALLERY_POST_TABLE." SET PoolItemOrder=$index WHERE PostId='$escaped_post_id';");
+    if (sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE ParentPoolId='$escaped_pool_id' ORDER BY PoolItemOrder;", 0)) {
+        $index = 1;  // 1-indexed
+        while ($row = $result->fetch_assoc()) {
+            if ($row['PoolItemOrder'] != $index) {
+                sql_query("UPDATE ".GALLERY_POST_TABLE." SET PoolItemOrder=$index WHERE PostId='$escaped_post_id';");
+            }
+            $index++;
         }
-        $index++;
+    }
+    if (sql_query_into($result, "SELECT * FROM ".GALLERY_POOL_TABLE." WHERE PoolId=$pool_id;", 1)) {
+        $pool = $result->fetch_assoc();
+        $uid = $user['UserId'];
+        $pid = $post['PostId'];
+        $username = $user['DisplayName'];
+        $pool_name = $pool['Name'];
+        $pool_id = $pool['PoolId'];
+        LogAction("<strong><a href='/user/$uid/'>$username</a></strong> removed <strong><a href='/gallery/post/show/$pid/'>post #$pid</a></strong> from pool <strong><a href='/gallery/pool/$pool_id/'>$pool_name</a></strong>", "G");
     }
 } else {
     AJAXErr();

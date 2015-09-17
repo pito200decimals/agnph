@@ -82,23 +82,29 @@
     font-size: 75%;
 }
 
-.ctypetag {
+/*category*/
+.atypetag {
     color: rgb(221,0,204);
 }
-.wtypetag {
-    color: rgb(221,0,0);
-}
-.rtypetag {
+/*series*/
+.btypetag {
     color: rgb(0,221,63);
 }
-.htypetag {
+/*character*/
+.ctypetag {
     color: rgb(0,170,188);
 }
-.gtypetag {
+/*species*/
+.dtypetag {
+    color: rgb(237,93,31);
+}
+/*general*/
+.mtypetag {
     color: rgb(0,0,102);
 }
-.stypetag {
-    color: rgb(237,93,31);
+/*warning*/
+.ztypetag {
+    color: rgb(221,0,0);
 }
 
 .taglist {

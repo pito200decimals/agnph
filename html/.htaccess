@@ -63,7 +63,7 @@ RewriteRule ^gallery/upload/?$ /gallery/upload.php
 RewriteRule ^gallery/edit/?$ /gallery/posts/editpost.php
 RewriteRule ^gallery/pools/?$ /gallery/pools/poolindex.php [QSA]
 RewriteRule ^gallery/pools/reorder/(\d+)/?$ /gallery/pools/reorder_pool.php?pid=$1
-RewriteRule ^gallery/pools/list/$ /gallery/pools/pool_list.php [QSA]
+RewriteRule ^gallery/poolsearch/$ /gallery/pools/pool_ajax.php [QSA]
 RewriteRule ^gallery/pools/modify/(\d+)/(\d+)/?$ /gallery/pools/addremove_pool.php?post=$1&pool=$2
 RewriteRule ^gallery/pools/create/?$ /gallery/pools/create.php
 RewriteRule ^gallery/pools/delete/?$ /gallery/pools/delete.php
@@ -89,6 +89,7 @@ RewriteRule ^fics/delete/(\d+)/?$ /fics/delete_story.php?sid=$1&action=delete&ty
 RewriteRule ^fics/delete/(\d+)/(\d+)/?$ /fics/delete_story.php?sid=$1&action=delete&type=chapter&index=$2
 RewriteRule ^fics/undelete/(\d+)/?$ /fics/delete_story.php?sid=$1&action=undelete&type=story
 RewriteRule ^fics/favorite/?$ /fics/edit_favorites.php
+RewriteRule ^fics/tagsearch/?$ /fics/tag_ajax.php [QSA]
 
 #Rewrites for user pages.
 RewriteRule ^user/list/?$ /user/list.php?sort=name&order=asc [QSA]

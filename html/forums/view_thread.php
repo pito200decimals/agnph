@@ -89,8 +89,8 @@ return;
 
 function HandlePost() {
     global $user, $board, $thread, $posts;
-    if (!CanPerformSitePost()) MaintenanceError();
     if (isset($user) && isset($_POST['action']) && isset($_POST['id']) && is_numeric($_POST['id'])) {
+        if (!CanPerformSitePost()) MaintenanceError();
         // Try to perform action.
         $action_done = false;
         $action = $_POST['action'];

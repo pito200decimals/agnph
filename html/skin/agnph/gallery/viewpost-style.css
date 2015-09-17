@@ -110,6 +110,7 @@
 }
 .pooleditbox {
     display: none;
+    margin-left: 20px;
 }
 #poolautocomplete span {
     font-weight: bold;
@@ -152,7 +153,7 @@ textarea {
 }
 #edit-taglist {
     display: inline-block;
-    border: 1px solid black;
+    border: 1px solid rgb(127,127,127);
     margin: 5px;
     width: 400px;
     min-height: 50px;
@@ -162,10 +163,53 @@ textarea {
 #edit-taglist > li {
     font-weight: bold;
     display: inline-block;
-    border: 1px solid black;
-    border-radius: 5px;
+    border: 1px solid rgb(127,127,127);
+    border-radius: 10px;
     padding: 5px;
+    margin: 2px 2px 2px 2px;
+    font-size: 75%;
+}
+#edit-taglist .close {
     cursor: pointer;
+    background-image: url('/images/remove-tag.png');
+    width: 16px;
+    height: 16px;
+    background-size: 16px 16px;
+    display: inline-block;
+    margin-left: 3px;
+}
+#edit-taglist .close:hover {
+    background-image: url('/images/remove-tag-hover.png');
+}
+/*artist*/
+#edit-taglist .atypetag {
+    /*background-color: rgb(242,172,8);*/
+    background-color: rgb(248,213,131);
+    color: black;
+}
+/*copyright*/
+#edit-taglist .btypetag {
+    /*background-color: rgb(221,0,204);*/
+    background-color: rgb(238,127,229);
+    color: black;
+}
+/*character*/
+#edit-taglist .ctypetag {
+    /*background-color: rgb(0,170,188);*/
+    background-color: rgb(127,212,221);
+    color: black;
+}
+/*species*/
+#edit-taglist .dtypetag {
+    /*background-color: rgb(237,93,31);*/
+    background-color: rgb(246,174,143);
+    color: black;
+}
+/*general*/
+#edit-taglist .mtypetag {
+    /*background-color: rgb(0,0,102);*/
+    background-color: rgb(127,127,178);
+    color: black;
 }
 
 /* Comments */
