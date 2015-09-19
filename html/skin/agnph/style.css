@@ -250,6 +250,13 @@ a:hover {
 .blue-banner {
     background-color: rgb(85,85,153);
 }
+.none-tag {
+    color: rgb(221,63,31);
+    font-weight: bold;
+}
+span.radio-button-group {
+    display: inline-block;
+}
 .Clear {
   clear: both;
   height: 0;
@@ -282,6 +289,12 @@ a:hover {
     margin: 5px;
     color: rgb(0,0,127);
     padding: 3px 8px;
+}
+.desktop-only {
+    display: inherit;
+}
+.mobile-only {
+    display: none;
 }
 
 
@@ -338,6 +351,12 @@ a:hover {
     }
     .iterator .currentpage {
         padding: 13px 18px;
+    }
+    .desktop-only {
+        display: none;
+    }
+    .mobile-only {
+        display: inherit;
     }
 }
 /* For horizontal site menu */

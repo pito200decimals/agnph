@@ -137,6 +137,7 @@ define("MAX_POOL_NAME_LENGTH", 128);
 define("MIN_POOL_PREFIX_LENGTH", 3);  // For ajax add-to-pool search.
 define("MAX_GALLERY_POST_FLAG_REASON_LENGTH", 64);
 define("GALLERY_DATE_FORMAT", "M j Y");
+define("GALLERY_DATE_LONG_FORMAT", "g:i A M j Y");
 define("MAX_GALLERY_POSTS_PER_PAGE", 100);
 define("MAX_GALLERY_BLACKLIST_TAGS", 50);
 define("GALLERY_PROFILE_SHOW_NUM_UPLOADS", 6);
@@ -144,6 +145,7 @@ define("GALLERY_PROFILE_SHOW_NUM_FAVORITES", 6);
 define("INITIAL_GALLERY_UPLOAD_LIMIT", 10);
 define("GALLERY_ADMIN_TAG_ALIAS_CHANGE_LIMIT", 1000);  // Max # of posts to edit when adding an alias.
 define("MAX_GALLERY_POST_DESCRIPTION_LENGTH", 1024);
+define("MAX_MASS_TAG_EDIT_COUNT", 1000);
 
 // Fics-related
 $FICS_TAG_TYPES = array(  // Note: Present in edit-story template and CSS.

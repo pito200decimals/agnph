@@ -21,10 +21,13 @@
 // Has artist, etc?
 
 function CreateSQLClauses($search) {
+    global $user;
     $terms = explode(" ", $search);
     $terms = array_map("trim", $terms);
     $terms = array_filter($terms, "mb_strlen");
-    $terms = array_slice($terms, 0, MAX_GALLERY_SEARCH_TERMS);
+    if (!isset($user) || !CanUserSearchUnlimitedClauses($user)) {
+        $terms = array_slice($terms, 0, MAX_GALLERY_SEARCH_TERMS);
+    }
     return CreateSQLClausesFromTerms($terms);
 }
 

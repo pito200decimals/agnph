@@ -35,7 +35,7 @@
                     <td><strong><a href="{{ statusSortUrl }}">Status</a></strong>{% if sortParam == "status" %}{{ block('sortArrow') }}{% endif %}</td>
                     <td><strong><a href="{{ nameSortUrl }}">Name</a></strong>{% if sortParam == "name" %}{{ block('sortArrow') }}{% endif %}</td>
                     <td><strong><a href="{{ positionSortUrl }}">Position</a></strong>{% if sortParam == "position" %}{{ block('sortArrow') }}{% endif %}</td>
-                    <td><span class="omit-mobile"><strong><a href="{{ registerSortUrl }}">Date Registered</a></strong>{% if sortParam == "register" %}{{ block('sortArrow') }}{% endif %}</span></td>
+                    <td><span class="desktop-only"><strong><a href="{{ registerSortUrl }}">Date Registered</a></strong>{% if sortParam == "register" %}{{ block('sortArrow') }}{% endif %}</span></td>
                 </tr>
             </thead>
             <tbody>
@@ -57,7 +57,7 @@
                         </td>
                         <td><a href="/user/{{ account.UserId }}/">{{ account.DisplayName }}</a></td>
                         <td>{% if account.administrator %}Administrator{% elseif account.inactive %}Inactive User{% else %}User{% endif %}</td>
-                        <td><span class="omit-mobile">{{ account.dateJoined }}</span></td>
+                        <td><span class="desktop-only">{{ account.dateJoined }}</span></td>
                     </tr>
                 {% endfor %}
             </tbody>

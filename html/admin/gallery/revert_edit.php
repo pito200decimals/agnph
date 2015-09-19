@@ -137,6 +137,7 @@ foreach ($edits_by_pid as $pid => $edits) {
 
 PostSessionBanner("Edits reverted", "green");
 
+// Go back to edit page.
 header("Location: ".$_SERVER['HTTP_REFERER']);
 exit();
 

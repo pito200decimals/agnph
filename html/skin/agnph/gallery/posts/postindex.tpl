@@ -3,6 +3,23 @@
 {% block styles %}
     <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/postindex-style.css') }}" />
+    {% if canMassTagEdit %}
+        <style>
+            #mass-tag-edit-toggle {
+                cursor: pointer;
+            }
+            #mass-tag-edit {
+                display: none;
+            }
+            #mass-tag-edit td {
+                vertical-align: top;
+            }
+            #mass-tag-edit textarea {
+                min-height: 75px;
+                width: 400px;
+            }
+        </style>
+    {% endif %}
 {% endblock %}
 
 {% block scripts %}
@@ -66,16 +83,27 @@
             }
         </script>
     {% endif %}
+    {% if canMassTagEdit %}
+        <script>
+            $(document).ready(function() {
+                $("#mass-tag-edit-toggle").click(function() {
+                    $("#mass-tag-edit").toggle();
+                });
+            });
+        </script>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
+    {{ block('banner') }}
     <div class="sidepanel">
         <div class="searchbox">
             <h3>Search</h3>
-            <form action="/gallery/post/" accept-charset="UTF-8">
+            <form accept-charset="UTF-8">
                 <input class="search" name="search" value="{{ search }}" type="text" required />
             </form>
         </div>
+        {# TODO: Related tags go here #}
     </div>
     <div class="mainpanel">
         {% if posts|length > 0 %}
@@ -112,4 +140,33 @@
             <p>
         {% endif %}
     </div>
+    {% if canMassTagEdit %}
+        <div class="footer-panel desktop-only">
+            <div id="mass-tag-edit-toggle">
+                <a>Mass tag edit</a>
+            </div>
+            <div id="mass-tag-edit">
+                <hr />
+                <form method="POST" accept-charset="UTF-8">
+                    <p>
+                        This will apply these tag modifications to all posts in the current search.
+                    </p>
+                    <table>
+                        <tr>
+                            <td><label>Tags to add:</label></td>
+                            <td><textarea name="tags-to-add"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td><label>Tags to remove:</label></td>
+                            <td><textarea name="tags-to-remove"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><input type="submit" name="submit" value="Apply Changes" /></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}

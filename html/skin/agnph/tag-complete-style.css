@@ -1,0 +1,100 @@
+.autocomplete-tag-list {
+    display: inline-block;
+    border: 1px solid rgb(127,127,127);
+    width: 100%;
+    min-height: 50px;
+    padding: 0px;
+    list-style: none;
+    margin: 0px;
+}
+.autocomplete-tag-list > li {
+    font-weight: bold;
+    display: inline-block;
+    border: 1px solid rgb(127,127,127);
+    border-radius: 10px;
+    padding: 5px;
+    margin: 2px 2px 2px 2px;
+    font-size: 75%;
+}
+.autocomplete-tag-list .close {
+    cursor: pointer;
+    background-image: url('/images/remove-tag.png');
+    width: 16px;
+    height: 16px;
+    background-size: 16px 16px;
+    display: inline-block;
+    margin-left: 3px;
+}
+.autocomplete-tag-list .close:hover {
+    background-image: url('/images/remove-tag-hover.png');
+}
+
+/*Gallery*/
+/*artist*/
+.g.autocomplete-tag-list .atypetag {
+    /*background-color: rgb(242,172,8);*/
+    background-color: rgb(248,213,131);
+    color: black;
+}
+/*copyright*/
+.g.autocomplete-tag-list .btypetag {
+    /*background-color: rgb(221,0,204);*/
+    background-color: rgb(238,127,229);
+    color: black;
+}
+/*character*/
+.g.autocomplete-tag-list .ctypetag {
+    /*background-color: rgb(0,170,188);*/
+    background-color: rgb(127,212,221);
+    color: black;
+}
+/*species*/
+.g.autocomplete-tag-list .dtypetag {
+    /*background-color: rgb(237,93,31);*/
+    background-color: rgb(246,174,143);
+    color: black;
+}
+/*general*/
+.g.autocomplete-tag-list .mtypetag {
+    /*background-color: rgb(0,0,102);*/
+    background-color: rgb(127,127,178);
+    color: black;
+}
+
+/*fics*/
+/*category*/
+.f.autocomplete-tag-list .atypetag {
+    /*background-color: rgb(221,0,204);*/
+    background-color: rgb(238,127,229);
+    color: black;
+}
+/*series*/
+.f.autocomplete-tag-list .btypetag {
+    /*background-color: rgb(0,221,63);*/
+    background-color: rgb(127,238,159);
+    color: black;
+}
+/*character*/
+.f.autocomplete-tag-list .ctypetag {
+    /*background-color: rgb(0,170,188);*/
+    background-color: rgb(127,212,221);
+    color: black;
+}
+/*species*/
+.f.autocomplete-tag-list .dtypetag {
+    /*background-color: rgb(237,93,31);*/
+    background-color: rgb(246,174,143);
+    color: black;
+}
+/*general*/
+.f.autocomplete-tag-list .mtypetag {
+    /*background-color: rgb(0,0,102);*/
+    background-color: rgb(127,127,178);
+    color: black;
+}
+/*warning*/
+.f.autocomplete-tag-list .ztypetag {
+    /*background-color: rgb(221,0,0);*/
+    background-color: rgb(238,127,127);
+    color: black;
+}

@@ -75,7 +75,7 @@ switch ($action) {
         // Do nothing.
         break;
 }
-
+// Go back to requesting page.
 header("Location: ".$_SERVER['HTTP_REFERER']);
 exit();
 ?>

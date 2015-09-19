@@ -24,13 +24,13 @@ return;
 
 function err($msg) {
     PostSessionBanner($msg, "red");
-    header("Location: ".$_SERVER['HTTP_REFERER']);
+    header("Location: ".$_SERVER['REQUEST_URI']);
     exit();
 }
 
 function success($msg) {
     PostSessionBanner($msg, "green");
-    header("Location: ".$_SERVER['HTTP_REFERER']);
+    header("Location: ".$_SERVER['REQUEST_URI']);
     exit();
 }
 

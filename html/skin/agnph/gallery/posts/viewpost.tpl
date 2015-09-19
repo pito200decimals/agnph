@@ -4,6 +4,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/viewpost-style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('/comments-style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/tag-complete-style.css') }}" />
 {% endblock %}
 
 {% block scripts %}
@@ -11,32 +12,34 @@
     <script>
         var pi = {{ post.PostId }};
         var ppi = {{post.ParentPoolId }};
-        var tag_search_url = '/gallery/tagsearch/';
-        function GetPreclass(pre) {
-            var preclass = null;
-            if (pre.toLowerCase() == 'artist') {
-                preclass = 'atypetag';
-            }
-            if (pre.toLowerCase() == 'copyright') {
-                preclass = 'btypetag';
-            }
-            if (pre.toLowerCase() == 'character') {
-                preclass = 'ctypetag';
-            }
-            if (pre.toLowerCase() == 'species') {
-                preclass = 'dtypetag';
-            }
-            if (pre.toLowerCase() == 'general') {
-                preclass = 'mtypetag';
-            }
-            return preclass;
-        }
     </script>
     <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
     <script src="{{ asset('/scripts/gallery.js') }}"></script>
     {% if post.canEdit %}
         <script src="{{ asset('/scripts/jquery.autocomplete.min.js') }}"></script>
         <script src="{{ asset('/scripts/gallery-edit.js') }}"></script>
+        <script>
+            var tag_search_url = '/gallery/tagsearch/';
+            function GetPreclass(pre) {
+                var preclass = null;
+                if (pre.toLowerCase() == 'artist') {
+                    preclass = 'atypetag';
+                }
+                if (pre.toLowerCase() == 'copyright') {
+                    preclass = 'btypetag';
+                }
+                if (pre.toLowerCase() == 'character') {
+                    preclass = 'ctypetag';
+                }
+                if (pre.toLowerCase() == 'species') {
+                    preclass = 'dtypetag';
+                }
+                if (pre.toLowerCase() == 'general') {
+                    preclass = 'mtypetag';
+                }
+                return preclass;
+            }
+        </script>
         <script src="{{ asset('/scripts/tag-complete.js') }}"></script>
     {% endif %}
     {% if user and user.NavigateGalleryPoolsWithKeyboard %}
@@ -95,18 +98,24 @@
                 <li>
                     <h3>Tags:</h3>
                     <ul class="taglist">
-                        {% for category in post.tagCategories %}
-                            <li class="tagcategory">
-                                <strong>{{ category.name }}</strong>
-                                <ul class="taglist">
-                                    {% for tag in category.tags %}
-                                        <li class="tag">
-                                            <a href="/gallery/post/?search={{ tag.quotedName|url_encode }}" class="{{ tag.Type|lower }}typetag">{{ tag.displayName }}</a>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
+                        {% if post.tagCategories|length > 0 %}
+                            {% for category in post.tagCategories %}
+                                <li class="tagcategory">
+                                    <strong>{{ category.name }}</strong>
+                                    <ul class="taglist">
+                                        {% for tag in category.tags %}
+                                            <li class="tag">
+                                                <a href="/gallery/post/?search={{ tag.quotedName|url_encode }}" class="{{ tag.Type|lower }}typetag">{{ tag.displayName }}</a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <li class="tag">
+                                <span class="none-tag">None</span>
                             </li>
-                        {% endfor %}
+                        {% endif %}
                     </ul>
                 </li>
                 <li>
@@ -116,7 +125,7 @@
                         {% if post.Source != "" %}
                             <li>Source:
                                 {% if post.Source starts with "http://" or post.Source starts with "https://" %}
-                                    <a href="{{ post.Source }}">{{ post.Source }}</a>
+                                    <a href="{{ post.Source }}" title="{{ post.Source }}">{{ post.Source }}</a>
                                 {% else %}
                                     {{ post.Source }}
                                 {% endif %}
@@ -282,11 +291,23 @@
                     <a id="editanchor">&nbsp;</a>
                     <form method="POST" accept-charset="UTF-8" onsubmit="OnEditSubmit()">
                         <input type="hidden" name="action" value="edit" />
-                        <label class="formlabel">Rating</label>         <input name="rating" type="radio"{% if post.Rating=='e' %} checked{% endif %} value="e" /><label>Explicit</label>
-                                                                        <input name="rating" type="radio"{% if post.Rating=='q' %} checked{% endif %} value="q" /><label>Questionable</label>
-                                                                        <input name="rating" type="radio"{% if post.Rating=='s' %} checked{% endif %} value="s" /><label>Safe</label><br />
-                        <label class="formlabel">Parent</label>         <input id="parent" class="textbox" type="text" name="parent" value="{% if post.ParentPostId!=-1 %}{{ post.ParentPostId }}{% endif %}" /><br />
-                        <label class="formlabel">Source</label>         <input id="imgsource" class="textbox" type="text" size=35 name="source" value="{{ post.Source }}" /><br />
+                        <table>
+                        <tr>
+                            <td><label>Rating</label></td>
+                            <td>
+                                <span class="radio-button-group"><input name="rating" type="radio"{% if post.Rating=='e' %} checked{% endif %} value="e" /><label>Explicit</label></span>
+                                <span class="radio-button-group"><input name="rating" type="radio"{% if post.Rating=='q' %} checked{% endif %} value="q" /><label>Questionable</label></span>
+                                <span class="radio-button-group"><input name="rating" type="radio"{% if post.Rating=='s' %} checked{% endif %} value="s" /><label>Safe</label></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label>Parent</label></td>
+                            <td><input id="parent" class="textbox" type="text" name="parent" value="{% if post.ParentPostId!=-1 %}{{ post.ParentPostId }}{% endif %}" /></td>
+                        </tr>
+                        <tr>
+                            <td><label>Source</label></td>
+                            <td><input id="imgsource" class="textbox" type="text" size=35 name="source" value="{{ post.Source }}" /></td>
+                        </tr>
                         {% if not user.PlainGalleryTagging %}
                             <script>
                                 $(document).ready(function() {
@@ -297,14 +318,29 @@
                                     {% endfor %}
                                 });
                             </script>
-                            <label class="formlabel">Tags</label>       <ul id="edit-taglist"></ul><textarea id="tags" class="" name="tags" hidden>{{ post.tagstring }}</textarea><br />
-                            <label class="formlabel">&nbsp;</label>     <input id="tag-input" type="text" class="textbox" /><br />
+                            <tr>
+                                <td><label>Tags</label></td>
+                                <td><ul class="g autocomplete-tag-list"></ul><textarea class="autocomplete-tags" name="tags" hidden>{{ post.tagstring }}</textarea></td>
+                            </tr>
+                            <tr>
+                                <td><label>&nbsp;</label></td>
+                                <td><input type="text" class="textbox autocomplete-tag-input" /></td>
+                            </tr>
                         {% else %}
-                            <label class="formlabel">Tags</label>       <textarea id="tags" class="textbox" name="tags">{{ post.tagstring }}</textarea><br />
+                            <tr>
+                                <td><label>Tags</label></td>
+                                <td><textarea id="tags" class="textbox" name="tags">{{ post.tagstring }}</textarea></td>
+                            </tr>
                         {% endif %}
-                        <label class="formlabel">Description</label>    <textarea id="desc" class="textbox" name="description">{{ post.Description }}</textarea><br />
-                        <br />
-                        <input type="submit" value="Save Changes" />
+                        <tr>
+                            <td><label>Description</label></td>
+                            <td><textarea id="desc" class="textbox" name="description">{{ post.Description }}</textarea></td>
+                        </tr>
+                        <tr>
+                            <td><input type="submit" value="Save Changes" /></td>
+                            <td></td>
+                        </tr>
+                        </table>
                     </form>
                 </div>
                 <div class="Clear">&nbsp;</div>

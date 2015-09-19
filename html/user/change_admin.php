@@ -80,7 +80,7 @@ if ($success) {
     $pusername = $profile_user['DisplayName'];
     LogAction("<strong><a href='/user/$uid/'>$username</a></strong> changed privileges of user <strong><a href='/user/$puid/'>$pusername</a></strong>", "");
 }
-
+// Go back to requesting page.
 header("Location: ".$_SERVER['HTTP_REFERER']);
 exit();
 ?>

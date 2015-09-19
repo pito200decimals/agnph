@@ -92,7 +92,7 @@ if ($post['HasPreview']) {
 $post['downloadUrl'] = GetSiteImagePath($md5, $ext);
 
 // Process tags.
-$tags = GetTags($post);
+$tags = GetTags($post['PostId']);
 $tagNameStr = ToTagNameString($tags);
 $tagCategories = ToTagCategorized($tags);
 $post['tagstring'] = $tagNameStr;
@@ -139,23 +139,6 @@ function GetPost(&$pid) {
     $post = $result->fetch_assoc();
     $pid = $post['PostId'];  // Get safe value, not user-generated.
     return $post;
-}
-
-function GetTags($post) {
-    $pid = $post['PostId'];
-    $allTagIds = array();
-    if (!sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TAG_TABLE." WHERE PostId=$pid;", 0)) return null;
-    while ($row = $result->fetch_assoc()) {
-        $allTagIds[] = $row['TagId'];
-    }
-    return GetTagsById(GALLERY_TAG_TABLE, $allTagIds);
-}
-
-function ToTagNameString($allTags) {
-    $tagNames = array_map(function($tag) { return $tag['Name']; }, $allTags);
-    sort($tagNames);
-    return implode(" ", $tagNames);
-
 }
 
 function ToTagCategorized($allTags) {
@@ -286,7 +269,7 @@ function FetchPostProperties(&$post) {
     $poster_id = $post['UploaderId'];
     if (!sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId=$poster_id;", 1)) return false;
     $poster = $result->fetch_assoc();
-    $post['postedHtml'] = FormatDuration(time() - $postdate)." ago by <a href='/user/".$poster['UserId']."/gallery/'>".$poster['DisplayName']."</a>";
+    $post['postedHtml'] = "<span title='".FormatDate($postdate, GALLERY_DATE_LONG_FORMAT)."'>".FormatDuration(time() - $postdate)." ago</span> by <a href='/user/".$poster['UserId']."/gallery/'>".$poster['DisplayName']."</a>";
     switch ($post['Rating']) {
       case "s":
         $post['ratingHtml'] = "<span class='srating'>Safe</span>";

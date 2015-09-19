@@ -14,7 +14,7 @@ include_once(SITE_ROOT."gallery/includes/searchclause.php");
 // order:date
 
 // TODO: Unimportant bug fix: Can't search for ~status:deleted
-function CreatePostSearchSQL($search_string, $posts_per_page, $page, &$can_sort_pool, &$pool_sort_id) {
+function CreatePostSearchSQL($search_string, $posts_per_page, $page, &$can_sort_pool, &$pool_sort_id, $return_where_only=false) {
     $offset = ($page - 1) * $posts_per_page;
     $page_size = $posts_per_page;
     $sortOrder = "T.PostId DESC";  // Will effectively be the same as DateUploaded DESC.
@@ -71,7 +71,11 @@ function CreatePostSearchSQL($search_string, $posts_per_page, $page, &$can_sort_
         $offset = 0;
         $page_size = 250;  // Max sort space for a pool.
     }
-    return "SELECT * FROM ".GALLERY_POST_TABLE." T WHERE ".CreateSQLClauses($search_string)." ORDER BY $sortOrder LIMIT $posts_per_page OFFSET $offset;";
+    if ($return_where_only) {
+        return CreateSQLClauses($search_string);
+    } else {
+        return "SELECT * FROM ".GALLERY_POST_TABLE." T WHERE ".CreateSQLClauses($search_string)." ORDER BY $sortOrder LIMIT $posts_per_page OFFSET $offset;";
+    }
 }
 
 // Returns the number of posts in the given query, or -1 if a failure occurs.

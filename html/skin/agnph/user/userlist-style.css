@@ -28,9 +28,3 @@
 .actionset {
     font-size: 0px;
 }
-
-@media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
-    .omit-mobile {
-        display: none;
-    }
-}

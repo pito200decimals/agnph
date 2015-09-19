@@ -3,6 +3,7 @@
 {% block styles %}
     <link rel="stylesheet" type="text/css" href="{{ asset('/fics/style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('/fics/edit-style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/tag-complete-style.css') }}" />
 {% endblock %}
 
 {% use 'fics/storyblock.tpl' %}
@@ -14,29 +15,6 @@
     {% if not create and chapters %}
         <script src="{{ asset('/scripts/jquery.sortable.js') }}"></script>
         <script>
-            var tag_search_url = '/fics/tagsearch/';
-            function GetPreclass(pre) {
-                var preclass = null;
-                if (pre.toLowerCase() == 'category') {
-                    preclass = 'atypetag';
-                }
-                if (pre.toLowerCase() == 'series') {
-                    preclass = 'btypetag';
-                }
-                if (pre.toLowerCase() == 'character') {
-                    preclass = 'ctypetag';
-                }
-                if (pre.toLowerCase() == 'species') {
-                    preclass = 'dtypetag';
-                }
-                if (pre.toLowerCase() == 'general') {
-                    preclass = 'mtypetag';
-                }
-                if (pre.toLowerCase() == 'warning') {
-                    preclass = 'ztypetag';
-                }
-                return preclass;
-            }
             $(document).ready(function() {
                 $('.sortable').sortable().bind('sortupdate', Update);
                 $(".reorder_hint").removeClass("hidden");
@@ -106,8 +84,33 @@
                 }
             }
         </script>
-        <script src="{{ asset('/scripts/tag-complete.js') }}"></script>
     {% endif %}
+    <script>
+        var tag_search_url = '/fics/tagsearch/';
+        function GetPreclass(pre) {
+            var preclass = null;
+            if (pre.toLowerCase() == 'category') {
+                preclass = 'atypetag';
+            }
+            if (pre.toLowerCase() == 'series') {
+                preclass = 'btypetag';
+            }
+            if (pre.toLowerCase() == 'character') {
+                preclass = 'ctypetag';
+            }
+            if (pre.toLowerCase() == 'species') {
+                preclass = 'dtypetag';
+            }
+            if (pre.toLowerCase() == 'general') {
+                preclass = 'mtypetag';
+            }
+            if (pre.toLowerCase() == 'warning') {
+                preclass = 'ztypetag';
+            }
+            return preclass;
+        }
+    </script>
+    <script src="{{ asset('/scripts/tag-complete.js') }}"></script>
     <script type="text/javascript">
         tinymce.init({
             selector: "textarea#summary",
@@ -293,9 +296,8 @@
                         {% endfor %}
                     });
                 </script>
-                <ul id="edit-taglist"></ul>
-                <textarea id="tags" class="" name="tags" hidden>{{ post.tagstring }}</textarea><br />
-                <input id="tag-input" type="text" class="textbox" /><br />
+                <ul class="f autocomplete-tag-list"></ul><textarea class="autocomplete-tags" name="tags" hidden>{{ post.tagstring }}</textarea><br />
+                <input type="text" class="textbox autocomplete-tag-input" /><br />
             {% else %}
                 <textarea id="tags" class="tagbox" name="tags">{{ formstory.tagstring }}</textarea>
             {% endif %}

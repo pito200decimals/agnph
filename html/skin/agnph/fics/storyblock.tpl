@@ -77,7 +77,7 @@
                                     {% endfor %}
                                 </ul>
                             {% else %}
-                                None
+                                <span class="none-tag">None</span>
                             {% endif %}
                         </span>
                     </li>

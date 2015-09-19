@@ -46,6 +46,19 @@
         </div>
     {% else %}
         {# No tags here. #}
-        No tags found.
+        <table class="list-table">
+            <thead>
+                <tr>
+                    <td><strong><a href="{{ nameSortUrl }}">Name</a></strong>{% if sortParam == "name" %}{{ block('sortArrow') }}{% endif %}</td>
+                    <td><strong><a href="{{ typeSortUrl }}">Type</a></strong>{% if sortParam == "type" %}{{ block('sortArrow') }}{% endif %}</td>
+                    <td><strong><a href="{{ countSortUrl }}">Count</a></strong>{% if sortParam == "count" %}{{ block('sortArrow') }}{% endif %}</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="3">No Tags found</td>
+                </tr>
+            </tbody>
+        </table>
     {% endif %}
 {% endblock %}

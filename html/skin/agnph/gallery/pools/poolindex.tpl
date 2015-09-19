@@ -77,6 +77,21 @@
         </div>
     {% else %}
         {# No pools here. #}
-        No pools found.
+        <table class="list-table">
+            <thead>
+                <tr>
+                    <td><div><strong>Name</strong></div></td>
+                    <td><div><strong>Number of Posts</strong></div></td>
+                    <td><div><strong>Created By</strong></div></td>
+                    {% if canEditPools %}<td><div><strong>Actions</strong></div></td>{% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="3">No pools found</td>
+                    {% if canEditPools %}<td></td>{% endif %}
+                </tr>
+            </tbody>
+        </table>
     {% endif %}
 {% endblock %}

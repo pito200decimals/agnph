@@ -22,6 +22,7 @@ if ($action == "add-favorite") {
                 // Failed to query, or did not find existing favorite.
                 if (sql_query("INSERT INTO ".FICS_USER_FAVORITES_TABLE." (StoryId, UserId, Timestamp) VALUES ($sid, $uid, $now);")) {
                     PostSessionBanner("Story added to favorites", "green");
+                    // Go back to requesting page.
                     header("Location: ".$_SERVER['HTTP_REFERER']);
                     exit();
                 }
@@ -39,6 +40,7 @@ if ($action == "add-favorite") {
                 // Found the entry for favorites.
                 if (sql_query("DELETE FROM ".FICS_USER_FAVORITES_TABLE." WHERE StoryId=$sid AND UserId=$uid;")) {
                     PostSessionBanner("Story removed from favorites", "green");
+                    // Go back to requesting page.
                     header("Location: ".$_SERVER['HTTP_REFERER']);
                     exit();
                 }

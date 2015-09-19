@@ -1,10 +1,9 @@
-
 $(document).ready(function() {
-    if ($('#edit-taglist').length > 0) {
-        $('#tag-input').autocomplete({
+    if ($('.autocomplete-tag-list').length > 0) {
+        $('.autocomplete-tag-input').autocomplete({
             serviceUrl: tag_search_url,
             onSelect: function(suggestion) {
-                AddTag($('#tag-input').val().trim().toLowerCase(), suggestion.data.type);
+                AddTag($('.autocomplete-tag-input').val().trim().toLowerCase(), suggestion.data.type);
             },
             transformResult: function(response, originalQuery) {
                 response = JSON.parse(response);
@@ -19,17 +18,17 @@ $(document).ready(function() {
             tabDisabled: true,
             triggerSelectOnValidInput: false
         }).keydown(function(event) {
-            if (event.keyCode == 13 && $('#tag-input').val().trim().length == 0) return;
+            if (event.keyCode == 13 && $('.autocomplete-tag-input').val().trim().length == 0) return;
             if (event.keyCode == 13 || event.keyCode == 32) {
-                AddTag($('#tag-input').val().trim().toLowerCase(), null);
+                AddTag($('.autocomplete-tag-input').val().trim().toLowerCase(), null);
                 event.preventDefault();
                 return false;
             }
         });
-        $('#edit-taglist li .close').click(function() {
+        $('.autocomplete-tag-list li .close').click(function() {
             RemoveTag($(this).parent());
         });
-        $('#edit-taglist li').mousedown(function(e) {
+        $('.autocomplete-tag-list li').mousedown(function(e) {
             e.preventDefault();
         });
     }
@@ -51,7 +50,7 @@ function suffix(input) {
 }
 function getExistingTag(tag) {
     suf = suffix(tag);
-    var t = $('#edit-taglist li').filter(function(i,e) {
+    var t = $('.autocomplete-tag-list li').filter(function(i,e) {
         inner = e.innerHTML;
         inner = inner.substr(0, inner.indexOf('<span')).trim();
         tstr = suffix(inner);
@@ -65,7 +64,7 @@ function hasTag(tag) {
 }
 function AddTag(tag, type) {
     if (tag.length == 0) return;
-    $('#tag-input').val("");
+    $('.autocomplete-tag-input').val("");
     var pre = prefix(tag);
     var suf = suffix(tag);
     var preclass = null;
@@ -79,7 +78,7 @@ function AddTag(tag, type) {
     }
     var elem = $('<li>'+tag+'<span class="close">&nbsp;</span></li>');
     var close = elem.find('.close');
-    $('#edit-taglist').append(elem);
+    $('.autocomplete-tag-list').append(elem);
     close.click(function() {
         RemoveTag($(elem));
     });
@@ -108,13 +107,11 @@ function AddTag(tag, type) {
     });
 }
 function OnEditSubmit() {
-    if ($('#edit-taglist').length > 0) {
-        var tags = $('#edit-taglist li').map(function(i, opt) {
+    if ($('.autocomplete-tag-list').length > 0) {
+        var tags = $('.autocomplete-tag-list li').map(function(i, opt) {
             return $(opt).clone().children().remove().end().text().trim();
         }).toArray().join(' ');
-        $('#tags').val(tags);
-        console.log(tags);
-        console.log($('#tags').val())
+        $('.autocomplete-tags').val(tags);
     }
 }
 function RemoveTag(elem) {

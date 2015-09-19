@@ -98,6 +98,7 @@ if ($action == "comment" || $action == "review") {
         } else {
             PostSessionBanner("Comment posted", "green");
         }
+        // Go back to requesting page.
         header("Location: ".$_SERVER['HTTP_REFERER']);
         exit();
     } else {
@@ -113,6 +114,7 @@ if ($action == "comment" || $action == "review") {
     $success = sql_query("UPDATE ".FICS_REVIEW_TABLE." SET AuthorResponseText='$escaped_text' WHERE ReviewId='$escaped_review_id';");
     if ($success){
         PostSessionBanner("Response posted", "green");
+        // Go back to requesting page.
         header("Location: ".$_SERVER['HTTP_REFERER']);
         exit();
     } else {
@@ -127,6 +129,7 @@ if ($action == "comment" || $action == "review") {
     } else {
         PostSessionBanner("Comment deleted", "green");
     }
+    // Go back to requesting page.
     header("Location: ".$_SERVER['HTTP_REFERER']);
     exit();
 }

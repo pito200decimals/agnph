@@ -45,7 +45,7 @@
             {{ chapternotes }}
         {% endautoescape %}
     </textarea></p>
-    <p><a id="chaptertextanchor" /><label>Chapter Text:</label>
+    <p><a id="chaptertextanchor"></a><label>Chapter Text:</label>
     <textarea id="chaptext" name="chaptertext">
         {% autoescape false %}
             {{ chaptertext}}

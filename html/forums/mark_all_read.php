@@ -38,6 +38,7 @@ if (isset($_GET['board']) && is_numeric($_GET['board'])) {
     MarkAllAsRead($user);
     PostSessionBanner("Posts marked as read", "green");
 }
+// Go back to requesting page.
 header("Location: ".$_SERVER['HTTP_REFERER']);
 exit();
 

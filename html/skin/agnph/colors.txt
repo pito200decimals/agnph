@@ -37,6 +37,7 @@
 # gallery/postindex-style.css
 0,0,127     (post tile text color)
 159,182,211 (post tile label)
+221,63,31   (None-tag color)
 
 # gallery/viewpost-style.css
 85,153,85   (parent box)

@@ -116,6 +116,16 @@ function CanUserRegenerateThumbnail($user, $post) {
     if ($user['GalleryPermissions'] == 'C') return true;
     return false;
 }
+function CanUserSearchUnlimitedClauses($user) {
+    if (!IsUserActivated($user)) return false;
+    if ($user['GalleryPermissions'] == 'A') return true;
+    return false;
+}
+function CanUserMassTagEdit($user) {
+    if (!IsUserActivated($user)) return false;
+    if ($user['GalleryPermissions'] == 'A') return true;
+    return false;
+}
 
 // General path functions.
 function GetSiteImagePath($md5, $ext) { return "/".GetImagePath($md5, $ext); }
@@ -146,13 +156,15 @@ function GetValidParentPostId($parent_post_id, $post_id) {
 }
 
 // Updates a post with the new tags/properties (and updates history log).
-function UpdatePost($tag_string, $post_id, $user) {
+function UpdatePost($tag_string, $post_id, $user, $update_tag_types=true, $batch_id=0) {
     global $GALLERY_TAG_TYPES;
     $tag_string = CleanTagString($tag_string);
     $tokens = GetTagStringTokens($tag_string);
     $descriptors = GetTagDescriptors($tokens, $post_id, "GalleryTagDescriptorFilterFn");
-    UpdatePostWithDescriptors($descriptors, $post_id, $user);
-    UpdateTagTypes(GALLERY_TAG_TABLE, $GALLERY_TAG_TYPES, $descriptors, $user);  // Do after creating tags above when setting post tags.
+    UpdatePostWithDescriptors($descriptors, $post_id, $user, $batch_id);
+    if ($update_tag_types) {
+        UpdateTagTypes(GALLERY_TAG_TABLE, $GALLERY_TAG_TYPES, $descriptors, $user);  // Do after creating tags above when setting post tags.
+    }
 }
 
 // Updates a post with the new description (and updates history log).
@@ -171,12 +183,12 @@ function UpdatePostDescription($post_id, $description, $user) {
 // Writes post statistics to database.
 function UpdatePostStatistics($post_id) {
     // NumFavorites
-    // NumComments
     if (sql_query_into($result, "SELECT count(*) FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE PostId=$post_id;", 1)) {
         $num_favorites = $result->fetch_assoc()['count(*)'];
     } else {
         $num_favorites = 0;
     }
+    // NumComments
     if (sql_query_into($result, "SELECT count(*) FROM ".GALLERY_COMMENT_TABLE." WHERE PostId=$post_id;", 1)) {
         $num_comments = $result->fetch_assoc()['count(*)'];
     } else {
@@ -189,7 +201,7 @@ function UpdatePostStatistics($post_id) {
 
 
 
-function UpdatePostWithDescriptors($descriptors, $post_id, $user) {
+function UpdatePostWithDescriptors($descriptors, $post_id, $user, $batch_id=0) {
     $tag_descriptors = array_filter($descriptors, function($desc) { return $desc->isTag; });
     $tag_names = array_map(function($desc) { return $desc->tag; }, $tag_descriptors);
     $properties = array_filter($descriptors, function($desc) { return !$desc->isTag; });
@@ -264,7 +276,7 @@ function UpdatePostWithDescriptors($descriptors, $post_id, $user) {
         $user_id = $user['UserId'];
         $keys = implode(", ", array_keys($log_fields));
         $values = implode(",", array_map(function($str) { return "'$str'"; }, array_values($log_fields)));
-        sql_query("INSERT INTO ".GALLERY_POST_TAG_HISTORY_TABLE." (PostId, Timestamp, UserId, $keys) VALUES ($post_id, $now, $user_id, $values);");
+        sql_query("INSERT INTO ".GALLERY_POST_TAG_HISTORY_TABLE." (PostId, Timestamp, UserId, BatchId, $keys) VALUES ($post_id, $now, $user_id, $batch_id, $values);");
     }
 }
 
@@ -397,6 +409,38 @@ function CanUserUpload($user, $numPending, $numSuccessful, $numDeletedNotFlagged
 }
 function QuickCanUserUpload($user) {
     return FetchUploadCountsByUserBySuccess($user, $numPending, $numSuccessful, $numDeletedNotFlaggedBySelf) && CanUserUpload($user, $numPending, $numSuccessful, $numDeletedNotFlaggedBySelf);
+}
+
+function GetTags($pid, $fresh=false) {
+    static $cache = array();
+    $allTagIds = array();
+    if (!sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TAG_TABLE." WHERE PostId=$pid;", 0)) return null;
+    while ($row = $result->fetch_assoc()) {
+        $allTagIds[] = $row['TagId'];
+    }
+
+    $ret = array();
+    if (!$fresh) {
+        $origSize = sizeof($allTagIds);
+        for ($i = 0; $i < $origSize; $i++) {
+            if (isset($cache[$allTagIds[$i]])) {
+                $ret[$allTagIds[$i]] = $cache[$allTagIds[$i]];
+                unset($allTagIds[$i]);
+            }
+        }
+    }
+    $result = GetTagsById(GALLERY_TAG_TABLE, $allTagIds);
+    foreach ($result as $key => $value) {
+        $cache[$key] = $value;
+    }
+    $ret = $ret + $result;
+    return $ret;
+}
+
+function ToTagNameString($allTags) {
+    $tagNames = array_map(function($tag) { return $tag['Name']; }, $allTags);
+    sort($tagNames);
+    return implode(" ", $tagNames);
 }
 
 ?>

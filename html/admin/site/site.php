@@ -18,7 +18,7 @@ $vars['is_maintenance_mode'] = IsMaintenanceMode();
 if (isset($_POST['submit'])) {
     HandlePost();
     PostSessionBanner("Settings changed", "green");
-    header("Location: ".$_SERVER['HTTP_REFERER']);
+    header("Location: ".$_SERVER['REQUEST_URI']);
     exit();
 }
 

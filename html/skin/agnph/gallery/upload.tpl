@@ -3,54 +3,121 @@
 {% block styles %}
     <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/upload-style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/tag-complete-style.css') }}" />
 {% endblock %}
 
 {% block scripts %}
     {{ parent() }}
     <script type="text/javascript">
-    $(document).ready(function() {
-        function ResetImage() {
-            var file = $("#imgbrowse")[0];
-            if (file.files && file.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function() {
-                    $("#previewimg").attr("src", reader.result);
-                    $("#previewpanel").removeAttr("style");
-                };
-                reader.onerror = function() {
-                    $("#previewimg").attr("src", $("#imgsource").val());
-                    $("#previewpanel").removeAttr("style");
-                };
-                reader.readAsDataURL(file.files[0]);
-                return;
+        var tag_search_url = '/gallery/tagsearch/';
+        function GetPreclass(pre) {
+            var preclass = null;
+            if (pre.toLowerCase() == 'artist') {
+                preclass = 'atypetag';
             }
-            $("#previewimg").attr("src", $("#imgsource").val());
-            $("#previewpanel").removeAttr("style");
+            if (pre.toLowerCase() == 'copyright') {
+                preclass = 'btypetag';
+            }
+            if (pre.toLowerCase() == 'character') {
+                preclass = 'ctypetag';
+            }
+            if (pre.toLowerCase() == 'species') {
+                preclass = 'dtypetag';
+            }
+            if (pre.toLowerCase() == 'general') {
+                preclass = 'mtypetag';
+            }
+            return preclass;
         }
-        $("#previewpanel").hide();
-        $("#imgbrowse").on("change mousedown", ResetImage);
-        $("#imgsource").on("change", ResetImage);
-        $("#previewimg").error(function() {
+        $(document).ready(function() {
+            function ResetImage() {
+                var file = $("#imgbrowse")[0];
+                if (file.files && file.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function() {
+                        $("#previewimg").attr("src", reader.result);
+                        $("#previewpanel").removeAttr("style");
+                    };
+                    reader.onerror = function() {
+                        $("#previewimg").attr("src", $("#imgsource").val());
+                        $("#previewpanel").removeAttr("style");
+                    };
+                    reader.readAsDataURL(file.files[0]);
+                    return;
+                }
+                $("#previewimg").attr("src", $("#imgsource").val());
+                $("#previewpanel").removeAttr("style");
+            }
             $("#previewpanel").hide();
+            $("#imgbrowse").on("change mousedown", ResetImage);
+            $("#imgsource").on("change", ResetImage);
+            $("#previewimg").error(function() {
+                $("#previewpanel").hide();
+            });
         });
-    });
     </script>
+    <script src="{{ asset('/scripts/jquery.autocomplete.min.js') }}"></script>
+    <script src="{{ asset('/scripts/tag-complete.js') }}"></script>
 {% endblock %}
 
 {% block content %}
     <div class="uploadpanel">
         <h3>Upload</h3>
         <form action="" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
-            <label class="formlabel">File</label>           <input id="imgbrowse" class="textbox" type="file" name="file" accept="image/jpeg,image/png,image/gif,application/x-shockwave-flash,video/webm" /><br />
-            <label class="formlabel">Source</label>         <input id="imgsource" class="textbox" type="textbox" size=35 name="source" /><br />
-            <label class="formlabel">Tags</label>           <textarea class="textbox" name="tags" required></textarea><br />
-            <label class="formlabel">Description</label>    <textarea id="desc" class="textbox" name="description"></textarea><br />
-            <label class="formlabel">Parent</label>         <input id="parent" class="textbox" type="textbox" name="parent" /><br />
-            <label class="formlabel">Rating</label>         <input name="rating" type="radio" value="e" /><label>Explicit</label>
-                                                            <input name="rating" type="radio" checked value="q" /><label>Questionable</label>
-                                                            <input name="rating" type="radio" value="s" /><label>Safe</label><br />
-            <br />
-            <input type="submit" value="Upload" />
+            <table>
+                <tr>
+                    <td><label class="formlabel">File</label></td>
+                    <td><input id="imgbrowse" class="textbox" type="file" name="file" accept="image/jpeg,image/png,image/gif,application/x-shockwave-flash,video/webm" /></td>
+                </tr>
+                <tr>
+                    <td><label class="formlabel">Source</label></td>
+                    <td><input id="imgsource" class="textbox" type="textbox" size=35 name="source" /></td>
+                </tr>
+                {% if not user.PlainGalleryTagging %}
+                    <script>
+                        $(document).ready(function() {
+                            {% for category in post.tagCategories %}
+                                {% for tag in category.tags %}
+                                    AddTag('{{ tag.Name }}', '{{ tag.Type|lower }}');
+                                {% endfor %}
+                            {% endfor %}
+                        });
+                    </script>
+                    <tr>
+                        <td><label class="formlabel">Tags</label></td>
+                        <td><ul class="g autocomplete-tag-list"></ul><textarea class="autocomplete-tags" name="tags" hidden>{{ post.tagstring }}</textarea></td>
+                    </tr>
+                    <tr>
+                        <td><label class="formlabel">&nbsp;</label></td>
+                        <td><input type="text" class="textbox autocomplete-tag-input" /></td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td><label class="formlabel">Tags</label></td>
+                        <td><textarea id="tags" class="textbox" name="tags">{{ post.tagstring }}</textarea></td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <td><label class="formlabel">Description</label></td>
+                    <td><textarea id="desc" class="textbox" name="description"></textarea></td>
+                </tr>
+                <tr>
+                    <td><label class="formlabel">Parent</label></td>
+                    <td><input id="parent" class="textbox" type="text" name="parent" /></td>
+                </tr>
+                <tr>
+                    <td><label class="formlabel">Rating</label></td>
+                    <td>
+                        <span class="radio-button-group"><input name="rating" type="radio" value="e" /><label>Explicit</label></span>
+                        <span class="radio-button-group"><input name="rating" type="radio" checked value="q" /><label>Questionable</label></span>
+                        <span class="radio-button-group"><input name="rating" type="radio" value="s" /><label>Safe</label></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="submit" value="Upload" /></td>
+                </tr>
+            </table>
         </form>
     </div>
     <div class="previewpanel" id="previewpanel">

@@ -21,8 +21,10 @@ if (isset($user)) {
 } else {
     $posts_per_page = DEFAULT_GALLERY_POSTS_PER_PAGE;
 }
+HandlePost($searchterms);
 $vars['search'] = $searchterms;
 $sql = CreatePostSearchSQL(mb_strtolower($searchterms), $posts_per_page, $page, $can_sort_pool, $pool_id);
+$unlimited_sql = CreatePostSearchSQL(mb_strtolower($searchterms), $posts_per_page, $page, $can_sort_pool, $pool_id, false);
 $posts = array();
 if (sql_query_into($result, $sql, 0)) {
     while ($row = $result->fetch_assoc()) {
@@ -37,6 +39,11 @@ if (sql_query_into($result, $sql, 0)) {
 
 // Construct page iterator.
 $vars['postIterator'] = CreatePageIterator($searchterms, $page, $posts_per_page);
+
+// Set up permissions.
+if (isset($user)) {
+    $vars['canMassTagEdit'] = CanUserMassTagEdit($user) && mb_strlen($searchterms) > 0;
+}
 
 $vars['posts'] = $posts;
 $vars['cansort'] = $can_sort_pool;
@@ -92,6 +99,78 @@ function CreatePageIterator($searchterms, $page, $posts_per_page) {
     } else {
         return "";
     }
+}
+
+function HandlePost($searchterms) {
+    // TODO: Handle timeouts.
+    global $user;
+    if (isset($user) && isset($_POST['submit'])) {
+        if (!CanPerformSitePost()) MaintenanceError();
+        if (!CanUserMassTagEdit($user)) {
+            RenderPostError("Insufficient permissions");
+        }
+        $where_clause = CreatePostSearchSQL(mb_strtolower($searchterms), 0, 0, $can_sort_pool, $pool_id, true);
+        sql_query_into($result, "SELECT COUNT(*) AS C FROM ".GALLERY_POST_TABLE." T WHERE $where_clause;", 1) or RenderPostError("Error modifying posts");
+        $num_posts = $result->fetch_assoc()['C'];
+        if ($num_posts > MAX_MASS_TAG_EDIT_COUNT) {
+            RenderPostError("Cannot modify $num_posts posts (max limit ".MAX_MASS_TAG_EDIT_COUNT.")");
+        }
+        if ($num_posts == 0) {
+            RenderPostError("No posts to modify");
+        }
+
+        // Get next batch id.
+        sql_query_into($result, "SELECT MAX(BatchId) AS M FROM ".GALLERY_POST_TAG_HISTORY_TABLE.";", 1) or RenderPostError("Error modifying posts");
+        $next_batch_id = $result->fetch_assoc()['M'] + 1;
+
+        // Get posts to modify.
+        $post_ids = array();
+        sql_query_into($result, "SELECT PostId FROM ".GALLERY_POST_TABLE." T WHERE $where_clause;", 1) or RenderPostError("Error modifying posts");
+        while ($row = $result->fetch_assoc()) {
+            $post_ids[] = $row['PostId'];
+        }
+
+        // Get tags to add/remove.
+        $tags_to_add = $_POST['tags-to-add'];
+        $tags_to_add = explode(" ", $tags_to_add);
+        $tags_to_add = array_map("trim", $tags_to_add);
+        $tags_to_add = array_filter($tags_to_add, "mb_strlen");
+        $tags_to_remove = $_POST['tags-to-remove'];
+        $tags_to_remove = explode(" ", $tags_to_remove);
+        $tags_to_remove = array_map("trim", $tags_to_remove);
+        $tags_to_remove = array_filter($tags_to_remove, "mb_strlen");
+        $can_create_tags = CanUserCreateGalleryTags($user);
+        // For add tags, do alias, implication, and remove aliased tags.
+        $tags_to_add = GetTagsByNameWithAliasAndImplied(GALLERY_TAG_TABLE, GALLERY_TAG_ALIAS_TABLE, GALLERY_TAG_IMPLICATION_TABLE, $tags_to_add, $can_create_tags, $user['UserId']);
+        // For remove tags, do alias, no implications, and keep aliased tags. Also, don't create tags being removed.
+        $tags_to_remove = GetTagsByNameWithAliasAndImplied(GALLERY_TAG_TABLE, GALLERY_TAG_ALIAS_TABLE, GALLERY_TAG_IMPLICATION_TABLE, $tags_to_remove, false, $user['UserId'], true, false, false);
+        // Convert to names, but don't add any tags we're also removing.
+        $tag_ids_to_remove = array_map(function($tag) { return $tag['TagId']; }, $tags_to_remove);
+        $tags_to_add = array_filter($tags_to_add, function($tag) use ($tag_ids_to_remove) {
+            return !in_array($tag['TagId'], $tag_ids_to_remove);
+        });
+        $tag_ids_to_add = array_map(function($tag) { return $tag['TagId']; }, $tags_to_add);
+
+        foreach ($post_ids as $pid) {
+            $existing_tags = GetTags($pid);
+            $existing_tags = array_filter($existing_tags, function($tag) use ($tag_ids_to_remove,$tag_ids_to_add) {
+                return !in_array($tag['TagId'], $tag_ids_to_remove) && !in_array($tag['TagId'], $tag_ids_to_add);
+            });
+            $existing_tags = array_merge($existing_tags, $tags_to_add);
+            $tag_str = ToTagNameString($existing_tags);
+            UpdatePost($tag_str, $pid, $user, false, $next_batch_id);
+        }
+
+        PostSessionBanner("Posts modified", "green");
+        header("Location: ".$_SERVER['REQUEST_URI']);
+        exit();
+    }
+}
+
+function RenderPostError($msg) {
+    PostSessionBanner($msg, "red");
+    header("Location: ".$_SERVER['REQUEST_URI']);
+    exit();
 }
 
 ?>
