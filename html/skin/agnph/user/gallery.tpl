@@ -1,16 +1,13 @@
 {% extends "user/base.tpl" %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/user/style.css') }}" />
+    {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/postindex-style.css') }}" />
 {% endblock %}
 
-{% block scripts %}
-{% endblock %}
-
 {% block sidebar %}
-    {% if user %}
+    {% if user and adminLinks|length > 0 %}
         <h4>Actions</h4>
         <ul>
             {{ block('admin_link_block') }}

@@ -1,7 +1,7 @@
 {% extends 'fics/base.tpl' %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/fics/style.css') }}" />
+    {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('/fics/edit-style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('/tag-complete-style.css') }}" />
 {% endblock %}

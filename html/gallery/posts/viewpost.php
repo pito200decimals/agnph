@@ -113,10 +113,10 @@ if (sql_query_into($result, "SELECT PostId FROM ".GALLERY_POST_TABLE." WHERE Pos
 $comments = GetComments($post);
 ConstructCommentBlockIterator($comments, $vars['commentIterator'], true /* allow_offset */,
     function($index) use ($pid) {
-        $offset = ($index - 1) * DEFAULT_GALLERY_COMMENTS_PER_PAGE;
+        $offset = ($index - 1) * GALLERY_COMMENTS_PER_PAGE;
         $url = "/gallery/post/show/$pid/?offset=$offset";
         return $url;
-    }, DEFAULT_GALLERY_COMMENTS_PER_PAGE);
+    }, GALLERY_COMMENTS_PER_PAGE);
 $post['comments'] = $comments;
 
 // Process user permissions for general actions.

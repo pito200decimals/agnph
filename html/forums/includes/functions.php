@@ -17,6 +17,7 @@ function CanUserViewBoard($user, $board) {
 }
 function CanUserCreateThread($user, $board) {
     if (!IsUserActivated($user)) return false;
+    if ($user['FicsPermissions'] == 'R') return false;
     if ($user['ForumsPermissions'] == 'A') return true;
     // TODO: Determine if this is desired.
     // if (isset($board['childBoards']) && sizeof($board['childBoards']) > 0) return false;  // Can't post to top-level boards (Although admins can move posts to them).
@@ -26,6 +27,7 @@ function CanUserCreateThread($user, $board) {
 }
 function CanUserPostToThread($user, $thread) {
     if (!IsUserActivated($user)) return false;
+    if ($user['FicsPermissions'] == 'R') return false;
     if ($user['ForumsPermissions'] == 'A') return true;
     if ($thread['Locked']) return false;
     // Don't check board locked status, as users can still reply to threads in locked boards.
@@ -40,6 +42,7 @@ function CanUserEditForumsPost($user, $thread, $post) {
 function CanUserDeleteForumsPost($user, $thread, $post) {
     if ($post['IsThread'] == 1 && sizeof($thread['posts']) > 1) return false;
     if (!IsUserActivated($user)) return false;
+    if ($user['FicsPermissions'] == 'R') return false;
     if ($user['ForumsPermissions'] == 'A') return true;
     if ($user['UserId'] == $post['UserId']) return true;
     return false;

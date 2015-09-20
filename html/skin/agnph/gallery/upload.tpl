@@ -1,7 +1,7 @@
 {% extends 'gallery/base.tpl' %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/style.css') }}" />
+    {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/upload-style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('/tag-complete-style.css') }}" />
 {% endblock %}

@@ -45,16 +45,16 @@ $reviews = array_filter($storyReviews, function($review) {
 });
 ConstructCommentBlockIterator($comments, $vars['commentIterator'], !isset($_GET['reviews']),
     function($index) use ($sid) {
-        $offset = ($index - 1) * DEFAULT_FICS_COMMENTS_PER_PAGE;
+        $offset = ($index - 1) * FICS_COMMENTS_PER_PAGE;
         $url = "/fics/story/$sid/?offset=$offset";
         return $url;
-    }, DEFAULT_FICS_COMMENTS_PER_PAGE);
+    }, FICS_COMMENTS_PER_PAGE);
 ConstructCommentBlockIterator($reviews, $vars['reviewIterator'], isset($_GET['reviews']),
     function($index) use ($sid) {
-        $offset = ($index - 1) * DEFAULT_FICS_COMMENTS_PER_PAGE;
+        $offset = ($index - 1) * FICS_COMMENTS_PER_PAGE;
         $url = "/fics/story/$sid/?reviews&offset=$offset#reviews";
         return $url;
-    }, DEFAULT_FICS_COMMENTS_PER_PAGE);
+    }, FICS_COMMENTS_PER_PAGE);
 
 // Format comments for template.
 debug($reviews);

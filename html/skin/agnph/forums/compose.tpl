@@ -1,7 +1,7 @@
 {% extends 'forums/base.tpl' %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/forums/style.css') }}" />
+    {{ parent() }}
     <style>
         .form-block {
             margin: 5px;
@@ -11,17 +11,19 @@
 {% block scripts %}
     {{ parent() }}
     <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
+    <script src="{{ asset('/scripts/tinymce-spoiler-plugin.js') }}"></script>
     <script>
         $(document).ready(function() {
             tinymce.init({
                 selector: "textarea#compose",
-                plugins: [ "paste", "link", "autoresize", "hr", "code", "contextmenu", "emoticons", "image", "textcolor" ],
+                plugins: [ "paste", "link", "autoresize", "code", "contextmenu", "emoticons", "image", "textcolor", "spoiler" ],
                 target_list: [ {title: 'New page', value: '_blank'} ],
-                toolbar: "undo redo | bold italic underline | bullist numlist | link",
-                contextmenu: "image link | hr",
+                toolbar: "undo redo | bold italic underline | bullist numlist | image link | code blockquote spoiler",
+                contextmenu: "image link",
                 autoresize_max_height: 150,
                 resize: false,
-                menubar: false
+                menubar: false,
+                content_css: "{{ asset('/comments-style.css') }}"
             });
         });
     </script>
@@ -35,6 +37,7 @@
     {% elseif thread %}
         <h3>Replying to thread: {{ thread.Title }}</h3>
     {% endif %}
+    {{ block('banner') }}
     <form method="POST" accept-encoding="UTF-8">
         <input type="hidden" name="action" value="{{ action }}" />
         <input type="hidden" name="id" value="{{ id }}" />
@@ -48,6 +51,13 @@
                         {{ POST.text }}
                     {% elseif post.Text %}
                         {{ post.Text }}
+                    {% elseif quoteText %}
+                        <p>
+                            <blockquote>
+                                {{ quoteText }}
+                            </blockquote>
+                        </p>
+                        <p></p>
                     {% endif %}
                 {% endautoescape %}
             </textarea>

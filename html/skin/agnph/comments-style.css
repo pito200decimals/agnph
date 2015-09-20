@@ -42,3 +42,22 @@
     display: block;
     margin: 5px;
 }
+blockquote {
+    display: inline-block;
+    background-color: rgb(191,223,255);
+    background-image: url(/images/lquote.png),url(/images/rquote.png);
+    background-repeat: no-repeat;
+    background-position: left top, right top;
+    padding: 15px;
+    border-radius: 15px;
+}
+.spoiler {
+    color: black;
+    background-color: black;
+}
+.spoiler:hover {
+    color: inherit;
+    background-color: inherit;
+    border: 1px dotted black;
+    cursor: pointer;
+}

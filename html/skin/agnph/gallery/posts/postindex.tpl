@@ -1,7 +1,7 @@
 {% extends 'gallery/base.tpl' %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/style.css') }}" />
+    {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/postindex-style.css') }}" />
     {% if canMassTagEdit %}
         <style>

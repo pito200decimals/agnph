@@ -15,8 +15,8 @@ $name = $_POST['search'];
 $name = str_replace("_", " ", $name);
 // And strip out duplicate spaces.
 $name = mb_ereg_replace("\s+", " ", $name);
-$name = mb_substr($name, 0, MAX_POOL_NAME_LENGTH);
-if (mb_strlen($name) < MIN_POOL_PREFIX_LENGTH) {
+$name = mb_substr($name, 0, MAX_GALLERY_POOL_NAME_LENGTH);
+if (mb_strlen($name) < MIN_GALLERY_POOL_NAME_LENGTH) {
     PostSessionBanner("Invalid pool name", "red");
     header("Location: ".$_SERVER['HTTP_REFERER']);
     exit();

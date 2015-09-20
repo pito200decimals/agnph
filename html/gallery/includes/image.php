@@ -123,9 +123,9 @@ function CreateThumbnailFile($md5, $ext) {
     $image->load($image_path);
     // Always create thumbnail file.
     if ($image->getWidth() > $image->getHeight()) {
-        $image->resizeToWidth(MAX_IMAGE_THUMB_SIZE);
+        $image->resizeToWidth(MAX_GALLERY_IMAGE_THUMB_SIZE);
     } else {
-        $image->resizeToHeight(MAX_IMAGE_THUMB_SIZE);
+        $image->resizeToHeight(MAX_GALLERY_IMAGE_THUMB_SIZE);
     }
     $image->save($thumb_path);
     return $thumb_path;
@@ -139,11 +139,11 @@ function CreatePreviewFile($md5, $ext) {
     umask($oldmask);
     $image = new SimpleImage();
     $image->load($image_path);
-    if (($image->getWidth() > MAX_IMAGE_PREVIEW_SIZE || $image->getHeight() > MAX_IMAGE_PREVIEW_SIZE)) {
+    if (($image->getWidth() > MAX_GALLERY_IMAGE_PREVIEW_SIZE || $image->getHeight() > MAX_GALLERY_IMAGE_PREVIEW_SIZE)) {
         if ($image->getWidth() > $image->getHeight()) {
-            $image->resizeToWidth(MAX_IMAGE_PREVIEW_SIZE);
+            $image->resizeToWidth(MAX_GALLERY_IMAGE_PREVIEW_SIZE);
         } else {
-            $image->resizeToHeight(MAX_IMAGE_PREVIEW_SIZE);
+            $image->resizeToHeight(MAX_GALLERY_IMAGE_PREVIEW_SIZE);
         }
         $image->save($preview_path);
     } else {

@@ -40,7 +40,7 @@ RewriteRule ^forums/mark-all-read/?$ /forums/mark_all_read.php [QSA]
 
 # Rewrites for accounts section
 RewriteRule ^user/(\d+)/?$ /user/profile.php?uid=$1
-#RewriteRule ^user/(\d+)/forums/?$ /user/profile.php?uid=$1
+RewriteRule ^user/(\d+)/forums/?$ /forums/user.php?uid=$1
 RewriteRule ^user/(\d+)/gallery/?$ /gallery/user.php?uid=$1
 RewriteRule ^user/(\d+)/fics/?$ /fics/user.php?uid=$1
 #RewriteRule ^user/(\d+)/oekaki/?$ /user/profile.php?uid=$1

@@ -56,16 +56,16 @@ $reviews = array_filter($chapterReviews, function($review) use ($chapter) {
 });
 ConstructCommentBlockIterator($comments, $vars['commentIterator'], !isset($_GET['reviews']),
     function($index) use ($sid, $chapternum) {
-        $offset = ($index - 1) * DEFAULT_FICS_COMMENTS_PER_PAGE;
+        $offset = ($index - 1) * FICS_COMMENTS_PER_PAGE;
         $url = "/fics/story/$sid/$chapternum/?offset=$offset";
         return $url;
-    }, DEFAULT_FICS_COMMENTS_PER_PAGE);
+    }, FICS_COMMENTS_PER_PAGE);
 ConstructCommentBlockIterator($reviews, $vars['reviewIterator'], isset($_GET['reviews']),
     function($index) use ($sid, $chapternum) {
-        $offset = ($index - 1) * DEFAULT_FICS_COMMENTS_PER_PAGE;
+        $offset = ($index - 1) * FICS_COMMENTS_PER_PAGE;
         $url = "/fics/story/$sid/$chapternum/?reviews&offset=$offset#reviews";
         return $url;
-    }, DEFAULT_FICS_COMMENTS_PER_PAGE);
+    }, FICS_COMMENTS_PER_PAGE);
 $comments = array_map(function($comment) {
         global $user;
         return array(

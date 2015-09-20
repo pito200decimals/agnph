@@ -1,7 +1,7 @@
 {% extends 'gallery/base.tpl' %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/style.css') }}" />
+    {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/viewpost-style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('/comments-style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('/tag-complete-style.css') }}" />
@@ -14,7 +14,32 @@
         var ppi = {{post.ParentPoolId }};
     </script>
     <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
-    <script src="{{ asset('/scripts/gallery.js') }}"></script>
+    <script src="{{ asset('/scripts/tinymce-spoiler-plugin.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            tinymce.init({
+                selector: "textarea.commenttextbox",
+                plugins: [ "paste", "link", "autoresize", "hr", "code", "contextmenu", "emoticons", "image", "textcolor", "spoiler" ],
+                target_list: [ {title: 'New page', value: '_blank'} ],
+                toolbar: "undo redo | bold italic underline | bullist numlist | image link | code blockquote spoiler",
+                contextmenu: "image link | hr",
+                autoresize_max_height: 150,
+                resize: false,
+                menubar: false,
+                content_css: "{{ asset('/comments-style.css') }}"
+            });
+            $("#commentbutton").click(function() {
+                $("#commentbutton").hide();
+                $("#commentform").show();
+                $("html body").animate(
+                    { scrollTop: $("#commentform").offset().top },
+                    { duration: 0,
+                      complete: function() {
+                        tinyMCE.get("commenttextbox").focus();
+                    }});
+            });
+        });
+    </script>
     {% if post.canEdit %}
         <script src="{{ asset('/scripts/jquery.autocomplete.min.js') }}"></script>
         <script src="{{ asset('/scripts/gallery-edit.js') }}"></script>

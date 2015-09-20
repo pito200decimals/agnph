@@ -1,8 +1,8 @@
 {% extends "user/base.tpl" %}
 
 {% block styles %}
+    {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('/list-style.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('/user/style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('/user/mail-style.css') }}" />
 {% endblock %}
 

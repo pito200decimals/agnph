@@ -2,13 +2,13 @@ TODOs
 (* = Required for launch, - = Normal priority, X = Scrapped)
 
 == FORUMS ==
-* Quoting
-* Spoiler tags
 - Admin control panel?
-- Link up news forum to other index pages?
-    - Optional large first posts in a thread?
 - Search?
     - Profile user subpage for forums
+X Link up news forum to other index pages?
+    - Optional large first posts in a thread?
+X Quoting
+    - With headers denoting source
 
 == GALLERY ==
 - Slideshow view
@@ -41,6 +41,7 @@ X RSS Feed?
 * Admin site management (Ongoing)
 * General help pages
 * General about section, admin bios, etc.
+- Admin ticket system
 - Link news from forums to each section/home page?
 - Global site statistics?
 - Polls?
@@ -50,7 +51,6 @@ X RSS Feed?
 - All CSS
 - Multiple themes?
 X Theme switcher for guests?
-- Admin ticket system
 
 == ACCOUNT ==
 * Mailbox/PM system

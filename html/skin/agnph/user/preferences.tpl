@@ -1,9 +1,5 @@
 {% extends "user/base.tpl" %}
 
-{% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/user/style.css') }}" />
-{% endblock %}
-
 {% block scripts %}
     {{ parent() }}
     {% if canEditBio %}

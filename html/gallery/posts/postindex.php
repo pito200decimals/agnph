@@ -58,7 +58,7 @@ function CreatePageIterator($searchterms, $page, $posts_per_page) {
     $total_num_posts = CountNumPosts(mb_strtolower($searchterms));
     $num_max_pages = (int)(($total_num_posts + $posts_per_page - 1) / $posts_per_page);
     if ($num_max_pages > 1) {
-        $iterator_html = ConstructPageIterator($page, $num_max_pages, DEFAULT_GALLERY_PAGE_ITERATOR_SIZE,
+        $iterator_html = ConstructPageIterator($page, $num_max_pages, DEFAULT_PAGE_ITERATOR_SIZE,
             function($i, $current_page) use ($searchterms, $num_max_pages) {
                 if ($i == 0) {
                     if ($current_page == 1) {
@@ -112,8 +112,8 @@ function HandlePost($searchterms) {
         $where_clause = CreatePostSearchSQL(mb_strtolower($searchterms), 0, 0, $can_sort_pool, $pool_id, true);
         sql_query_into($result, "SELECT COUNT(*) AS C FROM ".GALLERY_POST_TABLE." T WHERE $where_clause;", 1) or RenderPostError("Error modifying posts");
         $num_posts = $result->fetch_assoc()['C'];
-        if ($num_posts > MAX_MASS_TAG_EDIT_COUNT) {
-            RenderPostError("Cannot modify $num_posts posts (max limit ".MAX_MASS_TAG_EDIT_COUNT.")");
+        if ($num_posts > GALLERY_MAX_MASS_TAG_EDIT_COUNT) {
+            RenderPostError("Cannot modify $num_posts posts (max limit ".GALLERY_MAX_MASS_TAG_EDIT_COUNT.")");
         }
         if ($num_posts == 0) {
             RenderPostError("No posts to modify");

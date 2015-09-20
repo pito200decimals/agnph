@@ -37,13 +37,13 @@ $ACTION_KEYS = array(
     "fics" => "FicsPermissions");
 $ALLOWED_CHARS = array(
     "site" => "ARGFOIM",
-    "forums" => "AN",  // TODO: Forums restricted permissions.
+    "forums" => "ANR",
     "gallery" => "ACNR",
     "fics" => "ANR");
 foreach ($actions as $action) {
     foreach ($ACTION_TABLE as $prefix => $table) {
         if (startsWith($action, $prefix)) {
-            $perm = substr($action, strlen($prefix));
+            $perm = substr($action, strlen($prefix));  // Okay to use non-mb here.
             if (!CanUserSetPermissions($user, $profile_user, $prefix, $perm)) {
                 RenderErrorPage("Insufficient permissions");
                 return;
@@ -74,11 +74,12 @@ foreach ($actions as $action) {
 
 if ($success) {
     PostSessionBanner("Permissions changed", "green");
+    $action_str = implode(",", $actions);
     $uid = $user['UserId'];
     $username = $user['DisplayName'];
     $puid = $profile_user['UserId'];
     $pusername = $profile_user['DisplayName'];
-    LogAction("<strong><a href='/user/$uid/'>$username</a></strong> changed privileges of user <strong><a href='/user/$puid/'>$pusername</a></strong>", "");
+    LogAction("<strong><a href='/user/$uid/'>$username</a></strong> changed privileges of user <strong><a href='/user/$puid/'>$pusername</a></strong> ($action_str)", "");
 }
 // Go back to requesting page.
 header("Location: ".$_SERVER['HTTP_REFERER']);

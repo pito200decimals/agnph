@@ -33,6 +33,9 @@ if (!is_numeric($sid)) return;
 if (mb_strlen($title) == 0) {
     $errmsg = "Invalid Story Title";
 }
+if (mb_strlen($title) > MAX_FICS_STORY_TITLE_LENGTH) {
+    $title = mb_substr($title, 0, MAX_FICS_STORY_TITLE_LENGTH);
+}
 if (!is_numeric($author_uid)) return;
 foreach ($coauthor_ids as $id) {
     if (!is_numeric($id)) return;

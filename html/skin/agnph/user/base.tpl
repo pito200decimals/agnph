@@ -47,11 +47,13 @@
                 {% block profile_sidepanel %}
                     <div class="sidepanel-section">
                         <img class="profile-avatarimg" src="{{ profile.user.avatarURL }}" />
-                        {% if profile.user.online %}
-                            <img class="status-icon" src="/images/user-online.png" /><small>Online</small>
-                        {% else %}
-                            <img class="status-icon"  src="/images/user-offline.png" /><small>Offline</small>
-                        {% endif %}
+                        <div>
+                            {% if profile.user.online %}
+                                <img class="status-icon" src="/images/user-online.png" /><small>Online</small>
+                            {% else %}
+                                <img class="status-icon"  src="/images/user-offline.png" /><small>Offline</small>
+                            {% endif %}
+                        </div>
                     </div>
                     {# Other actions to perform on this user #}
                     <div class="sidepanel-section">

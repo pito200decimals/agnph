@@ -60,10 +60,14 @@ if (isset($user)) {
         AddAdminActionLink($admin_links, array("site=A", "forums=A", "gallery=A", "fics=A"), "Make Site Administrator");
         AddAdminActionLinkBreak($admin_links);
         // Forums options.
-        if ($profile_user['ForumsPermissions'] == 'N') {
-            AddAdminActionLink($admin_links, array("site+R", "forums=A"), "Make Forums Moderator");
+        if ($profile_user['ForumsPermissions'] == 'R') {
+            AddAdminActionLink($admin_links, array("forums=N"), "Unrestrict Forums Edits");
+            AddAdminActionLink($admin_links, array("site+R", "forums=A"), "Make Forums Administrator");
+        } else if ($profile_user['ForumsPermissions'] == 'N') {
+            AddAdminActionLink($admin_links, array("forums=R"), "Restrict Forums Edits");
+            AddAdminActionLink($admin_links, array("site+R", "forums=A"), "Make Forums Administrator");
         } else if ($profile_user['ForumsPermissions'] == 'A') {
-            AddAdminActionLink($admin_links, array("site-R", "forums=N"), "Revoke Forums Moderator");
+            AddAdminActionLink($admin_links, array("site-R", "forums=N"), "Revoke Forums Administrator");
         }
         AddAdminActionLinkBreak($admin_links);
         // Gallery options.

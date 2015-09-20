@@ -1,6 +1,7 @@
 {% extends 'base.tpl' %}
 
 {% block styles %}
+    {{ parent() }}
     <style>
         .step {
             margin: 15px;

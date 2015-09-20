@@ -1,7 +1,7 @@
 {% extends 'fics/base.tpl' %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/fics/style.css') }}" />
+    {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('/fics/story/story-style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('/fics/story/chapter-style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('/comments-style.css') }}" />
@@ -12,6 +12,7 @@
 {% block scripts %}
     {{ parent() }}
     <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
+    <script src="{{ asset('/scripts/tinymce-spoiler-plugin.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             {{ block('reviewready') }}

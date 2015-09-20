@@ -1,7 +1,7 @@
 {% extends 'base.tpl' %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/user/style.css') }}" />
+    {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('/user/recover-style.css') }}" />
     <style>
         h4 {

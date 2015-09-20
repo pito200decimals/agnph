@@ -1,7 +1,9 @@
 {% extends 'base.tpl' %}
 
 {% block styles %}
+    {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('/forums/style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/comments-style.css') }}" />
 {% endblock %}
 
 {% block section_navigation %}

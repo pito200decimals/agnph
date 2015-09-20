@@ -1,7 +1,7 @@
 {% extends "user/base.tpl" %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/user/style.css') }}" />
+    {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('/user/mail-style.css') }}" />
     <link rel="stylesheet" type="text/css" href="/skin/agnph/comments-style.css" />
 {% endblock %}

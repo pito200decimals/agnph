@@ -1,7 +1,7 @@
 {% extends 'fics/base.tpl' %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/fics/style.css') }}" />
+    {{ parent() }}
     <style>
         .delete {
             margin: 10px;

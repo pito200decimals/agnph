@@ -1,14 +1,9 @@
 {% extends 'forums/base.tpl' %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/forums/style.css') }}" />
+    {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('/list-style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('/forums/board-style.css') }}" />
-    <style>
-        #move-board-form {
-            display: inline-block;
-        }
-    </style>
 {% endblock %}
 
 {% block scripts %}
@@ -123,7 +118,7 @@
                 {% if board.BoardId != -1 %}
                     <li>
                         Move Board:
-                        <form id="move-board-form" method="POST" accept-encoding="UTF-8">
+                        <form style="display: inline-block;" method="POST" accept-encoding="UTF-8">
                             <input type="hidden" name="action" value="move-board" />
                             <select name="parent-board" onchange="document.getElementById('move-board-form').submit();return false;">
                                 {% for boardOption in allBoards %}

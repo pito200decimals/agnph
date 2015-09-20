@@ -7,7 +7,8 @@ $(document).ready(function() {
         contextmenu: "image link | hr",
         autoresize_max_height: 150,
         resize: false,
-        menubar: false
+        menubar: false,
+        content_css: "{{ asset('/comments-style.css') }}"
     });
     $("#commentbutton").click(function() {
         $("#commentbutton").hide();

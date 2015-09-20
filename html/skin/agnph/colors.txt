@@ -11,6 +11,7 @@
 
 # comments-style.css
 191,223,255 (comment header)
+191,223,255 (quote background)
 
 # list-style.css
 100,130,185 (header bar)

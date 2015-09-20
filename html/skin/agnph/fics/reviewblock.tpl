@@ -41,13 +41,14 @@
                 $("#responseformblock").insertAfter($(this));
                 tinymce.init({
                     selector: "#responsetextbox",
-                    plugins: [ "paste", "link", "autoresize", "hr", "code", "contextmenu", "emoticons", "image", "textcolor" ],
+                    plugins: [ "paste", "link", "autoresize", "hr", "code", "contextmenu", "emoticons", "image", "textcolor", "spoiler" ],
                     target_list: [ {title: 'New page', value: '_blank'} ],
-                    toolbar: "undo redo | bold italic underline | bullist numlist | link",
+                    toolbar: "undo redo | bold italic underline | bullist numlist | image link | code blockquote spoiler",
                     contextmenu: "image link | hr",
                     autoresize_max_height: 150,
                     resize: false,
-                    menubar: false
+                    menubar: false,
+                    content_css: "{{ asset('/comments-style.css') }}"
                 });
                 $("html body").animate(
                     { scrollTop: $("#responseform").offset().top },
@@ -63,13 +64,14 @@
 {% block reviewMCESetup %}
     tinymce.init({
         selector: "textarea.commenttextbox",
-        plugins: [ "paste", "link", "autoresize", "hr", "code", "contextmenu", "emoticons", "image", "textcolor" ],
+        plugins: [ "paste", "link", "autoresize", "hr", "code", "contextmenu", "emoticons", "image", "textcolor", "spoiler" ],
         target_list: [ {title: 'New page', value: '_blank'} ],
-        toolbar: "undo redo | bold italic underline | bullist numlist | link",
+        toolbar: "undo redo | bold italic underline | bullist numlist | image link | code blockquote spoiler",
         contextmenu: "image link | hr",
         autoresize_max_height: 150,
         resize: false,
-        menubar: false
+        menubar: false,
+        content_css: "{{ asset('/comments-style.css') }}"
     });
 {% endblock %}
 

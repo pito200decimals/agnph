@@ -33,7 +33,7 @@ function GetAuthURL($code) {
 
 function ValidateEmail($email) {
     // Email regex taken from http://www.regular-expressions.info/email.html
-    if (strlen($email) > MAX_EMAIL_LENGTH) return false;
+    if (strlen($email) > MAX_USER_EMAIL_LENGTH) return false;
     if (!mb_eregi("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$", $email) &&
         !mb_eregi("^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$", $email)) {
         return false;

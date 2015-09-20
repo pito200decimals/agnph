@@ -1,7 +1,7 @@
 {% extends "user/base.tpl" %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/user/style.css') }}" />
+    {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('/fics/style.css') }}" />
     <style>
         .story-list {
@@ -13,12 +13,8 @@
     </style>
 {% endblock %}
 
-{% block scripts %}
-    {{ parent() }}
-{% endblock %}
-
 {% block sidebar %}
-    {% if user %}
+    {% if user and adminLinks|length > 0 %}
         <h4>Actions</h4>
         <ul>
             {{ block('admin_link_block') }}

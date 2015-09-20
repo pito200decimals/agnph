@@ -13,6 +13,8 @@ GetPostObject($action, $_GET);
 
 $vars['action'] = $action;
 
+// TODO: Handle quoting.
+
 RenderPage("forums/compose.tpl");
 return;
 
@@ -101,6 +103,8 @@ function HandlePost() {
     if ($action == "edit") HandleEditPost();
 }
 
+// Note: Below, PostBanner and POSTS are kept so that input text is preserved.
+
 function HandleCreateThread() {
     global $user, $vars;
     if (isset($_POST['title']) &&
@@ -113,6 +117,14 @@ function HandleCreateThread() {
         } else {
             $sticky = "0";
             $locked = "0";
+        }
+        if (mb_strlen($title) == 0) {
+            PostBanner("Missing post title", "red");
+            return;
+        }
+        if (mb_strlen($text) < MIN_COMMENT_STRING_SIZE) {
+            PostBanner("Post not long enough", "red");
+            return;
         }
         $sanitizedText = GetSanitizedTextTruncated($text, MAX_FORUMS_POST_LENGTH);
         $escaped_title = sql_escape($_POST['title']);
@@ -139,6 +151,14 @@ function HandleReplyThread() {
         isset($_POST['text'])) {
         $title = $_POST['title'];
         $text = $_POST['text'];
+        if (mb_strlen($title) == 0) {
+            PostBanner("Missing post title", "red");
+            return;
+        }
+        if (mb_strlen($text) < MIN_COMMENT_STRING_SIZE) {
+            PostBanner("Post not long enough", "red");
+            return;
+        }
         $sanitizedText = GetSanitizedTextTruncated($text, MAX_FORUMS_POST_LENGTH);
         $escaped_title = sql_escape($_POST['title']);
         $escaped_text = sql_escape($sanitizedText);
@@ -167,8 +187,18 @@ function HandleEditPost() {
         isset($_POST['text'])) {
 
         $sets = array();
-        $sanitizedText = GetSanitizedTextTruncated($_POST['text'], MAX_FORUMS_POST_LENGTH);
-        $escaped_title = sql_escape($_POST['title']);
+        $title = $_POST['title'];
+        $text = $_POST['text'];
+        if (mb_strlen($title) == 0) {
+            PostBanner("Missing post title", "red");
+            return;
+        }
+        if (mb_strlen($text) < MIN_COMMENT_STRING_SIZE) {
+            PostBanner("Post not long enough", "red");
+            return;
+        }
+        $sanitizedText = GetSanitizedTextTruncated($text, MAX_FORUMS_POST_LENGTH);
+        $escaped_title = sql_escape($title);
         $sets[] = "Title='$escaped_title'";
 
         $escaped_text = sql_escape($sanitizedText);

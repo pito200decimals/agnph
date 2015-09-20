@@ -85,12 +85,6 @@ function DateStringToReadableString($datestr) {
 
 // TODO: Better badge icon.
 function GetAdminBadge($profile_user) {
-    if ($profile_user['Usermode'] == -1) {
-        return "Banned";
-    } else if ($profile_user['Usermode'] == 0) {
-        // Unactivated account.
-        return "";
-    }
     $ret = array();
     $AddBadge = function($name) use (&$ret) {
         $ret[] = array(
@@ -104,6 +98,12 @@ function GetAdminBadge($profile_user) {
             "class" => "badge"
         );
     };
+    if ($profile_user['Usermode'] == -1) {
+        $AddBadge("Banned");
+        return $ret;
+    } else if ($profile_user['Usermode'] == 0) {
+        return $ret;
+    }
     if (mb_strpos($profile_user['Permissions'], 'A') !== FALSE) $AddBadgeImage("/images/site_admin.gif");
     if (mb_strpos($profile_user['Permissions'], 'R') !== FALSE) $AddBadge("Forums Moderator");
     if (mb_strpos($profile_user['Permissions'], 'G') !== FALSE) $AddBadgeImage("/images/gallery_admin.gif");

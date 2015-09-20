@@ -1,24 +1,26 @@
 {% extends "user/base.tpl" %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/user/style.css') }}" />
+    {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('/user/mail-style.css') }}" />
 {% endblock %}
 
 {% block scripts %}
     {{ parent() }}
     <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
+    <script src="{{ asset('/scripts/tinymce-spoiler-plugin.js') }}"></script>
     <script src="{{ asset('/scripts/jquery.autocomplete.min.js') }}"></script>
     <script type="text/javascript">
         tinymce.init({
             selector: "textarea#message",
-            plugins: [ "paste", "link", "autoresize", "hr", "code", "contextmenu", "emoticons", "image", "textcolor" ],
+            plugins: [ "paste", "link", "autoresize", "hr", "code", "contextmenu", "emoticons", "image", "textcolor", "spoiler" ],
             target_list: [ {title: 'New page', value: '_blank'} ],
-            toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor | link | code",
+            toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor | image link | code blockquote spoiler",
             contextmenu: "image link | hr",
             autoresize_max_height: 200,
             resize: false,
-            menubar: false
+            menubar: false,
+            content_css: "{{ asset('/comments-style.css') }}"
         });
         $(document).ready(function() {
             {# Set up ajax lookups #}

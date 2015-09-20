@@ -9,7 +9,7 @@ include_once("../includes/util/sql.php");
 header('Content-type: application/json; charset=utf-8');
 
 
-if (!isset($_GET['query']) || mb_strlen($_GET['query']) < MIN_USER_LOOKUP_PREFIX_LENGTH){
+if (!isset($_GET['query'])){
     echo json_encode(array());
     return;
 }
