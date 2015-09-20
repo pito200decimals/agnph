@@ -104,7 +104,7 @@ define("MAX_TAG_NOTE_LENGTH", 256);
 ///////////////////////////////////////
 // Site constants (Both data and display-related)
 define("NO_HTML_TAGS", "");
-define("DEFAULT_ALLOWED_TAGS", "a[href],p[style],span[style|class],b,u,i,strong,em,ol,ul,li,center,hr,br,div,pre,small,blockquote");  // For comments, forums, fics, user bios.
+define("DEFAULT_ALLOWED_TAGS", "a[href],p[style|class],span[style|class],b,u,i,strong,em,ol,ul,li,center,hr,br,div[style|class],pre,small,blockquote,img[src|style|class|width|height|alt]");  // For comments, forums, fics, user bios.
 
 // Site constants (data-related).
 define("MIN_PASSWORD_LENGTH", 4);  // Also present in register.tpl
@@ -144,6 +144,7 @@ define("PROFILE_DOB_FORMAT", "F j Y");
 define("MAX_FORUMS_THREADS_PER_PAGE", 100);  // Max value for user-setting.
 define("MAX_FORUMS_POSTS_PER_PAGE", 50);  // Max value for user-setting.
 define("FORUMS_DATE_FORMAT", "M j, Y g:i A");
+define("FORUMS_QUOTE_DATE_FORMAT", "M j, Y");
 define("FORUMS_PROFILE_SHOW_NUM_RECENT_POSTS", 6);
 define("MAX_GALLERY_POSTS_PER_PAGE", 100);  // Max value for user-setting.
 define("GALLERY_LIST_ITEMS_PER_PAGE", 50);

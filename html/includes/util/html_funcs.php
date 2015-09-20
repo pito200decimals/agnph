@@ -4,13 +4,48 @@
 // Sanitizes input for the allowed html tags and attributes. Returns the sanitized result.
 // allowed_html_config is of the form "element1[attr1|attr2],element2", e.g. a[href],p
 function SanitizeHTMLTags($html, $allowed_html_config) {
+    $html = ParseBBCode($html);
     $html = str_replace("> <", ">&nbsp;<", $html);  // Prevent user-created spaces from disappearing. HTMLPurifier will convert back to space.
     include_once(SITE_ROOT."../lib/HTMLPurifier/HTMLPurifier.auto.php");
     $config = HTMLPurifier_Config::createDefault();
     $config->set('HTML.Allowed', $allowed_html_config);
     $purifier = new HTMLPurifier($config);
-    return $purifier->purify($html);
+    $html = $purifier->purify($html);
+    $trim_values = array(
+        "<p></p>",
+        "<p> </p>",
+        "<p>&nbsp;</p>",
+        "<p>\xc2\xa0</p>",
+        "<div></div>",
+        "<div> </div>",
+        "<div>&nbsp;</div>",
+        "<div>\xc2\xa0</div>",
+        );
+    foreach ($trim_values as $trim) {
+        $len = strlen($trim);
+        while (startsWith($html, $trim)) {
+            $html = substr($html, $len);
+        }
+        while (endsWith($html, $trim)) {
+            $html = substr($html, 0, strlen($html) - $len);
+        }
+    }
+    $html = $purifier->purify($html);
+    return $html;
     // TODO: Remove XSS injection attacks (e.g. style background image urls).
+}
+
+include_once(SITE_ROOT."../lib/JBBCode/Parser.php");
+
+function ParseBBCode($html) {
+    $parser = new JBBCode\Parser();
+    $parser->addCodeDefinitionSet(new JBBCode\DefaultCodeDefinitionSet());
+    $builder = new JBBCode\CodeDefinitionBuilder('quote', '<blockquote>{param}</blockquote>');
+    $parser->addCodeDefinition($builder->build());
+    $builder = new JBBCode\CodeDefinitionBuilder('spoiler', '<span class="spoiler">{param}</span>');
+    $parser->addCodeDefinition($builder->build());
+    $parser->parse($html);
+    return $parser->getAsHtml();
 }
 
 // TODO: Consolidate pagination more.

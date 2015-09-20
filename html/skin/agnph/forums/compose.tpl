@@ -8,6 +8,7 @@
         }
     </style>
 {% endblock %}
+
 {% block scripts %}
     {{ parent() }}
     <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
@@ -28,6 +29,8 @@
         });
     </script>
 {% endblock %}
+
+{% use 'includes/comment-block.tpl' %}
 
 {% block content %}
     {% if board %}
@@ -52,11 +55,13 @@
                     {% elseif post.Text %}
                         {{ post.Text }}
                     {% elseif quoteText %}
-                        <p>
+                        <p></p>
+                        <div>
+                            <div class="quote-header"><a href="/user/{{ quoteUserId }}/">{{ quoteUser }}</a> on {{ quoteDate }} said:</div>
                             <blockquote>
                                 {{ quoteText }}
                             </blockquote>
-                        </p>
+                        </div>
                         <p></p>
                     {% endif %}
                 {% endautoescape %}
@@ -75,6 +80,11 @@
                 </select>
             {% endif %}
         </div>
-        <input type="submit" value="Save" />
+        <input type="submit" name="submit" value="Save" />
     </form>
+    <ul class="comment-list">
+        {% for comment in thread.posts|reverse %}
+            {{ block('comment') }}
+        {% endfor %}
+    </ul>
 {% endblock %}

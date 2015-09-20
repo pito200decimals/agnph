@@ -5,6 +5,7 @@ TODOs
 - Admin control panel?
 - Search?
     - Profile user subpage for forums
+    - Also show all unread posts/threads.
 X Link up news forum to other index pages?
     - Optional large first posts in a thread?
 X Quoting

@@ -93,7 +93,7 @@ if ($action == "comment" || $action == "review") {
                 $story['TotalStars'] += $score;
                 $story['TotalRatings']++;
             }
-            $story['stars'] = GetStarsHTML($story['TotalStars'], $story['TotalRatings']);
+            $story['stars'] = GetStars($story['TotalStars'], $story['TotalRatings']);
             PostSessionBanner("Review posted", "green");
         } else {
             PostSessionBanner("Comment posted", "green");

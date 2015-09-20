@@ -30,6 +30,13 @@
                 {{ block('comment') }}
             {% endfor %}
         </ul>
+        {% if user %}
+            <ul class="forums-actionbar">
+                {% if canReply %}
+                    <li><a href="/forums/compose/?action=reply&id={{ thread.ThreadId }}">Reply</a></li>
+                {% endif %}
+            </ul>
+        {% endif %}
         <div class="iterator">
             {% autoescape false %}{{ iterator }}{% endautoescape %}
         </div>

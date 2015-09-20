@@ -34,6 +34,19 @@ foreach ($posts as &$post) {
     $post['title'] = $post['Title'];
     if (isset($user)) {
         $post['actions'] = array();
+        if (CanUserPostToThread($user, $thread)) {
+            $post['actions'][] = array(
+                "url" => "/forums/compose/",
+                "action" => "reply",  // parameter id is already the post id.
+                "method" => "GET",
+                "label" => "Quote",
+                "id" => $thread['ThreadId'],
+                "kv" => array(array(
+                        "key" => "quote",
+                        "value" => $post['PostId']
+                    ))
+                );
+        }
         if (CanUserEditForumsPost($user, $thread, $post)) {
             $post['actions'][] = array(
                 "url" => "/forums/compose/",

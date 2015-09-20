@@ -63,8 +63,23 @@ function GetPostObject($action, $params) {
             $vars['id'] = $tid;
             $posts = GetPostsInThread($thread);
             InitPosters($posts);
+            SetUpThreadPostHistory($posts);
             $thread['posts'] = $posts;
             $vars['thread'] = $thread;
+            if (isset($_GET['quote']) && is_numeric($_GET['quote'])) {
+                $qpid = (int)$_GET['quote'];
+                $escaped_qpid = sql_escape($qpid);
+                if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId='$escaped_qpid';", 1)) {
+                    $row = $result->fetch_assoc();
+                    $vars['quoteDate'] = FormatDate($row['PostDate'], FORUMS_QUOTE_DATE_FORMAT);
+                    $vars['quoteText'] = $row['Text'];
+                    $quid = $row['UserId'];
+                    $vars['quoteUserId'] = $quid;
+                    if (sql_query_into($result, "SELECT DisplayName FROM ".USER_TABLE." WHERE UserId=$quid;", 1)) {
+                        $vars['quoteUser'] = $result->fetch_assoc()['DisplayName'];
+                    }
+                }
+            }
             return $thread;
         case "edit":
             $pid = (int)$params['id'];
@@ -94,10 +109,11 @@ function GetPostObject($action, $params) {
 }
 
 function HandlePost() {
-    if (!CanPerformSitePost()) MaintenanceError();
+    if (!isset($_POST['submit'])) return;
     $action = ValidParams($_POST);
     if (!$action) return;
     GetPostObject($action, $_POST);
+    if (!CanPerformSitePost()) MaintenanceError();
     if ($action == "create") HandleCreateThread();
     if ($action == "reply") HandleReplyThread();
     if ($action == "edit") HandleEditPost();
@@ -282,6 +298,16 @@ function GoToForumPost($pid) {
     }
     header("Location: /forums/thread/$tid/?page=$page#p$pid");
     exit();
+}
+
+function SetUpThreadPostHistory(&$posts) {
+    foreach ($posts as &$post) {
+        $post['id'] = $post['PostId'];
+        $post['date'] = FormatDate($post['PostDate'], FORUMS_DATE_FORMAT);
+        if ($post['EditDate'] != 0) $post['editDate'] = FormatDate($post['EditDate'], FORUMS_DATE_FORMAT);
+        $post['title'] = $post['Title'];
+        $post['text'] = "<div>".$post['Text']."</div>";
+    }
 }
 
 ?>

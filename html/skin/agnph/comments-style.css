@@ -42,14 +42,33 @@
     display: block;
     margin: 5px;
 }
+.quote-header {
+    font-size: 80%;
+    margin-left: 20px;
+}
 blockquote {
+    font-size: 80%;
     display: inline-block;
     background-color: rgb(191,223,255);
     background-image: url(/images/lquote.png),url(/images/rquote.png);
     background-repeat: no-repeat;
     background-position: left top, right top;
     padding: 15px;
+    margin: 5px 20px;
     border-radius: 15px;
+    border: 1px solid rgb(127,127,127);
+}
+blockquote .quote-header {
+    font-size: 80%;
+    margin-left: 0px;
+}
+blockquote blockquote {
+    font-size: 100%;
+    background-color: rgb(167,195,223);
+    margin: 0px;
+}
+blockquote blockquote blockquote {
+    background-color: rgb(143,167,191);
 }
 .spoiler {
     color: black;

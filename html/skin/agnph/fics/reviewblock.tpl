@@ -88,7 +88,16 @@
                     <input type="submit" value="{{ action.label }}" {% if action.confirmMsg %}onclick="return confirm('{{ action.confirmMsg }}');" {% endif %}/>
                 </form>
             {% endfor %}
-            <strong>Reviewer:</strong> <a href="/user/{{ review.commenter.UserId }}/">{{ review.commenter.DisplayName }}</a>{% autoescape false %}{{ review.stars }}{% endautoescape %}<br />
+            <strong>Reviewer:</strong> <a href="/user/{{ review.commenter.UserId }}/">{{ review.commenter.DisplayName }}</a>
+            <span class="stars">
+                {% for star in review.stars %}
+                    {% if star == "half" %}
+                        <img src='/images/starhalf.gif' />
+                    {% elseif star == "full" %}
+                        <img src='/images/star.gif' />
+                    {% endif %}
+                {% endfor %}
+            </span><br />
             <strong>Date:</strong> {{ review.date }}{% if review.ChapterId > 0 %} <strong>Chapter:</strong> {{ review.chapterTitle }}{% endif %}
         </div>
         <div class="commenttext">
