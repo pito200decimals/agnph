@@ -2,6 +2,8 @@
 // Page for logging out of a user's account.
 // URL: /logout/ => /logout.php
 
+define("SITE_ROOT", __DIR__."/");
+
 include_once("includes/auth/logout.php");
 unset($user);
 unset($_COOKIE[UID_COOKIE]);

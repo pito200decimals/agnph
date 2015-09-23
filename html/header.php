@@ -54,6 +54,35 @@ $vars['version'] = VERSION;
 // Template engine includes.
 include_once(__DIR__."/../lib/Twig/Autoloader.php");
 Twig_Autoloader::register();
+
+$vars['GET'] = $_GET;
+$vars['POST'] = $_POST;
+
+FetchUserHeaderVars();
+SetHeaderHighlight();
+GetUnreadPMCount();
+
+if (isset($user)) {
+    // Do nothing if logged in.
+} else if (!isset($_SESSION['age_gate'])) {
+    if (contains($_SERVER['REQUEST_URI'], AGE_GATE_PATH)) {
+        // Redirect to destination.
+        $_SESSION['age_gate'] = true;
+        header("Location: ".$_SERVER['HTTP_REFERER']);
+        exit();
+    } else {
+        $uri = strtolower($_SERVER['REQUEST_URI']);
+        foreach ($AGE_GATE_SECTIONS as $section) {
+            if (contains($uri, strtolower($section))) {
+                // Show age gate.
+                $vars['confirm_age_url'] = "/".AGE_GATE_PATH."/";
+                RenderPage("age_splash.tpl");
+                exit();
+            }
+        }
+    }
+}
+
 // Set up for banner notifications. Initialize session banners if not created yet.
 if (!isset($_SESSION['banner_notifications'])) {
     $_SESSION['banner_notifications'] = array();
@@ -63,13 +92,8 @@ if (!isset($_SESSION['banner_notifications'])) {
 } else {
     $vars['banner_notifications'] = array();
 }
-$vars['GET'] = $_GET;
-$vars['POST'] = $_POST;
 
-FetchUserHeaderVars();
-SetHeaderHighlight();
-GetUnreadPMCount();
-
+return;
 
 function FetchUserHeaderVars() {
     global $user, $vars, $twig;

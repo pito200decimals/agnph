@@ -38,6 +38,7 @@ X RSS Feed?
 * Check for vuln's for style background-image URL
 * Search string length attacks.
 * Splash for Disclaimer/Warning/Age gate.
+    - Add disclaimer?
 * Oekaki section
 * Admin site management (Ongoing)
 * General help pages
