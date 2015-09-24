@@ -92,7 +92,7 @@ do_or_die(sql_query(
         ImportFicsPassword VARCHAR(32) NOT NULL,
         ImportOekakiPassword VARCHAR(32) NOT NULL,
         PRIMARY KEY(UserId)
-    ) DEFAULT CHARSET=utf8;"));
+    ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 do_or_die(sql_query("SET GLOBAL event_scheduler = ON;"));  // Turn on cleanup scheduler.
 // User biography is stored in text files at /user/bio/{UserId}.txt
 
@@ -101,7 +101,7 @@ do_or_die(sql_query(
         Name VARCHAR(24) NOT NULL,
         Value TEXT(4096) NOT NULL,
         PRIMARY KEY(Name)
-    ) DEFAULT CHARSET=utf8;"));
+    ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 
 ///////////////////
 // Forums tables //
@@ -122,7 +122,7 @@ do_or_die(sql_query(
         LastPostId INT(11) NOT NULL,
         LastPostDate INT(11) NOT NULL,
         PRIMARY KEY(BoardId)
-    ) DEFAULT CHARSET=utf8;"));
+    ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 // Post table. Contains both threads and posts. Threads are equal to the first post in the thread.
 do_or_die(sql_query(
     "CREATE TABLE ".FORUMS_POST_TABLE." (
@@ -140,7 +140,7 @@ do_or_die(sql_query(
         Sticky TINYINT(1) DEFAULT 0 NOT NULL,
         Locked TINYINT(1) DEFAULT 0 NOT NULL,
         PRIMARY KEY(PostId)
-    ) DEFAULT CHARSET=utf8;"));
+    ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 // User preferences specific to the forums section.
 do_or_die(sql_query(
     "CREATE TABLE ".FORUMS_USER_PREF_TABLE." (
@@ -151,14 +151,14 @@ do_or_die(sql_query(
         ForumPostsPerPage INT(11) DEFAULT ".DEFAULT_FORUM_POSTS_PER_PAGE.",
         ForumsPermissions CHAR(1) DEFAULT 'N' NOT NULL,".  // R - Restricted user, N - Normal user, A - Admin
        "PRIMARY KEY(UserId)
-    ) DEFAULT CHARSET=utf8;"));
+    ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 // Table containing rows of tuples of (UserId, PostId).
 do_or_die(sql_query(
     "CREATE TABLE ".FORUMS_UNREAD_POST_TABLE." (
         UserId INT(11) NOT NULL,
         PostId INT(11) NOT NULL,
         PRIMARY KEY(UserId, PostId)
-    ) DEFAULT CHARSET=utf8;"));
+    ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 
 
 ////////////////////
@@ -191,7 +191,7 @@ do_or_die(sql_query(
        "FlaggerUserId INT(11) DEFAULT -1 NOT NULL,
         FlagReason VARCHAR(".MAX_GALLERY_POST_FLAG_REASON_LENGTH.") NOT NULL,
         PRIMARY KEY(PostId)
-    ) DEFAULT CHARSET=utf8;"));
+    ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 // Tag Types: A=Artist, B=Copyright, C=Character, D=Species, M=General
 CreateItemTagTables(GALLERY_TAG_TABLE, GALLERY_POST_TAG_TABLE, GALLERY_TAG_ALIAS_TABLE, GALLERY_TAG_IMPLICATION_TABLE, "PostId");
 // History of tag edits for a given post.
@@ -206,7 +206,7 @@ do_or_die(sql_query(
        "PropertiesChanged TEXT(512) DEFAULT '',".  // Can hold ~30 properties.
        "BatchId INT(11) DEFAULT 0,".  // Id for groups of related tag edits. 0 if unbatched. Not used, but may be helpful in the future.
        "PRIMARY KEY(Id, PostId, Timestamp)
-    ) DEFAULT CHARSET=utf8;"));
+    ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_DESC_HISTORY_TABLE." (
         Id INT(11) UNSIGNED AUTO_INCREMENT,
@@ -215,7 +215,7 @@ do_or_die(sql_query(
         UserId INT(11) NOT NULL,
         Description TEXT(".MAX_GALLERY_POST_DESCRIPTION_LENGTH.") NOT NULL,
         PRIMARY KEY(Id, PostId, Timestamp)
-    ) DEFAULT CHARSET=utf8;"));
+    ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 // General information about pools.
 do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_POOLS_TABLE." (
@@ -224,7 +224,7 @@ do_or_die(sql_query(
         Name VARCHAR(".MAX_GALLERY_POOL_NAME_LENGTH.") NOT NULL,
         Description TEXT(".MAX_GALLERY_POOL_DESCRIPTION_LENGTH.") NOT NULL,
         PRIMARY KEY(PoolId)
-    ) DEFAULT CHARSET=utf8;"));
+    ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 // Table containing comments on posts. TODO: Score?
 do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_COMMENT_TABLE." (
@@ -234,7 +234,7 @@ do_or_die(sql_query(
         CommentDate INT(11) NOT NULL,
         CommentText TEXT(".MAX_GALLERY_COMMENT_LENGTH.") NOT NULL,
         PRIMARY KEY(CommentId)
-    ) DEFAULT CHARSET=utf8;"));
+    ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 // User preferences for gallery section.
 do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_USER_PREF_TABLE." (
@@ -248,7 +248,7 @@ do_or_die(sql_query(
         PrivateGalleryFavorites TINYINT(1) DEFAULT 0,
         PlainGalleryTagging TINYINT(1) DEFAULT 0,
         PRIMARY KEY(UserId)
-    ) DEFAULT CHARSET=utf8;"));
+    ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 // User favorites for gallery section.
 do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_USER_FAVORITES_TABLE." (
@@ -256,7 +256,7 @@ do_or_die(sql_query(
         PostId INT(11) NOT NULL,
         Timestamp INT(11) NOT NULL,
         PRIMARY KEY(UserId, PostId)
-    ) DEFAULT CHARSET=utf8;"));
+    ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 
 
 /////////////////
@@ -285,7 +285,7 @@ do_or_die(sql_query(
         TotalRatings INT(11) NOT NULL,
         NumReviews INT(11) NOT NULL,
         PRIMARY KEY(StoryId)
-    ) DEFAULT CHARSET=utf8;"));
+    ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 // Fics table that stores all the chapter metadata.
 do_or_die(sql_query(
     "CREATE TABLE ".FICS_CHAPTER_TABLE." (
@@ -303,7 +303,7 @@ do_or_die(sql_query(
         NumReviews INT(11) NOT NULL,
         ApprovalStatus CHAR(1) DEFAULT 'A',".  // P - Pending, A - Approved, D - Deleted (Pending not used).
        "PRIMARY KEY(ChapterId)
-    ) DEFAULT CHARSET=utf8;"));  // NOTE: WordCount, TotalStars and TotalRatings not implemented yet.
+    ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));  // NOTE: WordCount, TotalStars and TotalRatings not implemented yet.
 // Fics table that stores comments and reviews.
 do_or_die(sql_query(
     "CREATE TABLE ".FICS_REVIEW_TABLE." (
@@ -318,7 +318,7 @@ do_or_die(sql_query(
         IsReview TINYINT(1) NOT NULL,
         IsComment TINYINT(1) NOT NULL,
         PRIMARY KEY(ReviewId)
-    ) DEFAULT CHARSET=utf8;"));
+    ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 // Tag Types: A - Category, B - Series, C - Character, D - Species, M - General, Z - Warning
 CreateItemTagTables(FICS_TAG_TABLE, FICS_STORY_TAG_TABLE, FICS_TAG_ALIAS_TABLE, FICS_TAG_IMPLICATION_TABLE, "StoryId");
 do_or_die(sql_query(
@@ -331,7 +331,7 @@ do_or_die(sql_query(
        "PrivateFicsFavorites TINYINT(1) DEFAULT 0,
         PlainFicsTagging TINYINT(1) DEFAULT 0,
         PRIMARY KEY(UserId)
-    ) DEFAULT CHARSET=utf8;"));
+    ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 // Table holding user story favorites.
 do_or_die(sql_query(
     "CREATE TABLE ".FICS_USER_FAVORITES_TABLE." (
@@ -339,7 +339,7 @@ do_or_die(sql_query(
         StoryId INT(11) NOT NULL,
         Timestamp INT(11) NOT NULL,
         PRIMARY KEY(UserId, StoryId)
-    ) DEFAULT CHARSET=utf8;"));
+    ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 // TODO: Author following
 
 // Table holding all user PM's.
@@ -354,7 +354,7 @@ do_or_die(sql_query(
        "Title VARCHAR(".MAX_PM_TITLE_LENGTH.") NOT NULL,
         Content TEXT(".MAX_PM_LENGTH.") NOT NULL,
         PRIMARY KEY(Id)
-    ) DEFAULT CHARSET=utf8;"));
+    ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 
 // Table for handling account recovery/resets. Also used for tracking security emails when dealing with email/password changes.
 do_or_die(sql_query(
@@ -367,7 +367,7 @@ do_or_die(sql_query(
        "Data VARCHAR(256) NOT NULL,".  // For other application uses.
        "Redirect VARCHAR(256) NOT NULL,
         PRIMARY KEY(Email)
-    ) DEFAULT CHARSET=utf8;"));
+    ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 
 // Table for holding all log messages.
 do_or_die(sql_query(
@@ -379,7 +379,7 @@ do_or_die(sql_query(
         Section CHAR(1) NOT NULL,".  // ''=Site, R=Forums, G=Gallery, F=Fics, O=Oekaki (Site lists all sections as well).
        "Verbosity INT(11) NOT NULL,".  // Important actions = 1, Minor actions = 2.
        "PRIMARY KEY(Id, UserId, Timestamp)
-    ) DEFAULT CHARSET=utf8;"));
+    ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 
 // Table cleanup events.
 sql_query("CREATE EVENT delete_security_email_entries ON SCHEDULE EVERY 0:15 HOUR_MINUTE DO DELETE FROM ".SECURITY_EMAIL_TABLE." WHERE CURRENT_TIMESTAMP > MaxTimestamp;");
@@ -404,14 +404,14 @@ function CreateItemTagTables($tag_table_name, $item_tag_table_name, $alias_table
             ChangeTypeTimestamp INT(11) NOT NULL,
             Note VARCHAR(".MAX_TAG_NOTE_LENGTH.") NOT NULL,
             PRIMARY KEY(TagId, Name)
-        ) DEFAULT CHARSET=utf8;"));
+        ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
     // Table for item-tag mapping.
     do_or_die(sql_query(
         "CREATE TABLE $item_tag_table_name (
             $item_id INT(11) NOT NULL,
             TagId INT(11) NOT NULL,
             PRIMARY KEY($item_id, TagId)
-        ) DEFAULT CHARSET=utf8;"));
+        ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
     // Table for tag aliases.
     do_or_die(sql_query(
         "CREATE TABLE $alias_table_name (
@@ -420,7 +420,7 @@ function CreateItemTagTables($tag_table_name, $item_tag_table_name, $alias_table
             CreatorUserId INT(11) NOT NULL,
             Timestamp INT(11) NOT NULL,
             PRIMARY KEY(TagId)
-        ) DEFAULT CHARSET=utf8;"));
+        ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
     // Table for tag implications.
     do_or_die(sql_query(
         "CREATE TABLE $implication_table_name (
@@ -429,6 +429,6 @@ function CreateItemTagTables($tag_table_name, $item_tag_table_name, $alias_table
             CreatorUserId INT(11) NOT NULL,
             Timestamp INT(11) NOT NULL,
             PRIMARY KEY(TagId, ImpliedTagId)
-        ) DEFAULT CHARSET=utf8;"));
+        ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 }
 ?>

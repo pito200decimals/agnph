@@ -125,7 +125,9 @@ define("FICS_NOT_FEATURED", "D");  // Also present in templates: editstory.tpl
 define("FICS_CHAPTER_MIN_WORD_COUNT_KEY", "FicsMinWordCount");
 define("DEFAULT_FICS_CHAPTER_MIN_WORD_COUNT", 500);
 define("FICS_WELCOME_MESSAGE_KEY", "FicsWelcomeMessage");
-define("DEFAULT_FICS_WELCOME_MESSAGE", "");
+define("DEFAULT_FICS_WELCOME_MESSAGE", "{{ fics_welcome }}");
+define("FICS_NUM_RANDOM_STORIES_KEY", "FicsNumRandStories");
+define("DEFAULT_FICS_NUM_RANDOM_STORIES", 1);
 define("FICS_MAX_NUM_COAUTHORS", 3);
 define("MAX_FICS_SEARCH_TERMS", 6);
 define("MAX_FICS_BLACKLIST_TAGS", 50);  // Max data input limit.
@@ -159,6 +161,8 @@ define("FICS_COMMENTS_PER_PAGE", 10);
 define("FICS_DATE_FORMAT", "M j Y");
 define("FICS_PROFILE_SHOW_NUM_STORIES", 3);
 define("FICS_PROFILE_SHOW_NUM_FAVORITES", 3);
+define("FICS_MAX_FEATURED_STORIES", 5);
+define("MAX_FICS_SHORT_SUMMARY_LEGNTH", 100);
 define("USERS_LIST_ITEMS_PER_PAGE", 50);
 define("INBOX_ITEMS_PER_PAGE", 50);
 define("USERLIST_DATE_FORMAT", "M j Y");

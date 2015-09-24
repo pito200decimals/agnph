@@ -1,7 +1,8 @@
 <?php
 // Page for receiving ajax requests to set the order of posts in a pool.
 
-include_once("../../header.php");
+define("SITE_ROOT", "../../");
+include_once(SITE_ROOT."ajax_header.php");
 include_once(SITE_ROOT."gallery/includes/functions.php");
 
 if (!isset($user) || !CanUserChangePoolOrdering($user)) {
@@ -20,6 +21,7 @@ foreach ($_POST['values'] as $elem) {
     }
 }
 
+echo json_encode(array());
 return;
 
 ?>

@@ -4,7 +4,8 @@
 // If new index is < old index, move chapters towards end until desired index is reached.
 // If new index is > old index, move chapters towards front until desired index is reached.
 
-include_once("../header.php");
+define("SITE_ROOT", "../");
+include_once(SITE_ROOT."ajax_header.php");
 include_once(SITE_ROOT."fics/includes/functions.php");
 
 if (!isset($user)) {
@@ -50,6 +51,7 @@ if ($newchapternum > $oldchapternum) {
     }
 } else {
     // Nothing to change!
+    echo json_encode(array());
     return;
 }
 // Get new indices, and SQL change the differences.
@@ -60,6 +62,7 @@ for ($i = 0; $i < sizeof($chapters); $i++) {
         sql_query("UPDATE ".FICS_CHAPTER_TABLE." SET ChapterItemOrder=$i WHERE ChapterId=$cid;");
     }
 }
+echo json_encode(array());
 return;
 
 function CheckNumericAndSave($id, &$val) {

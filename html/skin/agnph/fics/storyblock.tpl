@@ -1,23 +1,24 @@
 {% block storyblock %}
+    {% import 'fics/stars.tpl' as stars %}
     <div class="storyblock">
         <div class="storyblockcontainer">
             <div class="storyblockheader">
                 {% if story.Featured=="F" %}
-                    <img class="ribbon" src="/images/blueribbon.gif" />
+                    <img class="ribbon" src="/images/blueribbon.gif" title="Featured Story" />
                 {% elseif story.Featured=="G" %}
-                    <img class="ribbon" src="/images/goldribbon.gif" />
+                    <img class="ribbon" src="/images/goldribbon.gif" title="Gold Ribbon" />
                 {% elseif story.Featured=="S" %}
-                    <img class="ribbon" src="/images/silverribbon.gif" />
+                    <img class="ribbon" src="/images/silverribbon.gif" title="Silver Ribbon" />
                 {% elseif story.Featured=="Z" %}
-                    <img class="ribbon" src="/images/bronzeribbon.gif" />
+                    <img class="ribbon" src="/images/bronzeribbon.gif" title="Bronze Ribbon" />
                 {% elseif story.Featured=="f" %}
-                    <img class="ribbon" src="/images/redribbon.gif" />
+                    <img class="ribbon" src="/images/redribbon.gif" title="Featured Story" />
                 {% elseif story.Featured=="g" %}
-                    <img class="ribbon" src="/images/goldribbon_old.gif" />
+                    <img class="ribbon" src="/images/goldribbon_old.gif" title="Gold Ribbon" />
                 {% elseif story.Featured=="s" %}
-                    <img class="ribbon" src="/images/silverribbon_old.gif" />
+                    <img class="ribbon" src="/images/silverribbon_old.gif" title="Silver Ribbon" />
                 {% elseif story.Featured=="z" %}
-                    <img class="ribbon" src="/images/bronzeribbon_old.gif" />
+                    <img class="ribbon" src="/images/bronzeribbon_old.gif" title="Bronze Ribbon" />
                 {% endif %}
                 <div class="mininfo">
                     <span class="title">
@@ -35,25 +36,13 @@
                         {% endfor %}
                     </ul>
                     <span class="stars">
-                        {% for star in story.stars %}
-                            {% if star == "half" %}
-                                <img src='/images/starhalf.gif' />
-                            {% elseif star == "full" %}
-                                <img src='/images/star.gif' />
-                            {% endif %}
-                        {% endfor %}
+                        {{ stars.stars(story) }}
                     </span>
                 </div>
                 <div>
                     <span class="rating">Rated: {{ story.rating }}</span>
                     <span class="stars">
-                        {% for star in story.stars %}
-                            {% if star == "half" %}
-                                <img src='/images/starhalf.gif' />
-                            {% elseif star == "full" %}
-                                <img src='/images/star.gif' />
-                            {% endif %}
-                        {% endfor %}
+                        {{ stars.stars(story) }}
                     </span>
                     {% if not story.shortDesc %}
                     {% if story.NumReviews > 0 %}<span class="reviews">[<a href="/fics/story/{{ story.StoryId }}/?reviews#reviews">Reviews: {{ story.NumReviews }}</a>]</span>{% endif %}

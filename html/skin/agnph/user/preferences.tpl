@@ -1,5 +1,14 @@
 {% extends "user/base.tpl" %}
 
+{% block styles %}
+    {{ parent() }}
+    <style>
+        textarea {
+            width: 100%;
+        }
+    </style>
+{% endblock %}
+
 {% block scripts %}
     {{ parent() }}
     {% if canEditBio %}
@@ -61,14 +70,14 @@
                         <option value="other"{% if profile.user.Gender == 'O' %} selected{% endif %}>Other</option>
                     </select></span></li>
                 <li><span class="basic-info-label">Birthday:</span>         <span><input type="date" name="dob" value="{{ profile.user.DOB }}" /></span>
-                    <span><input type="checkbox" name="show-dob" value="show"{% if profile.user.ShowDOB %} checked{% endif %} />Show Birthday</span></li>
+                    <span class="radio-button-group"><input type="checkbox" name="show-dob" value="show"{% if profile.user.ShowDOB %} checked{% endif %} />Show Birthday</span></li>
                 <li><span class="basic-info-label">Species:</span>          <span><input type="text" name="species" value="{{ profile.user.Species }}" /></span></li>
                 <li><span class="basic-info-label">Title:</span>            <span><input type="text" name="title" value="{{ profile.user.Title }}" /></span></li>
                 <li><span class="basic-info-label">Location:</span>         <span><input type="text" name="location" value="{{ profile.user.Location }}" /></span></li>
                 <li><span class="basic-info-label">Timezone:</span>         <span><input type="text" name="timezone" value="{{ profile.user.timezoneOffset }}" /></span>
-                    <span><input type="checkbox" name="auto-detect-timezone" value="yes" {% if user.AutoDetectTimezone %}checked {% endif %}/>Auto-Detect Timezone</span></li>
+                    <span class="radio-button-group"><input type="checkbox" name="auto-detect-timezone" value="yes" {% if user.AutoDetectTimezone %}checked {% endif %}/>Auto-Detect Timezone</span></li>
                 <li><span class="basic-info-label">Upload Avatar:</span>    <span><input type="file" name="file" accept="image/jpeg,image/png,image/gif" /></span>
-                    <span><input type="checkbox" name="reset-avatar" value="yes" />Reset Avatar</span></li>
+                    <span class="radio-button-group"><input type="checkbox" name="reset-avatar" value="yes" />Reset Avatar</span></li>
             </ul>
             <div class="Clear">&nbsp;</div>
         </div>
@@ -135,6 +144,7 @@
                 <li><span class="basic-info-label">Private Favorites:</span><span><input type="checkbox" name="fics-hide-favorites" value="1" {% if profile.user.PrivateFicsFavorites %}checked {% endif %}/></span></li>
             </ul>
         </div>
+        {#
         <div class="infoblock">
             <div class="expand-click">
                 <span class="twiddle"><h3>+</h3></span>
@@ -144,6 +154,8 @@
                 <li><span class="basic-info-label">Posts per page:</span><span><input type="text" name="oekaki-posts-per-page" value="N/A" /></span></li>
             </ul>
         </div>
+        #}
+        <p></p>
         <input type="submit" value="Save Changes" />
     </form>
 {% endblock %}

@@ -32,7 +32,7 @@ function CreatePostSearchSQL($search_string, $posts_per_page, $page, &$can_sort_
             $search_string = mb_ereg_replace("^(.*)(pool:[^ ]*)($| .*)", "\\1$replacement\\3", $search_string);
             $sortOrder = "T.PoolItemOrder ASC, ".$sortOrder;
             $can_sort_pool = true;
-            $pool_sort_id = $matches[1];
+            $pool_sort_id = $pool_id;
         } else if (is_numeric($pool_name)) {
             $sortOrder = "T.PoolItemOrder ASC, ".$sortOrder;
             $can_sort_pool = true;

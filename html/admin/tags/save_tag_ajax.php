@@ -6,9 +6,8 @@
 
 // Assumes that if a user can access this admin page, they can also create/modify tags.
 
-include_once("../../includes/util/core.php");
-include_once("../../includes/util/sql.php");
-include_once("../../includes/tagging/tag_functions.php");
+include_once(SITE_ROOT."ajax_header.php");
+include_once(SITE_ROOT."includes/tagging/tag_functions.php");
 
 if (!isset($user)) {
     AJAXErr();
@@ -123,5 +122,7 @@ if (sizeof($implied_tag_ids) > 0) {
 } else {
     sql_query("DELETE FROM ".IMPLICATION_TABLE." WHERE TagId=$tag_id;");
 }
+echo json_encode(array());
+return;
 
 ?>

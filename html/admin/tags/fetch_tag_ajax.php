@@ -6,11 +6,8 @@
 
 // Assumes that if a user can access this admin page, they can also create tags.
 
-include_once("../../includes/util/core.php");
-include_once("../../includes/util/sql.php");
-include_once("../../includes/tagging/tag_functions.php");
-
-header('Content-type: application/json; charset=utf-8');
+include_once(SITE_ROOT."ajax_header.php");
+include_once(SITE_ROOT."includes/tagging/tag_functions.php");
 
 if (!isset($_GET['search']) || !isset($_GET['filter'])) {
     AJAXErr();

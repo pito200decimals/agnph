@@ -297,14 +297,16 @@ function UpdateStoryStats($sid) {
 
     // Also get story reviews.
     if (sql_query_into($result, "SELECT ".SCORES_THAT_COUNT." as C1, ".NUM_SCORES_THAT_COUNT." as C2, ".NUM_REVIEWS." as C3 FROM ".FICS_REVIEW_TABLE." R WHERE
-        StoryId='$escaped_sid' AND
+        StoryId='$escaped_sid' OR
+        (StoryId='$escaped_sid' AND
         EXISTS(SELECT 1 FROM ".FICS_CHAPTER_TABLE." C WHERE
             R.ChapterId=C.ChapterId AND
-            C.ApprovalStatus='A');", 0)) {
+            C.ApprovalStatus='A'));", 0)) {
         $row = $result->fetch_assoc();
         $totalStars = $row['C1'];
         $totalRatings = $row['C2'];
         $numReviews = $row['C3'];
+        debug($row);
         sql_query("UPDATE ".FICS_STORY_TABLE." SET ChapterCount=$chapcount, WordCount=$wordcount, Views=$viewcount, TotalStars=$totalStars, TotalRatings=$totalRatings, NumReviews=$numReviews WHERE StoryId='$escaped_sid';");
     } else {
         sql_query("UPDATE ".FICS_STORY_TABLE." SET ChapterCount=$chapcount, WordCount=$wordcount, Views=$viewcount WHERE StoryId='$escaped_sid';");

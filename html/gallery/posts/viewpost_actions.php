@@ -251,6 +251,7 @@ function HandleRegenThumbnailsAction($post) {
         return;
     }
     CreateThumbnailFile($post['Md5'], $post['Extension']);
+    $pid = $post['PostId'];
     $uid = $user['UserId'];
     $username = $user['DisplayName'];
     LogAction("<strong><a href='/user/$uid/'>$username</a></strong> regenerated thumbnail for <strong><a href='/gallery/post/show/$pid/'>post #$pid</a></strong>", "G");

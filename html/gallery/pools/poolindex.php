@@ -20,7 +20,7 @@ CollectItems(GALLERY_POOLS_TABLE, "$whereClause ORDER BY Name ASC", $pools, GALL
 if (sizeof($pools) > 0) {
     // Compute pool search names.
     foreach ($pools as &$pool) {
-        $pool['searchName'] = urlencode("pool:".str_replace(" ", "_", $pool['Name']));
+        $pool['searchString'] = "pool:".str_replace(" ", "_", $pool['Name']);
     }
     // Compute counts.
     foreach ($pools as &$pool) { $pool['count'] = 0; }

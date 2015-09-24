@@ -1,18 +1,16 @@
 <?php
 // Page handling ajax requests for tag names.
 
-include_once("../../header.php");
-include_once(SITE_ROOT."includes/util/user.php");
+define("SITE_ROOT", "../../");
+include_once(SITE_ROOT."ajax_header.php");
 include_once(SITE_ROOT."admin/includes/functions.php");
 
 if (!isset($user)) {
-    echo json_encode(array());
-    return;
+    AJAXErr();
 }
 ComputePageAccess($user);
 if (!$vars['canAdminGallery']) {
-    echo json_encode(array());
-    return;
+    AJAXErr();
 }
 
 define("TABLE", GALLERY_TAG_TABLE);

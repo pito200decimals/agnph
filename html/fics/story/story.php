@@ -1,7 +1,7 @@
 <?php
 // Page for displaying a story summary and TOC.
 // URL: /fics/story/{story-id}/
-// URL: /fics/story/story.php?sid={story-id}
+// URL: /fics/story/story.php?sid={story-id}\
 
 include_once("../../header.php");
 include_once(SITE_ROOT."fics/includes/functions.php");

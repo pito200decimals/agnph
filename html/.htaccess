@@ -18,16 +18,6 @@ RewriteRule ^timezone/?$ /timezone.php
 RewriteRule ^confirm_age/?$ header.php
 
 # Rewrites for forums pages
-#RewriteRule ^forums/thread/(\d+)/?$ /forums/thread/viewthread.php?t=$1
-#RewriteRule ^forums/thread/(\d+)/(\d+)/?$ /forums/thread/viewthread.php?t=$1&offset=$2
-#RewriteRule ^forums/board/(\d+)/?$ /forums/viewboard.php?b=$1
-#RewriteRule ^forums/board/(\d+)/(\d+)/?$ /forums/viewboard.php?b=$1&offset=$2
-#RewriteRule ^forums/?$ /forums/viewboard.php
-#RewriteRule ^forums/create/(\d+)/?$ /forums/compose.php?action=create&board=$1
-#RewriteRule ^forums/reply/(\d+)/?$ /forums/compose.php?action=reply&thread=$1
-#RewriteRule ^forums/edit/(\d+)/?$ /forums/compose.php?action=edit&post=$1
-#RewriteRule ^forums/delete/?$ /forums/delete.php
-#RewriteRule ^forums/markallread/(\d+)/?$ /forums/mark_all_read.php?b=$1
 
 # TODO: Adjust this rewrite rule for "forums/"
 RewriteRule ^forums/?$ /forums/view_board.php?board=-1
@@ -63,9 +53,9 @@ RewriteRule ^gallery/post/random/?$ /gallery/posts/random_post.php
 RewriteRule ^gallery/upload/?$ /gallery/upload.php
 RewriteRule ^gallery/edit/?$ /gallery/posts/editpost.php
 RewriteRule ^gallery/pools/?$ /gallery/pools/poolindex.php [QSA]
-RewriteRule ^gallery/pools/reorder/(\d+)/?$ /gallery/pools/reorder_pool.php?pid=$1
+RewriteRule ^gallery/pools/reorder/(\d+)/?$ /gallery/pools/reorder_pool_ajax.php?pid=$1
 RewriteRule ^gallery/poolsearch/$ /gallery/pools/pool_ajax.php [QSA]
-RewriteRule ^gallery/pools/modify/(\d+)/(\d+)/?$ /gallery/pools/addremove_pool.php?post=$1&pool=$2
+RewriteRule ^gallery/pools/modify/(\d+)/(\d+)/?$ /gallery/pools/addremove_pool_ajax.php?post=$1&pool=$2
 RewriteRule ^gallery/pools/create/?$ /gallery/pools/create.php
 RewriteRule ^gallery/pools/delete/?$ /gallery/pools/delete.php
 RewriteRule ^gallery/post/status/?$ /gallery/posts/changestatus.php
@@ -83,7 +73,7 @@ RewriteRule ^fics/create/?$ /fics/edit_story.php?action=create
 RewriteRule ^fics/edit/(\d+)/?$ /fics/edit_story.php?action=edit&sid=$1
 RewriteRule ^fics/create/(\d+)/(\d+)/?$ /fics/edit_chapter.php?action=create&sid=$1&chapternum=$2
 RewriteRule ^fics/edit/(\d+)/(\d+)/?$ /fics/edit_chapter.php?action=edit&sid=$1&chapternum=$2
-RewriteRule ^fics/story/chapter/order/?$ /fics/reorder_chapter.php
+RewriteRule ^fics/story/chapter/order/?$ /fics/reorder_chapter_ajax.php
 RewriteRule ^fics/tags/?$ /fics/tags.php?sort=name&order=asc [QSA]
 RewriteRule ^fics/authors/?$ /fics/authorindex.php [QSA]
 RewriteRule ^fics/delete/(\d+)/?$ /fics/delete_story.php?sid=$1&action=delete&type=story

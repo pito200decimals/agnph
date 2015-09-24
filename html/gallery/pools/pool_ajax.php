@@ -2,13 +2,7 @@
 // AJAX for auto-completion of pool names.
 
 define("SITE_ROOT", "../../");
-
-include_once(SITE_ROOT."includes/config.php");
-include_once(SITE_ROOT."includes/constants.php");
-include_once(SITE_ROOT."includes/util/core.php");
-include_once(SITE_ROOT."includes/util/sql.php");
-
-header('Content-type: application/json; charset=utf-8');
+include_once(SITE_ROOT."ajax_header.php");
 
 if (!isset($_GET['query'])) AJAXErr();
 $search = $_GET['query'];

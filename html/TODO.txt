@@ -46,12 +46,14 @@ X RSS Feed?
 - Admin ticket system
 - Link news from forums to each section/home page?
 - Global site statistics?
-- Polls?
 - Way to push notifications and site updates to users (via PM system?)
     - Include welcome message, and account migration message on registration.
 - API, at least for gallery similar to Ouroboros?
 - All CSS
 - Multiple themes?
+- Admin sitewide settings
+    - Registration messages, welcome messages, etc.
+X Polls?
 X Theme switcher for guests?
 
 == ACCOUNT ==

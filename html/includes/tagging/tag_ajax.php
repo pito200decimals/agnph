@@ -2,10 +2,7 @@
 // AJAX for auto-completion of tag names.
 // Assumes SITE_ROOT and TABLE_NAME is defined.
 
-include_once(SITE_ROOT."includes/config.php");
-include_once(SITE_ROOT."includes/constants.php");
-include_once(SITE_ROOT."includes/util/core.php");
-include_once(SITE_ROOT."includes/util/sql.php");
+include_once(SITE_ROOT."ajax_header.php");
 
 header('Content-type: application/json; charset=utf-8');
 

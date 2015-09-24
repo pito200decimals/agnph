@@ -36,8 +36,7 @@ if (isset($_POST['display-name']) &&
     isset($_POST['gallery-posts-per-page']) &&
     isset($_POST['gallery-tag-blacklist']) &&
     isset($_POST['fics-stories-per-page']) &&
-    isset($_POST['fics-tag-blacklist']) &&
-    isset($_POST['oekaki-posts-per-page'])) {
+    isset($_POST['fics-tag-blacklist'])) {
     if (!CanPerformSitePost()) MaintenanceError();
     $settings_changed = false;
     // Handle post submit.

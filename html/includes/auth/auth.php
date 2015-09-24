@@ -1,7 +1,9 @@
 <?php
 // General user-authentication code. Will be included and run once at the beginning of each public-facing page.
 
-include_once(__DIR__."/../../header.php");
+if (!defined("SITE_ROOT") || !defined("USER_TABLE")) {
+    die();
+}
 
 if (isset($user)) {
     debug_die("Already defined \$user: $user");

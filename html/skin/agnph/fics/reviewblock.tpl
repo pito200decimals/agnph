@@ -78,6 +78,7 @@
 {% use 'includes/comment-block.tpl' %}
 
 {% block review_post_block %}
+    {% import 'fics/stars.tpl' as stars %}
     <li class="comment">
         <img class="comment-avatarimg" src="{{ review.commenter.avatarURL }}" />
         <div class="commentheader">
@@ -90,13 +91,7 @@
             {% endfor %}
             <strong>Reviewer:</strong> <a href="/user/{{ review.commenter.UserId }}/">{{ review.commenter.DisplayName }}</a>
             <span class="stars">
-                {% for star in review.stars %}
-                    {% if star == "half" %}
-                        <img src='/images/starhalf.gif' />
-                    {% elseif star == "full" %}
-                        <img src='/images/star.gif' />
-                    {% endif %}
-                {% endfor %}
+                {{ stars.stars(review) }}
             </span><br />
             <strong>Date:</strong> {{ review.date }}{% if review.ChapterId > 0 %} <strong>Chapter:</strong> {{ review.chapterTitle }}{% endif %}
         </div>

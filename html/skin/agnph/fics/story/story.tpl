@@ -41,7 +41,13 @@
                         <strong>{{ chapter.Title }}</strong>
                     </a>
                     {% if chapter.NumReviews > 0 %}
-                        {% autoescape false %}{{ chapter.stars }}{% endautoescape %}
+                        {% for star in chapter.stars %}
+                            {% if star == "half" %}
+                                <img src='/images/starhalf.gif' />
+                            {% elseif star == "full" %}
+                                <img src='/images/star.gif' />
+                            {% endif %}
+                        {% endfor %}
                         <span class="reviews">[<a href="/fics/story/{{ story.StoryId }}/{{ loop.index }}/?reviews#reviews">Reviews: {{ chapter.NumReviews }}</a>]</span>
                     {% endif %}
                 </p>
