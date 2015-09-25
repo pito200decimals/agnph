@@ -1,13 +1,11 @@
 <?php
 // Page for viewing the index page of the fics section.
 
-//define("DEBUG", true);
-
 include_once("../header.php");
 include_once(SITE_ROOT."fics/includes/functions.php");
 
 // Fetch center content.
-$vars['welcome_message'] = GetSiteSetting(FICS_WELCOME_MESSAGE_KEY, DEFAULT_FICS_WELCOME_MESSAGE);
+$vars['welcome_message'] = GetSiteSetting(FICS_WELCOME_MESSAGE_KEY, "");
 
 // Fetch left sidepanel data.
 $vars['events'] = true;
@@ -27,7 +25,8 @@ if (sql_query_into($result, "SELECT * FROM ".FICS_STORY_TABLE." WHERE Featured I
 $num_rand = GetSiteSetting(FICS_NUM_RANDOM_STORIES_KEY, DEFAULT_FICS_NUM_RANDOM_STORIES);
 if (is_numeric($num_rand)) {
     $num_rand = (int)$num_rand;
-    if (sql_query_into($result, "SELECT * FROM ".FICS_STORY_TABLE." ORDER BY RAND() LIMIT $num_rand;", $num_rand)) {
+    if ($num_rand > FICS_MAX_NUM_RANDOM_STORIES) $num_rand = FICS_MAX_NUM_RANDOM_STORIES;
+    if (sql_query_into($result, "SELECT * FROM ".FICS_STORY_TABLE." ORDER BY RAND() LIMIT $num_rand;", 1)) {
         $rand = array();
         while ($story = $result->fetch_assoc()) {
             FillStoryInfo($story);

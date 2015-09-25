@@ -85,10 +85,11 @@ do_or_die(sql_query(
     "INSERT INTO ".SITE_SETTINGS_TABLE."
     (Name, Value)
     VALUES
+    ('".MAINTENANCE_MODE_KEY."', 'false'),
     ('".REGISTER_DISCLAIMER_KEY."', 'By clicking \'Register\', you agree to the <a href=\'\'>terms of use</a> and that you are 18 years of age or older. A verification email will be sent to the provided email address.'),
     ('".SHORT_BAN_DURATION_KEY."', '".DEFAULT_SHORT_BAN_DURATION."'),
     ('".FICS_CHAPTER_MIN_WORD_COUNT_KEY."', '".DEFAULT_FICS_CHAPTER_MIN_WORD_COUNT."'),
-    ('".FICS_WELCOME_MESSAGE_KEY."', '".DEFAULT_FICS_WELCOME_MESSAGE."'),
+    ('".FICS_WELCOME_MESSAGE_KEY."', ''),
     ('".FICS_NUM_RANDOM_STORIES_KEY."', '".DEFAULT_FICS_NUM_RANDOM_STORIES."');"));
 
 function rand_date() {

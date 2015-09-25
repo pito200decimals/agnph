@@ -73,13 +73,17 @@ function UnsetCookies() {
 }
 
 
-function FormatDate($epoch, $format = DEFAULT_DATE_FORMAT) {
+function FormatDate($epoch, $format = DEFAULT_DATE_FORMAT, $time_offset=null) {
     global $user;
     $offset = 0;
-    if (isset($user)) {
-        $offset = $user['Timezone'];
-    } else if (isset($_SESSION['timezone_offset'])) {
-        $offset = $_SESSION['timezone_offset'];
+    if ($time_offset != null) {
+        $offset = $time_offset;
+    } else {
+        if (isset($user)) {
+            $offset = $user['Timezone'];
+        } else if (isset($_SESSION['timezone_offset'])) {
+            $offset = $_SESSION['timezone_offset'];
+        }
     }
     $epoch += (int)($offset * 60 * 60);
     $dt = new DateTime("@$epoch");
@@ -118,7 +122,7 @@ function GetWithDefault($array, $key, $default) {
 }
 
 // Gets or sets a site setting value.
-function GetSiteSetting($key, $default_value, $fresh=false) {
+function GetSiteSetting($key, $default_value="", $fresh=false) {
     static $data_table = null;
     if ($data_table == null || $fresh) {
         $data_table = array();
@@ -141,6 +145,7 @@ function SetSiteSetting($key, $value) {
         ('$escaped_key', '$escaped_value')
         ON DUPLICATE KEY UPDATE
             Value=VALUES(Value);");
+    GetSiteSetting($key, $value, true);  // Refresh cache.
 }
 
 function DefaultUser() {

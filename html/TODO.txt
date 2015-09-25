@@ -38,7 +38,7 @@ X RSS Feed?
 * Check for vuln's for style background-image URL
 * Search string length attacks.
 * Splash for Disclaimer/Warning/Age gate.
-    - Add disclaimer?
+    - Add disclaimer banner?
 * Oekaki section
 * Admin site management (Ongoing)
 * General help pages
@@ -53,6 +53,7 @@ X RSS Feed?
 - Multiple themes?
 - Admin sitewide settings
     - Registration messages, welcome messages, etc.
+- BUGFIX: Tags are lost on fail-to-submit in fancy tagger UI.
 X Polls?
 X Theme switcher for guests?
 

@@ -48,8 +48,9 @@
         <table>
             <tr><td><label>Welcome Message:</label></td><td></td></tr>
             <tr><td colspan="2"><textarea name="welcome-message">{% autoescape false %}{{ welcome_message }}{% endautoescape %}</textarea></td></tr>
+            <tr><td><label>Random stories on Index:</label></td><td><input name="num-rand-stories" type="text" value="{{ num_rand_stories }}" /></td></tr>
             <tr><td><label>Chapter Minimum Word Count:</label></td><td><input name="min-word-count" type="text" value="{{ min_word_count }}" /></td></tr>
         </table>
-        <input type="submit" value="Save Changes" />
+        <input type="submit" name="submit" value="Save Changes" />
     </form>
 {% endblock %}

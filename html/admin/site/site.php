@@ -2,6 +2,7 @@
 // Main control panel for admin operations.
 
 include_once("../../header.php");
+include_once(SITE_ROOT."includes/util/date.php");
 include_once(SITE_ROOT."includes/util/user.php");
 include_once(SITE_ROOT."admin/includes/functions.php");
 
@@ -21,16 +22,42 @@ if (isset($_POST['submit'])) {
     header("Location: ".$_SERVER['REQUEST_URI']);
     exit();
 }
+$vars['site_welcome_message'] = SanitizeHTMLTags(GetSiteSetting(SITE_WELCOME_MESSAGE_KEY, ""), DEFAULT_ALLOWED_TAGS);
+$vars['register_message'] = SanitizeHTMLTags(GetSiteSetting(REGISTER_DISCLAIMER_KEY, ""), DEFAULT_ALLOWED_TAGS);
+$vars['short_ban_duration'] = FormatShortDuration(GetSiteSetting(SHORT_BAN_DURATION_KEY, ""));
 
 RenderPage("admin/site/site.tpl");
 return;
 
 function HandlePost() {
+    if (isset($_POST['site-welcome-message'])) {
+        $msg = SanitizeHTMLTags($_POST['site-welcome-message'], DEFAULT_ALLOWED_TAGS);
+        if ($msg != GetSiteSetting(SITE_WELCOME_MESSAGE_KEY, "")) {
+            if (mb_strlen(SanitizeHTMLTags($msg, "")) == 0) {
+                $msg = "";
+            }
+            SetSiteSetting(SITE_WELCOME_MESSAGE_KEY, $msg);
+        }
+    }
+    if (isset($_POST['register-message'])) {
+        $msg = SanitizeHTMLTags($_POST['register-message'], DEFAULT_ALLOWED_TAGS);
+        if ($msg != GetSiteSetting(REGISTER_DISCLAIMER_KEY, "")) {
+            if (mb_strlen(SanitizeHTMLTags($msg, "")) == 0) {
+                $msg = "";
+            }
+            SetSiteSetting(REGISTER_DISCLAIMER_KEY, $msg);
+        }
+    }
+    if (isset($_POST['short-ban-duration'])) {
+        $duration = ParseShortDuration($_POST['short-ban-duration']);
+        if ($duration > 0 && $duration != GetSiteSetting(SHORT_BAN_DURATION_KEY, "")) {
+            SetSiteSetting(SHORT_BAN_DURATION_KEY, $duration);
+        }
+    }
     if (isset($_POST['maintenance-mode'])) {
         SetSiteSetting(MAINTENANCE_MODE_KEY, "true");
     } else {
         SetSiteSetting(MAINTENANCE_MODE_KEY, "false");
     }
-    
 }
 ?>

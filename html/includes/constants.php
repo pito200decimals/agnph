@@ -125,8 +125,8 @@ define("FICS_NOT_FEATURED", "D");  // Also present in templates: editstory.tpl
 define("FICS_CHAPTER_MIN_WORD_COUNT_KEY", "FicsMinWordCount");
 define("DEFAULT_FICS_CHAPTER_MIN_WORD_COUNT", 500);
 define("FICS_WELCOME_MESSAGE_KEY", "FicsWelcomeMessage");
-define("DEFAULT_FICS_WELCOME_MESSAGE", "{{ fics_welcome }}");
 define("FICS_NUM_RANDOM_STORIES_KEY", "FicsNumRandStories");
+define("FICS_MAX_NUM_RANDOM_STORIES", 5);
 define("DEFAULT_FICS_NUM_RANDOM_STORIES", 1);
 define("FICS_MAX_NUM_COAUTHORS", 3);
 define("MAX_FICS_SEARCH_TERMS", 6);
@@ -143,6 +143,7 @@ define("PROFILE_MAIL_DATE_FORMAT_SHORT", "g:i A");
 define("PROFILE_MAIL_DATE_FORMAT_LONG", "M j g:i A");
 define("PROFILE_MAIL_DATE_FORMAT_VERY_LONG", "M j Y");
 define("PROFILE_DOB_FORMAT", "F j Y");
+define("PROFILE_TIME_FORMAT", "g:i A");
 define("MAX_FORUMS_THREADS_PER_PAGE", 100);  // Max value for user-setting.
 define("MAX_FORUMS_POSTS_PER_PAGE", 50);  // Max value for user-setting.
 define("FORUMS_DATE_FORMAT", "M j, Y g:i A");
@@ -171,6 +172,7 @@ define("ADMIN_LOG_ENTRIES_PER_PAGE", 50);
 // Other default constant values.
 define("SITE_DOMAIN", "http://agnph.cloudapp.net");  // TODO: Change on live site.
 define("VERSION", "0.9.1");
+define("SITE_WELCOME_MESSAGE_KEY", "SiteWelcomeMessage");
 define("REGISTER_DISCLAIMER_KEY", "RegisterDisclaimer");
 define("SHORT_BAN_DURATION_KEY", "UserShortBanDuration");
 define("MAINTENANCE_MODE_KEY", "MaintenanceMode");

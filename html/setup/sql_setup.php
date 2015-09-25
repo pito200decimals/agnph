@@ -72,6 +72,7 @@ do_or_die(sql_query(
         Location VARCHAR(".MAX_USER_LOCATION_LENGTH.") NOT NULL,
         AutoDetectTimezone TINYINT(1) DEFAULT 1 NOT NULL,
         Timezone FLOAT DEFAULT 0 NOT NULL,
+        ShowLocalTime TINYINT(1) DEFAULT 1 NOT NULL,
         Species VARCHAR(".MAX_USER_SPECIES_LENGTH.") NOT NULL,
         DOB CHAR(10) NOT NULL,".  // Format: MM/DD/YYYY
        "ShowDOB TINYINT(1) DEFAULT 0,

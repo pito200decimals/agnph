@@ -28,4 +28,35 @@ function ParseDate($date_str) {
     }
     return sprintf("%04d-%02d-%02d", $year, $month, $day);
 }
+
+function FormatShortDuration($val) {
+    // For now, always format in terms of days.
+    $days = $val / (24 * 60 * 60);
+    return $days."d";
+}
+
+function ParseShortDuration($val) {
+    $mult = 24 * 60 * 60;
+    $val = mb_strtolower($val);
+    if (endsWith($val, 'y')) {
+        $mult *= 365;
+        $val = mb_substr($val, 0, mb_strlen($val) - 1);
+    }
+    if (endsWith($val, 'm')) {
+        $mult *= 30;
+        $val = mb_substr($val, 0, mb_strlen($val) - 1);
+    }
+    if (endsWith($val, 'w')) {
+        $mult *= 7;
+        $val = mb_substr($val, 0, mb_strlen($val) - 1);
+    }
+    if (endsWith($val, 'd')) {
+        $mult *= 1;
+        $val = mb_substr($val, 0, mb_strlen($val) - 1);
+    }
+    if (!is_numeric($val)) return -1;
+    $val = (int)$val;
+    if ($val <= 0) return -1;
+    return $val * $mult;
+}
 ?>

@@ -45,6 +45,9 @@
     {{ block('banner') }}
     <form method="POST" accept-encoding="UTF-8">
         <table>
+            <tr><td>Site Welcome Message</td><td><textarea name="site-welcome-message">{{ site_welcome_message }}</textarea></td></tr>
+            <tr><td>Registration agreement</td><td><textarea name="register-message">{{ register_message }}</textarea></td></tr>
+            <tr><td>Duration of Bans</td><td><input name="short-ban-duration" value="{{ short_ban_duration }}" /></td></tr>
             <tr><td>Maintenance Mode</td><td><input type="checkbox" name="maintenance-mode" value="yes" {% if is_maintenance_mode %}checked {% endif %}/></td></tr>
         </table>
         <input type="submit" name="submit" value="Save Changes" />

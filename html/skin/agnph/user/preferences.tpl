@@ -75,7 +75,8 @@
                 <li><span class="basic-info-label">Title:</span>            <span><input type="text" name="title" value="{{ profile.user.Title }}" /></span></li>
                 <li><span class="basic-info-label">Location:</span>         <span><input type="text" name="location" value="{{ profile.user.Location }}" /></span></li>
                 <li><span class="basic-info-label">Timezone:</span>         <span><input type="text" name="timezone" value="{{ profile.user.timezoneOffset }}" /></span>
-                    <span class="radio-button-group"><input type="checkbox" name="auto-detect-timezone" value="yes" {% if user.AutoDetectTimezone %}checked {% endif %}/>Auto-Detect Timezone</span></li>
+                    <span class="radio-button-group"><input type="checkbox" name="auto-detect-timezone" value="yes" {% if user.AutoDetectTimezone %}checked {% endif %}/>Auto-Detect Timezone</span>
+                    <span class="radio-button-group"><input type="checkbox" name="show-local-time" value="yes" {% if user.ShowLocalTime %}checked {% endif %}/>Show local time</span></li>
                 <li><span class="basic-info-label">Upload Avatar:</span>    <span><input type="file" name="file" accept="image/jpeg,image/png,image/gif" /></span>
                     <span class="radio-button-group"><input type="checkbox" name="reset-avatar" value="yes" />Reset Avatar</span></li>
             </ul>

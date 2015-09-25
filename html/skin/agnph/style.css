@@ -256,6 +256,7 @@ a:hover {
 }
 span.radio-button-group {
     display: inline-block;
+    margin-right: 20px;
 }
 .Clear {
   clear: both;

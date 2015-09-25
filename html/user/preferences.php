@@ -146,6 +146,16 @@ if (isset($_POST['display-name']) &&
             $user_table_sets[] = "Timezone=$timezone";
         }
     }
+    // Show Local time
+    if (isset($_POST['show-local-time'])) {
+        if ($user['ShowLocalTime'] != 1) {
+            $user_table_sets[] = "ShowLocalTime=1";
+        }
+    } else {
+        if ($user['ShowLocalTime'] != 0) {
+            $user_table_sets[] = "ShowLocalTime=0";
+        }
+    }
     // Handle avatar.
     ProcessAvatarUpload($user_table_sets);
     // GroupMailboxThreads

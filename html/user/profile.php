@@ -31,6 +31,7 @@ sql_query_into($result, "SELECT count(*) FROM ".FICS_STORY_TABLE." WHERE AuthorU
 $profile_user['numFicsStories'] = $result->fetch_assoc()['count(*)'];
 // TODO: Oekaki data.
 $profile_user['numOekakiDrawn'] = 0;
+$profile_user['currentTime'] = FormatDate(time(), PROFILE_TIME_FORMAT, $profile_user['Timezone']);
 
 // Init private visible statistics.
 if (isset($user)) {

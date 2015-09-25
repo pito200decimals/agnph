@@ -46,6 +46,8 @@
 
 {% block content %}
     {% import _self as self %}
+
+
     <div class="right-column">
         <div class="column-contents">
             {% if featured|length > 0 %}
@@ -72,6 +74,8 @@
             {% endif %}
         </div>
     </div>
+
+
     <div class="center-column">
         <div class="column-contents">
             {% if welcome_message %}
@@ -80,12 +84,15 @@
                     <div class="content">{% autoescape false %}{{ welcome_message }}{% endautoescape %}</div>
                 </div>
             {% endif %}
+            {# TODO: Only show first entry on mobile #}
             <div class="block">
                 <div class="header">News</div>
                 <div class="content">Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah</div>
             </div>
         </div>
     </div>
+
+
     <div class="left-column">
         <div class="column-contents">
             {% if events %}
