@@ -140,6 +140,7 @@ do_or_die(sql_query(
         LastPostDate INT(11) NOT NULL,
         Sticky TINYINT(1) DEFAULT 0 NOT NULL,
         Locked TINYINT(1) DEFAULT 0 NOT NULL,
+        NewsPost TINYINT(1) DEFAULT 0 NOT NULL,
         PRIMARY KEY(PostId)
     ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 // User preferences specific to the forums section.

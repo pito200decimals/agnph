@@ -18,6 +18,7 @@ function CanUserViewBoard($user, $board) {
 function CanUserCreateThread($user, $board) {
     if (!IsUserActivated($user)) return false;
     if ($user['FicsPermissions'] == 'R') return false;
+    if ($board['BoardId'] == -1) return false;  // Can't make threads under fake root board.
     if ($user['ForumsPermissions'] == 'A') return true;
     // TODO: Determine if this is desired.
     // if (isset($board['childBoards']) && sizeof($board['childBoards']) > 0) return false;  // Can't post to top-level boards (Although admins can move posts to them).
@@ -47,7 +48,7 @@ function CanUserDeleteForumsPost($user, $thread, $post) {
     if ($user['UserId'] == $post['UserId']) return true;
     return false;
 }
-function CanUserLockOrStickyThread($user) {
+function CanUserLockStickyOrMarkNewsThread($user) {
     if (!IsUserActivated($user)) return false;
     if ($user['ForumsPermissions'] == 'A') return true;
     return false;
@@ -114,6 +115,16 @@ function InitBoardParents(&$board) {
         InitBoardParents($parent);
         $board['parentBoard'] = $parent;
     }
+}
+
+function HasChildBoardId($board, $cbid) {
+    if ($board['BoardId'] == $cbid) return true;
+    if (isset($board['childBoards']) && sizeof($board['childBoards']) > 0) {
+        foreach ($board['childBoards'] as $c) {
+            if (HasChildBoardId($c, $cbid)) return true;
+        }
+    }
+    return false;
 }
 
 function FetchThread($thread_id) {

@@ -3,9 +3,27 @@
 
 include_once("../header.php");
 include_once(SITE_ROOT."fics/includes/functions.php");
+include_once(SITE_ROOT."forums/includes/functions.php");
 
 // Fetch center content.
 $vars['welcome_message'] = GetSiteSetting(FICS_WELCOME_MESSAGE_KEY, "");
+// Get news stories.
+$boardName = GetSiteSetting(FICS_NEWS_SOURCE_BOARD_NAME, null);
+if ($boardName != null && sql_query_into($result, "SELECT BoardId FROM ".FORUMS_BOARD_TABLE." WHERE UPPER(Name)=UPPER('".sql_escape($boardName)."');", 1)) {
+    $news_board_id = $result->fetch_assoc()['BoardId'];
+    $news = array();
+    if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE IsThread=1 AND ParentId=$news_board_id AND NewsPost=1 ORDER BY PostDate DESC;", 1)) {
+        while ($row = $result->fetch_assoc()) {
+            $row['date'] = FormatDate($row['PostDate'], FICS_DATE_FORMAT);
+            $news[] = $row;
+        }
+    }
+    if (sizeof($news) > 0) {
+        $news[0]['mobile'] = true;
+    }
+    InitPosters($news);
+    $vars['news'] = $news;
+}
 
 // Fetch left sidepanel data.
 $vars['events'] = true;

@@ -13,8 +13,6 @@ GetPostObject($action, $_GET);
 
 $vars['action'] = $action;
 
-// TODO: Handle quoting.
-
 RenderPage("forums/compose.tpl");
 return;
 
@@ -52,7 +50,7 @@ function GetPostObject($action, $params) {
             $bid = $board['BoardId'];
             $vars['id'] = $bid;
             $vars['board'] = $board;
-            $vars['canLockOrSticky'] = CanUserLockOrStickyThread($user);
+            $vars['canLockOrSticky'] = CanUserLockStickyOrMarkNewsThread($user);
             return $board;
         case "reply":
             $tid = (int)$params['id'];
@@ -66,6 +64,12 @@ function GetPostObject($action, $params) {
             SetUpThreadPostHistory($posts);
             $thread['posts'] = $posts;
             $vars['thread'] = $thread;
+            GetBoard($thread['ParentBoardId'], $board);
+            // Create a fake "board" for this thread in the breadcrumb.
+            $vars['board'] = array(
+                "Name" => $thread['Title'],
+                "parentBoard" => $board,
+                "linkUrl" => "/forums/thread/$tid/");
             if (isset($_GET['quote']) && is_numeric($_GET['quote'])) {
                 $qpid = (int)$_GET['quote'];
                 $escaped_qpid = sql_escape($qpid);
@@ -97,7 +101,13 @@ function GetPostObject($action, $params) {
             $vars['id'] = $pid;
             $vars['post'] = $post;
             $vars['thread'] = $thread;
-            $vars['canLockOrSticky'] = (($post['IsThread'] == 1) && CanUserLockOrStickyThread($user));
+            GetBoard($thread['ParentBoardId'], $board);
+            // Create a fake "board" for this thread in the breadcrumb.
+            $vars['board'] = array(
+                "Name" => $thread['Title'],
+                "parentBoard" => $board,
+                "linkUrl" => "/forums/thread/$tid/");
+            $vars['canLockOrSticky'] = (($post['IsThread'] == 1) && CanUserLockStickyOrMarkNewsThread($user));
             $vars['canMoveThread'] = (($post['IsThread'] == 1) && CanUserMoveThread($user));
             if ($vars['canMoveThread']) {
                 $vars['allBoards'] = GetOrderedBoardTree();
@@ -127,12 +137,14 @@ function HandleCreateThread() {
         isset($_POST['text'])) {
         $title = $_POST['title'];
         $text = $_POST['text'];
-        if (CanUserLockOrStickyThread($user)) {
+        if (CanUserLockStickyOrMarkNewsThread($user)) {
             $sticky = isset($_POST['sticky']) ? "1" : "0";
             $locked = isset($_POST['locked']) ? "1" : "0";
+            $news = isset($_POST['news']) ? "1" : "0";
         } else {
             $sticky = "0";
             $locked = "0";
+            $news = "0";
         }
         if (mb_strlen($title) == 0) {
             PostBanner("Missing post title", "red");
@@ -149,9 +161,9 @@ function HandleCreateThread() {
         $uid = $user['UserId'];
         $bid = $vars['id'];
         sql_query("INSERT INTO ".FORUMS_POST_TABLE."
-            (UserId, Title, Text, PostDate, ParentId, IsThread, Replies, LastPostDate, Sticky, Locked)
+            (UserId, Title, Text, PostDate, ParentId, IsThread, Replies, LastPostDate, Sticky, Locked, NewsPost)
             VALUES
-            ($uid, '$escaped_title', '$escaped_text', $now, $bid, 1, 1, $now, $sticky, $locked);");
+            ($uid, '$escaped_title', '$escaped_text', $now, $bid, 1, 1, $now, $sticky, $locked, $news);");
         $pid = sql_last_id();
         UpdateBoardStats($bid);
         PostSessionBanner("Thread created", "green");
@@ -220,11 +232,13 @@ function HandleEditPost() {
         $escaped_text = sql_escape($sanitizedText);
         $sets[] = "Text='$escaped_text'";
 
-        if (CanUserLockOrStickyThread($user)) {
+        if (CanUserLockStickyOrMarkNewsThread($user)) {
             $sticky = isset($_POST['sticky']) ? "1" : "0";
             $locked = isset($_POST['locked']) ? "1" : "0";
+            $news = isset($_POST['news']) ? "1" : "0";
             $sets[] = "Sticky=$sticky";
             $sets[] = "Locked=$locked";
+            $sets[] = "NewsPost=$news";
         }
         if (CanUserMoveThread($user) && isset($_POST['move-board']) && is_numeric($_POST['move-board'])) {
             // Assume "move-board" will not be set on non-threads (as only authenticated administrators can do this anyways).

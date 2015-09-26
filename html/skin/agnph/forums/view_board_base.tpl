@@ -118,7 +118,7 @@
                 {% if board.BoardId != -1 %}
                     <li>
                         Move Board:
-                        <form style="display: inline-block;" method="POST" accept-encoding="UTF-8">
+                        <form id="move-board-form" style="display: inline-block;" method="POST" accept-encoding="UTF-8">
                             <input type="hidden" name="action" value="move-board" />
                             <select name="parent-board" onchange="document.getElementById('move-board-form').submit();return false;">
                                 {% for boardOption in allBoards %}

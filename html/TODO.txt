@@ -17,6 +17,7 @@ X Quoting
     - Move favorites over to parent?
 - Related tag suggestions in sidebar on index page
 - Some sort of tag exploration feature, perhaps tag cloud?
+- Reverse-image search links
 X "Popular" recent posts, maybe by # of views in last day/week/month?
 X Search by newly-tagged?
 X Gallery linking to source on delete

@@ -24,6 +24,7 @@ if (isset($_POST['submit'])) {
 
 $vars['welcome_message'] = SanitizeHTMLTags(GetSiteSetting(FICS_WELCOME_MESSAGE_KEY, ""), DEFAULT_ALLOWED_TAGS);
 $vars['min_word_count'] = GetSiteSetting(FICS_CHAPTER_MIN_WORD_COUNT_KEY, null);
+$vars['news_posts_board'] = GetSiteSetting(FICS_NEWS_SOURCE_BOARD_NAME, null);
 $vars['num_rand_stories'] = GetSiteSetting(FICS_NUM_RANDOM_STORIES_KEY, "");
 
 RenderPage("admin/fics/fics.tpl");
@@ -47,6 +48,17 @@ function HandlePost() {
             SetSiteSetting(FICS_CHAPTER_MIN_WORD_COUNT_KEY, $val);
         } else {
             PostSessionBanner("Invalid minimum word count", "red");
+        }
+    }
+    if (isset($_POST['news-posts-board'])) {
+        $board_name = $_POST['news-posts-board'];
+        if ($board_name != GetSiteSetting(FICS_NEWS_SOURCE_BOARD_NAME, null)) {
+            $escaped_board_name = sql_escape($board_name);
+            if (sql_query_into($result, "SELECT * FROM ".FORUMS_BOARD_TABLE." WHERE UPPER(Name)=UPPER('$escaped_board_name');", 1)) {
+                SetSiteSetting(FICS_NEWS_SOURCE_BOARD_NAME, $board_name);
+            } else {
+                PostSessionBanner("Board not found", "red");
+            }
         }
     }
     if (isset($_POST['num-rand-stories'])) {

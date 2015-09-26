@@ -20,9 +20,9 @@
                 <tr class="board-row">
                     <td class="status">
                         {% if board.unread %}
-                            <img src="/images/unread-board.png" />
+                            <img src="/images/unread-board.png" title="Unread posts" />
                         {% else %}
-                            <img src="/images/read-board.png" />
+                            <img src="/images/read-board.png" title="All posts read" />
                         {% endif %}
                     </td>
                     <td class="board-desc">

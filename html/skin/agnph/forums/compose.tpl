@@ -69,8 +69,9 @@
         </div>
         <div class="form-block">
             {% if canLockOrSticky %}
-                <input type="checkbox" name="sticky" value="sticky" {% if POST.sticky %}checked {% elseif post.Sticky %}checked {% endif %}/> Sticky Thread<br />
-                <input type="checkbox" name="locked" value="locked" {% if POST.locked %}checked {% elseif post.Locked %}checked {% endif %}/> Lock Thread<br />
+                <span class="radio-button-group"><input type="checkbox" name="sticky" value="sticky" {% if POST.sticky %}checked {% elseif post.Sticky %}checked {% endif %}/>Sticky Thread</span><br />
+                <span class="radio-button-group"><input type="checkbox" name="locked" value="locked" {% if POST.locked %}checked {% elseif post.Locked %}checked {% endif %}/>Lock Thread</span><br />
+                <span class="radio-button-group"><input type="checkbox" name="news" value="news" {% if POST.news %}checked {% elseif post.NewsPost %}checked {% endif %}/>News Post</span><br />
             {% endif %}
             {% if canMoveThread %}
                 <select name="move-board">

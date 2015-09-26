@@ -51,7 +51,7 @@ function GetPostObject($action, $params) {
             $bid = $board['BoardId'];
             $vars['id'] = $bid;
             $vars['board'] = $board;
-            $vars['canLockOrSticky'] = CanUserLockOrStickyThread($user);
+            $vars['canLockOrSticky'] = CanUserLockStickyOrMarkNewsThread($user);
             return $board;
         case "reply":
             $tid = (int)$params['id'];
@@ -81,7 +81,7 @@ function GetPostObject($action, $params) {
             $vars['id'] = $pid;
             $vars['post'] = $post;
             $vars['thread'] = $thread;
-            $vars['canLockOrSticky'] = (($post['IsThread'] == 1) && CanUserLockOrStickyThread($user));
+            $vars['canLockOrSticky'] = (($post['IsThread'] == 1) && CanUserLockStickyOrMarkNewsThread($user));
             $vars['canMoveThread'] = (($post['IsThread'] == 1) && CanUserMoveThread($user));
             if ($vars['canMoveThread']) {
                 $vars['allBoards'] = GetOrderedBoardTree();
@@ -108,7 +108,7 @@ function HandleCreateThread() {
         isset($_POST['text'])) {
         $title = $_POST['title'];
         $text = $_POST['text'];
-        if (CanUserLockOrStickyThread($user)) {
+        if (CanUserLockStickyOrMarkNewsThread($user)) {
             $sticky = isset($_POST['sticky']) ? "1" : "0";
             $locked = isset($_POST['locked']) ? "1" : "0";
         } else {
@@ -175,7 +175,7 @@ function HandleEditPost() {
         $escaped_text = sql_escape($sanitizedText);
         $sets[] = "Text='$escaped_text'";
         
-        if (CanUserLockOrStickyThread($user)) {
+        if (CanUserLockStickyOrMarkNewsThread($user)) {
             $sticky = isset($_POST['sticky']) ? "1" : "0";
             $locked = isset($_POST['locked']) ? "1" : "0";
             $sets[] = "Sticky=$sticky";

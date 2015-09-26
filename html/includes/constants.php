@@ -126,6 +126,7 @@ define("FICS_CHAPTER_MIN_WORD_COUNT_KEY", "FicsMinWordCount");
 define("DEFAULT_FICS_CHAPTER_MIN_WORD_COUNT", 500);
 define("FICS_WELCOME_MESSAGE_KEY", "FicsWelcomeMessage");
 define("FICS_NUM_RANDOM_STORIES_KEY", "FicsNumRandStories");
+define("FICS_NEWS_SOURCE_BOARD_NAME", "FicsNewsBoardName");
 define("FICS_MAX_NUM_RANDOM_STORIES", 5);
 define("DEFAULT_FICS_NUM_RANDOM_STORIES", 1);
 define("FICS_MAX_NUM_COAUTHORS", 3);

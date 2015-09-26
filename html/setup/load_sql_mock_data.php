@@ -90,7 +90,8 @@ do_or_die(sql_query(
     ('".SHORT_BAN_DURATION_KEY."', '".DEFAULT_SHORT_BAN_DURATION."'),
     ('".FICS_CHAPTER_MIN_WORD_COUNT_KEY."', '".DEFAULT_FICS_CHAPTER_MIN_WORD_COUNT."'),
     ('".FICS_WELCOME_MESSAGE_KEY."', ''),
-    ('".FICS_NUM_RANDOM_STORIES_KEY."', '".DEFAULT_FICS_NUM_RANDOM_STORIES."');"));
+    ('".FICS_NUM_RANDOM_STORIES_KEY."', '".DEFAULT_FICS_NUM_RANDOM_STORIES."'),
+    ('".FICS_NEWS_SOURCE_BOARD_NAME."', 'writing');"));
 
 function rand_date() {
     return mt_rand(0, 2147483647);

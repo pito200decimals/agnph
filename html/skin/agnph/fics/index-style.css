@@ -38,6 +38,12 @@ div {
     font-size: 110%;
     padding: 5px;
 }
+.block .header .tagline {
+    padding: 5px;
+    font-size: 70%;
+    font-weight: normal;
+    float: right;
+}
 .block .content {
     padding: 10px;
     background-color: rgb(191,223,255);

@@ -174,6 +174,11 @@ function HandlePost($board) {
                 PostSessionBanner("Error moving board", "red");
                 break;
             }
+            if (HasChildBoardId($board, $pid)) {
+                // Board can't become its own child.
+                PostSessionBanner("Can't move board to be its own child.", "red");
+                break;
+            }
             // Re-compute old placement.
             $old_pid = $board['ParentId'];
             if (sql_query_into($result, "SELECT * FROM ".FORUMS_BOARD_TABLE." WHERE ParentId=$old_pid ORDER BY BoardSortOrder ASC;", 1)) {
@@ -298,7 +303,7 @@ function HandlePost($board) {
                 sql_query("UPDATE ".FORUMS_BOARD_TABLE." SET Name='$escaped_name', Description='$escaped_description' WHERE BoardId=$bid;");
             }
             // Manually redirect to new board name.
-            $final_url = "/forums/board/".urlencode($name)."/";
+            $final_url = "/forums/board/".urlencode(mb_strtolower($name))."/";
             header("Location: $final_url");
             exit();
         default:
