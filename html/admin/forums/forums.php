@@ -2,6 +2,7 @@
 // Main control panel for admin operations.
 
 include_once("../../header.php");
+include_once(SITE_ROOT."includes/util/html_funcs.php");
 include_once(SITE_ROOT."includes/util/user.php");
 include_once(SITE_ROOT."admin/includes/functions.php");
 
@@ -14,7 +15,31 @@ if (!$vars['canAdminForums']) {
     DoRedirect();
 }
 
-RenderPage("admin/base.tpl");
+if (isset($_POST['submit'])) {
+    HandlePost();
+    PostSessionBanner("Settings changed", "green");
+    header("Location: ".$_SERVER['REQUEST_URI']);
+    exit();
+}
+
+$vars['news_posts_board'] = GetSiteSetting(FORUMS_NEWS_SOURCE_BOARD_NAME_KEY, null);
+
+RenderPage("admin/forums/forums.tpl");
 return;
+
+
+function HandlePost() {
+    if (isset($_POST['news-posts-board'])) {
+        $board_name = $_POST['news-posts-board'];
+        if ($board_name != GetSiteSetting(FORUMS_NEWS_SOURCE_BOARD_NAME_KEY, null)) {
+            $escaped_board_name = sql_escape($board_name);
+            if (sql_query_into($result, "SELECT * FROM ".FORUMS_BOARD_TABLE." WHERE UPPER(Name)=UPPER('$escaped_board_name');", 1)) {
+                SetSiteSetting(FORUMS_NEWS_SOURCE_BOARD_NAME_KEY, $board_name);
+            } else {
+                PostSessionBanner("Board not found", "red");
+            }
+        }
+    }
+}
 
 ?>

@@ -49,6 +49,7 @@
             <tr><td>Registration agreement</td><td><textarea name="register-message">{{ register_message }}</textarea></td></tr>
             <tr><td>Duration of Bans</td><td><input name="short-ban-duration" value="{{ short_ban_duration }}" /></td></tr>
             <tr><td>Maintenance Mode</td><td><input type="checkbox" name="maintenance-mode" value="yes" {% if is_maintenance_mode %}checked {% endif %}/></td></tr>
+            <tr><td><label>Board for News Posts:</label></td><td><input name="news-posts-board" type="text" value="{{ news_posts_board }}" /></td></tr>
         </table>
         <input type="submit" name="submit" value="Save Changes" />
     </form>

@@ -170,7 +170,7 @@ if (isset($_POST['display-name']) &&
     }
     // Skin
     if ($_POST['skin'] != $profile_user['Skin']) {
-        if (contains($_POST['skin'], ".") || contains($_POST['skin'], "/") || contains($_POST['skin'], "\\")) {
+        if (contains($_POST['skin'], ".") || contains($_POST['skin'], "/") || contains($_POST['skin'], "\\") || !in_array($_POST['skin'], $vars['availableSkins'])) {
             PostErrorMessage("Invalid site skin");
         } else {
             $escaped_skin = sql_escape(mb_strtolower($_POST['skin']));
@@ -414,9 +414,6 @@ if (isset($user)) {
         $profile_user['ips'] = $profile_user['RegisterIP'].",".$profile_user['KnownIPs'];
     }
 }
-
-// Set up skins.
-$vars['availableSkins'] = array_map("basename", array_filter(glob(SITE_ROOT."skin/*"), "is_dir"));
 
 // This is how to output the template.
 RenderPage("user/preferences.tpl");

@@ -22,6 +22,10 @@
 170,200,255 (board group) [Including style.css help block]
 191,223,255 (board)
 
+# fics/index-style.css
+159,182,211 (index block header)
+191,223,255 (index block contents)
+
 # fics/story-style.css
 191,223,255 (notes box)
 191,223,255 (comments selected tab)

@@ -25,6 +25,7 @@ if (isset($_POST['submit'])) {
 $vars['site_welcome_message'] = SanitizeHTMLTags(GetSiteSetting(SITE_WELCOME_MESSAGE_KEY, ""), DEFAULT_ALLOWED_TAGS);
 $vars['register_message'] = SanitizeHTMLTags(GetSiteSetting(REGISTER_DISCLAIMER_KEY, ""), DEFAULT_ALLOWED_TAGS);
 $vars['short_ban_duration'] = FormatShortDuration(GetSiteSetting(SHORT_BAN_DURATION_KEY, ""));
+$vars['news_posts_board'] = GetSiteSetting(SITE_NEWS_SOURCE_BOARD_NAME_KEY, null);
 
 RenderPage("admin/site/site.tpl");
 return;
@@ -58,6 +59,17 @@ function HandlePost() {
         SetSiteSetting(MAINTENANCE_MODE_KEY, "true");
     } else {
         SetSiteSetting(MAINTENANCE_MODE_KEY, "false");
+    }
+    if (isset($_POST['news-posts-board'])) {
+        $board_name = $_POST['news-posts-board'];
+        if ($board_name != GetSiteSetting(SITE_NEWS_SOURCE_BOARD_NAME_KEY, null)) {
+            $escaped_board_name = sql_escape($board_name);
+            if (sql_query_into($result, "SELECT * FROM ".FORUMS_BOARD_TABLE." WHERE UPPER(Name)=UPPER('$escaped_board_name');", 1)) {
+                SetSiteSetting(SITE_NEWS_SOURCE_BOARD_NAME_KEY, $board_name);
+            } else {
+                PostSessionBanner("Board not found", "red");
+            }
+        }
     }
 }
 ?>

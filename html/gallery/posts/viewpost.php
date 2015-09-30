@@ -90,6 +90,11 @@ if ($post['HasPreview']) {
     $post['previewUrl'] = GetSiteImagePath($md5, $ext);
 }
 $post['downloadUrl'] = GetSiteImagePath($md5, $ext);
+// Concatenate reverse-image search urls.
+$post['googleUrl'] = "http://google.com/searchbyimage?image_url=".SITE_DOMAIN.GetSiteImagePath($md5, $ext);
+$post['saucenaoUrl'] = "http://saucenao.com/search.php?url=".SITE_DOMAIN.GetSiteImagePath($md5, $ext);
+$post['iqdbUrl'] = "http://iqdb.org/?url=".SITE_DOMAIN.GetSiteImagePath($md5, $ext);
+$post['harryluUrl'] = "http://iqdb.harry.lu/?url=".SITE_DOMAIN.GetSiteImagePath($md5, $ext);
 
 // Process tags.
 $tags = GetTags($post['PostId']);

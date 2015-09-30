@@ -108,6 +108,21 @@
     max-width: 275px;
     padding: 0px;
 }
+
+/* Reverse image search */
+.reverse-image-search-list {
+    margin: 0px;
+    padding: 0px;
+}
+.reverse-image-search-list li {
+    margin-left: 0px;
+    display: block;
+    overflow: hidden;
+    max-width: 275px;
+    padding: 0px;
+    font-size: 80%;
+}
+
 .pooleditbox {
     display: none;
     margin-left: 20px;

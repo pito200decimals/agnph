@@ -272,6 +272,13 @@
                         {% if prevPostId %}<li><a href="/gallery/post/show/{{ prevPostId }}/">Previous</a></li>{% endif %}
                         {% if nextPostId %}<li><a href="/gallery/post/show/{{ nextPostId }}/">Next</a></li>{% endif %}
                         <li><a href="/gallery/post/random/">Random</a></li>
+                        <li>&nbsp;</li>
+                    </ul>
+                    <ul class="reverse-image-search-list">
+                        <li><a href="{{ post.googleUrl }}">Reverse Google Search</a></li>
+                        <li><a href="{{ post.saucenaoUrl }}">Reverse SauceNao Search</a></li>
+                        <li><a href="{{ post.iqdbUrl }}">Reverse IQDB Search</a></li>
+                        <li><a href="{{ post.harryluUrl }}">Reverse harry.lu Search</a></li>
                     </ul>
                 </li>
             </ul>

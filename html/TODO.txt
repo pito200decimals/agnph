@@ -2,14 +2,11 @@ TODOs
 (* = Required for launch, - = Normal priority, X = Scrapped)
 
 == FORUMS ==
-- Admin control panel?
 - Search?
     - Profile user subpage for forums
     - Also show all unread posts/threads.
-X Link up news forum to other index pages?
-    - Optional large first posts in a thread?
-X Quoting
-    - With headers denoting source
+- Thread/post icons
+- Optional large first posts in a thread (for news posts?)
 
 == GALLERY ==
 - Slideshow view
@@ -17,7 +14,6 @@ X Quoting
     - Move favorites over to parent?
 - Related tag suggestions in sidebar on index page
 - Some sort of tag exploration feature, perhaps tag cloud?
-- Reverse-image search links
 X "Popular" recent posts, maybe by # of views in last day/week/month?
 X Search by newly-tagged?
 X Gallery linking to source on delete
@@ -28,7 +24,6 @@ X Gallery notes
 X Custom swf/webm thumbs when parent is set to image.
 
 == FICS ==
-- Index page, including news and featured stories, perhaps random selection
 X Author/Story following?
 X Ability to subscribe for email/PM notifications (for your stories and watching others)
 X Breakdown of views per-chapter
@@ -39,13 +34,13 @@ X RSS Feed?
 * Check for vuln's for style background-image URL
 * Search string length attacks.
 * Splash for Disclaimer/Warning/Age gate.
-    - Add disclaimer banner?
+    - Add disclaimer banner to non-splash-blocked pages.
+    - Also exempt bots from blocking
 * Oekaki section
-* Admin site management (Ongoing)
+    - Just a direct way to post to the forums?
 * General help pages
 * General about section, admin bios, etc.
 - Admin ticket system
-- Link news from forums to each section/home page?
 - Global site statistics?
 - Way to push notifications and site updates to users (via PM system?)
     - Include welcome message, and account migration message on registration.
@@ -53,10 +48,9 @@ X RSS Feed?
 - All CSS
 - Multiple themes?
 - Admin sitewide settings
-    - Registration messages, welcome messages, etc.
+- Theme switcher for guests (Works, figure out where on the template is a good location).
 - BUGFIX: Tags are lost on fail-to-submit in fancy tagger UI.
 X Polls?
-X Theme switcher for guests?
 
 == ACCOUNT ==
 * Mailbox/PM system

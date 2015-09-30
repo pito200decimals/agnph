@@ -51,6 +51,8 @@
             <tr><td><label>Board for News Posts:</label></td><td><input name="news-posts-board" type="text" value="{{ news_posts_board }}" /></td></tr>
             <tr><td><label>Random stories on Index:</label></td><td><input name="num-rand-stories" type="text" value="{{ num_rand_stories }}" /></td></tr>
             <tr><td><label>Chapter Minimum Word Count:</label></td><td><input name="min-word-count" type="text" value="{{ min_word_count }}" /></td></tr>
+            <tr><td><label>Current events:</label></td><td></td></tr>
+            <tr><td colspan="2"><textarea name="events">{% autoescape false %}{{ events_list }}{% endautoescape %}</textarea></td></tr>
         </table>
         <input type="submit" name="submit" value="Save Changes" />
     </form>

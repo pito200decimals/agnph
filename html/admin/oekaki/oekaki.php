@@ -11,7 +11,7 @@ if (!isset($user)) {
     return;
 }
 ComputePageAccess($user);
-if (!$vars['canAdminGallery']) {
+if (!$vars['canAdminOekaki']) {
     DoRedirect();
 }
 
@@ -22,19 +22,19 @@ if (isset($_POST['submit'])) {
     exit();
 }
 
-$vars['news_posts_board'] = GetSiteSetting(GALLERY_NEWS_SOURCE_BOARD_NAME_KEY, null);
+$vars['news_posts_board'] = GetSiteSetting(OEKAKI_NEWS_SOURCE_BOARD_NAME_KEY, null);
 
-RenderPage("admin/gallery/gallery.tpl");
+RenderPage("admin/oekaki/oekaki.tpl");
 return;
 
 
 function HandlePost() {
     if (isset($_POST['news-posts-board'])) {
         $board_name = $_POST['news-posts-board'];
-        if ($board_name != GetSiteSetting(GALLERY_NEWS_SOURCE_BOARD_NAME_KEY, null)) {
+        if ($board_name != GetSiteSetting(OEKAKI_NEWS_SOURCE_BOARD_NAME_KEY, null)) {
             $escaped_board_name = sql_escape($board_name);
             if (sql_query_into($result, "SELECT * FROM ".FORUMS_BOARD_TABLE." WHERE UPPER(Name)=UPPER('$escaped_board_name');", 1)) {
-                SetSiteSetting(GALLERY_NEWS_SOURCE_BOARD_NAME_KEY, $board_name);
+                SetSiteSetting(OEKAKI_NEWS_SOURCE_BOARD_NAME_KEY, $board_name);
             } else {
                 PostSessionBanner("Board not found", "red");
             }

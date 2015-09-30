@@ -112,6 +112,11 @@ define("AVATAR_UPLOAD_EXTENSION", "png");
 define("MAX_AVATAR_UPLOAD_DIMENSIONS", 200);
 define("IMPORTED_ACCOUNT_USERNAME_PREFIX", "imported-");  // Normal usernames can't have hyphens.
 define("MIN_COMMENT_STRING_SIZE", 10);  // TODO: Enforce everywhere.
+define("SITE_NEWS_SOURCE_BOARD_NAME_KEY", "SiteNewsBoardName");
+define("FORUMS_NEWS_SOURCE_BOARD_NAME_KEY", "ForumsNewsBoardName");
+define("GALLERY_NEWS_SOURCE_BOARD_NAME_KEY", "GalleryNewsBoardName");
+define("FICS_NEWS_SOURCE_BOARD_NAME_KEY", "FicsNewsBoardName");
+define("OEKAKI_NEWS_SOURCE_BOARD_NAME_KEY", "OekakiNewsBoardName");
 define("GALLERY_THUMB_FILE_EXTENSION", "png");  // Don't change once gallery starts indexing.
 define("MAX_GALLERY_IMAGE_THUMB_SIZE", 200);
 define("MAX_GALLERY_IMAGE_PREVIEW_SIZE", 1200);
@@ -126,7 +131,7 @@ define("FICS_CHAPTER_MIN_WORD_COUNT_KEY", "FicsMinWordCount");
 define("DEFAULT_FICS_CHAPTER_MIN_WORD_COUNT", 500);
 define("FICS_WELCOME_MESSAGE_KEY", "FicsWelcomeMessage");
 define("FICS_NUM_RANDOM_STORIES_KEY", "FicsNumRandStories");
-define("FICS_NEWS_SOURCE_BOARD_NAME", "FicsNewsBoardName");
+define("FICS_EVENTS_LIST_KEY", "FicsEvents");
 define("FICS_MAX_NUM_RANDOM_STORIES", 5);
 define("DEFAULT_FICS_NUM_RANDOM_STORIES", 1);
 define("FICS_MAX_NUM_COAUTHORS", 3);
@@ -138,6 +143,9 @@ define("DEFAULT_PAGE_ITERATOR_SIZE", 2);  // 2 => 1 ... 5 6 [7] 8 9 ... 12
 define("BASE_SKIN", "agnph");  // Skin to default values to if skin omits files.
 define("DEFAULT_AVATAR_PATH", "/images/default-avatar.png");
 define("DEFAULT_DATE_FORMAT", "Y-m-d H:i:s");
+define("NEWS_POST_DATE_FORMAT", "M j Y");
+define("MAX_SITE_NEWS_POSTS_KEY", "MaxSiteNewsPosts");
+define("DEFAULT_MAX_SITE_NEWS_POSTS", 5);
 define("PROFILE_DATE_FORMAT", "M j Y");  // For register date.
 define("PROFILE_DATE_TIME_FORMAT", "g:i A M j Y");  // For last visit time.
 define("PROFILE_MAIL_DATE_FORMAT_SHORT", "g:i A");

@@ -7,6 +7,8 @@ include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."includes/util/user.php");
 include_once(SITE_ROOT."includes/util/table_data.php");
 include_once(SITE_ROOT."user/includes/functions.php");
+include_once(SITE_ROOT."gallery/includes/functions.php");
+include_once(SITE_ROOT."fics/includes/functions.php");
 
 if (!isset($user)) {
     RenderErrorPage("Must be logged in to access this page");
@@ -39,16 +41,16 @@ function HandlePost() {
     $service = $_POST['service'];
     switch ($service) {
         case "forums":
-            ProcessPost("SMF_sha", "forums", "ImportForumsPassword");
+            ProcessPost("SMF_sha", $service, "ImportForumsPassword");
             break;
         case "gallery":
             // HandleGalleryPost();
             break;
         case "fics":
-            ProcessPost(function ($u, $p) { return md5($p); }, "fics", "ImportFicsPassword");
+            ProcessPost(function ($u, $p) { return md5($p); }, $service, "ImportFicsPassword");
             break;
         case "oekaki":
-            ProcessPost(function($u, $p) { return crypt($p, OEKAKI_CRYPT_SALT); }, "oekaki", "ImportOekakiPassword");
+            ProcessPost(function($u, $p) { return crypt($p, OEKAKI_CRYPT_SALT); }, $service, "ImportOekakiPassword");
             break;
         default:
             return;
@@ -64,8 +66,11 @@ function ProcessPost($hash_fn, $section, $field) {
         $hashed_password = $hash_fn($username, $password);
         if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UPPER(Username)=UPPER('$escaped_username') AND RegisterIP='' LIMIT 1;", 1)) {
             $old_user = $result->fetch_assoc();
-            $expected_hashed_password = $old_user[$field];
-            if ($hashed_password == $expected_hashed_password) {
+            if ($hashed_password == $old_user[$field]) {
+                MigrateAccount($old_user['UserId']);
+                success("Account linked successfully");
+            } else if (md5($password) == $old_user['Password']) {  // Also allow this so admins can reset imported accounts' passwords if necessary.
+                // Note: Normal accounts are protected because they don't have the correct prefix.
                 MigrateAccount($old_user['UserId']);
                 success("Account linked successfully");
             } else {
@@ -124,9 +129,10 @@ function MigrateAccount($uid) {
     // For mailbox, we shouldn't be able to send any messages to these accounts. Just delete any messages we find.
     sql_query("DELETE FROM ".USER_MAILBOX_TABLE." WHERE SenderUserId=$uid;");
     sql_query("DELETE FROM ".USER_MAILBOX_TABLE." WHERE RecipientUserId=$uid;");
-    // For favorites, these should not exist for imported accounts (Normally, statistics would need to be updated).
-    sql_query("DELETE FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE UserId=$uid;");
-    sql_query("DELETE FROM ".FICS_USER_FAVORITES_TABLE." WHERE UserId=$uid;");
+    // Move favorites to new account, and update item stats.
+    MoveFavorites(GALLERY_USER_FAVORITES_TABLE, "PostId", "UpdatePostStatistics", $uid, $new_uid);
+    MoveFavorites(FICS_USER_FAVORITES_TABLE, "StoryId", "UpdateStoryStats", $uid, $new_uid);
+
     // For story co-authors, search and replace them manually.
     if (sql_query_into($result, "SELECT * FROM ".FICS_STORY_TABLE." WHERE INSTR(CONCAT(',', CoAuthors, ','), ',$uid,') <> 0);", 1)) {
         $stories = array();
@@ -148,6 +154,41 @@ function MigrateAccount($uid) {
     $account_uid = $old_user['UserId'];;
     $account_username = $old_user['DisplayName'];
     LogAction("<strong><a href='/user/$user_uid/'>$user_username</a></strong> imported old account <strong><a href='/user/$account_uid/'>$account_username</a></strong>", "");
+}
+
+function MoveFavorites($favorites_table, $item_name, $update_item_stats_fn, $old_user_id, $new_user_id) {
+    $old_fav_ids = array();
+    if (sql_query_into($result, "SELECT $item_name AS id FROM $favorites_table WHERE UserId=$old_user_id;", 1)) {
+        while ($row = $result->fetch_assoc()) {
+            $old_fav_ids[] = $row['id'];
+        }
+    }
+    $new_fav_ids = array();
+    if (sql_query_into($result, "SELECT $item_name AS id FROM $favorites_table WHERE UserId=$new_user_id;", 1)) {
+        while ($row = $result->fetch_assoc()) {
+            $new_fav_ids[] = $row['id'];
+        }
+    }
+    $faves_to_move = array();
+    $faves_to_delete = array();
+    foreach ($old_fav_ids as $fid) {
+        if (in_array($fid, $new_fav_ids)) {
+            $faves_to_delete[] = $fid;
+        } else {
+            $faves_to_move[] = $fid;
+        }
+    }
+    if (sizeof($faves_to_move) > 0) {
+        $joined_to_move = implode(",", $faves_to_move);
+        sql_query("UPDATE $favorites_table SET UserId=$new_user_id WHERE UserId=$old_user_id AND $item_name IN ($joined_to_move);");
+    }
+    if (sizeof($faves_to_delete) > 0) {
+        $joined_to_delete = implode(",", $faves_to_delete);
+        sql_query("DELETE FROM $favorites_table WHERE UserId=$old_user_id AND $item_name IN ($joined_to_delete);");
+    }
+    foreach ($old_fav_ids as $fid) {
+        $update_item_stats_fn($fid);
+    }
 }
 
 ///////////////////////////////////

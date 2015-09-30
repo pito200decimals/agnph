@@ -132,7 +132,6 @@ function GetSiteSetting($key, $default_value="", $fresh=false) {
             }
         }
     }
-    debug($data_table);
     if (isset($data_table[$key])) return $data_table[$key];
     return $default_value;
 }
@@ -195,26 +194,36 @@ function SetHeaderHighlight() {
     $url = $_SERVER['REQUEST_URI'];
     if ($url == "/" || $url == "") {
         $vars['nav_section'] = "home";
+        $vars['_title'] = "AGNPH - Home";
     } else if (startsWith($url, "/forums")) {
         $vars['nav_section'] = "forums";
+        $vars['_title'] = "AGNPH - Forums";
     } else if (startsWith($url, "/gallery")) {
         $vars['nav_section'] = "gallery";
+        $vars['_title'] = "AGNPH - Gallery";
     } else if (startsWith($url, "/fics")) {
         $vars['nav_section'] = "fics";
+        $vars['_title'] = "AGNPH - Fics";
     } else if (startsWith($url, "/user/list")) {
         $vars['nav_section'] = "user";
+        $vars['_title'] = "AGNPH - Users";
     } else if (preg_match("#^/user/\d+/preferences.*$#", $url)) {
         $vars['nav_section'] = "account_preferences";
+        $vars['_title'] = "AGNPH - Preferences";
     } else if (preg_match("#^/user/\d+/mail.*$#", $url)) {
         $vars['nav_section'] = "mail";
+        $vars['_title'] = "AGNPH - Messages";
     } else if (preg_match("#^/user/\d+.*$#", $url)) {
         $vars['nav_section'] = "user";
+        $vars['_title'] = "AGNPH - Users";
     } else if (startsWith($url, "/user/account/link")) {
         $vars['nav_section'] = "link_account";
     } else if (startsWith($url, "/about")) {
         $vars['nav_section'] = "about";
+        $vars['_title'] = "AGNPH - About";
     } else if (startsWith($url, "/admin")) {
         $vars['nav_section'] = "admin";
+        $vars['_title'] = "AGNPH - Admin";
     }
 }
 

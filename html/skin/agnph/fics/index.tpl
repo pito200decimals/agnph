@@ -9,9 +9,8 @@
 
 {% block styles %}
     {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('/index-style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('/fics/index-style.css') }}" />
-    <style>
-    </style>
 {% endblock %}
 
 
@@ -108,7 +107,7 @@
             {% if events %}
                 <div class="block">
                     <div class="header">Events</div>
-                    <div class="content">Left</div>
+                    <div class="content">{% autoescape false %}{{ events }}{% endautoescape %}</div>
                 </div>
             {% endif %}
         </div>

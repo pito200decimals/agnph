@@ -38,6 +38,11 @@ switch ($filter) {
         $name = "Fics";
         $sql_filter = "F";
         break;
+    case "oekaki":
+        $perm = "canAdminOekaki";
+        $name = "Oekaki";
+        $sql_filter = "O";
+        break;
     default:
         InvalidURL();
         break;
@@ -74,6 +79,9 @@ foreach ($log_entries as &$entry) {
             break;
         case "F":
             $entry['section'] = "Fics";
+            break;
+        case "O":
+            $entry['section'] = "Oekaki";
             break;
         default:
             $entry['section'] = "Unknown (".$entry['Section'].")";

@@ -54,7 +54,8 @@ do_or_die(sql_query(
     (2, 'Sig of User2', 'N'),
     (3, 'Sig of User3', 'N'),
     (4, '', 'N'),
-    (5, '', 'N');"));
+    (5, '', 'N'),
+    (6, '', 'N');"));
 do_or_die(sql_query(
    "INSERT INTO ".GALLERY_USER_PREF_TABLE."
     (UserId, GalleryPermissions)
@@ -63,7 +64,8 @@ do_or_die(sql_query(
     (2, 'C'),
     (3, 'N'),
     (4, 'N'),
-    (5, 'N');"));
+    (5, 'N'),
+    (6, 'N');"));
 do_or_die(sql_query(
    "INSERT INTO ".FICS_USER_PREF_TABLE."
     (UserId, FicsPermissions)
@@ -72,13 +74,15 @@ do_or_die(sql_query(
     (2, 'A'),
     (3, 'N'),
     (4, 'N'),
-    (5, 'N');"));
+    (5, 'N'),
+    (6, 'N');"));
 
 WriteBio(1, "Bio of User1!<br />TEST");
 WriteBio(2, "Bio of User2!");
 WriteBio(3, "Bio of User3!");
 WriteBio(4, "");
 WriteBio(5, "");
+WriteBio(6, "");
 
 // Set up site settings defaults.
 do_or_die(sql_query(
@@ -91,7 +95,12 @@ do_or_die(sql_query(
     ('".FICS_CHAPTER_MIN_WORD_COUNT_KEY."', '".DEFAULT_FICS_CHAPTER_MIN_WORD_COUNT."'),
     ('".FICS_WELCOME_MESSAGE_KEY."', ''),
     ('".FICS_NUM_RANDOM_STORIES_KEY."', '".DEFAULT_FICS_NUM_RANDOM_STORIES."'),
-    ('".FICS_NEWS_SOURCE_BOARD_NAME."', 'writing');"));
+    ('".SITE_NEWS_SOURCE_BOARD_NAME_KEY."', 'news'),
+    ('".FORUMS_NEWS_SOURCE_BOARD_NAME_KEY."', ''),
+    ('".GALLERY_NEWS_SOURCE_BOARD_NAME_KEY."', ''),
+    ('".FICS_NEWS_SOURCE_BOARD_NAME_KEY."', 'writing'),
+    ('".OEKAKI_NEWS_SOURCE_BOARD_NAME_KEY."', ''),
+    ('".MAX_SITE_NEWS_POSTS_KEY."', '".DEFAULT_MAX_SITE_NEWS_POSTS."');"));
 
 function rand_date() {
     return mt_rand(0, 2147483647);
@@ -245,6 +254,9 @@ CreateGalleryPost("ba395299b5abdaaabb99938ab249283c", "jpg", array("umbreon","fl
 CreateGalleryPost("a096c523ac2044bc6ed13f069f474bf9", "jpg", array("flygon","male", "solo"));
 // */
 CreateGalleryPost("b4778c99464f01b56d8c3611143aad6f", "jpg", array("typhlosion","floatzel","male", "female"));
+
+sql_query("INSERT INTO ".GALLERY_USER_FAVORITES_TABLE." (PostId, UserId) VALUES (15, 1),(14, 5),(15, 5);");
+sql_query("INSERT INTO ".FICS_USER_FAVORITES_TABLE." (StoryId, UserId) VALUES (1, 1),(1, 6),(2, 6);");
 
 function CreateLotsOfFakeGallery($n) {
     for ($p = 0; $p < $n; $p+=100) {

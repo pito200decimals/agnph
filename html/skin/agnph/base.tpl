@@ -29,9 +29,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        {% block head %}
-            <title>AGNPH</title>
-        {% endblock %}
+        <title>{% if _title %}{{ _title }}{% else %}{% block title %}AGNPH{% endblock %}{% endif %}</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script src="{{ asset('/base.js') }}"></script>
         {% block scripts %}
@@ -95,6 +93,7 @@
                     <li{% if nav_section=="forums" %} class="selected-nav"{% endif %}><a href="/forums/board/">Forums</a></li>
                     <li{% if nav_section=="gallery" %} class="selected-nav"{% endif %}><a href="/gallery/post/">Gallery</a></li>
                     <li{% if nav_section=="fics" %} class="selected-nav"{% endif %}><a href="/fics/">Fics</a></li>
+                    <li{% if nav_section=="oekaki" %} class="selected-nav"{% endif %}><a href="/oekaki/">Oekaki</a></li>
                     <li{% if nav_section=="user" %} class="selected-nav"{% endif %}><a href="/user/list/">Users</a></li>
                     <li{% if nav_section=="about" %} class="selected-nav"{% endif %}><a href="/about/">About</a></li>
                     {% if user.showAdminTab %}<li{% if nav_section=="admin" %} class="selected-nav"{% endif %}><a href="/admin/">Admin</a></li>{% endif %}
@@ -127,12 +126,28 @@
                     {% endblock %}
                 {% endif %}
             </div>
+            {#
+                TODO: Is this a good location to put sitewide theme switcher?
+            #}
+            <div style="padding: 10px;">
+                <span style="float: left; font-size: 80%;">
+                    Theme: <br/>
+                    <form id="skin-switcher" action="/change-skin/" method="POST" accept-encoding="UTF-8">
+                        <select name="skin" onchange="document.getElementById('skin-switcher').submit();">
+                            {% for s in availableSkins %}
+                                <option{% if s == skin %} selected{% endif %}>{{ s }}</option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                </span>
+                <div class="Clear" style="display: block">&nbsp;</div>
+            </div>
             <div class="Clear" style="display: block">&nbsp;</div>
         </div>
         <div id="footer">
             <div><span>© 1996-2015 AGNPH</span> | <span>v{{ version }}</span></div>
             {# TODO: Links #}
-            <div><span><a href="">Terms of Service</a></span> | <span><a href="">Rules</a></span> | <span><a href="">Contact Us</a></span></div>
+            <div><span><a href="">Terms of Service</a></span> | <span><a href="/about/rules/">Rules</a></span> | <span><a href="">Contact Us</a></span></div>
             <div><span><small>All fanworks within are based on Pokémon. Pokémon © Nintendo/Creatures, Inc./GAME FREAK/The Pokémon Company. All work contained within this website are user-submitted, fan-made contributions. No copyright infringement is intended.</small></span></div>
         </div>
     </body>

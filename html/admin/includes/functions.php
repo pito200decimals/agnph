@@ -9,6 +9,7 @@ function ComputePageAccess($user) {
     $vars['canAdminForums'] = false;
     $vars['canAdminGallery'] = false;
     $vars['canAdminFics'] = false;
+    $vars['canAdminOekaki'] = false;
     $perms = str_split($user['Permissions']);
     foreach ($perms as $char) {
         switch ($char) {
@@ -17,6 +18,7 @@ function ComputePageAccess($user) {
                 $vars['canAdminForums'] = true;
                 $vars['canAdminGallery'] = true;
                 $vars['canAdminFics'] = true;
+                $vars['canAdminOekaki'] = true;
                 break;
             case 'R':
                 $vars['canAdminForums'] = true;
@@ -28,7 +30,7 @@ function ComputePageAccess($user) {
                 $vars['canAdminFics'] = true;
                 break;
             case 'O':
-                // TODO: Oekaki permissions.
+                $vars['canAdminOekaki'] = true;
                 break;
             default:
                 break;
@@ -49,6 +51,10 @@ function DoRedirect() {
     }
     if ($vars['canAdminFics']) {
         header("Location: /admin/fics/");
+        exit();
+    }
+    if ($vars['canAdminOekaki']) {
+        header("Location: /admin/oekaki/");
         exit();
     }
     RenderErrorPage("Not authorized to access this page");

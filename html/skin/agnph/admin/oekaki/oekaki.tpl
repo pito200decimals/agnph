@@ -2,11 +2,8 @@
 
 {% block sub_section_navigation %}
     <ul class="section-nav">
-        <li id="selected-gallery-tab"><a href="/admin/gallery/">Settings</a></li>
-        <li><a href="/admin/gallery/tags/">Tags</a></li>
-        <li><a href="/admin/gallery/edit-history/">Edit History</a></li>
-        <li><a href="/admin/gallery/description-history/">Description History</a></li>
-        <li><a href="/admin/gallery/log/">Log</a></li>
+        <li id="selected-oekaki-tab"><a href="/admin/oekaki/">Settings</a></li>
+        <li><a href="/admin/oekaki/log/">Log</a></li>
     </ul>
 {% endblock %}
 
@@ -17,10 +14,10 @@
             vertical-align: top;
             padding-bottom: 10px;
         }
-        #gallery-admin-tab {
+        #oekaki-admin-tab {
             background-color: rgb(191,223,255);
         }
-        #selected-gallery-tab {
+        #selected-oekaki-tab {
             background-color: rgb(191,223,255);
         }
     </style>
@@ -31,7 +28,7 @@
 {% endblock %}
 
 {% block content %}
-    <h3>Gallery Administrator Control Panel</h3>
+    <h3>Oekaki Administrator Control Panel</h3>
     {{ block('banner') }}
     <form action="" method="POST" accept-encoding="UTF-8">
         <table>

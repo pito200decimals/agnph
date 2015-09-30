@@ -24,8 +24,9 @@ if (isset($_POST['submit'])) {
 
 $vars['welcome_message'] = SanitizeHTMLTags(GetSiteSetting(FICS_WELCOME_MESSAGE_KEY, ""), DEFAULT_ALLOWED_TAGS);
 $vars['min_word_count'] = GetSiteSetting(FICS_CHAPTER_MIN_WORD_COUNT_KEY, null);
-$vars['news_posts_board'] = GetSiteSetting(FICS_NEWS_SOURCE_BOARD_NAME, null);
-$vars['num_rand_stories'] = GetSiteSetting(FICS_NUM_RANDOM_STORIES_KEY, "");
+$vars['news_posts_board'] = GetSiteSetting(FICS_NEWS_SOURCE_BOARD_NAME_KEY, null);
+$vars['num_rand_stories'] = GetSiteSetting(FICS_NUM_RANDOM_STORIES_KEY, "0");
+$vars['events_list'] = GetSiteSetting(FICS_EVENTS_LIST_KEY, null);
 
 RenderPage("admin/fics/fics.tpl");
 return;
@@ -52,10 +53,10 @@ function HandlePost() {
     }
     if (isset($_POST['news-posts-board'])) {
         $board_name = $_POST['news-posts-board'];
-        if ($board_name != GetSiteSetting(FICS_NEWS_SOURCE_BOARD_NAME, null)) {
+        if ($board_name != GetSiteSetting(FICS_NEWS_SOURCE_BOARD_NAME_KEY, null)) {
             $escaped_board_name = sql_escape($board_name);
             if (sql_query_into($result, "SELECT * FROM ".FORUMS_BOARD_TABLE." WHERE UPPER(Name)=UPPER('$escaped_board_name');", 1)) {
-                SetSiteSetting(FICS_NEWS_SOURCE_BOARD_NAME, $board_name);
+                SetSiteSetting(FICS_NEWS_SOURCE_BOARD_NAME_KEY, $board_name);
             } else {
                 PostSessionBanner("Board not found", "red");
             }
@@ -69,6 +70,15 @@ function HandlePost() {
             SetSiteSetting(FICS_NUM_RANDOM_STORIES_KEY, $val);
         } else {
             PostSessionBanner("Invalid number of random stories", "red");
+        }
+    }
+    if (isset($_POST['events'])) {
+        $msg = SanitizeHTMLTags($_POST['events'], DEFAULT_ALLOWED_TAGS);
+        if ($msg != GetSiteSetting(FICS_EVENTS_LIST_KEY, "")) {
+            if (mb_strlen(SanitizeHTMLTags($msg, "")) == 0) {
+                $msg = "";
+            }
+            SetSiteSetting(FICS_EVENTS_LIST_KEY, $msg);
         }
     }
 }
