@@ -1,10 +1,5 @@
 {% extends 'fics/base.tpl' %}
 
-{% block styles %}
-    {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/fics/storyindex-style.css') }}" />
-{% endblock %}
-
 {% block scripts %}
     {{ parent() }}
     {#

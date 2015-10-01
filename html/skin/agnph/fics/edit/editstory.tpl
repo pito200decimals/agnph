@@ -301,7 +301,6 @@
             {% else %}
                 <textarea id="tags" class="tagbox" name="tags">{{ formstory.tagstring }}</textarea>
             {% endif %}
-            <span id="gender-warning" class="tag-warning"><br />Tags should include the character's gender or pairing (e.g. Female, Male/Female, Sexless)</span>
         </div>
 
         {% if edit and chapters %}

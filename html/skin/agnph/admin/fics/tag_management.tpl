@@ -16,12 +16,6 @@
             display: inline-block;
             width: 100px;
         }
-        #fics-admin-tab {
-            background-color: rgb(191,223,255);
-        }
-        #selected-fics-tab {
-            background-color: rgb(191,223,255);
-        }
     </style>
 {% endblock %}
 

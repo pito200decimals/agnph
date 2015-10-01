@@ -26,14 +26,6 @@
     margin: 5px;
 }
 
-/* For autocomplete */
-.autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
-.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; cursor: pointer}
-.autocomplete-selected { background: #F0F0F0; }
-.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
-.autocomplete-group { padding: 2px 5px; }
-.autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
-
 @media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
     .action-bar {
         float: left;

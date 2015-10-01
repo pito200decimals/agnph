@@ -13,6 +13,11 @@
     {% endblock %}
 {% endblock %}
 
+{% block styles %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('/admin/color.css') }}" />
+{% endblock %}
+
 {% block content %}
     <h3>Administrator Control Panel</h3>
 {% endblock %}

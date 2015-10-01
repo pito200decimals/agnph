@@ -25,21 +25,12 @@ label {
 form hr {
     margin: 75px;
 }
-.errormsg {
-    color: rgb(255,0,0);
-    font-weight: bold;
-}
 .newchapter {
     text-align: center;
 }
 .tagbox {
     min-width: 500px;
     min-height: 100px;
-}
-.tag-warning {
-    color: rgb(255,0,0);
-    font-size: 75%;
-    display: none;
 }
 .chapter-row span {
     margin-right: 15px;
@@ -69,10 +60,3 @@ form hr {
     cursor: pointer;
 }
 
-/* For autocomplete */
-.autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
-.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; cursor: pointer; }
-.autocomplete-selected { background: #F0F0F0; }
-.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
-.autocomplete-group { padding: 2px 5px; }
-.autocomplete-group strong { display: block; border-bottom: 1px solid #000; }

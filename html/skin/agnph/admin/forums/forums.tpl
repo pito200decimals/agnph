@@ -14,12 +14,6 @@
             vertical-align: top;
             padding-bottom: 10px;
         }
-        #forums-admin-tab {
-            background-color: rgb(191,223,255);
-        }
-        #selected-forums-tab {
-            background-color: rgb(191,223,255);
-        }
     </style>
 {% endblock %}
 

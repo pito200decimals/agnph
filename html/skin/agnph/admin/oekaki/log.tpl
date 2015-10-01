@@ -14,11 +14,5 @@
             vertical-align: top;
             padding-bottom: 10px;
         }
-        #oekaki-admin-tab {
-            background-color: rgb(191,223,255);
-        }
-        #selected-oekaki-tab {
-            background-color: rgb(191,223,255);
-        }
     </style>
 {% endblock %}

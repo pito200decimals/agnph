@@ -14,11 +14,5 @@
             vertical-align: top;
             padding-bottom: 10px;
         }
-        #site-admin-tab {
-            background-color: rgb(191,223,255);
-        }
-        #selected-site-tab {
-            background-color: rgb(191,223,255);
-        }
     </style>
 {% endblock %}

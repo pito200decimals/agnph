@@ -28,7 +28,7 @@
 
 {% block help_block %}
     {#
-    <div class="help-block">
+    <div class="forums-help-block">
         <ul>
             <li><img src="/images/read-board.png" /> = Read</li>
             <li><img src="/images/unread-board.png" /> = Unread</li>

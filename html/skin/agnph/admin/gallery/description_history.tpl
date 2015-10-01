@@ -22,12 +22,6 @@
             float: right;
             margin: 5px;
         }
-        #gallery-admin-tab {
-            background-color: rgb(191,223,255);
-        }
-        #selected-gallery-tab {
-            background-color: rgb(191,223,255);
-        }
     </style>
 {% endblock %}
 

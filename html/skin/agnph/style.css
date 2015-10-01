@@ -59,6 +59,9 @@ a:hover {
         background-color: rgb(163,91,55);
         text-decoration: none;
     }
+    .site-navbar li.selected-nav a {
+        background-color: rgb(223,127,63);
+    }
     .nav-dropdown-tray#main_menu_icon {
         background-color: rgb(63,91,55);
     }
@@ -147,22 +150,6 @@ a:hover {
 #content {
     padding: 10px;
 }
-
-/* TODO: Remove error box css */
-#content > .error-box {
-    margin: 10px auto;
-    padding: 15px;
-    max-width: 600px;
-    border-radius: 15px;
-    background-color: rgb(223,223,255);
-    text-align: center;
-}
-#content > .error-box > .error-msg {
-    display: block;
-    text-align: center;
-    padding: 15px;
-}
-/* End TODO */
 
 /* === Site Footer === */
 #footer {
@@ -291,6 +278,15 @@ span.radio-button-group {
     color: rgb(0,0,127);
     padding: 3px 8px;
 }
+
+/* For autocomplete */
+.autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
+.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; cursor: pointer; }
+.autocomplete-selected { background: #F0F0F0; }
+.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+.autocomplete-group { padding: 2px 5px; }
+.autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
+
 .desktop-only {
     display: inherit;
 }

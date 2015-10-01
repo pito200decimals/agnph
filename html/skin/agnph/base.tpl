@@ -39,6 +39,7 @@
         {% block styles %}
             {# Custom page styles go here #}
         {% endblock %}
+        <link rel="stylesheet" type="text/css" href="{{ asset('/color.css') }}" />
         {% if debug %}
             {# Dot all borders to help style debugging #}
             {# TODO: Remove #}
@@ -113,8 +114,8 @@
             <div id="content">
                 {# TODO: Remove error_msg (after forums cleanup) #}
                 {% if error_msg %}
-                    <div class="error-box">
-                        <p class="error-msg">
+                    <div style="margin: 10px auto; padding: 15px; max-width: 600px; border-radius: 15px; background-color: rgb(223,223,255); text-align: center;">
+                        <p style="display: block; text-align: center; padding: 15px;">
                             {{ error_msg }}
                         </div>
                     </div>

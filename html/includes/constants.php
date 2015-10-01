@@ -118,7 +118,7 @@ define("GALLERY_NEWS_SOURCE_BOARD_NAME_KEY", "GalleryNewsBoardName");
 define("FICS_NEWS_SOURCE_BOARD_NAME_KEY", "FicsNewsBoardName");
 define("OEKAKI_NEWS_SOURCE_BOARD_NAME_KEY", "OekakiNewsBoardName");
 define("GALLERY_THUMB_FILE_EXTENSION", "png");  // Don't change once gallery starts indexing.
-define("MAX_GALLERY_IMAGE_THUMB_SIZE", 200);
+define("MAX_GALLERY_IMAGE_THUMB_SIZE", 300);
 define("MAX_GALLERY_IMAGE_PREVIEW_SIZE", 1200);
 define("INITIAL_GALLERY_UPLOAD_LIMIT", 10);
 define("GALLERY_ADMIN_TAG_ALIAS_CHANGE_LIMIT", 1000);  // Max # of posts to edit when adding an alias.

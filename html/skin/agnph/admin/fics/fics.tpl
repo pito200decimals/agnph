@@ -15,12 +15,6 @@
             vertical-align: top;
             padding-bottom: 10px;
         }
-        #fics-admin-tab {
-            background-color: rgb(191,223,255);
-        }
-        #selected-fics-tab {
-            background-color: rgb(191,223,255);
-        }
     </style>
 {% endblock %}
 
