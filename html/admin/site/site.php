@@ -27,6 +27,7 @@ $vars['register_message'] = SanitizeHTMLTags(GetSiteSetting(REGISTER_DISCLAIMER_
 $vars['short_ban_duration'] = FormatShortDuration(GetSiteSetting(SHORT_BAN_DURATION_KEY, ""));
 $vars['news_posts_board'] = GetSiteSetting(SITE_NEWS_SOURCE_BOARD_NAME_KEY, null);
 
+$vars['admin_section'] = "site";
 RenderPage("admin/site/site.tpl");
 return;
 

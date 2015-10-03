@@ -63,7 +63,7 @@
 {% block content %}
     <div class="uploadpanel">
         <h3>Upload</h3>
-        <form action="" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
+        <form action="" method="post" enctype="multipart/form-data" accept-charset="UTF-8" onsubmit="OnEditSubmit()">
             <table>
                 <tr>
                     <td><label class="formlabel">File</label></td>
@@ -108,9 +108,9 @@
                 <tr>
                     <td><label class="formlabel">Rating</label></td>
                     <td>
-                        <span class="radio-button-group"><input name="rating" type="radio" value="e" /><label>Explicit</label></span>
-                        <span class="radio-button-group"><input name="rating" type="radio" checked value="q" /><label>Questionable</label></span>
-                        <span class="radio-button-group"><input name="rating" type="radio" value="s" /><label>Safe</label></span>
+                        <span class="radio-button-group"><input name="rating" type="radio" value="e" required /><label>Explicit</label></span>
+                        <span class="radio-button-group"><input name="rating" type="radio" value="q" required /><label>Questionable</label></span>
+                        <span class="radio-button-group"><input name="rating" type="radio" value="s" required /><label>Safe</label></span>
                     </td>
                 </tr>
                 <tr>

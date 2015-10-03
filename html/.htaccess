@@ -64,6 +64,7 @@ RewriteRule ^gallery/post/show/(\d+)/history/?$ /gallery/posts/tag_history.php?p
 RewriteRule ^gallery/tags/?$ /gallery/tags/tags.php?sort=name&order=asc [QSA]
 RewriteRule ^gallery/post/view-script/ /gallery/posts/viewpost-script.php [QSA]
 RewriteRule ^gallery/tagsearch/?$ /gallery/tag_ajax.php [QSA]
+RewriteRule ^gallery/set-mobile/?$ /gallery/toggle_mobile_ajax.php
 
 #Rewrites for fics pages
 RewriteRule ^fics/?$ /fics/index.php

@@ -40,14 +40,17 @@ X RSS Feed?
     - Just a direct way to post to the forums?
 * General help pages
 * General about section, admin bios, etc.
+- Hide aliased tags from autocomplete?
 - Admin ticket system
 - Global site statistics?
 - Way to push notifications and site updates to users (via PM system?)
     - Include welcome message, and account migration message on registration.
 - API, at least for gallery similar to Ouroboros?
 - All CSS
+    - User profile CSS
 - Multiple themes?
-- Admin sitewide settings
+    - Ensure no colors clash on mobile
+- Admin sitewide settings (WIP)
 - Theme switcher for guests (Works, figure out where on the template is a good location).
 - BUGFIX: Tags are lost on fail-to-submit in fancy tagger UI.
 X Polls?

@@ -51,6 +51,12 @@ if ($can_sort_pool) {
     $vars['poolId'] = $pool_id;
 }
 
+if (isset($_SESSION['disable-gallery-mobile'])) {
+    $vars['ignore_mobile'] = $_SESSION['disable-gallery-mobile'];
+} else {
+    $vars['ignore_mobile'] = false;
+}
+
 RenderPage("gallery/posts/postindex.tpl");
 return;
 

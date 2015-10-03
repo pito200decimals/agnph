@@ -9,7 +9,7 @@ a {
 }
 /* Background */
 .site-navbar, .site-navbar * {
-    background-color: rgb(223,31,31);
+    background-color: rgb(255,31,31);
 }
 /* Selected section background */
 .site-navbar li.selected-nav a {
@@ -28,7 +28,7 @@ a {
 }
 /* Dropdown tray background color */
 .nav-dropdown-tray a {
-    background-color: rgb(127,31,31);
+    background-color: rgb(191,31,31);
 }
 /* Dropdown tray hover color */
 #account_dropdown a:hover {
@@ -244,7 +244,7 @@ blockquote blockquote {
 @media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
     /* Main site nav tray color */
     ul.navigation_left a {
-        background-color: rgb(127,31,31);
+        background-color: rgb(191,31,31);
     }
     /* Main site nav tray hover color */
     ul.navigation_left a:hover {
@@ -257,11 +257,14 @@ blockquote blockquote {
         background-color: rgb(223,127,63);
     }
     .nav-dropdown-tray#main_menu_icon {
-        background-color: rgb(127,31,31);
+        background-color: rgb(191,31,31);
+    }
+    .nav-dropdown-tray {
+        background-color: blue;
     }
 }
 @media only handheld, screen and (max-device-height: 400px), screen and (max-height: 400px) {
     ul.navigation_left {
-        background-color: rgb(63,91,55);
+        background-color: rgb(191,31,31);
     }
 }

@@ -58,7 +58,12 @@
                 <ul class="navigation_right">
                     {% if user %}
 <noscript>
-                        <li class="navigation_left"><a href="/logout/">Log out</a></li>
+                        <li class="navigation_left">
+                            <form action="/logout/" method="POST" accept-encoding="UTF-8">
+                                <input type="submit name="submit" value="Log out" />
+                            </form>
+                            <a href="/logout/">Log out</a>
+                        </li>
 </noscript>
                         <li class="navigation_left">
                             <a id="mail_icon" href="/user/{{ user.UserId }}/mail/">
@@ -78,7 +83,12 @@
                             <ul id="account_dropdown" class="" hidden>
                                 <li><a href="/user/{{ user.UserId }}/">Profile</a></li>
                                 <li><a href="/user/{{ user.UserId }}/preferences/">Settings</a></li>
-                                <li><a href="/logout/">Log out</a></li>
+                                <li>
+                                    <form action="/logout/" method="POST" accept-encoding="UTF-8">
+                                        <input type="submit" name="submit" value="Log out" />
+                                    </form>
+                                </li>
+                                {#<li><a href="/logout/">Log out</a></li>#}
                             </ul>
                         </li>
                     {% else %}
@@ -90,7 +100,8 @@
                 {# TODO: Adjust logo #}
                 {# <a id="logo" href="/"><img src="/images/logo.png" /></a> #}
                 <ul class="navigation_left">
-                    <li{% if nav_section=="home" %} class="selected-nav"{% endif %}><a href="/">Home</a></li>
+                    <li class="desktop-only"><a id="top-logo-link" href="/"><img id="top-logo" src="/images/logo.png" /></a></li>
+                    <li class="mobile-only{% if nav_section=="home" %} selected-nav{% endif %}"><a href="/">Home</a></li>
                     <li{% if nav_section=="forums" %} class="selected-nav"{% endif %}><a href="/forums/board/">Forums</a></li>
                     <li{% if nav_section=="gallery" %} class="selected-nav"{% endif %}><a href="/gallery/post/">Gallery</a></li>
                     <li{% if nav_section=="fics" %} class="selected-nav"{% endif %}><a href="/fics/">Fics</a></li>
@@ -105,6 +116,10 @@
             <div class="Clear">&nbsp;</div>
         </div>
         <div id="mainbody">
+            <div id="logo">
+                <img src="/images/banner.png" style="max-width: 100%;/>
+            </div>
+            <div class="Clear">&nbsp;</div>
             <div id="header">
                 {# TODO: Add site/section banner here, above section navigation? #}
                 {% block section_navigation %}
@@ -130,6 +145,7 @@
             {#
                 TODO: Is this a good location to put sitewide theme switcher?
             #}
+            <div class="Clear">&nbsp;</div>
             <div style="padding: 10px;">
                 <span style="float: left; font-size: 80%;">
                     Theme: <br/>

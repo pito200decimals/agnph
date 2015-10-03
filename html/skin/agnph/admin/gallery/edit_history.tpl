@@ -4,7 +4,7 @@
     <ul class="section-nav">
         <li><a href="/admin/gallery/">Settings</a></li>
         <li><a href="/admin/gallery/tags/">Tags</a></li>
-        <li id="selected-gallery-tab"><a href="/admin/gallery/edit-history/">Edit History</a></li>
+        <li class="selected-admin-tab"><a href="/admin/gallery/edit-history/">Edit History</a></li>
         <li><a href="/admin/gallery/description-history/">Description History</a></li>
         <li><a href="/admin/gallery/log/">Log</a></li>
     </ul>

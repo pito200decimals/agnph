@@ -158,22 +158,25 @@ a {
     background-color: rgb(63,127,63);
 }
 /* Text color */
-.site-navbar a {
-    color: rgb(255,255,255);
+.site-navbar a,.site-navbar input {
+    color: white;
 }
-.site-navbar a:hover {
+.site-navbar a:hover,.site-navbar input:hover {
     text-shadow: 0 0 3px rgb(255,255,255);
 }
 /* Main hover color */
 .navigation_left a:hover, .navigation_left li.selected-nav a:hover {
     background-color: rgb(63,91,255);
 }
+#top-logo:hover {
+    background-color: rgb(63,91,255);
+}
 /* Dropdown tray background color */
-.nav-dropdown-tray a {
+.nav-dropdown-tray a,.nav-dropdown-tray input {
     background-color: rgb(63,91,55);
 }
 /* Dropdown tray hover color */
-#account_dropdown a:hover {
+#account_dropdown a:hover,#account_dropdown input:hover {
     background-color: rgb(163,91,55);
 }
 #mainbody {

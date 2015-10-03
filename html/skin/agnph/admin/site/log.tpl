@@ -3,7 +3,7 @@
 {% block sub_section_navigation %}
     <ul class="section-nav">
         <li id=""><a href="/admin/">Settings</a></li>
-        <li id="selected-site-tab"><a href="/admin/log/">Log</a></li>
+        <li class="selected-admin-tab"><a href="/admin/log/">Log</a></li>
     </ul>
 {% endblock %}
 

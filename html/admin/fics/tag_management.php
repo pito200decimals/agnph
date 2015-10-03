@@ -19,6 +19,7 @@ include_once(SITE_ROOT."admin/tags/tag_management.php");
 
 $vars['section'] = "fics";
 
+$vars['admin_section'] = "fics";
 RenderPage("admin/fics/tag_management.tpl");
 return;
 

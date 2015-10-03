@@ -19,6 +19,7 @@ include_once(SITE_ROOT."admin/tags/tag_management.php");
 
 $vars['section'] = "gallery";
 
+$vars['admin_section'] = "gallery";
 RenderPage("admin/gallery/tag_management.tpl");
 return;
 

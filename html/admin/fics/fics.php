@@ -28,6 +28,7 @@ $vars['news_posts_board'] = GetSiteSetting(FICS_NEWS_SOURCE_BOARD_NAME_KEY, null
 $vars['num_rand_stories'] = GetSiteSetting(FICS_NUM_RANDOM_STORIES_KEY, "0");
 $vars['events_list'] = GetSiteSetting(FICS_EVENTS_LIST_KEY, null);
 
+$vars['admin_section'] = "fics";
 RenderPage("admin/fics/fics.tpl");
 return;
 

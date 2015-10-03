@@ -24,6 +24,7 @@ if (isset($_POST['submit'])) {
 
 $vars['news_posts_board'] = GetSiteSetting(FORUMS_NEWS_SOURCE_BOARD_NAME_KEY, null);
 
+$vars['admin_section'] = "forums";
 RenderPage("admin/forums/forums.tpl");
 return;
 

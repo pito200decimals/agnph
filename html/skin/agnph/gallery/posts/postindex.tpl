@@ -3,6 +3,7 @@
 {% block styles %}
     {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/postindex-style.css') }}" />
+    <link id="mobile-css" rel="stylesheet" type="text/css" href="{{ asset('/gallery/postindex-mobile.css') }}" {% if ignore_mobile %}disabled {% endif %}/>
     {% if canMassTagEdit %}
         <style>
             #mass-tag-edit-toggle {
@@ -92,6 +93,23 @@
             });
         </script>
     {% endif %}
+    {# For mobile layout toggle #}
+    <script>
+        function ToggleMobile() {
+            var disable = !$('#mobile-css')[0].disabled;
+            $.ajax("/gallery/set-mobile/", {
+                data: {
+                    disabled: disable
+                },
+                method: "POST",
+                xhrFields: {
+                    withCredentials: true
+                }
+            });
+            $('#mobile-css')[0].disabled = disable;
+            return false;
+        }
+    </script>
 {% endblock %}
 
 {% block content %}
@@ -102,6 +120,8 @@
             <form accept-charset="UTF-8">
                 <input class="search" name="search" value="{{ search }}" type="text" required />
             </form>
+            <a style="float: right;" class="toggle-mobile-layout" href="" onclick="return ToggleMobile();">Toggle Mobile</a>
+            <div class="Clear">&nbsp;</div>
         </div>
         {# TODO: Related tags go here #}
     </div>

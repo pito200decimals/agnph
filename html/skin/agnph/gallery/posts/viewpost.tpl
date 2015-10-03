@@ -159,7 +159,7 @@
                         <li>Posted: {% autoescape false %}{{ post.postedHtml }}{% endautoescape %}</li>
                         <li>Rating: {% autoescape false %}{{ post.ratingHtml }}{% endautoescape %}</li>
                         <li>Favorites: {{ post.NumFavorites }}</li>
-                        {% if post.FileSize != "" %}<li>Size: {{ post.FileSize }}</li>{% endif %}
+                        <li>Size: {{ post.Width }} x {{ post.Height }}{% if post.FileSize != "" %} ({{ post.FileSize }}){% endif %}</li>
                         <li>Views: {{ post.NumViews }}</li>
                         <li><a href="/gallery/post/show/{{ post.PostId }}/history/">Tag History</a></li>
                     </ul>

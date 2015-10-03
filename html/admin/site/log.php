@@ -106,6 +106,7 @@ if (contains($url, "?")) {
     $vars['verboseLink'] = "$url?verbose";
 }
 
+$vars['admin_section'] = $filter;
 RenderPage("admin/$filter/log.tpl");
 return;
 

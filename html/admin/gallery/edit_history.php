@@ -38,6 +38,7 @@ $vars['tagHistoryItems'] = $tag_history_items;
 $vars['postIterator'] = $iterator;
 $vars['search'] = $search;
 
+$vars['admin_section'] = "gallery";
 RenderPage("admin/gallery/edit_history.tpl");
 return;
 ?>

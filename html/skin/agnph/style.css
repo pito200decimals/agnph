@@ -24,10 +24,10 @@ a:hover {
     background-color: rgb(63,127,63);
 }
 /* Text color */
-.site-navbar a {
-    color: rgb(255,255,255);
+.site-navbar a,.site-navbar input {
+    color: white;
 }
-.site-navbar a:hover {
+.site-navbar a:hover,.site-navbar input:hover {
     text-shadow: 0 0 3px rgb(255,255,255);
     text-decoration: none;
 }
@@ -36,12 +36,15 @@ a:hover {
     background-color: rgb(63,91,255);
     text-decoration: none;
 }
+#top-logo:hover {
+    background-color: rgb(63,91,255);
+}
 /* Dropdown tray background color */
-.nav-dropdown-tray a {
+.nav-dropdown-tray a,.nav-dropdown-tray input {
     background-color: rgb(63,91,55);
 }
 /* Dropdown tray hover color */
-#account_dropdown a:hover {
+#account_dropdown a:hover,#account_dropdown input:hover {
     background-color: rgb(163,91,55);
     text-decoration: none;
 }
@@ -73,7 +76,15 @@ a:hover {
     margin: 0px;
     padding: 0px;
 }
-.site-navbar a {
+.site-navbar input {
+    background:none;
+    border:none;
+    font: inherit;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+}
+.site-navbar a,.site-navbar input {
     text-decoration: none;
     padding: 5px 15px;
     font-weight: bold;
@@ -115,6 +126,14 @@ a:hover {
 }
 #main_menu_icon {
     display: none;
+}
+#top-logo {
+    max-width: inherit;
+    max-height: 29px;
+    margin: 0px;
+}
+#top-logo-link {
+    padding: 0px;
 }
 /* TODO: Adjust logo.
 #logo {
@@ -288,10 +307,10 @@ span.radio-button-group {
 .autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
 
 .desktop-only {
-    display: inherit;
+    display: inherit !important;
 }
 .mobile-only {
-    display: none;
+    display: none !important;
 }
 
 
@@ -301,7 +320,7 @@ span.radio-button-group {
         cursor: pointer;
         padding: 5px 15px;
     }
-    #account_dropdown a {
+    #account_dropdown a,#account_dropdown input {
         padding: 15px;
     }
     #mail_icon {
@@ -350,10 +369,10 @@ span.radio-button-group {
         padding: 13px 18px;
     }
     .desktop-only {
-        display: none;
+        display: none !important;
     }
     .mobile-only {
-        display: inherit;
+        display: inherit !important;
     }
 }
 /* For horizontal site menu */
