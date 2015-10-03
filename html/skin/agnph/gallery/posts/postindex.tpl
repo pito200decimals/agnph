@@ -109,6 +109,11 @@
             $('#mobile-css')[0].disabled = disable;
             return false;
         }
+        {% if ignore_mobile %}
+            $(document).ready(function() {
+                $('#mobile-css')[0].disabled = true;
+            });
+        {% endif %}
     </script>
 {% endblock %}
 
