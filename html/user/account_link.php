@@ -26,14 +26,12 @@ return;
 
 function err($msg) {
     PostSessionBanner($msg, "red");
-    header("Location: ".$_SERVER['REQUEST_URI']);
-    exit();
+    Redirect($_SERVER['REQUEST_URI']);
 }
 
 function success($msg) {
     PostSessionBanner($msg, "green");
-    header("Location: ".$_SERVER['REQUEST_URI']);
-    exit();
+    Redirect($_SERVER['REQUEST_URI']);
 }
 
 function HandlePost() {

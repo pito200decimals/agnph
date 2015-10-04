@@ -22,7 +22,6 @@ $poolName = $pool['Name'];
 LogAction("<strong><a href='/user/$uid/'>$username</a></strong> deleted pool <strong>$poolName</strong>", "G");
 PostSessionBanner("Pool deleted", "red");
 // Go back to requesting page.
-header("Location: ".$_SERVER['HTTP_REFERER']);
-exit();
+Redirect($_SERVER['HTTP_REFERER']);
 
 ?>

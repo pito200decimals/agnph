@@ -13,8 +13,7 @@ if (isset($_GET['code'])) {
             sql_query("DELETE FROM ".SECURITY_EMAIL_TABLE." WHERE Code='$escaped_code';");  // 1-time use code.
             $url = $event['Redirect'];
             $_SESSION['auth_row'] = $event;
-            header("Location: $url");
-            exit();
+            Redirect("$url");
         }
     }
 }

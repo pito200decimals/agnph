@@ -290,8 +290,7 @@ function GetSanitizedText($text) {
 function GoToForumPost($pid) {
     $posts_per_page = GetPostsPerPageInThread();
     if (!sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId=$pid;", 1)) {
-        header("Location: /forums/");
-        exit();
+        Redirect("/forums/");
     }
     $post = $result->fetch_assoc();
     if ($post['IsThread'] == 1) {
@@ -299,7 +298,7 @@ function GoToForumPost($pid) {
     } else {
         $tid = $post['ParentId'];
     }
-    $posts = GetPostsInThread($tid) or header("Location: /forums/");
+    $posts = GetPostsInThread($tid) or Redirect("/forums/");
     $offset = 0;
     $page = 1;
     foreach ($posts as $post) {
@@ -310,8 +309,7 @@ function GoToForumPost($pid) {
             $page++;
         }
     }
-    header("Location: /forums/thread/$tid/?page=$page#p$pid");
-    exit();
+    Redirect("/forums/thread/$tid/?page=$page#p$pid");
 }
 
 function SetUpThreadPostHistory(&$posts) {

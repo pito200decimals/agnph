@@ -11,7 +11,7 @@ include_once(SITE_ROOT."includes/auth/email_auth.php");
 include_once(SITE_ROOT."user/includes/register_functions.php");
 
 if (isset($user)) {
-    header("Location: /");
+    Redirect("/");
     return;
 }
 if (isset($_SESSION['auth_row'])) {
@@ -23,11 +23,9 @@ if (isset($_SESSION['auth_row'])) {
     $registered_user = $result->fetch_assoc();
     PrepareAllUserTables($registered_user) or RenderErrorPage("Failed to complete registration. Please contact an AGNPH administrator for help");
     ForceLogin($uid);
-    header("Location: /");
-    exit();
+    Redirect("/");
 } else {
-    header("Location: /register/confirm/");
-    exit();
+    Redirect("/register/confirm/");
 }
 return;
 

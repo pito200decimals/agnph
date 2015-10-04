@@ -39,7 +39,16 @@
             {% if messages|length > 0 %}
                 {% for message in messages %}
                     <tr class="{% if message.Status == 'U' %}unread{% endif %}">
-                        <td><div>{% if message.inbox %}<img class="mail-icon" src="/images/inbox_icon.png" />{% elseif message.outbox %}<img class="mail-icon" src="/images/outbox_icon.png" />{% endif %} {% if message.count > 1 %}({{ message.count }}){% endif %}</div></td>
+                        <td><div>
+                            {% if message.inbox %}
+                                <img class="mail-icon" src="/images/inbox_icon.png" />
+                            {% elseif message.outbox %}
+                                <img class="mail-icon" src="/images/outbox_icon.png" />
+                            {% elseif message.notification %}
+                                <img class="mail-icon" src="/images/favicon.png" />
+                            {% endif %}
+                            {% if message.count > 1 %}({{ message.count }}){% endif %}
+                        </div></td>
                         <td><div>{{ message.date }}</div></td>
                         <td><div><a href="/user/{{ profile.user.UserId }}/mail/message/{{ message.Id }}/">{{ message.Title }}</a></div></td>
                         <td><div><a href="/user/{{ message.toFromUser.UserId }}/">{{ message.toFromUser.DisplayName }}</a></div></td>
@@ -47,8 +56,8 @@
                 {% endfor %}
             {% else %}
                 <tr>
-                    <td colspan="1">No messages found</td>
-                    <td colspan="4"></td>
+                    <td></td>
+                    <td colspan="4">No messages found</td>
                 </tr>
             {% endif %}
         </tbody>

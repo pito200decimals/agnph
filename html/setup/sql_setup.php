@@ -355,7 +355,8 @@ do_or_die(sql_query(
         Status CHAR(1) DEFAULT 'U',".  // U - Unread, R - Read, D - Deleted
        "Title VARCHAR(".MAX_PM_TITLE_LENGTH.") NOT NULL,
         Content TEXT(".MAX_PM_LENGTH.") NOT NULL,
-        PRIMARY KEY(Id)
+        MessageType TINYINT(1) DEFAULT 0,".  // 0 = Normal, 1 = Admin Notification (2 = Admin Help ticket?)
+       "PRIMARY KEY(Id)
     ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 
 // Table for handling account recovery/resets. Also used for tracking security emails when dealing with email/password changes.

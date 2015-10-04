@@ -24,6 +24,5 @@ if (isset($user)) {
     }
 }
 
-header("Location: ".$_SERVER['HTTP_REFERER']);
-exit();
+Redirect($_SERVER['HTTP_REFERER']);
 ?>

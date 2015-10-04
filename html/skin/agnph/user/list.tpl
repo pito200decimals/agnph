@@ -28,17 +28,17 @@
         {% if orderParam %}<input type="hidden" name="order" value="{{ orderParam }}" />{% endif %}
         <label>Search by Name:</label><input class="search" name="search" type="text" value="{{ search }}" required/>
     </form>
-    {% if users|length > 0 %}
-        <table class="list-table">
-            <thead>
-                <tr>
-                    <td><strong><a href="{{ statusSortUrl }}">Status</a></strong>{% if sortParam == "status" %}{{ block('sortArrow') }}{% endif %}</td>
-                    <td><strong><a href="{{ nameSortUrl }}">Name</a></strong>{% if sortParam == "name" %}{{ block('sortArrow') }}{% endif %}</td>
-                    <td><strong><a href="{{ positionSortUrl }}">Position</a></strong>{% if sortParam == "position" %}{{ block('sortArrow') }}{% endif %}</td>
-                    <td><span class="desktop-only"><strong><a href="{{ registerSortUrl }}">Date Registered</a></strong>{% if sortParam == "register" %}{{ block('sortArrow') }}{% endif %}</span></td>
-                </tr>
-            </thead>
-            <tbody>
+    <table class="list-table">
+        <thead>
+            <tr>
+                <td><strong><a href="{{ statusSortUrl }}">Status</a></strong>{% if sortParam == "status" %}{{ block('sortArrow') }}{% endif %}</td>
+                <td><strong><a href="{{ nameSortUrl }}">Name</a></strong>{% if sortParam == "name" %}{{ block('sortArrow') }}{% endif %}</td>
+                <td><strong><a href="{{ positionSortUrl }}">Position</a></strong>{% if sortParam == "position" %}{{ block('sortArrow') }}{% endif %}</td>
+                <td><span class="desktop-only"><strong><a href="{{ registerSortUrl }}">Date Registered</a></strong>{% if sortParam == "register" %}{{ block('sortArrow') }}{% endif %}</span></td>
+            </tr>
+        </thead>
+        <tbody>
+            {% if users|length > 0 %}
                 {% for account in users %}
                     <tr>
                         <td>
@@ -60,12 +60,15 @@
                         <td><span class="desktop-only">{{ account.dateJoined }}</span></td>
                     </tr>
                 {% endfor %}
-            </tbody>
-        </table>
-        <div class="iterator">
-            {% autoescape false %}{{ iterator }}{% endautoescape %}
-        </div>
-    {% else %}
-        No users found.
-    {% endif %}
+            {% else %}
+                <tr>
+                    <td></td>
+                    <td colspan="3">No users found</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+    <div class="iterator">
+        {% autoescape false %}{{ iterator }}{% endautoescape %}
+    </div>
 {% endblock %}

@@ -138,8 +138,7 @@ foreach ($edits_by_pid as $pid => $edits) {
 PostSessionBanner("Edits reverted", "green");
 
 // Go back to edit page.
-header("Location: ".$_SERVER['HTTP_REFERER']);
-exit();
+Redirect($_SERVER['HTTP_REFERER']);
 
 function GetPreviousProperty($pid, $eid, $prop_name) {
     if (sql_query_into($result, "SELECT PropertiesChanged FROM ".GALLERY_POST_TAG_HISTORY_TABLE." WHERE PostId=$pid AND Id < $eid AND LENGTH(PropertiesChanged) > 0 ORDER BY Id DESC;", 1)) {

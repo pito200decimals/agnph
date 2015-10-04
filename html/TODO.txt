@@ -14,6 +14,9 @@ TODOs
     - Move favorites over to parent?
 - Related tag suggestions in sidebar on index page
 - Some sort of tag exploration feature, perhaps tag cloud?
+- Center mobile-index or not?
+- Hide upload when not logged in
+- Enable uploader to delete within short time period.
 X "Popular" recent posts, maybe by # of views in last day/week/month?
 X Search by newly-tagged?
 X Gallery linking to source on delete
@@ -40,6 +43,7 @@ X RSS Feed?
     - Just a direct way to post to the forums?
 * General help pages
 * General about section, admin bios, etc.
+- Custom 404 page
 - Hide aliased tags from autocomplete?
 - Admin ticket system
 - Global site statistics?

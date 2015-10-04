@@ -132,27 +132,22 @@ function HandlePost() {
                                 PostSessionBanner("Post deleted", "green");
                                 $page = $_GET['page'];
                                 if ($page == 1) {
-                                    header("Location: /forums/thread/".$thread['ThreadId']."/");
-                                    exit();
+                                    Redirect("/forums/thread/".$thread['ThreadId']."/");
                                 } else {
-                                    header("Location: /forums/thread/".$thread['ThreadId']."/?page=".($page - 1));
-                                    exit();
+                                    Redirect("/forums/thread/".$thread['ThreadId']."/?page=".($page - 1));
                                 }
                             } else {
                                 // Whole thread was deleted, go back to board.
                                 PostSessionBanner("Thread deleted", "green");
-                                header("Location: /forums/board/".urlencode(mb_strtolower($board['Name']))."/");
-                                exit();
+                                Redirect("/forums/board/".urlencode(mb_strtolower($board['Name']))."/");
                             }
                         } else {
                             PostSessionBanner("Post deleted", "green");
-                            header("Location: ".$_SERVER['REQUEST_URI']);
-                            exit();
+                            Redirect($_SERVER['REQUEST_URI']);
                         }
                     } else {
                         PostSessionBanner("Not authorized to delete post", "red");
-                        header("Location: ".$_SERVER['REQUEST_URI']);
-                        exit();
+                        Redirect($_SERVER['REQUEST_URI']);
                     }
                 }
                 break;

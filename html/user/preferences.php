@@ -391,8 +391,7 @@ if (isset($_POST['display-name']) &&
     if ($settings_changed) PostConfirmMessage("Settings saved");
 
     // Redirect user.
-    header("Location: /user/$uid/preferences/");
-    exit();
+    Redirect("/user/$uid/preferences/");
 }
 
 /////////////////////////////////////////

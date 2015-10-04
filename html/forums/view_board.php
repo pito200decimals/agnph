@@ -240,8 +240,7 @@ function HandlePost($board) {
             sql_query("INSERT INTO ".FORUMS_BOARD_TABLE." (ParentId, Name, Description, BoardSortOrder) VALUES ($bid, '$escaped_name', '$escaped_description', $index);");
             // Manually redirect to new board.
             $final_url = "/forums/board/".urlencode($name)."/";
-            header("Location: $final_url");
-            exit();
+            Redirect("$final_url");
         case "delete":
             if ($board['BoardId'] == -1) break;
             if (!sql_query_into($result, "SELECT COUNT(*) AS C FROM ".FORUMS_BOARD_TABLE." WHERE ParentId=$bid;", 1)) {
@@ -280,8 +279,7 @@ function HandlePost($board) {
                 $parentName = $result->fetch_assoc()['Name'];
                 $final_url = "/forums/board/".urlencode($parentName)."/";
             }
-            header("Location: $final_url");
-            exit();
+            Redirect("$final_url");
         case "rename":
             if ($board['BoardId'] == -1) break;
             if (!isset($_POST['name']) || !isset($_POST['description'])) {
@@ -304,14 +302,12 @@ function HandlePost($board) {
             }
             // Manually redirect to new board name.
             $final_url = "/forums/board/".urlencode(mb_strtolower($name))."/";
-            header("Location: $final_url");
-            exit();
+            Redirect("$final_url");
         default:
             // Not a valid POST.
             return;
     }
-    header("Location: ".$_SERVER['HTTP_REFERER']);
-    exit();
+    Redirect($_SERVER['HTTP_REFERER']);
 }
 
 ?>

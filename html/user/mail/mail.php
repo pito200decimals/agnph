@@ -28,8 +28,7 @@ if (isset($_POST['action'])) {
         case "mark-all-read":
             sql_query("UPDATE ".USER_MAILBOX_TABLE." SET Status='R' WHERE RecipientUserId=$uid AND Status='U';");
             // Go back to requesting page.
-            header("Location: ".$_SERVER['HTTP_REFERER']);
-            exit();
+            Redirect($_SERVER['HTTP_REFERER']);
         default:
             break;
     }

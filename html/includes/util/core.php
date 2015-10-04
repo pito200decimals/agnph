@@ -168,6 +168,11 @@ function InvalidURL() {
     exit();
 }
 
+function Redirect($url) {
+    header("Location: $url", true, 302);
+    exit();
+}
+
 function MaintenanceError() {
     RenderErrorPage("Site is in read-only mode");
 }

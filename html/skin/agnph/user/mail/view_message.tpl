@@ -34,12 +34,16 @@
 {% use 'includes/comment-block.tpl' %}
 
 {% block usercontent %}
-    {% if user.GroupMailboxThreads %}
-        <h3>Conversation with {{ message.toFromUser.DisplayName }}</h3>
-    {% elseif message.inbox %}
-        <h3>Message from {{ message.toFromUser.DisplayName }}</h3>
+    {% if message.MessageType == 0 %}
+        {% if user.GroupMailboxThreads %}
+            <h3>Conversation with {{ message.toFromUser.DisplayName }}</h3>
+        {% elseif message.inbox %}
+            <h3>Message from {{ message.toFromUser.DisplayName }}</h3>
+        {% else %}
+            <h3>Message to {{ message.toFromUser.DisplayName }}</h3>
+        {% endif %}
     {% else %}
-        <h3>Message to {{ message.toFromUser.DisplayName }}</h3>
+        <h3>Admin Notification</h3>
     {% endif %}
     {% if canSendPM %}
         <form action="/user/{{ profile.user.UserId }}/mail/send/" method="POST" accept-charset="UTF-8">

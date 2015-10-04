@@ -74,6 +74,11 @@ function CanUserBan($user, $profile) {
     if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
     return false;
 }
+function CanUserPMAllUsers($user) {
+    if (!IsUserActivated($user)) return false;
+    if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
+    return false;
+}
 
 
 function DateStringToReadableString($datestr) {

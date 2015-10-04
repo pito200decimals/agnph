@@ -99,8 +99,7 @@ if ($action == "comment" || $action == "review") {
             PostSessionBanner("Comment posted", "green");
         }
         // Go back to requesting page.
-        header("Location: ".$_SERVER['HTTP_REFERER']);
-        exit();
+        Redirect($_SERVER['HTTP_REFERER']);
     } else {
         RenderErrorPage("Unable to perform action");
     }
@@ -115,8 +114,7 @@ if ($action == "comment" || $action == "review") {
     if ($success){
         PostSessionBanner("Response posted", "green");
         // Go back to requesting page.
-        header("Location: ".$_SERVER['HTTP_REFERER']);
-        exit();
+        Redirect($_SERVER['HTTP_REFERER']);
     } else {
         RenderErrorPage("Error while posting response");
     }
@@ -130,8 +128,7 @@ if ($action == "comment" || $action == "review") {
         PostSessionBanner("Comment deleted", "green");
     }
     // Go back to requesting page.
-    header("Location: ".$_SERVER['HTTP_REFERER']);
-    exit();
+    Redirect($_SERVER['HTTP_REFERER']);
 }
 
 ?>

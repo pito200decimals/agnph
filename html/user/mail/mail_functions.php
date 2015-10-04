@@ -7,7 +7,7 @@ include_once(SITE_ROOT."includes/util/core.php");
 function GetMessages($user) {
     $uid = $user['UserId'];
     $messages = array();
-    $sql = "SELECT * FROM ".USER_MAILBOX_TABLE." WHERE (SenderUserId=$uid OR RecipientUserId=$uid) AND Status<>'D' ORDER BY Timestamp DESC, Id DESC;";
+    $sql = "SELECT * FROM ".USER_MAILBOX_TABLE." WHERE ((SenderUserId=$uid AND MessageType<>1) OR RecipientUserId=$uid) AND Status<>'D' ORDER BY Timestamp DESC, Id DESC;";
     if (sql_query_into($result, $sql, 0)) {
         while ($row = $result->fetch_assoc()) {
             $messages[] = $row;
@@ -34,14 +34,20 @@ function AddMessageMetadata(&$messages, $user) {
         $usr['avatarURL'] = GetAvatarURL($usr);
     }
     foreach ($messages as &$message) {
-        if ($message['SenderUserId'] != $user['UserId']) {
+        // Determine if outbox, inbox, or notification.
+        if ($message['MessageType'] == 1) {
             $message['toFromUser'] = $all_users[$message['SenderUserId']];
-            $message['inbox'] = true;
+            $message['notification'] = true;
         } else {
-            $message['toFromUser'] = $all_users[$message['RecipientUserId']];
-            $message['outbox'] = true;
-            // Outbox messages can't be seen as unread.
-            $message['Status'] = 'R';
+            if ($message['SenderUserId'] != $user['UserId']) {
+                $message['toFromUser'] = $all_users[$message['SenderUserId']];
+                $message['inbox'] = true;
+            } else {
+                $message['toFromUser'] = $all_users[$message['RecipientUserId']];
+                $message['outbox'] = true;
+                // Outbox messages can't be seen as unread.
+                $message['Status'] = 'R';
+            }
         }
         // Format for template.
         $elapsed_time = time() - $message['Timestamp'];

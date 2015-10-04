@@ -10,8 +10,7 @@ include_once(SITE_ROOT."includes/auth/email_auth.php");
 if (IsMaintenanceMode()) PostBanner("Site is in read-only mode, account recovery has been disabled", "red", false);
 
 if (isset($user)) {
-    header("Location: /");
-    exit();
+    Redirect("/");
 }
 
 if (isset($_POST['email']) &&
@@ -35,8 +34,7 @@ if (isset($_POST['email']) &&
                     $ip = $_SERVER['REMOTE_ADDR'];
                     LogAction("<strong><a href='/user/$uid/'>$username</a></strong> requested a password reset from IP $ip", "");
                     $_SESSION['recovery_email'] = $email;
-                    header("Location: /recover/confirm/");
-                    exit();
+                    Redirect("/recover/confirm/");
                 } else {
                     PostBanner("Error sending confirmation email, please try again later", "red");
                 }

@@ -39,8 +39,7 @@ if (isset($_GET['board']) && is_numeric($_GET['board'])) {
     PostSessionBanner("Posts marked as read", "green");
 }
 // Go back to requesting page.
-header("Location: ".$_SERVER['HTTP_REFERER']);
-exit();
+Redirect($_SERVER['HTTP_REFERER']);
 
 function GetAllBoardIds($board, &$ret) {
     $ret[] = $board['BoardId'];

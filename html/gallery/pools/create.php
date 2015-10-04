@@ -18,8 +18,7 @@ $name = mb_ereg_replace("\s+", " ", $name);
 $name = mb_substr($name, 0, MAX_GALLERY_POOL_NAME_LENGTH);
 if (mb_strlen($name) < MIN_GALLERY_POOL_NAME_LENGTH) {
     PostSessionBanner("Invalid pool name", "red");
-    header("Location: ".$_SERVER['HTTP_REFERER']);
-    exit();
+    Redirect($_SERVER['HTTP_REFERER']);
 }
 $escaped_name = sql_escape($name);
 // If there's a duplicate name, go to that page.
@@ -27,8 +26,7 @@ sql_query_into($result, "SELECT * FROM ".GALLERY_POOLS_TABLE." WHERE UPPER(Name)
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $search_name = ToSearchNameString($row['Name']);
-    header("Location: /gallery/post/?search=".urlencode("pool:$search_name"));
-    exit();
+    Redirect("/gallery/post/?search=".urlencode("pool:$search_name"));
 }
 
 $user_id = $user['UserId'];
@@ -38,8 +36,7 @@ $username = $user['DisplayName'];
 $name = htmlspecialchars($name);
 LogAction("<strong><a href='/user/$uid/'>$username</a></strong> created pool <strong>$name</strong>", "G");
 PostSessionBanner("Pool created", "green");
-header("Location: ".$_SERVER['HTTP_REFERER']);
-exit();
+Redirect($_SERVER['HTTP_REFERER']);
 
 function ToSearchNameString($name) {
     $name = str_replace(" ", "_", $name);

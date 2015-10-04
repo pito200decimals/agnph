@@ -121,7 +121,7 @@
     {{ block('banner') }}
     <div class="sidepanel">
         <div class="searchbox">
-            <h3>Search</h3>
+            <h3>Search<a id="search-help-link" href="/gallery/help/">?</a></h3>
             <form accept-charset="UTF-8">
                 <input class="search" name="search" value="{{ search }}" type="text" required />
             </form>

@@ -18,7 +18,7 @@ unset($folder_level);
 
 // Set up charset.
 header('Content-type: text/html; charset=utf-8');
-// TODO: Cache control.
+header('Cache-Control: max-age=3600');  // 3600-seconds, dunno what's a good value here.
 
 // Include common headers.
 include_once(SITE_ROOT."includes/config.php");
@@ -68,8 +68,7 @@ if (isset($user)) {
     if (contains($_SERVER['REQUEST_URI'], AGE_GATE_PATH)) {
         // Redirect to destination.
         $_SESSION['age_gate'] = true;
-        header("Location: ".$_SERVER['HTTP_REFERER']);
-        exit();
+        Redirect($_SERVER['HTTP_REFERER']);
     } else {
         $uri = strtolower($_SERVER['REQUEST_URI']);
         foreach ($AGE_GATE_SECTIONS as $section) {

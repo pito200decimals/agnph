@@ -18,11 +18,17 @@ if (!CanUserSendPMsForUser($user, $profile_user)) {
 }
 
 if (isset($_GET['to'])) {
-    $escaped_name = sql_escape($_GET['to']);
-    if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UPPER(DisplayName) LIKE UPPER('$escaped_name');", 1)) {
-        $to_user = $result->fetch_assoc();
-        $vars['toUser'] = $to_user['DisplayName'];
-        $vars['toUserId'] = $to_user['UserId'];
+    $name = $_GET['to'];
+    if ($name == "__all_users__") {
+        $vars['toUser'] = "All Users";
+        $vars['toUserId'] = -1;
+    } else {
+        $escaped_name = sql_escape($name);
+        if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UPPER(DisplayName) LIKE UPPER('$escaped_name');", 1)) {
+            $to_user = $result->fetch_assoc();
+            $vars['toUser'] = $to_user['DisplayName'];
+            $vars['toUserId'] = $to_user['UserId'];
+        }
     }
 }
 if (isset($_POST['message'])) {

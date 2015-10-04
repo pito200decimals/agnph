@@ -59,7 +59,12 @@
         <ul class="compose-form">
             <li>
                 <label>To:</label>
-                <input id="to-field" name="to" type="text" value="{{ toUser }}" />
+                {% if toUserId != -1 %}
+                    <input id="to-field" name="to" type="text" value="{{ toUser }}" />
+                {% else %}
+                    <input type="text" value="{{ toUser }}" disabled />
+                    <input id="to-field" name="to" type="hidden" value="{{ toUser }}" />
+                {% endif %}
                 <input id="ruid-field" name="ruid" type="hidden" value="{{ toUserId }}" />
                 <span id="missing-user" class="compose-error">User missing</span>
             </li>

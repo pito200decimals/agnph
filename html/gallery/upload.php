@@ -130,8 +130,7 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
     $uid = $user['UserId'];
     $username = $user['DisplayName'];
     LogVerboseAction("<strong><a href='/user/$uid/'>$username</a></strong> uploaded <strong><a href='/gallery/post/show/$pid/'>post #$pid</a></strong>", "G");
-    header("Location: /gallery/post/show/$post_id/");
-    exit();
+    Redirect("/gallery/post/show/$post_id/");
 }
 
 RenderPage("gallery/upload.tpl");
@@ -158,8 +157,7 @@ function GoToExistingFile($md5) {
     // TODO: Add new properties to existing file.
     sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE Md5='$md5';", 1) or RenderErrorPage("Error while uploading file.");
     $id = $result->fetch_assoc()['PostId'];
-    header("Location: /gallery/post/show/$id/");
-    exit();
+    Redirect("/gallery/post/show/$id/");
 }
 
 function GetExtensionFromURL($url) {

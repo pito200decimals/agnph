@@ -34,8 +34,7 @@ if (isset($_SESSION['auth_row'])) {
     RenderPage("user/recover_success.tpl");
     return;
 } else {
-    header("Location: /recover/confirm/");
-    exit();
+    Redirect("/recover/confirm/");
 }
 return;
 ?>

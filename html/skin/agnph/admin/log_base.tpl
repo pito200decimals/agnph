@@ -43,7 +43,10 @@
                     </tr>
                 {% endfor %}
             {% else %}
-                <tr><td></td><td>No logs found</td><td></td></tr>
+                <tr>
+                    <td></td>
+                    <td colspan="2">No logs found</td>
+                </tr>
             {% endif %}
         </tbody>
     </table>

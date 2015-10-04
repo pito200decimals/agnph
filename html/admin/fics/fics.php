@@ -18,8 +18,7 @@ if (!$vars['canAdminFics']) {
 if (isset($_POST['submit'])) {
     HandlePost();
     PostSessionBanner("Settings changed", "green");
-    header("Location: ".$_SERVER['REQUEST_URI']);
-    exit();
+    Redirect($_SERVER['REQUEST_URI']);
 }
 
 $vars['welcome_message'] = SanitizeHTMLTags(GetSiteSetting(FICS_WELCOME_MESSAGE_KEY, ""), DEFAULT_ALLOWED_TAGS);

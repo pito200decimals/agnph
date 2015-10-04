@@ -19,8 +19,7 @@ $vars['is_maintenance_mode'] = IsMaintenanceMode();
 if (isset($_POST['submit'])) {
     HandlePost();
     PostSessionBanner("Settings changed", "green");
-    header("Location: ".$_SERVER['REQUEST_URI']);
-    exit();
+    Redirect($_SERVER['REQUEST_URI']);
 }
 $vars['site_welcome_message'] = SanitizeHTMLTags(GetSiteSetting(SITE_WELCOME_MESSAGE_KEY, ""), DEFAULT_ALLOWED_TAGS);
 $vars['register_message'] = SanitizeHTMLTags(GetSiteSetting(REGISTER_DISCLAIMER_KEY, ""), DEFAULT_ALLOWED_TAGS);

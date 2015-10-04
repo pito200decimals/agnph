@@ -20,17 +20,17 @@
         <input type="hidden" name="order" value="{{ orderParam }}" />
         <label>Search for Tags:</label><input class="search" name="search" type="text" value="{{ search }}" required/>
     </form>
-    {% if tags|length > 0 %}
-        {# Display tag index. #}
-        <table class="list-table">
-            <thead>
-                <tr>
-                    <td><strong><a href="{{ nameSortUrl }}">Name</a></strong>{% if sortParam == "name" %}{{ block('sortArrow') }}{% endif %}</td>
-                    <td><strong><a href="{{ typeSortUrl }}">Type</a></strong>{% if sortParam == "type" %}{{ block('sortArrow') }}{% endif %}</td>
-                    <td><strong><a href="{{ countSortUrl }}">Count</a></strong>{% if sortParam == "count" %}{{ block('sortArrow') }}{% endif %}</td>
-                </tr>
-            </thead>
-            <tbody>
+    {# Display tag index. #}
+    <table class="list-table">
+        <thead>
+            <tr>
+                <td><strong><a href="{{ nameSortUrl }}">Name</a></strong>{% if sortParam == "name" %}{{ block('sortArrow') }}{% endif %}</td>
+                <td><strong><a href="{{ typeSortUrl }}">Type</a></strong>{% if sortParam == "type" %}{{ block('sortArrow') }}{% endif %}</td>
+                <td><strong><a href="{{ countSortUrl }}">Count</a></strong>{% if sortParam == "count" %}{{ block('sortArrow') }}{% endif %}</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% if tags|length > 0 %}
                 {% for tag in tags %}
                     <tr>
                         <td><strong><a class="{{ tag.typeClass }}" href="/gallery/post/?search={{ tag.quotedName|url_encode }}">{{ tag.displayName }}</a></strong></td>
@@ -38,27 +38,16 @@
                         <td>{{ tag.tagCounts }}</td>
                     </tr>
                 {% endfor %}
-            </tbody>
-        </table>
-        <div class="Clear">&nbsp;</div>
-        <div class="iterator">
-            {% autoescape false %}{{ iterator }}{% endautoescape %}
-        </div>
-    {% else %}
-        {# No tags here. #}
-        <table class="list-table">
-            <thead>
+            {% else %}
                 <tr>
-                    <td><strong><a href="{{ nameSortUrl }}">Name</a></strong>{% if sortParam == "name" %}{{ block('sortArrow') }}{% endif %}</td>
-                    <td><strong><a href="{{ typeSortUrl }}">Type</a></strong>{% if sortParam == "type" %}{{ block('sortArrow') }}{% endif %}</td>
-                    <td><strong><a href="{{ countSortUrl }}">Count</a></strong>{% if sortParam == "count" %}{{ block('sortArrow') }}{% endif %}</td>
+                    <td></td>
+                    <td colspan="2">No Tags found</td>
                 </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td colspan="3">No Tags found</td>
-                </tr>
-            </tbody>
-        </table>
-    {% endif %}
+            {% endif %}
+        </tbody>
+    </table>
+    <div class="Clear">&nbsp;</div>
+    <div class="iterator">
+        {% autoescape false %}{{ iterator }}{% endautoescape %}
+    </div>
 {% endblock %}

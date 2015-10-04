@@ -52,8 +52,7 @@ if (isset($_POST['confirm'])) {
                         $chapterTitle = htmlspecialchars($chapter['Title']);
                         $storyTitle = htmlspecialchars($story['Title']);
                         LogAction("<strong><a href='/user/$uid/'>$username</a></strong> deleted chapter <strong>$chapterTitle</strong> ($cid) from story <strong><a href='/fics/story/$sid/'>$storyTitle</a></strong>", "F");
-                        header("Location: /fics/edit/$sid/");
-                        exit();
+                        Redirect("/fics/edit/$sid/");
                     } else {
                         RenderErrorPage("Unable to delete chapter");
                     }
@@ -69,8 +68,7 @@ if (isset($_POST['confirm'])) {
             $username = $user['DisplayName'];
             $storyTitle = htmlspecialchars($story['Title']);
             LogAction("<strong><a href='/user/$uid/'>$username</a></strong> deleted story <strong><a href='/fics/story/$sid/'>$storyTitle</a></strong>", "F");
-            header("Location: /fics/browse/");
-            exit();
+            Redirect("/fics/browse/");
         }
     } else if ($_GET['action'] == "undelete" && CanUserUndeleteStory($story, $user)) {
         sql_query("UPDATE ".FICS_STORY_TABLE." SET ApprovalStatus='A' WHERE StoryId=$sid;");
@@ -78,8 +76,7 @@ if (isset($_POST['confirm'])) {
         $username = $user['DisplayName'];
         $storyTitle = htmlspecialchars($story['Title']);
         LogAction("<strong><a href='/user/$uid/'>$username</a></strong> un-deleted story <strong><a href='/fics/story/$sid/'>$storyTitle</a></strong>", "F");
-        header("Location: /fics/story/$sid/");
-        exit();
+        Redirect("/fics/story/$sid/");
     } else {
         RenderErrorPage("Not authorized to modify story");
     }

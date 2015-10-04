@@ -168,15 +168,13 @@ function HandlePost($searchterms) {
         }
 
         PostSessionBanner("Posts modified", "green");
-        header("Location: ".$_SERVER['REQUEST_URI']);
-        exit();
+        Redirect($_SERVER['REQUEST_URI']);
     }
 }
 
 function RenderPostError($msg) {
     PostSessionBanner($msg, "red");
-    header("Location: ".$_SERVER['REQUEST_URI']);
-    exit();
+    Redirect($_SERVER['REQUEST_URI']);
 }
 
 ?>

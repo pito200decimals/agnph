@@ -9,13 +9,11 @@ include_once(SITE_ROOT."includes/util/sql.php");
 include_once(SITE_ROOT."includes/util/file.php");
 
 if (isset($user)) {
-    header("Location: /");
-    exit();
+    Redirect("/");
 }
 
 if (!isset($_SESSION['register_email'])) {
-    header("Location: /register/");
-    exit();
+    Redirect("/register/");
 }
 $vars['email'] = $_SESSION['register_email'];
 // This is how to output the template.

@@ -13,8 +13,7 @@ include_once(SITE_ROOT."includes/auth/email_auth.php");
 if (IsMaintenanceMode()) PostBanner("Site is in read-only mode, account registration has been disabled", "red", false);
 
 if (isset($user)) {
-    header("Location: /");
-    exit();
+    Redirect("/");
 }
 if (isset($_POST['username']) &&
     isset($_POST['email']) &&
@@ -98,7 +97,7 @@ if (isset($_POST['username']) &&
         if (HandlePostSuccess($username, $email, $password, $bday)) {
             $_SESSION['register_email'] = $email;
             unset($_SESSION['captcha_code']);
-            header("Location: /register/confirm/");
+            Redirect("/register/confirm/");
             return;
         }
     }

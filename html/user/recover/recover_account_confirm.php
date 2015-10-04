@@ -7,13 +7,11 @@ include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."includes/util/sql.php");
 
 if (isset($user)) {
-    header("Location: /");
-    exit();
+    Redirect("/");
 }
 
 if (!isset($_SESSION['recovery_email'])) {
-    header("Location: /recover/");
-    exit();
+    Redirect("/recover/");
 }
 $vars['email'] = $_SESSION['recovery_email'];
 RenderPage("user/recover_confirm.tpl");

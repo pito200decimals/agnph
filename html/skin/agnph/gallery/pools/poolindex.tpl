@@ -44,18 +44,18 @@
             &nbsp;
         {% endif %}
     </div>
-    {% if pools|length > 0 %}
-        {# Display pool index. #}
-        <table class="list-table">
-            <thead>
-                <tr>
-                    <td><div><strong>Name</strong></div></td>
-                    <td><div><strong>Number of Posts</strong></div></td>
-                    <td><div><strong>Created By</strong></div></td>
-                    {% if canEditPools %}<td><div><strong>Actions</strong></div></td>{% endif %}
-                </tr>
-            </thead>
-            <tbody>
+    {# Display pool index. #}
+    <table class="list-table">
+        <thead>
+            <tr>
+                <td><div><strong>Name</strong></div></td>
+                <td><div><strong>Number of Posts</strong></div></td>
+                <td><div><strong>Created By</strong></div></td>
+                {% if canEditPools %}<td><div><strong>Actions</strong></div></td>{% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% if pools|length > 0 %}
                 {% for pool in pools %}
                     <tr>
                         <td><div><a href="/gallery/post/?search={{ pool.searchString|url_encode }}">{{ pool.Name }}</a></div></td>
@@ -69,29 +69,17 @@
                         </div></td>{% endif %}
                     </tr>
                 {% endfor %}
-            </tbody>
-        </table>
-        <div class="Clear">&nbsp;</div>
-        <div class="iterator">
-            {% autoescape false %}{{ postIterator }}{% endautoescape %}
-        </div>
-    {% else %}
-        {# No pools here. #}
-        <table class="list-table">
-            <thead>
+            {% else %}
                 <tr>
-                    <td><div><strong>Name</strong></div></td>
-                    <td><div><strong>Number of Posts</strong></div></td>
-                    <td><div><strong>Created By</strong></div></td>
-                    {% if canEditPools %}<td><div><strong>Actions</strong></div></td>{% endif %}
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td colspan="3">No pools found</td>
+                    <td></td>
+                    <td colspan="2">No pools found</td>
                     {% if canEditPools %}<td></td>{% endif %}
                 </tr>
-            </tbody>
-        </table>
-    {% endif %}
+            {% endif %}
+        </tbody>
+    </table>
+    <div class="Clear">&nbsp;</div>
+    <div class="iterator">
+        {% autoescape false %}{{ postIterator }}{% endautoescape %}
+    </div>
 {% endblock %}

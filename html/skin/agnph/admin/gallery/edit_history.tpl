@@ -46,20 +46,20 @@
     <form method="GET" accept-encoding="UTF-8">
     Search: <input type="text" class="search" name="search" value="{{ search }}" required />
     </form>
-    {% if tagHistoryItems|length > 0 %}
-        {# Display tag history index. #}
-        <form action="/admin/gallery/revert-edit/" method="POST" accept-encoding="UTF-8">
-            <table class="list-table">
-                <thead>
-                    <tr>
-                        <td><strong>Post</strong></td>
-                        <td><strong>Date</strong></td>
-                        <td><strong>Edited by</strong></td>
-                        <td><strong>Tag Changes</strong></td>
-                        <td><input type="checkbox" id="revert-all-box" /></td>
-                    </tr>
-                </thead>
-                <tbody>
+    {# Display tag history index. #}
+    <form action="/admin/gallery/revert-edit/" method="POST" accept-encoding="UTF-8">
+        <table class="list-table">
+            <thead>
+                <tr>
+                    <td><strong>Post</strong></td>
+                    <td><strong>Date</strong></td>
+                    <td><strong>Edited by</strong></td>
+                    <td><strong>Tag Changes</strong></td>
+                    <td><input type="checkbox" id="revert-all-box" /></td>
+                </tr>
+            </thead>
+            <tbody>
+                {% if tagHistoryItems|length > 0 %}
                     {% for item in tagHistoryItems %}
                         <tr>
                             <td><a href="/gallery/post/show/{{ item.PostId }}/">{{ item.PostId }}</a></td>
@@ -69,16 +69,18 @@
                             <td><input class="revert-line-box" type="checkbox" name="revert-id[]" value="{{ item.Id }}" /></td>
                         </tr>
                     {% endfor %}
-                </tbody>
-            </table>
-            <input id="revert-button" type="submit" value="Revert selected" />
-        </form>
-        <div class="Clear">&nbsp;</div>
-        <div class="iterator">
-            {% autoescape false %}{{ postIterator }}{% endautoescape %}
-        </div>
-    {% else %}
-        {# No history items here. #}
-        No tag history found.
-    {% endif %}
+                {% else %}
+                    <tr>
+                        <td></td>
+                        <td colspan="4">No tag history found</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+        <input id="revert-button" type="submit" value="Revert selected" />
+    </form>
+    <div class="Clear">&nbsp;</div>
+    <div class="iterator">
+        {% autoescape false %}{{ postIterator }}{% endautoescape %}
+    </div>
 {% endblock %}

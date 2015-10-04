@@ -14,8 +14,7 @@ if (IsMaintenanceMode()) PostBanner("Site is in read-only mode, login has been d
 if (isset($_POST['username']) && isset($_POST['password'])) {
     include_once(SITE_ROOT."includes/auth/login.php");
     if (isset($user)) {
-        header("Location: /");
-        exit();
+        Redirect("/");
     } else {
         if (isset($user_banned) && $user_banned) {
             $msg = "Your account has been banned";
@@ -39,8 +38,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 }
 
 if (isset($user)) {
-    header("Location: /");
-    exit();
+    Redirect("/");
 }
 
 RenderPage("login.tpl");

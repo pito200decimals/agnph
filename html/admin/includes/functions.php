@@ -42,20 +42,16 @@ function DoRedirect() {
     global $vars;
     // Redirect to another admin control panel page.
     if ($vars['canAdminForums']) {
-        header("Location: /admin/forums/");
-        exit();
+        Redirect("/admin/forums/");
     }
     if ($vars['canAdminGallery']) {
-        header("Location: /admin/gallery/");
-        exit();
+        Redirect("/admin/gallery/");
     }
     if ($vars['canAdminFics']) {
-        header("Location: /admin/fics/");
-        exit();
+        Redirect("/admin/fics/");
     }
     if ($vars['canAdminOekaki']) {
-        header("Location: /admin/oekaki/");
-        exit();
+        Redirect("/admin/oekaki/");
     }
     RenderErrorPage("Not authorized to access this page");
 }

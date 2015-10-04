@@ -18,8 +18,7 @@ if (!$vars['canAdminGallery']) {
 if (isset($_POST['submit'])) {
     HandlePost();
     PostSessionBanner("Settings changed", "green");
-    header("Location: ".$_SERVER['REQUEST_URI']);
-    exit();
+    Redirect($_SERVER['REQUEST_URI']);
 }
 
 $vars['news_posts_board'] = GetSiteSetting(GALLERY_NEWS_SOURCE_BOARD_NAME_KEY, null);

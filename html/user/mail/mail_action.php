@@ -30,7 +30,7 @@ if ($action == "send") {
     if (isset($_POST['rid']) && is_numeric($_POST['rid'])) {
         // Reply to message.
         $rid = (int)$_POST['rid'];
-        sql_query_into($result, "SELECT * FROM ".USER_MAILBOX_TABLE." WHERE Id=$rid;", 1) or RenderErrorPage("Unable to send message");
+        sql_query_into($result, "SELECT * FROM ".USER_MAILBOX_TABLE." WHERE Id=$rid AND MessageType<>1;", 1) or RenderErrorPage("Unable to send message");
         $msg = $result->fetch_assoc();
 
         if ($msg['SenderUserId'] == $uid) {
@@ -63,19 +63,22 @@ if ($action == "send") {
             VALUES
             ($suid, $ruid, $pmid, $now, '$escaped_title', '$escaped_message');") or RenderErrorPage("Unable to send message");
         PostMailSessionBanner("Message sent");
-        header("Location: /user/$uid/mail/");
-        exit();
+        Redirect("/user/$uid/mail/");
     } else if (isset($_POST['to']) &&
         isset($_POST['ruid']) &&
         is_numeric($_POST['ruid']) &&
         isset($_POST['subject'])) {
         // Send new message.
-        $to_name = sql_escape($_POST['to']);
-        sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE DisplayName LIKE '$to_name';", 1) or RenderErrorPage("Unable to find user: ".$_POST['to']);
-        $ruid = (int)$_POST['ruid'];
-        $to_uid = $_POST['ruid'];
-        if ($ruid != $to_uid) {
-            RenderErrorPage("Unable to find user: ".$_POST['to']);
+        if ($_POST['ruid'] == -1 && CanUserPMAllUsers($user)) {
+            $ruid = -1;
+        } else {
+            $to_name = sql_escape($_POST['to']);
+            sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE DisplayName LIKE '$to_name';", 1) or RenderErrorPage("Unable to find user: ".$_POST['to']);
+            $ruid = (int)$_POST['ruid'];
+            $to_uid = $_POST['ruid'];
+            if ($ruid != $to_uid) {
+                RenderErrorPage("Unable to find user: ".$_POST['to']);
+            }
         }
 
         $title = $_POST['subject'];
@@ -85,14 +88,27 @@ if ($action == "send") {
         $escaped_title = sql_escape($title);
         $escaped_message = sql_escape($message);
         $now = time();
+        $msgs = array();
+        if ($ruid == -1) {
+            // Send to all users.
+            if (sql_query_into($result, "SELECT UserId FROM ".USER_TABLE." WHERE Usermode=1 AND RegisterIP<>'';", 1)) {
+                while ($row = $result->fetch_assoc()) {
+                    $ruid = $row['UserId'];
+                    $msgs[] = "($uid, $ruid, -1, $now, '$escaped_title', '$escaped_message', 1)";
+                }
+            } else {
+                RenderErrorPage("Unable to send message");
+            }
+        } else {
+            $msgs[] = "($uid, $ruid, -1, $now, '$escaped_title', '$escaped_message', 0)";
+        }
+        $msgs = implode(",", $msgs);
         sql_query("INSERT INTO ".USER_MAILBOX_TABLE."
-            (SenderUserId, RecipientUserId, ParentMessageId, Timestamp, Title, Content)
-            VALUES
-            ($uid, $ruid, -1, $now, '$escaped_title', '$escaped_message');") or RenderErrorPage("Unable to send message");
+            (SenderUserId, RecipientUserId, ParentMessageId, Timestamp, Title, Content, MessageType)
+            VALUES $msgs;") or RenderErrorPage("Unable to send message");
 
         PostMailSessionBanner("Message sent");
-        header("Location: /user/$uid/mail/");
-        exit();
+        Redirect("/user/$uid/mail/");
     } else {
         RenderErrorPage("Unable to send message");
     }

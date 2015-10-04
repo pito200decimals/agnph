@@ -2,6 +2,11 @@
 
 # Needed so that we can name URL's with the same filename as php files (e.g. /gallery/upload/)
 Options -MultiViews
+IndexIgnore *
+RewriteCond %{THE_REQUEST} /.+?\.php[\s?] [NC]
+RewriteRule ^ - [F]
+RewriteCond %{THE_REQUEST} /.+?\.tpl[\s?] [NC]
+RewriteRule ^ - [F]
 
 # Rewrites for Sitewide pages
 RewriteRule ^login/?$ /login.php
@@ -37,11 +42,12 @@ RewriteRule ^user/(\d+)/gallery/?$ /gallery/user.php?uid=$1
 RewriteRule ^user/(\d+)/fics/?$ /fics/user.php?uid=$1
 #RewriteRule ^user/(\d+)/oekaki/?$ /user/profile.php?uid=$1
 RewriteRule ^user/(\d+)/preferences/?$ /user/preferences.php?uid=$1
-RewriteRule ^user/(\d+)/preferences/bio/save/?$ /user/savebio.php?uid=$1
+RewriteRule ^user/(\d+)/preferences/bio/save/?$ /user/save_bio_ajax.php?uid=$1
 RewriteRule ^user/(\d+)/mail/?$ /user/mail/mail.php?uid=$1 [QSA]
 RewriteRule ^user/(\d+)/mail/unread/?$ /user/mail/mail.php?uid=$1&unread=1 [QSA]
 RewriteRule ^user/(\d+)/mail/message/(\d+)/?$ /user/mail/view_message.php?uid=$1&mid=$2
 RewriteRule ^user/(\d+)/mail/compose/?$ /user/mail/compose_message.php?uid=$1 [QSA]
+RewriteRule ^user/(\d+)/mail/compose/all/?$ /user/mail/compose_message.php?uid=$1&to=__all_users__ [QSA]
 RewriteRule ^user/(\d+)/mail/send/?$ /user/mail/mail_action.php?uid=$1&action=send
 RewriteRule ^user/auth/change/?$ /user/recover/recover_account_success.php
 RewriteRule ^user/(\d+)/admin/?$ /user/change_admin.php?uid=$1
@@ -65,6 +71,7 @@ RewriteRule ^gallery/tags/?$ /gallery/tags/tags.php?sort=name&order=asc [QSA]
 RewriteRule ^gallery/post/view-script/ /gallery/posts/viewpost-script.php [QSA]
 RewriteRule ^gallery/tagsearch/?$ /gallery/tag_ajax.php [QSA]
 RewriteRule ^gallery/set-mobile/?$ /gallery/toggle_mobile_ajax.php
+RewriteRule ^gallery/help/?$ /gallery/tag_help.php
 
 #Rewrites for fics pages
 RewriteRule ^fics/?$ /fics/index.php
