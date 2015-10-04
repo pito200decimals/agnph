@@ -168,7 +168,7 @@ function UpdatePost($tag_string, $post_id, $user, $update_tag_types=true, $batch
 }
 
 // Updates a post with the new description (and updates history log).
-function UpdatePostDescription($post_id, $description, $user) {
+function UpdatePostDescription($post_id, $description, $user, $log_change=true) {
     $description = mb_substr($description, 0, MAX_GALLERY_POST_DESCRIPTION_LENGTH);
     $escaped_description = sql_escape($description);
     $now = time();

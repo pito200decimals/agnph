@@ -126,7 +126,8 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
     // Update post with tags history gets recorded.
     // Append rating and stuff before tags, so that tags can override the other fields.
     UpdatePost("rating:$rating source:$source parent:$parent_post_id ".$_POST['tags'], $post_id, $user);
-    UpdatePostDescription($post_id, $_POST['description'], $user);
+    $log_description_change = mb_strlen($_POST['description']);
+    UpdatePostDescription($post_id, $_POST['description'], $user, $log_description_change);
     $uid = $user['UserId'];
     $username = $user['DisplayName'];
     LogVerboseAction("<strong><a href='/user/$uid/'>$username</a></strong> uploaded <strong><a href='/gallery/post/show/$pid/'>post #$pid</a></strong>", "G");

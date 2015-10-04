@@ -32,7 +32,7 @@ CollectItems(GALLERY_DESC_HISTORY_TABLE, "WHERE $sql_clause ORDER BY Timestamp D
 
 if (sizeof($tag_history_items) > 0) {
     foreach ($tag_history_items as &$item) {
-        $item['date'] = FormatDate($item['Timestamp']);
+        $item['date'] = FormatDate($item['Timestamp'], GALLERY_DATE_LONG_FORMAT);
         LoadSingleTableEntry(array(USER_TABLE), "UserId", $item['UserId'], $item['user']);
     }
 }

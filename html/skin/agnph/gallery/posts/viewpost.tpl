@@ -148,7 +148,7 @@
                     <ul class="statlist">
                         <li>ID: {{ post.PostId }}</li>
                         {% if post.Source != "" %}
-                            <li>Source:
+                            <li class="source-line">Source:
                                 {% if post.Source starts with "http://" or post.Source starts with "https://" %}
                                     <a href="{{ post.Source }}" title="{{ post.Source }}">{{ post.Source }}</a>
                                 {% else %}

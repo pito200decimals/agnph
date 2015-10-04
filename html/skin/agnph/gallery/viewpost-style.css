@@ -82,6 +82,9 @@
     max-width: 275px;
     padding: 0px;
 }
+.source-line {
+    text-overflow: ellipsis;
+}
 
 /* Actions */
 .actionlist {

@@ -50,7 +50,7 @@ foreach ($tag_history_items as &$item) {
             } else if (startsWith($prop, "source:")) {
                 $s = mb_substr($prop, 7);
                 if ($s != $source) {
-                    $edits[] = "<span class='ptypetag'>$prop</span>";
+                    $edits[] = "<span class='ptypetag source-history-item'>$prop</span>";
                     $source = $s;
                 }
             }
@@ -62,7 +62,7 @@ foreach ($tag_history_items as &$item) {
     }, $edits);
     $tag_changes = implode(" ", $edits);
     $item['tagChanges'] = $tag_changes;
-    $item['date'] = FormatDate($item['Timestamp']);
+    $item['date'] = FormatDate($item['Timestamp'], GALLERY_DATE_LONG_FORMAT);
     LoadSingleTableEntry(array(USER_TABLE), "UserId", $item['UserId'], $item['user']);
 }
 $tag_history_items = array_reverse($tag_history_items);  // Undo reverse order.

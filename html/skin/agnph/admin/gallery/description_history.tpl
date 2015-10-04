@@ -46,7 +46,7 @@
                 {% for item in tagHistoryItems %}
                     <tr>
                         <td><a href="/gallery/post/show/{{ item.PostId }}/">{{ item.PostId }}</a></td>
-                        <td>{{ item.date }}</td>
+                        <td style="white-space: nowrap;"><small>{{ item.date }}</small></td>
                         <td><a href="/user/{{ item.user.UserId }}/gallery/">{{ item.user.DisplayName }}</a></td>
                         <td>{{ item.Description }}</td>
                     </tr>
