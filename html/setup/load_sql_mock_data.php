@@ -76,6 +76,16 @@ do_or_die(sql_query(
     (4, 'N'),
     (5, 'N'),
     (6, 'N');"));
+do_or_die(sql_query(
+   "INSERT INTO ".OEKAKI_USER_PREF_TABLE."
+    (UserId)
+    VALUES
+    (1),
+    (2),
+    (3),
+    (4),
+    (5),
+    (6);"));
 
 WriteBio(1, "Bio of User1!<br />TEST");
 WriteBio(2, "Bio of User2!");
@@ -315,7 +325,7 @@ function AddChapter($sid, $author_id, $title, $begin_notes, $content, $end_notes
         (ParentStoryId, AuthorUserId, Title, ChapterItemOrder, ChapterNotes, ChapterEndNotes, TotalStars, TotalRatings)
         VALUES
         ($sid, $author_id, '$title', $count, '$begin_notes', '$end_notes', 13, 2);"));
-    // TODO: Write story content to file.
+
     $cid = sql_last_id();
     $chapter_path = GetChapterPath($cid);
     write_file($chapter_path, $content);

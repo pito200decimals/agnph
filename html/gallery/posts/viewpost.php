@@ -218,7 +218,6 @@ function AddUserPermissions(&$post, $user) {
     }
     if (CanUserDeleteGalleryPost($user)) {
         if ($post['Status'] == 'F') {
-            // TODO: Decide if admins can delete post from any state.
             $post['canDelete'] = true;
             $post['canUnflag'] = true;
             $post['hasAction'] = true;

@@ -52,6 +52,7 @@ sql_query("DROP TABLE ".FICS_USER_PREF_TABLE.";");
 sql_query("DROP TABLE ".FICS_USER_FAVORITES_TABLE.";");
 sql_query("DROP TABLE ".FICS_TAG_ALIAS_TABLE.";");
 sql_query("DROP TABLE ".FICS_TAG_IMPLICATION_TABLE.";");
+sql_query("DROP TABLE ".OEKAKI_USER_PREF_TABLE.";");
 // NOTE: If you add another user table, make sure to update account migration.
 sql_query("DELETE FROM mysql.event");
 
@@ -227,7 +228,7 @@ do_or_die(sql_query(
         Description TEXT(".MAX_GALLERY_POOL_DESCRIPTION_LENGTH.") NOT NULL,
         PRIMARY KEY(PoolId)
     ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
-// Table containing comments on posts. TODO: Score?
+// Table containing comments on posts. TODO: Comment Score?
 do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_COMMENT_TABLE." (
         CommentId INT(11) UNSIGNED AUTO_INCREMENT,
@@ -275,7 +276,7 @@ do_or_die(sql_query(
         DateUpdated INT(11) NOT NULL,
         Title VARCHAR(".MAX_FICS_STORY_TITLE_LENGTH.") NOT NULL,
         Summary TEXT(".MAX_FICS_STORY_SUMMARY_LENGTH.") NOT NULL,
-        Rating CHAR(11) NOT NULL,".  // G - G, P - PG, T - PG-13, R - R, X - XXX TODO: Ordering
+        Rating CHAR(11) NOT NULL,".  // G - G, P - PG, T - PG-13, R - R, X - XXX
        "ApprovalStatus CHAR(1) DEFAULT 'A',".  // P - Pending, A - Approved, D - Deleted (Pending not used).
        "Completed TINYINT(1) DEFAULT FALSE,
         Featured CHAR(1) DEFAULT '".FICS_NOT_FEATURED."',".  // D/F/f/G/g/S/s/Z/z (upper-case current, lower-case retired).
@@ -342,7 +343,25 @@ do_or_die(sql_query(
         Timestamp INT(11) NOT NULL,
         PRIMARY KEY(UserId, StoryId)
     ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
-// TODO: Author following
+// TODO: Author following?
+
+
+///////////////////
+// Oekaki tables //
+///////////////////
+
+// Table for oekaki user preferences.
+do_or_die(sql_query(
+   "CREATE TABLE ".OEKAKI_USER_PREF_TABLE." (
+        UserId INT(11) NOT NULL,
+        OekakiPostsPerPage INT(11) DEFAULT ".DEFAULT_OEKAKI_POSTS_PER_PAGE.",
+        PRIMARY KEY(UserId)
+    ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
+
+
+///////////////////////
+// Other site tables //
+///////////////////////
 
 // Table holding all user PM's.
 do_or_die(sql_query(

@@ -34,7 +34,6 @@ $sid = $story['StoryId'];  // Get db value.
 $vars['story'] = $story;
 if (isset($_POST['confirm'])) {
     // Submit action.
-    // TODO: Log action.
     if ($_GET['action'] == "delete" && CanUserDeleteStory($story, $user)) {
         if ($_GET['type'] == "chapter") {
             if (isset($_POST['id']) && isset($_POST['index']) && is_numeric($_POST['index'])) {

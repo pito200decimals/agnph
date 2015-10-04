@@ -24,7 +24,7 @@ if (!isset($user)) {
 $actions = $_POST['action'];
 $success = false;
 // Parse action string.
-// TODO: Update when other sections permissions are finalized.
+// TODO: Add oekaki permissions when section is finished.
 $ACTION_TABLE = array(
     "site" => USER_TABLE,
     "forums" => FORUMS_USER_PREF_TABLE,

@@ -82,6 +82,7 @@ function ProcessPost($hash_fn, $section, $field) {
     }
 }
 
+// TODO: Handle oekaki data.
 function MigrateAccount($uid) {
     global $user;
     $new_uid = $user['UserId'];

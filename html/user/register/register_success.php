@@ -34,8 +34,9 @@ function PrepareAllUserTables($user) {
     $uid = $user['UserId'];
 
     // Create bio file.
-    mkdirs("/user/data/bio/");
-    $success = write_file(SITE_ROOT."user/data/bio/$uid.txt", "");
+    mkdirs("/user/data/bio/");  // Make sure directory is created.
+    $bio_path = SITE_ROOT."user/data/bio/$uid.txt";
+    $success = write_file($bio_path, "");
 
     // Create Forums table entry.
     if ($success) $success = sql_query("INSERT INTO ".FORUMS_USER_PREF_TABLE." (UserId) VALUES ($uid);");
@@ -46,7 +47,8 @@ function PrepareAllUserTables($user) {
     // Create Fics table entry.
     if ($success) $success = sql_query("INSERT INTO ".FICS_USER_PREF_TABLE." (UserId) VALUES ($uid);");
 
-    // TODO: Create Oekaki entry
+    // Create Oekaki table entry.
+    if ($success) $success = sql_query("INSERT INTO ".OEKAKI_USER_PREF_TABLE." (UserId) VALUES ($uid);");
 
     // Mark user as registered.
     if ($success) $success = sql_query("UPDATE ".USER_TABLE." SET Usermode=1 WHERE UserId=$uid;");
@@ -56,6 +58,14 @@ function PrepareAllUserTables($user) {
         $username = $user['DisplayName'];
         $ip = $user['RegisterIP'];
         LogAction("<strong><a href='/user/$uid/'>$username</a></strong> activated new account", "");
+    } else {
+        // Try to delete files/table entries that were created.
+        delete_files($bio_path);
+        sql_query("DELETE FROM ".FORUMS_USER_PREF_TABLE." WHERE UserId=$uid;");
+        sql_query("DELETE FROM ".GALLERY_USER_PREF_TABLE." WHERE UserId=$uid;");
+        sql_query("DELETE FROM ".FICS_USER_PREF_TABLE." WHERE UserId=$uid;");
+        sql_query("DELETE FROM ".OEKAKI_USER_PREF_TABLE." WHERE UserId=$uid;");
+        // User table remains unregistered, just leave it so user can try again.
     }
     return $success;
 }

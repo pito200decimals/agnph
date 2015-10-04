@@ -24,7 +24,6 @@ if (isset($user)) {
 HandlePost($searchterms);
 $vars['search'] = $searchterms;
 $sql = CreatePostSearchSQL(mb_strtolower($searchterms), $posts_per_page, $page, $can_sort_pool, $pool_id);
-$unlimited_sql = CreatePostSearchSQL(mb_strtolower($searchterms), $posts_per_page, $page, $can_sort_pool, $pool_id, false);
 $posts = array();
 if (sql_query_into($result, $sql, 0)) {
     while ($row = $result->fetch_assoc()) {

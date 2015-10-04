@@ -22,7 +22,9 @@ if (isset($_GET['search'])) {
 } else {
     $search_clause = "Usermode=1";
 }
-// TODO: Hide un-recovered accounts?
+if (HIDE_IMPORTED_ACCOUNTS_FROM_USER_LIST) {
+    $search_clause .= " AND RegisterIP<>''";
+}
 
 if (isset($_GET['sort'])) {
     $order_asc = true;

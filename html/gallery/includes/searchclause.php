@@ -163,6 +163,8 @@ function CreateSQLClauseFromFilter($filter) {
             } else {
                 return "FALSE";
             }
+        } else if (startsWith($filter, "order:")) {
+            return "TRUE";
         } else {
             // Fallback on normal search clauses.
             return CreateSQLClauseFromTerm($filter);

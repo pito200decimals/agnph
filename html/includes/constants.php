@@ -28,6 +28,7 @@ define("GALLERY_USER_FAVORITES_TABLE", SQL_TABLE_PREFIX."gallery_user_fav");
 define("FICS_USER_PREF_TABLE", SQL_TABLE_PREFIX."fics_user");
 define("FICS_USER_FAVORITES_TABLE", SQL_TABLE_PREFIX."fics_user_fav");
 define("USER_MAILBOX_TABLE", SQL_TABLE_PREFIX."user_mail");
+define("OEKAKI_USER_PREF_TABLE", SQL_TABLE_PREFIX."oekaki_user");
 
 // Forums tables.
 define("FORUMS_BOARD_TABLE", SQL_TABLE_PREFIX."forums_boards");
@@ -53,6 +54,8 @@ define("FICS_TAG_TABLE", SQL_TABLE_PREFIX."fics_tags");
 define("FICS_REVIEW_TABLE", SQL_TABLE_PREFIX."fics_reviews");
 define("FICS_TAG_ALIAS_TABLE", SQL_TABLE_PREFIX."fics_tag_aliases");
 define("FICS_TAG_IMPLICATION_TABLE", SQL_TABLE_PREFIX."fics_tag_implications");
+
+// Oekaki tables.
 
 ////////////////////////////////////////////////////////////////////
 // Settings Defaults and Limits (Embedded in SQL table defaults). //
@@ -92,6 +95,8 @@ define("MAX_FICS_CHAPTER_TITLE_LENGTH", 256);
 define("MAX_FICS_CHAPTER_NOTES_LENGTH", 1024);
 define("MAX_FICS_COMMENT_LENGTH", 4096);
 define("DEFAULT_FICS_STORIES_PER_PAGE", 15);
+// Oekaki related
+define("DEFAULT_OEKAKI_POSTS_PER_PAGE", 25);
 // Other user constants.
 define("MAX_PM_TITLE_LENGTH", 256);
 define("MAX_PM_LENGTH", 4096);
@@ -218,5 +223,6 @@ $AGE_GATE_SECTIONS = array(
     "fics",
     "oekaki",
 );
+define("HIDE_IMPORTED_ACCOUNTS_FROM_USER_LIST", true);
 
 ?>

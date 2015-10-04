@@ -150,8 +150,7 @@ function HandlePostSuccess($username, $email, $password, $bday) {
 
 function SendValidationEmailLink($uid, $username, $email, $joinTime) {
     $to = "$username <$email>";
-    // TODO: Remove (TEST)
-    $subject = "(TEST) Account Registration for AGNPH";
+    $subject = "Account Registration for AGNPH";
     // Don't have to worry about duplicate codes, as only one account can exist per-email.
     $code = CreateCodeEntry($email, "registration", "$uid", "/register/success/", REGISTER_ACCOUNT_TIMESTAMP_DURATION);
     if ($code === FALSE) return false;

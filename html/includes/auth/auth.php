@@ -15,7 +15,6 @@ if (isset($user)) {
 function AuthenticateUser($uid, $salt) {
     global $user, $user_banned, $user_ban_timestamp, $user_ban_reason;
     debug("Authenticating user with uid=$uid, salt=$salt");
-    // TODO: Load only main user table?
     LoadAllUserPreferences($uid, $user, true);
     $uid = $user['UserId'];
     if ($user['Usermode'] == -1) {

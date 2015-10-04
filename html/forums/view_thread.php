@@ -17,8 +17,7 @@ if ($thread == null) {
 }
 $tid = $thread['ThreadId'];
 $threads_per_page = GetPostsPerPageInThread();
-// TODO: Remove order by IsThread.
-CollectItems(FORUMS_POST_TABLE, "WHERE (PostId=$tid AND IsThread=1) OR (ParentId=$tid AND IsThread=0) ORDER BY IsThread DESC, PostDate ASC, PostId ASC", $posts, $threads_per_page, $iterator, "Thread not found");
+CollectItems(FORUMS_POST_TABLE, "WHERE (PostId=$tid AND IsThread=1) OR (ParentId=$tid AND IsThread=0) ORDER BY PostDate ASC, PostId ASC", $posts, $threads_per_page, $iterator, "Thread not found");
 
 InitPosters($posts);
 $thread['posts'] = &$posts;

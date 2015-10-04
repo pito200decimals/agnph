@@ -4,7 +4,6 @@
 include_once(SITE_ROOT."includes/util/user.php");
 include_once(SITE_ROOT."includes/util/table_data.php");
 
-// TODO: Overall, permissions for restricted users.
 function CanGuestViewBoard($board) {
     if ($board['PrivateBoard'] == 1) return false;
     return true;
@@ -17,18 +16,17 @@ function CanUserViewBoard($user, $board) {
 }
 function CanUserCreateThread($user, $board) {
     if (!IsUserActivated($user)) return false;
-    if ($user['FicsPermissions'] == 'R') return false;
+    if ($user['ForumsPermissions'] == 'R') return false;
     if ($board['BoardId'] == -1) return false;  // Can't make threads under fake root board.
     if ($user['ForumsPermissions'] == 'A') return true;
-    // TODO: Determine if this is desired.
-    // if (isset($board['childBoards']) && sizeof($board['childBoards']) > 0) return false;  // Can't post to top-level boards (Although admins can move posts to them).
+    if (isset($board['childBoards']) && sizeof($board['childBoards']) > 0) return false;  // Can't post to top-level boards (Although admins can move posts to them).
     if ($board['PrivateBoard'] == 1) return false;
     if ($board['Locked'] == 1) return false;
     return true;
 }
 function CanUserPostToThread($user, $thread) {
     if (!IsUserActivated($user)) return false;
-    if ($user['FicsPermissions'] == 'R') return false;
+    if ($user['ForumsPermissions'] == 'R') return false;
     if ($user['ForumsPermissions'] == 'A') return true;
     if ($thread['Locked']) return false;
     // Don't check board locked status, as users can still reply to threads in locked boards.
@@ -43,7 +41,7 @@ function CanUserEditForumsPost($user, $thread, $post) {
 function CanUserDeleteForumsPost($user, $thread, $post) {
     if ($post['IsThread'] == 1 && sizeof($thread['posts']) > 1) return false;
     if (!IsUserActivated($user)) return false;
-    if ($user['FicsPermissions'] == 'R') return false;
+    if ($user['ForumsPermissions'] == 'R') return false;
     if ($user['ForumsPermissions'] == 'A') return true;
     if ($user['UserId'] == $post['UserId']) return true;
     return false;
@@ -168,7 +166,7 @@ function GetPostsInThread($thread_or_tid) {
     if (is_array($thread_or_tid)) return GetPostsInThread($thread_or_tid['ThreadId']);
     $tid = (int)$thread_or_tid;
     // TODO: Remove order by IsThread.
-    if (!sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE (PostId=$tid AND IsThread=1) OR (ParentId=$tid AND IsThread=0) ORDER BY IsThread DESC, PostDate ASC, PostId ASC;", 1)) return null;
+    if (!sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE (PostId=$tid AND IsThread=1) OR (ParentId=$tid AND IsThread=0) ORDER BY PostDate ASC, PostId ASC;", 1)) return null;
     $ret = array();
     while ($row = $result->fetch_assoc()) {
         $ret[] = $row;
@@ -202,7 +200,6 @@ function UpdateThreadStats($tid) {
 }
 
 function UpdateBoardStats($bid) {
-    // TODO, when stats are supported for boards.
     $numPosts = 0;
     $numThreads = 0;
     $lastPostId = -1;

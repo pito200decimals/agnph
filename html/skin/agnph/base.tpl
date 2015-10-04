@@ -106,7 +106,7 @@
                     <li{% if nav_section=="forums" %} class="selected-nav"{% endif %}><a href="/forums/board/">Forums</a></li>
                     <li{% if nav_section=="gallery" %} class="selected-nav"{% endif %}><a href="/gallery/post/">Gallery</a></li>
                     <li{% if nav_section=="fics" %} class="selected-nav"{% endif %}><a href="/fics/">Fics</a></li>
-                    <li{% if nav_section=="oekaki" %} class="selected-nav"{% endif %}><a href="/oekaki/">Oekaki</a></li>
+                    {#<li{% if nav_section=="oekaki" %} class="selected-nav"{% endif %}><a href="/oekaki/">Oekaki</a></li>#}
                     <li{% if nav_section=="user" %} class="selected-nav"{% endif %}><a href="/user/list/">Users</a></li>
                     <li{% if nav_section=="about" %} class="selected-nav"{% endif %}><a href="/about/">About</a></li>
                     {% if user.showAdminTab %}<li{% if nav_section=="admin" %} class="selected-nav"{% endif %}><a href="/admin/">Admin</a></li>{% endif %}

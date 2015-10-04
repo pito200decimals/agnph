@@ -63,7 +63,6 @@ function write_file($file_path, $contents, $append = false) {
 }
 
 // Deletes the given file or directory (and all child files).
-// TODO: Add return value with success.
 function delete_files($target) {
     if(is_dir($target)){
         $files = glob( $target . '*', GLOB_MARK ); //GLOB_MARK adds a slash to directories returned

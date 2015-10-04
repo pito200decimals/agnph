@@ -28,6 +28,7 @@ include_once(SITE_ROOT."includes/util/sql.php");
 include_once(SITE_ROOT."includes/util/logging.php");
 include_once(SITE_ROOT."includes/util/user.php");
 include_once(SITE_ROOT."includes/util/logging.php");
+include_once(SITE_ROOT."includes/util/browser.php");
 // Authenticate logged-in user.
 include_once(SITE_ROOT."includes/auth/auth.php");
 
@@ -64,7 +65,7 @@ GetUnreadPMCount();
 
 if (isset($user)) {
     // Do nothing if logged in.
-} else if (!isset($_SESSION['age_gate'])) {
+} else if (!isset($_SESSION['age_gate']) && IsRealUser()) {
     if (contains($_SERVER['REQUEST_URI'], AGE_GATE_PATH)) {
         // Redirect to destination.
         $_SESSION['age_gate'] = true;

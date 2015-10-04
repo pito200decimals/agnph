@@ -29,7 +29,6 @@ if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE UserId=$p
 }
 $profile_user['recentPosts'] = $recent;
 
-// TODO: Set up global admin links.
 $admin_links = array();
 if (!contains($profile_user['Permissions'], 'A')) {
     // Forums options.

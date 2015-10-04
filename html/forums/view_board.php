@@ -140,7 +140,6 @@ function HandlePost($board) {
         RenderErrorPage("Not authorized to perform this action");
     }
     $bid = $board['BoardId'];
-    // TODO: Decide if logging is desired here.
     switch ($action) {
         case "lock":
             if ($board['BoardId'] == -1) break;

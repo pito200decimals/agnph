@@ -86,8 +86,7 @@ function ForceLogin($uid) {
 
 function SendEmailChangeConfirmationEmail($email, $username) {
     $to = "$username <$email>";
-    // TODO: Remove (TEST)
-    $subject = "(TEST) Confirmation: AGNPH Email address updated";
+    $subject = "Confirmation: AGNPH Email address updated";
     $time = DEFAULT_EMAIL_EXPIRE_HUMAN_READABLE_STRING;
     $message = <<<EOT
 <html>
@@ -135,8 +134,7 @@ function SendRecoveryEmail($email, $username, $email_change, $password_change, $
             return false;
         }
     }
-    // TODO: Remove (TEST)
-    $subject = "(TEST) Confirmation: AGNPH Account $changed change";
+    $subject = "Confirmation: AGNPH Account $changed change";
     $url = GetAuthURL($code);
     $time = DEFAULT_EMAIL_EXPIRE_HUMAN_READABLE_STRING;
     $message = <<<EOT
