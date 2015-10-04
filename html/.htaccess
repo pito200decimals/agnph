@@ -22,6 +22,8 @@ RewriteRule ^recover/success/?$ /user/recover/recover_account_success.php
 RewriteRule ^timezone/?$ /timezone_ajax.php
 RewriteRule ^confirm_age/?$ header.php
 RewriteRule ^change-skin/?$ skin_switch.php
+# TODO: Remove the following
+RewriteRule ^setup/?$ /setup/sql_setup.php
 
 # Rewrites for forums pages
 
@@ -111,12 +113,16 @@ RewriteRule ^admin/forums/?$ /admin/forums/forums.php
 RewriteRule ^admin/forums/log/?$ /admin/site/log.php?filter=forums [QSA]
 RewriteRule ^admin/gallery/?$ /admin/gallery/gallery.php
 RewriteRule ^admin/gallery/tags/?$ /admin/gallery/tag_management.php
+RewriteRule ^admin/gallery/fetch_tag/?$ /admin/gallery/fetch_tag_ajax.php [QSA]
+RewriteRule ^admin/gallery/save_tag/?$ /admin/gallery/save_tag_ajax.php [QSA]
 RewriteRule ^admin/gallery/edit-history/?$ /admin/gallery/edit_history.php
 RewriteRule ^admin/gallery/revert-edit/?$ /admin/gallery/revert_edit.php
 RewriteRule ^admin/gallery/description-history/?$ /admin/gallery/description_history.php
 RewriteRule ^admin/gallery/log/?$ /admin/site/log.php?filter=gallery [QSA]
 RewriteRule ^admin/fics/?$ /admin/fics/fics.php
 RewriteRule ^admin/fics/tags/?$ /admin/fics/tag_management.php
+RewriteRule ^admin/fics/fetch_tag/?$ /admin/fics/fetch_tag_ajax.php [QSA]
+RewriteRule ^admin/fics/save_tag/?$ /admin/fics/save_tag_ajax.php [QSA]
 RewriteRule ^admin/fics/log/?$ /admin/site/log.php?filter=fics [QSA]
 RewriteRule ^admin/oekaki/?$ /admin/oekaki/oekaki.php
 RewriteRule ^admin/oekaki/log/?$ /admin/site/log.php?filter=oekaki [QSA]

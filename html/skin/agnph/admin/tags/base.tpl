@@ -28,7 +28,7 @@
             if ($("#create-filter").is(":checked")) filter = "create";
             $("#searching-span").show();
             return $.ajax({
-                url: "/admin/{{ section }}/fetch_tag_ajax.php",
+                url: "/admin/{{ section }}/fetch_tag/",
                 data: {
                     search: searchTerm,
                     filter: filter
@@ -74,7 +74,7 @@
                 container.append($("<p></p>").append($("<label>Type:</label>")).append(type_select));
                 container.append($("<p><label>Type Lock:</label><select id='edit-lock'><option "+(tag.editLock==1?"":"selected")+">- - -</option><option "+(tag.editLock==1?"selected":"")+">Locked</option></select></p>"));
                 container.append($("<p><label>Add Lock:</label><select id='add-lock'><option "+(tag.addLock==1?"":"selected")+">- - -</option><option "+(tag.addLock==1?"selected":"")+">Locked</option></select></p>"));
-                container.append($("<p><label>Alias:</label><input id='alias' type='text' value='"+(tag.alias==null?"":tag.alias.name)+"' /></p>"));
+                container.append($("<p><label>Alias:</label><input id='alias' type='text' value='"+(tag.alias==null?"":tag.alias.name)+"' /><span class='radio-button-group'><input type='checkbox' id='hide-tag' value='hide' "+(tag.hide_tag==true?"checked":"")+"/>Hide tag from Autocomplete</span></p>"));
                 if (tag.aliased_by != null && tag.aliased_by.length > 0) {
                     var alias_list = $("<ul style='list-style: none; display: inline-block; padding: 0px; margin: 0px;'></ul>");
                     tag.aliased_by.forEach(function(tag) {
@@ -103,13 +103,14 @@
         function SaveChanges(cb) {
             $("#save-button, #search").prop("disabled", true);
             $.ajax({
-                url: "/admin/{{ section }}/save_tag_ajax.php",
+                url: "/admin/{{ section }}/save_tag/",
                 data: {
                     id: tag_data.id,
                     type: $("#tag-type").val(),
                     edit: $("#edit-lock").val(),
                     add: $("#add-lock").val(),
                     alias: $("#alias").val(),
+                    hide_tag: $("#hide-tag").is(':checked'),
                     implied: $("#implied-tags").val(),
                     note: $("#note").val()
                 },

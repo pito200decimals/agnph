@@ -44,7 +44,6 @@ X RSS Feed?
 * General help pages
 * General about section, admin bios, etc.
 - Custom 404 page
-- Hide aliased tags from autocomplete?
 - Admin ticket system
 - Global site statistics?
 - Way to push notifications and site updates to users (via PM system?)

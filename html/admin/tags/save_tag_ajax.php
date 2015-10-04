@@ -48,6 +48,11 @@ if ($_POST['add'] == "Locked") {
 } else {
     $update_clauses[] = "AddLocked=0";
 }
+if ($_POST['hide_tag'] == "true") {
+    $update_clauses[] = "HideTag=1";
+} else {
+    $update_clauses[] = "HideTag=0";
+}
 $update_clauses[] = "Note='".sql_escape($_POST['note'])."'";
 // Update tag table.
 $joined = implode(",", $update_clauses);

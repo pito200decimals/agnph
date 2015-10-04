@@ -65,6 +65,13 @@ if (strlen($search_term) > 0) {
                 continue;
             }
         }
+        if ($term == "type:hidden") {
+            $sql_clauses[] = "T.HideTag=1";
+            continue;
+        } else if ($term == "type:not_hidden") {
+            $sql_clauses[] = "T.HideTag=0";
+            continue;
+        }
         // Normal search.
         $escaped_name = sql_escape($term);
         $sql_clauses[] = "UPPER(T.Name) LIKE UPPER('%$escaped_name%')";
@@ -116,6 +123,7 @@ $joined_ids = implode(",", $tag_ids);
 if (sql_query_into($result, "SELECT * FROM ".ALIAS_TABLE." WHERE TagId IN ($joined_ids) OR AliasTagId IN ($joined_ids);", 1)) {
     $temp_tag_ids = $tag_ids;
     $alias_elems = array();
+    $hidden_alias_ids = array();
     while ($row = $result->fetch_assoc()) {
         $alias_elems[] = $row;
         $temp_tag_ids[] = $row['TagId'];
@@ -188,6 +196,7 @@ function CreateElem($row) {
         "editLock" => $row['EditLocked'],
         "addLock" => $row['AddLocked'],
         "alias" => null,
+        "hide_tag" => $row['HideTag'],
         "aliased_by" => array(),
         "implies" => array(),
         "implied_by" => array(),

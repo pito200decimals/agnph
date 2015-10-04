@@ -16,7 +16,7 @@ if ($index > -1) {
     $search = mb_substr($search, $index + 1);
 }
 $escaped_search = sql_escape($search);
-if (sql_query_into($result, "SELECT TagId, Name, Type FROM ".TABLE_NAME." WHERE AddLocked=0 AND UPPER(Name) LIKE UPPER('$escaped_search%') LIMIT 3;", 1)) {
+if (sql_query_into($result, "SELECT TagId, Name, Type FROM ".TABLE_NAME." WHERE HideTag=0 AND AddLocked=0 AND UPPER(Name) LIKE UPPER('$escaped_search%') LIMIT 3;", 1)) {
     $elems = array();
     while ($row = $result->fetch_assoc()) {
         if ($prefix == "") $prefix = strtolower($GALLERY_TAG_TYPES[$row['Type']]);

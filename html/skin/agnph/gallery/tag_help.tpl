@@ -60,7 +60,4 @@
             order:fav
         </li>
     </ul>
-// order:date (Recent to Past)
-// order:age (Oldest to Newest)
-// order:fav (Most to Least favorites)
 {% endblock %}

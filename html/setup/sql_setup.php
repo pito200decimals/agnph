@@ -406,6 +406,7 @@ function CreateItemTagTables($tag_table_name, $item_tag_table_name, $alias_table
             ChangeTypeUserId INT(11) NOT NULL,
             ChangeTypeTimestamp INT(11) NOT NULL,
             Note VARCHAR(".MAX_TAG_NOTE_LENGTH.") NOT NULL,
+            HideTag TINYINT(1) DEFAULT 0 NOT NULL,
             PRIMARY KEY(TagId, Name)
         ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
     // Table for item-tag mapping.
