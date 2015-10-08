@@ -12,13 +12,11 @@
     vertical-align: top;
     text-align: center;
     display: table-cell;
-    background-color: rgb(233,233,233);
     width: 160px;
 }
 
 .sidepanel-section {
-    background-color: rgb(233,195,195);
-    margin: 5px;
+    padding: 5px;
 }
 
 .sidepanel-section h4 {
@@ -39,12 +37,10 @@
 .profile-content {
     vertical-align: top;
     display: table-cell;
-    background-color: rgb(195,233,195);
     padding: 5px;
 }
 
 .infoblock {
-    background-color: rgb(195,195,223);
     padding: 5px;
     border-radius: 5px;
     margin-top: 5px;

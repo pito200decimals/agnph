@@ -21,7 +21,7 @@
         <li><a href="#forums">Forums</a></li>
         <li><a href="#gallery">Gallery</a></li>
         <li><a href="#fics">Fics</a></li>
-        <li><a href="#oekaki">Oekaki</a></li>
+        {#<li><a href="#oekaki">Oekaki</a></li>#}
         <li><a href="#irc">IRC</a></li>
         <li><a href="#minecraft">Minecraft</a></li>
     </ul>
@@ -204,13 +204,13 @@
             </ul>
         </div>
     </div>
-    <div class="block">
+    {#<div class="block">
         <a id="oekaki"></a>
         <div class="header">Oekaki Rules</div>
         <div class="content">
             <strong>(TODO: Oekaki rules)</strong>
         </div>
-    </div>
+    </div>#}
     <div class="block">
         <a id="irc"></a>
         <div class="header">IRC Rules</div>

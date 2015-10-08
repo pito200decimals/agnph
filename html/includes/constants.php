@@ -63,7 +63,7 @@ define("FICS_TAG_IMPLICATION_TABLE", SQL_TABLE_PREFIX."fics_tag_implications");
 ////////////////////////////////////////////////////////////////////
 // User related.
 define("MIN_USERNAME_LENGTH", 3);  // Also present in register.tpl (Not in SQL).
-define("MAX_USERNAME_LENGTH", 24);  // Also present in register.tpl
+define("MAX_USERNAME_LENGTH", 48);  // Also present in register.tpl (should be 24, but need 48 for imported accounts).
 define("MIN_DISPLAY_NAME_LENGTH", 3);  // Not in SQL.
 define("MAX_DISPLAY_NAME_LENGTH", 24);
 define("MAX_USER_EMAIL_LENGTH", 64);

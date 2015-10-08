@@ -75,6 +75,8 @@ function CreateSQLClauseFromTerm($term) {
         return "NOT(".CreateSQLClauseFromTerm(mb_substr($term, 1)).")";
     } else if (mb_strtolower($term) == "missing_artist") {
         return "NOT(EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." PT WHERE T.PostId=PT.PostId AND EXISTS(SELECT 1 FROM ".GALLERY_TAG_TABLE." TG WHERE TG.TagId=PT.TagId AND TG.Type='A')))";
+    } else if (mb_strtolower($term) == "missing_species") {
+        return "NOT(EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." PT WHERE T.PostId=PT.PostId AND EXISTS(SELECT 1 FROM ".GALLERY_TAG_TABLE." TG WHERE TG.TagId=PT.TagId AND TG.Type='D')))";
     } else {
         // Get appropriate tag id.
         $tags = GetTagsByNameWithAliasAndImplied(GALLERY_TAG_TABLE, GALLERY_TAG_ALIAS_TABLE, GALLERY_TAG_IMPLICATION_TABLE, array($term), false, -1, true, false, false);  // Apply alias, but don't drop tags.

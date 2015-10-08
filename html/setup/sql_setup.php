@@ -75,7 +75,7 @@ do_or_die(sql_query(
         Timezone FLOAT DEFAULT 0 NOT NULL,
         ShowLocalTime TINYINT(1) DEFAULT 1 NOT NULL,
         Species VARCHAR(".MAX_USER_SPECIES_LENGTH.") NOT NULL,
-        DOB CHAR(10) NOT NULL,".  // Format: MM/DD/YYYY
+        DOB CHAR(10) NOT NULL,".  // Format: YYYY-MM-DD
        "ShowDOB TINYINT(1) DEFAULT 0,
         HideOnlineStatus TINYINT(1) DEFAULT 0,
         Gender CHAR(1) DEFAULT 'U',".  // U=Unspecified, M=Male, F=Female, O=Other

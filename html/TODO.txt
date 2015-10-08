@@ -9,6 +9,9 @@ TODOs
 - Optional large first posts in a thread (for news posts?)
 
 == GALLERY ==
+- Disallow submissions with no tags
+- Number of posts next to tags
+    - Show deleted posts?
 - Slideshow view
 - Handle parent cleanup on post delete
     - Move favorites over to parent?
@@ -24,6 +27,9 @@ X Gallery notes
 X Custom swf/webm thumbs when parent is set to image.
 
 == FICS ==
+- Disallow submissions with no tags
+- Chapter template should have better margins (is 30px enough?)
+- Narrow-column toggle
 X Author/Story following?
 X Ability to subscribe for email/PM notifications (for your stories and watching others)
 X Breakdown of views per-chapter
@@ -52,6 +58,7 @@ X RSS Feed?
     - Ensure no colors clash on mobile
 - Admin sitewide settings (WIP)
 - Theme switcher for guests (Works, figure out where on the template is a good location).
+    - BUGFIX: On error page, dropdown is off the site page.
 - BUGFIX: Tags are lost on fail-to-submit in fancy tagger UI.
 X Polls?
 
@@ -62,6 +69,8 @@ X Polls?
     X Support message deletion? For now, no.
 * Account merge/import system.
     - Still need to do gallery, but other sections complete.
+- Auto-ban underage accounts
+- Mark offline when logged out.
 - Non-user IP tracking (DoS investigating, user demographic statistics, etc?)
     - Show statistic about # of guests browsing? (not including bots?)
 - Display section permissions (better badge icons) [PARTIALLY DONE]

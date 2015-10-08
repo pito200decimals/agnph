@@ -3,6 +3,12 @@
 {% block styles %}
     {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('/list-style.css') }}" />
+    <style>
+        .tag a,.tag a:hover {
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
 {% endblock %}
 
 {% block sortArrow %}
@@ -33,7 +39,7 @@
             {% if tags|length > 0 %}
                 {% for tag in tags %}
                     <tr>
-                        <td><strong><a class="{{ tag.typeClass }}" href="/gallery/post/?search={{ tag.quotedName|url_encode }}">{{ tag.displayName }}</a></strong></td>
+                        <td class="tag"><strong><a class="{{ tag.typeClass }}" href="/gallery/post/?search={{ tag.quotedName|url_encode }}">{{ tag.displayName }}</a></strong></td>
                         <td>{{ tag.typeName }}{% if tag.EditLocked %} (locked){% endif %}</td>
                         <td>{{ tag.tagCounts }}</td>
                     </tr>

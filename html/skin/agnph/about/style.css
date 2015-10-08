@@ -4,14 +4,12 @@
     overflow-x: hidden;
 }
 .block .header {
-    background-color: rgb(159,182,211);
     font-weight: bold;
     font-size: 110%;
     padding: 5px;
 }
 .block .content {
     padding: 10px;
-    background-color: rgb(191,223,255);
 }
 .warning {
     color: red;

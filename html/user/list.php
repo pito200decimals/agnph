@@ -15,6 +15,14 @@ if (isset($_GET['search'])) {
     $search = $_GET['search'];
     if (mb_strtolower($search) == "status:banned") {
         $search_clause = "Usermode=-1";
+    } else if (mb_strtolower($search) == "status:underage") {
+        $now = time();
+        $threshold = (new DateTime("@$now"))->format("Y-m-d");
+        $year = substr($threshold, 0, 4);
+        $date = substr($threshold, 4);
+        $year = ((int)$year) - 18;
+        $threshold = $year.$date;
+        $search_clause = "DOB > '$threshold'";
     } else {
         $escaped_search = sql_escape($search);
         $search_clause = "UPPER(DisplayName) LIKE UPPER('%$escaped_search%') AND Usermode=1";

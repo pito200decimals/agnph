@@ -24,8 +24,8 @@ $(document).ready(function() {
             break;
             case 69:
                 $(".posteditbox").show()[0].scrollIntoView();
-                if ($('#tag-input').length > 0) {
-                    $('#tag-input').focus();
+                if ($('.autocomplete-tag-input').length > 0) {
+                    $('.autocomplete-tag-input').focus();
                 } else if ($('#tags').length > 0) {
                     $('#tags').focus();
                 }

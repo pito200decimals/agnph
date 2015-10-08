@@ -97,6 +97,7 @@ $post['harryluUrl'] = "http://iqdb.harry.lu/?url=".SITE_DOMAIN.GetSiteImagePath(
 
 // Process tags.
 $tags = GetTags($post['PostId']);
+GetTagCountsByTag(GALLERY_POST_TAG_TABLE, $tags);
 $tagNameStr = ToTagNameString($tags);
 $tagCategories = ToTagCategorized($tags);
 $post['tagstring'] = $tagNameStr;

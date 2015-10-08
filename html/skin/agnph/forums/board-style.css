@@ -2,7 +2,6 @@
     width: 100%;
     padding: 10px;
     border-spacing: 2px;
-    background-color: rgb(170,200,255);
     margin-bottom: 5px;
     border-radius: 15px;
 }
@@ -14,7 +13,6 @@
 }
 .board-row td {
     padding: 5px;
-    background-color: rgb(191,223,255);
 }
 .status {
     width: 6%;

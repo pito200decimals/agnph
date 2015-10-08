@@ -1,11 +1,115 @@
 /* Global site skin colors */
 
-/* About */
+/*
+Header-blue:        63,191,255
+Background-blue:    63,127,255
+Bold-blue:          63,127,255
+Medium-blue:        127,191,255
+Light-blue:         191,223,255
+Gray-blue:          159,182,211
+
+Tray-green:         63,91,55
+Tray-highlight:     63,127,63
+*/
+
+/* Sitewide */
+body {
+    background-color: rgb(63,127,255);
+}
+a {
+    color: rgb(0,0,127);
+}
+/* Background */
+.site-navbar, .site-navbar * {
+    background-color: rgb(63,191,255);
+}
+/* Selected section background */
+.site-navbar li.selected-nav a {
+    background-color: rgb(63,127,255);
+}
+/* Text color */
+.site-navbar a,.site-navbar input {
+    color: white;
+}
+.site-navbar a:hover,.site-navbar input:hover {
+    text-shadow: 0 0 3px rgb(255,255,255);
+}
+/* Main hover color */
+.navigation_left a:hover, .navigation_left li.selected-nav a:hover {
+    background-color: rgb(63,127,255);
+}
+#top-logo:hover {
+    background-color: rgb(63,127,255);
+}
+/* Dropdown tray background color */
+.nav-dropdown-tray a,.nav-dropdown-tray input {
+    background-color: rgb(63,91,55);
+}
+/* Dropdown tray hover color */
+#account_dropdown a:hover,#account_dropdown input:hover {
+    background-color: rgb(63,127,63);
+}
+#mainbody {
+    background-color: white;
+}
+.section-nav a {
+    color: rgb(0,0,0);
+}
+.form-box {
+    background-color: rgb(159,182,211);
+}
+.search {
+    background-color: rgb(255,255,255);
+	border-color: rgba(0,0,0,0.8);
+}
+.banner-nofication input {
+    background-color:rgba(0,0,0,0);
+}
+.green-banner {
+    background-color: rgb(85,153,85);
+}
+.red-banner {
+    background-color: rgb(153,85,85);
+}
+.blue-banner {
+    background-color: rgb(85,85,153);
+}
+.none-tag {
+    color: rgb(221,63,31);
+}
+/* Index */
 .block .header {
     background-color: rgb(159,182,211);
 }
 .block .content {
     background-color: rgb(191,223,255);
+}
+/* Lists */
+.list-table thead td {
+    background-color: rgb(100,130,185);
+}
+.list-table tbody tr:nth-child(odd) td {
+    background-color: rgb(150,180,235);
+}
+.list-table tbody tr:nth-child(even) td {
+    background-color: rgb(130,160,215);
+}
+.iterator a {
+    border-color: rgb(63,127,255);
+    background-color: rgb(191,223,255);
+    color: rgb(0,0,127);
+}
+.iterator a:hover {
+    background-color: rgb(127,191,255);
+}
+.iterator .currentpage {
+    color: rgb(0,0,127);
+}
+.autocomplete-tag-list {
+    border-color: rgb(127,127,127);
+}
+.autocomplete-tag-list > li {
+    border-color: rgb(127,127,127);
 }
 
 /* Comments */
@@ -21,10 +125,10 @@ blockquote {
     border-color: rgb(127,127,127);
 }
 blockquote blockquote {
-    background-color: rgb(167,195,223);
+    background-color: rgb(167,195,223); /* Darker */
 }
-blockquote blockquote {
-    background-color: rgb(167,195,223);
+blockquote blockquote blockquote {
+    background-color: rgb(127,191,223); /* Even darker */
 }
 .spoiler {
     color: black;
@@ -34,58 +138,21 @@ blockquote blockquote {
     border-color: black;
 }
 
-/* Fics */
-.notesbox {
-    background-color: rgb(191,223,255);
-    border-color: black;
-}
-.comments ul.tabs li{
-    background-color: rgb(223,239,255);
-    border-color: black;
-}
-.comments ul.tabs li.current{
-    background-color: rgb(191,223,255);
-    border-color: black;
-    border-bottom-color: rgba(0,0,0,0);
-}
-.comments .tab-content{
-    background-color: rgb(191,223,255);
-    border-color: black;
-}
-.storyblock {
-    background-color: rgb(63,127,255);
-}
-.storyblockcontainer {
-    background-color: rgb(255,255,255);
-}
-.storyblockheader {
-    background-color: rgb(191,223,255);
-}
-.storyblockinfo {
-    background-color: rgb(255,255,255);
-}
-.storyblockfooter {
-    background-color: rgb(191,223,255);
-}
-.taglist a:hover span {
-    color: rgb(144,147,255);
-}
-
 /* Forums */
 .board-group {
-    background-color: rgb(170,200,255);
+    background-color: rgb(127,191,255);
 }
 .board-row td {
     background-color: rgb(191,223,255);
 }
 .forums-help-block {
-    background-color: rgb(170,200,255);
+    background-color: rgb(127,191,255);
 }
 
 /* Gallery */
 .floatactionpanel {
     border-color: rgb(0,0,0);
-    background-color: rgb(63, 127, 255);
+    background-color: rgb(127,191,255);
 }
 .post-tile {
     color: rgb(0,0,127);
@@ -112,131 +179,64 @@ blockquote blockquote {
     color: rgb(225,95,95);
 }
 .parentbox, .poolbox {
-    background-color: rgb(85,153,85);
+    background-color: rgb(85,153,85); /* Pool box green */
 }
 .post-description {
     background-color: rgb(191,223,255);
 }
 .tag a:hover {
-    color: rgb(144,147,255);
+    color: rgb(63,127,255)
+}
+.tag small {
+    opacity: 0.5;
 }
 .posteditbox {
-    background-color: rgb(170,200,255);
+    background-color: rgb(159,182,211);
 }
 .comment-section {
     background-color: white;
 }
 
-/* Sitewide */
-.block .header {
-    background-color: rgb(159,182,211);
-}
-.block .content {
+/* Fics */
+.notesbox {
     background-color: rgb(191,223,255);
+    border-color: black;
 }
-.list-table thead td {
-    background-color: rgb(100,130,185);
+.comments ul.tabs li{
+    background-color: rgb(191,223,255);
+    border-color: black;
 }
-.list-table tbody tr:nth-child(odd) td {
-    background-color: rgb(150,180,235);
+.comments ul.tabs li.current{
+    background-color: rgb(127,191,255);
+    border-color: black;
+    border-bottom-color: rgba(0,0,0,0);
 }
-.list-table tbody tr:nth-child(even) td {
-    background-color: rgb(130,160,215);
+.comments .tab-content{
+    background-color: rgb(127,191,255);
+    border-color: black;
 }
-body {
-    background-color: rgb(63,127,255);
+.storyblock {
+    background-color: rgb(127,191,255);
 }
-a {
-    color: rgb(0,0,127);
-}
-/* Background */
-.site-navbar, .site-navbar * {
-    background-color: rgb(63,191,255);
-}
-/* Selected section background */
-.site-navbar li.selected-nav a {
-    background-color: rgb(63,127,63);
-}
-/* Text color */
-.site-navbar a,.site-navbar input {
-    color: white;
-}
-.site-navbar a:hover,.site-navbar input:hover {
-    text-shadow: 0 0 3px rgb(255,255,255);
-}
-/* Main hover color */
-.navigation_left a:hover, .navigation_left li.selected-nav a:hover {
-    background-color: rgb(63,91,255);
-}
-#top-logo:hover {
-    background-color: rgb(63,91,255);
-}
-/* Dropdown tray background color */
-.nav-dropdown-tray a,.nav-dropdown-tray input {
-    background-color: rgb(63,91,55);
-}
-/* Dropdown tray hover color */
-#account_dropdown a:hover,#account_dropdown input:hover {
-    background-color: rgb(163,91,55);
-}
-#mainbody {
+.storyblockcontainer {
     background-color: white;
 }
-.section-nav a {
-    color: rgb(0,0,0);
+.storyblockheader {
+    background-color: rgb(191,223,255);
 }
-.form-box {
-    background-color: rgb(223,223,255);
+.storyblockinfo {
+    background-color: white;
 }
-.search {
-    background-color: rgb(255,255,255);
-	border-color: rgba(0,0,0,0.8);
-}
-.banner-nofication input {
-    background-color:rgba(0,0,0,0);
-}
-.green-banner {
-    background-color: rgb(85,153,85);
-}
-.red-banner {
-    background-color: rgb(153,85,85);
-}
-.blue-banner {
-    background-color: rgb(85,85,153);
-}
-.none-tag {
-    color: rgb(221,63,31);
-}
-.iterator a {
-    border-color: rgb(63,127,255);
-    background-color: rgb(223,255,223);
-    color: rgb(0,0,127);
-}
-.iterator a:hover {
-    background-color: rgb(63,191,255);
-}
-.iterator .currentpage {
-    color: rgb(0,0,127);
-}
-.autocomplete-tag-list {
-    border-color: rgb(127,127,127);
-}
-.autocomplete-tag-list > li {
-    border-color: rgb(127,127,127);
+.storyblockfooter {
+    background-color: rgb(191,223,255);
 }
 
 /* User profile */
-.profile-sidepanel {
-    background-color: rgb(233,233,233);
-}
 .sidepanel-section {
-    background-color: rgb(233,195,195);
-}
-.profile-content {
-    background-color: rgb(195,233,195);
+    background-color: rgb(127,191,255);
 }
 .infoblock {
-    background-color: rgb(195,195,223);
+    background-color: rgb(191,223,255);
 }
 .unread-messages {
     color: rgb(255,95,0);
@@ -249,7 +249,13 @@ a {
     }
     /* Main site nav tray hover color */
     ul.navigation_left a:hover {
-        background-color: rgb(163,91,55);
+        background-color: rgb(63,127,63);
+    }
+    .site-navbar li.selected-nav a {
+        background-color: rgb(63,127,63);
+    }
+    .site-navbar li.selected-nav a:hover {
+        background-color: rgb(63,127,63);
     }
     .nav-dropdown-tray#main_menu_icon {
         background-color: rgb(63,91,55);

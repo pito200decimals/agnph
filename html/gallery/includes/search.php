@@ -65,6 +65,11 @@ function CreatePostSearchSQL($search_string, $posts_per_page, $page, &$can_sort_
             $sortOrder = "T.NumFavorites DESC, ".$sortOrder;
             $can_sort_pool = false;
         }
+        if (contains($lower_search_string, "order:score") !== FALSE) {
+            $search_string = mb_eregi_replace("order:score", "", $search_string);
+            $sortOrder = "T.NumFavorites DESC, ".$sortOrder;
+            $can_sort_pool = false;
+        }
     }
     if ($can_sort_pool) {
         // Possible to sort order within a pool. Will be messed up for pools of size > 250.

@@ -7,3 +7,7 @@
 #next {
     float: right;
 }
+.chaptercontent {
+    margin-left: 30px;
+    margin-right: 30px;
+}

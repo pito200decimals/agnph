@@ -213,4 +213,32 @@ function UpdateTagTypes($tag_table_name, $char_to_tag_type_map, $descriptors, $u
         }
     }, $tag_descriptors);
 }
+
+// From an array of ids, returns a map from id to item counts. Returns null on failure.
+function GetTagCountsById($tag_item_table_name, $ids) {
+    $queries = implode(", ", array_map(function($id) {
+        return "COUNT(CASE WHEN TagId=$id THEN 1 ELSE NULL END) AS C$id";
+    }, $ids));
+    $joined = implode(",", $ids);
+    $sql = "SELECT $queries FROM $tag_item_table_name WHERE TagId IN ($joined);";
+    if (!sql_query_into($result, "SELECT $queries FROM $tag_item_table_name WHERE TagId IN ($joined);", 1)) {
+        return null;
+    }
+    $ret = array();
+    while ($row = $result->fetch_assoc()) {
+        foreach ($ids as $id) {
+            $ret[$id] = $row["C$id"];
+        }
+    }
+    debug($ret);
+    return $ret;
+}
+
+function GetTagCountsByTag($tag_item_table_name, &$tags) {
+    $ids = array_map(function($tag) { return $tag['TagId']; }, $tags);
+    $counts = GetTagCountsById($tag_item_table_name, $ids);
+    foreach ($tags as &$tag) {
+        $tag['count'] = $counts[$tag['TagId']];
+    }
+}
 ?>

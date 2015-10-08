@@ -22,7 +22,7 @@ if (isset($_POST['username']) &&
     isset($_POST['password-confirm']) &&
     isset($_POST['bday']) &&
     isset($_POST['captcha'])) {
-    if (!CanPerformSitePost()) MaintenanceError();
+    if (IsMaintenanceMode()) MaintenanceError();
     $success = true;
     // Check username format.
     $username = mb_strtolower($_POST['username']);

@@ -21,7 +21,6 @@
 .parentbox, .poolbox {
     margin: 5px;
     border-radius: 5px;
-    background-color: rgb(85,153,85);
     padding: 5px;
     box-shadow: 2px 2px 5px #07162D;
 }
@@ -39,7 +38,6 @@
 .post-description {
     margin: 5px;
     border-radius: 5px;
-    background-color: rgb(191,223,255);
     padding: 5px;
     box-shadow: 2px 2px 5px #07162D;
 }
@@ -68,6 +66,9 @@
 }
 .tag a:hover {
     color: rgb(144,147,255);
+}
+.tag small {
+    opacity: 0.5;
 }
 
 /* Stats */

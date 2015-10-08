@@ -60,8 +60,8 @@
                             {% if story.tags|length > 0 %}
                                 <ul class="taglist">
                                     {% for tag in story.tags %}
-                                        <li>
-                                            <a href="/fics/browse/?search={{ tag.quotedName|url_encode }}"><span class="{{ tag.Type|lower }}typetag">{{ tag.displayName }}</span></a>
+                                        <li class="tag">
+                                            <a href="/fics/browse/?search={{ tag.quotedName|url_encode }}" class="{{ tag.Type|lower }}typetag">{{ tag.displayName }}</a>
                                         </li>
                                     {% endfor %}
                                 </ul>

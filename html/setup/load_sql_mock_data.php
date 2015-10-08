@@ -37,14 +37,7 @@ do_or_die(sql_query(
     VALUES
     (1, 'User1', 'User1', 'user1@example.com', '".md5("Password 1")."', 1, '2003-02-01', 'A', 'Most Awesome Cyndaquil', 'Cyndaquil', $now, $now, '127.0.0.1'),
     (2, 'User2', 'User2', 'user2@example.com', '".md5("Password 2")."', 1, '2006-05-04', 'F', 'Hungry Resident', 'Totodile', $now, $now, '127.0.0.1'),
-    (3, 'User3', 'User3', 'user3@example.com', '".md5("Password 3")."', 1, '2009-08-07', '', 'Generic Title', 'Chikorita', $now, $now, '127.0.0.1'),
-    (4, 'imported-User4', 'User4', 'user4@example.com', '".md5("Password 4")."', 1, '2009-08-07', '', '', '', $now, $now, ''),
-    (5, 'imported-User5', 'User5', 'user5@example.com', '".md5("Password 5")."', 1, '2009-08-07', '', '', '', $now, $now, ''),
-    (6, 'imported-User6', 'User6', 'user6@example.com', '".md5("Password 6")."', 1, '2009-08-07', '', '', '', $now, $now, '');"));
-// Note: Imported users have a password set, but should not be able to log in.
-do_or_die(sql_query("UPDATE ".USER_TABLE." SET ImportForumsPassword='96c2fd2d4063c6b7d330b4216c2ee3cc7f01da6e' WHERE UserId=4;"));  // For testing forums import (Password="Password 4").
-do_or_die(sql_query("UPDATE ".USER_TABLE." SET ImportFicsPassword='".md5("Password 5")."' WHERE UserId=5;"));  // For testing fics import.
-do_or_die(sql_query("UPDATE ".USER_TABLE." SET ImportOekakiPassword='poJkyds5BIxl2' WHERE UserId=6;"));  // For testing oekaki import.
+    (3, 'User3', 'User3', 'user3@example.com', '".md5("Password 3")."', 1, '2009-08-07', '', 'Generic Title', 'Chikorita', $now, $now, '127.0.0.1');"));
 // Forums settings.
 do_or_die(sql_query(
     "INSERT INTO ".FORUMS_USER_PREF_TABLE."
@@ -52,40 +45,63 @@ do_or_die(sql_query(
     VALUES
     (1, 'Sig of User1', 'A'),
     (2, 'Sig of User2', 'N'),
-    (3, 'Sig of User3', 'N'),
-    (4, '', 'N'),
-    (5, '', 'N'),
-    (6, '', 'N');"));
+    (3, 'Sig of User3', 'N');"));
 do_or_die(sql_query(
    "INSERT INTO ".GALLERY_USER_PREF_TABLE."
     (UserId, GalleryPermissions)
     VALUES
     (1, 'A'),
     (2, 'C'),
-    (3, 'N'),
-    (4, 'N'),
-    (5, 'N'),
-    (6, 'N');"));
+    (3, 'N');"));
 do_or_die(sql_query(
    "INSERT INTO ".FICS_USER_PREF_TABLE."
     (UserId, FicsPermissions)
     VALUES
     (1, 'A'),
     (2, 'A'),
-    (3, 'N'),
-    (4, 'N'),
-    (5, 'N'),
-    (6, 'N');"));
+    (3, 'N');"));
 do_or_die(sql_query(
    "INSERT INTO ".OEKAKI_USER_PREF_TABLE."
     (UserId)
     VALUES
     (1),
     (2),
-    (3),
-    (4),
-    (5),
-    (6);"));
+    (3);"));
+
+
+AddImportedUser(4, "User4", "User4", "ImportForumsPassword", "96c2fd2d4063c6b7d330b4216c2ee3cc7f01da6e");
+AddImportedUser(5, "User5", "User5", "ImportFicsPassword", md5("Password 5"));
+AddImportedUser(6, "User6", "User6", "ImportOekakiPassword", "poJkyds5BIxl2");
+
+
+function AddImportedUser($uid, $username, $display_name, $passwd_field, $passwd_hash) {
+    $now = time();
+    do_or_die(sql_query(
+        "INSERT INTO ".USER_TABLE."
+        (UserID, UserName, DisplayName, Email, Password, Usermode, DOB, Permissions, Title, Species, JoinTime, LastVisitTime, RegisterIP, $passwd_field)
+        VALUES
+        ($uid, 'imported-$username', '$display_name', '', '', 1, '2000-01-01', '', 'Imported Title', 'Imported Species', $now, $now, '', '$passwd_hash');"));
+    do_or_die(sql_query(
+        "INSERT INTO ".FORUMS_USER_PREF_TABLE."
+        (UserId, Signature, ForumsPermissions)
+        VALUES
+        ($uid, '', 'N');"));
+    do_or_die(sql_query(
+       "INSERT INTO ".GALLERY_USER_PREF_TABLE."
+        (UserId, GalleryPermissions)
+        VALUES
+        ($uid, 'N');"));
+    do_or_die(sql_query(
+       "INSERT INTO ".FICS_USER_PREF_TABLE."
+        (UserId, FicsPermissions)
+        VALUES
+        ($uid, 'N');"));
+    do_or_die(sql_query(
+       "INSERT INTO ".OEKAKI_USER_PREF_TABLE."
+        (UserId)
+        VALUES
+        ($uid);"));
+}
 
 WriteBio(1, "Bio of User1!<br />TEST");
 WriteBio(2, "Bio of User2!");

@@ -1,11 +1,23 @@
 /* Global site skin colors */
 
+/*
+Header-red:        255,31,31
+Background-red:    127,31,31
+Bold-red:          127,31,31
+Medium-red:        255,95,95
+Light-red:         255,223,223
+Gray-red:          191,159,159
+
+Tray-red:         95,31,31
+Tray-highlight:     127,63,63
+*/
+
 /* Sitewide */
 body {
     background-color: rgb(127,31,31);
 }
 a {
-    color: rgb(0,0,127);
+    color: rgb(0,0,63);
 }
 /* Background */
 .site-navbar, .site-navbar * {
@@ -13,26 +25,29 @@ a {
 }
 /* Selected section background */
 .site-navbar li.selected-nav a {
-    background-color: rgb(223,127,63);
+    background-color: rgb(127,31,31);
 }
 /* Text color */
-.site-navbar a {
-    color: rgb(255,255,255);
+.site-navbar a,.site-navbar input {
+    color: white;
 }
-.site-navbar a:hover {
+.site-navbar a:hover,.site-navbar input:hover {
     text-shadow: 0 0 3px rgb(255,255,255);
 }
 /* Main hover color */
 .navigation_left a:hover, .navigation_left li.selected-nav a:hover {
-    background-color: rgb(255,63,63);
+    background-color: rgb(127,31,31);
+}
+#top-logo:hover {
+    background-color: rgb(127,31,31);
 }
 /* Dropdown tray background color */
-.nav-dropdown-tray a {
-    background-color: rgb(191,31,31);
+.nav-dropdown-tray a,.nav-dropdown-tray input {
+    background-color: rgb(95,31,31);
 }
 /* Dropdown tray hover color */
-#account_dropdown a:hover {
-    background-color: rgb(163,91,55);
+#account_dropdown a:hover,#account_dropdown input:hover {
+    background-color: rgb(127,63,63);
 }
 #mainbody {
     background-color: white;
@@ -41,7 +56,7 @@ a {
     color: rgb(0,0,0);
 }
 .form-box {
-    background-color: rgb(223,223,255);
+    background-color: rgb(191,159,159);
 }
 .search {
     background-color: rgb(255,255,255);
@@ -64,31 +79,31 @@ a {
 }
 /* Index */
 .block .header {
-    background-color: rgb(159,182,211);
+    background-color: rgb(191,159,159);
 }
 .block .content {
-    background-color: rgb(191,223,255);
+    background-color: rgb(255,223,223);
 }
 /* Lists */
 .list-table thead td {
-    background-color: rgb(100,130,185);
+    background-color: rgb(185,100,100);
 }
 .list-table tbody tr:nth-child(odd) td {
-    background-color: rgb(150,180,235);
+    background-color: rgb(200,150,150);
 }
 .list-table tbody tr:nth-child(even) td {
-    background-color: rgb(130,160,215);
+    background-color: rgb(180,130,130);
 }
 .iterator a {
-    border-color: rgb(63,127,255);
-    background-color: rgb(223,255,223);
+    border-color: rgb(127,31,31);
+    background-color: rgb(255,223,223);
     color: rgb(0,0,127);
 }
 .iterator a:hover {
-    background-color: rgb(63,191,255);
+    background-color: rgb(255,95,95);
 }
 .iterator .currentpage {
-    color: rgb(0,0,127);
+    color: rgb(0,0,63);
 }
 .autocomplete-tag-list {
     border-color: rgb(127,127,127);
@@ -103,17 +118,17 @@ a {
     background-color: white;
 }
 .commentheader {
-    background-color: rgb(191,223,255);
+    background-color: rgb(255,223,223);
 }
 blockquote {
-    background-color: rgb(191,223,255);
+    background-color: rgb(255,223,223);
     border-color: rgb(127,127,127);
 }
 blockquote blockquote {
-    background-color: rgb(167,195,223);
+    background-color: rgb(167,195,223); /* Darker */
 }
-blockquote blockquote {
-    background-color: rgb(167,195,223);
+blockquote blockquote blockquote {
+    background-color: rgb(127,191,223); /* Even darker */
 }
 .spoiler {
     color: black;
@@ -125,25 +140,25 @@ blockquote blockquote {
 
 /* Forums */
 .board-group {
-    background-color: rgb(170,200,255);
+    background-color: rgb(255,95,95);
 }
 .board-row td {
-    background-color: rgb(191,223,255);
+    background-color: rgb(255,223,223);
 }
 .forums-help-block {
-    background-color: rgb(170,200,255);
+    background-color: rgb(255,95,95);
 }
 
 /* Gallery */
 .floatactionpanel {
     border-color: rgb(0,0,0);
-    background-color: rgb(63, 127, 255);
+    background-color: rgb(255,95,95);
 }
 .post-tile {
     color: rgb(0,0,127);
 }
 .post-label {
-    background-color: rgb(159,182,211);
+    background-color: rgb(191,159,159);
 }
 .childoutline {
     border-color: rgb(255,255,0);
@@ -164,16 +179,19 @@ blockquote blockquote {
     color: rgb(225,95,95);
 }
 .parentbox, .poolbox {
-    background-color: rgb(85,153,85);
+    background-color: rgb(85,153,85); /* Pool box green */
 }
 .post-description {
-    background-color: rgb(191,223,255);
+    background-color: rgb(255,223,223);
 }
 .tag a:hover {
-    color: rgb(144,147,255);
+    color: rgb(127,31,31)
+}
+.tag small {
+    opacity: 0.5;
 }
 .posteditbox {
-    background-color: rgb(170,200,255);
+    background-color: rgb(191,159,159);
 }
 .comment-section {
     background-color: white;
@@ -181,90 +199,70 @@ blockquote blockquote {
 
 /* Fics */
 .notesbox {
-    background-color: rgb(191,223,255);
+    background-color: rgb(255,223,223);
     border-color: black;
 }
 .comments ul.tabs li{
-    background-color: rgb(223,239,255);
+    background-color: rgb(255,223,223);
     border-color: black;
 }
 .comments ul.tabs li.current{
-    background-color: rgb(191,223,255);
+    background-color: rgb(255,95,95);
     border-color: black;
     border-bottom-color: rgba(0,0,0,0);
 }
 .comments .tab-content{
-    background-color: rgb(191,223,255);
+    background-color: rgb(255,95,95);
     border-color: black;
 }
 .storyblock {
-    background-color: rgb(63,127,255);
+    background-color: rgb(255,95,95);
 }
 .storyblockcontainer {
-    background-color: rgb(255,255,255);
+    background-color: white;
 }
 .storyblockheader {
-    background-color: rgb(191,223,255);
+    background-color: rgb(255,223,223);
 }
 .storyblockinfo {
-    background-color: rgb(255,255,255);
+    background-color: white;
 }
 .storyblockfooter {
-    background-color: rgb(191,223,255);
+    background-color: rgb(255,223,223);
 }
-.taglist a:hover span {
-    color: rgb(144,147,255);
-}
-    
-/* About */
-.block .header {
-    background-color: rgb(159,182,211);
-}
-.block .content {
-    background-color: rgb(191,223,255);
-}
+
 /* User profile */
-.profile-sidepanel {
-    background-color: rgb(233,233,233);
-}
 .sidepanel-section {
-    background-color: rgb(233,195,195);
-}
-.profile-content {
-    background-color: rgb(195,233,195);
+    background-color: rgb(255,95,95);
 }
 .infoblock {
-    background-color: rgb(195,195,223);
+    background-color: rgb(255,223,223);
 }
 .unread-messages {
     color: rgb(255,95,0);
 }
 
-
 @media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
     /* Main site nav tray color */
     ul.navigation_left a {
-        background-color: rgb(191,31,31);
+        background-color: rgb(95,31,31);
     }
     /* Main site nav tray hover color */
     ul.navigation_left a:hover {
-        background-color: rgb(163,91,55);
+        background-color: rgb(127,63,63);
     }
     .site-navbar li.selected-nav a {
-        background-color: rgb(223,127,63);
+        background-color: rgb(127,63,63);
     }
     .site-navbar li.selected-nav a:hover {
-        background-color: rgb(223,127,63);
+        background-color: rgb(127,63,63);
     }
     .nav-dropdown-tray#main_menu_icon {
-        background-color: rgb(191,31,31);
-    }
-    .nav-dropdown-tray {
-        background-color: blue;
+        background-color: rgb(95,31,31);
     }
 }
 @media only handheld, screen and (max-device-height: 400px), screen and (max-height: 400px) {
     ul.navigation_left {
-        background-color: rgb(191,31,31);
+        background-color: rgb(95,31,31);
     }
 }

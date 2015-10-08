@@ -5,18 +5,16 @@
 
 /* Storyblock CSS */
 .storyblock {
-    margin: 5px;
+    margin: 15px;
     padding: 5px;
-    background-color: rgb(63,127,255);
     display: block;
 }
 .storyblockcontainer {
-    background-color: rgb(255,255,255);
+    background-color: white;
 }
 /*header*/
 .storyblockheader {
     padding: 5px;
-    background-color: rgb(191,223,255);
 }
 .storyblockheader div {
     margin: 5px;
@@ -48,7 +46,7 @@
 /*info*/
 .storyblockinfo {
     padding: 5px;
-    background-color: rgb(255,255,255);
+    background-color: white;
 }
 .storyblockinfo ul {
     list-style: none;
@@ -73,7 +71,6 @@
 /*footer*/
 .storyblockfooter {
     padding: 5px;
-    background-color: rgb(191,223,255);
 }
 .storyblockfooter form {
     display: inline;
@@ -123,8 +120,8 @@
     text-decoration: none;
     font-weight: bold;
 }
-.taglist a:hover span {
-    color: rgb(144,147,255);
+.tag a:hover {
+    color: rgb(63,127,255)
 }
 .ribbon {
     float: left;
