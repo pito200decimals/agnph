@@ -11,18 +11,18 @@ $(document).ready(function() {
             return;
         }
         switch (e.which) {
-            case 37:
+            case 37:  // Left
                 var link = $("#previnpool")[0];
                 if (link) link.click();
             break;
-            case 39:
+            case 39:  // Right
                 var link = $("#nextinpool")[0];
                 if (link) link.click();
             break;
-            case 68:
+            case 68:  // D
                 document.getElementById("download-link").click()
             break;
-            case 69:
+            case 69:  // E
                 $(".posteditbox").show()[0].scrollIntoView();
                 if ($('.autocomplete-tag-input').length > 0) {
                     $('.autocomplete-tag-input').focus();
@@ -30,11 +30,14 @@ $(document).ready(function() {
                     $('#tags').focus();
                 }
             break;
-            case 80:
+            case 70:  // F
+                document.getElementById('favorite-form').submit();
+            break;
+            case 80:  // P
                 $(".posteditbox").show()[0].scrollIntoView();
                 $('#parent').focus();
             break;
-            case 83:
+            case 83:  // S
                 $(".searchbox .search").focus().select();
             break;
             default: return;

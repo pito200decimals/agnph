@@ -47,6 +47,9 @@
     padding: 5px;
     font-style: italic;
 }
+.chap-word-count {
+    font-size: 90%;
+}
 
 #commentform {
     display: none;

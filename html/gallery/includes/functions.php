@@ -126,6 +126,11 @@ function CanUserMassTagEdit($user) {
     if ($user['GalleryPermissions'] == 'A') return true;
     return false;
 }
+function CanUserSearchDeletedPosts($user) {
+    if (!IsUserActivated($user)) return false;
+    if ($user['GalleryPermissions'] == 'A') return true;
+    return false;
+}
 
 // General path functions.
 function GetSiteImagePath($md5, $ext) { return "/".GetImagePath($md5, $ext); }
@@ -140,7 +145,7 @@ function GetSystemPreviewPath($md5, $ext) { return SITE_ROOT.GetPreviewPath($md5
 // Gets a parent post id for a given post. If the parent doesn't exist, returns -1.
 // Replaces "none" with -1. Replaces self-parenting with -1.
 function GetValidParentPostId($parent_post_id, $post_id) {
-    if (mb_strtolower($parent_post_id) == "none") return -1;
+    if (mb_strtolower($parent_post_id, "UTF-8") == "none") return -1;
     if (is_numeric($parent_post_id) && $parent_post_id != $post_id && $parent_post_id > 0) {
         $escaped_parent_post_id = sql_escape($parent_post_id);
         if (sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE PostId='$escaped_parent_post_id';", 1)) {
@@ -158,6 +163,7 @@ function GetValidParentPostId($parent_post_id, $post_id) {
 // Updates a post with the new tags/properties (and updates history log).
 function UpdatePost($tag_string, $post_id, $user, $update_tag_types=true, $batch_id=0) {
     global $GALLERY_TAG_TYPES;
+    $tag_ids = GetPostTags($post_id);  // Get tags before post was edited.
     $tag_string = CleanTagString($tag_string);
     $tokens = GetTagStringTokens($tag_string);
     $descriptors = GetTagDescriptors($tokens, $post_id, "GalleryTagDescriptorFilterFn");
@@ -165,12 +171,27 @@ function UpdatePost($tag_string, $post_id, $user, $update_tag_types=true, $batch
     if ($update_tag_types) {
         UpdateTagTypes(GALLERY_TAG_TABLE, $GALLERY_TAG_TYPES, $descriptors, $user);  // Do after creating tags above when setting post tags.
     }
+    $tag_ids = array_unique(array_merge($tag_ids, GetPostTags($post_id)));  // Get tags after post was edited.
+    UpdateTagItemCounts(GALLERY_TAG_TABLE, GALLERY_POST_TAG_TABLE, $tag_ids);  // Update tag counts on touched tags.
+}
+
+function GetPostTags($pid) {
+    $tag_ids = array();
+    if (sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TAG_TABLE." WHERE PostId=$pid;", 1)) {
+        while ($row = $result->fetch_assoc()) {
+            $tag_ids[] = $row['TagId'];
+        }
+    }
+    return $tag_ids;
+}
+
+function UpdatePostTags($pid) {
+    // Get tag ids so counts can be updated.
 }
 
 // Updates a post with the new description (and updates history log).
 function UpdatePostDescription($post_id, $description, $user, $log_change=true) {
-    $description = mb_substr($description, 0, MAX_GALLERY_POST_DESCRIPTION_LENGTH);
-    $escaped_description = sql_escape($description);
+    $escaped_description = sql_escape(GetSanitizedTextTruncated($description, NO_HTML_TAGS, MAX_GALLERY_POST_DESCRIPTION_LENGTH));
     $now = time();
     $user_id = $user['UserId'];
     sql_query("UPDATE ".GALLERY_POST_TABLE." SET Description='$escaped_description' WHERE PostId=$post_id;");
@@ -289,7 +310,7 @@ function GalleryTagDescriptorFilterFn($token, $label, $tag, $post_id) {
     switch ($label) {
         case "rating":
             $obj->label = $label;
-            $tagletter = mb_strtolower(mb_substr($tag, 0, 1));
+            $tagletter = mb_strtolower(mb_substr($tag, 0, 1), "UTF-8");
             if ($tagletter == 'e' || $tagletter == 'q' || $tagletter == 's') {
                 $obj->tag = $tagletter;
                 $obj->isTag = false;
@@ -313,12 +334,12 @@ function GalleryTagDescriptorFilterFn($token, $label, $tag, $post_id) {
         case "general":
         case "species":
             $obj->label = $label;
-            $obj->tag = mb_strtolower($tag);
+            $obj->tag = mb_strtolower($tag, "UTF-8");
             $obj->isTag = true;
             break;
         default:
             $obj->label = "";
-            $obj->tag = mb_strtolower($token);
+            $obj->tag = mb_strtolower($token, "UTF-8");
             $obj->isTag = true;
             break;
     }

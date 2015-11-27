@@ -5,7 +5,6 @@
 
 include_once("../header.php");
 include_once(SITE_ROOT."fics/includes/functions.php");
-include_once(SITE_ROOT."fics/includes/file.php");
 include_once(SITE_ROOT."includes/util/html_funcs.php");
 include_once(SITE_ROOT."fics/includes/search.php");
 
@@ -28,12 +27,10 @@ if (isset($_GET['search'])) {
     $search_terms = $_GET['search'];
     $vars['searchTerms'] = $search_terms;
     $search_clauses = GetSearchClauses($search_terms);
-    if (mb_strlen($search_clauses) == 0) $search_clauses = "TRUE";
     $order_clauses = GetOrderingClauses($search_terms);
     if (mb_strlen($order_clauses) != 0) $order_clauses .= ", ";
 } else {
-    $blacklist_clauses = GetSearchClauses("");
-    if (mb_strlen($blacklist_clauses) > 0) $search_clauses = $blacklist_clauses;
+    $search_clauses = GetSearchClauses("");
 }
 
 $stories = array();
@@ -43,7 +40,6 @@ if (sql_query_into($result,
     $search_clauses
     ORDER BY $order_clauses DateUpdated DESC, StoryId DESC;", 0)) {
     while ($story = $result->fetch_assoc()) {
-        FillStoryInfo($story);
         $stories[] = $story;
     }
 }
@@ -55,6 +51,10 @@ if (sizeof($stories) <= $stories_per_page) {
     } else {
         $iterator = CreatePostIterator($stories, $offset, $stories_per_page, null);
     }
+}
+// Only fetch detailed story data on stories we will display.
+foreach ($stories as &$story) {
+    FillStoryInfo($story);
 }
 $vars['stories'] = $stories;
 $vars['iterator'] = $iterator;
@@ -77,20 +77,20 @@ function CreatePostIterator(&$stories, $offset, $stories_per_page, $search_terms
             };
             if ($index == 0) {
                 if ($current_page == 1) {
-                    return "";  // No link.
+                    return "<span class='currentpage'>&lt;&lt;</span>";
                 } else {
                     $url = $url_from_page($current_page - 1);
                     return "<a href='$url'>&lt;&lt;</a>";
                 }
             } else if ($index == $max_page + 1) {
                 if ($current_page == $max_page) {
-                    return "";  // No link.
+                    return "<span class='currentpage'>&gt;&gt;</span>";
                 } else {
                     $url = $url_from_page($current_page + 1);
                     return "<a href='$url'>&gt;&gt;</a>";
                 }
             } else if ($index == $current_page) {
-                return "<a>[$index]</a>";  // No link.
+                return "<span class='currentpage'>$index</span>";
             } else {
                     $url = $url_from_page($index);
                 return "<a href='$url'>$index</a>";

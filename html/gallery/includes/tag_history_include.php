@@ -22,11 +22,11 @@ $tag_history_items = array_reverse($tag_history_items);  // Need to process in r
 foreach ($tag_history_items as &$item) {
     $tag_changes = "";
     $adds = array_map(function($tag_id) use ($tags) {
-        $typeclass = mb_strtolower($tags[$tag_id]['Type'])."typetag";
+        $typeclass = mb_strtolower($tags[$tag_id]['Type'], "UTF-8")."typetag";
         return "<span class='pscore'>+</span><span class='$typeclass'>".$tags[$tag_id]['Name']."</span>";
     }, array_filter(explode(",", $item['TagsAdded']), "mb_strlen"));
     $removes = array_map(function($tag_id) use ($tags) {
-        $typeclass = mb_strtolower($tags[$tag_id]['Type'])."typetag";
+        $typeclass = mb_strtolower($tags[$tag_id]['Type'], "UTF-8")."typetag";
         return "<span class='nscore'>-</span><span class='$typeclass'>".$tags[$tag_id]['Name']."</span>";
     }, array_filter(explode(",", $item['TagsRemoved']), "mb_strlen"));
     $edits = array_merge($adds, $removes);

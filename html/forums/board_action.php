@@ -115,8 +115,8 @@ function HandleCreateThread() {
             $sticky = "0";
             $locked = "0";
         }
-        $sanitizedText = GetSanitizedTextTruncated($text, MAX_FORUMS_POST_LENGTH);
-        $escaped_title = sql_escape($_POST['title']);
+        $sanitizedText = GetSanitizedTextTruncated($text, DEFAULT_ALLOWED_TAGS, MAX_FORUMS_POST_LENGTH);
+        $escaped_title = sql_escape(GetSanitizedTextTruncated($_POST['title'], DEFAULT_ALLOWED_TAGS, MAX_FORUMS_POST_TITLE_LENGTH);
         $escaped_text = sql_escape($sanitizedText);
         $now = time();
         $uid = $user['UserId'];
@@ -140,8 +140,8 @@ function HandleReplyThread() {
         isset($_POST['text'])) {
         $title = $_POST['title'];
         $text = $_POST['text'];
-        $sanitizedText = GetSanitizedTextTruncated($text, MAX_FORUMS_POST_LENGTH);
-        $escaped_title = sql_escape($_POST['title']);
+        $sanitizedText = GetSanitizedTextTruncated($text, DEFAULT_ALLOWED_TAGS, MAX_FORUMS_POST_LENGTH);
+        $escaped_title = sql_escape(GetSanitizedTextTruncated($_POST['title'], DEFAULT_ALLOWED_TAGS, MAX_FORUMS_POST_TITLE_LENGTH);
         $escaped_text = sql_escape($sanitizedText);
         $now = time();
         $uid = $user['UserId'];
@@ -168,8 +168,8 @@ function HandleEditPost() {
         isset($_POST['text'])) {
         
         $sets = array();
-        $sanitizedText = GetSanitizedTextTruncated($_POST['text'], MAX_FORUMS_POST_LENGTH);
-        $escaped_title = sql_escape($_POST['title']);
+        $sanitizedText = GetSanitizedTextTruncated($_POST['text'], DEFAULT_ALLOWED_TAGS, MAX_FORUMS_POST_LENGTH);
+        $escaped_title = sql_escape(GetSanitizedTextTruncated($_POST['title'], DEFAULT_ALLOWED_TAGS, MAX_FORUMS_POST_TITLE_LENGTH);
         $sets[] = "Title='$escaped_title'";
         
         $escaped_text = sql_escape($sanitizedText);
@@ -201,19 +201,6 @@ function HandleEditPost() {
     } else {
         PostBanner("Invalid", "red");
     }
-}
-
-function GetSanitizedTextTruncated($text, $max_byte_size){
-    $sanitized = GetSanitizedText($text);
-    while (strlen($sanitized) > $max_byte_size) {  // Use byte-size here, not mb_char size.
-        $text = mb_substr($text, 0, mb_strlen($text) - 1);
-        $sanitized = GetSanitizedText($text);
-    }
-    return $sanitized;
-}
-
-function GetSanitizedText($text) {
-    return SanitizeHTMLTags($text, DEFAULT_ALLOWED_TAGS);
 }
 
 function GoToForumPost($pid) {

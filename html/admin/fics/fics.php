@@ -24,8 +24,10 @@ if (isset($_POST['submit'])) {
 $vars['welcome_message'] = SanitizeHTMLTags(GetSiteSetting(FICS_WELCOME_MESSAGE_KEY, ""), DEFAULT_ALLOWED_TAGS);
 $vars['min_word_count'] = GetSiteSetting(FICS_CHAPTER_MIN_WORD_COUNT_KEY, null);
 $vars['news_posts_board'] = GetSiteSetting(FICS_NEWS_SOURCE_BOARD_NAME_KEY, null);
+$vars['num_recent_stories'] = GetSiteSetting(FICS_NUM_RECENT_STORIES_KEY, "0");
 $vars['num_rand_stories'] = GetSiteSetting(FICS_NUM_RANDOM_STORIES_KEY, "0");
 $vars['events_list'] = GetSiteSetting(FICS_EVENTS_LIST_KEY, null);
+$vars['max_news_posts'] = GetSiteSetting(FICS_MAX_NEWS_POSTS_KEY, DEFAULT_FICS_MAX_NEWS_POSTS);
 
 $vars['admin_section'] = "fics";
 RenderPage("admin/fics/fics.tpl");
@@ -60,6 +62,25 @@ function HandlePost() {
             } else {
                 PostSessionBanner("Board not found", "red");
             }
+        }
+    }
+    if (isset($_POST['max-news-posts'])) {
+        if (is_numeric($_POST['max-news-posts']) &&
+            ((int)$_POST['max-news-posts']) >= 0) {
+            $val = (int)$_POST['max-news-posts'];
+            SetSiteSetting(FICS_MAX_NEWS_POSTS_KEY, $val);
+        } else {
+            PostSessionBanner("Invalid number of maximum news posts", "red");
+        }
+    }
+    if (isset($_POST['num-recent-stories'])) {
+        if (is_numeric($_POST['num-recent-stories']) &&
+            ((int)$_POST['num-recent-stories']) >= 0) {
+            $val = (int)$_POST['num-recent-stories'];
+            if ($val > FICS_MAX_NUM_RECENT_STORIES) $val = FICS_MAX_NUM_RECENT_STORIES;
+            SetSiteSetting(FICS_NUM_RECENT_STORIES_KEY, $val);
+        } else {
+            PostSessionBanner("Invalid number of recent stories", "red");
         }
     }
     if (isset($_POST['num-rand-stories'])) {

@@ -63,7 +63,9 @@ foreach ($posts as &$post) {
                 );
         }
     }
-    $post['text'] = "<div>".$post['Text']."</div><hr /><div class='signature'>".$post['user']['Signature']."</div>";
+    $postContent = SanitizeHTMLTags($post['Text'], DEFAULT_ALLOWED_TAGS);
+    $postSignature = SanitizeHTMLTags($post['user']['Signature'], DEFAULT_ALLOWED_TAGS);
+    $post['text'] = "<div>$postContent</div><hr /><div class='signature'>$postSignature</div>";
     $post['anchor'] = "p".$post['PostId'];
     if (isset($user)) {
         if ($post['PostId'] >= $maybe_read_up_to || in_array($post['PostId'], $unread_post_ids)) {
@@ -138,7 +140,7 @@ function HandlePost() {
                             } else {
                                 // Whole thread was deleted, go back to board.
                                 PostSessionBanner("Thread deleted", "green");
-                                Redirect("/forums/board/".urlencode(mb_strtolower($board['Name']))."/");
+                                Redirect("/forums/board/".urlencode(mb_strtolower($board['Name'], "UTF-8"))."/");
                             }
                         } else {
                             PostSessionBanner("Post deleted", "green");

@@ -1,4 +1,5 @@
 /* Global site style CSS */
+/* Media transitions at 820px width, 450px width, and 400px height. */
 body {
     margin: 0px;
     font-family: verdana,sans-serif;
@@ -129,11 +130,13 @@ a:hover {
 /* === Main site content === */
 #mainbody {
     background-color: white;
-    min-height: 800px;
     margin: 0 auto;
     min-width: 800px;
     max-width:1600px;
     width: 80%;
+}
+#maincontent {
+    min-height: 800px;
 }
 #site-navbar-container {
     margin: 0 auto;
@@ -146,6 +149,16 @@ a:hover {
 }
 #content {
     padding: 10px;
+}
+#mainfooter {
+    padding: 10px;
+}
+#theme-switcher {
+    float: left;
+    font-size: 80%;
+}
+#theme-switcher-form {
+    display: inline-block;
 }
 
 /* === Site Footer === */
@@ -178,7 +191,7 @@ a:hover {
 .section-nav a {
     display: inline-block;
     text-decoration: none;
-    padding: 5px 15px;
+    padding: 5px 10px;
     font-weight: bold;
     border: none;
 }
@@ -272,6 +285,19 @@ span.radio-button-group {
     color: rgb(0,0,127);
     padding: 3px 8px;
 }
+.base-error-msg {
+    margin: 10px auto;
+    padding: 15px;
+    max-width: 600px;
+    border-radius: 15px;
+    background-color: rgb(191,223,255);
+    text-align: center;
+}
+.base-error-msg p {
+    display: block;
+    text-align: center;
+    padding: 15px;
+}
 
 /* For autocomplete */
 .autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
@@ -281,11 +307,11 @@ span.radio-button-group {
 .autocomplete-group { padding: 2px 5px; }
 .autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
 
-.desktop-only {
-    display: inherit !important;
-}
+/*.desktop-only {
+    display: inherit;
+}*/
 .mobile-only {
-    display: none !important;
+    display: none;
 }
 
 
@@ -337,7 +363,7 @@ span.radio-button-group {
         display: none !important;
     }
     .mobile-only {
-        display: inherit !important;
+        display: inherit;
     }
 }
 /* For horizontal site menu */

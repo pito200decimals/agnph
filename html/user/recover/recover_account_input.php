@@ -18,7 +18,7 @@ if (isset($_POST['email']) &&
     isset($_POST['password-confirm'])) {
     if (!CanPerformSitePost()) MaintenanceError();
     $vars['email'] = $_POST['email'];
-    $email = mb_strtolower($_POST['email']);
+    $email = mb_strtolower($_POST['email'], "UTF-8");
     $password = $_POST['password'];
     $password_confirm = $_POST['password-confirm'];
     if ($password == $password_confirm) {

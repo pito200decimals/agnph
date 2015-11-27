@@ -25,7 +25,8 @@
                 contextmenu: "image link | hr",
                 autoresize_max_height: 200,
                 resize: false,
-                menubar: false
+                menubar: false,
+                relative_urls: false
             });
         </script>
     {% endif %}

@@ -34,12 +34,17 @@
     <p>
         In late 2015, AGNPH moved to a new software system. If you had an old account prior to this migration, you can migrate it and all of its data to your current account using this console.
     </p>
+    {% if similar_accounts %}
+        <p>
+            Potential accounts detected: <strong>{{ similar_accounts }}</strong>
+        </p>
+    {% endif %}
     <div class="step">
         <p>
             Select the service your original account was signed up for:
         </p>
         <input class="service-select" type="radio" name="service" value="forums" /> Forums<br />
-        <input class="service-select" type="radio" name="service" value="gallery" disabled /> Gallery<br />
+        <input class="service-select" type="radio" name="service" value="gallery" /> Gallery<br />
         <input class="service-select" type="radio" name="service" value="fics" /> Fics<br />
         <input class="service-select" type="radio" name="service" value="oekaki" /> Oekaki<br />
     </div>

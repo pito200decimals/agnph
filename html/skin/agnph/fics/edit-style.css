@@ -32,8 +32,24 @@ form hr {
     min-width: 500px;
     min-height: 100px;
 }
+.chapter-row {
+    margin: 5px;
+    display: block;
+}
+.chapter-row:hover {
+    background-color: rgb(191,223,255);
+}
 .chapter-row span {
     margin-right: 15px;
+}
+.chapter-title {
+    font-weight: bold;
+}
+.chapter-actions {
+    float: right;
+}
+.chapter-stats {
+    font-size: 80%;
 }
 
 .form-block {

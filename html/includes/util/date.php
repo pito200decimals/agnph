@@ -37,7 +37,7 @@ function FormatShortDuration($val) {
 
 function ParseShortDuration($val) {
     $mult = 24 * 60 * 60;
-    $val = mb_strtolower($val);
+    $val = mb_strtolower($val, "UTF-8");
     if (endsWith($val, 'y')) {
         $mult *= 365;
         $val = mb_substr($val, 0, mb_strlen($val) - 1);

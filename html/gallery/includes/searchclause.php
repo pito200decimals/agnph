@@ -32,6 +32,7 @@ function CreateSQLClauses($search) {
 }
 
 function CreateSQLClausesFromTerms($terms, $mode="AND") {
+    global $user;
     $or_terms = array();
     $and_terms = array();
     $filter_clauses = array();
@@ -67,15 +68,22 @@ function CreateSQLClausesFromTerms($terms, $mode="AND") {
             $sql[] = "(".CreateSQLClauseFromFilter($term).")";
         }
     }
-    return implode(" $mode ", $sql);
+    $sql = implode(" $mode ", $sql);
+    if (isset($user) && CanUserSearchDeletedPosts($user)) {
+        // Any sql is fine.
+    } else {
+        // Ensure all results are not deleted.
+        $sql = "($sql) AND T.Status<>'D'";
+    }
+    return $sql;
 }
 
 function CreateSQLClauseFromTerm($term) {
     if (startsWith($term, "-")) {
         return "NOT(".CreateSQLClauseFromTerm(mb_substr($term, 1)).")";
-    } else if (mb_strtolower($term) == "missing_artist") {
+    } else if (mb_strtolower($term, "UTF-8") == "missing_artist") {
         return "NOT(EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." PT WHERE T.PostId=PT.PostId AND EXISTS(SELECT 1 FROM ".GALLERY_TAG_TABLE." TG WHERE TG.TagId=PT.TagId AND TG.Type='A')))";
-    } else if (mb_strtolower($term) == "missing_species") {
+    } else if (mb_strtolower($term, "UTF-8") == "missing_species") {
         return "NOT(EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." PT WHERE T.PostId=PT.PostId AND EXISTS(SELECT 1 FROM ".GALLERY_TAG_TABLE." TG WHERE TG.TagId=PT.TagId AND TG.Type='D')))";
     } else {
         // Get appropriate tag id.
@@ -108,7 +116,7 @@ function CreateSQLClauseFromFilter($filter) {
         } else if (startsWith($filter, "user:")) {
             $name = mb_substr($filter, 5);
             $escaped_name = sql_escape($name);
-            return "EXISTS(SELECT 1 FROM ".USER_TABLE." U WHERE U.DisplayName='$escaped_name' AND T.UploaderId=U.UserId)";
+            return "EXISTS(SELECT 1 FROM ".USER_TABLE." U WHERE UPPER(U.DisplayName)=UPPER('$escaped_name') AND T.UploaderId=U.UserId)";
         } else if (preg_match("/^fav(e|orite[ds]?)?:(.*)$/", $filter, $match)) {
             $name = $match[2];
             if (isset($user)) {
@@ -132,7 +140,7 @@ function CreateSQLClauseFromFilter($filter) {
             return "EXISTS(SELECT 1 FROM ".GALLERY_USER_FAVORITES_TABLE." F WHERE F.PostId=T.PostId AND F.UserId IN ($joined_uids))";
         } else if (startsWith($filter, "parent:")) {
             $parent = mb_substr($filter, 7);
-            if (mb_strtolower($parent) == "none" || !is_numeric($parent) || $parent <= 0) return "FALSE";  // Don't let searching for all non-child posts.
+            if (mb_strtolower($parent, "UTF-8") == "none" || !is_numeric($parent) || $parent <= 0) return "FALSE";  // Don't let searching for all non-child posts.
             $escaped_parent = sql_escape($parent);
             return "T.ParentPostId='$escaped_parent'";
         } else if (startsWith($filter, "status:")) {
@@ -150,7 +158,7 @@ function CreateSQLClauseFromFilter($filter) {
             }
         } else if (startsWith($filter, "pool:")) {
             $pool = mb_substr($filter, 5);
-            if (mb_strtolower($pool) == "none" || !is_numeric($pool) || $pool <= 0) return "FALSE";  // Don't let searching for all non-pool posts.
+            if (mb_strtolower($pool, "UTF-8") == "none" || !is_numeric($pool) || $pool <= 0) return "FALSE";  // Don't let searching for all non-pool posts.
             $escaped_pool = sql_escape($pool);
             return "T.ParentPoolId='$escaped_pool'";
         } else if (startsWith($filter, "file:")) {

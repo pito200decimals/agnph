@@ -73,7 +73,7 @@ if (isset($user)) {
     } else {
         $uri = strtolower($_SERVER['REQUEST_URI']);
         foreach ($AGE_GATE_SECTIONS as $section) {
-            if (contains($uri, strtolower($section))) {
+            if (startsWith($uri, "/".strtolower($section))) {
                 // Show age gate.
                 $vars['confirm_age_url'] = "/".AGE_GATE_PATH."/";
                 RenderPage("age_splash.tpl");
@@ -123,7 +123,6 @@ function FetchUserHeaderVars() {
     if (contains($skin, ".") || contains($skin, "/") || contains($skin, "\\")) {
         $skin = DEFAULT_SKIN;
     }
-    $skin = mb_strtolower($skin);
     $vars['skin'] = $skin;
     // Also fetch all possible skins, if the theme has the theme switcher on every page.
     $vars['availableSkins'] = array_map("basename", array_filter(glob(SITE_ROOT."skin/*"), "is_dir"));

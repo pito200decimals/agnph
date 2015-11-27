@@ -23,7 +23,7 @@ if (isset($user)) {
 }
 HandlePost($searchterms);
 $vars['search'] = $searchterms;
-$sql = CreatePostSearchSQL(mb_strtolower($searchterms), $posts_per_page, $page, $can_sort_pool, $pool_id);
+$sql = CreatePostSearchSQL(mb_strtolower($searchterms, "UTF-8"), $posts_per_page, $page, $can_sort_pool, $pool_id);
 $posts = array();
 if (sql_query_into($result, $sql, 0)) {
     while ($row = $result->fetch_assoc()) {
@@ -60,7 +60,7 @@ RenderPage("gallery/posts/postindex.tpl");
 return;
 
 function CreatePageIterator($searchterms, $page, $posts_per_page) {
-    $total_num_posts = CountNumPosts(mb_strtolower($searchterms));
+    $total_num_posts = CountNumPosts(mb_strtolower($searchterms, "UTF-8"));
     $num_max_pages = (int)(($total_num_posts + $posts_per_page - 1) / $posts_per_page);
     if ($num_max_pages > 1) {
         $iterator_html = ConstructPageIterator($page, $num_max_pages, DEFAULT_PAGE_ITERATOR_SIZE,
@@ -114,7 +114,7 @@ function HandlePost($searchterms) {
         if (!CanUserMassTagEdit($user)) {
             RenderPostError("Insufficient permissions");
         }
-        $where_clause = CreatePostSearchSQL(mb_strtolower($searchterms), 0, 0, $can_sort_pool, $pool_id, true);
+        $where_clause = CreatePostSearchSQL(mb_strtolower($searchterms, "UTF-8"), 0, 0, $can_sort_pool, $pool_id, true);
         sql_query_into($result, "SELECT COUNT(*) AS C FROM ".GALLERY_POST_TABLE." T WHERE $where_clause;", 1) or RenderPostError("Error modifying posts");
         $num_posts = $result->fetch_assoc()['C'];
         if ($num_posts > GALLERY_MAX_MASS_TAG_EDIT_COUNT) {

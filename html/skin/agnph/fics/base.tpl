@@ -18,9 +18,11 @@
         <li id="fics-search">
             <form action="/fics/browse/" accept-charset="UTF-8">
                 <input class="search" name="search" value="{{ searchTerms }}" type="text" required placeholder="Search" onfocus="javascript:$(this).attr('placeholder', '');" onblur="javascript:$(this).attr('placeholder', 'Search');"  />
+                <a id="search-help-link" href="/fics/help/" title="Search Help">?</a>
             </form>
         </li>
     </ul>
+    <div class="Clear">&nbsp;</div>{# for search box float alignment #}
 {% endblock %}
 
 {% block content %}

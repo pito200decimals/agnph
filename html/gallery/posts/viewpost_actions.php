@@ -84,7 +84,7 @@ function HandleFlagAction($post) {
     $reason = $_POST['reason'];
     $reason = SanitizeHTMLTags($reason, NO_HTML_TAGS);  // Strip all tags.
     $reason = mb_substr($reason, 0, MAX_GALLERY_POST_FLAG_REASON_LENGTH);  // Trim to max length.
-    $escaped_reason = sql_escape($reason);
+    $escaped_reason = sql_escape(GetSanitizedTextTruncated($reason, NO_HTML_TAGS, MAX_GALLERY_POST_FLAG_REASON_LENGTH));
     if (!sql_query("UPDATE ".GALLERY_POST_TABLE." SET Status='F', FlagReason='$escaped_reason', FlaggerUserId='$uid' WHERE PostId=$pid;")) {
         ErrorBanner();
         return;
@@ -129,6 +129,7 @@ function HandleDeleteAction($post) {
     // Remove from user favorites. Don't check for errors since we can't do anything.
     // TODO: Move favorites to parent post?
     sql_query("DELETE FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE PostId=$pid;");
+    UpdatePostStatistics($pid);
     PostSessionBanner("Post deleted", "green");
 }
 function HandleUndeleteAction($post) {
@@ -166,7 +167,7 @@ function HandleAddCommentAction($post) {
         PostSessionBanner("Comment length is too short", "red");
         return;
     }
-    $escaped_text = sql_escape($text);
+    $escaped_text = sql_escape(GetSanitizedTextTruncated($text, DEFAULT_ALLOWED_TAGS, MAX_GALLERY_POST_FLAG_REASON_LENGTH));
     $uid = $user['UserId'];
     $pid = $post['PostId'];
     $now = time();
@@ -203,6 +204,10 @@ function HandleDeleteCommentAction($post) {
 }
 function HandleAddFavoriteAction($post) {
     global $user;
+    if ($post['Status'] == "D") {
+        PostSessionBanner("Cannot add deleted post to favorites.", "red");
+        return;
+    }
     // All users can do this to self.
     $uid = $user['UserId'];
     $pid = $post['PostId'];
@@ -228,6 +233,10 @@ function HandleRemoveFavoriteAction($post) {
 }
 function HandleSetAvatarAction($post) {
     global $user;
+    if ($post['Status'] == "D") {
+        PostSessionBanner("Cannot set avatar to a deleted post.", "red");
+        return;
+    }
     // All users can do this to self.
     $uid = $user['UserId'];
     $pid = $post['PostId'];

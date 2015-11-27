@@ -9,11 +9,25 @@
     margin: 5px;
     min-height: 100px;
 }
+.comment-side-panel {
+    float: left;
+    margin: 0px;
+    width: 100px;
+    vertical-align: top;
+}
+.comment-side-panel-label {
+    font-size: 60%;
+}
+.comment-content {
+    display: block;
+    margin: 0px;
+    margin-left: 100px;
+    text-align: left;
+}
 
 .commentheader {
     margin: 5px;
     margin-top: 0px;
-    margin-left: 105px;
     padding: 5px;
 }
 .commentheader span {
@@ -21,7 +35,6 @@
 }
 .commenttext {
     margin: 5px;
-    margin-left: 105px;
     padding: 5px;
 }
 
@@ -74,4 +87,19 @@ blockquote blockquote blockquote {
     background-color: inherit;
     border: 1px dotted black;
     cursor: pointer;
+}
+.strikethrough {
+    text-decoration: line-through;
+}
+.center {
+    display: block;
+    text-align: center;
+}
+.subscript {
+    vertical-align: sub;
+    font-size: 80%;
+}
+.superscript {
+    vertical-align: super;
+    font-size: 80%;
 }

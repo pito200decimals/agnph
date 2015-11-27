@@ -8,7 +8,7 @@ include_once(SITE_ROOT."includes/util/core.php");
 
 $search_clause = "WHERE TRUE";
 if (isset($_GET['prefix'])) {
-    $prefix = mb_strtolower($_GET['prefix']);
+    $prefix = mb_strtolower($_GET['prefix'], "UTF-8");
     $escaped_prefix = sql_escape($prefix);
     $search_clause = "WHERE LOWER(DisplayName) LIKE '$prefix%'";
 } else {

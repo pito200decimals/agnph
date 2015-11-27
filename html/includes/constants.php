@@ -11,7 +11,7 @@ define("SALT_COOKIE", "agnph_salt");
 define("SECONDS_IN_DAY", 60 * 60 * 24);
 define("COOKIE_DURATION", 30 * SECONDS_IN_DAY);  // 30 days since last visit.
 define("MAX_FILE_SIZE", 50 * 1024 * 1024);  // 50 MB.
-define("SQL_TABLE_PREFIX", "");
+define("SQL_TABLE_PREFIX", "v2_");
 
 // Site data tables.
 define("SITE_NAV_TABLE", SQL_TABLE_PREFIX."nav_links");
@@ -56,6 +56,7 @@ define("FICS_TAG_ALIAS_TABLE", SQL_TABLE_PREFIX."fics_tag_aliases");
 define("FICS_TAG_IMPLICATION_TABLE", SQL_TABLE_PREFIX."fics_tag_implications");
 
 // Oekaki tables.
+define("OEKAKI_POST_TABLE", SQL_TABLE_PREFIX."oekaki_posts");
 
 ////////////////////////////////////////////////////////////////////
 // Settings Defaults and Limits (Embedded in SQL table defaults). //
@@ -75,6 +76,7 @@ define("DEFAULT_SKIN", "agnph");
 // Forums related.
 define("MAX_FORUMS_BOARD_TITLE_LENGTH", 64);
 define("MAX_FORUMS_BOARD_DESCRIPTION_LENGTH", 512);
+define("MAX_FORUMS_POST_TITLE_LENGTH", 256);
 define("MAX_FORUMS_POST_LENGTH", 131072);
 define("MAX_FORUMS_SIGNATURE_LENGTH", 1024);
 define("DEFAULT_FORUM_THREADS_PER_PAGE", 25);
@@ -97,12 +99,18 @@ define("MAX_FICS_COMMENT_LENGTH", 4096);
 define("DEFAULT_FICS_STORIES_PER_PAGE", 15);
 // Oekaki related
 define("DEFAULT_OEKAKI_POSTS_PER_PAGE", 25);
+define("MAX_OEKAKI_POST_TITLE_LENGTH", 128);
+define("MAX_OEKAKI_POST_TEXT_LENGTH", 1024);
 // Other user constants.
 define("MAX_PM_TITLE_LENGTH", 256);
 define("MAX_PM_LENGTH", 4096);
+define("MAX_KNOWN_IP_STRING_LENGTH", 512);
+define("MAX_SKIN_STRING_LENGTH", 16);
 // Tagging related.
 define("MAX_TAG_NAME_LENGTH", 32);
-define("MAX_TAG_NOTE_LENGTH", 256);
+define("MAX_TAG_NOTE_LENGTH", 1024);
+// Logging related.
+define("MAX_LOG_ACTION_STRING_LENGTH", 256);
 
 ///////////////////////////////////////
 // Section for other site constants. //
@@ -130,15 +138,19 @@ define("GALLERY_ADMIN_TAG_ALIAS_CHANGE_LIMIT", 1000);  // Max # of posts to edit
 define("GALLERY_MAX_MASS_TAG_EDIT_COUNT", 1000);  // Max # of posts to edit when mass-editing.
 define("MAX_GALLERY_SEARCH_TERMS", 6);
 define("MAX_GALLERY_BLACKLIST_TAGS", 50);  // Max data input limit.
+define("FICS_ADMIN_TAG_ALIAS_CHANGE_LIMIT", 1000);  // Max # of stories to edit when adding an alias.
 define("MIN_FICS_TITLE_SUMMARY_SEARCH_STRING_SIZE", 3);  // Min char-count for token to search titles/summaries.
 define("FICS_NOT_FEATURED", "D");  // Also present in templates: editstory.tpl
 define("FICS_CHAPTER_MIN_WORD_COUNT_KEY", "FicsMinWordCount");
 define("DEFAULT_FICS_CHAPTER_MIN_WORD_COUNT", 500);
 define("FICS_WELCOME_MESSAGE_KEY", "FicsWelcomeMessage");
 define("FICS_NUM_RANDOM_STORIES_KEY", "FicsNumRandStories");
+define("FICS_NUM_RECENT_STORIES_KEY", "FicsNumRecentStories");
 define("FICS_EVENTS_LIST_KEY", "FicsEvents");
 define("FICS_MAX_NUM_RANDOM_STORIES", 5);
+define("FICS_MAX_NUM_RECENT_STORIES", 5);
 define("DEFAULT_FICS_NUM_RANDOM_STORIES", 1);
+define("DEFAULT_FICS_NUM_RECENT_STORIES", 3);
 define("FICS_MAX_NUM_COAUTHORS", 3);
 define("MAX_FICS_SEARCH_TERMS", 6);
 define("MAX_FICS_BLACKLIST_TAGS", 50);  // Max data input limit.
@@ -157,7 +169,7 @@ define("PROFILE_MAIL_DATE_FORMAT_SHORT", "g:i A");
 define("PROFILE_MAIL_DATE_FORMAT_LONG", "M j g:i A");
 define("PROFILE_MAIL_DATE_FORMAT_VERY_LONG", "M j Y");
 define("PROFILE_DOB_FORMAT", "F j Y");
-define("PROFILE_TIME_FORMAT", "g:i A");
+define("PROFILE_TIME_FORMAT", "g:i A M j, Y");  // For local time.
 define("MAX_FORUMS_THREADS_PER_PAGE", 100);  // Max value for user-setting.
 define("MAX_FORUMS_POSTS_PER_PAGE", 50);  // Max value for user-setting.
 define("FORUMS_DATE_FORMAT", "M j, Y g:i A");
@@ -178,16 +190,21 @@ define("FICS_PROFILE_SHOW_NUM_STORIES", 3);
 define("FICS_PROFILE_SHOW_NUM_FAVORITES", 3);
 define("FICS_MAX_FEATURED_STORIES", 5);
 define("MAX_FICS_SHORT_SUMMARY_LEGNTH", 100);
+define("FICS_MAX_NEWS_POSTS_KEY", "FicsMaxNewsPosts");
+define("DEFAULT_FICS_MAX_NEWS_POSTS", 5);
 define("USERS_LIST_ITEMS_PER_PAGE", 50);
 define("INBOX_ITEMS_PER_PAGE", 50);
 define("USERLIST_DATE_FORMAT", "M j Y");
 define("ADMIN_LOG_ENTRIES_PER_PAGE", 50);
+define("IMPORT_USER_WELCOME_PM_KEY", "ImportUserLoginPMKey");
 
 // Other default constant values.
-define("SITE_DOMAIN", "http://agnph.cloudapp.net");  // TODO: Change on live site.
-define("VERSION", "0.9.1");
+// TODO: Change on live site.
+define("SITE_DOMAIN", "http://agn.ph");  // Used for post-image-search urls, email auth.
+define("VERSION", "2.0");
 define("SITE_WELCOME_MESSAGE_KEY", "SiteWelcomeMessage");
 define("REGISTER_DISCLAIMER_KEY", "RegisterDisclaimer");
+define("LOGIN_MESSAGE_KEY", "LoginMessage");
 define("SHORT_BAN_DURATION_KEY", "UserShortBanDuration");
 define("MAINTENANCE_MODE_KEY", "MaintenanceMode");
 // Site security-related values.
@@ -219,10 +236,13 @@ $FICS_TAG_TYPES = array(  // Note: Present in edit-story template and CSS.
     "M" => "General",
     "Z" => "Warning");
 $AGE_GATE_SECTIONS = array(
+    "forums",
     "gallery",
     "fics",
     "oekaki",
+    "user",
+    "about/staff",
 );
-define("HIDE_IMPORTED_ACCOUNTS_FROM_USER_LIST", true);
+define("HIDE_IMPORTED_ACCOUNTS_FROM_USER_LIST", false);
 
 ?>

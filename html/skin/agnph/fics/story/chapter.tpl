@@ -22,7 +22,7 @@
 {% endblock %}
 
 {% block prevnext %}
-    <div>&nbsp;
+    <div class="chapter-iterator">&nbsp;
         {% if chapter.ChapterItemOrder > 0 %}
         <div id="prev">
             <a href="/fics/story/{{ story.StoryId }}/{{ chapter.ChapterItemOrder }}/">&lt;&lt;&lt;&nbsp;Previous</a>

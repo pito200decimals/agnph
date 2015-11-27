@@ -13,7 +13,6 @@ include_once(SITE_ROOT."gallery/includes/searchclause.php");
 // order:favorites
 // order:date
 
-// TODO: Unimportant bug fix: Can't search for ~status:deleted
 function CreatePostSearchSQL($search_string, $posts_per_page, $page, &$can_sort_pool, &$pool_sort_id, $return_where_only=false) {
     $offset = ($page - 1) * $posts_per_page;
     $page_size = $posts_per_page;
@@ -42,7 +41,7 @@ function CreatePostSearchSQL($search_string, $posts_per_page, $page, &$can_sort_
         }
     }
     // If order specified, use new order.
-    $lower_search_string = mb_strtolower($search_string);
+    $lower_search_string = mb_strtolower($search_string, "UTF-8");
     if (contains($lower_search_string, "order:") !== FALSE) {
         // Check for various orderings (with this priority lowest to highest).
         if (contains($lower_search_string, "order:date") !== FALSE) {

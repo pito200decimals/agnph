@@ -2,6 +2,8 @@
 // Standard header for all AJAX. Just includes common headers.
 // Assumes SITE_ROOT is defined.
 
+session_start();
+
 // Include common headers.
 include_once(SITE_ROOT."includes/config.php");
 include_once(SITE_ROOT."includes/constants.php");

@@ -4,16 +4,20 @@
 
 include ("header.php");
 
-// TODO: Remove after site testing is complete.
-if (isset($_GET['debug']) && $_GET['debug'] == true) {
-    $_POST['username'] = "User1";
-    $_POST['password'] = "Password 1";
-}
 if (IsMaintenanceMode()) PostBanner("Site is in read-only mode, login has been disabled", "red", false);
 
 if (isset($_POST['username']) && isset($_POST['password'])) {
+    if (contains($_POST['username'], "-")) {  // Prevent logging in with imported accounts.
+        PostBanner("Invalid username/password", "red");
+        RenderPage("login.tpl");
+        return;
+    }
     include_once(SITE_ROOT."includes/auth/login.php");
     if (isset($user)) {
+        if (isset($newly_imported) && $newly_imported) {
+            // Show a splash page notifying to check their email settings, and not to log in to another account.
+            Redirect("/user/import/");
+        }
         Redirect("/");
     } else {
         if (isset($user_banned) && $user_banned) {
@@ -40,6 +44,8 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 if (isset($user)) {
     Redirect("/");
 }
+
+$vars['login_msg'] = SanitizeHTMLTags(GetSiteSetting(LOGIN_MESSAGE_KEY, ""), DEFAULT_ALLOWED_TAGS);
 
 RenderPage("login.tpl");
 return;

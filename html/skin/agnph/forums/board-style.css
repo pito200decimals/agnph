@@ -18,8 +18,17 @@
     width: 6%;
     text-align: center;
 }
-.board-desc {
-
+.thread-title {
+    font-weight: bold;
+}
+.thread-subline {
+    font-size: 90%;
+}
+.board-desc span {
+    font-weight: bold;
+}
+.board-desc div {
+    font-size: 90%;
 }
 .board-stats {
     width: 15%;
@@ -44,4 +53,11 @@
 }
 .list-table .status img {
     max-height: 30px;
+}
+.new-post-label {
+    background-color: rgb(255,191,0);
+    padding: 1px;
+    border-radius: 5px;
+    vertical-align: super;
+    font-size: 80%;
 }

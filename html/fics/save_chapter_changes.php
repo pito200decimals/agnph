@@ -13,18 +13,22 @@ $sid = $_POST['sid'];
 if (!isset($_POST['chapternum'])) return;
 $chapternum = $_POST['chapternum'];
 if (!isset($_POST['chaptertitle'])) return;
-$chaptertitle = SanitizeHTMLTags($_POST['chaptertitle'], DEFAULT_ALLOWED_TAGS);
+$chaptertitle = GetSanitizedTextTruncated($_POST['chaptertitle'], DEFAULT_ALLOWED_TAGS, MAX_FICS_CHAPTER_TITLE_LENGTH);
 if (!isset($_POST['chapternotes'])) return;
-$chapternotes = SanitizeHTMLTags($_POST['chapternotes'], DEFAULT_ALLOWED_TAGS);
+$chapternotes = GetSanitizedTextTruncated($_POST['chapternotes'], DEFAULT_ALLOWED_TAGS, MAX_FICS_CHAPTER_NOTES_LENGTH);
 if (!isset($_POST['chaptertext'])) return;
 $chaptertext = SanitizeHTMLTags($_POST['chaptertext'], DEFAULT_ALLOWED_TAGS);
 if (!isset($_POST['chapterendnotes'])) return;
-$chapterendnotes = SanitizeHTMLTags($_POST['chapterendnotes'], DEFAULT_ALLOWED_TAGS);
+$chapterendnotes = GetSanitizedTextTruncated($_POST['chapterendnotes'], DEFAULT_ALLOWED_TAGS, MAX_FICS_CHAPTER_NOTES_LENGTH);
 if (!isset($_POST['chapterid'])) return;
 $chapterid = $_POST['chapterid'];
 
 if (!isset($_GET['action'])) return;
 $action = $_GET['action'];
+
+// Get uploaded file, if it exists.
+$uploaded_text = GetDocumentText("chapter-file");
+if ($uploaded_text != null) $chaptertext = $uploaded_text;
 
 // Check for valid input.
 if (!is_numeric($sid)) return;
@@ -104,6 +108,8 @@ if ($action == "edit") {
     
     // Update story word count. Just do a full count, hopefully it's not too expensive.
     UpdateStoryStats($sid);
+    PostSessionBanner("Chapter saved", "green");
+    $uid = $user['UserId'];
     $username = $user['DisplayName'];
     $chaptertitle = htmlspecialchars($chaptertitle);
     $storyTitle = htmlspecialchars($story['Title']);
@@ -133,6 +139,7 @@ if ($action == "edit") {
     
     // Update story word count. Just do a full count, hopefully it's not too expensive.
     UpdateStoryStats($sid);
+    PostSessionBanner("Chapter created", "green");
     $username = $user['DisplayName'];
     $chaptertitle = htmlspecialchars($chaptertitle);
     $storyTitle = htmlspecialchars($story['Title']);

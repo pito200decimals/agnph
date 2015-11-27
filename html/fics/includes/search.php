@@ -2,8 +2,7 @@
 // Included php file for handling searches in the fics section.
 //
 // == Search filters implemented so far ==
-// order:rating
-// order:score
+// order:{rating|score}
 // order:{views|reads}
 // order:{words|length}
 // order:chapters
@@ -16,6 +15,7 @@
 // featured:{gold|silver|bronze}
 // status:{p|a|d}
 // fav:{user|me}
+// tag:/title:/author:/summary:{term} (forces only one type of match).
 
 include_once(SITE_ROOT."includes/constants.php");
 include_once(SITE_ROOT."includes/util/core.php");
@@ -50,7 +50,7 @@ function GetOrderingClauses($search_term_string) {
 }
 
 function GetOrdering($search_term) {
-    $search_term = mb_strtolower($search_term);
+    $search_term = mb_strtolower($search_term, "UTF-8");
     if (startsWith($search_term, "order:rating") ||
         startsWith($search_term, "order:score")) {
         return "(TotalStars / IF (TotalRatings = 0, 1, TotalRatings)) DESC";
@@ -101,7 +101,7 @@ function GetClause($search_term) {
         return "NOT(".GetClause($search_term).")";
     }
     if (mb_strlen($search_term) == 0) return "";
-    $lower_term = mb_strtolower($search_term);
+    $lower_term = mb_strtolower($search_term, "UTF-8");
     if ($lower_term == "completed" ||
         $lower_term == "complete" ||
         $lower_term == "completed:yes" ||
@@ -160,6 +160,20 @@ function GetClause($search_term) {
         $joined_uids = implode(",", $uids);
         return "EXISTS(SELECT 1 FROM ".FICS_USER_FAVORITES_TABLE." F WHERE F.StoryId=T.StoryId AND F.UserId IN ($joined_uids))";
     }
+    // Search only one type.
+    if (preg_match("/^tag:(.*)$/", $lower_term, $match)) {
+        return ClauseForTag($match[1]);
+    }
+    if (preg_match("/^title:(.*)$/", $lower_term, $match)) {
+        return ClauseForTitle($match[1]);
+    }
+    if (preg_match("/^author:(.*)$/", $lower_term, $match)) {
+        return ClauseForAuthor($match[1]);
+    }
+    if (preg_match("/^summary:(.*)$/", $lower_term, $match)) {
+        return ClauseForSummary($match[1]);
+    }
+    
     // Strip "", if it exists. No multi-byte needed.
     // Allows for searching for terms that are also filters.
     $search_term = str_replace("\"", "", $search_term);
@@ -191,25 +205,32 @@ function ClauseForTag($tag_name) {
 
 function ClauseForTitle($text) {
     // Replace _ with space, if user put it in.
-    $title = mb_strtolower(mb_ereg_replace("_+", " ", $text));
-    if (mb_strlen($title) < MIN_FICS_TITLE_SUMMARY_SEARCH_STRING_SIZE) return "";
+    $title = mb_strtolower(mb_ereg_replace("_+", " ", $text), "UTF-8");
     $escaped_title = sql_escape($title);
-    return "LOWER(Title) LIKE '%$escaped_title%'";
+    if (mb_strlen($title) == 1) {
+        // Require searching for prefix.
+        return "LOWER(Title) LIKE '$escaped_title%'";
+    } else {
+        if (mb_strlen($title) < MIN_FICS_TITLE_SUMMARY_SEARCH_STRING_SIZE) return "";
+        return "LOWER(Title) LIKE '%$escaped_title%'";
+    }
 }
 
 function ClauseForSummary($text) {
     // Replace _ with space, if user put it in.
-    $summary = mb_strtolower(mb_ereg_replace("_+", " ", $text));
+    $summary = mb_strtolower(mb_ereg_replace("_+", " ", $text), "UTF-8");
     if (mb_strlen($summary) < MIN_FICS_TITLE_SUMMARY_SEARCH_STRING_SIZE) return "";
     $escaped_summary = sql_escape($summary);
     return "LOWER(Summary) LIKE '%$escaped_summary%'";
 }
 
 function ClauseForAuthor($author_display_name) {
+    // Search for author using both _  and (space).
     // Replace _ with space, if user put it in.
-    $display_name = mb_strtolower(mb_ereg_replace("_+", " ", $author_display_name));
-    $escaped_display_name = sql_escape($display_name);
-    if (!sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE LOWER(DisplayName) LIKE '%$escaped_display_name%';", 1)) return null;
+    $display_name2 = mb_strtolower(mb_ereg_replace("_+", " ", $author_display_name), "UTF-8");
+    $escaped_display_name = sql_escape($author_display_name);
+    $escaped_display_name2 = sql_escape($display_name2);
+    if (!sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE LOWER(DisplayName) LIKE '%$escaped_display_name%' OR LOWER(DisplayName) LIKE '%$escaped_display_name2%';", 1)) return null;
     $user_ids = array();
     while ($row = $result->fetch_assoc()) {
         $user_ids[] = $row['UserId'];

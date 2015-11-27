@@ -25,7 +25,7 @@ if (isset($_POST['username']) &&
     if (IsMaintenanceMode()) MaintenanceError();
     $success = true;
     // Check username format.
-    $username = mb_strtolower($_POST['username']);
+    $username = mb_strtolower($_POST['username'], "UTF-8");
     if (strlen($username) < MIN_USERNAME_LENGTH) {
         ShowErrorBanner("Username too short");
         $success = false;
@@ -120,10 +120,10 @@ function ShowErrorBanner($msg) {
 
 function HandlePostSuccess($username, $email, $password, $bday) {
     // Create user table values.
-    $escaped_username = sql_escape($username);
-    $escaped_email = sql_escape($email);
+    $escaped_username = sql_escape(GetSanitizedTextTruncated($username, NO_HTML_TAGS, MAX_USERNAME_LENGTH));
+    $escaped_email = sql_escape(GetSanitizedTextTruncated($email, NO_HTML_TAGS, MAX_USER_EMAIL_LENGTH));
     $hashed_password = md5($password);
-    $escaped_password = sql_escape($hashed_password);
+    $escaped_password = sql_escape($hashed_password);  // Okay to not sanitize this.
     $escaped_bday = sql_escape($bday);  // Not necessary, but just in case...
     $register_time = time();
     $escaped_ip = sql_escape($_SERVER['REMOTE_ADDR']);

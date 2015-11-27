@@ -64,7 +64,7 @@ if (strlen($sql_filter) > 0) {
 } else {
     $sql_order = "WHERE Verbosity <= $verbosity ORDER BY Timestamp DESC";
 }
-CollectItems(SITE_LOGGING_TABLE, $sql_order, $log_entries, ADMIN_LOG_ENTRIES_PER_PAGE, $iterator);
+CollectItems(SITE_LOGGING_TABLE, $sql_order, $log_entries, ADMIN_LOG_ENTRIES_PER_PAGE, $iterator, "Error accessing log");
 foreach ($log_entries as &$entry) {
     $entry['date'] = FormatDate($entry['Timestamp']);
     switch ($entry['Section']) {

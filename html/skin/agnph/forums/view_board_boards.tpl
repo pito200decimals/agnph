@@ -17,7 +17,7 @@
         </thead>
         <tbody>
             {% for board in boardgroup.childBoards %}
-                <tr class="board-row">
+                <tr class="board-row desktop-only">
                     <td class="status">
                         {% if board.unread %}
                             <img src="/images/unread-board.png" title="Unread posts" />
@@ -37,7 +37,7 @@
                             <li>{{ board.NumThreads }} threads</li>
                         </ul>
                     </td>
-                    <td class="lastpost">
+                    <td class="lastpost desk">
                         {% if board.lastPost %}
                             <ul>
                                 <li>Last Post by <a href="/user/{{ board.lastPost.user.UserId }}/">{{ board.lastPost.user.DisplayName }}</a></li>
@@ -45,6 +45,21 @@
                                 <li>on {{ board.lastPost.date }}</li>
                             </ul>
                         {% endif %}
+                    </td>
+                </tr>
+                <tr class="board-row mobile-only">
+                    <td class="status">
+                        {% if board.unread %}
+                            <img src="/images/unread-board.png" title="Unread posts" />
+                        {% else %}
+                            <img src="/images/read-board.png" title="All posts read" />
+                        {% endif %}
+                    </td>
+                    <td class="board-desc">
+                        <span><a href="/forums/board/{{ board.Name|lower|url_encode }}/">{{ board.Name }}</a></span>
+                        <div>
+                            {{ board.Description }}
+                        </div>
                     </td>
                 </tr>
             {% endfor %}

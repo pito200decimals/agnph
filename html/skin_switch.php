@@ -8,12 +8,12 @@ if (!isset($_POST['skin'])) {
 }
 
 if (contains($_POST['skin'], ".") || contains($_POST['skin'], "/") || contains($_POST['skin'], "\\") || !in_array($_POST['skin'], $vars['availableSkins'])) {
-    PostErrorMessage("Invalid site skin");
+    RenderErrorPage("Invalid site skin");
 }
 if (isset($user)) {
     if (!CanPerformSitePost()) MaintenanceError();
     if ($_POST['skin'] != $user['Skin']) {
-        $escaped_skin = sql_escape(mb_strtolower($_POST['skin']));
+        $escaped_skin = sql_escape(GetSanitizedTextTruncated($_POST['skin'], NO_HTML_TAGS, MAX_SKIN_STRING_LENGTH));
         sql_query("UPDATE ".USER_TABLE." SET Skin='$escaped_skin' WHERE UserId=".$user['UserId'].";");
         PostSessionBanner("Skin changed", "green");
     }

@@ -1,7 +1,6 @@
 <?php
 // General utility functions for the fics section.
 
-include_once(SITE_ROOT."fics/includes/file.php");
 include_once(SITE_ROOT."includes/util/table_data.php");
 include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."includes/util/sql.php");
@@ -10,6 +9,7 @@ include_once(SITE_ROOT."includes/util/file.php");
 include_once(SITE_ROOT."includes/util/user.php");
 include_once(SITE_ROOT."includes/comments/comments_functions.php");
 include_once(SITE_ROOT."user/includes/functions.php");
+include_once(SITE_ROOT."fics/includes/doc_reader.php");
 
 function CanUserCreateStory($user) {
     if (!IsUserActivated($user)) return false;
@@ -63,9 +63,8 @@ function CanUserDeleteComment($user, $comment) {
     if (!IsUserActivated($user)) return false;
     if ($user['FicsPermissions'] == 'R') return false;
     if ($user['FicsPermissions'] == 'A') return true;
-    // TODO: Allow users to delete their own comments?
-    // if ($user['UserId'] == $comment['UserId']) return true;
-    if ($user['UserId'] == $story['AuthorUserId']) return true;
+    // TODO: Allow users and/or authors to delete comments on their story?
+    // if ($user['UserId'] == $comment['ReviewerUserId']) return true;
     return false;
 }
 function CanUserReview($user) {
@@ -195,7 +194,7 @@ function SetChapterText($cid, $text) {
     return write_file(GetChapterPath($cid), $text);
 }
 
-// Gets tag ids for story, and tag info.
+// Gets tag ids for story.
 function GetTagsIdsForStory($sid) {
     $escaped_sid = sql_escape($sid);
     if (!sql_query_into($result, "SELECT * FROM ".FICS_STORY_TAG_TABLE." WHERE StoryId=$escaped_sid;")) return array();
@@ -306,7 +305,6 @@ function UpdateStoryStats($sid) {
         $totalStars = $row['C1'];
         $totalRatings = $row['C2'];
         $numReviews = $row['C3'];
-        debug($row);
         sql_query("UPDATE ".FICS_STORY_TABLE." SET ChapterCount=$chapcount, WordCount=$wordcount, Views=$viewcount, TotalStars=$totalStars, TotalRatings=$totalRatings, NumReviews=$numReviews WHERE StoryId='$escaped_sid';");
     } else {
         sql_query("UPDATE ".FICS_STORY_TABLE." SET ChapterCount=$chapcount, WordCount=$wordcount, Views=$viewcount WHERE StoryId='$escaped_sid';");
@@ -315,7 +313,7 @@ function UpdateStoryStats($sid) {
 
 function ChapterWordCount($content) {
     $stripped = SanitizeHTMLTags($content, "");
-    $stripped = str_replace("\xC2\xA0", " ", $stripped);  // No multi-byte okay here.
+    $stripped = str_replace("\xC2\xA0", " ", $stripped);  // No multi-byte okay here. Replace &nbsp; with space.
     $words = explode(" ", $stripped);
     $words = array_filter($words, function($word) {
         return mb_strlen($word) > 0;
@@ -339,9 +337,28 @@ function GetStars($totalStars, $numReviews) {
             $stars[] = "half";
         }
     }
-    // $stars .= "<img src='/images/star.gif' />";
-    // $stars .= "<img src='/images/starhalf.gif' />";
     return $stars;
+}
+
+// Functions to process word document uploads. Returns null on error.
+function GetDocumentText($form_name) {
+    if (!file_exists($_FILES[$form_name]['tmp_name']) || !is_uploaded_file($_FILES[$form_name]['tmp_name'])) return null;
+    if ($_FILES[$form_name]['error']) return null;
+    if ($_FILES[$form_name]['size'] > MAX_FILE_SIZE) return null;
+    $file_parts = explode(".", $_FILES[$form_name]['name']);
+    $extension = end($file_parts);
+    if (!in_array($extension, array(
+        "docx"
+        ))) return null;
+    if (!in_array($_FILES[$form_name]['type'], array(
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        ))) return null;
+        
+    // Read docx file and get contents.
+    $doc_reader = new DocReader();
+    $doc_reader->ReadDocument($_FILES[$form_name]['tmp_name']);
+    $html = $doc_reader->ParseDocumentToHTML();
+    return $html;
 }
 
 ?>

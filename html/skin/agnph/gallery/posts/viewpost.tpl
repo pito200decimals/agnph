@@ -26,6 +26,7 @@
                 autoresize_max_height: 150,
                 resize: false,
                 menubar: false,
+                relative_urls: false,
                 content_css: "{{ asset('/comments-style.css') }}"
             });
             $("#commentbutton").click(function() {
@@ -102,7 +103,7 @@
 
 {% block search_block %}
     <div class="searchbox">
-        <h3>Search</h3>
+        <h3>Search<a id="search-help-link" href="/gallery/help/" title="Search Help">?</a></h3>
         <form action="/gallery/post/" accept-charset="UTF-8">
             <input class="search" name="search" type="text" required />
         </form>
@@ -130,7 +131,7 @@
                                     <ul class="taglist">
                                         {% for tag in category.tags %}
                                             <li class="tag">
-                                                <a href="/gallery/post/?search={{ tag.quotedName|url_encode }}" class="{{ tag.Type|lower }}typetag">{{ tag.displayName }}</a><small>{{ tag.count }}</small>
+                                                <a href="/gallery/post/?search={{ tag.quotedName|url_encode }}" class="{{ tag.Type|lower }}typetag">{{ tag.displayName }}</a><small>{{ tag.ItemCount }}</small>
                                             </li>
                                         {% endfor %}
                                     </ul>

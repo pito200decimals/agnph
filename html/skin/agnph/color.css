@@ -105,6 +105,9 @@ a {
 .iterator .currentpage {
     color: rgb(0,0,127);
 }
+.base-error-msg {
+    background-color: rgb(191,223,255);
+}
 .autocomplete-tag-list {
     border-color: rgb(127,127,127);
 }
@@ -147,6 +150,10 @@ blockquote blockquote blockquote {
 }
 .forums-help-block {
     background-color: rgb(127,191,255);
+}
+.new-post-label {
+    /* Custom color */
+    background-color: rgb(255,191,0);
 }
 
 /* Gallery */
@@ -230,6 +237,9 @@ blockquote blockquote blockquote {
 .storyblockfooter {
     background-color: rgb(191,223,255);
 }
+.chapter-row:hover {
+    background-color: rgb(191,223,255);
+}
 
 /* User profile */
 .sidepanel-section {
@@ -239,6 +249,7 @@ blockquote blockquote blockquote {
     background-color: rgb(191,223,255);
 }
 .unread-messages {
+    /* Custom color */
     color: rgb(255,95,0);
 }
 

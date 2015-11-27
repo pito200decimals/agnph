@@ -18,9 +18,9 @@ if (isset($_GET['q'])) {
             $vars['_title'] = "AGNPH - Staff";
             RenderPage("about/staff.tpl");
             return;
-        case "help":
-            $vars['_title'] = "AGNPH - Help";
-            RenderPage("about/help.tpl");
+        case "gallery":
+            $vars['_title'] = "AGNPH - Gallery Help";
+            RenderPage("about/gallery.tpl");
             return;
         case "irc":
             $vars['_title'] = "AGNPH - IRC";
@@ -29,6 +29,10 @@ if (isset($_GET['q'])) {
         case "minecraft":
             $vars['_title'] = "AGNPH - Minecraft";
             RenderPage("about/minecraft.tpl");
+            return;
+        case "oekaki":
+            $vars['_title'] = "AGNPH - Oekaki Help";
+            RenderPage("about/oekaki.tpl");
             return;
         default:
             break;

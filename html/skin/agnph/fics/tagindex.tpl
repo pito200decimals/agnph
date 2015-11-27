@@ -39,8 +39,8 @@
             {% if tags|length > 0 %}
                 {% for tag in tags %}
                     <tr>
-                        <td class="tag"><strong><a class="{{ tag.typeClass }}" href="/fics/browse/?search={{ tag.quotedName|url_encode }}">{{ tag.displayName }}</a></strong></td>
-                        <td>{{ tag.typeName }}{% if tag.EditLocked %} (locked){% endif %}</td>
+                        <td class="tag"><strong><a class="{{ tag.typeClass }}" href="/fics/browse/?search=tag%3A{{ tag.quotedName|url_encode }}">{{ tag.displayName }}</a></strong></td>
+                        <td>{{ tag.typeName }}</td>
                         <td>{{ tag.tagCounts }}</td>
                     </tr>
                 {% endfor %}

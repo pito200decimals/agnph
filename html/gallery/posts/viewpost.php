@@ -97,7 +97,6 @@ $post['harryluUrl'] = "http://iqdb.harry.lu/?url=".SITE_DOMAIN.GetSiteImagePath(
 
 // Process tags.
 $tags = GetTags($post['PostId']);
-GetTagCountsByTag(GALLERY_POST_TAG_TABLE, $tags);
 $tagNameStr = ToTagNameString($tags);
 $tagCategories = ToTagCategorized($tags);
 $post['tagstring'] = $tagNameStr;
@@ -130,10 +129,10 @@ if (isset($user)) {
 }
 
 // Increment view count, and do SQL after page is rendered.
-$post['NumViews']++;
+if ($post['Status'] != 'D') $post['NumViews']++;
 $vars['post'] = &$post;
 RenderPage("gallery/posts/viewpost.tpl");
-if (!IsMaintenanceMode()) {
+if ($post['Status'] != 'D' && !IsMaintenanceMode()) {
     sql_query("UPDATE ".GALLERY_POST_TABLE." SET NumViews = NumViews + 1 WHERE PostId=$pid;");
 }
 return;
@@ -238,11 +237,15 @@ function AddUserPermissions(&$post, $user) {
         $post['hasAction'] = true;
     }
     if (CanUserAddOrRemoveFromPools($user)) {
-        $post['canModifyPool'] = true;
+        if ($post['Status'] != "D") {
+            $post['canModifyPool'] = true;
+            $post['hasAction'] = true;
+        }
+    }
+    if ($post['Status'] != "D") {
+        $post['canFavorite'] = true;
         $post['hasAction'] = true;
     }
-    $post['canFavorite'] = true;
-    $post['hasAction'] = true;
 
     // Non-action-bar permissions.
     if (CanUserCommentOnPost($user)) {
@@ -252,7 +255,10 @@ function AddUserPermissions(&$post, $user) {
     // Don't allow swf of webm posts to be used as an avatar.
     if (CanUserEditBasicInfo($user, $user) && $user['AvatarPostId'] != $pid &&
         ($ext == "jpg" || $ext == "png" || $ext == "gif")) {
-        $post['canSetAvatar'] = true;
+        if ($post['Status'] != "D") {
+            $post['canSetAvatar'] = true;
+            $post['hasAction'] = true;
+        }
     }
     // Add perms for all comments.
     foreach ($post['comments'] as &$comment) {
@@ -351,7 +357,7 @@ function CreatePoolIterator($post) {
     if (!sql_query_into($result, "SELECT * FROM ".GALLERY_POOLS_TABLE." WHERE PoolId=$pool_id;", 1)) return "";
     $pool = $result->fetch_assoc();
     $index = $post['PoolItemOrder'];
-    $pool_url = "/gallery/post/?search=pool%3A".$pool['PoolId'];
+    $pool_url = "/gallery/post/?search=pool%3A".str_replace(" ", "_", $pool['Name']);
     if (!sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE ParentPoolId=$pool_id AND PoolItemOrder < $index ORDER BY PoolItemOrder DESC LIMIT 1;", 0)) return "";
     if ($result->num_rows > 0) {
         $prev_url = "/gallery/post/show/".$result->fetch_assoc()['PostId']."/";

@@ -2,12 +2,22 @@
     float: right;
     display: inline-block;
 }
+#fics-search input {
+    margin-right: 0px;
+}
+#search-help-link {
+    font-size: 60%;
+    vertical-align: super;
+    padding: 0px;
+    margin-right: 10px;
+}
 
 /* Storyblock CSS */
 .storyblock {
     margin: 15px;
     padding: 5px;
     display: block;
+    box-shadow: 2px 2px 5px #07162D;
 }
 .storyblockcontainer {
     background-color: white;

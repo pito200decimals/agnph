@@ -20,6 +20,10 @@ if (isset($_POST['service'])) {
     err("Unexpected error, please try again");
 }
 
+if (strlen($user['Email'])) {
+    $vars['similar_accounts'] = implode(", ", GetSimilarAccounts($user['Email']));
+}
+
 // This is how to output the template.
 RenderPage("user/account_link.tpl");
 return;
@@ -42,7 +46,7 @@ function HandlePost() {
             ProcessPost("SMF_sha", $service, "ImportForumsPassword");
             break;
         case "gallery":
-            // HandleGalleryPost();
+            ProcessPost(function($u, $p) { return sha1(GALLERY_CRYPT_SALT."--$p--"); }, $service, "ImportGalleryPassword");
             break;
         case "fics":
             ProcessPost(function ($u, $p) { return md5($p); }, $service, "ImportFicsPassword");
@@ -62,18 +66,25 @@ function ProcessPost($hash_fn, $section, $field) {
         $escaped_username = sql_escape(IMPORTED_ACCOUNT_USERNAME_PREFIX.$username);
         $password = $_POST["$section-password"];
         $hashed_password = $hash_fn($username, $password);
-        if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UPPER(Username)=UPPER('$escaped_username') AND RegisterIP='' LIMIT 1;", 1)) {
-            $old_user = $result->fetch_assoc();
-            if ($hashed_password == $old_user[$field]) {
-                MigrateAccount($old_user['UserId']);
+        if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UPPER(Username)=UPPER('$escaped_username') AND RegisterIP='';", 1)) {
+            while ($old_user = $result->fetch_assoc()) {
+                if ($hashed_password == $old_user[$field]) {
+                    $uid_to_migrate = $old_user['UserId'];
+                } else if (md5($password) == $old_user['Password']) {  // Also allow this so admins can reset imported accounts' passwords if necessary.
+                    // Note: Normal accounts are protected because they don't have the correct prefix.
+                    $uid_to_migrate = $old_user['UserId'];
+                } else {
+                    // Failure, try another account with the same username if it exists.
+                    continue;
+                }
+                $other_users = MigrateAccount($old_user['UserId']);
+                if (sizeof($other_users) > 0) {
+                    $msg = "Other accounts you might want to migrate: ".implode(", ", $other_users);
+                    PostSessionBanner($msg, "green");
+                }
                 success("Account linked successfully");
-            } else if (md5($password) == $old_user['Password']) {  // Also allow this so admins can reset imported accounts' passwords if necessary.
-                // Note: Normal accounts are protected because they don't have the correct prefix.
-                MigrateAccount($old_user['UserId']);
-                success("Account linked successfully");
-            } else {
-                err("Invalid password");
             }
+            err("Invalid password");
         } else {
             err(ucfirst($section)." account not found");
         }
@@ -82,12 +93,36 @@ function ProcessPost($hash_fn, $section, $field) {
     }
 }
 
+function GetSimilarAccounts($email, $ignore_uid = -1) {
+    $ret_array = array();
+    $escaped_email = sql_escape($email);
+    if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId<>$ignore_uid AND Email='$escaped_email' AND RegisterIP='';", 1)) {
+        while ($row = $result->fetch_assoc()) {
+            if (startsWith($row['UserName'], IMPORTED_ACCOUNT_USERNAME_PREFIX)) {
+                $username = substr($row['UserName'], strlen(IMPORTED_ACCOUNT_USERNAME_PREFIX));
+                $sections = array();
+                if (strlen($row['ImportForumsPassword']) > 0) $sections[] = "Forums";
+                if (strlen($row['ImportGalleryPassword']) > 0) $sections[] = "Gallery";
+                if (strlen($row['ImportFicsPassword']) > 0) $sections[] = "Fics";
+                if (strlen($row['ImportOekakiPassword']) > 0) $sections[] = "Oekaki";
+                if (sizeof($sections) > 0) $username .= "(".implode(",", $sections).")";
+                $ret_array[] = $username;
+            }
+        }
+    }
+    return $ret_array;
+}
+
 // TODO: Handle oekaki data.
+// Migrates an account. Returns an array of similar usernames, if any were found (same email).
 function MigrateAccount($uid) {
     global $user;
     $new_uid = $user['UserId'];
     LoadSingleTableEntry(array(USER_TABLE), "UserId", $uid, $old_user);
     if (!isset($old_user)) RenderErrorPage("Account not found");
+    // Find same emails.
+    $escaped_email = sql_escape($old_user['Email']);
+    $ret_array = GetSimilarAccounts($old_user['Email'], $uid);
 
     $update_mapping = array(
         SITE_LOGGING_TABLE => "UserId",
@@ -102,10 +137,25 @@ function MigrateAccount($uid) {
         FICS_CHAPTER_TABLE => "AuthorUserId",
         FICS_REVIEW_TABLE => "ReviewerUserId",  // TODO: Will these be imported?
         FICS_TAG_ALIAS_TABLE => "CreatorUserId",  // Likely empty.
-        FICS_TAG_IMPLICATION_TABLE => "CreatorUserId"  // Likely empty.
+        FICS_TAG_IMPLICATION_TABLE => "CreatorUserId",  // Likely empty.
+        OEKAKI_POST_TABLE => "UserId"
         );
     foreach ($update_mapping as $table => $field) {
         sql_query("UPDATE $table SET $field=$new_uid WHERE $field=$uid;");
+    }
+    // Before deleting old user, try to move some settings over (like forums signature).
+    // Signature.
+    if (sql_query_into($result, "SELECT Signature FROM ".FORUMS_USER_PREF_TABLE." WHERE UserId=$new_uid;", 1)) {
+        $current_sig = $result->fetch_assoc()['Signature'];
+        if (strlen(SanitizeHTMLTags($current_sig, "")) == 0) {
+            // When tags are stripped, signature is empty.
+            if (sql_query_into($result, "SELECT Signature FROM ".FORUMS_USER_PREF_TABLE." WHERE UserId=$uid;", 1)) {
+                $new_sig = $result->fetch_assoc()['Signature'];
+                $new_sig = SanitizeHTMLTags($new_sig, DEFAULT_ALLOWED_TAGS);
+                $escaped_new_sig = sql_escape(GetSanitizedTextTruncated($new_sig, DEFAULT_ALLOWED_TAGS, MAX_FORUMS_SIGNATURE_LENGTH));
+                sql_query("UPDATE ".FORUMS_USER_PREF_TABLE." SET Signature='$escaped_new_sig' WHERE UserId=$new_uid;");
+            }
+        }
     }
     $delete_mapping = array(
         USER_TABLE => "UserId",
@@ -153,6 +203,7 @@ function MigrateAccount($uid) {
     $account_uid = $old_user['UserId'];;
     $account_username = $old_user['DisplayName'];
     LogAction("<strong><a href='/user/$user_uid/'>$user_username</a></strong> imported old account <strong><a href='/user/$account_uid/'>$account_username</a></strong>", "");
+    return $ret_array;
 }
 
 function MoveFavorites($favorites_table, $item_name, $update_item_stats_fn, $old_user_id, $new_user_id) {

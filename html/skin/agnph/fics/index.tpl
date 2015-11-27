@@ -10,6 +10,7 @@
 {% block styles %}
     {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('/index-style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/comments-style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('/fics/index-style.css') }}" />
 {% endblock %}
 
@@ -38,7 +39,7 @@
             <a href="/fics/story/{{ story.StoryId }}/">{{ story.Title }}</a> by <a href="/user/{{ story.author.UserId }}/fics/">{{ story.author.DisplayName }}</a>
             <span class="stars">{{ stars.stars(story) }}</span>
         </div>
-        <div class="summary">{{ story.shortSummary }}</div>
+        <div class="summary">{% autoescape false %}{{ story.shortSummary }}{% endautoescape %}</div>
         <div class="rating"><strong>Rating:</strong>{{ story.rating }}</div>
     </div>
 {% endmacro %}
@@ -46,70 +47,82 @@
 {% block content %}
     {% import _self as self %}
 
-
-    <div class="right-column">
-        <div class="column-contents">
-            {% if featured|length > 0 %}
-                <div class="block">
-                    <div class="header">Featured Stories</div>
-                    <div class="content">
-                        <ul id="feature-list">
-                            {% for story in featured %}
-                                <li>{{ self.storyitem(story) }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-            {% endif %}
-            {% if random_stories %}
-                <div class="block">
-                    <div class="header">Random</div>
-                    <div class="content">
-                        {% for story in random_stories %}
-                            {{ self.storyitem(story) }}
-                        {% endfor %}
-                    </div>
-                </div>
-            {% endif %}
-        </div>
-    </div>
-
-
-    <div class="center-column">
-        <div class="column-contents">
-            {% if welcome_message %}
-                <div class="block">
-                    <div class="header">Welcome</div>
-                    <div class="content">{% autoescape false %}{{ welcome_message }}{% endautoescape %}</div>
-                </div>
-            {% endif %}
-            {# TODO: Only show first entry on mobile #}
-            {% for post in news %}
-                <div class="block{% if not post.mobile %} desktop-only{% endif %}">
-                    <div class="header">
-                        <a href="/forums/thread/{{ post.PostId }}/">{{ post.Title }}</a>
-                        <div class="tagline">
-                            Posted {{ post.date }} by <a href="/user/{{ post.user.UserId }}/">{{ post.user.DisplayName }}</a>
+    {{ block('banner') }}
+    <div class="index-table">
+        <div class="right-column">
+            <div class="column-contents">
+                {% if featured|length > 0 %}
+                    <div class="block">
+                        <div class="header">Featured Stories</div>
+                        <div class="content">
+                            <ul id="feature-list">
+                                {% for story in featured %}
+                                    <li>{{ self.storyitem(story) }}</li>
+                                {% endfor %}
+                            </ul>
                         </div>
-                        <div class="Clear">&nbsp;</div>
                     </div>
-                    <div class="content">
-                        {% autoescape false %}{{ post.Text }}{% endautoescape %}
+                {% endif %}
+                {% if recent_stories|length > 0 %}
+                    <div class="block">
+                        <div class="header">Recent Stories</div>
+                        <div class="content">
+                            {% for story in recent_stories %}
+                                {{ self.storyitem(story) }}
+                            {% endfor %}
+                        </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endif %}
+                {% if random_stories|length > 0 %}
+                    <div class="block">
+                        <div class="header">Random</div>
+                        <div class="content">
+                            {% for story in random_stories %}
+                                {{ self.storyitem(story) }}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
         </div>
-    </div>
 
 
-    <div class="left-column">
-        <div class="column-contents">
-            {% if events %}
-                <div class="block">
-                    <div class="header">Events</div>
-                    <div class="content">{% autoescape false %}{{ events }}{% endautoescape %}</div>
-                </div>
-            {% endif %}
+        <div class="center-column">
+            <div class="column-contents">
+                {% if welcome_message %}
+                    <div class="block">
+                        <div class="header">Welcome</div>
+                        <div class="content">{% autoescape false %}{{ welcome_message }}{% endautoescape %}</div>
+                    </div>
+                {% endif %}
+                {% for post in news %}
+                    <div class="block{% if not post.mobile %} desktop-only{% endif %}">
+                        <div class="header">
+                            <a href="/forums/thread/{{ post.PostId }}/">{{ post.Title }}</a>
+                            <div class="tagline">
+                                Posted {{ post.date }} by <a href="/user/{{ post.user.UserId }}/">{{ post.user.DisplayName }}</a>
+                            </div>
+                            <div class="Clear">&nbsp;</div>
+                        </div>
+                        <div class="content">
+                            {% autoescape false %}{{ post.Text }}{% endautoescape %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+
+        <div class="left-column">
+            <div class="column-contents">
+                {% if events %}
+                    <div class="block">
+                        <div class="header">Events</div>
+                        <div class="content">{% autoescape false %}{{ events }}{% endautoescape %}</div>
+                    </div>
+                {% endif %}
+            </div>
         </div>
     </div>
+    <div class="Clear">&nbsp;</div>
 {% endblock %}

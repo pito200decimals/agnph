@@ -25,7 +25,7 @@
         <h3>Edit Chapter</h3>
     {% endif %}
     {{ block('banner') }}
-    <form method="POST" accept-charset="UTF-8">
+    <form method="POST" enctype="multipart/form-data" accept-charset="UTF-8">
         <input type="hidden" name="sid" value="{{ storyid }}" />
         {{ block('editchapter') }}
         <input type="submit" name="save" value="Save Changes" />

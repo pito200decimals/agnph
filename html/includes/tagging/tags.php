@@ -4,14 +4,13 @@
 // This file just sets up the data.
 
 // Assumes a constant named TABLE defines the tag table and TAGS_PER_PAGE defines how many elements to show per page.
-// If a constant named TAG_ITEM_TABLE is defined, also fetches the counts of each tag.
 // Also that $TAG_TYPE_MAP is initialized to (from letter to label) and optionally $search_clause as the WHERE search clause.
 
 include_once(SITE_ROOT."includes/util/listview.php");
 
 $clauseArray = array();
 if (isset($_GET['search'])) {
-    $search = mb_strtolower($_GET['search']);
+    $search = mb_strtolower($_GET['search'], "UTF-8");
     $clauses = explode(" ", $search);
     foreach ($clauses as $clause) {
         $isTypeSearch = false;
@@ -29,28 +28,21 @@ if (isset($_GET['search'])) {
     }
 }
 // Only include tags that have at least one item.
-$clauseArray[] = "EXISTS(SELECT 1 FROM ".TAG_ITEM_TABLE." P WHERE T.TagId=P.TagId)";
+$clauseArray[] = "T.ItemCount > 0";
 $search_clause = "WHERE ".implode(" AND ", $clauseArray);
 
 if (!isset($search_clause)) $search_clause = "";
 if (!isset($search)) $search = "";
 
 $tags = array();
-if (defined("TAG_ITEM_TABLE")) {
-    CollectItemsComplex(TABLE,
-        "SELECT T.*, COUNT(*) AS ItemCount
-        FROM ".TABLE." T LEFT JOIN ".TAG_ITEM_TABLE." Q ON T.TagId=Q.TagId", "$search_clause GROUP BY T.TagId ORDER BY ".GetQueryOrder(true),
-        "$search_clause ORDER BY ".GetQueryOrder(false), $tags, TAGS_PER_PAGE, $iterator, "No tags found.");
-} else {
-    CollectItems(TABLE, "$search_clause ORDER BY ".GetQueryOrder(false), $tags, TAGS_PER_PAGE, $iterator, "No tags found.");
-}
+CollectItems(TABLE, "$search_clause ORDER BY ".GetQueryOrder(true), $tags, TAGS_PER_PAGE, $iterator, "No tags found.");
 
 foreach ($tags as &$tag) {
     $tag['displayName'] = TagNameToDisplayName($tag['Name']);
     $tag['quotedName'] = contains($tag['Name'], ":") ? "\"".$tag['Name']."\"" : $tag['Name'];
     $tag['tagCounts'] = $tag['ItemCount'];
     $tag['typeName'] = $TAG_TYPE_MAP[$tag['Type']];
-    $tag['typeClass'] = mb_strtolower($tag['Type'])."typetag tagname";
+    $tag['typeClass'] = mb_strtolower($tag['Type'], "UTF-8")."typetag tagname";
 }
 
 $vars['tags'] = $tags;
@@ -68,7 +60,7 @@ function GetQueryOrder($allow_count_order) {
     $search = "";
     if (isset($_GET['search'])) {
         $search = $_GET['search'];
-        if (mb_strtolower($search) == "status:banned") {
+        if (mb_strtolower($search, "UTF-8") == "status:banned") {
             $search_clause = "Usermode=-1";
         } else {
             $escaped_search = sql_escape($search);
@@ -81,14 +73,14 @@ function GetQueryOrder($allow_count_order) {
     if (isset($_GET['sort'])) {
         $order_asc = true;
         if (isset($_GET['order'])) {
-            if (mb_strtolower($_GET['order']) == "asc") {
+            if (mb_strtolower($_GET['order'], "UTF-8") == "asc") {
                 $order_asc = true;
-            } else if (mb_strtolower($_GET['order']) == "desc") {
+            } else if (mb_strtolower($_GET['order'], "UTF-8") == "desc") {
                 $order_asc = false;
             }
         }
         $sort = "Name";
-        switch (mb_strtolower($_GET['sort'])) {
+        switch (mb_strtolower($_GET['sort'], "UTF-8")) {
             case "name":
                 $sort = "Name";
                 break;

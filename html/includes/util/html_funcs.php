@@ -6,6 +6,7 @@
 function SanitizeHTMLTags($html, $allowed_html_config) {
     $html = ParseBBCode($html);
     $html = str_replace("> <", ">&nbsp;<", $html);  // Prevent user-created spaces from disappearing. HTMLPurifier will convert back to space.
+    $html = str_replace("<ul><br /><li>", "<ul><li>", $html);
     include_once(SITE_ROOT."../lib/HTMLPurifier/HTMLPurifier.auto.php");
     $config = HTMLPurifier_Config::createDefault();
     $config->set('HTML.Allowed', $allowed_html_config);
@@ -44,8 +45,33 @@ function ParseBBCode($html) {
     $parser->addCodeDefinition($builder->build());
     $builder = new JBBCode\CodeDefinitionBuilder('spoiler', '<span class="spoiler">{param}</span>');
     $parser->addCodeDefinition($builder->build());
+    $builder = new JBBCode\CodeDefinitionBuilder('s', '<span class="strikethrough">{param}</span>');
+    $parser->addCodeDefinition($builder->build());
+    $builder = new JBBCode\CodeDefinitionBuilder('center', '<span class="center">{param}</span>');
+    $parser->addCodeDefinition($builder->build());
+    $builder = new JBBCode\CodeDefinitionBuilder('list', '<ul>{param}</ul>');
+    $parser->addCodeDefinition($builder->build());
+    $builder = new JBBCode\CodeDefinitionBuilder('li', '<li>{param}</li>');
+    $parser->addCodeDefinition($builder->build());
+    $builder = new JBBCode\CodeDefinitionBuilder('sub', '<span class="subscript">{param}</span>');
+    $parser->addCodeDefinition($builder->build());
+    $builder = new JBBCode\CodeDefinitionBuilder('sup', '<span class="superscript">{param}</span>');
+    $parser->addCodeDefinition($builder->build());
     $parser->parse($html);
     return $parser->getAsHtml();
+}
+
+function GetSanitizedTextTruncated($text, $allowed_html_config, $max_byte_size, $add_ellipsis=false) {
+    $text = html_entity_decode($text);
+    $sanitized = SanitizeHTMLTags($text, $allowed_html_config);
+    $ellipsis = "";
+    if ($add_ellipsis) $ellipsis = "...";
+    
+    while (strlen($sanitized) > $max_byte_size) {  // Use byte-size here, not mb_char size.
+        $text = mb_substr($text, 0, min(mb_strlen($text) - 1, $max_byte_size));
+        $sanitized = htmlentities(SanitizeHTMLTags($text.$ellipsis, $allowed_html_config));
+    }
+    return $sanitized;
 }
 
 // TODO: Consolidate pagination more.
@@ -137,54 +163,94 @@ function TidyHTML($html) {
     $indent = 0;
     $iter = 0;
     $lastOpenCloseTag = null;
+    $no_space_after_tag_capture_group = "([\.,?!](?=(\s|<)))?";
     while (mb_strlen($html) > 0) {
         $iter++;
         if ($iter > 10000) {
             return $html;
         }
         $match = array();
-        if (mb_eregi("^(<script.*?</script>)(.*)$", $html, $match)) {
+        if (mb_eregi("^(<script.*?</script>$no_space_after_tag_capture_group)(.*)$", $html, $match)) {
             // Script tag.
+            // 1=<script/>
+            // 2,3=no_space_after_tag_capture_group
+            // 4=$remainder
             $tabs = Tabs($indent);
             $ret .= $tabs.$match[1]."\n";
-            $html = $match[2];
+            $html = $match[4];
             $lastOpenCloseTag = null;
-        } else if (mb_ereg("^(<([^/][^>]*[^/]|[^>/]+)>)([^<>]*)(</[^>]+>)(.*)$", $html, $match)) {
-            // Tag with only text in it.
+        } else if (mb_eregi("^(<style.*?</style>$no_space_after_tag_capture_group)(.*)$", $html, $match)) {
+            // Style tag.
+            // 1=<style/>
+            // 2,3=no_space_after_tag_capture_group
+            // 4=$remainder.
             $tabs = Tabs($indent);
-            $ret .= $tabs.$match[1].trim($match[3]).$match[4]."\n";
-            $html = $match[5];
+            $ret .= $tabs.$match[1]."\n";
+            $html = $match[4];
+            $lastOpenCloseTag = null;
+        } else if (mb_ereg("^(<([^/][^>]*[^/]|[^>/]+)>$no_space_after_tag_capture_group)([^<>]*)(</[^>]+>$no_space_after_tag_capture_group)(.*)$", $html, $match)) {
+            // Tag with only text in it.
+            // 1=<tag>+no_space_after_tag_capture_group
+            // 2=tag
+            // 3,4=no_space_after_tag_capture_group
+            // 5=inner_text
+            // 6=</tag>
+            // 7,8=no_space_after_tag_capture_group
+            // 9=$remainder
+            $tabs = Tabs($indent);
+            $ret .= $tabs.$match[1].trim($match[5]).$match[6]."\n";
+            $html = $match[9];
             $lastOpenCloseTag = null;
         } else if (mb_ereg("^([^<]+)(<.*)$", $html, $match)) {
             // Text.
+            // 1=text
+            // 2=$remainder
             $tabs = Tabs($indent);
             $ret .= $tabs.trim($match[1])."\n";
             $html = $match[2];
             $lastOpenCloseTag = null;
-        } elseif (mb_ereg("^([^<]*)(</[^>]+>)(.*)$", $html, $match)) {
+        } elseif (mb_ereg("^([^<]*)(</[^>]+>$no_space_after_tag_capture_group)(.*)$", $html, $match)) {
             // Close tag.
+            // 1=text
+            // 2=tag+no_space_after_tag_capture_group
+            // 3,4=no_space_after_tag_capture_group
+            // 5=$remainder
             $indent--;
             $tabs = Tabs($indent);
             if (mb_strlen($match[1]) > 0) $ret .= $tabs.$match[1]."\n";
             $ret .= $tabs.$match[2]."\n";
-            $html = $match[3];
+            $html = $match[5];
             $lastOpenCloseTag = null;
-        } elseif (mb_ereg("^([^<]*)(<\\?[^>]+>)(.*)$", $html, $match)) {
+        } elseif (mb_ereg("^([^<]*)(<\\?[^>]+>$no_space_after_tag_capture_group)(.*)$", $html, $match)) {
             // xml
+            // 1=text
+            // 2=tag+no_space_after_tag_capture_group
+            // 3,4=no_space_after_tag_capture_group
+            // 5=$remainder
             $tabs = Tabs($indent);
             if (mb_strlen($match[1]) > 0) $ret .= $tabs.$match[1]."\n";
             $ret .= $tabs.$match[2]."\n";
-            $html = $match[3];
+            $html = $match[5];
             $lastOpenCloseTag = null;
-        } elseif (mb_ereg("^([^<]*)(<![^>]+>)(.*)$", $html, $match)) {
+        } elseif (mb_ereg("^([^<]*)(<![^>]+>$no_space_after_tag_capture_group)(.*)$", $html, $match)) {
             // DOCTYPE
+            // 1=text
+            // 2=tag+no_space_after_tag_capture_group
+            // 3,4=no_space_after_tag_capture_group
+            // 5=$remainder
             $tabs = Tabs($indent);
             if (mb_strlen($match[1]) > 0) $ret .= $tabs.$match[1]."\n";
             $ret .= $tabs.$match[2]."\n";
-            $html = $match[3];
+            $html = $match[5];
             $lastOpenCloseTag = null;
-        } elseif (mb_ereg("^([^<]*)(<([^ />]+)( [^>]*)?/>)(.*)$", $html, $match)) {
+        } elseif (mb_ereg("^([^<]*)(<([^ />]+)( [^>]*)?/>$no_space_after_tag_capture_group)(.*)$", $html, $match)) {
             // OpenClose tag.
+            // 1=text
+            // 2=tag+no_space_after_tag_capture_group
+            // 3=tag name
+            // 4=tag attrs+close
+            // 5,6=no_space_after_tag_capture_group
+            // 7=$remainder
             $tabs = Tabs($indent);
             $tagName = $match[3];
             if ($lastOpenCloseTag != null) {
@@ -196,13 +262,17 @@ function TidyHTML($html) {
             $lastOpenCloseTag = $tagName;
             if (mb_strlen($match[1]) > 0) $ret .= $tabs.$match[1]."\n";
             $ret .= $tabs.$match[2]."\n";
-            $html = $match[5];
-        } elseif (mb_ereg("^([^<]*)(<[^>]+>)(.*)$", $html, $match)) {
+            $html = $match[7];
+        } elseif (mb_ereg("^([^<]*)(<[^>]+>$no_space_after_tag_capture_group)(.*)$", $html, $match)) {
             // Open tag.
+            // 1=text
+            // 2=tag+no_space_after_tag_capture_group
+            // 3,4=no_space_after_tag_capture_group
+            // 5=$remainder
             $tabs = Tabs($indent);
             if (mb_strlen($match[1]) > 0) $ret .= $tabs.$match[1]."\n";
             $ret .= $tabs.$match[2]."\n";
-            $html = $match[3];
+            $html = $match[5];
             $lastOpenCloseTag = null;
             $indent++;
         } else {

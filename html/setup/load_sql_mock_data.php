@@ -68,12 +68,6 @@ do_or_die(sql_query(
     (2),
     (3);"));
 
-
-AddImportedUser(4, "User4", "User4", "ImportForumsPassword", "96c2fd2d4063c6b7d330b4216c2ee3cc7f01da6e");
-AddImportedUser(5, "User5", "User5", "ImportFicsPassword", md5("Password 5"));
-AddImportedUser(6, "User6", "User6", "ImportOekakiPassword", "poJkyds5BIxl2");
-
-
 function AddImportedUser($uid, $username, $display_name, $passwd_field, $passwd_hash) {
     $now = time();
     do_or_die(sql_query(
@@ -183,9 +177,6 @@ function WriteBio($uid, $bio) {
 }
 
 // Populate some gallery entries.
-
-set_time_limit(90);
-ini_set('memory_limit', '-1');
 
 function prep_file($md5, $ext) {
     $system_path = GetSystemImagePath($md5, $ext);

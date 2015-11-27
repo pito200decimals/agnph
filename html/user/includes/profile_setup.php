@@ -31,5 +31,7 @@ switch ($profile_user['Gender']) {
     default:
         break;
 }
+// Also construct a name with underscores, for later use.
+$profile_user['underscore_name'] = mb_ereg_replace("\s+", "_", $profile_user['DisplayName']);
 $vars['profile']['user'] = $profile_user;
 ?>

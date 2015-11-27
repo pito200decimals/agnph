@@ -26,7 +26,7 @@ function RecordUserIP(&$user) {
     }
     $new_ips_string = implode(",", $prev_ips);
     if ($old_ips_string != $new_ips_string) {
-        $escaped_ips = sql_escape($new_ips_string);
+        $escaped_ips = sql_escape(GetSanitizedTextTruncated($new_ips_string, NO_HTML_TAGS, MAX_KNOWN_IP_STRING_LENGTH));
         sql_query("UPDATE ".USER_TABLE." SET KnownIPs='$escaped_ips' WHERE UserId=$uid;");
     }
 }
@@ -40,8 +40,9 @@ function LogAction($action, $section, $verbosity=1) {
     if (isset($user)) {
         $uid = $user['UserId'];
         $timestamp = time();
-        $escaped_action = sql_escape($action);
-        $escaped_section = sql_escape($section);
+        $escaped_action = sql_escape(GetSanitizedTextTruncated($action, DEFAULT_ALLOWED_TAGS, MAX_LOG_ACTION_STRING_LENGTH));
+        $escaped_section = sql_escape($section);  // Okay to not sanitize this value.
+        $escaped_ips = sql_escape(GetSanitizedTextTruncated($new_ips_string, NO_HTML_TAGS, MAX_KNOWN_IP_STRING_LENGTH));
         sql_query("INSERT INTO ".SITE_LOGGING_TABLE." (UserId, Timestamp, Action, Section, Verbosity) VALUES ($uid, $timestamp, '$escaped_action', '$escaped_section', $verbosity);");
     }
 }

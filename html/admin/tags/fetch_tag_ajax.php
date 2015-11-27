@@ -13,7 +13,7 @@ if (!isset($_GET['search']) || !isset($_GET['filter'])) {
     AJAXErr();
 }
 
-$search_term = mb_strtolower($_GET['search']);
+$search_term = mb_strtolower($_GET['search'], "UTF-8");
 $filter = $_GET['filter'];
 $sql_clauses = array();
 // Add filter clauses.

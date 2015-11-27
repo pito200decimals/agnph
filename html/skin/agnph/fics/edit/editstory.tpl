@@ -16,10 +16,13 @@
         <script src="{{ asset('/scripts/jquery.sortable.js') }}"></script>
         <script>
             $(document).ready(function() {
-                $('.sortable').sortable().bind('sortupdate', Update);
-                $(".reorder_hint").removeClass("hidden");
-                $('.sortable').removeAttr("style");
-                $('.sortable').css("cursor", "ns-resize");
+                var supports_touch = ((document.ontouchstart===null)?true:false);
+                if (!supports_touch) {
+                    $('.sortable').sortable().bind('sortupdate', Update);
+                    $(".reorder_hint").removeClass("hidden");
+                    $('.sortable').removeAttr("style");
+                    $('.sortable').css("cursor", "move");
+                }
                 $("#tags").keydown(function(e) {
                     if (e.keyCode == 13) {
                         $(this.form).submit();
@@ -69,7 +72,7 @@
                             });
                             $('.sortable').sortable();
                             $('.sortable').removeAttr("style");
-                            $('.sortable').css("cursor", "ns-resize");
+                            $('.sortable').css("cursor", "move");
                         },
                         error: function(e) {
                             $('.sortable').sortable('destroy');
@@ -120,7 +123,8 @@
             contextmenu: "image link | hr",
             autoresize_max_height: 200,
             resize: false,
-            menubar: false
+            menubar: false,
+            relative_urls: false
         });
         tinymce.init({
             selector: "textarea#notes",
@@ -130,7 +134,8 @@
             contextmenu: "image link | hr",
             autoresize_max_height: 150,
             resize: false,
-            menubar: false
+            menubar: false,
+            relative_urls: false
         });
         {% if create or not chapters %}
             {{ block('chapterMCESetup') }}
@@ -217,7 +222,7 @@
     {% endif %}
     {{ block('banner') }}
     {# Autocomplete off so that hidden inputs in the chapter ordering section don't autofill with previous values #}
-    <form method="POST" autocomplete="off" accept-charset="UTF-8" onsubmit="OnEditSubmit()">
+    <form method="POST" autocomplete="off" enctype="multipart/form-data" accept-charset="UTF-8" onsubmit="OnEditSubmit()">
         <input type="hidden" name="sid" value="{% if create %}-1{% else %}{{ formstory.StoryId }}{% endif %}" />
         <div class="form-block">
             <label>Title:</label>
@@ -315,17 +320,26 @@
         {% else %}
             <h4>Chapters</h4>
             <div class="reorder_hint hidden">(Drag to reorder)</div>
-            <ol class="sortable">
+            <ol class="chapter-list sortable">
                 {% for chapter in chapters %}
                     {# TODO: Add non-JS support (Copy fields on submit) #}
-                    <li class="chapter-row">
+                    <li>
                         <input class="chapternum" type="hidden" value="{{ chapter.ChapterItemOrder + 1 }}" id="{{ chapter.ChapterItemOrder + 1 }}" />
                         <input class="chapterid" type="hidden" value="{{ chapter.hash }}" />
-                        <span>{{ chapter.Title }}</span>
-                        <span><a class="chaptereditlink" href="/fics/edit/{{ formstory.StoryId }}/{{ chapter.ChapterItemOrder + 1 }}/">Edit</a></span>
-                        {% if chapters|length > 1 %}
-                            <span><a class="chapterdeletelink" href="/fics/delete/{{ formstory.StoryId }}/{{ chapter.ChapterItemOrder + 1 }}/">Delete</a></span>
-                        {% endif %}
+                        <div class="chapter-row">
+                            <span class="chapter-title">{{ chapter.Title }}</span>
+                            <span class="chapter-actions">
+                                <span class="chapter-stats">
+                                    <span class="desktop-only">{{ chapter.WordCount }} words</span>
+                                    <span class="desktop-only">{{ chapter.Views }} views</span>
+                                </span>
+                                <span><a class="chaptereditlink" href="/fics/edit/{{ formstory.StoryId }}/{{ chapter.ChapterItemOrder + 1 }}/">Edit</a></span>
+                                {% if chapters|length > 1 %}
+                                    <span><a class="chapterdeletelink" href="/fics/delete/{{ formstory.StoryId }}/{{ chapter.ChapterItemOrder + 1 }}/">Delete</a></span>
+                                {% endif %}
+                            </span>
+                            <div class="Clear">&nbsp;</div>
+                        </div>
                     </li>
                 {% endfor %}
             </ol>

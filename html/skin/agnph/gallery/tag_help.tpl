@@ -34,7 +34,7 @@
         </li>
         <li class="content">
             <p>
-                <strong>-{tag}</strong> - Searches for posts that does <strong>not</strong> contain this tag.
+                <strong>-{tag}</strong> - Searches for posts that do <strong>not</strong> contain this tag.
             </p>
             <div>
                 <p>
@@ -118,6 +118,16 @@
     <h4>Sorting</h4>
     <ul class="tag-help-block header">
         <div class="Clear">&nbsp;</div>
+        <li class="content">
+            <p>
+                <strong>order:score</strong> - Orders found posts from most-favorited to least-favorited.
+            </p>
+        </li>
+        <li class="content">
+            <p>
+                <strong>order:views</strong> - Orders found posts from most-viewed to least-viewed.
+            </p>
+        </li>
         <li class="content">
             <p>
                 <strong>order:date</strong> - Orders found posts from newest to oldest.

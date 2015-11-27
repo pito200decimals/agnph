@@ -61,9 +61,8 @@
 <noscript>
                         <li class="navigation_left">
                             <form action="/logout/" method="POST" accept-encoding="UTF-8">
-                                <input type="submit name="submit" value="Log out" />
+                                <input type="submit" name="submit" value="Log out" />
                             </form>
-                            <a href="/logout/">Log out</a>
                         </li>
 </noscript>
                         <li class="navigation_left">
@@ -101,8 +100,12 @@
                 {# TODO: Adjust logo #}
                 {# <a id="logo" href="/"><img src="/images/logo.png" /></a> #}
                 <ul class="navigation_left">
+                    {# Uncomment if logo as home is desired #}
+                    {#
                     <li class="desktop-only"><a id="top-logo-link" href="/"><img id="top-logo" src="/images/logo.png" /></a></li>
                     <li class="mobile-only{% if nav_section=="home" %} selected-nav{% endif %}"><a href="/">Home</a></li>
+                    #}
+                    <li{% if nav_section=="home" %} class="selected-nav"{% endif %}><a href="/">Home</a></li>
                     <li{% if nav_section=="forums" %} class="selected-nav"{% endif %}><a href="/forums/board/">Forums</a></li>
                     <li{% if nav_section=="gallery" %} class="selected-nav"{% endif %}><a href="/gallery/post/">Gallery</a></li>
                     <li{% if nav_section=="fics" %} class="selected-nav"{% endif %}><a href="/fics/">Fics</a></li>
@@ -117,55 +120,48 @@
             <div class="Clear">&nbsp;</div>
         </div>
         <div id="mainbody">
-            <div id="logo">
-                <img src="/images/banner.png" style="max-width: 100%;/>
-            </div>
-            <div class="Clear">&nbsp;</div>
-            <div id="header">
-                {# TODO: Add site/section banner here, above section navigation? #}
-                {% block section_navigation %}
-                {% endblock %}
-            </div>
-            <div class="Clear">&nbsp;</div>
-            <div id="content">
-                {# TODO: Remove error_msg (after forums cleanup) #}
-                {% if error_msg %}
-                    <div style="margin: 10px auto; padding: 15px; max-width: 600px; border-radius: 15px; background-color: rgb(223,223,255); text-align: center;">
-                        <p style="display: block; text-align: center; padding: 15px;">
-                            {{ error_msg }}
-                        </div>
-                    </div>
-                {% else %}
-                    {% block content %}
-                        <p style="text-align: center;">
-                            Page not found
-                        </p>
+            <div id="maincontent">
+                <div id="logo">
+                    <img src="/images/banner.png" style="max-width: 100%;" />
+                </div>
+                <div id="header">
+                    {% block section_navigation %}
                     {% endblock %}
-                {% endif %}
+                </div>
+                <div id="content">
+                    {% if error_msg %}
+                        <div class="base-error-msg">
+                            <p>
+                                {{ error_msg }}
+                            </p>
+                        </div>
+                    {% else %}
+                        {% block content %}
+                            {# Default error message if template is broken, should never show #}
+                            <p style="text-align: center;">
+                                Page not found
+                            </p>
+                        {% endblock %}
+                    {% endif %}
+                </div>
             </div>
-            {#
-                TODO: Is this a good location to put sitewide theme switcher?
-            #}
-            <div class="Clear">&nbsp;</div>
-            <div style="padding: 10px;">
-                <span style="float: left; font-size: 80%;">
-                    Theme: <br/>
-                    <form id="skin-switcher" action="/change-skin/" method="POST" accept-encoding="UTF-8">
-                        <select name="skin" onchange="document.getElementById('skin-switcher').submit();">
+            <div id="mainfooter">
+                <span id="theme-switcher">
+                    Theme:
+                    <form id="theme-switcher-form" action="/change-skin/" method="POST" accept-encoding="UTF-8">
+                        <select name="skin" onchange="document.getElementById('theme-switcher-form').submit();">
                             {% for s in availableSkins %}
                                 <option{% if s == skin %} selected{% endif %}>{{ s }}</option>
                             {% endfor %}
                         </select>
                     </form>
                 </span>
-                <div class="Clear" style="display: block">&nbsp;</div>
+                <div class="Clear">&nbsp;</div>
             </div>
-            <div class="Clear" style="display: block">&nbsp;</div>
         </div>
         <div id="footer">
-            <div><span>© 1996-2015 AGNPH</span> | <span>v{{ version }}</span></div>
-            {# TODO: Links #}
-            <div><span><a href="">Terms of Service</a></span> | <span><a href="/about/rules/">Rules</a></span> | <span><a href="">Contact Us</a></span></div>
+            <div><span>© 1996-2015 AGNPH</span> | <span>v{{ version }}</span> | <span><a href="/about/rules/">Rules</a></span> | <span><a href="/about/staff/">Contact Us</a></span></div>
+            <div></div>
             <div><span><small>All fanworks within are based on Pokémon. Pokémon © Nintendo/Creatures, Inc./GAME FREAK/The Pokémon Company. All work contained within this website are user-submitted, fan-made contributions. No copyright infringement is intended.</small></span></div>
         </div>
     </body>

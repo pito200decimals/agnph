@@ -45,8 +45,9 @@
     padding: 10px;
 }
 @media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
-    #content {
+    .index-table {
         display: table;
+        width: 100%;
     }
     .center-column {
         display: table-header-group;

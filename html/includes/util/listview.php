@@ -33,8 +33,8 @@ function CollectItemsComplex($table_name, $complicated_sql, $sql_order, $count_s
     }
 
     // Get total number, and construct iterator.
-    sql_query_into($result, "SELECT count(*) as ItemCount FROM $table_name T $count_sql_order;", 1) or RenderErrorPage($error_msg);
-    $total_num_items = $result->fetch_assoc()['ItemCount'];
+    sql_query_into($result, "SELECT count(*) as ListSize FROM $table_name T $count_sql_order;", 1) or RenderErrorPage($error_msg);
+    $total_num_items = $result->fetch_assoc()['ListSize'];
     $num_max_pages = (int)(($total_num_items + $items_per_page - 1) / $items_per_page);
     if ($num_max_pages > 1) {
         $iterator = ConstructPageIterator($page, $num_max_pages, DEFAULT_PAGE_ITERATOR_SIZE,

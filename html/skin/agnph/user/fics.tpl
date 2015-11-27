@@ -46,7 +46,7 @@
                 {% endfor %}
             </ul>
             <div class="Clear">&nbsp;</div>
-            <a href="/fics/browse/?search={{ profile.user.DisplayName|url_encode }}">Show all</a>
+            <a href="/fics/browse/?search=author%3A{{ profile.user.underscore_name|url_encode }}">Show all</a>
         </div>
     {% endif %}
     {% if showFavorites and profile.user.favorites|length > 0 %}
@@ -60,7 +60,7 @@
                 {% endfor %}
             </ul>
             <div class="Clear">&nbsp;</div>
-            <a href="/fics/browse/?search=fav%3A{{ profile.user.DisplayName|url_encode }}">Show all</a>
+            <a href="/fics/browse/?search=fav%3A{{ profile.user.underscore_name|url_encode }}">Show all</a>
         </div>
     {% endif %}
 {% endblock %}

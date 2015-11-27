@@ -14,20 +14,20 @@ function ConstructCommentBlockIterator(&$items, &$iterator, $is_offset, $url_fn,
             function($index, $current_page, $max_page) use ($url_fn) {
                 if ($index == 0) {
                     if ($current_page == 1) {
-                        return "";  // No link.
+                        return "<span class='currentpage'>&lt;&lt;</span>";
                     } else {
                         $url = $url_fn($current_page - 1);
                         return "<a href='$url'>&lt;&lt;</a>";
                     }
                 } else if ($index == $max_page + 1) {
                     if ($current_page == $max_page) {
-                        return "";  // No link.
+                        return "<span class='currentpage'>&gt;&gt;</span>";
                     } else {
                         $url = $url_fn($current_page + 1);
                         return "<a href='$url'>&gt;&gt;</a>";
                     }
                 } else if ($index == $current_page) {
-                    return "<a>[$index]</a>";  // No link.
+                    return "<span class='currentpage'>$index</span>";
                 } else {
                         $url = $url_fn($index);
                     return "<a href='$url'>$index</a>";

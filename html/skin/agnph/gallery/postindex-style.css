@@ -40,12 +40,14 @@ a.postlink {
     font-weight: bold;
     margin: 0px 2px;
 }
+/*
 a:hover .post-preview-img {
     box-shadow: 5px 5px 8px #07162D;
 }
 a:hover div.post-label {
     box-shadow: 5px 5px 8px #07162D;
 }
+*/
 
 /* Post tile outlines */
 .childoutline {
@@ -62,10 +64,6 @@ a:hover div.post-label {
 }
 .toggle-mobile-layout {
     display: none;
-}
-#search-help-link {
-    font-size: 60%;
-    vertical-align: super;
 }
 
 @media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {

@@ -51,13 +51,13 @@ if ($action == "send") {
         }
 
         $pmid = $msg['Id'];  // Also equal to $rid.
-        $escaped_message = sql_escape($message);
+        $escaped_message = sql_escape(GetSanitizedTextTruncated($message, DEFAULT_ALLOWED_TAGS, MAX_PM_LENGTH));
         $now = time();
         $title = $msg['Title'];
         if (!startsWith($title, "RE:")) {
             $title = "RE: $title";
         }
-        $escaped_title = sql_escape($title);
+        $escaped_title = sql_escape(GetSanitizedTextTruncated($title, NO_HTML_TAGS, MAX_PM_TITLE_LENGTH));
         sql_query("INSERT INTO ".USER_MAILBOX_TABLE."
             (SenderUserId, RecipientUserId, ParentMessageId, Timestamp, Title, Content)
             VALUES
@@ -85,8 +85,8 @@ if ($action == "send") {
         if (mb_strlen($title) == 0) {
             $title = "(no subject)";
         }
-        $escaped_title = sql_escape($title);
-        $escaped_message = sql_escape($message);
+        $escaped_title = sql_escape(GetSanitizedTextTruncated($title, NO_HTML_TAGS, MAX_PM_TITLE_LENGTH));
+        $escaped_message = sql_escape(GetSanitizedTextTruncated($message, DEFAULT_ALLOWED_TAGS, MAX_PM_LENGTH));
         $now = time();
         $msgs = array();
         if ($ruid == -1) {

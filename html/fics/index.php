@@ -4,20 +4,25 @@
 include_once("../header.php");
 include_once(SITE_ROOT."includes/news/news.php");
 include_once(SITE_ROOT."fics/includes/functions.php");
+include_once(SITE_ROOT."fics/includes/search.php");
 
 // Fetch center content.
 $vars['welcome_message'] = SanitizeHTMLTags(GetSiteSetting(FICS_WELCOME_MESSAGE_KEY, ""), DEFAULT_ALLOWED_TAGS);
 
 // Get news stories.
 $boardName = GetSiteSetting(FICS_NEWS_SOURCE_BOARD_NAME_KEY, null);
-$vars['news'] = GetNewsPosts($boardName);
+$maxNewsPosts = GetSiteSetting(FICS_MAX_NEWS_POSTS_KEY, DEFAULT_FICS_MAX_NEWS_POSTS);
+$vars['news'] = GetNewsPosts($boardName, null /*section*/, $maxNewsPosts);
 
 // Fetch left sidepanel data.
 $vars['events'] = SanitizeHTMLTags(GetSiteSetting(FICS_EVENTS_LIST_KEY, null), DEFAULT_ALLOWED_TAGS);
 
+$search_clauses = GetSearchClauses("");
+
+
 // Fetch right sidepanel data.
 // Get featured stories.
-if (sql_query_into($result, "SELECT * FROM ".FICS_STORY_TABLE." WHERE Featured IN ('F','G','S','Z') ORDER BY Featured ASC, DateUpdated DESC LIMIT ".FICS_MAX_FEATURED_STORIES.";", 1)) {
+if (sql_query_into($result, "SELECT * FROM ".FICS_STORY_TABLE." WHERE Featured IN ('F','G','S','Z') AND ($search_clauses) ORDER BY Featured ASC, DateUpdated DESC LIMIT ".FICS_MAX_FEATURED_STORIES.";", 1)) {
     $featured = array();
     while ($story = $result->fetch_assoc()) {
         FillStoryInfo($story);
@@ -31,14 +36,21 @@ $num_rand = GetSiteSetting(FICS_NUM_RANDOM_STORIES_KEY, DEFAULT_FICS_NUM_RANDOM_
 if (is_numeric($num_rand)) {
     $num_rand = (int)$num_rand;
     if ($num_rand > FICS_MAX_NUM_RANDOM_STORIES) $num_rand = FICS_MAX_NUM_RANDOM_STORIES;
-    if (sql_query_into($result, "SELECT * FROM ".FICS_STORY_TABLE." ORDER BY RAND() LIMIT $num_rand;", 1)) {
+    $vars['random_stories'] = GetRandomStories($num_rand);
+}
+// Get recent stories.
+$num_recent = GetSiteSetting(FICS_NUM_RECENT_STORIES_KEY, DEFAULT_FICS_NUM_RECENT_STORIES);
+if (is_numeric($num_recent)) {
+    $num_recent = (int)$num_recent;
+    if ($num_recent > FICS_MAX_NUM_RECENT_STORIES) $num_recent = FICS_MAX_NUM_RECENT_STORIES;
+    if (sql_query_into($result, "SELECT * FROM ".FICS_STORY_TABLE." WHERE ($search_clauses) ORDER BY DateUpdated DESC LIMIT $num_recent;", 1)) {
         $rand = array();
         while ($story = $result->fetch_assoc()) {
             FillStoryInfo($story);
             $story['shortSummary'] = ShortSummary($story['Summary']);
             $rand[] = $story;
         }
-        $vars['random_stories'] = $rand;
+        $vars['recent_stories'] = $rand;
     }
 }
 
@@ -46,16 +58,27 @@ RenderPage("fics/index.tpl");
 return;
 
 function ShortSummary($summary) {
-    return GetSanitizedTextTruncated($summary, MAX_FICS_SHORT_SUMMARY_LEGNTH);
+    return html_entity_decode(GetSanitizedTextTruncated($summary, NO_HTML_TAGS, MAX_FICS_SHORT_SUMMARY_LEGNTH, true));
 }
 
-function GetSanitizedTextTruncated($text, $max_byte_size){
-    $sanitized = SanitizeHTMLTags($text, "");
-    while (strlen($sanitized) > $max_byte_size) {  // Use byte-size here, not mb_char size.
-        $text = mb_substr($text, 0, mb_strlen($text) - 1);
-        $sanitized = SanitizeHTMLTags($text."...", "");
+function GetRandomStories($num_stories) {
+    if (!sql_query_into($result, "SELECT StoryId FROM ".FICS_STORY_TABLE." WHERE ApprovalStatus='A' ORDER BY StoryId DESC LIMIT 1;", 1)) return array();
+    $max_sid = $result->fetch_assoc()['StoryId'];
+    $ret_sids = array();
+    for ($i = 0; $i < $num_stories; $i++) {
+        $sid = rand(1, $max_sid);
+        if (in_array($sid, $ret_sids)) continue;
+        $ret_sids[] = $sid;
     }
-    return $sanitized;
+    $joined = implode(",", $ret_sids);
+    $ret_stories = array();
+    if (!sql_query_into($result, "SELECT * FROM ".FICS_STORY_TABLE." WHERE ApprovalStatus='A' AND StoryId IN ($joined);", 1)) return array();
+    while ($story = $result->fetch_assoc()) {
+        FillStoryInfo($story);
+        $story['shortSummary'] = ShortSummary($story['Summary']);
+        $ret_stories[] = $story;
+    }
+    return $ret_stories;
 }
 
 ?>

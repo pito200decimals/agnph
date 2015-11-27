@@ -48,6 +48,7 @@
                     autoresize_max_height: 150,
                     resize: false,
                     menubar: false,
+                    relative_urls: false,
                     content_css: "{{ asset('/comments-style.css') }}"
                 });
                 $("html body").animate(
@@ -71,6 +72,7 @@
         autoresize_max_height: 150,
         resize: false,
         menubar: false,
+        relative_urls: false,
         content_css: "{{ asset('/comments-style.css') }}"
     });
 {% endblock %}

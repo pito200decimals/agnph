@@ -154,8 +154,8 @@ function HandleCreateThread() {
             PostBanner("Post not long enough", "red");
             return;
         }
-        $sanitizedText = GetSanitizedTextTruncated($text, MAX_FORUMS_POST_LENGTH);
-        $escaped_title = sql_escape($_POST['title']);
+        $sanitizedText = GetSanitizedTextTruncated($text, DEFAULT_ALLOWED_TAGS, MAX_FORUMS_POST_LENGTH);
+        $escaped_title = sql_escape(GetSanitizedTextTruncated($_POST['title'], DEFAULT_ALLOWED_TAGS, MAX_FORUMS_POST_TITLE_LENGTH));
         $escaped_text = sql_escape($sanitizedText);
         $now = time();
         $uid = $user['UserId'];
@@ -187,8 +187,8 @@ function HandleReplyThread() {
             PostBanner("Post not long enough", "red");
             return;
         }
-        $sanitizedText = GetSanitizedTextTruncated($text, MAX_FORUMS_POST_LENGTH);
-        $escaped_title = sql_escape($_POST['title']);
+        $sanitizedText = GetSanitizedTextTruncated($text, DEFAULT_ALLOWED_TAGS, MAX_FORUMS_POST_LENGTH);
+        $escaped_title = sql_escape(GetSanitizedTextTruncated($_POST['title'], DEFAULT_ALLOWED_TAGS, MAX_FORUMS_POST_TITLE_LENGTH));
         $escaped_text = sql_escape($sanitizedText);
         $now = time();
         $uid = $user['UserId'];
@@ -225,8 +225,8 @@ function HandleEditPost() {
             PostBanner("Post not long enough", "red");
             return;
         }
-        $sanitizedText = GetSanitizedTextTruncated($text, MAX_FORUMS_POST_LENGTH);
-        $escaped_title = sql_escape($title);
+        $sanitizedText = GetSanitizedTextTruncated($text, DEFAULT_ALLOWED_TAGS, MAX_FORUMS_POST_LENGTH);
+        $escaped_title = sql_escape(GetSanitizedTextTruncated($title, DEFAULT_ALLOWED_TAGS, MAX_FORUMS_POST_TITLE_LENGTH));
         $sets[] = "Title='$escaped_title'";
 
         $escaped_text = sql_escape($sanitizedText);
@@ -250,8 +250,10 @@ function HandleEditPost() {
             if (sql_query_into($result, "SELECT * FROM ".FORUMS_BOARD_TABLE." WHERE BoardId=$new_bid;", 1)) {
                 $board = $result->fetch_assoc();
                 $boardname = $board['Name'];
-                $sets[] = "ParentId='$escaped_bid'";
-                LogAction("<strong><a href='/user/$uid/'>$name</a></strong> moved thread <strong>$title</strong> to board <strong>$boardname</strong>", "R");
+                if ($new_bid != $vars['post']['ParentId']) {
+                    $sets[] = "ParentId='$escaped_bid'";
+                    LogAction("<strong><a href='/user/$uid/'>$name</a></strong> moved thread <strong>$title</strong> to board <strong>$boardname</strong>", "R");
+                }
             } else {
                 PostSessionBanner("Board does not exist", "red");
             }
@@ -272,19 +274,6 @@ function HandleEditPost() {
     } else {
         PostBanner("Invalid action", "red");
     }
-}
-
-function GetSanitizedTextTruncated($text, $max_byte_size){
-    $sanitized = GetSanitizedText($text);
-    while (strlen($sanitized) > $max_byte_size) {  // Use byte-size here, not mb_char size.
-        $text = mb_substr($text, 0, mb_strlen($text) - 1);
-        $sanitized = GetSanitizedText($text);
-    }
-    return $sanitized;
-}
-
-function GetSanitizedText($text) {
-    return SanitizeHTMLTags($text, DEFAULT_ALLOWED_TAGS);
 }
 
 function GoToForumPost($pid) {

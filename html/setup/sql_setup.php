@@ -53,6 +53,7 @@ sql_query("DROP TABLE ".FICS_USER_FAVORITES_TABLE.";");
 sql_query("DROP TABLE ".FICS_TAG_ALIAS_TABLE.";");
 sql_query("DROP TABLE ".FICS_TAG_IMPLICATION_TABLE.";");
 sql_query("DROP TABLE ".OEKAKI_USER_PREF_TABLE.";");
+sql_query("DROP TABLE ".OEKAKI_POST_TABLE.";");
 // NOTE: If you add another user table, make sure to update account migration.
 sql_query("DELETE FROM mysql.event");
 
@@ -61,7 +62,7 @@ do_or_die(sql_query(
     "CREATE TABLE ".USER_TABLE." (
         UserId INT(11) UNSIGNED AUTO_INCREMENT,".  // User's ID.
         // User/admin/signup-assigned values.
-       "UserName VARCHAR(".MAX_USERNAME_LENGTH.") UNIQUE NOT NULL,
+       "UserName VARCHAR(".MAX_USERNAME_LENGTH.") NOT NULL,
         DisplayName VARCHAR(".MAX_DISPLAY_NAME_LENGTH.") NOT NULL,
         Email VARCHAR(".MAX_USER_EMAIL_LENGTH.") NOT NULL,
         Password CHAR(32) NOT NULL,".  // Requires 32 for md5
@@ -82,15 +83,15 @@ do_or_die(sql_query(
        "GroupMailboxThreads TINYINT(1) DEFAULT 1,
         AvatarPostId INT(11) DEFAULT -1,".  // Format: Post ID in gallery.
        "AvatarFname VARCHAR(16) DEFAULT '',".  // Format: "user$uid.$ext"
-       "Skin VARCHAR(16) DEFAULT '".DEFAULT_SKIN."' NOT NULL,".
+       "Skin VARCHAR(".MAX_SKIN_STRING_LENGTH.") DEFAULT '".DEFAULT_SKIN."' NOT NULL,".
         // Code-assigned values.
        "JoinTime INT(11) NOT NULL,
         LastVisitTime INT(11) NOT NULL,
         DisplayNameChangeTime INT(11) DEFAULT 0 NOT NULL,
         RegisterIP VARCHAR(50) NOT NULL,".  // RegisterIP will be empty-string if the user was imported from the old site software.
-       "KnownIPs VARCHAR(512) NOT NULL,".  // Allocate 45 + 1 characters for each IP address. Store the past 10 addresses comma-separated.
+       "KnownIPs VARCHAR(".MAX_KNOWN_IP_STRING_LENGTH.") NOT NULL,".  // Allocate 45 + 1 characters for each IP address. Store the past 10 addresses comma-separated.
        "ImportForumsPassword VARCHAR(40) NOT NULL,
-        ImportGalleryPassword VARCHAR(32) NOT NULL,
+        ImportGalleryPassword VARCHAR(40) NOT NULL,
         ImportFicsPassword VARCHAR(32) NOT NULL,
         ImportOekakiPassword VARCHAR(32) NOT NULL,
         PRIMARY KEY(UserId)
@@ -130,7 +131,7 @@ do_or_die(sql_query(
     "CREATE TABLE ".FORUMS_POST_TABLE." (
         PostId INT(11) UNSIGNED AUTO_INCREMENT,
         UserId INT(11) NOT NULL,
-        Title VARCHAR(256) NOT NULL,
+        Title VARCHAR(".MAX_FORUMS_POST_TITLE_LENGTH.") NOT NULL,
         Text TEXT(".MAX_FORUMS_POST_LENGTH."),
         PostDate INT(11) NOT NULL,
         EditDate INT(11) DEFAULT 0 NOT NULL,
@@ -242,7 +243,6 @@ do_or_die(sql_query(
 do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_USER_PREF_TABLE." (
         UserId INT(11) NOT NULL,
-        UploadLimit INT(11) NOT NULL,
         ArtistTagId INT(11) NOT NULL,
         GalleryPermissions CHAR(1) DEFAULT 'N',".  // R - Restricted user, N - Normal user, C - Contributor, A - Admin
        "GalleryPostsPerPage INT(11) DEFAULT ".DEFAULT_GALLERY_POSTS_PER_PAGE.",
@@ -350,6 +350,22 @@ do_or_die(sql_query(
 // Oekaki tables //
 ///////////////////
 
+// Table for oekaki posts.
+do_or_die(sql_query(
+    "CREATE TABLE ".OEKAKI_POST_TABLE." (
+        PostId INT(11) UNSIGNED AUTO_INCREMENT,
+        UserId INT(11) NOT NULL,
+        ParentPostId INT(11) NOT NULL,
+        Timestamp INT(11) NOT NULL,
+        Title VARCHAR(".MAX_OEKAKI_POST_TITLE_LENGTH.") NOT NULL,
+        Text TEXT(".MAX_OEKAKI_POST_TEXT_LENGTH.") NOT NULL,
+        Width INT(11) NOT NULL,
+        Height INT(11) NOT NULL,
+        Extension CHAR(3) NOT NULL,
+        Adult TINYINT(1) DEFAULT 0 NOT NULL,
+        Duration INT(11) NOT NULL,
+        PRIMARY KEY(PostId)
+    ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 // Table for oekaki user preferences.
 do_or_die(sql_query(
    "CREATE TABLE ".OEKAKI_USER_PREF_TABLE." (
@@ -369,7 +385,7 @@ do_or_die(sql_query(
         Id INT(11) UNSIGNED AUTO_INCREMENT,
         SenderUserId INT(11) NOT NULL,
         RecipientUserId INT(11) NOT NULL,
-        ParentMessageId INT(11) NOT NULL,
+        ParentMessageId INT(11) DEFAULT -1 NOT NULL,
         Timestamp INT(11) NOT NULL,
         Status CHAR(1) DEFAULT 'U',".  // U - Unread, R - Read, D - Deleted
        "Title VARCHAR(".MAX_PM_TITLE_LENGTH.") NOT NULL,
@@ -397,7 +413,7 @@ do_or_die(sql_query(
         Id INT(11) UNSIGNED AUTO_INCREMENT,".  // Just a unique ID, even though Timestamp should make it unique.
        "UserId INT(11) NOT NULL,
         Timestamp INT(11) NOT NULL,
-        Action TEXT(256) NOT NULL,
+        Action TEXT(".MAX_LOG_ACTION_STRING_LENGTH.") NOT NULL,
         Section CHAR(1) NOT NULL,".  // ''=Site, R=Forums, G=Gallery, F=Fics, O=Oekaki (Site lists all sections as well).
        "Verbosity INT(11) NOT NULL,".  // Important actions = 1, Minor actions = 2.
        "PRIMARY KEY(Id, UserId, Timestamp)
@@ -406,12 +422,7 @@ do_or_die(sql_query(
 // Table cleanup events.
 sql_query("CREATE EVENT delete_security_email_entries ON SCHEDULE EVERY 0:15 HOUR_MINUTE DO DELETE FROM ".SECURITY_EMAIL_TABLE." WHERE CURRENT_TIMESTAMP > MaxTimestamp;");
 
-// TODO: Initialize file directories.
-
-// TODO: Remove this call after testing is complete.
-include_once("load_sql_mock_data.php");
-
-// Creates the tag table and a item-tag map table. Default tag type is 'G'.
+// Creates the tag table and a item-tag map table. Default tag type is 'M'.
 function CreateItemTagTables($tag_table_name, $item_tag_table_name, $alias_table_name, $implication_table_name, $item_id) {
     // Table for tags.
     do_or_die(sql_query(
@@ -421,11 +432,12 @@ function CreateItemTagTables($tag_table_name, $item_tag_table_name, $alias_table
             Type CHAR(1) DEFAULT 'M',".
            "EditLocked TINYINT(1) DEFAULT FALSE,
             AddLocked TINYINT(1) DEFAULT FALSE,
-            CreatorUserId INT(11) NOT NULL,
-            ChangeTypeUserId INT(11) NOT NULL,
-            ChangeTypeTimestamp INT(11) NOT NULL,
-            Note VARCHAR(".MAX_TAG_NOTE_LENGTH.") NOT NULL,
+            CreatorUserId INT(11) DEFAULT 0 NOT NULL,
+            ChangeTypeUserId INT(11) DEFAULT 0 NOT NULL,
+            ChangeTypeTimestamp INT(11) DEFAULT 0 NOT NULL,
+            Note TEXT(".MAX_TAG_NOTE_LENGTH.") NOT NULL,
             HideTag TINYINT(1) DEFAULT 0 NOT NULL,
+            ItemCount INT(11) NOT NULL,
             PRIMARY KEY(TagId, Name)
         ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
     // Table for item-tag mapping.
@@ -454,4 +466,7 @@ function CreateItemTagTables($tag_table_name, $item_tag_table_name, $alias_table
             PRIMARY KEY(TagId, ImpliedTagId)
         ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 }
+
+
+include_once("load_sql_mock_data.php");
 ?>

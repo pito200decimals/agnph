@@ -18,6 +18,11 @@ if ($action == "add-favorite") {
         if (sql_query_into($result, "SELECT * FROM ".FICS_STORY_TABLE." WHERE StoryId='$escaped_sid';", 1)) {
             $story = $result->fetch_assoc();
             $sid = $story['StoryId'];
+            if ($story['ApprovalStatus'] == "D") {
+                PostSessionBanner("Story not found", "green");
+                    // Go back to requesting page.
+                    Redirect($_SERVER['HTTP_REFERER']);
+            }
             if (!sql_query_into($result, "SELECT * FROM ".FICS_USER_FAVORITES_TABLE." WHERE UserId=$uid AND StoryId=$sid;", 1)) {
                 // Failed to query, or did not find existing favorite.
                 if (sql_query("INSERT INTO ".FICS_USER_FAVORITES_TABLE." (StoryId, UserId, Timestamp) VALUES ($sid, $uid, $now);")) {
@@ -35,6 +40,11 @@ if ($action == "add-favorite") {
         if (sql_query_into($result, "SELECT * FROM ".FICS_STORY_TABLE." WHERE StoryId='$escaped_sid';", 1)) {
             $story = $result->fetch_assoc();
             $sid = $story['StoryId'];
+            if ($story['ApprovalStatus'] == "D") {
+                PostSessionBanner("Story not found", "green");
+                    // Go back to requesting page.
+                    Redirect($_SERVER['HTTP_REFERER']);
+            }
             if (sql_query_into($result, "SELECT * FROM ".FICS_USER_FAVORITES_TABLE." WHERE UserId=$uid AND StoryId=$sid;", 1)) {
                 // Found the entry for favorites.
                 if (sql_query("DELETE FROM ".FICS_USER_FAVORITES_TABLE." WHERE StoryId=$sid AND UserId=$uid;")) {

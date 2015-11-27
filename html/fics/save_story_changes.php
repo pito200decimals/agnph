@@ -12,19 +12,19 @@ if (!CanPerformSitePost()) MaintenanceError();
 if (!isset($_POST['sid'])) return;
 $sid = $_POST['sid'];
 if (!isset($_POST['title'])) return;
-$title = SanitizeHTMLTags($_POST['title'], DEFAULT_ALLOWED_TAGS);
+$title = GetSanitizedTextTruncated($_POST['title'], DEFAULT_ALLOWED_TAGS, MAX_FICS_STORY_TITLE_LENGTH);
 if (!isset($_POST['author'])) return;
 $author_uid = $_POST['author'];
 if (!isset($_POST['coauthors'])) $coauthor_ids = array();
 else $coauthor_ids = $_POST['coauthors'];
 if (!isset($_POST['summary'])) return;
-$summary = SanitizeHTMLTags($_POST['summary'], DEFAULT_ALLOWED_TAGS);
+$summary = GetSanitizedTextTruncated($_POST['summary'], DEFAULT_ALLOWED_TAGS, MAX_FICS_STORY_SUMMARY_LENGTH);
 if (!isset($_POST['rating'])) return;
 $rating = $_POST['rating'];
 if (!isset($_POST['completed'])) return;
 $completed = $_POST['completed'];
 if (!isset($_POST['notes'])) return;
-$storynotes = SanitizeHTMLTags($_POST['notes'], DEFAULT_ALLOWED_TAGS);
+$storynotes = GetSanitizedTextTruncated($_POST['notes'], DEFAULT_ALLOWED_TAGS, MAX_FICS_STORY_NOTES_LENGTH);
 if (!isset($_POST['tags'])) return;
 $tagstring = CleanTagString($_POST['tags']);
 
@@ -64,16 +64,20 @@ if ($completed == '1') {
 // Check chapter 1 input, if applicable.
 if ($sid <= 0) {
     if (!isset($_POST['chaptertitle'])) return;
-    $chaptertitle = SanitizeHTMLTags($_POST['chaptertitle'], DEFAULT_ALLOWED_TAGS);
+    $chaptertitle = GetSanitizedTextTruncated($_POST['chaptertitle'], DEFAULT_ALLOWED_TAGS, MAX_FICS_CHAPTER_TITLE_LENGTH);
     if (!isset($_POST['chapternotes'])) return;
-    $chapternotes = SanitizeHTMLTags($_POST['chapternotes'], DEFAULT_ALLOWED_TAGS);
+    $chapternotes = GetSanitizedTextTruncated($_POST['chapternotes'], DEFAULT_ALLOWED_TAGS, MAX_FICS_CHAPTER_NOTES_LENGTH);
     if (!isset($_POST['chaptertext'])) return;
     $chaptertext = SanitizeHTMLTags($_POST['chaptertext'], DEFAULT_ALLOWED_TAGS);
     if (!isset($_POST['chapterendnotes'])) return;
-    $chapterendnotes = SanitizeHTMLTags($_POST['chapterendnotes'], DEFAULT_ALLOWED_TAGS);
+    $chapterendnotes = GetSanitizedTextTruncated($_POST['chapterendnotes'], DEFAULT_ALLOWED_TAGS, MAX_FICS_CHAPTER_NOTES_LENGTH);
     if (mb_strlen($chaptertitle) == 0) {
         $errmsg = "Invalid Chapter Title";
     }
+    
+    // Get uploaded file, if it exists.
+    $uploaded_text = GetDocumentText("chapter-file");
+    if ($uploaded_text != null) $chaptertext = $uploaded_text;
 }
 
 if (isset($errmsg) && mb_strlen($errmsg) > 0) return;
@@ -147,6 +151,7 @@ if ($sid > 0) {
     }
     // Also process tag changes.
     ProcessTagChanges($tagstring, $sid);
+    PostSessionBanner("Story saved", "green");
     return;
 } else {
     if (!CanUserCreateStory($user)) RenderErrorPage("Not authorized to create a story");
@@ -174,7 +179,7 @@ if ($sid > 0) {
     $word_count = ChapterWordCount($chaptertext);
     // Check min word count.
     $min_word_count = GetSiteSetting(FICS_CHAPTER_MIN_WORD_COUNT_KEY, DEFAULT_FICS_CHAPTER_MIN_WORD_COUNT);
-    if ($min_word_count > 0) {
+    if ($min_word_count > 0 && false) {
         if ($word_count < $min_word_count) {
             $errmsg = "Chapter must be at least $min_word_count words long. Current length: $word_count words";
             return;
@@ -211,6 +216,8 @@ if ($sid > 0) {
         sql_query("DELETE FROM ".FICS_STORY_TABLE." WHERE StoryId=$sid;");
         return;
     }
+    ProcessTagChanges($tagstring, $sid);
+    PostSessionBanner("Story created", "green");
 
     $username = $user['DisplayName'];
     $storyTitle = htmlspecialchars($title);
@@ -220,10 +227,13 @@ if ($sid > 0) {
 // Changes tags for the story, and updates tag types.
 function ProcessTagChanges($tag_string, $story_id) {
     global $user, $FICS_TAG_TYPES;
+    $tag_ids = GetTagsIdsForStory($story_id);  // Get tag ids before edit.
     $tokens = GetTagStringTokens($tag_string);
     $descriptors = GetTagDescriptors($tokens, $story_id, "FicsTagDescriptorFilterFn");
     UpdateStoryTags($descriptors, $story_id, $user);
     UpdateTagTypes(FICS_TAG_TABLE, $FICS_TAG_TYPES, $descriptors, $user);  // Do after creating tags above when setting post tags.
+    $tag_ids = array_unique(array_merge($tag_ids, GetTagsIdsForStory($story_id)));  // Add tag ids after edit.
+    UpdateTagItemCounts(FICS_TAG_TABLE, FICS_STORY_TAG_TABLE, $tag_ids);  // Update tag counts on touched tags.
 }
 
 // Updates tags attached to a story.
@@ -273,12 +283,12 @@ function FicsTagDescriptorFilterFn($token, $label, $tag, $story_id) {
         case "series":
         case "general":
             $obj->label = $label;
-            $obj->tag = mb_strtolower($tag);
+            $obj->tag = mb_strtolower($tag, "UTF-8");
             $obj->isTag = true;
             break;
         default:
             $obj->label = "";
-            $obj->tag = mb_strtolower($token);
+            $obj->tag = mb_strtolower($token, "UTF-8");
             $obj->isTag = true;
             break;
     }

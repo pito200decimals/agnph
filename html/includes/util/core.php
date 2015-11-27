@@ -223,6 +223,7 @@ function SetHeaderHighlight() {
         $vars['_title'] = "AGNPH - Users";
     } else if (startsWith($url, "/user/account/link")) {
         $vars['nav_section'] = "link_account";
+        $vars['_title'] = "AGNPH - Account Recovery";
     } else if (startsWith($url, "/about")) {
         $vars['nav_section'] = "about";
         $vars['_title'] = "AGNPH - About";

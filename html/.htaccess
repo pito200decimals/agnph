@@ -1,12 +1,24 @@
-# Rewrites for the whole site. Will split into separate files later.
+# Set up Apache.
+RewriteEngine On
+AddDefaultCharset utf-8
+
+# Set up PHP.
+php_value upload_max_filesize 50M
+php_value post_max_size 50M
 
 # Needed so that we can name URL's with the same filename as php files (e.g. /gallery/upload/)
 Options -MultiViews
+# Don't display the index of files.
 IndexIgnore *
+# Don't allow .php or .tpl links.
 RewriteCond %{THE_REQUEST} /.+?\.php[\s?] [NC]
 RewriteRule ^ - [F]
 RewriteCond %{THE_REQUEST} /.+?\.tpl[\s?] [NC]
 RewriteRule ^ - [F]
+# Set up error pages.
+#ErrorDocument 403 /403.php (This isn't working yet)
+ErrorDocument 404 /404.php
+ErrorDocument 500 /500.php
 
 # Rewrites for Sitewide pages
 RewriteRule ^login/?$ /login.php
@@ -26,13 +38,10 @@ RewriteRule ^change-skin/?$ skin_switch.php
 RewriteRule ^setup/?$ /setup/sql_setup.php
 
 # Rewrites for forums pages
-
-# TODO: Adjust this rewrite rule for "forums/"
 RewriteRule ^forums/?$ /forums/view_board.php?board=-1
 RewriteRule ^forums/board/?$ /forums/view_board.php?board=-1
-# Is this needed?
-#RewriteRule ^forums/board/(\d+)/?$ /forums/view_board.php?board=$1&sort=lastpost&order=desc [QSA]
-RewriteRule ^forums/board/([^0-9][^/]*)/?$ /forums/view_board.php?boardname=$1&sort=lastpost&order=desc [QSA]
+RewriteRule ^forums/board/(\d+)/?$ /forums/view_board.php?board=$1&sort=lastpost&order=desc [QSA]
+RewriteRule ^forums/board/([^0-9][^/]*)/?$ /forums/view_board.php?boardname=$1&sort=lastpost&order=desc [QSA,B,NE]
 RewriteRule ^forums/thread/(\d+)/?$ /forums/view_thread.php?thread=$1 [QSA]
 RewriteRule ^forums/compose/?$ /forums/compose.php [QSA]
 RewriteRule ^forums/mark-all-read/?$ /forums/mark_all_read.php [QSA]
@@ -92,19 +101,22 @@ RewriteRule ^fics/delete/(\d+)/(\d+)/?$ /fics/delete_story.php?sid=$1&action=del
 RewriteRule ^fics/undelete/(\d+)/?$ /fics/delete_story.php?sid=$1&action=undelete&type=story
 RewriteRule ^fics/favorite/?$ /fics/edit_favorites.php
 RewriteRule ^fics/tagsearch/?$ /fics/tag_ajax.php [QSA]
+RewriteRule ^fics/help/?$ /fics/tag_help.php
 
 #Rewrites for user pages.
 RewriteRule ^user/list/?$ /user/list.php?sort=name&order=asc [QSA]
 RewriteRule ^user/search/?$ /user/find_user_ajax.php [QSA]
 RewriteRule ^user/account/link/?$ /user/account_link.php [QSA]
+RewriteRule ^user/import/?$ /imported_user.php
 
 #Rewrites for about pages.
 RewriteRule ^about/?$ /about/index.php?q=about
 RewriteRule ^about/rules/?$ /about/index.php?q=rules
 RewriteRule ^about/staff/?$ /about/index.php?q=staff
-RewriteRule ^about/help/?$ /about/index.php?q=help
+RewriteRule ^about/gallery/?$ /about/index.php?q=gallery
 RewriteRule ^about/irc/?$ /about/index.php?q=irc
 RewriteRule ^about/minecraft/?$ /about/index.php?q=minecraft
+RewriteRule ^about/oekaki/?$ /about/index.php?q=oekaki
 
 #Rewrites for admin pages
 RewriteRule ^admin/?$ /admin/site/site.php

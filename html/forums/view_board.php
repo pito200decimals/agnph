@@ -13,7 +13,7 @@ $board_id = -1;
 if (isset($_GET['board']) && is_numeric($_GET['board'])) {
     $board_id = (int)$_GET['board'];
 } else if (isset($_GET['boardname'])) {
-    $escaped_board_name = sql_escape($_GET['boardname']);
+    $escaped_board_name = sql_escape(urldecode($_GET['boardname']));
     if (sql_query_into($result, "SELECT * FROM ".FORUMS_BOARD_TABLE." WHERE UPPER(Name)=UPPER('$escaped_board_name');", 1)) {
         $board_id = $result->fetch_assoc()['BoardId'];
     }
@@ -37,7 +37,7 @@ if ($board_id == -1) {
     // Fetch and display threads.
     $items_per_page = GetThreadsPerPageInBoard();
     $sort_order = GetThreadSortOrder();
-    CollectItems(FORUMS_POST_TABLE, "WHERE ParentId=$board_id AND IsThread=1 ORDER BY Sticky DESC, $sort_order", $threads, $items_per_page, $iterator);
+    CollectItems(FORUMS_POST_TABLE, "WHERE ParentId=$board_id AND IsThread=1 ORDER BY Sticky DESC, $sort_order", $threads, $items_per_page, $iterator, "Error accessing board");
     InitPosters($threads);
     if (isset($user)) TagThreadsAsUnread($user, $threads);
     foreach ($threads as &$thread) {
@@ -80,13 +80,13 @@ function GetThreadSortOrder() {
     if (isset($_GET['sort'])) {
         $order_asc = true;
         if (isset($_GET['order'])) {
-            if (mb_strtolower($_GET['order']) == "asc") {
+            if (mb_strtolower($_GET['order'], "UTF-8") == "asc") {
                 $order_asc = true;
-            } else if (mb_strtolower($_GET['order']) == "desc") {
+            } else if (mb_strtolower($_GET['order'], "UTF-8") == "desc") {
                 $order_asc = false;
             }
         }
-        switch (mb_strtolower($_GET['sort'])) {
+        switch (mb_strtolower($_GET['sort'], "UTF-8")) {
             case "title":
                 $sort = "Title";
                 break;
@@ -110,7 +110,7 @@ function GetThreadSortOrder() {
 }
 
 function GetSortURL($board, $sort) {
-    $base_sort_url = "/forums/board/".urlencode(mb_strtolower($board['Name']))."/?";
+    $base_sort_url = "/forums/board/".urlencode(mb_strtolower($board['Name'], "UTF-8"))."/?";
     foreach ($_GET as $key => $value) {
         $base_sort_url .= "$key=".urlencode($value)."&";
     }
@@ -225,8 +225,8 @@ function HandlePost($board) {
                 PostSessionBanner("Error creating board", "red");
                 break;
             }
-            $escaped_name = sql_escape($name);
-            $escaped_description = sql_escape($description);
+            $escaped_name = sql_escape(GetSanitizedTextTruncated($name, DEFAULT_ALLOWED_TAGS, MAX_FORUMS_BOARD_TITLE_LENGTH));
+            $escaped_description = sql_escape(GetSanitizedTextTruncated($description, DEFAULT_ALLOWED_TAGS, MAX_FORUMS_BOARD_DESCRIPTION_LENGTH));
             if (sql_query_into($result, "SELECT COUNT(*) AS C FROM ".FORUMS_BOARD_TABLE." WHERE Name='$escaped_name';", 1)) {
                 if ($result->fetch_assoc()['C'] > 0) {
                     PostSessionBanner("Board name already exists", "red");
@@ -292,15 +292,15 @@ function HandlePost($board) {
                 PostSessionBanner("Error renaming board", "red");
                 break;
             }
-            $escaped_name = sql_escape($name);
+            $escaped_name = sql_escape(GetSanitizedTextTruncated($name, DEFAULT_ALLOWED_TAGS, MAX_FORUMS_BOARD_TITLE_LENGTH));
             if ($description == "") {
                 sql_query("UPDATE ".FORUMS_BOARD_TABLE." SET Name='$escaped_name' WHERE BoardId=$bid;");
             } else {
-                $escaped_description = sql_escape($description);
+                $escaped_description = sql_escape(GetSanitizedTextTruncated($description, DEFAULT_ALLOWED_TAGS, MAX_FORUMS_BOARD_DESCRIPTION_LENGTH));
                 sql_query("UPDATE ".FORUMS_BOARD_TABLE." SET Name='$escaped_name', Description='$escaped_description' WHERE BoardId=$bid;");
             }
             // Manually redirect to new board name.
-            $final_url = "/forums/board/".urlencode(mb_strtolower($name))."/";
+            $final_url = "/forums/board/".urlencode(mb_strtolower($name, "UTF-8"))."/";
             Redirect("$final_url");
         default:
             // Not a valid POST.

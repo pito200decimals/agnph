@@ -18,6 +18,21 @@ define("ALIAS_TABLE", FICS_TAG_ALIAS_TABLE);
 define("IMPLICATION_TABLE", FICS_TAG_IMPLICATION_TABLE);
 $TAG_TYPE_MAP = $FICS_TAG_TYPES;
 include_once(SITE_ROOT."admin/tags/save_tag_ajax.php");
+// $original_alias_tag_id and $new_alias_tag_id are defined, apply here?
+if (isset($original_tag_id) && isset($new_alias_tag_id)) {
+    if (sql_query_into($result, "SELECT * FROM ".FICS_STORY_TAG_TABLE." WHERE TagId=$original_tag_id;", 1)) {
+        $num_posts = $result->num_rows;
+        if ($num_posts < FICS_ADMIN_TAG_ALIAS_CHANGE_LIMIT) {
+            $uid = $user['UserId'];
+            $now = time();
+            while ($row = $result->fetch_assoc()) {
+                $sid = $row['StoryId'];
+                sql_query("UPDATE ".GALLERY_POST_TAG_TABLE." SET TagId=$new_alias_tag_id WHERE StoryId=$sid AND TagId=$original_tag_id;");
+            }
+        }
+    }
+    UpdateTagItemCounts(GALLERY_TAG_TABLE, GALLERY_POST_TAG_TABLE, array($original_tag_id, $new_alias_tag_id));  // Update tag counts on touched tags.
+}
 return;
 
 ?>

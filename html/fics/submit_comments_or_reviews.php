@@ -9,11 +9,12 @@ include_once(SITE_ROOT."includes/util/html_funcs.php");
 if (!isset($user)) return;
 if (!CanPerformSitePost()) MaintenanceError();
 if (!isset($_POST['action'])) return;
+if ($story['ApprovalStatus'] == "D") RenderErrorPage("Story not found.");
 $action = $_POST['action'];
 if ($action == "comment") {
     // Expect textbox "text".
     if (!isset($_POST['text'])) InvalidURL();
-    $text = SanitizeHTMLTags($_POST['text'], DEFAULT_ALLOWED_TAGS);
+    $text = GetSanitizedTextTruncated($_POST['text'], DEFAULT_ALLOWED_TAGS, MAX_FICS_COMMENT_LENGTH);
     if (!CanUserComment($user)) RenderErrorPage("You are not authorized to comment");
     $score = 0;  // Comments can't have a score.
     // Also, unset $_GET['reviews'] since we want to redirect to comments.
@@ -22,7 +23,7 @@ if ($action == "comment") {
 } else if ($action == "review") {
     // Expect textbox "text", select "score".
     if (!isset($_POST['text'])) InvalidURL();
-    $text = SanitizeHTMLTags($_POST['text'], DEFAULT_ALLOWED_TAGS);
+    $text = GetSanitizedTextTruncated($_POST['text'], DEFAULT_ALLOWED_TAGS, MAX_FICS_COMMENT_LENGTH);
     if (!isset($_POST['score'])) InvalidURL();
     $score = $_POST['score'];
     if (!is_numeric($score)) InvalidURL();
@@ -34,7 +35,7 @@ if ($action == "comment") {
 } else if ($action == "response") {
     // Expect textbox "text", input "reviewId".
     if (!isset($_POST['text'])) InvalidURL();
-    $text = SanitizeHTMLTags($_POST['text'], DEFAULT_ALLOWED_TAGS);
+    $text = GetSanitizedTextTruncated($_POST['text'], DEFAULT_ALLOWED_TAGS, MAX_FICS_COMMENT_LENGTH);
     if (!isset($_POST['reviewId'])) InvalidURL();
     $reviewId = $_POST['reviewId'];
     if (!is_numeric($reviewId)) InvalidURL();

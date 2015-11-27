@@ -45,7 +45,7 @@
                         {{ stars.stars(story) }}
                     </span>
                     {% if not story.shortDesc %}
-                    {% if story.NumReviews > 0 %}<span class="reviews">[<a href="/fics/story/{{ story.StoryId }}/?reviews#reviews">Reviews: {{ story.NumReviews }}</a>]</span>{% endif %}
+                    {% if story.NumReviews > 0 %}<span class="reviews">[<a href="/fics/story/{{ story.StoryId }}/?reviews#reviews">Reviews:&nbsp;{{ story.NumReviews }}</a>]</span>{% endif %}
                     {% endif %}
                 </div>
             </div>
@@ -61,7 +61,7 @@
                                 <ul class="taglist">
                                     {% for tag in story.tags %}
                                         <li class="tag">
-                                            <a href="/fics/browse/?search={{ tag.quotedName|url_encode }}" class="{{ tag.Type|lower }}typetag">{{ tag.displayName }}</a>
+                                            <a href="/fics/browse/?search=tag%3A{{ tag.quotedName|url_encode }}" class="{{ tag.Type|lower }}typetag">{{ tag.displayName }}</a>
                                         </li>
                                     {% endfor %}
                                 </ul>

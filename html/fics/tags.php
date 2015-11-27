@@ -7,7 +7,6 @@ include_once(SITE_ROOT."includes/constants.php");
 include_once(SITE_ROOT."includes/util/core.php");
 
 define("TABLE", FICS_TAG_TABLE);
-define("TAG_ITEM_TABLE", FICS_STORY_TAG_TABLE);
 define("TAGS_PER_PAGE", FICS_LIST_ITEMS_PER_PAGE);
 $TAG_TYPE_MAP = $FICS_TAG_TYPES;
 

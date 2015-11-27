@@ -4,7 +4,7 @@
 define("SITE_ROOT", "./");
 include_once(SITE_ROOT."ajax_header.php");
 
-if (isset($_POST['offset'])) {
+if (isset($_POST['offset']) && is_numeric($_POST['offset'])) {
     $offset_str = ConvertReceivedOffset($_POST['offset']);
     // Only store data if session var changed.
     if (ShouldRecordSessionTime($offset_str)) {

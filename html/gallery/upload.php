@@ -130,7 +130,7 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
     UpdatePostDescription($post_id, $_POST['description'], $user, $log_description_change);
     $uid = $user['UserId'];
     $username = $user['DisplayName'];
-    LogVerboseAction("<strong><a href='/user/$uid/'>$username</a></strong> uploaded <strong><a href='/gallery/post/show/$pid/'>post #$pid</a></strong>", "G");
+    LogVerboseAction("<strong><a href='/user/$uid/'>$username</a></strong> uploaded <strong><a href='/gallery/post/show/$post_id/'>post #$post_id</a></strong>", "G");
     Redirect("/gallery/post/show/$post_id/");
 }
 

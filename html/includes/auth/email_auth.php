@@ -18,6 +18,7 @@ function CreateCodeEntry($email, $type, $data, $redirect, $expire_time = DEFAULT
     $escaped_type = sql_escape($type);
     $escaped_data = sql_escape($data);
     $escaped_redirect = sql_escape($redirect);
+    // TODO: Check email string length?
     $success = sql_query("INSERT INTO ".SECURITY_EMAIL_TABLE."
         (Email, Timestamp, MaxTimestamp, Code, Type, Data, Redirect)
         VALUES
@@ -54,6 +55,7 @@ function ChangeEmailPassword($uid, $email, $password_md5, $confirm_email = true,
         if (!SendEmailChangeConfirmationEmail($email, $usr['UserName'])) return false;
     }
     $escaped_email = sql_escape($email);
+    // TODO: Check email string length?
     if (!sql_query("UPDATE ".USER_TABLE." SET Email='$escaped_email', Password='$password_md5' WHERE UserId=$uid;")) return false;
     if ($re_login) {
         ForceLogin($uid);

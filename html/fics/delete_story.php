@@ -50,6 +50,7 @@ if (isset($_POST['confirm'])) {
                         $username = $user['DisplayName'];
                         $chapterTitle = htmlspecialchars($chapter['Title']);
                         $storyTitle = htmlspecialchars($story['Title']);
+                        PostSessionBanner("Chapter deleted", "green");
                         LogAction("<strong><a href='/user/$uid/'>$username</a></strong> deleted chapter <strong>$chapterTitle</strong> ($cid) from story <strong><a href='/fics/story/$sid/'>$storyTitle</a></strong>", "F");
                         Redirect("/fics/edit/$sid/");
                     } else {
@@ -63,10 +64,13 @@ if (isset($_POST['confirm'])) {
             }
         } else {
             sql_query("UPDATE ".FICS_STORY_TABLE." SET ApprovalStatus='D' WHERE StoryId=$sid;");
+            // Delete favorites for this story.
+            sql_query("DELETE FROM ".FICS_USER_FAVORITES_TABLE." WHERE StoryId=$sid;");
             $uid = $user['UserId'];
             $username = $user['DisplayName'];
             $storyTitle = htmlspecialchars($story['Title']);
-            LogAction("<strong><a href='/user/$uid/'>$username</a></strong> deleted story <strong><a href='/fics/story/$sid/'>$storyTitle</a></strong>", "F");
+            PostSessionBanner("Story deleted", "green");
+            LogAction("<strong><a href='/user/$uid/'>$username</a></strong> deleted story <strong><a href='/fics/story/$sid/'>$storyTitle</a></strong> (<a href='/fics/undelete/$sid/'>Undelete</a>)", "F");
             Redirect("/fics/browse/");
         }
     } else if ($_GET['action'] == "undelete" && CanUserUndeleteStory($story, $user)) {
@@ -74,6 +78,7 @@ if (isset($_POST['confirm'])) {
         $uid = $user['UserId'];
         $username = $user['DisplayName'];
         $storyTitle = htmlspecialchars($story['Title']);
+        PostSessionBanner("Story un-deleted", "green");
         LogAction("<strong><a href='/user/$uid/'>$username</a></strong> un-deleted story <strong><a href='/fics/story/$sid/'>$storyTitle</a></strong>", "F");
         Redirect("/fics/story/$sid/");
     } else {

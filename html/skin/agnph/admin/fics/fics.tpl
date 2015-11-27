@@ -30,7 +30,8 @@
             contextmenu: "image link | hr",
             autoresize_max_height: 200,
             resize: false,
-            menubar: false
+            menubar: false,
+            relative_urls: false
         });
     </script>
 {% endblock %}
@@ -43,6 +44,8 @@
             <tr><td><label>Welcome Message:</label></td><td></td></tr>
             <tr><td colspan="2"><textarea name="welcome-message">{% autoescape false %}{{ welcome_message }}{% endautoescape %}</textarea></td></tr>
             <tr><td><label>Board for News Posts:</label></td><td><input name="news-posts-board" type="text" value="{{ news_posts_board }}" /></td></tr>
+            <tr><td><label>Max news posts:</label></td><td><input name="max-news-posts" type="text" value="{{ max_news_posts }}" /></td></tr>
+            <tr><td><label>Recent stories on Index:</label></td><td><input name="num-recent-stories" type="text" value="{{ num_recent_stories }}" /></td></tr>
             <tr><td><label>Random stories on Index:</label></td><td><input name="num-rand-stories" type="text" value="{{ num_rand_stories }}" /></td></tr>
             <tr><td><label>Chapter Minimum Word Count:</label></td><td><input name="min-word-count" type="text" value="{{ min_word_count }}" /></td></tr>
             <tr><td><label>Current events:</label></td><td></td></tr>

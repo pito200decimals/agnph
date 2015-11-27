@@ -11,6 +11,10 @@
         float: none;
     }
 }
+#search-help-link {
+    font-size: 60%;
+    vertical-align: super;
+}
 
 /* Other general section CSS */
 .searchbox h3 {
@@ -60,5 +64,6 @@
 .source-history-item {
     max-width: 400px;
     display: inline-block;
+    overflow: hidden;
     text-overflow: ellipsis;
 }

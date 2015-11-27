@@ -1,4 +1,4 @@
-.list-table tr td:nth-child(1) {
+.list-table tr td:first-child {
     min-width: 80px;
     width: 80px;
 }
@@ -27,4 +27,15 @@
 }
 .actionset {
     font-size: 0px;
+}
+
+/* Only show small size on *really* small width screens */
+@media only handheld, screen and (max-device-width: 450px), screen and (max-width: 450px) {
+    .list-table tr td:first-child {
+        min-width: 65px;
+        width: 65px;
+    }
+    .list-table {
+        font-size: 80%;
+    }
 }

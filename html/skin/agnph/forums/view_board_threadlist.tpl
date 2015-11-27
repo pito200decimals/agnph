@@ -30,7 +30,12 @@
                         <tr>
                             <td class="status">
                                 {% if thread.unread %}
-                                    <img src="/images/unread-board.png" title="Unread posts" />
+                                    {% if thread.first_unread_url %}
+                                        <a href="{{ thread.first_unread_url }}"><img src="/images/unread-board.png" title="Unread posts" /></a>
+                                    {% else %}
+                                        {# Link is missing for some reason #}
+                                        <img src="/images/unread-board.png" title="Unread posts" />
+                                    {% endif %}
                                 {% else %}
                                     <img src="/images/read-board.png" title="All posts read" />
                                 {% endif %}
@@ -38,8 +43,10 @@
                             <td>
                                 {% if thread.Sticky %}<img class="icon" src="/images/sticky.gif" />{% endif %}
                                 {% if thread.Locked %}<img class="icon" src="/images/locked.png" />{% endif %}
-                                <a href="/forums/thread/{{ thread.PostId }}/">{{ thread.Title }}</a><br />
-                                Started by <a href="/user/{{ thread.user.UserId }}/">{{ thread.user.DisplayName }}</a>
+                                <span class="thread-title"><a href="/forums/thread/{{ thread.PostId }}/">{{ thread.Title }}</a></span>
+                                {% if thread.first_unread_url %}<span class="new-post-label"><a href="{{ thread.first_unread_url }}">New</a></span>{% endif %}
+                                <br />
+                                <span class="thread-subline">Started by <a href="/user/{{ thread.user.UserId }}/">{{ thread.user.DisplayName }}</a></span>
                             </td>
                             <td>
                                 {{ thread.Replies }} replies<br />

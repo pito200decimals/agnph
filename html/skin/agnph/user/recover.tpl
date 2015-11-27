@@ -10,6 +10,12 @@
         #recover-form {
             max-width: 400px;
         }
+        #old-account-note {
+            margin: auto;
+            display: block;
+            text-align: center;
+            width: 60%;
+        }
     </style>
 {% endblock %}
 
@@ -18,6 +24,11 @@
 {% endblock %}
 
 {% block content %}
+    <div id="old-account-note">
+        <p>
+            <strong>If you had an account in 2015 or prior and have not logged into it since the site update, you cannot recover your password via this form.</strong> Please register a new account, then contact an administrator to import all of your old data.
+        </p>
+    </div>
     <div id="recover-form" class="form-box">
         <h4>Account Recovery</h4>
         {{ block('banner') }}

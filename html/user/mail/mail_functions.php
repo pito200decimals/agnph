@@ -20,6 +20,12 @@ function GetMessages($user) {
     return $messages;
 }
 
+function GetAdminUserMetadata() {
+    return array(
+        "DisplayName" => "Admin",
+        "avatarURL" => DEFAULT_AVATAR_PATH);
+}
+
 // Adds metadata to messages. Returns true on success, false on failure.
 function AddMessageMetadata(&$messages, $user) {
     $ids = array_map(function($msg) { return $msg['Id']; }, $messages);
@@ -33,6 +39,7 @@ function AddMessageMetadata(&$messages, $user) {
     foreach ($all_users as &$usr) {
         $usr['avatarURL'] = GetAvatarURL($usr);
     }
+    $all_users[-1] = GetAdminUserMetadata();
     foreach ($messages as &$message) {
         // Determine if outbox, inbox, or notification.
         if ($message['MessageType'] == 1) {

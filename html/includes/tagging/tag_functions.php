@@ -8,12 +8,12 @@
 
 // Gets display name of tag, using spaces.
 function TagNameToDisplayName($tag_name) {
-    return mb_strtolower(str_replace("_", " ", $tag_name));
+    return mb_strtolower(str_replace("_", " ", $tag_name), "UTF-8");
 }
 
 // Gets tag name of display name, using underscores.
 function TagDisplayNameToTagName($tag_name) {
-    $ret = mb_strtolower(str_replace(" ", "_", $tag_name));
+    $ret = mb_strtolower(str_replace(" ", "_", $tag_name), "UTF-8");
     return $ret;
 }
 
@@ -69,7 +69,7 @@ function GetTagsByName($tag_table_name, $tag_names, $create_new = false, $user_i
         $tag_names = array_map("SanitizeTagName", $tag_names);
         if (sizeof($tag_names) == 0) return array();
         $joined = implode(",", array_map(function($name) use ($user_id) {
-            $name = sql_escape($name);
+            $name = sql_escape(GetSanitizedTextTruncated($name, NO_HTML_TAGS, MAX_TAG_NAME_LENGTH));
             return "('$name', $user_id, $user_id)";
         }, array_filter($tag_names, "mb_strlen")));
         if (!sql_query("INSERT INTO $tag_table_name (Name, CreatorUserId, ChangeTypeUserId) VALUES $joined;")) return null;
@@ -89,9 +89,9 @@ function GetTagsByName($tag_table_name, $tag_names, $create_new = false, $user_i
         return $ret + $new_tags;  // + operator okay because indexed by tag id.
     } else {
         if (sizeof($tag_names) == 0) return array();
-        $joined = implode(",", array_map(function($name) { return "'".sql_escape($name)."'"; }, $tag_names));
+        $joined = implode(",", array_map(function($name) { return "'".sql_escape(mb_strtoupper($name, "UTF-8"))."'"; }, $tag_names));
         $ret = array();
-        if (!sql_query_into($result, "SELECT * FROM $tag_table_name WHERE Name IN ($joined);", 0)) return array();  // Return empty on error, or none found.
+        if (!sql_query_into($result, "SELECT * FROM $tag_table_name WHERE UPPER(Name) IN ($joined);", 0)) return array();  // Return empty on error, or none found.
         while ($row = $result->fetch_assoc()) {
             $row['displayName'] = TagNameToDisplayName($row['Name']);
             $row['quotedName'] = contains($row['Name'], ":") ? "\"".$row['Name']."\"" : $row['Name'];
@@ -184,7 +184,7 @@ function GetTagDescriptors($tokens, $item_id, $tag_descriptor_filter_fn) {
     $arr = array_map(function($token) use ($item_id, $tag_descriptor_filter_fn) {
         if (($index = mb_strpos($token, ":")) !== FALSE) {
             // Possibly has label.
-            $label = mb_strtolower(mb_substr($token, 0, $index));
+            $label = mb_strtolower(mb_substr($token, 0, $index), "UTF-8");
             $tag = mb_substr($token, $index + 1);
         } else {
             $label = "";
@@ -201,7 +201,7 @@ function UpdateTagTypes($tag_table_name, $char_to_tag_type_map, $descriptors, $u
     $tag_descriptors = array_filter($descriptors, function($desc) { return $desc->isTag; });
     $mapping = array();
     foreach ($char_to_tag_type_map as $char => $name) {
-        $mapping[mb_strtolower($name)] = $char;
+        $mapping[mb_strtolower($name, "UTF-8")] = $char;
     }
     array_map(function($desc) use ($user, $mapping, $tag_table_name) {
         if (mb_strlen($desc->label) > 0) {  // Only update when a label is explicitly specified.
@@ -214,13 +214,19 @@ function UpdateTagTypes($tag_table_name, $char_to_tag_type_map, $descriptors, $u
     }, $tag_descriptors);
 }
 
+function UpdateTagItemCounts($tag_table_name, $tag_item_table_name, $tag_ids) {
+    $id_count_map = GetTagCountsById($tag_item_table_name, $tag_ids);
+    foreach ($id_count_map as $id => $count) {
+        sql_query("UPDATE $tag_table_name SET ItemCount=$count WHERE TagId=$id;");
+    }
+}
+
 // From an array of ids, returns a map from id to item counts. Returns null on failure.
 function GetTagCountsById($tag_item_table_name, $ids) {
     $queries = implode(", ", array_map(function($id) {
         return "COUNT(CASE WHEN TagId=$id THEN 1 ELSE NULL END) AS C$id";
     }, $ids));
     $joined = implode(",", $ids);
-    $sql = "SELECT $queries FROM $tag_item_table_name WHERE TagId IN ($joined);";
     if (!sql_query_into($result, "SELECT $queries FROM $tag_item_table_name WHERE TagId IN ($joined);", 1)) {
         return null;
     }
@@ -230,15 +236,7 @@ function GetTagCountsById($tag_item_table_name, $ids) {
             $ret[$id] = $row["C$id"];
         }
     }
-    debug($ret);
     return $ret;
 }
 
-function GetTagCountsByTag($tag_item_table_name, &$tags) {
-    $ids = array_map(function($tag) { return $tag['TagId']; }, $tags);
-    $counts = GetTagCountsById($tag_item_table_name, $ids);
-    foreach ($tags as &$tag) {
-        $tag['count'] = $counts[$tag['TagId']];
-    }
-}
 ?>

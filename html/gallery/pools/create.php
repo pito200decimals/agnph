@@ -20,7 +20,7 @@ if (mb_strlen($name) < MIN_GALLERY_POOL_NAME_LENGTH) {
     PostSessionBanner("Invalid pool name", "red");
     Redirect($_SERVER['HTTP_REFERER']);
 }
-$escaped_name = sql_escape($name);
+$escaped_name = sql_escape(GetSanitizedTextTruncated($name, NO_HTML_TAGS, MAX_GALLERY_POOL_NAME_LENGTH));
 // If there's a duplicate name, go to that page.
 sql_query_into($result, "SELECT * FROM ".GALLERY_POOLS_TABLE." WHERE UPPER(Name)=UPPER('$escaped_name');", 0) or RenderErrorPage("An error occurred, please try again later.");
 if ($result->num_rows > 0) {

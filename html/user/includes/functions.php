@@ -78,12 +78,17 @@ function CanUserPMAllUsers($user) {
     if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
     return false;
 }
+function CanUserAdminSearchUsers($user) {
+    if (!IsUserActivated($user)) return false;
+    if (mb_strpos($user['Permissions'], 'A') !== FALSE) return true;
+    return false;
+}
 
 
 function DateStringToReadableString($datestr) {
-    // $datestr is in the database format "MM/DD/YYYY"
-    $datetime = strtotime($datestr);
-    return FormatDate($datetime, PROFILE_DOB_FORMAT, 0 /* time_offset */);
+    // $datestr is in the database format "YYYY-MM-DD"
+    $date = new DateTime($datestr);
+    return $date->format(PROFILE_DOB_FORMAT);
 }
 
 // TODO: Better badge icons.

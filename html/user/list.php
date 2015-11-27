@@ -13,9 +13,11 @@ $order_clause = "DisplayName ASC";
 $search = "";
 if (isset($_GET['search'])) {
     $search = $_GET['search'];
-    if (mb_strtolower($search) == "status:banned") {
+    $admin_search = isset($user) && CanUserAdminSearchUsers($user);
+    $match = array();
+    if (mb_strtolower($search, "UTF-8") == "status:banned") {
         $search_clause = "Usermode=-1";
-    } else if (mb_strtolower($search) == "status:underage") {
+    } else if ($admin_search && mb_strtolower($search, "UTF-8") == "status:underage") {
         $now = time();
         $threshold = (new DateTime("@$now"))->format("Y-m-d");
         $year = substr($threshold, 0, 4);
@@ -23,6 +25,10 @@ if (isset($_GET['search'])) {
         $year = ((int)$year) - 18;
         $threshold = $year.$date;
         $search_clause = "DOB > '$threshold'";
+    } else if ($admin_search && preg_match("/^(\d+\.\d+\.\d+\.\d+)$/", $search, $match)) {
+        $ip = $match[1];
+        $escaped_ip = sql_escape($ip);
+        $search_clause = "RegisterIP='$escaped_ip' OR KnownIPs LIKE ('%$escaped_ip%')";
     } else {
         $escaped_search = sql_escape($search);
         $search_clause = "UPPER(DisplayName) LIKE UPPER('%$escaped_search%') AND Usermode=1";
@@ -37,14 +43,14 @@ if (HIDE_IMPORTED_ACCOUNTS_FROM_USER_LIST) {
 if (isset($_GET['sort'])) {
     $order_asc = true;
     if (isset($_GET['order'])) {
-        if (mb_strtolower($_GET['order']) == "asc") {
+        if (mb_strtolower($_GET['order'], "UTF-8") == "asc") {
             $order_asc = true;
-        } else if (mb_strtolower($_GET['order']) == "desc") {
+        } else if (mb_strtolower($_GET['order'], "UTF-8") == "desc") {
             $order_asc = false;
         }
     }
     $order = ($order_asc ? "ASC" : "DESC");
-    switch (mb_strtolower($_GET['sort'])) {
+    switch (mb_strtolower($_GET['sort'], "UTF-8")) {
         case "status":
             $order_clause = "LastVisitTime $order, DisplayName $order";
             break;
@@ -64,14 +70,7 @@ if (isset($_GET['sort'])) {
 }
 
 $accounts = array();
-CollectItems(USER_TABLE, "WHERE $search_clause ORDER BY $order_clause", $accounts, USERS_LIST_ITEMS_PER_PAGE, $iterator, function($i) use ($search) {
-    $url = $_SERVER['REQUEST_URI'];
-    if (contains($url, "?")) {
-        return $url."&page=$i";
-    } else {
-        return $url."?page=$i";
-    }
-}, "No users found.");
+CollectItems(USER_TABLE, "WHERE $search_clause ORDER BY $order_clause", $accounts, USERS_LIST_ITEMS_PER_PAGE, $iterator, "No users found.");
 
 $now = time();
 foreach ($accounts as &$account) {

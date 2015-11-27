@@ -59,7 +59,7 @@ if (isset($_POST['display-name']) &&
             PostErrorMessage("Name must start with a letter");
             $valid_name = false;
         }
-        $escaped_display_name = sql_escape($display_name);
+        $escaped_display_name = sql_escape(GetSanitizedTextTruncated($display_name, NO_HTML_TAGS, MAX_DISPLAY_NAME_LENGTH));
         // Check for duplicates.
         // Search for display name, and current user (so that at least one result is returned).
         if ($valid_name) {
@@ -105,12 +105,13 @@ if (isset($_POST['display-name']) &&
     }
     // DOB
     if ($_POST['dob'] != $profile_user['DOB']) {
+        $old_dob = $profile_user['DOB'];
         $dob = ParseDate($_POST['dob']);
         if ($dob) {
             $user_table_sets[] = "DOB='".sql_escape($dob)."'";
             $username = $user['DisplayName'];
             $log_dob = htmlspecialchars($_POST['dob']);
-            LogAction("<strong><a href='/user/$uid/'>$username</a></strong> changed birthday to <strong>$log_dob</strong>", "");
+            LogAction("<strong><a href='/user/$uid/'>$username</a></strong> changed birthday from <strong>$old_dob</strong> to <strong>$log_dob</strong>", "");
         }
     }
     // ShowDOB
@@ -120,17 +121,17 @@ if (isset($_POST['display-name']) &&
     }
     // Species
     if ($_POST['species'] != $profile_user['Species']) {
-        $escaped_species = sql_escape($_POST['species']);
+        $escaped_species = sql_escape(GetSanitizedTextTruncated($_POST['species'], NO_HTML_TAGS, MAX_USER_SPECIES_LENGTH));
         $user_table_sets[] = "Species='$escaped_species'";
     }
     // Title
     if ($_POST['title'] != $profile_user['Title']) {
-        $escaped_title = sql_escape($_POST['title']);
+        $escaped_title = sql_escape(GetSanitizedTextTruncated($_POST['title'], NO_HTML_TAGS, MAX_USER_TITLE_LENGTH));
         $user_table_sets[] = "Title='$escaped_title'";
     }
     // Location
     if ($_POST['location'] != $profile_user['Location']) {
-        $escaped_location = sql_escape($_POST['location']);
+        $escaped_location = sql_escape(GetSanitizedTextTruncated($_POST['location'], NO_HTML_TAGS, MAX_USER_LOCATION_LENGTH));
         $user_table_sets[] = "Location='$escaped_location'";
     }
     // Timezone
@@ -174,7 +175,7 @@ if (isset($_POST['display-name']) &&
         if (contains($_POST['skin'], ".") || contains($_POST['skin'], "/") || contains($_POST['skin'], "\\") || !in_array($_POST['skin'], $vars['availableSkins'])) {
             PostErrorMessage("Invalid site skin");
         } else {
-            $escaped_skin = sql_escape(mb_strtolower($_POST['skin']));
+            $escaped_skin = sql_escape(GetSanitizedTextTruncated(mb_strtolower($_POST['skin'], "UTF-8"), NO_HTML_TAGS, MAX_SKIN_STRING_LENGTH));
             $user_table_sets[] = "Skin='$escaped_skin'";
         }
     }
@@ -276,7 +277,7 @@ if (isset($_POST['display-name']) &&
     // Purposefully do non-utf-8 substr here, to ensure all of the output can be saved in database.
     $signature = SanitizeHTMLTags(substr($_POST['signature'], 0, MAX_FORUMS_SIGNATURE_LENGTH), DEFAULT_ALLOWED_TAGS);
     if ($signature !== $profile_user['Signature']) {
-        $escaped_signature = sql_escape($signature);
+        $escaped_signature = sql_escape(GetSanitizedTextTruncated($signature, DEFAULT_ALLOWED_TAGS, MAX_FORUMS_SIGNATURE_LENGTH));
         $forums_table_sets[] = "Signature='$escaped_signature'";
     }
     if (sizeof($forums_table_sets) > 0) {

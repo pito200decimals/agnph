@@ -44,6 +44,7 @@ if (isset($original_tag_id) && isset($new_alias_tag_id)) {
             }
         }
     }
+    UpdateTagItemCounts(GALLERY_TAG_TABLE, GALLERY_POST_TAG_TABLE, array($original_tag_id, $new_alias_tag_id));  // Update tag counts on touched tags.
 }
 return;
 

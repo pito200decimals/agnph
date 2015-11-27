@@ -20,6 +20,7 @@
             autoresize_max_height: 200,
             resize: false,
             menubar: false,
+            relative_urls: false,
             content_css: "{{ asset('/comments-style.css') }}"
         });
         $(document).ready(function() {

@@ -360,6 +360,32 @@ function TagThreadsAsUnread($user, &$thread_posts) {
     }
     foreach ($thread_posts as &$thread) {
         $thread['unread'] = isset($unread_tids[$thread['PostId']]);
+        $tid = $thread['PostId'];
+        // Find oldest unread post.
+        if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." S WHERE
+            (S.PostId=$tid OR (S.ParentId=$tid AND S.IsThread=0)) AND
+            (S.PostId >= $maybe_read_up_to OR EXISTS(SELECT 1 FROM ".FORUMS_UNREAD_POST_TABLE." U WHERE U.UserId=$uid AND U.PostId=S.PostId))
+            ORDER BY PostDate ASC LIMIT 1;", 1)) {
+            $first_unread_post = $result->fetch_assoc();
+            $upid = $first_unread_post['PostId'];
+            if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." S WHERE
+                (S.PostId=$tid OR (S.ParentId=$tid AND S.IsThread=0)) ORDER BY PostDate ASC;", 1)) {
+                $index = 0;
+                $post_index = -1;
+                while ($row = $result->fetch_assoc()) {
+                    if ($row['PostId'] == $upid) {
+                        $post_index = $index;
+                        break;
+                    }
+                    $index++;
+                }
+                if ($post_index >= 0) {
+                    $posts_per_page = GetPostsPerPageInThread();
+                    $page = ((int)($index / $posts_per_page)) + 1;
+                    $thread['first_unread_url'] = "/forums/thread/$tid/?page=$page#p$upid";
+                }
+            }
+        }
     }
 }
 

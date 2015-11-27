@@ -65,7 +65,7 @@ foreach ($actions as $action) {
                 return;
             }
             if (isset($new_perms)) {
-                $escaped_perms = sql_escape($new_perms);
+                $escaped_perms = sql_escape($new_perms);  // Okay to not sanitize this.
                 $success = sql_query("UPDATE $table SET $key='$escaped_perms' WHERE UserId=$puid;");
             }
         }
