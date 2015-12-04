@@ -240,7 +240,7 @@ if (isset($_POST['display-name']) &&
                     $puid = $uid;
                     $pusername = $profile_user['DisplayName'];
                     LogAction("<strong><a href='/user/$uuid/'>$username</a></strong> requested an email/password change", "");
-                    PostConfirmMessage("To finish changing your $detailed_desc, please click the link in the email sent to ".$profile_user['Email']);
+                    PostConfirmMessage("To finish changing your $detailed_desc, please click the link in the email sent to ".$profile_user['Email']." (may need to check your spam folder)");
                 } else {
                     $vars['error'] = "Error sending confirmation email, please try again later";
                 }

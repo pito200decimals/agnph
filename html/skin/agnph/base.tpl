@@ -112,9 +112,7 @@
                     {#<li{% if nav_section=="oekaki" %} class="selected-nav"{% endif %}><a href="/oekaki/">Oekaki</a></li>#}
                     <li{% if nav_section=="user" %} class="selected-nav"{% endif %}><a href="/user/list/">Users</a></li>
                     <li{% if nav_section=="about" %} class="selected-nav"{% endif %}><a href="/about/">About</a></li>
-                    {% if user.showAdminTab %}<li{% if nav_section=="admin" %} class="selected-nav"{% endif %}><a href="/admin/">Admin</a></li>{% endif %}<!--
-                    {# TODO: Remove after debugging complete #}<li><a href="/setup/">DEBUG Setup</a></li>
-                    {# TODO: Remove after debugging complete #}{% if not user %}<li><a href="/login/?debug=true">DEBUG Login</a></li>{% endif %} -->
+                    {% if user.showAdminTab %}<li{% if nav_section=="admin" %} class="selected-nav"{% endif %}><a href="/admin/">Admin</a></li>{% endif %}
                 </ul>
             </div>
             <div class="Clear">&nbsp;</div>

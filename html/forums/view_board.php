@@ -42,6 +42,7 @@ if ($board_id == -1) {
     if (isset($user)) TagThreadsAsUnread($user, $threads);
     foreach ($threads as &$thread) {
         $thread['lastPost'] = GetLastPostInThread($thread['PostId']);
+        $thread['Title'] = html_entity_decode($thread['Title']);
     }
     $vars['threads'] = $threads;
     $vars['iterator'] = $iterator;

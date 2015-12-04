@@ -124,7 +124,7 @@ function HandleCreateThread() {
         sql_query("INSERT INTO ".FORUMS_POST_TABLE."
             (UserId, Title, Text, PostDate, ParentId, IsThread, Replies, LastPostDate, Sticky, Locked)
             VALUES
-            ($uid, '$escaped_title', '$escaped_text', $now, $bid, 1, 1, $now, $sticky, $locked);");
+            ($uid, '$escaped_title', '$escaped_text', $now, $bid, 1, 0, $now, $sticky, $locked);");
         $pid = sql_last_id();
         UpdateBoardStats($bid);
         PostSessionBanner("Thread created", "green");

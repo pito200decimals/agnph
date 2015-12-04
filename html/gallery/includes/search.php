@@ -8,6 +8,7 @@ include_once(SITE_ROOT."gallery/includes/searchclause.php");
 // order:date (Recent to Past)
 // order:age (Oldest to Newest)
 // order:fav (Most to Least favorites)
+// order:popular (By popularity formula)
 //
 // === Not implemented yet ===
 // order:favorites
@@ -67,6 +68,13 @@ function CreatePostSearchSQL($search_string, $posts_per_page, $page, &$can_sort_
         if (contains($lower_search_string, "order:score") !== FALSE) {
             $search_string = mb_eregi_replace("order:score", "", $search_string);
             $sortOrder = "T.NumFavorites DESC, ".$sortOrder;
+            $can_sort_pool = false;
+        }
+        if (contains($lower_search_string, "order:popular") !== FALSE) {
+            $grace_period = 1*24*60*60;
+            $now = time();
+            $search_string = mb_eregi_replace("order:popular", "", $search_string);
+            $sortOrder = "LOG(GREATEST(T.NumViews - 10, 1) + 100 * T.NumFavorites) * 1.0 / POWER(LOG(GREATEST($now - T.DateUploaded, $grace_period)), 2) DESC, ".$sortOrder;
             $can_sort_pool = false;
         }
     }

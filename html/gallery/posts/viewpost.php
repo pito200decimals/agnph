@@ -101,6 +101,7 @@ $tagNameStr = ToTagNameString($tags);
 $tagCategories = ToTagCategorized($tags);
 $post['tagstring'] = $tagNameStr;
 $post['tagCategories'] = $tagCategories;
+$vars['_title'] = "AGNPH - Gallery - ".$post['PostId']." - $tagNameStr";
 
 // Get other properties like uploader, rating HTML, etc.
 FetchPostProperties($post) or RenderErrorPage("Post not found");
@@ -132,7 +133,7 @@ if (isset($user)) {
 if ($post['Status'] != 'D') $post['NumViews']++;
 $vars['post'] = &$post;
 RenderPage("gallery/posts/viewpost.tpl");
-if ($post['Status'] != 'D' && !IsMaintenanceMode()) {
+if ($post['Status'] != 'D' && !IsMaintenanceMode() && IsRealUser()) {
     sql_query("UPDATE ".GALLERY_POST_TABLE." SET NumViews = NumViews + 1 WHERE PostId=$pid;");
 }
 return;
@@ -357,7 +358,8 @@ function CreatePoolIterator($post) {
     if (!sql_query_into($result, "SELECT * FROM ".GALLERY_POOLS_TABLE." WHERE PoolId=$pool_id;", 1)) return "";
     $pool = $result->fetch_assoc();
     $index = $post['PoolItemOrder'];
-    $pool_url = "/gallery/post/?search=pool%3A".str_replace(" ", "_", $pool['Name']);
+    $pool_search = urlencode("pool:".str_replace(" ", "_", $pool['Name']));
+    $pool_url = "/gallery/post/?search=$pool_search";
     if (!sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE ParentPoolId=$pool_id AND PoolItemOrder < $index ORDER BY PoolItemOrder DESC LIMIT 1;", 0)) return "";
     if ($result->num_rows > 0) {
         $prev_url = "/gallery/post/show/".$result->fetch_assoc()['PostId']."/";

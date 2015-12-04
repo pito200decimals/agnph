@@ -16,6 +16,7 @@ X Optional large first posts in a thread (for news posts?)
 - Slideshow view
 - Related tag suggestions in sidebar on index page
 - Add users that favorited to gallery posts
+- Order priority should be based on query, not tokens
 X Some sort of tag exploration feature, perhaps tag cloud?
 X Handle parent cleanup on post delete (Move favorites over to parent?)
 X "Popular" recent posts, maybe by # of views in last day/week/month?

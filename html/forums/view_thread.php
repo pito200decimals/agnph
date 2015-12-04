@@ -168,7 +168,7 @@ function GetPostsById($posts) {
 }
 
 function UpdateStatistics($thread) {
-    if (!IsMaintenanceMode()) {
+    if (!IsMaintenanceMode() && IsRealUser()) {
         sql_query("UPDATE ".FORUMS_POST_TABLE." SET Views=Views+1 WHERE PostId=".$thread['ThreadId'].";");
     }
 }

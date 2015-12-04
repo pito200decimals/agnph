@@ -58,7 +58,13 @@ function ParseBBCode($html) {
     $builder = new JBBCode\CodeDefinitionBuilder('sup', '<span class="superscript">{param}</span>');
     $parser->addCodeDefinition($builder->build());
     $parser->parse($html);
-    return $parser->getAsHtml();
+    $html = $parser->getAsHtml();
+    $html = mb_ereg_replace("\\[quote[^\\]]*\\]", "<blockquote>", $html);
+    $html = mb_ereg_replace("\\[/quote[^\\]]*\\]", "</blockquote><br />", $html);
+    $html = mb_ereg_replace("\\[/?font[^\\]]*\\]", "", $html);
+    $html = mb_ereg_replace("\\[/?glow[^\\]]*\\]", "", $html);
+    $html = mb_ereg_replace("\\[/?color[^\\]]*\\]", "", $html);
+    return $html;
 }
 
 function GetSanitizedTextTruncated($text, $allowed_html_config, $max_byte_size, $add_ellipsis=false) {

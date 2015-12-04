@@ -67,8 +67,8 @@ function AddMessageMetadata(&$messages, $user) {
         }
         $message['date'] = FormatDate($message['Timestamp'], $format);
         $message['user'] = $all_users[$message['SenderUserId']];
-        $message['title'] = $message['Title'];
-        $message['text'] = $message['Content'];
+        $message['title'] = html_entity_decode(SanitizeHTMLTags($message['Title'], NO_HTML_TAGS));
+        $message['text'] = SanitizeHTMLTags($message['Content'], DEFAULT_ALLOWED_TAGS);
     }
     return true;
 }

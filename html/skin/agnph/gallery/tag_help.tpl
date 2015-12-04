@@ -120,6 +120,11 @@
         <div class="Clear">&nbsp;</div>
         <li class="content">
             <p>
+                <strong>order:popular</strong> - Orders found posts by overall popularity.
+            </p>
+        </li>
+        <li class="content">
+            <p>
                 <strong>order:score</strong> - Orders found posts from most-favorited to least-favorited.
             </p>
         </li>

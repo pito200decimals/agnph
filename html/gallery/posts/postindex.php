@@ -13,6 +13,7 @@ if (isset($_GET['page']) && is_numeric($_GET['page']) && ((int)$_GET['page']) > 
 }
 if (isset($_GET['search'])) {
     $searchterms = mb_ereg_replace('\s+', ' ', trim($_GET['search']));
+    $vars['_title'] = "$searchterms - AGNPH - Gallery";
 } else {
     $searchterms = "";
 }
@@ -23,6 +24,7 @@ if (isset($user)) {
 }
 HandlePost($searchterms);
 $vars['search'] = $searchterms;
+$vars['page'] = $page;
 $sql = CreatePostSearchSQL(mb_strtolower($searchterms, "UTF-8"), $posts_per_page, $page, $can_sort_pool, $pool_id);
 $posts = array();
 if (sql_query_into($result, $sql, 0)) {
@@ -34,6 +36,20 @@ if (sql_query_into($result, $sql, 0)) {
         $posts[] = $row;
     }
     SetOutlineClasses($posts);
+}
+
+// Add a featured post.
+if (isset($_GET['feature']) && is_numeric($_GET['feature']) && !contains(mb_strtolower($searchterms), "pool:")) {
+    $escaped_post_id = sql_escape($_GET['feature']);
+    if (sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE PostId='$escaped_post_id' LIMIT 1;", 1)) {
+        $row = $result->fetch_assoc();
+        $row['outlineClass'] = "featuredoutline";
+        $md5 = $row['Md5'];
+        $ext = $row['Extension'];
+        $row['thumbnail'] = GetSiteThumbPath($md5, $ext);
+        CreatePostLabel($row);
+        array_unshift($posts, $row);
+    }
 }
 
 // Construct page iterator.
@@ -97,7 +113,6 @@ function CreatePageIterator($searchterms, $page, $posts_per_page) {
                         $url = "/gallery/post/";
                     }
                 }
-                $url = DefaultCreateIteratorLinkFn($i);
                 return "<a href='$url'>$txt</a>";
             }, true);
         return $iterator_html;

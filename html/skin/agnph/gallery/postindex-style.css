@@ -62,6 +62,27 @@ a:hover div.post-label {
 .flaggedoutline {
     border: 3px solid rgb(255,0,0);
 }
+.featuredoutline {
+    border: 5px solid rgb(127,0,63);
+}
+
+/* Featured posts */
+.post-list li.featuredtile {
+    display: block;
+    text-align: center;
+    margin: auto;
+    width: 270px;
+    height: 308px;
+}
+.featuredtile .post-tile {
+    width: 262px;
+    height: 300px;
+}
+.featuredtile .post-preview-img {
+    max-width: 234px;
+    max-height: 234px;
+}
+
 .toggle-mobile-layout {
     display: none;
 }

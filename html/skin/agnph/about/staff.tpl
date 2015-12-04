@@ -70,11 +70,11 @@
                 </li>
                 <li>
                     <div class="staff-group-img">
-                        <img class="profile-img" src="/images/staff/anon.png" />
+                        <img class="profile-img" src="/images/staff/wilon.png" />
                     </div>
                     <a class="profile-name" href="/user/3/">Wilon</a>
                     <p class="profile-bio">
-                        Cute, fluffy wulf.
+                        Fluffy and approachable wuff.
                     </p>
                     <p class="contact">
                         <span>Contact via:</span> Site PM
@@ -95,7 +95,7 @@
                 <li>
                     <a class="profile-name" href="/user/43/">Cyn</a>
                     <p class="profile-bio">
-                        Friendly resident Cyndaquil. In charge of site software and Fics admin.
+                        Friendly resident Cyndaquil. In charge of site software and Fics.
                     </p>
                     <p class="contact">
                         <span>Contact via:</span> IRC, Site PM
@@ -104,7 +104,7 @@
                 <li>
                     <a class="profile-name" href="/user/1/">HatchlingByHeart</a>
                     <p class="profile-bio">
-                        Chubby dragon. In charge of site tech and Minecraft admin.
+                        Chubby dragon. In charge of site tech and Minecraft.
                     </p>
                     <p class="contact">
                         <span>Contact via:</span> Site PM

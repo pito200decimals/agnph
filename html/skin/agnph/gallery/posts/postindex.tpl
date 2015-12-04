@@ -115,6 +115,15 @@
             });
         {% endif %}
     </script>
+    <link rel="stylesheet" type="text/css" href="{{ asset('/scripts/slideshow/photoswipe.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/scripts/slideshow/default-skin.css') }}" />
+    <script src="{{ asset('/scripts/slideshow/photoswipe.js') }}"></script>
+    <script src="{{ asset('/scripts/slideshow/photoswipe-ui-default.js') }}"></script>
+    <script>
+        var searchString = "{% autoescape false %}{{ search|e('js') }}{% endautoescape %}";
+        var startPage = {{ page }};
+    </script>
+    <script src="{{ asset('/scripts/gallery-slideshow.js') }}"></script>
 {% endblock %}
 
 {% block content %}
@@ -125,6 +134,7 @@
             <form accept-charset="UTF-8">
                 <input class="search" name="search" value="{{ search }}" type="text" required />
             </form>
+            <a style="float: left;" href="" onclick="return OpenSlideshow();">Slideshow</a>
             <a style="float: right;" class="toggle-mobile-layout" href="" onclick="return ToggleMobile();">Toggle Mobile</a>
             <div class="Clear">&nbsp;</div>
         </div>
@@ -135,7 +145,7 @@
             {# Display search index. #}
             <ul class="sortable list post-list">
                 {% for post in posts %}
-                    <li class="dragitem">
+                    <li class="dragitem{% if post.outlineClass == 'featuredoutline' %} featuredtile{% endif %}">
                         {% if cansort %}
                             <input class="postid" type="hidden" value="{{ post.PostId }}" />
                             <input class="postorder" type="hidden" value="{{ post.PoolItemOrder }}" />
@@ -194,4 +204,44 @@
             </div>
         </div>
     {% endif %}
+    
+    {# HTML for slideshow gallery #}
+    {# Find more details at http://photoswipe.com/documentation/getting-started.html #}
+    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="pswp__bg"></div>
+        <div class="pswp__scroll-wrap">
+            <div class="pswp__container">
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+            </div>
+            <div class="pswp__ui pswp__ui--hidden">
+                <div class="pswp__top-bar">
+                    <div class="pswp__counter"></div>
+                    <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                    <button class="pswp__button pswp__button--share" title="Share"></button>
+                    <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                    <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                    <button class="pswp__button pswp__button--start--autoplay" style="float: right; position: relative;" title="Autoplay"></button>
+                    <div class="pswp__preloader">
+                        <div class="pswp__preloader__icn">
+                          <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                    <div class="pswp__share-tooltip"></div> 
+                </div>
+                <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+                </button>
+                <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+                </button>
+                <div class="pswp__caption">
+                    <div class="pswp__caption__center"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

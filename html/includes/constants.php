@@ -81,7 +81,7 @@ define("MAX_FORUMS_POST_LENGTH", 131072);
 define("MAX_FORUMS_SIGNATURE_LENGTH", 1024);
 define("DEFAULT_FORUM_THREADS_PER_PAGE", 25);
 define("DEFAULT_FORUM_POSTS_PER_PAGE", 10);
-define("MAX_GALLERY_POST_FLAG_REASON_LENGTH", 64);
+define("MAX_GALLERY_POST_FLAG_REASON_LENGTH", 128);
 // Gallery related.
 define("DEFAULT_GALLERY_POSTS_PER_PAGE", 45);
 define("MAX_GALLERY_POST_DESCRIPTION_LENGTH", 4096);
@@ -200,7 +200,7 @@ define("IMPORT_USER_WELCOME_PM_KEY", "ImportUserLoginPMKey");
 
 // Other default constant values.
 // TODO: Change on live site.
-define("SITE_DOMAIN", "http://agn.ph");  // Used for post-image-search urls, email auth.
+define("SITE_DOMAIN", "http://newgallery.agn.ph");  // Used for post-image-search urls, email auth.
 define("VERSION", "2.0");
 define("SITE_WELCOME_MESSAGE_KEY", "SiteWelcomeMessage");
 define("REGISTER_DISCLAIMER_KEY", "RegisterDisclaimer");

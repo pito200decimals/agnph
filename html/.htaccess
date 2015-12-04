@@ -66,6 +66,7 @@ RewriteRule ^user/(\d+)/ban/?$ /user/change_ban_status.php?uid=$1
 
 # Rewrites for gallery pages
 RewriteRule ^gallery/post/?$ /gallery/posts/postindex.php [QSA]
+RewriteRule ^gallery/post/slideshow/fetch/?$ /gallery/posts/postindex_ajax.php [QSA]
 RewriteRule ^gallery/post/show/(\d+)/?$ /gallery/posts/viewpost.php?post=$1 [QSA]
 RewriteRule ^gallery/post/random/?$ /gallery/posts/random_post.php
 RewriteRule ^gallery/upload/?$ /gallery/upload.php
