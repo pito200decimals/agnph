@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block section_navigation %}
-    <ul class="section-nav">
+    <ul class="section-nav font-scalable">
         {{ block('breadcrumb_block_recursive') }}
     </ul>
 {% endblock %}
@@ -20,7 +20,13 @@
     {% if board and board.BoardId != -1 %}
         {% set oldBoard = board %}
         {% set board = board.parentBoard %}
-        {{ block('breadcrumb_block_recursive') }}<li> » <a href="{% if oldBoard.linkUrl %}{{ oldBoard.linkUrl }}{% else %}/forums/board/{{ oldBoard.Name|lower|url_encode }}/{% endif %}">{{ oldBoard.Name }}</a></li>
+        {{ block('breadcrumb_block_recursive') }}
+        <li>»</li>
+        <li>
+            <a href="{% if oldBoard.linkUrl %}{{ oldBoard.linkUrl }}{% else %}/forums/board/{{ oldBoard.Name|lower|url_encode }}/{% endif %}">
+                {{ oldBoard.Name }}
+            </a>
+        </li>
     {% else %}
         <li><a href="/forums/board/">Index</a></li>
     {% endif %}

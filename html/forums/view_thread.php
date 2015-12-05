@@ -120,12 +120,19 @@ function HandlePost() {
                         sql_query("DELETE FROM ".FORUMS_POST_TABLE." WHERE PostId=$id;");
                         if ($post['IsThread'] == 0) {
                             // Update thread stats.
-                            UpdateThreadStats($post['ParentId']);
+                            $tid = $post['ParentId'];
+                            UpdateThreadStats($tid);
+                            // Also update board for last post.
+                            if (sql_query_into($result, "SELECT * FROM ".FORUMS_POST_TABLE." WHERE PostId=$tid AND IsThread=1;", 1)) {
+                                $bid = $result->fetch_assoc()['ParentId'];
+                                UpdateBoardStats($bid);
+                            }
                         } else {
                             // Thread was deleted, update board stats.
                             UpdateBoardStats($post['ParentId']);
                         }
                         sql_query("DELETE FROM ".FORUMS_UNREAD_POST_TABLE." WHERE PostId=$id;");
+                        exit();
                         if (sizeof($posts) == 1) {
                             // Deleting only post on page.
                             if (isset($_GET['page']) && $_GET['page'] > 0) {

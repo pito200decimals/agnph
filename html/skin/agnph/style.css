@@ -160,6 +160,10 @@ a:hover {
 #theme-switcher-form {
     display: inline-block;
 }
+.font-size-switcher {
+    float: right;
+    font-size: 80%;
+}
 
 /* === Site Footer === */
 #footer {
@@ -182,17 +186,19 @@ a:hover {
 .section-nav {
     list-style-type: none;
     margin: 0px;
+    margin-left: 10px;
+    margin-right: 10px;
     padding: 0px;
     position: relative;
 }
 .section-nav li {
     display: inline-block;
+    padding: 5px 10px;
+    font-weight: bold;
 }
 .section-nav a {
     display: inline-block;
     text-decoration: none;
-    padding: 5px 10px;
-    font-weight: bold;
     border: none;
 }
 .section-nav a:hover {
@@ -316,6 +322,9 @@ span.radio-button-group {
 
 
 @media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
+    .font-scalable {
+        font-size: 80%;
+    }
     #main_menu_icon {
         display: inline-block;
         cursor: pointer;

@@ -1,3 +1,11 @@
+Critical Bugfixes:
+- Fics authors page performance
+- PM loading performance
+- Gallery "stash"/private pools
+- Login redirects
+- Staff page PM links
+
+
 TODOs
 (* = Required for launch, - = Normal priority, X = Scrapped)
 

@@ -8,7 +8,12 @@
     <li class="comment">
         {% if comment.anchor %}<a name="{{ comment.anchor }}"></a>{% endif %}
         <div class="comment-side-panel">
-            <a href="/user/{{ comment.user.UserId }}/"><img class="comment-avatarimg" src="{{ comment.user.avatarURL }}" /></a>
+            <div>
+                <a href="/user/{{ comment.user.UserId }}/">
+                    <img class="comment-avatarimg" src="{{ comment.user.avatarURL }}" />
+                </a>
+                <div class="Clear">&nbsp;</div>
+            </div>
             {% if comment.user.Title|length > 0 %}
                 <span class="comment-side-panel-label">{{ comment.user.Title }}</span>
             {% endif %}

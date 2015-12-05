@@ -39,8 +39,8 @@
 }
 
 .comment-avatarimg {
-    width: 100px;
-    height: 100px;
+    max-width: 100px;
+    max-height: 100px;
     float: left;
 }
 .no-comments {
@@ -102,4 +102,16 @@ blockquote blockquote blockquote {
 .superscript {
     vertical-align: super;
     font-size: 80%;
+}
+@media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
+    .comment-avatarimg {
+        max-width: 75px;
+        max-height: 75px;
+    }
+    .comment-side-panel {
+        width: 75px;
+    }
+    .comment-content {
+        margin-left: 75px;
+    }
 }

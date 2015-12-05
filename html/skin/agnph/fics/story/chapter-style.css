@@ -14,3 +14,9 @@
 .chapter-iterator {
     margin: 10px;
 }
+@media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
+    .chaptercontent {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+}

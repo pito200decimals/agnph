@@ -59,6 +59,6 @@
             {% autoescape false %}{{ iterator }}{% endautoescape %}
         </div>
     {% else %}
-        No stories found
+        <p>No stories found</p>
     {% endif %}
 {% endblock %}

@@ -232,10 +232,11 @@ function UpdateBoardStats($bid) {
             } else {
                 $numPosts += $row['NumPosts'];
                 $numThreads += $row['NumThreads'];
-            }
-            if ((int)$row['LastPostDate'] > $lastPostDate) {
-                $lastPostId = (int)$row['LastPostId'];
-                $lastPostDate = (int)$row['LastPostDate'];
+                // Use last post of child board if better.
+                if ((int)$row['LastPostDate'] > $lastPostDate) {
+                    $lastPostId = (int)$row['LastPostId'];
+                    $lastPostDate = (int)$row['LastPostDate'];
+                }
             }
         }
     }

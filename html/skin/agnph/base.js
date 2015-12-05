@@ -33,4 +33,44 @@ $(document).ready(function() {
         toggled_visible_mobile = !toggled_visible_mobile;
         return false;
     });
+    
+    // Set up font size switcher cookie.
+    function setZoom(zoom) {
+        var found = false;
+        var options = $(".font-size-select").children().each(function() {
+            if (zoom == $(this).text()) {
+                found = true;
+                $(this).prop("selected", true);
+                setCookie("zoom", zoom);
+                refreshZoom(zoom);
+            }
+        });
+        if (!found) setZoom("100%");
+    }
+
+    function refreshZoom(zoom) {
+        $(".font-scalable").children().css("font-size", zoom);
+    }
+    setZoom(getCookie("zoom"));
+    $(".font-size-select").change(function() {
+        setZoom($(this).val());
+    });
+    $(".font-size-switcher").show();
 });
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+    }
+    return "";
+}
+function setCookie(cname, cvalue) {
+    var d = new Date();
+    d.setTime(d.getTime() + (365*24*60*60*1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + "; " + expires;
+}
