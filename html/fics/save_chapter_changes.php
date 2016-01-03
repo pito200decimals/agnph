@@ -138,7 +138,7 @@ if ($action == "edit") {
     }
     
     // Update story word count. Just do a full count, hopefully it's not too expensive.
-    UpdateStoryStats($sid);
+    UpdateStoryStats($sid, true /* Bump DateUpdated */ );
     PostSessionBanner("Chapter created", "green");
     $username = $user['DisplayName'];
     $chaptertitle = htmlspecialchars($chaptertitle);

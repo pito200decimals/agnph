@@ -20,6 +20,7 @@ include_once(SITE_ROOT."fics/submit_comments_or_reviews.php");
 $chapters = GetChaptersInfo($sid) or RenderErrorPage("Story not found");
 $vars['story'] = &$story;
 $vars['chapters'] = &$chapters;
+$vars['_title'] = $story['Title']." by ".$story['author']['DisplayName']." - AGNPH - Fics";
 
 $storyReviews = GetReviews($sid);
 if ($storyReviews == null) $storyReviews = array();

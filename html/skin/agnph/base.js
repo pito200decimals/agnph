@@ -49,7 +49,7 @@ $(document).ready(function() {
     }
 
     function refreshZoom(zoom) {
-        $(".font-scalable").children().css("font-size", zoom);
+        $(".font-scalable").children(":not(.not-font-scalable)").css("font-size", zoom);
     }
     setZoom(getCookie("zoom"));
     $(".font-size-select").change(function() {
@@ -72,5 +72,5 @@ function setCookie(cname, cvalue) {
     var d = new Date();
     d.setTime(d.getTime() + (365*24*60*60*1000));
     var expires = "expires="+d.toUTCString();
-    document.cookie = cname + "=" + cvalue + "; " + expires;
+    document.cookie = cname + "=" + cvalue + "; " + expires + "; path=/";
 }

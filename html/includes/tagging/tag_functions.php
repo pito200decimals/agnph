@@ -19,7 +19,9 @@ function TagDisplayNameToTagName($tag_name) {
 
 // Replaces spaces with _, and removes all other whitespace.
 function SanitizeTagName($name) {
-    return mb_ereg_replace("[\s<>\\[\\]{};!@#\$%^&*+=|\\\\\"',?~`]+", "", TagDisplayNameToTagName($name));
+    // TODO: Correct bad tag names in database, then re-enable this filter.
+    return TagDisplayNameToTagName($name);
+    //return mb_ereg_replace("[\s<>\\[\\]{};!@#\$%^&*+=|\\\\\"',?~`]+", "", TagDisplayNameToTagName($name));
 }
 
 // Gets rid of newlines and other junk characters and replaces them with spaces.

@@ -17,7 +17,8 @@ $profile_user = &$vars['profile']['user'];
 $uid = $profile_user['UserId'];
 $file_path = SITE_ROOT."user/data/bio/$uid.txt";
 read_file($file_path, $bio_contents) or RenderErrorPage("Error loading profile.");
-$profile_user['bio'] = SanitizeHTMLTags($bio_contents, DEFAULT_ALLOWED_TAGS);
+$bio_contents = trim(SanitizeHTMLTags($bio_contents, DEFAULT_ALLOWED_TAGS));
+$profile_user['bio'] = $bio_contents;
 $profile_user['hasBio'] = (mb_strlen($bio_contents) > 0);
 $profile_user['admin'] = GetAdminBadge($profile_user);
 $profile_user['birthday'] = DateStringToReadableString($profile_user['DOB']);
@@ -48,7 +49,7 @@ if (isset($user)) {
     if (mb_strlen($profile_user['RegisterIP']) > 0 && mb_strpos($profile_user['KnownIPs'], $profile_user['RegisterIP']) === FALSE) {
         $ips[] = $profile_user['RegisterIP'];
     }
-    $profile_user['ips'] = implode(",", $ips);
+    $profile_user['ips'] = $ips;
     // Set up global admin links.
     $admin_links = array();
     if (contains($profile_user['Permissions'], 'A')) {

@@ -138,7 +138,9 @@ function MigrateAccount($uid) {
         FICS_REVIEW_TABLE => "ReviewerUserId",  // TODO: Will these be imported?
         FICS_TAG_ALIAS_TABLE => "CreatorUserId",  // Likely empty.
         FICS_TAG_IMPLICATION_TABLE => "CreatorUserId",  // Likely empty.
-        OEKAKI_POST_TABLE => "UserId"
+        OEKAKI_POST_TABLE => "UserId",
+        USER_MAILBOX_TABLE => "SenderUserId",
+        USER_MAILBOX_TABLE => "RecipientUserId"
         );
     foreach ($update_mapping as $table => $field) {
         sql_query("UPDATE $table SET $field=$new_uid WHERE $field=$uid;");
@@ -175,9 +177,8 @@ function MigrateAccount($uid) {
     sql_query("UPDATE ".FICS_TAG_TABLE." SET ChangeTypeUserId=$new_uid WHERE ChangeTypeUserId=$uid;");  // Likely empty.
 
     // Now, for semantically complicated transfers.
-    // For mailbox, we shouldn't be able to send any messages to these accounts. Just delete any messages we find.
-    sql_query("DELETE FROM ".USER_MAILBOX_TABLE." WHERE SenderUserId=$uid;");
-    sql_query("DELETE FROM ".USER_MAILBOX_TABLE." WHERE RecipientUserId=$uid;");
+    // For mailbox, delete messages that are sent and received by the same new user.
+    sql_query("DELETE FROM ".USER_MAILBOX_TABLE." WHERE SenderUserId=$new_uid AND RecipientUserId=$new_uid");
     // Move favorites to new account, and update item stats.
     MoveFavorites(GALLERY_USER_FAVORITES_TABLE, "PostId", "UpdatePostStatistics", $uid, $new_uid);
     MoveFavorites(FICS_USER_FAVORITES_TABLE, "StoryId", "UpdateStoryStats", $uid, $new_uid);

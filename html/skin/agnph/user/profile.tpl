@@ -176,7 +176,7 @@
         </ul>
         <h3>Admin Info</h3>
         <ul id="basic-info">
-                                                        <li><span class="basic-info-label">IP Addresses:</span><span>{{ profile.user.ips }}</span></li>
+                                                        <li><span class="basic-info-label">IP Addresses:</span><span><ul>{% for ip in profile.user.ips %}<li>{{ ip }}</li>{% endfor %}</ul></span></li>
                                                         {% if profile.user.isBanned %}
                                                             <li><span class="basic-info-label">Ban duration:</span><span>{{ profile.user.banDuration }}</span></li>
                                                         {% endif %}

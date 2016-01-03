@@ -1,9 +1,12 @@
 Critical Bugfixes:
 - Fics authors page performance
 - PM loading performance
-- Gallery "stash"/private pools
 - Login redirects
 - Staff page PM links
+- Gallery "stash"/private pools
+- Theme/Skinning adjustments
+- Mass-edit undo
+- Fix tags and re-disable banned characters in tags (tag_functions.php)
 
 
 TODOs
@@ -25,6 +28,7 @@ X Optional large first posts in a thread (for news posts?)
 - Related tag suggestions in sidebar on index page
 - Add users that favorited to gallery posts
 - Order priority should be based on query, not tokens
+- Add tags on posts already uploaded from upload form
 X Some sort of tag exploration feature, perhaps tag cloud?
 X Handle parent cleanup on post delete (Move favorites over to parent?)
 X "Popular" recent posts, maybe by # of views in last day/week/month?
@@ -44,8 +48,6 @@ X Custom swf/webm thumbs when parent is set to image.
 - Include co-authors in author list.
 X Author/Story following?
 X Ability to subscribe for email/PM notifications (for your stories and watching others)
-X Breakdown of views per-chapter
-    - Where in the interface to put this?
 X RSS Feed?
 
 == SITE ==
@@ -54,24 +56,19 @@ X RSS Feed?
     - Add disclaimer banner to non-splash-blocked pages.
 * Oekaki section
     - Just a direct way to post to the forums?
-* General about section, admin bios, etc.
-* Contact, about, etc.
 - Check htmlentities decoding everywhere.
 - Custom 404/error pages
+    - 404 done, error pages not all working quite yet.
 - Admin staff bio layout on desktop/mobile
     - Check again after bios are done.
 - Admin ticket system
     - Integrate admin notification broadcast to this control panel
-- Include welcome message, and account migration message on registration.
 - Global site statistics?
 - API, at least for gallery similar to Ouroboros?
 - Multiple themes?
     - All CSS
     - Ensure no colors clash on mobile
-- Theme switcher for guests (Works, figure out where on the template is a good location).
-    - BUGFIX: On error page, dropdown is off the site page.
 - BUGFIX: Tags are lost on fail-to-submit in fancy tagger UI.
-- Get site to work on mobile without javascript.
 - Fix no-script CSS on menubar hover color
 X Polls?
 X Search string length attacks (Unlikely to be a huge problem).

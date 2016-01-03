@@ -47,7 +47,9 @@ function CreateSQLClausesFromTerms($terms, $mode="AND") {
             }
         }
     }
-    $and_terms = array_merge($and_terms, GetGalleryBlacklistClauses($and_terms, $or_terms));
+    if ($mode == "AND") {
+        $and_terms = array_merge($and_terms, GetGalleryBlacklistClauses($and_terms, $or_terms));
+    }
     $sql = array();
     if (sizeof($or_terms) > 0) {
         $sql[] = "(".CreateSQLClausesFromTerms($or_terms, "OR").")";
@@ -58,10 +60,18 @@ function CreateSQLClausesFromTerms($terms, $mode="AND") {
         }
     }
     if ($mode == "AND" &&
-        sizeof(array_filter($filter_clauses, function($str) {
-        return mb_ereg_match("-*status:deleted", $str) == 1;
-    })) == 0) {
+        !FilterHasClause($filter_clauses, "-*status:deleted")&&
+        !FilterHasClause($or_terms, "-*status:deleted")) {
         $filter_clauses[] = "-status:deleted";
+    }
+    if ($mode == "AND" &&
+        FilterHasClause($filter_clauses, "order:popular") &&
+        !FilterHasClause($filter_clauses, "-*file:swf") &&
+        !FilterHasClause($filter_clauses, "-*file:webm") &&
+        !FilterHasClause($or_terms, "-*file:swf") &&
+        !FilterHasClause($or_terms, "-*file:webm")) {
+        $filter_clauses[] = "-file:swf";
+        $filter_clauses[] = "-file:webm";
     }
     if (sizeof($filter_clauses) > 0) {
         foreach($filter_clauses as $term) {
@@ -76,6 +86,12 @@ function CreateSQLClausesFromTerms($terms, $mode="AND") {
         $sql = "($sql) AND T.Status<>'D'";
     }
     return $sql;
+}
+
+function FilterHasClause($filter_clauses, $reg) {
+    return sizeof(array_filter($filter_clauses, function($str) use ($reg) {
+        return mb_ereg_match($reg, $str) == 1;
+      })) == 1;
 }
 
 function CreateSQLClauseFromTerm($term) {

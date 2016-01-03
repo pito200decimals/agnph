@@ -265,7 +265,8 @@ define("NUM_SCORES_THAT_COUNT", "COUNT(CASE WHEN ReviewScore>0 THEN 1 ELSE NULL 
 define("NUM_REVIEWS", "COUNT(CASE WHEN IsReview THEN 1 ELSE NULL END)");
 
 // Does a full refresh on story stats. Updates ChapterCount, WordCount, TotalReviewStars, TotalReviews, and ChapterItemOrder
-function UpdateStoryStats($sid) {
+// Also updates DateUpdated if flag is true.
+function UpdateStoryStats($sid, $update_timestamp=false) {
     $escaped_sid = sql_escape($sid);
     $chapters = GetChaptersInfo($sid) or RenderErrorPage("Story not found");
     $chapcount = 0;
@@ -295,6 +296,7 @@ function UpdateStoryStats($sid) {
     }
 
     // Also get story reviews.
+    $update_sql = "ChapterCount=$chapcount, WordCount=$wordcount, Views=$viewcount";
     if (sql_query_into($result, "SELECT ".SCORES_THAT_COUNT." as C1, ".NUM_SCORES_THAT_COUNT." as C2, ".NUM_REVIEWS." as C3 FROM ".FICS_REVIEW_TABLE." R WHERE
         StoryId='$escaped_sid' OR
         (StoryId='$escaped_sid' AND
@@ -305,10 +307,13 @@ function UpdateStoryStats($sid) {
         $totalStars = $row['C1'];
         $totalRatings = $row['C2'];
         $numReviews = $row['C3'];
-        sql_query("UPDATE ".FICS_STORY_TABLE." SET ChapterCount=$chapcount, WordCount=$wordcount, Views=$viewcount, TotalStars=$totalStars, TotalRatings=$totalRatings, NumReviews=$numReviews WHERE StoryId='$escaped_sid';");
-    } else {
-        sql_query("UPDATE ".FICS_STORY_TABLE." SET ChapterCount=$chapcount, WordCount=$wordcount, Views=$viewcount WHERE StoryId='$escaped_sid';");
+        $update_sql = $update_sql.", TotalStars=$totalStars, TotalRatings=$totalRatings, NumReviews=$numReviews";
     }
+    if ($update_timestamp) {
+        $now = time();
+        $update_sql = $update_sql.", DateUpdated='$now'";
+    }
+    sql_query("UPDATE ".FICS_STORY_TABLE." SET $update_sql WHERE StoryId='$escaped_sid';");
 }
 
 function ChapterWordCount($content) {

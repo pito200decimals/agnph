@@ -61,6 +61,8 @@ if (isset($_GET['verbosity'])) {
 }
 if (strlen($sql_filter) > 0) {
     $sql_order = "WHERE Verbosity <= $verbosity AND Section LIKE '%$sql_filter%' ORDER BY Timestamp DESC";
+} else if ($verbosity <= 1) {
+    $sql_order = "WHERE Verbosity <= $verbosity AND Section='' ORDER BY Timestamp DESC";
 } else {
     $sql_order = "WHERE Verbosity <= $verbosity ORDER BY Timestamp DESC";
 }

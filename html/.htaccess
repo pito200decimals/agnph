@@ -10,6 +10,7 @@ php_value post_max_size 50M
 Options -MultiViews
 # Don't display the index of files.
 IndexIgnore *
+Options -Indexes
 # Don't allow .php or .tpl links.
 RewriteCond %{THE_REQUEST} /.+?\.php[\s?] [NC]
 RewriteRule ^ - [F]

@@ -124,7 +124,7 @@
                     dimensions limits for any upload. There's a reason we set limits and they are
                     already pretty generous.</li>
                 <li>Don't upload, without explicit permission from the artist(s), any art involving
-                    artists listed on the <strong>(TODO: Link)</strong>Do Not Post list.</li>
+                    artists listed on the <a href="/forums/thread/1600/">Do Not Post list</a>.</li>
                 <li>Don't make creepy comments on artwork. It's good to show light-hearted
                     appreciation, but we don't need to know the sticky, disturbing details of what
                     you want to do to whatever character. Also, remember that artists often use
@@ -132,7 +132,7 @@
                     about your theoretical intentions.</li>
                 <li>Don't whine about pictures having content you don't like. You can blacklist
                     tags you don't like in your account settings.</li>
-                <li>Follow the <strong>(TODO: Link)</strong> gallery tagging guidelines when adding
+                <li>Follow the <a href="/about/gallery/">gallery tagging guidelines</a> when adding
                     tags.</li>
                 <li>Don't vandalize tags. This includes adding stupid or deliberately wrong tags,
                     or removing good ones.</li>

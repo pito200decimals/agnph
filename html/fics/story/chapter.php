@@ -32,6 +32,7 @@ $chapter['author'] = $authors[$chapter['AuthorUserId']];
 
 $vars['story'] = $story;
 $vars['chapter'] = $chapter;
+$vars['_title'] = $story['Title'].", Chapter $chapternum - AGNPH - Fics";
 $vars['numchapters'] = sizeof($chapters);
 
 // Also fetch comments/reviews.
