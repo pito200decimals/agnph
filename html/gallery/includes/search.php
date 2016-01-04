@@ -86,7 +86,7 @@ function CreatePostSearchSQL($search_string, $posts_per_page, $page, &$can_sort_
     if ($return_where_only) {
         return CreateSQLClauses($search_string);
     } else {
-        return "SELECT * FROM ".GALLERY_POST_TABLE." T WHERE ".CreateSQLClauses($search_string)." ORDER BY $sortOrder LIMIT $posts_per_page OFFSET $offset;";
+        return "SELECT * FROM ".GALLERY_POST_TABLE." T WHERE ".CreateSQLClauses($search_string)." ORDER BY $sortOrder LIMIT $page_size OFFSET $offset;";
     }
 }
 

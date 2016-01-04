@@ -217,6 +217,7 @@ if (isset($_POST['display-name']) &&
             $detailed_desc = "password";
         }
         // Allow unverified changes for administrators, if they're not changing their own account (for security reasons).
+        $old_email = $profile_user['Email'];
         if ($user['UserId'] != $profile_user['UserId'] && CanUserChangeEmailAndPasswordWithoutVerification($user, $profile_user)) {
             $uuid = $user['UserId'];
             $username = $user['DisplayName'];
@@ -225,9 +226,17 @@ if (isset($_POST['display-name']) &&
             LogAction("<strong><a href='/user/$uuid/'>$username</a></strong> forced an email/password change for account <strong><a href='/user/$puid/'>$pusername</a></strong>", "");
             ChangeEmailPassword($profile_user['UserId'], $email, $pass, false /* confirmation email */, false /* force login */);
             PostConfirmMessage("User $detailed_desc changed");
+        } else if (mb_strlen($old_email) == 0) {
+            // Previous email was not set, allow changing email/password (valid email is provided by this point).
+            $uuid = $user['UserId'];
+            $username = $user['DisplayName'];
+            $puid = $uid;
+            $pusername = $profile_user['DisplayName'];
+            LogAction("<strong><a href='/user/$uuid/'>$username</a></strong> updated their email/password from imported empty value", "");
+            ChangeEmailPassword($profile_user['UserId'], $email, $pass, false /* confirmation email */, false /* force login */);
+            PostConfirmMessage("User $detailed_desc changed");
         } else {
             // Redirect to: /recover/success/
-            $old_email = $profile_user['Email'];
             $username = $profile_user['UserName'];
             $redirect = "/user/auth/change/";
             debug("Pass:$pass, Post=".$profile_user['UserId'].",".$email.",".$pass);
