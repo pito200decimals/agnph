@@ -59,6 +59,12 @@ $vars['postIterator'] = $iterator;
 if (isset($user) && CanUserCreateOrDeletePools($user)) {
     $vars['canEditPools'] = true;
 }
+if (isset($user) && CanUserCreatePool($user)) {
+    $vars['canCreatePools'] = true;
+}
+if (isset($user) && CanUserDeletePool($user)) {
+    $vars['canDeletePools'] = true;
+}
 RenderPage("gallery/pools/poolindex.tpl");
 return;
 

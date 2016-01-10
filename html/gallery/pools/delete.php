@@ -4,7 +4,7 @@
 include_once("../../header.php");
 include_once(SITE_ROOT."gallery/includes/functions.php");
 
-if (!isset($user) || !CanUserCreateOrDeletePools($user)) {
+if (!isset($user) || !CanUserDeletePool($user)) {
     RenderErrorPage("Not authorized to delete image pools");
 }
 if (!isset($_POST['pool'])) InvalidURL();

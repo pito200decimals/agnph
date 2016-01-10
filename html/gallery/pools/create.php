@@ -4,7 +4,7 @@
 include_once("../../header.php");
 include_once(SITE_ROOT."gallery/includes/functions.php");
 
-if (!isset($user) || !CanUserCreateOrDeletePools($user)) {
+if (!isset($user) || !CanUserCreatePool($user)) {
     RenderErrorPage("Not authroized to create image pools");
 }
 if (!isset($_POST['search'])) InvalidURL();

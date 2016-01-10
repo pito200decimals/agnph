@@ -30,7 +30,7 @@
         <form id="pool-search" method="GET" accept-encoding="UTF-8">
             <input type="text" class="search" name="search" value="" required />
         </form>
-        {% if canEditPools %}
+        {% if canCreatePools %}
             <ul id="action-list" hidden>
                 <li><a href="">Create</a></li>
             </ul>
@@ -51,7 +51,7 @@
                 <td><div><strong>Name</strong></div></td>
                 <td><div><strong>Number of Posts</strong></div></td>
                 <td><div><strong>Created By</strong></div></td>
-                {% if canEditPools %}<td><div><strong>Actions</strong></div></td>{% endif %}
+                {% if canDeletePools %}<td><div><strong>Actions</strong></div></td>{% endif %}
             </tr>
         </thead>
         <tbody>
@@ -61,7 +61,7 @@
                         <td><div><a href="/gallery/post/?search={{ pool.searchString|url_encode }}">{{ pool.Name }}</a></div></td>
                         <td><div>{{ pool.count }}</div></td>
                         <td><div><a href="/user/{{ pool.creator.UserId }}/gallery/">{{ pool.creator.DisplayName }}</a></div></td>
-                        {% if canEditPools %}<td><div>
+                        {% if canDeletePools %}<td><div>
                             <form action="/gallery/pools/delete/" method="POST" accept-charset="UTF-8">
                                 <input type="hidden" name="pool" value="{{ pool.PoolId }}" />
                                 <a href="#"><input type="submit" value="Delete" /></a>
@@ -73,7 +73,7 @@
                 <tr>
                     <td></td>
                     <td colspan="2">No pools found</td>
-                    {% if canEditPools %}<td></td>{% endif %}
+                    {% if canDeletePools %}<td></td>{% endif %}
                 </tr>
             {% endif %}
         </tbody>

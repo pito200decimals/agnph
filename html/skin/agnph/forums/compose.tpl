@@ -34,12 +34,12 @@
 {% use 'includes/comment-block.tpl' %}
 
 {% block content %}
-    {% if board %}
-        <h3>Posting to board: {{ board.Name }}</h3>
-    {% elseif post %}
+    {% if post %}
         <h3>Editing post: {{ post.Title }}</h3>
     {% elseif thread %}
         <h3>Replying to thread: {{ thread.Title }}</h3>
+    {% elseif board %}
+        <h3>Posting to board: {{ board.Name }}</h3>
     {% endif %}
     {{ block('banner') }}
     <form method="POST" accept-encoding="UTF-8">

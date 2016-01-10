@@ -2720,9 +2720,15 @@ var _items,
 		errorMsg: '<div class="pswp__error-msg"><a href="%url%" target="_blank">The image</a> could not be loaded.</div>',
 		forceProgressiveLoading: false, // TODO
 		preload: [1,1],
+        getItemNumFn: function(pswp) {
+            return pswp.getCurrentIndex() + 1;
+        },
 		getNumItemsFn: function() {
 			return _items.length;
-		}
+		},
+        getDisplayNumItemsFn: function() {
+			return _items.length;
+        }
 	};
 
 
@@ -3474,7 +3480,7 @@ _registerModule('DesktopZoom', {
 
 var _historyDefaultOptions = {
 	history: true,
-	galleryUID: 1
+	galleryUID: null
 };
 
 var _historyUpdateTimeout,
@@ -3571,7 +3577,10 @@ var _historyUpdateTimeout,
 			// carry forward any custom pid assigned to the item
 			pid = item.pid;
 		}
-		var newHash = _initialHash + '&'  +  'gid=' + _options.galleryUID + '&' + 'pid=' + pid;
+        var newHash = 'pid=' + pid;
+        if (_options.galleryUID) {
+            newHash = 'gid=' + _options.galleryUID + '&' + newHash;
+        }
 
 		if(!_historyChanged) {
 			if(_windowLoc.hash.indexOf(newHash) === -1) {

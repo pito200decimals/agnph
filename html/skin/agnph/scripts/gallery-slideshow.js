@@ -2,6 +2,7 @@ var gallery;
 var minPageIndex, maxPageIndex;
 var loadingPage = false;
 var jumpDistance = 10;
+var galleryOpening = false;
 
 $(document).ready(function() {
     $(".pswp").keydown(function(e) {
@@ -27,20 +28,48 @@ $(document).ready(function() {
                 break;
         }
     });
+    // Check for auto-start slideshow.
+    if (window.location.hash) {
+        var regexp = /^#pid=p(\d+)$/
+        var match = regexp.exec(window.location.hash);
+        if (match && match.length == 2) {
+            var offset = match[1];
+            var offsetString = "p" + offset;
+            offset--;
+            var page = Math.floor(offset / pagesize);
+            offset -= page * pagesize;
+            page++;
+            // Start slideshow immediately.
+            galleryOpening = true;
+            gallery = false;
+            minPageIndex = page;
+            maxPageIndex = page;
+            LoadMoreSlides(page, offsetString, 1, 0);
+        }
+    }
 });
 
 function OpenSlideshow() {
+    if (galleryOpening) return;
+    galleryOpening = true;
     gallery = false;
     minPageIndex = startPage;
     maxPageIndex = startPage;
-    LoadMoreSlides(startPage, 1, 0);
+    LoadMoreSlides(startPage, null, 1, 0);
     return false;
 }
 
-function InitSlideshow(items) {
+function InitSlideshow(items, initialOffset) {
+    var startingOffset = 0;
+    for (i = 0; i < items.length; i++) {
+        if (items[i].pid == initialOffset) {
+            startingOffset = i;
+            break;
+        }
+    }
     var pswpElement = document.querySelectorAll('.pswp')[0];
     var options = {
-        index: 0,
+        index: startingOffset,
         loop: true,
         preload: [1, 3],
         closeOnScroll: false,
@@ -59,20 +88,36 @@ function InitSlideshow(items) {
                 return gallery.currItem.src;
             }
         },
+        getItemNumFn: function(pswp) {
+            return gallery.currItem.pid.substr(1);
+        },
+        getDisplayNumItemsFn: function() {
+            return maxPageIndex * pagesize;
+        }
     };
-    gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
+    gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
     gallery.listen("afterChange", function() {
         var currentIndex = gallery.getCurrentIndex();
         if (currentIndex < jumpDistance && minPageIndex > 1) {
-            LoadMoreSlides(minPageIndex - 1, -1, 0);
+            LoadMoreSlides(minPageIndex - 1, null, -1, 0);
         } else if (currentIndex >= gallery.options.getNumItemsFn() - jumpDistance) {
-            LoadMoreSlides(maxPageIndex + 1, 1, 0);
+            LoadMoreSlides(maxPageIndex + 1, null, 1, 0);
         }
     });
+    /*
+    gallery.listen("close", function() {
+        if (history.pushState) {
+            history.pushState(null, null, "");
+        } else {
+            location.hash = "";
+        }
+    });
+    */
     gallery.init();
+    galleryOpening = false;
 }
 
-function LoadMoreSlides(page, increment, numEmptyPages) {
+function LoadMoreSlides(page, initialOffset, increment, numEmptyPages) {
     if (page <= 0) return;
     if (loadingPage) return;
     if (numEmptyPages >= 3) return;  // Skip up to 3 pages of unviewable posts.
@@ -82,14 +127,16 @@ function LoadMoreSlides(page, increment, numEmptyPages) {
     $.ajax("/gallery/post/slideshow/fetch/", {
         data: {
             page: page,
-            search: searchString
+            search: searchString,
+            pagesize: pagesize
         },
         method: "GET",
         success: function(response) {
             loadingPage = false;
             if (response.length > 0) {
                 if (!gallery) {
-                    InitSlideshow(response);
+                    // On first load.
+                    InitSlideshow(response, initialOffset);
                 } else {
                     if (increment == -1) {
                         var index = gallery.getCurrentIndex() + response.length;
@@ -107,11 +154,12 @@ function LoadMoreSlides(page, increment, numEmptyPages) {
                     gallery.ui.update();
                 }
             } else {
-                LoadMoreSlides(page + increment, increment, numEmptyPages + 1);
+                LoadMoreSlides(page + increment, null, increment, numEmptyPages + 1);
             }
         },
         error: function() {
             loadingPage = false;
+            galleryOpening = false;
         }
     });
 }

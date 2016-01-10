@@ -122,6 +122,7 @@
     <script>
         var searchString = "{% autoescape false %}{{ search|e('js') }}{% endautoescape %}";
         var startPage = {{ page }};
+        var pagesize = {{ pagesize }};
     </script>
     <script src="{{ asset('/scripts/gallery-slideshow.js') }}"></script>
 {% endblock %}

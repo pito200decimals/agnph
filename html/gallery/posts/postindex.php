@@ -72,6 +72,9 @@ if (isset($_SESSION['disable-gallery-mobile'])) {
     $vars['ignore_mobile'] = false;
 }
 
+// Used for gallery slideshow.
+$vars['pagesize'] = $posts_per_page;
+
 RenderPage("gallery/posts/postindex.tpl");
 return;
 

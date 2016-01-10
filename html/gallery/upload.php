@@ -50,6 +50,7 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
     if ($ext == null) OnFileUploadError($tmp_path);
     $dst_path = GetSystemImagePath($md5, $ext);
     if (file_exists($dst_path)) {
+        AddTagsToExistingPost($_POST['tags'], $md5);
         unlink($tmp_path);
         GoToExistingFile($md5);
         return;
@@ -154,8 +155,18 @@ function OnFileUploadError($tmp_paths, $msg = "Error while uploading file") {
     RenderErrorPage($msg);
 }
 
+function AddTagsToExistingPost($tag_string, $md5) {
+    global $user;
+    if (!CanUserEditGalleryPost($user)) return;
+    if (sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE Md5='$md5';", 1)) {
+        $post_id = $result->fetch_assoc()['PostId'];
+        $existing_tags = ToTagNameString(GetTags($post_id));
+        $all_tags = "$existing_tags $tag_string";
+        UpdatePost($all_tags, $post_id, $user);
+    }
+}
+
 function GoToExistingFile($md5) {
-    // TODO: Add new properties to existing file.
     sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE Md5='$md5';", 1) or RenderErrorPage("Error while uploading file.");
     $id = $result->fetch_assoc()['PostId'];
     Redirect("/gallery/post/show/$id/");
