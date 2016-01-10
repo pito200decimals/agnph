@@ -1,13 +1,14 @@
 Critical Bugfixes:
-- Fics authors page performance
-- PM loading performance
 - Login redirects
 - Staff page PM links
 - Gallery "stash"/private pools
 - Theme/Skinning adjustments
 - Mass-edit undo
 - Fix tags and re-disable banned characters in tags (tag_functions.php)
-
+- Link-to-slideshow
+- Slideshow timer adjustment
+- Better mobile iterator
+- Add "Pools Created" to gallery user page?
 
 TODOs
 (* = Required for launch, - = Normal priority, X = Scrapped)

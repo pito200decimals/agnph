@@ -314,7 +314,7 @@
                 {% if post.Description|length > 0 %}
                     <div class="post-description">
                         <h4>Description</h4>
-                        {{ post.Description }}
+                        {% autoescape false %}{{ post.Description }}{% endautoescape %}
                     </div>
                 {% endif %}
                 <p>

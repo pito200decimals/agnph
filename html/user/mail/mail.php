@@ -36,7 +36,7 @@ if (isset($_POST['action'])) {
 $messages = GetMessages($profile_user);
 if ($user['GroupMailboxThreads']) {
     // Bundle together messages of the same conversation.
-    BundleMessageThreads($messages);
+    BundleMessageThreads($profile_user, $messages);
 }
 if (isset($_GET['unread'])) {
     $messages = FilterOnlyUnreadMessages($messages);
@@ -78,6 +78,7 @@ if (sizeof($messages) > INBOX_ITEMS_PER_PAGE) {
         }, true);
     $vars['iterator'] = $iterator;
 }
+if (!AddMessageMetadata($profile_user, $messages)) RenderErrorPage("Error while fetching private messages");
 $vars['messages'] = $messages;
 
 // This is how to output the template.

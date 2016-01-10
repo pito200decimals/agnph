@@ -8,6 +8,7 @@ include_once(SITE_ROOT."gallery/includes/functions.php");
 include_once(SITE_ROOT."includes/util/user.php");
 include_once(SITE_ROOT."user/includes/functions.php");  // For avatar perms.
 include_once(SITE_ROOT."gallery/posts/viewpost_actions.php");
+include_once(SITE_ROOT."includes/util/html_funcs.php");
 
 // Layout of file:
 // 1. Get post.
@@ -89,6 +90,7 @@ if ($post['HasPreview']) {
     $post['previewUrl'] = GetSiteImagePath($md5, $ext);
 }
 $post['downloadUrl'] = GetSiteImagePath($md5, $ext);
+$post['Description'] = SanitizeHTMLTags($post['Description'], NO_HTML_TAGS);  // Sanitize input.
 // Concatenate reverse-image search urls.
 $post['googleUrl'] = "http://google.com/searchbyimage?image_url=".SITE_DOMAIN.GetSiteImagePath($md5, $ext);
 $post['saucenaoUrl'] = "http://saucenao.com/search.php?url=".SITE_DOMAIN.GetSiteImagePath($md5, $ext);

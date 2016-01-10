@@ -87,7 +87,7 @@
         </li>
         <li class="content">
             <p>
-                <strong>pool:{pool id}</strong> - Searches for posts in a pool given by the numeric id.
+                <strong>pool:{pool name}</strong> - Fetches posts in the given pool.
             </p>
         </li>
         <li class="content">

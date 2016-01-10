@@ -40,6 +40,7 @@ if (HIDE_IMPORTED_ACCOUNTS_FROM_USER_LIST) {
     $search_clause .= " AND RegisterIP<>''";
 }
 
+$now = time();
 if (isset($_GET['sort'])) {
     $order_asc = true;
     if (isset($_GET['order'])) {
@@ -52,7 +53,10 @@ if (isset($_GET['sort'])) {
     $order = ($order_asc ? "ASC" : "DESC");
     switch (mb_strtolower($_GET['sort'], "UTF-8")) {
         case "status":
-            $order_clause = "LastVisitTime $order, DisplayName $order";
+            // First sort by "online" vs "offline", then by last visit time, then by name.
+            // Avoids situations where users marked as "don't show online" show up above online users.
+            $cutoff_time = $now - CONSIDERED_ONLINE_DURATION;
+            $order_clause = "(CASE WHEN LastVisitTime >= $cutoff_time AND HideOnlineStatus=0 THEN 1 ELSE 0 END) $order, LastVisitTime $order, DisplayName $order";
             break;
         case "name":
             $order_clause = "DisplayName $order";
@@ -72,7 +76,6 @@ if (isset($_GET['sort'])) {
 $accounts = array();
 CollectItems(USER_TABLE, "WHERE $search_clause ORDER BY $order_clause", $accounts, USERS_LIST_ITEMS_PER_PAGE, $iterator, "No users found.");
 
-$now = time();
 foreach ($accounts as &$account) {
     $account['dateJoined'] = FormatDate($account['JoinTime'], USERLIST_DATE_FORMAT);
     if ($account['LastVisitTime'] + CONSIDERED_ONLINE_DURATION > $now && !$account['HideOnlineStatus']) {

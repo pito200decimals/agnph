@@ -4,18 +4,14 @@
 include_once(SITE_ROOT."includes/util/core.php");
 
 // Gets messages to or from a given user, in reverse-chronological order. Returns null on failure.
-function GetMessages($user) {
-    $uid = $user['UserId'];
+function GetMessages($profile_user) {
+    $uid = $profile_user['UserId'];
     $messages = array();
-    $sql = "SELECT * FROM ".USER_MAILBOX_TABLE." WHERE ((SenderUserId=$uid AND MessageType<>1) OR RecipientUserId=$uid) AND Status<>'D' ORDER BY Timestamp DESC, Id DESC;";
+    $sql = "SELECT Id, SenderUserId, RecipientUserId, ParentMessageId, Timestamp, Status, Title, MessageType FROM ".USER_MAILBOX_TABLE." WHERE ((SenderUserId=$uid AND MessageType<>1) OR RecipientUserId=$uid) AND Status<>'D' ORDER BY Timestamp DESC, Id DESC;";
     if (sql_query_into($result, $sql, 0)) {
         while ($row = $result->fetch_assoc()) {
             $messages[] = $row;
         }
-    }
-    if (sizeof($messages) > 0) {
-        // Process messages.
-        if (!AddMessageMetadata($messages, $user)) return null;
     }
     return $messages;
 }
@@ -26,8 +22,21 @@ function GetAdminUserMetadata() {
         "avatarURL" => DEFAULT_AVATAR_PATH);
 }
 
+function AddMessageBodyAndMetadata($profile_user, &$messages) {
+    $msg_by_id = GetMessagesById($messages);
+    $ids = array_map(function($msg) { return $msg['Id']; }, $messages);
+    $joined = implode(",", $ids);
+    $sql = "SELECT * FROM ".USER_MAILBOX_TABLE." WHERE Id IN ($joined);";
+    if (sql_query_into($result, $sql, 1)) {
+        while ($row = $result->fetch_assoc()) {
+            $msg_by_id[$row['Id']]['Content'] = $row['Content'];
+        }
+        AddMessageMetadata($profile_user, $messages);
+    }
+}
+
 // Adds metadata to messages. Returns true on success, false on failure.
-function AddMessageMetadata(&$messages, $user) {
+function AddMessageMetadata($profile_user, &$messages) {
     $ids = array_map(function($msg) { return $msg['Id']; }, $messages);
     $senders = array_map(function($msg) { return $msg['SenderUserId']; }, $messages);
     $recipients = array_map(function($msg) { return $msg['RecipientUserId']; }, $messages);
@@ -46,7 +55,7 @@ function AddMessageMetadata(&$messages, $user) {
             $message['toFromUser'] = $all_users[$message['SenderUserId']];
             $message['notification'] = true;
         } else {
-            if ($message['SenderUserId'] != $user['UserId']) {
+            if ($message['SenderUserId'] != $profile_user['UserId']) {
                 $message['toFromUser'] = $all_users[$message['SenderUserId']];
                 $message['inbox'] = true;
             } else {
@@ -85,7 +94,8 @@ function GetMessagesById(&$messages) {
 
 // Computes the message trees for a set of messages to/from a given user. Sets ParentMessageId to all the same root (lowest id in the tree).
 // If a message is its own root, parent id is that message's id (instead of the original -1).
-function ComputeMessageTrees(&$messages) {
+function ComputeMessageTrees($profile_user, &$messages) {
+    FixUnthreadedConversations($profile_user, $messages);
     // Construct convenient map.
     $msg_by_id = GetMessagesById($messages);
 
@@ -110,9 +120,45 @@ function ComputeMessageTrees(&$messages) {
     }
 }
 
+function FixUnthreadedConversations($profile_user, &$messages) {
+    $msg_per_user = array();
+    foreach ($messages as &$msg1) {
+        if ($msg1['SenderUserId'] != $profile_user['UserId']) {
+            $ouid = $msg1['SenderUserId'];
+        } else if ($msg1['RecipientUserId'] != $profile_user['UserId']) {
+            $ouid = $msg1['RecipientUserId'];
+        } else {
+            continue;
+        }
+        if (!isset($msg_per_user[$ouid])) {
+            $msg_per_user[$ouid] = array();
+        }
+        $msg_per_user[$ouid][] = &$msg1;
+    }
+    foreach ($msg_per_user as $ouid => $msg_list) {
+        $last_msg = null;
+        for ($i = sizeof($msg_list) - 1; $i >= 0; $i--) {
+            $msg2 = &$msg_list[$i];
+            if ($msg2['Title'] != "(No Subject)") continue;
+            if ($last_msg == null) {
+                $last_msg = $msg2;
+                continue;
+            }
+            if ($msg2['ParentMessageId'] == -1 &&
+                $msg2['Timestamp'] <= $last_msg['Timestamp'] + UNTHREADED_CONVERSATION_LINK_TIME &&
+                $msg2['Title'] == $last_msg['Title']) {
+                // Set parent thread id.
+                $msg2['ParentMessageId'] = $last_msg['Id'];
+            } else {
+                $last_msg = $msg2;
+            }
+        }
+    }
+}
+
 // Removes messages that are part of the same conversation, leaving only the latest one.
-function BundleMessageThreads(&$messages) {
-    ComputeMessageTrees($messages);
+function BundleMessageThreads($profile_user, &$messages) {
+    ComputeMessageTrees($profile_user, $messages);
     $msg_by_id = GetMessagesById($messages);
 
     // Compute latest message in each tree, and how many messages that tree has.

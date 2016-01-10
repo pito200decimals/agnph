@@ -73,7 +73,8 @@ function CreatePostSearchSQL($search_string, $posts_per_page, $page, &$can_sort_
         if (contains($lower_search_string, "order:popular") !== FALSE) {
             $grace_period = 1*24*60*60;
             $now = time();
-            $search_string = mb_eregi_replace("order:popular", "", $search_string);
+            // Don't remove "order:popular" from query string; used when filtering out swf/webm posts.
+            // $search_string = mb_eregi_replace("order:popular", "", $search_string);
             $sortOrder = "LOG(GREATEST(T.NumViews - 10, 1) + 100 * T.NumFavorites) * 1.0 / POWER(LOG(GREATEST($now - T.DateUploaded, $grace_period)), 2) DESC, ".$sortOrder;
             $can_sort_pool = false;
         }

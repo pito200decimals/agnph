@@ -50,7 +50,7 @@
                             {% if message.count > 1 %}({{ message.count }}){% endif %}
                         </div></td>
                         <td><div>{{ message.date }}</div></td>
-                        <td><div><a href="/user/{{ profile.user.UserId }}/mail/message/{{ message.Id }}/">{{ message.Title }}</a></div></td>
+                        <td><div><a href="/user/{{ profile.user.UserId }}/mail/message/{{ message.Id }}/">{% autoescape false %}{{ message.Title }}{% endautoescape %}</a></div></td>
                         <td><div><a href="/user/{{ message.toFromUser.UserId }}/">{{ message.toFromUser.DisplayName }}</a></div></td>
                     </tr>
                 {% endfor %}

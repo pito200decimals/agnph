@@ -23,7 +23,7 @@ if (!isset($_GET['mid']) || !is_numeric($_GET['mid'])) {
 $mid = (int)$_GET['mid'];
 
 $messages = GetMessages($profile_user) or RenderErrorPage("Unable to load message");
-ComputeMessageTrees($messages);
+ComputeMessageTrees($profile_user, $messages);
 $msg_by_id = GetMessagesById($messages);
 if (!isset($msg_by_id[$mid])) {
     // Trying to view message not under the given profile.
@@ -36,6 +36,7 @@ if ($user['GroupMailboxThreads']) {
 } else {
     $messages = array($selected_msg);
 }
+AddMessageBodyAndMetadata($profile_user, $messages);
 foreach ($messages as &$msg_ref) {
     $msg_ref['text'] = SanitizeHTMLTags($msg_ref['text'], DEFAULT_ALLOWED_TAGS);
 }
@@ -50,15 +51,17 @@ if ($message['MessageType']) {
 $vars['rid'] = $selected_msg['Id'];
 
 // Mark message(s) as read.
-$mark_read = array();
-foreach ($messages as $msg) {
-    if ($msg['Status'] == "U" && $user['UserId'] == $msg['RecipientUserId']) {
-        $mark_read[] = $msg['Id'];
+if ($user['UserId'] == $profile_user['UserId']) {
+    $mark_read = array();
+    foreach ($messages as $msg) {
+        if ($msg['Status'] == "U" && $user['UserId'] == $msg['RecipientUserId']) {
+            $mark_read[] = $msg['Id'];
+        }
     }
-}
-if (sizeof($mark_read) > 0) {
-    $joined = implode(",", $mark_read);
-    sql_query("UPDATE ".USER_MAILBOX_TABLE." SET Status='R' WHERE Id in ($joined);");
+    if (sizeof($mark_read) > 0) {
+        $joined = implode(",", $mark_read);
+        sql_query("UPDATE ".USER_MAILBOX_TABLE." SET Status='R' WHERE Id in ($joined);");
+    }
 }
 
 // Don't bother paginating PM conversations. Hopefully users will compose new conversations if needed.

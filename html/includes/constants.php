@@ -154,6 +154,7 @@ define("DEFAULT_FICS_NUM_RECENT_STORIES", 3);
 define("FICS_MAX_NUM_COAUTHORS", 3);
 define("MAX_FICS_SEARCH_TERMS", 6);
 define("MAX_FICS_BLACKLIST_TAGS", 50);  // Max data input limit.
+define("UNTHREADED_CONVERSATION_LINK_TIME", 7 * 24 * 60 * 60);
 
 // Site constants (display-related).
 define("DEFAULT_PAGE_ITERATOR_SIZE", 2);  // 2 => 1 ... 5 6 [7] 8 9 ... 12

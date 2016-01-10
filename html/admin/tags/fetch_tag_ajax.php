@@ -27,7 +27,8 @@ if ($filter == "alias") {
     if (!isset($user)) {
         AJAXErr();
     }
-    GetTagsByName(TABLE, array($_GET['search']), true /* create_new */, $user['UserId']);
+    $search_term = SanitizeTagName($search_term);
+    GetTagsByName(TABLE, array($search_term), true /* create_new */, $user['UserId']);
 }
 $offset = 0;
 if (strlen($search_term) > 0) {
