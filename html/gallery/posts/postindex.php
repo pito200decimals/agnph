@@ -55,6 +55,14 @@ if (isset($_GET['feature']) && is_numeric($_GET['feature']) && !contains(mb_strt
 // Construct page iterator.
 $vars['postIterator'] = CreatePageIterator($searchterms, $page, $posts_per_page);
 
+// Get suggested tags.
+$tag_tokens = GetTagStringTokens($searchterms);
+$tag_tokens = StripTildeAndMinus($tag_tokens);
+$similar_tags = GetSimilarTagsByName(GALLERY_TAG_TABLE, $tag_tokens);
+if (sizeof($similar_tags) > 0) {
+    $vars['similar_tags'] = $similar_tags;
+}
+
 // Set up permissions.
 if (isset($user)) {
     $vars['canMassTagEdit'] = CanUserMassTagEdit($user) && mb_strlen($searchterms) > 0;
@@ -77,6 +85,17 @@ $vars['pagesize'] = $posts_per_page;
 
 RenderPage("gallery/posts/postindex.tpl");
 return;
+
+function StripTildeAndMinus($terms) {
+    $ret = array();
+    foreach ($terms as $term) {
+        while (startsWith($term, "~") || startsWith($term, "-")) {
+            $term = mb_substr($term, 1);
+        }
+        $ret[] = $term;
+    }
+    return $ret;
+}
 
 function CreatePageIterator($searchterms, $page, $posts_per_page) {
     $total_num_posts = CountNumPosts(mb_strtolower($searchterms, "UTF-8"));

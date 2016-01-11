@@ -7,6 +7,7 @@ Critical Bugfixes:
 - Fix tags and re-disable banned characters in tags (tag_functions.php)
 - Slideshow timer adjustment
 - Better mobile iterator
+- Admin tag history search
 
 TODOs
 (* = Required for launch, - = Normal priority, X = Scrapped)

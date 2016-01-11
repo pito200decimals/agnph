@@ -46,31 +46,6 @@
     margin-bottom: 5px;
 }
 
-/* Tags */
-.taglist {
-    margin: 0px;
-    padding: 0px;
-}
-.tagcategory {
-    margin-top: 10px;
-    margin-left: 10px;
-    display: block;
-}
-.tag {
-    margin-left: 10px;
-    display: block;
-}
-.tag a {
-    text-decoration: none;
-    font-weight: bold;
-}
-.tag a:hover {
-    color: rgb(144,147,255);
-}
-.tag small {
-    opacity: 0.5;
-}
-
 /* Stats */
 .statlist {
     margin: 0px;

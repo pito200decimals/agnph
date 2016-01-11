@@ -3,6 +3,8 @@ var minPageIndex, maxPageIndex;
 var loadingPage = false;
 var jumpDistance = 10;
 var galleryOpening = false;
+var reachedEnd = false;
+var numItems = 0;
 
 $(document).ready(function() {
     $(".pswp").keydown(function(e) {
@@ -26,6 +28,12 @@ $(document).ready(function() {
                     gallery.goTo(0);
                 }
                 break;
+            case 35:
+                // End key.
+                if (gallery) {
+                    gallery.goTo(gallery.items.length - 1);
+                }
+                break;
         }
     });
     // Check for auto-start slideshow.
@@ -44,7 +52,7 @@ $(document).ready(function() {
             gallery = false;
             minPageIndex = page;
             maxPageIndex = page;
-            LoadMoreSlides(page, offsetString, 1, 0);
+            LoadMoreSlides(page, offsetString, +1);
         }
     }
 });
@@ -55,14 +63,15 @@ function OpenSlideshow() {
     gallery = false;
     minPageIndex = startPage;
     maxPageIndex = startPage;
-    LoadMoreSlides(startPage, null, 1, 0);
+    LoadMoreSlides(startPage, null, +1);
     return false;
 }
 
-function InitSlideshow(items, initialOffset) {
+function InitSlideshow(items, initialOffsetStr, count) {
+    numItems = count;
     var startingOffset = 0;
     for (i = 0; i < items.length; i++) {
-        if (items[i].pid == initialOffset) {
+        if (items[i].pid == initialOffsetStr) {
             startingOffset = i;
             break;
         }
@@ -92,35 +101,26 @@ function InitSlideshow(items, initialOffset) {
             return gallery.currItem.pid.substr(1);
         },
         getDisplayNumItemsFn: function() {
-            return maxPageIndex * pagesize;
+            return count;
         }
     };
     gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
     gallery.listen("afterChange", function() {
         var currentIndex = gallery.getCurrentIndex();
         if (currentIndex < jumpDistance && minPageIndex > 1) {
-            LoadMoreSlides(minPageIndex - 1, null, -1, 0);
+            LoadMoreSlides(minPageIndex - 1, null, -1);
         } else if (currentIndex >= gallery.options.getNumItemsFn() - jumpDistance) {
-            LoadMoreSlides(maxPageIndex + 1, null, 1, 0);
+            LoadMoreSlides(maxPageIndex + 1, null, +1);
         }
     });
-    /*
-    gallery.listen("close", function() {
-        if (history.pushState) {
-            history.pushState(null, null, "");
-        } else {
-            location.hash = "";
-        }
-    });
-    */
     gallery.init();
     galleryOpening = false;
 }
 
-function LoadMoreSlides(page, initialOffset, increment, numEmptyPages) {
+function LoadMoreSlides(page, initialOffsetStr, increment) {
     if (page <= 0) return;
     if (loadingPage) return;
-    if (numEmptyPages >= 3) return;  // Skip up to 3 pages of unviewable posts.
+    if (gallery && (page - 1) * pagesize >= numItems) return;
     minPageIndex = Math.min(minPageIndex, page);
     maxPageIndex = Math.max(maxPageIndex, page);
     loadingPage = true;
@@ -133,20 +133,21 @@ function LoadMoreSlides(page, initialOffset, increment, numEmptyPages) {
         method: "GET",
         success: function(response) {
             loadingPage = false;
-            if (response.length > 0) {
+            posts = response.posts;
+            if (posts.length > 0) {
                 if (!gallery) {
                     // On first load.
-                    InitSlideshow(response, initialOffset);
+                    InitSlideshow(posts, initialOffsetStr, response.data.count);
                 } else {
                     if (increment == -1) {
-                        var index = gallery.getCurrentIndex() + response.length;
-                        for (i = response.length - 1; i >= 0; i--) {
-                            gallery.items.unshift(response[i]);
+                        var index = gallery.getCurrentIndex() + posts.length;
+                        for (i = posts.length - 1; i >= 0; i--) {
+                            gallery.items.unshift(posts[i]);
                         }
                         gallery.goTo(index);
                     } else if (increment == 1) {
-                        for (i = 0; i < response.length; i++) {
-                            gallery.items.push(response[i]);
+                        for (i = 0; i < posts.length; i++) {
+                            gallery.items.push(posts[i]);
                         }
                     }
                     gallery.invalidateCurrItems();
@@ -154,7 +155,7 @@ function LoadMoreSlides(page, initialOffset, increment, numEmptyPages) {
                     gallery.ui.update();
                 }
             } else {
-                LoadMoreSlides(page + increment, null, increment, numEmptyPages + 1);
+                LoadMoreSlides(page + increment, null, increment);
             }
         },
         error: function() {

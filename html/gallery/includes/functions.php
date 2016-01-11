@@ -65,7 +65,10 @@ function CanUserCreatePool($user) {
     if (!IsUserActivated($user)) return false;
     if ($user['GalleryPermissions'] == 'A') return true;
     if ($user['GalleryPermissions'] == 'C') return true;
-    return false;
+    // Restrict user based on permissions and time since registration.
+    if ($user['GalleryPermissions'] == 'R') return false;
+    if ($user['JoinTime'] + ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE > time()) return false;
+    return true;
 }
 function CanUserDeletePool($user) {
     if (!IsUserActivated($user)) return false;

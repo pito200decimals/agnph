@@ -181,6 +181,33 @@ function GetAliasedAndImpliedTags($tag_table_name, $alias_table_name, $implicati
     return $ret;
 }
 
+// Gets and returns an array of tag objects that are similar in name to the given input (but not exactly equal.
+function GetSimilarTagsByName($tag_table_name, $tag_names) {
+    $tag_names = array_map("SanitizeTagName", $tag_names);
+    $tag_names = array_unique($tag_names);
+    if (sizeof($tag_names) == 0) return array();
+    $or_clauses = implode(" OR ", array_map(function($name) {
+        $name = sql_escape(mb_strtoupper($name, "UTF-8"));
+        return "(ItemCount > 0 AND UPPER(Name) LIKE '$name%')";
+    }, $tag_names));
+    $and_clauses = implode(" AND ", array_map(function($name) {
+        $name = sql_escape(mb_strtoupper($name, "UTF-8"));
+        return "(UPPER(Name)<>'$name')";
+    }, $tag_names));
+    $clauses = "$and_clauses AND ($or_clauses)";
+    $sql = "SELECT * FROM $tag_table_name WHERE $clauses ORDER BY ItemCount DESC LIMIT ".GALLERY_NUM_SUGGESTED_SPELLING_TAGS.";";
+    if (!sql_query_into($result, $sql, 1)) return array();  // Return empty on error or none found.
+    $ret = array();
+    while ($row = $result->fetch_assoc()) {
+        $row['displayName'] = TagNameToDisplayName($row['Name']);
+        $row['quotedName'] = contains($row['Name'], ":") ? "\"".$row['Name']."\"" : $row['Name'];
+        $tid = $row['TagId'];
+        $ret[$tid] = $row;
+    }
+    // TODO: Edit distance filtering.
+    return $ret;
+}
+
 // Returns tag descriptors of the given token array. The filter function is fn(token, label, tag, item_id) => obj{label, tag, isTag}.
 function GetTagDescriptors($tokens, $item_id, $tag_descriptor_filter_fn) {
     $arr = array_map(function($token) use ($item_id, $tag_descriptor_filter_fn) {

@@ -34,7 +34,7 @@ $posts = array();
 if ($can_sort_pool && $page > 1) {
     // There aren't any posts beyond the first page for pools.
 } else {
-    if (sql_query_into($result, $sql, 0)) {
+    if (sql_query_into($result, $sql, 1)) {
         $page_offset = 1;
         while ($row = $result->fetch_assoc()) {
             // Only allow non-animated posts.
@@ -67,6 +67,24 @@ if ($can_sort_pool && $page > 1) {
     }
 }
 
-echo json_encode($posts);
+$num = 0;
+$count_sql = $sql;
+$count_sql = mb_ereg_replace(" ORDER BY.*;", ";", $count_sql);
+$count_sql = mb_ereg_replace("SELECT \*", "SELECT COUNT(1) AS C", $count_sql);
+if (sql_query_into($result, $count_sql, 1)) {
+    $row = $result->fetch_assoc();
+    $num = $row['C'];
+}
+
+$data = array(
+    "count" => $num,
+    );
+
+$result = array(
+    "posts" => $posts,
+    "data" => $data
+    );
+
+echo json_encode($result);
 return;
 ?>

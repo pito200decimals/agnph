@@ -87,6 +87,10 @@ a:hover div.post-label {
     display: none;
 }
 
+.similar-tags {
+    margin: 10px;
+}
+
 @media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
     .mainpanel {
         text-align: center;

@@ -129,6 +129,16 @@
 
 {% block content %}
     {{ block('banner') }}
+    {% if similar_tags|length > 0 %}
+        <div class="similar-tags">
+            Maybe you meant:
+            {% for tag in similar_tags %}
+                <span class="tag">
+                    <a href="/gallery/post/?search={{ tag.quotedName|url_encode }}" class="{{ tag.Type|lower }}typetag">{{ tag.displayName }}</a>{% if loop.index0 < similar_tags|length - 1 %},{% endif %}
+                </span>
+            {% endfor %}
+        </div>
+    {% endif %}
     <div class="sidepanel">
         <div class="searchbox">
             <h3>Search<a id="search-help-link" href="/gallery/help/" title="Search Help">?</a></h3>
