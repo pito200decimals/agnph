@@ -1,5 +1,5 @@
 /* Global site style CSS */
-/* Media transitions at 820px width, 450px width, and 400px height. */
+/* Media transitions at 820px, 1024px width and 400px height. */
 body {
     margin: 0px;
     font-family: verdana,sans-serif;
@@ -131,7 +131,7 @@ a:hover {
 #mainbody {
     background-color: white;
     margin: 0 auto;
-    min-width: 800px;
+    min-width: 1024px;
     max-width:1600px;
     width: 80%;
 }
@@ -140,7 +140,7 @@ a:hover {
 }
 #site-navbar-container {
     margin: 0 auto;
-    min-width: 800px;
+    min-width: 1024px;
     max-width:1600px;
     width: 80%;
 }
@@ -320,6 +320,17 @@ span.radio-button-group {
     display: none;
 }
 
+/* For devices that aren't mobile, but shouldn't have borders at the edges. */
+@media only handheld, screen and (max-device-width: 1024px), screen and (max-width: 1024px) {
+    #mainbody {
+        min-width: 100%;
+        width: 100%;
+    }
+    #site-navbar-container {
+        min-width: 100%;
+        width: 100%;
+    }
+}
 
 @media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
     .font-scalable {
