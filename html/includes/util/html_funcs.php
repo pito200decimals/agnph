@@ -80,23 +80,19 @@ function GetSanitizedTextTruncated($text, $allowed_html_config, $max_byte_size, 
     return $sanitized;
 }
 
-// TODO: Consolidate pagination more.
-// Modifies $items and $offset, returns the HTML for the page_iterator.
-// $link_fn is function($page_index, $current_page, $max_pages) => HTML.
-function Paginate(&$items, &$offset, $items_per_page, $link_fn, $include_arrows = false) {
+// Takes a list of items and removes all but the current viewed page.
+// Input: List of items, item offset, items/page
+// Output: List of items, floor'd offset, $curr_page, $max_pages.
+function Paginate(&$items, &$offset, $items_per_page, &$curr_page, &$max_pages) {
     $num_items = sizeof($items);
     $curr_page = floor($offset / $items_per_page) + 1;
     $offset = ($curr_page - 1) * $items_per_page;
     $max_pages = ceil($num_items / $items_per_page);
     $items = array_slice($items, $offset, $items_per_page);
-    $new_link_fn = function($page_index, $current_page) use ($link_fn, $max_pages) {
-        return $link_fn($page_index, $current_page, $max_pages);
-    };
-    return ConstructPageIterator($curr_page, $max_pages, DEFAULT_PAGE_ITERATOR_SIZE, $new_link_fn, $include_arrows);
 }
 
 // Creates and returns the HTML for a page iterator (e.g. 1 ... 5 6 [7] 8 9 ... 12), with the appropriate links).
-// $link_fn is function($index, $current_page) => $html. Text passed in will be either "#" or "[#]".
+// $link_fn is function($index, $current_page) => iterator link $html. Text passed in will be either "#" or "[#]".
 function ConstructPageIterator($currpage, $maxpage, $iterator_size, $link_fn, $include_arrows = false) {
     $min_val = $currpage - $iterator_size;
     $max_val = $currpage + $iterator_size;

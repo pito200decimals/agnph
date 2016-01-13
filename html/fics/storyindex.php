@@ -25,13 +25,14 @@ $search_clauses = "TRUE";
 $order_clauses = "";
 if (isset($_GET['search'])) {
     $search_terms = $_GET['search'];
-    $vars['searchTerms'] = $search_terms;
     $search_clauses = GetSearchClauses($search_terms);
     $order_clauses = GetOrderingClauses($search_terms);
     if (mb_strlen($order_clauses) != 0) $order_clauses .= ", ";
 } else {
+    $search_terms = "";
     $search_clauses = GetSearchClauses("");
 }
+$vars['searchTerms'] = $search_terms;
 
 $stories = array();
 if (sql_query_into($result,
@@ -46,11 +47,7 @@ if (sql_query_into($result,
 if (sizeof($stories) <= $stories_per_page) {
     $iterator = "";
 } else {
-    if (isset($search_terms)) {
-        $iterator = CreatePostIterator($stories, $offset, $stories_per_page, $search_terms);
-    } else {
-        $iterator = CreatePostIterator($stories, $offset, $stories_per_page, null);
-    }
+    $iterator = CreatePostIterator($stories, $offset, $stories_per_page, $search_terms);
 }
 // Only fetch detailed story data on stories we will display.
 foreach ($stories as &$story) {
@@ -62,39 +59,44 @@ $vars['iterator'] = $iterator;
 RenderPage("fics/storyindex.tpl");
 return;
 
-function CreatePostIterator(&$stories, $offset, $stories_per_page, $search_terms) {
-    $iterator = Paginate($stories, $offset, $stories_per_page,
-        function($index, $current_page, $max_page) use ($stories_per_page, $search_terms) {
-            $url_from_page = function ($index) use ($stories_per_page, $search_terms) {
-                $offset = ($index - 1) * $stories_per_page;
-                $url = "/fics/browse/?offset=$offset";
-                if ($search_terms != null) {
-                    $url = "/fics/browse/?search=".urlencode($search_terms)."&offset=$offset";  // Safe with UTF-8.
-                } else {
-                    $url = "/fics/browse/?offset=$offset";
-                }
-                return $url;
-            };
-            if ($index == 0) {
+function CreatePostIterator(&$stories, $offset, $stories_per_page, $searchterms) {
+    Paginate($stories, $offset, $stories_per_page, $curr_page, $num_max_pages);
+    $iterator = ConstructPageIterator($curr_page, $num_max_pages, DEFAULT_PAGE_ITERATOR_SIZE,
+        function($i, $current_page) use ($stories_per_page, $searchterms, $num_max_pages) {
+            if ($i == 0) {
                 if ($current_page == 1) {
                     return "<span class='currentpage'>&lt;&lt;</span>";
                 } else {
-                    $url = $url_from_page($current_page - 1);
-                    return "<a href='$url'>&lt;&lt;</a>";
+                    $txt = "&lt;&lt;";
+                    $i = $current_page - 1;
                 }
-            } else if ($index == $max_page + 1) {
-                if ($current_page == $max_page) {
+            } else if ($i == $num_max_pages + 1) {
+                if ($current_page == $num_max_pages) {
                     return "<span class='currentpage'>&gt;&gt;</span>";
                 } else {
-                    $url = $url_from_page($current_page + 1);
-                    return "<a href='$url'>&gt;&gt;</a>";
+                    $txt = "&gt;&gt;";
+                    $i = $current_page + 1;
                 }
-            } else if ($index == $current_page) {
-                return "<span class='currentpage'>$index</span>";
+            } else if ($i == $current_page) {
+                return "<span class='currentpage'>$i</span>";
             } else {
-                    $url = $url_from_page($index);
-                return "<a href='$url'>$index</a>";
+                $txt = $i;
             }
+            $page_offset = ($i - 1) * $stories_per_page;
+            if (mb_strlen($searchterms) > 0) {
+                if ($i != 1) {
+                    $url = "/fics/browse/?search=".urlencode($searchterms)."&offset=$page_offset";
+                } else {
+                    $url = "/fics/browse/?search=".urlencode($searchterms);
+                }
+            } else {
+                if ($i != 1) {
+                    $url = "/fics/browse/?offset=$page_offset";
+                } else {
+                    $url = "/fics/browse/";
+                }
+            }
+            return "<a href='$url'>$txt</a>";
         }, true);
     return $iterator;
 }

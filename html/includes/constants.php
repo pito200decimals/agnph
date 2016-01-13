@@ -158,6 +158,7 @@ define("UNTHREADED_CONVERSATION_LINK_TIME", 7 * 24 * 60 * 60);
 
 // Site constants (display-related).
 define("DEFAULT_PAGE_ITERATOR_SIZE", 2);  // 2 => 1 ... 5 6 [7] 8 9 ... 12
+define("DEFAULT_MOBILE_PAGE_ITERATOR_SIZE", 1);  // 2 => 1 ... 6 [7] 8 ... 12
 define("BASE_SKIN", "agnph");  // Skin to default values to if skin omits files.
 define("DEFAULT_AVATAR_PATH", "/images/default-avatar.png");
 define("DEFAULT_DATE_FORMAT", "Y-m-d H:i:s");

@@ -48,34 +48,12 @@ if (isset($_GET['offset']) && is_numeric($_GET['offset'])) {
     $offset = 0;
 }
 if (sizeof($messages) > INBOX_ITEMS_PER_PAGE) {
-    $iterator = Paginate($messages, $offset, INBOX_ITEMS_PER_PAGE,
-        function($index, $current_page, $max_page) use ($uid) {
-            $url_from_page = function ($index) use ($uid) {
-                $offset = ($index - 1) * INBOX_ITEMS_PER_PAGE;
-                $url = "/user/$uid/mail/?offset=$offset";
-                return $url;
-            };
-            if ($index == 0) {
-                if ($current_page == 1) {
-                    return "<span class='currentpage'>&lt;&lt;</span>";
-                } else {
-                    $url = $url_from_page($current_page - 1);
-                    return "<a href='$url'>&lt;&lt;</a>";
-                }
-            } else if ($index == $max_page + 1) {
-                if ($current_page == $max_page) {
-                    return "<span class='currentpage'>&gt;&gt;</span>";
-                } else {
-                    $url = $url_from_page($current_page + 1);
-                    return "<a href='$url'>&gt;&gt;</a>";
-                }
-            } else if ($index == $current_page) {
-                return "<span class='currentpage'>$index</span>";
-            } else {
-                    $url = $url_from_page($index);
-                return "<a href='$url'>$index</a>";
-            }
-        }, true);
+    $url_fn = function ($index) use ($uid) {
+            $offset = ($index - 1) * INBOX_ITEMS_PER_PAGE;
+            $url = "/user/$uid/mail/?offset=$offset";
+            return $url;
+        };
+    $iterator = ConstructMailboxIterator($messages, $offset, INBOX_ITEMS_PER_PAGE, $url_fn);
     $vars['iterator'] = $iterator;
 }
 if (!AddMessageMetadata($profile_user, $messages)) RenderErrorPage("Error while fetching private messages");
@@ -84,4 +62,33 @@ $vars['messages'] = $messages;
 // This is how to output the template.
 RenderPage("user/mail/mail.tpl");
 return;
+
+function ConstructMailboxIterator(&$messages, &$offset, $mail_per_page, $url_fn) {
+    Paginate($messages, $offset, $mail_per_page, $curr_page, $num_max_pages);
+    $iterator = ConstructPageIterator($curr_page, $num_max_pages, DEFAULT_PAGE_ITERATOR_SIZE,
+        function($i, $current_page) use ($num_max_pages, $url_fn) {
+            if ($i == 0) {
+                if ($current_page == 1) {
+                    return "<span class='currentpage'>&lt;&lt;</span>";
+                } else {
+                    $txt = "&lt;&lt;";
+                    $i = $current_page - 1;
+                }
+            } else if ($i == $num_max_pages + 1) {
+                if ($current_page == $num_max_pages) {
+                    return "<span class='currentpage'>&gt;&gt;</span>";
+                } else {
+                    $txt = "&gt;&gt;";
+                    $i = $current_page + 1;
+                }
+            } else if ($i == $current_page) {
+                return "<span class='currentpage'>$i</span>";
+            } else {
+                $txt = $i;
+            }
+            $url = $url_fn($i);
+            return "<a href='$url'>$txt</a>";
+        }, true);
+    return $iterator;
+}
 ?>

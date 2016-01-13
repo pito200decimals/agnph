@@ -4,9 +4,8 @@ Critical Bugfixes:
 - Gallery "stash"/private pools
 - Theme/Skinning adjustments
 - Mass-edit undo
-- Fix tags and re-disable banned characters in tags (tag_functions.php)
 - Slideshow timer adjustment
-- Better mobile iterator
+- Better mobile iterator [In Progress]
 - Admin tag history search
 
 TODOs

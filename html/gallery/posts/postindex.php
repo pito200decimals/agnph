@@ -53,7 +53,7 @@ if (isset($_GET['feature']) && is_numeric($_GET['feature']) && !contains(mb_strt
 }
 
 // Construct page iterator.
-$vars['postIterator'] = CreatePageIterator($searchterms, $page, $posts_per_page);
+$vars['postIterator'] = CreateGalleryIterator($searchterms, $page, $posts_per_page);
 
 // Get suggested tags.
 $tag_tokens = GetTagStringTokens($searchterms);
@@ -97,7 +97,7 @@ function StripTildeAndMinus($terms) {
     return $ret;
 }
 
-function CreatePageIterator($searchterms, $page, $posts_per_page) {
+function CreateGalleryIterator($searchterms, $page, $posts_per_page) {
     $total_num_posts = CountNumPosts(mb_strtolower($searchterms, "UTF-8"));
     $num_max_pages = (int)(($total_num_posts + $posts_per_page - 1) / $posts_per_page);
     if ($num_max_pages > 1) {
