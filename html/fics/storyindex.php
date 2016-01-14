@@ -60,44 +60,18 @@ RenderPage("fics/storyindex.tpl");
 return;
 
 function CreatePostIterator(&$stories, $offset, $stories_per_page, $searchterms) {
-    Paginate($stories, $offset, $stories_per_page, $curr_page, $num_max_pages);
-    $iterator = ConstructPageIterator($curr_page, $num_max_pages, DEFAULT_PAGE_ITERATOR_SIZE,
-        function($i, $current_page) use ($stories_per_page, $searchterms, $num_max_pages) {
-            if ($i == 0) {
-                if ($current_page == 1) {
-                    return "<span class='currentpage'>&lt;&lt;</span>";
-                } else {
-                    $txt = "&lt;&lt;";
-                    $i = $current_page - 1;
-                }
-            } else if ($i == $num_max_pages + 1) {
-                if ($current_page == $num_max_pages) {
-                    return "<span class='currentpage'>&gt;&gt;</span>";
-                } else {
-                    $txt = "&gt;&gt;";
-                    $i = $current_page + 1;
-                }
-            } else if ($i == $current_page) {
-                return "<span class='currentpage'>$i</span>";
-            } else {
-                $txt = $i;
-            }
+    Paginate($stories, $offset, $stories_per_page, $curr_page, $maxpage);
+    $url_fn = function($i) use ($stories_per_page, $searchterms) {
             $page_offset = ($i - 1) * $stories_per_page;
-            if (mb_strlen($searchterms) > 0) {
-                if ($i != 1) {
-                    $url = "/fics/browse/?search=".urlencode($searchterms)."&offset=$page_offset";
-                } else {
-                    $url = "/fics/browse/?search=".urlencode($searchterms);
-                }
-            } else {
-                if ($i != 1) {
-                    $url = "/fics/browse/?offset=$page_offset";
-                } else {
-                    $url = "/fics/browse/";
-                }
-            }
-            return "<a href='$url'>$txt</a>";
-        }, true);
-    return $iterator;
+            $args = array();
+            if (mb_strlen($searchterms) > 0) $args[] = "search=".urlencode($searchterms);
+            if ($i != 1) $args[] = "offset=$page_offset";
+            if (sizeof($args) > 0) $args = "?".implode("&", $args);
+            else $args = "";
+            return "/fics/browse/$args";
+        };
+    $iterator = ConstructDefaultPageIterator($curr_page, $maxpage, DEFAULT_PAGE_ITERATOR_SIZE, $url_fn);
+    $iterator_mobile = ConstructDefaultPageIterator($curr_page, $maxpage, DEFAULT_MOBILE_PAGE_ITERATOR_SIZE, $url_fn);
+    return "<span class='desktop-only'>$iterator</span><span class='mobile-only'>$iterator_mobile</span>";
 }
 ?>

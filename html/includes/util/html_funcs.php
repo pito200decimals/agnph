@@ -82,12 +82,12 @@ function GetSanitizedTextTruncated($text, $allowed_html_config, $max_byte_size, 
 
 // Takes a list of items and removes all but the current viewed page.
 // Input: List of items, item offset, items/page
-// Output: List of items, floor'd offset, $curr_page, $max_pages.
-function Paginate(&$items, &$offset, $items_per_page, &$curr_page, &$max_pages) {
+// Output: List of items, floor'd offset, $curr_page, $maxpage.
+function Paginate(&$items, &$offset, $items_per_page, &$curr_page, &$maxpage) {
     $num_items = sizeof($items);
     $curr_page = floor($offset / $items_per_page) + 1;
     $offset = ($curr_page - 1) * $items_per_page;
-    $max_pages = ceil($num_items / $items_per_page);
+    $maxpage = ceil($num_items / $items_per_page);
     $items = array_slice($items, $offset, $items_per_page);
 }
 
@@ -122,6 +122,33 @@ function ConstructPageIterator($currpage, $maxpage, $iterator_size, $link_fn, $i
         $ret = $link_fn(0, $currpage).$ret.$link_fn($maxpage + 1, $currpage);
     }
     return $ret;
+}
+
+function ConstructDefaultPageIterator($currpage, $maxpage, $iterator_size, $url_fn) {
+    return ConstructPageIterator($currpage, $maxpage, $iterator_size,
+        function($i, $current_page) use ($maxpage, $url_fn) {
+            if ($i == 0) {
+                if ($current_page == 1) {
+                    return "<span class='currentpage'>&lt;&lt;</span>";
+                } else {
+                    $txt = "&lt;&lt;";
+                    $i = $current_page - 1;
+                }
+            } else if ($i == $maxpage + 1) {
+                if ($current_page == $maxpage) {
+                    return "<span class='currentpage'>&gt;&gt;</span>";
+                } else {
+                    $txt = "&gt;&gt;";
+                    $i = $current_page + 1;
+                }
+            } else if ($i == $current_page) {
+                return "<span class='currentpage'>$i</span>";
+            } else {
+                $txt = $i;
+            }
+            $url = $url_fn($i);
+            return "<a href='$url'>$txt</a>";
+        }, true);
 }
 
 // Renders the page to the given template.

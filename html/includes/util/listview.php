@@ -35,32 +35,11 @@ function CollectItemsComplex($table_name, $complicated_sql, $sql_order, $count_s
     // Get total number, and construct iterator.
     sql_query_into($result, "SELECT count(*) as ListSize FROM $table_name T $count_sql_order;", 1) or RenderErrorPage($error_msg);
     $total_num_items = $result->fetch_assoc()['ListSize'];
-    $num_max_pages = (int)(($total_num_items + $items_per_page - 1) / $items_per_page);
-    if ($num_max_pages > 1) {
-        $iterator = ConstructPageIterator($page, $num_max_pages, DEFAULT_PAGE_ITERATOR_SIZE,
-            function($i, $current_page) use ($num_max_pages) {
-                if ($i == 0) {
-                    if ($current_page == 1) {
-                        return "<span class='currentpage'>&lt;&lt;</span>";
-                    } else {
-                        $txt = "&lt;&lt;";
-                        $i = $current_page - 1;
-                    }
-                } else if ($i == $num_max_pages + 1) {
-                    if ($current_page == $num_max_pages) {
-                        return "<span class='currentpage'>&gt;&gt;</span>";
-                    } else {
-                        $txt = "&gt;&gt;";
-                        $i = $current_page + 1;
-                    }
-                } else if ($i == $current_page) {
-                    return "<span class='currentpage'>$i</span>";
-                } else {
-                    $txt = $i;
-                }
-                $url = DefaultCreateIteratorLinkFn($i);
-                return "<a href='$url'>$txt</a>";
-            }, true);
+    $maxpage = (int)(($total_num_items + $items_per_page - 1) / $items_per_page);
+    if ($maxpage > 1) {
+        $iterator = ConstructDefaultPageIterator($page, $maxpage, DEFAULT_PAGE_ITERATOR_SIZE, "DefaultCreateIteratorLinkFn");
+        $iterator_mobile = ConstructDefaultPageIterator($page, $maxpage, DEFAULT_MOBILE_PAGE_ITERATOR_SIZE, "DefaultCreateIteratorLinkFn");
+        $iterator = "<span class='desktop-only'>$iterator</span><span class='mobile-only'>$iterator_mobile</span>";
     } else {
         $iterator = "";
     }

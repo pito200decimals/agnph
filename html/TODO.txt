@@ -5,7 +5,6 @@ Critical Bugfixes:
 - Theme/Skinning adjustments
 - Mass-edit undo
 - Slideshow timer adjustment
-- Better mobile iterator [In Progress]
 - Admin tag history search
 
 TODOs

@@ -99,45 +99,19 @@ function StripTildeAndMinus($terms) {
 
 function CreateGalleryIterator($searchterms, $page, $posts_per_page) {
     $total_num_posts = CountNumPosts(mb_strtolower($searchterms, "UTF-8"));
-    $num_max_pages = (int)(($total_num_posts + $posts_per_page - 1) / $posts_per_page);
-    if ($num_max_pages > 1) {
-        $iterator_html = ConstructPageIterator($page, $num_max_pages, DEFAULT_PAGE_ITERATOR_SIZE,
-            function($i, $current_page) use ($searchterms, $num_max_pages) {
-                if ($i == 0) {
-                    if ($current_page == 1) {
-                        return "<span class='currentpage'>&lt;&lt;</span>";
-                    } else {
-                        $txt = "&lt;&lt;";
-                        $i = $current_page - 1;
-                    }
-                } else if ($i == $num_max_pages + 1) {
-                    if ($current_page == $num_max_pages) {
-                        return "<span class='currentpage'>&gt;&gt;</span>";
-                    } else {
-                        $txt = "&gt;&gt;";
-                        $i = $current_page + 1;
-                    }
-                } else if ($i == $current_page) {
-                    return "<span class='currentpage'>$i</span>";
-                } else {
-                    $txt = $i;
-                }
-                if (mb_strlen($searchterms) > 0) {
-                    if ($i != 1) {
-                        $url = "/gallery/post/?search=".urlencode($searchterms)."&page=$i";
-                    } else {
-                        $url = "/gallery/post/?search=".urlencode($searchterms);
-                    }
-                } else {
-                    if ($i != 1) {
-                        $url = "/gallery/post/?page=$i";
-                    } else {
-                        $url = "/gallery/post/";
-                    }
-                }
-                return "<a href='$url'>$txt</a>";
-            }, true);
-        return $iterator_html;
+    $maxpage = (int)(($total_num_posts + $posts_per_page - 1) / $posts_per_page);
+    if ($maxpage > 1) {
+        $url_fn = function($i) use ($posts_per_page, $searchterms) {
+                $args = array();
+                if (mb_strlen($searchterms) > 0) $args[] = "search=".urlencode($searchterms);
+                if ($i != 1) $args[] = "page=$i";
+                if (sizeof($args) > 0) $args = "?".implode("&", $args);
+                else $args = "";
+                return "/gallery/post/$args";
+            };
+        $iterator = ConstructDefaultPageIterator($page, $maxpage, DEFAULT_PAGE_ITERATOR_SIZE, $url_fn);
+        $iterator_mobile = ConstructDefaultPageIterator($page, $maxpage, DEFAULT_MOBILE_PAGE_ITERATOR_SIZE, $url_fn);
+        return "<span class='desktop-only'>$iterator</span><span class='mobile-only'>$iterator_mobile</span>";
     } else {
         return "";
     }

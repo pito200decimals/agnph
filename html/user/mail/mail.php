@@ -64,31 +64,9 @@ RenderPage("user/mail/mail.tpl");
 return;
 
 function ConstructMailboxIterator(&$messages, &$offset, $mail_per_page, $url_fn) {
-    Paginate($messages, $offset, $mail_per_page, $curr_page, $num_max_pages);
-    $iterator = ConstructPageIterator($curr_page, $num_max_pages, DEFAULT_PAGE_ITERATOR_SIZE,
-        function($i, $current_page) use ($num_max_pages, $url_fn) {
-            if ($i == 0) {
-                if ($current_page == 1) {
-                    return "<span class='currentpage'>&lt;&lt;</span>";
-                } else {
-                    $txt = "&lt;&lt;";
-                    $i = $current_page - 1;
-                }
-            } else if ($i == $num_max_pages + 1) {
-                if ($current_page == $num_max_pages) {
-                    return "<span class='currentpage'>&gt;&gt;</span>";
-                } else {
-                    $txt = "&gt;&gt;";
-                    $i = $current_page + 1;
-                }
-            } else if ($i == $current_page) {
-                return "<span class='currentpage'>$i</span>";
-            } else {
-                $txt = $i;
-            }
-            $url = $url_fn($i);
-            return "<a href='$url'>$txt</a>";
-        }, true);
-    return $iterator;
+    Paginate($messages, $offset, $mail_per_page, $curr_page, $maxpage);
+    $iterator = ConstructDefaultPageIterator($curr_page, $maxpage, DEFAULT_PAGE_ITERATOR_SIZE, $url_fn);
+    $iterator_mobile = ConstructDefaultPageIterator($curr_page, $maxpage, DEFAULT_MOBILE_PAGE_ITERATOR_SIZE, $url_fn);
+    return "<span class='desktop-only'>$iterator</span><span class='mobile-only'>$iterator_mobile</span>";
 }
 ?>
