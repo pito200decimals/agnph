@@ -147,7 +147,7 @@
                     <div class="staff-group-img">
                         <img class="profile-img" src="/images/staff/anon.png" />
                     </div>
-                    <a class="profile-name">Alynna</a> (IRC)
+                    <a class="profile-name" href="/user/93/">Alynna</a> (IRC)
                     <p class="profile-bio">
                         Classy, rainbow Sylveon.
                     </p>

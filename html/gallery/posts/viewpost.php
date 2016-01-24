@@ -99,6 +99,7 @@ $post['harryluUrl'] = "http://iqdb.harry.lu/?url=".SITE_DOMAIN.GetSiteImagePath(
 
 // Process tags.
 $tags = GetTags($post['PostId']);
+$tags = GetAliasedAndImpliedTags(GALLERY_TAG_TABLE, GALLERY_TAG_ALIAS_TABLE, GALLERY_TAG_IMPLICATION_TABLE, $tags, true /*do_alias*/, false /*do_implication*/, true /*alias_removes_tags*/);
 $tagNameStr = ToTagNameString($tags);
 $tagCategories = ToTagCategorized($tags);
 $post['tagstring'] = $tagNameStr;

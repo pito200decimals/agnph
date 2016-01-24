@@ -6,6 +6,8 @@ Critical Bugfixes:
 - Mass-edit undo
 - Slideshow timer adjustment
 - Admin tag history search
+- Separate zoom levels for fics stories and main site?
+- Gallery page title for pools?
 
 TODOs
 (* = Required for launch, - = Normal priority, X = Scrapped)

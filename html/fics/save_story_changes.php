@@ -179,7 +179,7 @@ if ($sid > 0) {
     $word_count = ChapterWordCount($chaptertext);
     // Check min word count.
     $min_word_count = GetSiteSetting(FICS_CHAPTER_MIN_WORD_COUNT_KEY, DEFAULT_FICS_CHAPTER_MIN_WORD_COUNT);
-    if ($min_word_count > 0 && false) {
+    if ($min_word_count > 0) {
         if ($word_count < $min_word_count) {
             $errmsg = "Chapter must be at least $min_word_count words long. Current length: $word_count words";
             return;
@@ -199,9 +199,9 @@ if ($sid > 0) {
     $escaped_chap_notes = sql_escape($chapternotes);
     $escaped_chap_endnotes = sql_escape($chapterendnotes);
     $success = sql_query("INSERT INTO ".FICS_CHAPTER_TABLE."
-        (ParentStoryId, AuthorUserId, Title, ChapterItemOrder, ChapterNotes, ChapterEndNotes)
+        (ParentStoryId, AuthorUserId, Title, ChapterItemOrder, ChapterNotes, ChapterEndNotes, WordCount)
         VALUES
-        ($sid, $uid, '$escaped_chap_title', 0, '$escaped_chap_notes', '$escaped_chap_endnotes');");
+        ($sid, $uid, '$escaped_chap_title', 0, '$escaped_chap_notes', '$escaped_chap_endnotes', $word_count);");
     if (!$success) {
         // Delete story.
         sql_query("DELETE FROM ".FICS_STORY_TABLE." WHERE StoryId=$sid;");
