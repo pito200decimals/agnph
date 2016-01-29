@@ -10,6 +10,7 @@
 {% block styles %}
     {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('/index-style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/comments-style.css') }}" />
 {% endblock %}
 
 {% block content %}

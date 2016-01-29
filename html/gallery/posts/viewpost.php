@@ -349,7 +349,7 @@ function CreateStatusBanner($post) {
             PostBanner($msg, "red", false, true);
             break;
         case 'D':
-            PostBanner("This post has been deleted".$extra_msg, "red", false);
+            PostBanner("This post has been deleted".$extra_msg, "red", false, true);
             break;
         default:
             break;
