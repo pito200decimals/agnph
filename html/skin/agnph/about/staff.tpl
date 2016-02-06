@@ -145,7 +145,7 @@
                 </li>
                 <li>
                     <div class="staff-group-img">
-                        <img class="profile-img" src="/images/staff/anon.png" />
+                        <img class="profile-img" src="/images/staff/alynna.png" />
                     </div>
                     <a class="profile-name" href="/user/93/">Alynna</a> (IRC)
                     <p class="profile-bio">

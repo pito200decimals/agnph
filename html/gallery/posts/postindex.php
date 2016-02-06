@@ -58,7 +58,7 @@ $vars['postIterator'] = CreateGalleryIterator($searchterms, $page, $posts_per_pa
 // Get suggested tags.
 $tag_tokens = GetTagStringTokens($searchterms);
 $tag_tokens = StripTildeAndMinus($tag_tokens);
-$similar_tags = GetSimilarTagsByName(GALLERY_TAG_TABLE, $tag_tokens);
+$similar_tags = GetSimilarTagsByName(GALLERY_TAG_TABLE, $tag_tokens, GALLERY_TAG_ALIAS_TABLE);
 if (sizeof($similar_tags) > 0) {
     $vars['similar_tags'] = $similar_tags;
 }

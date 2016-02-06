@@ -8,6 +8,13 @@
 {% block content %}
     <h3>AGNPH Help Pages (IRC)</h3>
     <div class="block">
+        <div class="header">I want to get on IRC right now!</div>
+        <div class="content">
+            Use our Browser IRC Client! Its fun and its easy.<br />
+            Just <a href="http://irc.agn.ph/"><strong>Click Here</strong></a>.
+        </div>
+    </div>
+    <div class="block">
         <div class="header">What is IRC?</div>
         <div class="content">
             IRC stands for Internet Relay Chat. It's an older and very simple method of communication on the internet that has been around since the late 80s.
@@ -97,13 +104,6 @@
         <div class="content">
             We have the standard <strong>NickServ</strong> and <strong>ChanServ</strong> services available on our IRC network. Additionally, there is a bot user named <strong>Dexter</strong> that resides in
             <strong>#agnph</strong> and provides some commonly-used functionality. For more info, ask him "!help", or just ask anyone in the channel.
-        </div>
-    </div>
-    <div class="block">
-        <div class="header">I want to get on IRC right now!</div>
-        <div class="content">
-            Use our Browser IRC Client! Its fun and its easy.<br />
-            Just <a href="http://irc.agn.ph/"><strong>Click Here</strong></a>.
         </div>
     </div>
 {% endblock %}

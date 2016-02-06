@@ -8,6 +8,8 @@ Critical Bugfixes:
 - Admin tag history search
 - Separate zoom levels for fics stories and main site?
 - Gallery page title for pools?
+- RSS feed for fics
+- Investigate how imported accounts can be activated without prefix changing.
 
 TODOs
 (* = Required for launch, - = Normal priority, X = Scrapped)

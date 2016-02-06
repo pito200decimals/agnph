@@ -179,21 +179,25 @@ function GetAliasedAndImpliedTags($tag_table_name, $alias_table_name, $implicati
     return $ret;
 }
 
-// Gets and returns an array of tag objects that are similar in name to the given input (but not exactly equal.
-function GetSimilarTagsByName($tag_table_name, $tag_names) {
+// Gets and returns an array of tag objects that are similar in name to the given input (but not exactly equal).
+// Also ignores any tags that have an alias.
+function GetSimilarTagsByName($tag_table_name, $tag_names, $alias_tag_table_name = null) {
     $tag_names = array_map("SanitizeTagName", $tag_names);
     $tag_names = array_unique($tag_names);
     if (sizeof($tag_names) == 0) return array();
-    $or_clauses = implode(" OR ", array_map(function($name) {
-        $name = sql_escape(mb_strtoupper($name, "UTF-8"));
-        return "(ItemCount > 0 AND UPPER(Name) LIKE '$name%')";
-    }, $tag_names));
     $and_clauses = implode(" AND ", array_map(function($name) {
         $name = sql_escape(mb_strtoupper($name, "UTF-8"));
         return "(UPPER(Name)<>'$name')";
     }, $tag_names));
+    $or_clauses = implode(" OR ", array_map(function($name) {
+        $name = sql_escape(mb_strtoupper($name, "UTF-8"));
+        return "(ItemCount > 0 AND UPPER(Name) LIKE '$name%')";
+    }, $tag_names));
     $clauses = "$and_clauses AND ($or_clauses)";
-    $sql = "SELECT * FROM $tag_table_name WHERE $clauses ORDER BY ItemCount DESC LIMIT ".GALLERY_NUM_SUGGESTED_SPELLING_TAGS.";";
+    if ($alias_tag_table_name != null) {
+        $clauses = "NOT(EXISTS(SELECT 1 FROM $alias_tag_table_name A WHERE A.TagId=T.TagId)) AND $clauses";
+    }
+    $sql = "SELECT * FROM $tag_table_name T WHERE $clauses ORDER BY ItemCount DESC LIMIT ".GALLERY_NUM_SUGGESTED_SPELLING_TAGS.";";
     if (!sql_query_into($result, $sql, 1)) return array();  // Return empty on error or none found.
     $ret = array();
     while ($row = $result->fetch_assoc()) {

@@ -11,15 +11,22 @@ Options -MultiViews
 # Don't display the index of files.
 IndexIgnore *
 Options -Indexes
+# Set up error pages.
+#ErrorDocument 403 /403.php (This isn't working yet)
+ErrorDocument 404 /404.php
+ErrorDocument 500 /500.php
 # Don't allow .php or .tpl links.
 RewriteCond %{THE_REQUEST} /.+?\.php[\s?] [NC]
 RewriteRule ^ - [F]
 RewriteCond %{THE_REQUEST} /.+?\.tpl[\s?] [NC]
 RewriteRule ^ - [F]
-# Set up error pages.
-#ErrorDocument 403 /403.php (This isn't working yet)
-ErrorDocument 404 /404.php
-ErrorDocument 500 /500.php
+# Redirect subdomains.
+RewriteCond %{HTTP_HOST} ^forums.agn.ph.*$ [NC]
+RewriteRule ^ http://agn.ph/forums/ [R=301,L]
+RewriteCond %{HTTP_HOST} ^gallery.agn.ph.*$ [NC]
+RewriteRule ^ http://agn.ph/gallery/post/ [R=301,L]
+RewriteCond %{HTTP_HOST} ^fics.agn.ph.*$ [NC]
+RewriteRule ^ http://agn.ph/fics/ [R=301,L]
 
 # Rewrites for Sitewide pages
 RewriteRule ^login/?$ /login.php
