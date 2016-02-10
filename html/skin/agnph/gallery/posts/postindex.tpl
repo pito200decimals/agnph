@@ -143,10 +143,13 @@
         <div class="searchbox">
             <h3>Search<a id="search-help-link" href="/gallery/help/" title="Search Help">?</a></h3>
             <form accept-charset="UTF-8">
-                <input class="search" name="search" value="{{ search }}" type="text" required />
+                <div class="search">
+                    <input class="search" name="search" value="{{ search }}" type="text" required placeholder="Search" onfocus="javascript:$(this).attr('placeholder', '');" onblur="javascript:$(this).attr('placeholder', 'Search');" />
+                    <input type="submit" class="search-button" value="" />
+                </div>
             </form>
-            <a style="float: left;" href="" onclick="return OpenSlideshow();">Slideshow</a>
-            <a style="float: right;" class="toggle-mobile-layout" href="" onclick="return ToggleMobile();">Toggle Mobile</a>
+            <a style="float: left; margin-top: 10px;" href="" onclick="return OpenSlideshow();">Slideshow</a>
+            <a style="float: right; margin-top: 10px;" class="toggle-mobile-layout" href="" onclick="return ToggleMobile();">Toggle Mobile</a>
             <div class="Clear">&nbsp;</div>
         </div>
         {# TODO: Related tags go here #}

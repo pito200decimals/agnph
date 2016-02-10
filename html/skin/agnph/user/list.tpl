@@ -23,10 +23,14 @@
 
 {% block content %}
     <h3>Users</h3>
-    <form action="/user/list/" method="GET" accept-charset="UTF-8">
+    <form action="/user/list/" method="GET" accept-charset="UTF-8" style="margin-bottom: 10px;>
         {% if sortParam %}<input type="hidden" name="sort" value="{{ sortParam }}" />{% endif %}
         {% if orderParam %}<input type="hidden" name="order" value="{{ orderParam }}" />{% endif %}
-        <label>Search by Name:</label><input class="search" name="search" type="text" value="{{ search }}" required/>
+        <label>Search by Name:</label>
+        <div class="search">
+            <input class="search" name="search" value="{{ searchTerms }}" type="text" required placeholder="Search" onfocus="javascript:$(this).attr('placeholder', '');" onblur="javascript:$(this).attr('placeholder', 'Search');" />
+            <input type="submit" class="search-button" value="" />
+        </div>
     </form>
     <table class="list-table">
         <thead>

@@ -212,18 +212,30 @@ a:hover {
     padding: 15px;
     border-radius: 15px;
 }
-.search {
+div.search {
+    position: relative;
+    display: inline-block;
+}
+input[type='text'].search {
     outline: none;
 	border: 1px solid rgba(0,0,0,0.8);
     border-radius: 10px;
+    height: 15px;
     padding: 5px;
-    margin: 5px;
+    margin: auto;
 }
-.search:invalid:not(:focus) {
-	outline: none;
-    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAMAAABhq6zVAAAAIVBMVEW/v7+/v78AAAC/v7+/v7+/v7+/v7+/v7+/v7+/v7+/v79QUkolAAAAC3RSTlOLYAAJeoMjRhpOcbsbtd4AAABJSURBVHjaVc1JDsAgDATB9uAF8v8Hx0QcSN9KssZI5eClDj18PRsFlmlQDcfUGd6A3EgYP1xncQ+sa5qYOk9jRQt1Y0izhU5bL2o2AW3ZQKeJAAAAAElFTkSuQmCC);
+input[type='submit'].search-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+	border: 1px solid rgba(0,0,0,0.8);
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAAcuQAAHLkBV+XtRgAAAAd0SU1FB+ACCgYGGflRcdIAAAK+SURBVFjDvZdLbE5BFMf/U/Hopy1abS1FJDZ2pY9IKiI2JfFIBInXBhsWlrbEwo4lEYKFBfEIi1pYqEWFlaXQr9FqbCyQkia0P5u5dXIzc+feL+okN9/cb2bO+Z//OXPmXCcjgJxz2bhJUk3SgKT9kvolrZXUImla0pikUUn3JL2R9MM5ByBJ83pKS7bRjzuBU8Ak5eQDcBRYHdJX1fgW4KVRPuefkOTnhoHeSiByxncDn4xyAuOQcTuuA0OZ7tJMeM8nA0as/AQ+AzOJde+BgSosdAIjEYW/gOtAj1/XAXQBvcAdYDYSjqdAdxIE0OQTLkT7OLApFjL/Pgh8jOTIkSQDQAswEfB+vMgDG19gg9FhmXgNdKQA7Ah4/zvzPOWBATFkwmGlLxWCqwHkN6qcZQNiOMDk+RSAtwHUmxspYsCuAJvPAFe0+XvO+AzQpQYEaA84864IQJOv7Va+SZqtVEr/sjAdmKoV7WsKbFolaVHVy8Svb8vwmKnpFIAx64ikxZLWN5KEkrZmeMx0PQVgNID6TBXqDVunc87I66dIwbZIFdyeYiFXjA5GqmFP6hi2AGOBWjABbIzdarlbdBCYCugYAVamKHTAsRwL2e8UsCdxFxzKGbeyt2wcO33BiN31z4F9ft0SYA1wAHiR6BkuAM2FoTQx7PXNBAmlsc4o1qxcBGpRELlYDvlmokhx2f8tiCtAa1kQ/cCTkkxUadVuAasKQZhwdAOHgVclQzDic+RuBEQm97POeb59DzHhnMvGHZLWSdopqc9/F9R8ea37IjMsqe6c+wqskHRZ0nFTfJwfZ7YeSTrhnPuSTEzLjD+u+Sd0LNuAm4n8eAi061+LCWEbcDuRN4+znFgoEK0exFzBd8YDLYQYEMuBa5FTM0fVpqNBEM3ApVhOaCHFgFgGnAsxof8IYilwNte6n/wDp978GmnLAn8AAAAASUVORK5CYII=');
+    background-size: 16px 16px;
     background-repeat: no-repeat;
-    background-position: 95%;
+    background-position: 50% 50%;
+    height: 27px;
+    width: 27px;
+    border-radius: 0px 10px 10px 0px;
 }
 .banner-nofication {
     margin: 5px;

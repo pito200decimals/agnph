@@ -2,7 +2,7 @@
     float: right;
     display: inline-block;
 }
-#fics-search input {
+#fics-search input[type='text'].search {
     margin-right: 0px;
 }
 #search-help-link {

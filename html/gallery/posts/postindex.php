@@ -43,12 +43,14 @@ if (isset($_GET['feature']) && is_numeric($_GET['feature']) && !contains(mb_strt
     $escaped_post_id = sql_escape($_GET['feature']);
     if (sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE PostId='$escaped_post_id' LIMIT 1;", 1)) {
         $row = $result->fetch_assoc();
-        $row['outlineClass'] = "featuredoutline";
-        $md5 = $row['Md5'];
-        $ext = $row['Extension'];
-        $row['thumbnail'] = GetSiteThumbPath($md5, $ext);
-        CreatePostLabel($row);
-        array_unshift($posts, $row);
+        if ($row['Status'] != 'D') {
+            $row['outlineClass'] = "featuredoutline";
+            $md5 = $row['Md5'];
+            $ext = $row['Extension'];
+            $row['thumbnail'] = GetSiteThumbPath($md5, $ext);
+            CreatePostLabel($row);
+            array_unshift($posts, $row);
+        }
     }
 }
 
