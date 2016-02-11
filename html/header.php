@@ -17,7 +17,11 @@ if(!defined("SITE_ROOT")) {
 unset($folder_level);
 
 // Set up charset.
-header('Content-type: text/html; charset=utf-8');
+if (isset($_GET['api']) && $_GET['api'] == "xml") {
+    header('Content-type: text/xml; charset=utf-8');
+} else {
+    header('Content-type: text/html; charset=utf-8');
+}
 header('Cache-Control: max-age=3600');  // 3600-seconds, dunno what's a good value here.
 
 // Include common headers.

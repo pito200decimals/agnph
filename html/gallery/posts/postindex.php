@@ -25,13 +25,18 @@ if (isset($user)) {
 HandlePost($searchterms);
 $vars['search'] = $searchterms;
 $vars['page'] = $page;
+$offset = ($page - 1) * $posts_per_page;
 $sql = CreatePostSearchSQL(mb_strtolower($searchterms, "UTF-8"), $posts_per_page, $page, $can_sort_pool, $pool_id);
 $posts = array();
 if (sql_query_into($result, $sql, 0)) {
     while ($row = $result->fetch_assoc()) {
         $md5 = $row['Md5'];
         $ext = $row['Extension'];
+        $row['image_path'] = GetSiteImagePath($md5, $ext);
         $row['thumbnail'] = GetSiteThumbPath($md5, $ext);
+        if ($row['HasPreview'] == "1") {
+            $row['preview'] = GetSitePreviewPath($md5, $ext);
+        }
         CreatePostLabel($row);
         $posts[] = $row;
     }
@@ -39,7 +44,7 @@ if (sql_query_into($result, $sql, 0)) {
 }
 
 // Add a featured post.
-if (isset($_GET['feature']) && is_numeric($_GET['feature']) && !contains(mb_strtolower($searchterms), "pool:")) {
+if (!isset($_GET['api']) && isset($_GET['feature']) && is_numeric($_GET['feature']) && !contains(mb_strtolower($searchterms), "pool:")) {
     $escaped_post_id = sql_escape($_GET['feature']);
     if (sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE PostId='$escaped_post_id' LIMIT 1;", 1)) {
         $row = $result->fetch_assoc();
@@ -47,7 +52,11 @@ if (isset($_GET['feature']) && is_numeric($_GET['feature']) && !contains(mb_strt
             $row['outlineClass'] = "featuredoutline";
             $md5 = $row['Md5'];
             $ext = $row['Extension'];
+            $row['image_path'] = GetSiteImagePath($md5, $ext);
             $row['thumbnail'] = GetSiteThumbPath($md5, $ext);
+            if ($row['HasPreview'] == "1") {
+                $row['preview'] = GetSitePreviewPath($md5, $ext);
+            }
             CreatePostLabel($row);
             array_unshift($posts, $row);
         }
@@ -55,7 +64,12 @@ if (isset($_GET['feature']) && is_numeric($_GET['feature']) && !contains(mb_strt
 }
 
 // Construct page iterator.
-$vars['postIterator'] = CreateGalleryIterator($searchterms, $page, $posts_per_page);
+$total_num_posts = 0;
+$vars['postIterator'] = CreateGalleryIterator($searchterms, $page, $posts_per_page, $total_num_posts);
+
+// Assign additional vars.
+$vars['total_num_posts'] = $total_num_posts;
+$vars['offset'] = $offset;
 
 // Get suggested tags.
 $tag_tokens = GetTagStringTokens($searchterms);
@@ -85,6 +99,14 @@ if (isset($_SESSION['disable-gallery-mobile'])) {
 // Used for gallery slideshow.
 $vars['pagesize'] = $posts_per_page;
 
+// Return API results if specified.
+if (isset($_GET['api'])) {
+    $api_type = $_GET['api'];
+    if ($api_type == "xml") {
+        RenderPage("gallery/posts/postindex.xml.tpl");
+        return;
+    }
+}
 RenderPage("gallery/posts/postindex.tpl");
 return;
 
@@ -99,7 +121,7 @@ function StripTildeAndMinus($terms) {
     return $ret;
 }
 
-function CreateGalleryIterator($searchterms, $page, $posts_per_page) {
+function CreateGalleryIterator($searchterms, $page, $posts_per_page, &$total_num_posts) {
     $total_num_posts = CountNumPosts(mb_strtolower($searchterms, "UTF-8"));
     $maxpage = (int)(($total_num_posts + $posts_per_page - 1) / $posts_per_page);
     if ($maxpage > 1) {
@@ -127,7 +149,7 @@ function HandlePost($searchterms) {
         if (!CanUserMassTagEdit($user)) {
             RenderPostError("Insufficient permissions");
         }
-        $where_clause = CreatePostSearchSQL(mb_strtolower($searchterms, "UTF-8"), 0, 0, $can_sort_pool, $pool_id, true);
+        $where_clause = CreatePostSearchSQL(mb_strtolower($searchterms, "UTF-8"), 0, 0, $can_sort_pool, $pool_id, true /* where_only */);
         sql_query_into($result, "SELECT COUNT(*) AS C FROM ".GALLERY_POST_TABLE." T WHERE $where_clause;", 1) or RenderPostError("Error modifying posts");
         $num_posts = $result->fetch_assoc()['C'];
         if ($num_posts > GALLERY_MAX_MASS_TAG_EDIT_COUNT) {
