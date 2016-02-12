@@ -84,6 +84,7 @@ if (isset($_POST['action'])) {
 // Get image URLs.
 $md5 = $post['Md5'];
 $ext = $post['Extension'];
+$post['thumbnailUrl'] = GetSiteThumbPath($md5, $ext);
 if ($post['HasPreview']) {
     $post['previewUrl'] = GetSitePreviewPath($md5, $ext);
 } else {
@@ -135,6 +136,15 @@ if (isset($user)) {
 // Increment view count, and do SQL after page is rendered.
 if ($post['Status'] != 'D') $post['NumViews']++;
 $vars['post'] = &$post;
+
+// Return API results if specified.
+if (isset($_GET['api'])) {
+    $api_type = $_GET['api'];
+    if ($api_type == "xml") {
+        RenderPage("gallery/posts/viewpost.xml.tpl");
+        return;
+    }
+}
 RenderPage("gallery/posts/viewpost.tpl");
 if ($post['Status'] != 'D' && !IsMaintenanceMode() && IsRealUser()) {
     sql_query("UPDATE ".GALLERY_POST_TABLE." SET NumViews = NumViews + 1 WHERE PostId=$pid;");

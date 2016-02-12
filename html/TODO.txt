@@ -10,6 +10,8 @@ Critical Bugfixes:
 - Gallery page title for pools?
 - RSS feed for fics
 - Investigate how imported accounts can be activated without prefix changing.
+- Fix search box button overlapping text
+- API post-by-md5
 
 TODOs
 (* = Required for launch, - = Normal priority, X = Scrapped)

@@ -34,7 +34,7 @@ if (sql_query_into($result, $sql, 0)) {
         $ext = $row['Extension'];
         $row['image_path'] = GetSiteImagePath($md5, $ext);
         $row['thumbnail'] = GetSiteThumbPath($md5, $ext);
-        if ($row['HasPreview'] == "1") {
+        if ($row['HasPreview']) {
             $row['preview'] = GetSitePreviewPath($md5, $ext);
         }
         CreatePostLabel($row);

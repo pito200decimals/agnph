@@ -11,15 +11,17 @@
             {% if post.Source %}<source>{{ post.Source }}</source>{% endif %}
             {# score #}
             <fav_count type="integer">{{ post.NumFavorites }}</fav_count>
-            <md5>{{ post.Md5 }}</md5>
-            {# file_size #}
-            <file_url>http://agn.ph{{ post.image_path }}</file_url>
-            <file_ext>{{ post.Extension }}</file_ext>
-            <thumbnail_url>http://agn.ph{{ post.thumbnail }}</thumbnail_url>
-            {# thumnail width/height #}
-            {% if post.preview %}<preview_url>http://agn.ph{{ post.preview }}</preview_url>{% endif %}
-            {# preview width/height #}
-            <rating>{{ post.rating }}</rating>
+            {% if post.Status != 'D' %}
+                <md5>{{ post.Md5 }}</md5>
+                {# file_size #}
+                <file_url>http://agn.ph{{ post.downloadUrl }}</file_url>
+                <file_ext>{{ post.Extension }}</file_ext>
+                <thumbnail_url>http://agn.ph{{ post.thumbnail }}</thumbnail_url>
+                {# thumbnail width/height #}
+                {% if post.preview %}<preview_url>http://agn.ph{{ post.preview }}</preview_url>{% endif %}
+                {# preview width/height #}
+            {% endif %}
+            <rating>{{ post.Rating }}</rating>
             <has_children type="boolean">
                 {% if post.outlineClass == "parentoutline" %}
                     true
@@ -28,7 +30,7 @@
                 {% endif %}
             </has_children>
             {# children #}
-            {% if post.ParentPostId != -1 %}
+            {% if post.ParentPostId == -1 %}
                 <parent_id nil="true" />
             {% else %}
                 <parent_id type="integer">{{ post.ParentPostId }}</parent_id>
