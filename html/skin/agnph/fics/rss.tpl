@@ -8,7 +8,7 @@
   {% for story in stories %}
     <item>
         <title>
-            {{ story.Title }} by {{ story.author }} - {{ story.last_chapter.Title }}
+            {{ story.Title }} by {{ story.author.DisplayName }} - {{ story.last_chapter.Title }}
         </title>
         <link>
             http://agn.ph/fics/story/{{ story.StoryId }}/
@@ -16,7 +16,9 @@
         <description>
             {% if story.last_chapter.ChapterNotes %}
                 <div>
-                    {{ story.last_chapter.ChapterNotes }}
+                    {% autoescape false %}
+                        {{ story.last_chapter.ChapterNotes }}
+                    {% endautoescape %}
                 </div>
             {% endif %}
             <div>
@@ -25,6 +27,9 @@
                 </p>
             </div>
         </description>
+        <pubDate>
+            {{ story.pubDate }}
+        </pubDate>
     </item>
   {% endfor %}
 </channel>

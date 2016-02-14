@@ -21,8 +21,10 @@ $twig = new Twig_Environment($loader, array(
 header('Content-type: text/xml; charset=utf-8');
 
 $stories = array();
-if (sql_query_into($result, "SELECT * FROM ".FICS_STORY_TABLE." LIMIT ".FICS_RSS_NUM_ITEMS." ORDER BY DateUpdated DESC, StoryId DESC;", 0)) {
+if (sql_query_into($result, "SELECT * FROM ".FICS_STORY_TABLE." WHERE ApprovalStatus='A' ORDER BY DateUpdated DESC, StoryId DESC LIMIT ".FICS_RSS_NUM_ITEMS.";", 0)) {
     while ($story = $result->fetch_assoc()) {
+        // Get pub date before story data updated with formatted date.
+        $story['pubDate'] = date("D, d M Y H:i:s O", $story['DateUpdated']);
         FillStoryInfo($story);
         $chapters = GetChaptersInfo($story['StoryId']);
         $story['last_chapter'] = $chapters[sizeof($chapters) - 1];
