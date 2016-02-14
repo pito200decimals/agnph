@@ -10,6 +10,25 @@
 {% block styles %}
     {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('/about/style.css') }}" />
+    <style>
+        .content p:first-child {
+            margin-top: 0px;
+        }
+        .content ul:last-child {
+            margin-bottom: 0px;
+        }
+        #contributors-list {
+            list-style: none;
+            padding: 0px;
+        }
+        #contributors-list li {
+            margin-top: 20px;
+        }
+        #contributors-list li p {
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
@@ -24,6 +43,33 @@
         <div class="header">History</div>
         <div class="content">
             AGNPH has been around in some form or another since 1996. Originally just a newsgroup, it quickly expanded into a standalone site to house the group's growing archive in 1999. Since then, it's been through at least 4 versions of the site.
+        </div>
+    </div>
+    <div class="block">
+        <div class="header">Contributors</div>
+        <div class="content">
+            <p>
+                This site wouldn't be where it is without its Community, and it's Contributors. It is not just <a href="/about/staff/">the Staff</a> that do all the work, after all!
+            </p>
+            <p>
+                The following users, by no means an exhaustive list, have made important contributions to AGNPH in recent history.
+            </p>
+            <ul id="contributors-list">
+                <li>
+                    <strong>Pienji</strong> - <a href="http://www.furaffinity.net/user/pienji/">Fur Affinity</a> / <a href="http://pienji.tumblr.com/">Tumblr</a><br />
+                    <strong>Watermelon</strong> - <a href="https://inkbunny.net/Watermelon">Inkbunny</a><br />
+                    <strong>Shikaro</strong> - <a href="http://www.furaffinity.net/user/shikaro/">Fur Affinity</a> / <a href="http://www.pixiv.net/member.php?id=1196214">Pixiv</a> / <a href="http://shikaro.tumblr.com/">Tumblr</a><br />
+                    <p>
+                    These artists have contributed toward AGNPH by allowing their artwork to be used to promote AGNPH.
+                    </p>
+                </li>
+                <li>
+                    <strong>Skye</strong> - <a href="http://www.furaffinity.net/user/skye.pyro/">Fur Affinity</a><br />
+                    <p>
+                    Skye contributed the fantastic vector artwork/font currently used by AGNPH.
+                    </p>
+                </li>
+            </ul>
         </div>
     </div>
 {% endblock %}

@@ -98,7 +98,9 @@
                 </ul>
                 <img id="main_menu_icon" src="/images/menu-icon.png" />
                 {# TODO: Adjust logo #}
-                {# <a id="logo" href="/"><img src="/images/logo.png" /></a> #}
+                <div id="mobile-logo-container" class="mobile-only">
+                    <img id="mobile-logo" src="/images/logo_300.png" />
+                </div>
                 <ul class="navigation_left">
                     {# Uncomment if logo as home is desired #}
                     {#
@@ -120,8 +122,8 @@
         </div>
         <div id="mainbody">
             <div id="maincontent">
-                <div id="logo">
-                    <img src="/images/banner.png" style="max-width: 100%;" />
+                <div id="desktop-logo-container" class="desktop-only">
+                    <img id="desktop-logo" src="/images/logo_300.png" />
                 </div>
                 <div id="header">
                     {% block section_navigation %}

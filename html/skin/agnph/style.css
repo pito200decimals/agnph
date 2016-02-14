@@ -144,6 +144,14 @@ a:hover {
     max-width:1600px;
     width: 80%;
 }
+#desktop-logo {
+    padding: 10px;
+    max-width: 200px;
+}
+#mobile-logo {
+    padding: 5px;
+    max-width: 200px;
+}
 #header {
     padding: 0px;
 }
@@ -368,7 +376,7 @@ span.radio-button-group {
         max-width: 66px;
         max-height: 40px;
         vertical-align: top;
-        margin: 0xp;
+        margin: 0px;
         margin-right: 5px;
     }
     ul.navigation_left {
@@ -389,6 +397,9 @@ span.radio-button-group {
     #site-navbar-container {
         width: 100%;
         min-width: 100%;
+    }
+    #mobile-logo-container {
+        display: inline-block;
     }
     .iterator a {
         padding: 13px 18px;
@@ -413,5 +424,11 @@ span.radio-button-group {
         width: inherit;
         float: left;
         display: inline-block;
+    }
+}
+/* For hiding logo on *really* narrow screens. */
+@media only handheld, screen and (max-device-width: 360px), screen and (max-width: 360px) {
+    #mobile-logo-container{
+        display: none;
     }
 }
