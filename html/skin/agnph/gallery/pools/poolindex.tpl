@@ -12,13 +12,13 @@
         $(document).ready(function() {
             $("#actionbar ul").show();
             $("#newpanel").hide().addClass("floatactionpanel");
-            var actionbar = $("#actionbar");
-            if (actionbar.length) {
-                actionbar.find("ul li").first().click(function() {
-                    $("#newpanel").toggle();
-                    return false;
-                });
-            }
+            $("#create-pool-button").click(function() {
+                $("#newpanel").toggle();
+                return false;
+            });
+            $("#newpanel input").blur(function() {
+                $("#newpanel").hide();
+            });
         });
     </script>
 {% endblock %}
@@ -37,7 +37,7 @@
         </div>
         {% if canCreatePools %}
             <ul id="action-list" hidden>
-                <li><a href="">Create</a></li>
+                <li><a href="" id="create-pool-button">Create</a></li>
             </ul>
             <div id="newpanel">
                 <form action="/gallery/pools/create/" method="POST" accept-charset="UTF-8">

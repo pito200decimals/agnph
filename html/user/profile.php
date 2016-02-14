@@ -16,7 +16,9 @@ $profile_user = &$vars['profile']['user'];
 // Read in bio text file.
 $uid = $profile_user['UserId'];
 $file_path = SITE_ROOT."user/data/bio/$uid.txt";
-read_file($file_path, $bio_contents) or RenderErrorPage("Error loading profile.");
+if (!read_file($file_path, $bio_contents)) {
+    $bio_contents = "";
+}
 $bio_contents = trim(SanitizeHTMLTags($bio_contents, DEFAULT_ALLOWED_TAGS));
 $profile_user['bio'] = $bio_contents;
 $profile_user['hasBio'] = (mb_strlen($bio_contents) > 0);

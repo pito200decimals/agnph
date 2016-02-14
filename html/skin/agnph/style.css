@@ -152,6 +152,9 @@ a:hover {
     padding: 5px;
     max-width: 200px;
 }
+#desktop-logo-container {
+    text-align: center;
+}
 #header {
     padding: 0px;
 }
