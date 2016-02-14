@@ -23,15 +23,17 @@
 
 {% block content %}
     <h3>Users</h3>
-    <form action="/user/list/" method="GET" accept-charset="UTF-8" style="margin-bottom: 10px;>
-        {% if sortParam %}<input type="hidden" name="sort" value="{{ sortParam }}" />{% endif %}
-        {% if orderParam %}<input type="hidden" name="order" value="{{ orderParam }}" />{% endif %}
-        <label>Search by Name:</label>
-        <div class="search">
-            <input class="search" name="search" value="{{ searchTerms }}" type="text" required placeholder="Search" onfocus="javascript:$(this).attr('placeholder', '');" onblur="javascript:$(this).attr('placeholder', 'Search');" />
-            <input type="submit" class="search-button" value="" />
-        </div>
-    </form>
+    <div class="list-search-bar">
+        <form action="/user/list/" method="GET" accept-charset="UTF-8">
+            {% if sortParam %}<input type="hidden" name="sort" value="{{ sortParam }}" />{% endif %}
+            {% if orderParam %}<input type="hidden" name="order" value="{{ orderParam }}" />{% endif %}
+            <label>Search by Name:</label>
+            <div class="search">
+                <input class="search" name="search" value="{{ searchTerms }}" type="text" required placeholder="Search" onfocus="javascript:$(this).attr('placeholder', '');" onblur="javascript:$(this).attr('placeholder', 'Search');" />
+                <input type="submit" class="search-button" value="" />
+            </div>
+        </form>
+    </div>
     <table class="list-table">
         <thead>
             <tr>
@@ -60,7 +62,17 @@
                             {% endif %}
                         </td>
                         <td><a href="/user/{{ account.UserId }}/">{{ account.DisplayName }}</a></td>
-                        <td>{% if account.administrator %}Administrator{% elseif account.inactive %}Inactive User{% else %}User{% endif %}</td>
+                        <td>
+                            {% if account.administrator %}
+                                Administrator
+                            {% elseif account.banned %}
+                                Banned
+                            {% elseif account.inactive %}
+                                Inactive User
+                            {% else %}
+                                User
+                            {% endif %}
+                        </td>
                         <td><span class="desktop-only">{{ account.dateJoined }}</span></td>
                     </tr>
                 {% endfor %}

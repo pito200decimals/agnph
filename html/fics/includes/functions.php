@@ -176,6 +176,8 @@ function GetChaptersInfo($sid) {
         $hash = GetHashForChapter($sid, $cid);
         $row['hash'] = $hash;
         $row['stars'] = GetStars($row['TotalStars'], $row['TotalRatings']);
+        $row['ChapterNotes'] = SanitizeHTMLTags($row['ChapterNotes'], DEFAULT_ALLOWED_TAGS);
+        $row['ChapterEndNotes'] = SanitizeHTMLTags($row['ChapterEndNotes'], DEFAULT_ALLOWED_TAGS);
         $chapters[] = $row;
     }
     return $chapters;

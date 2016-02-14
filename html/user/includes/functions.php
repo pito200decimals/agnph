@@ -87,6 +87,9 @@ function CanUserAdminSearchUsers($user) {
 
 function DateStringToReadableString($datestr) {
     // $datestr is in the database format "YYYY-MM-DD"
+    if (!preg_match("/^\\d{4}-\\d{2}-\\d{2}$/", $datestr)) {
+        $datestr = "0001-01-01";
+    }
     $date = new DateTime($datestr);
     return $date->format(PROFILE_DOB_FORMAT);
 }

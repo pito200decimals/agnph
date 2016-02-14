@@ -51,7 +51,7 @@ switch ($action) {
                 $username = $user['DisplayName'];
                 $puid = $profile_user['UserId'];
                 $pusername = $profile_user['DisplayName'];
-                LogAction("<strong><a href='/user/$uid/'>$username</a></strong> temporariliy banned user <strong><a href='/user/$puid/'>$pusername</a></strong> ($duration)", "");
+                LogAction("<strong><a href='/user/$uid/'>$username</a></strong> temporarily banned user <strong><a href='/user/$puid/'>$pusername</a></strong> ($duration)", "");
             } else {
                 PostSessionBanner("Failed to set temporary ban", "red");
             }

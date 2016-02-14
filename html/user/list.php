@@ -83,6 +83,7 @@ foreach ($accounts as &$account) {
     }
     $account['administrator'] = (strlen($account['Permissions']) > 0);
     $account['inactive'] = startsWith($account['UserName'], IMPORTED_ACCOUNT_USERNAME_PREFIX);
+    $account['banned'] = ($account['Usermode'] == -1);
     $account['avatarURL'] = GetAvatarURL($account);
 }
 

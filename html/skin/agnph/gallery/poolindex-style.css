@@ -8,17 +8,8 @@
     padding: 0px;
     margin: 0px;
 }
-#pool-search {
-    display: inline;
-}
-#pool-search input {
+.list-search-bar {
     float: right;
-    margin: 0px;
-    margin-top: -4px;
-}
-#newpanel {
-    padding: 5px;
-    display: inline-block;
 }
 .floatactionpanel {
     position: absolute;

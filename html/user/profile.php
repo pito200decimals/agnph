@@ -23,7 +23,12 @@ $profile_user['hasBio'] = (mb_strlen($bio_contents) > 0);
 $profile_user['admin'] = GetAdminBadge($profile_user);
 $profile_user['birthday'] = DateStringToReadableString($profile_user['DOB']);
 $profile_user['registerDate'] = FormatDate($profile_user['JoinTime'], PROFILE_DATE_FORMAT);
-$profile_user['lastVisitDate'] = FormatDate($profile_user['LastVisitTime'], PROFILE_DATE_TIME_FORMAT);
+if (startsWith($profile_user['UserName'], IMPORTED_ACCOUNT_USERNAME_PREFIX) ||
+    $profile_user['LastVisitTime'] == 0) {
+    // Don't add last visit date.
+} else {
+    $profile_user['lastVisitDate'] = FormatDate($profile_user['LastVisitTime'], PROFILE_DATE_TIME_FORMAT);
+}
 sql_query_into($result, "SELECT count(*) FROM ".FORUMS_POST_TABLE." WHERE UserId=$uid;", 0) or RenderErrorPage("Failed to fetch user profile");
 $profile_user['numForumPosts'] = $result->fetch_assoc()['count(*)'];
 sql_query_into($result, "SELECT count(*) FROM ".GALLERY_POST_TABLE." WHERE UploaderId=$uid AND Status<>'D';", 0) or RenderErrorPage("Failed to fetch user profile");

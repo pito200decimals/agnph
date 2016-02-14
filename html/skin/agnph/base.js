@@ -56,6 +56,13 @@ $(document).ready(function() {
         setZoom($(this).val());
     });
     $(".font-size-switcher").show();
+    $("div.search input[type='text'].search").focus(function() {
+        var placeholder = $(this).attr("placeholder");
+        $(this).attr("placeholder", "");
+        $(this).off("blur").blur(function() {
+            $(this).attr("placeholder", placeholder);
+        });
+    });
 });
 
 function getCookie(cname) {

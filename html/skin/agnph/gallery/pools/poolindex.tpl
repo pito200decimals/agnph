@@ -27,9 +27,14 @@
     <h3>Pools</h3>
     {{ block('banner') }}
     <div id="actionbar">
-        <form id="pool-search" method="GET" accept-encoding="UTF-8">
-            <input type="text" class="search" name="search" value="" required />
-        </form>
+        <div class="list-search-bar">
+            <form id="pool-search" method="GET" accept-encoding="UTF-8">
+                <div class="search">
+                    <input class="search" name="search" value="{{ search }}" type="text" required placeholder="Search Pools" />
+                    <input type="submit" class="search-button" value="" />
+                </div>
+            </form>
+        </div>
         {% if canCreatePools %}
             <ul id="action-list" hidden>
                 <li><a href="">Create</a></li>

@@ -111,6 +111,7 @@ RewriteRule ^fics/undelete/(\d+)/?$ /fics/delete_story.php?sid=$1&action=undelet
 RewriteRule ^fics/favorite/?$ /fics/edit_favorites.php
 RewriteRule ^fics/tagsearch/?$ /fics/tag_ajax.php [QSA]
 RewriteRule ^fics/help/?$ /fics/tag_help.php
+RewriteRule ^fics/rss.xml$ /fics/rss.php
 
 #Rewrites for user pages.
 RewriteRule ^user/list/?$ /user/list.php?sort=name&order=asc [QSA]

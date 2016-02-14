@@ -215,14 +215,16 @@ a:hover {
 div.search {
     position: relative;
     display: inline-block;
+    width: 180px;
 }
 input[type='text'].search {
     outline: none;
 	border: 1px solid rgba(0,0,0,0.8);
-    border-radius: 10px;
+    border-radius: 10px 0px 0px 10px;
     height: 15px;
     padding: 5px;
     margin: auto;
+    width: 143px;
 }
 input[type='submit'].search-button {
     position: absolute;
@@ -236,6 +238,9 @@ input[type='submit'].search-button {
     height: 27px;
     width: 27px;
     border-radius: 0px 10px 10px 0px;
+}
+.list-search-bar {
+    margin-bottom: 10px;
 }
 .banner-nofication {
     margin: 5px;

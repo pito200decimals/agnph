@@ -11,6 +11,7 @@
         <li><a href="/fics/browse/">Stories</a></li>
         <li><a href="/fics/authors/">Authors</a></li>
         <li><a href="/fics/tags/">Tags</a></li>
+        <li><a href="/fics/rss.xml">RSS</a></li>
         {% if user %}
             <li><a href="/fics/create/">Upload</a></li>
             <li><a href="/user/{{ user.UserId }}/fics/">My Stories</a></li>

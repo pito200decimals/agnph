@@ -21,11 +21,16 @@
 
 {% block content %}
     <h3>Tags</h3>
-    <form method="GET" accept-charset="UTF-8">
-        <input type="hidden" name="sort" value="{{ sortParam }}" />
-        <input type="hidden" name="order" value="{{ orderParam }}" />
-        <label>Search for Tags:</label><input class="search" name="search" type="text" value="{{ search }}" required/>
-    </form>
+    <div class="list-search-bar">
+        <form method="GET" accept-charset="UTF-8">
+            <input type="hidden" name="sort" value="{{ sortParam }}" />
+            <input type="hidden" name="order" value="{{ orderParam }}" />
+            <div class="search">
+                <input class="search" name="search" value="{{ search }}" type="text" required placeholder="Search Tags" />
+                <input type="submit" class="search-button" value="" />
+            </div>
+        </form>
+    </div>
     {# Display tag index. #}
     <table class="list-table">
         <thead>
