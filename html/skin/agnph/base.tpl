@@ -79,7 +79,7 @@
                             </a>
                         </li>
                         <li id="account_link">
-                            <a href="/user/{{ user.UserId }}/"><img src="{{ user.avatarURL }}" />{{ user.DisplayName }}</a>
+                            <a href="/user/{{ user.UserId }}/"><img src="{{ user.avatarURL }}" /><span class="desktop-only">{{ user.DisplayName }}</span></a>
                             <ul id="account_dropdown" class="" hidden>
                                 <li><a href="/user/{{ user.UserId }}/">Profile</a></li>
                                 <li><a href="/user/{{ user.UserId }}/preferences/">Settings</a></li>
@@ -92,8 +92,12 @@
                             </ul>
                         </li>
                     {% else %}
-                        <li><a href="/login/">Login</a></li>
-                        <li><a href="/register/">Register</a></li>
+                        <li class="desktop-only"><a href="/login/">Login</a></li>
+                        <li class="desktop-only"><a href="/register/">Register</a></li>
+                        <li class="mobile-only mobile-navbar-right-links">
+                            <a href="/register/">Register</a>
+                            <a href="/login/">Login</a>
+                        </li>
                     {% endif %}
                 </ul>
                 <img id="main_menu_icon" src="/images/menu-icon.png" />

@@ -401,6 +401,9 @@ span.radio-button-group {
     #mobile-logo-container {
         display: inline-block;
     }
+    .mobile-navbar-right-links {
+        font-size: 90%;
+    }
     .iterator a {
         padding: 13px 18px;
     }
@@ -427,7 +430,7 @@ span.radio-button-group {
     }
 }
 /* For hiding logo on *really* narrow screens. */
-@media only handheld, screen and (max-device-width: 360px), screen and (max-width: 360px) {
+@media only handheld, screen and (max-device-width: 323px), screen and (max-width: 323px) {
     #mobile-logo-container{
         display: none;
     }
