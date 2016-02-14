@@ -36,7 +36,7 @@ a:hover {
 #top-logo:hover {
 }
 /* Dropdown tray background color */
-.nav-dropdown-tray a,.nav-dropdown-tray input {
+.nav-dropdown-tray a, .nav-dropdown-tray input, .nav-dropdown-tray span {
 }
 /* Dropdown tray hover color */
 #account_dropdown a:hover,#account_dropdown input:hover {

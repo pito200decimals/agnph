@@ -80,7 +80,7 @@
                         </li>
                         <li id="account_link">
                             <a href="/user/{{ user.UserId }}/"><img src="{{ user.avatarURL }}" /><span class="desktop-only">{{ user.DisplayName }}</span></a>
-                            <ul id="account_dropdown" class="" hidden>
+                            <ul id="account_dropdown" hidden>
                                 <li><a href="/user/{{ user.UserId }}/">Profile</a></li>
                                 <li><a href="/user/{{ user.UserId }}/preferences/">Settings</a></li>
                                 <li>

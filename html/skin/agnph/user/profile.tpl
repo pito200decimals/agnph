@@ -170,7 +170,7 @@
             {% if profile.user.numGalleryUploads > 0 %} <li><span class="basic-info-label">Gallery Uploads:</span><span>{{ profile.user.numGalleryUploads }}</span></li>{% endif %}
             {% if profile.user.numFicsStories > 0 %}    <li><span class="basic-info-label">Fic Stories:</span><span>{{ profile.user.numFicsStories }}</span></li>{% endif %}
             {% if profile.user.numOekakiDrawn > 0 %}    <li><span class="basic-info-label">Oekaki Drawn:</span><span>{{ profile.user.numOekakiDrawn }}</span></li>{% endif %}
-            {% if profile.user.lastVisitDate %}         <li><span class="basic-info-label">Last Active:</span><span>{{ profile.user.lastVisitDate }}</span></li><% endif %}
+            {% if profile.user.lastVisitDate %}         <li><span class="basic-info-label">Last Active:</span><span>{{ profile.user.lastVisitDate }}</span></li>{% endif %}
                                                         <li><span class="basic-info-label">Date Registered:</span>{{ profile.user.registerDate }}<span></span></li>
             {% if canSeeAdminInfo %}
         </ul>

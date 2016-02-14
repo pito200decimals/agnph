@@ -42,7 +42,7 @@ a {
     background-color: rgb(63,127,255);
 }
 /* Dropdown tray background color */
-.nav-dropdown-tray a,.nav-dropdown-tray input {
+.nav-dropdown-tray a, .nav-dropdown-tray input, .nav-dropdown-tray span {
     background-color: rgb(63,91,55);
 }
 /* Dropdown tray hover color */
