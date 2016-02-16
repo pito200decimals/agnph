@@ -118,6 +118,7 @@ function GetSimilarAccounts($email, $ignore_uid = -1) {
 function MigrateAccount($uid) {
     global $user;
     $new_uid = $user['UserId'];
+    if ($uid == $new_uid) RenderErrorPage("Cannot migrate account to yourself");
     LoadSingleTableEntry(array(USER_TABLE), "UserId", $uid, $old_user);
     if (!isset($old_user)) RenderErrorPage("Account not found");
     // Find same emails.

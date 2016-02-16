@@ -12,6 +12,14 @@ $TAG_TYPE_MAP = $GALLERY_TAG_TYPES;
 
 include_once(SITE_ROOT."includes/tagging/tags.php");
 
+// Return API results if specified.
+if (isset($_GET['api'])) {
+    $api_type = $_GET['api'];
+    if ($api_type == "xml") {
+        RenderPage("gallery/tags/tagindex.xml.tpl");
+        return;
+    }
+}
 RenderPage("gallery/tags/tagindex.tpl");
 return;
 ?>

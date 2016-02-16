@@ -14,6 +14,7 @@ function CollectItems($table_name, $sql_order, &$items, $items_per_page, &$itera
     CollectItemsComplex($table_name, "SELECT * FROM $table_name T", $sql_order, $sql_order, $items, $items_per_page, $iterator, $error_msg);
 }
 function CollectItemsComplex($table_name, $complicated_sql, $sql_order, $count_sql_order, &$items, $items_per_page, &$iterator, $error_msg = null) {
+    global $vars;
     if (isset($_GET['page']) && is_numeric($_GET['page']) && ((int)$_GET['page']) > 0) {
         $page = $_GET['page'];
     } else {
@@ -43,6 +44,8 @@ function CollectItemsComplex($table_name, $complicated_sql, $sql_order, $count_s
     } else {
         $iterator = "";
     }
+    $vars['total_num_items'] = $total_num_items;
+    $vars['offset'] = $offset;
 }
 
 function DefaultCreateIteratorLinkFn($i) {

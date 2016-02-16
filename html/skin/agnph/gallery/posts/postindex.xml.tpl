@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<posts count="{{ total_num_posts }}" offset="{{ offset }}">
+<posts count="{{ total_num_items }}" offset="{{ offset }}">
     {% for post in posts %}
         <post>
             <id type="integer">{{ post.PostId }}</id>

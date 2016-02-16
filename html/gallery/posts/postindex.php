@@ -64,11 +64,11 @@ if (!isset($_GET['api']) && isset($_GET['feature']) && is_numeric($_GET['feature
 }
 
 // Construct page iterator.
-$total_num_posts = 0;
-$vars['postIterator'] = CreateGalleryIterator($searchterms, $page, $posts_per_page, $total_num_posts);
+$total_num_items = 0;
+$vars['postIterator'] = CreateGalleryIterator($searchterms, $page, $posts_per_page, $total_num_items);
 
 // Assign additional vars.
-$vars['total_num_posts'] = $total_num_posts;
+$vars['total_num_items'] = $total_num_items;
 $vars['offset'] = $offset;
 
 // Get suggested tags.

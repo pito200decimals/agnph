@@ -17,7 +17,8 @@ if(!defined("SITE_ROOT")) {
 unset($folder_level);
 
 // Set up charset.
-if (isset($_GET['api']) && $_GET['api'] == "xml") {
+$is_api = isset($_GET['api']) && $_GET['api'] == "xml";
+if ($is_api) {
     header('Content-type: text/xml; charset=utf-8');
 } else {
     header('Content-type: text/html; charset=utf-8');
@@ -69,6 +70,8 @@ GetUnreadPMCount();
 
 if (isset($user)) {
     // Do nothing if logged in.
+} else if ($is_api) {
+    // Do nothing for API interface.
 } else if (!isset($_SESSION['age_gate']) && IsRealUser()) {
     if (contains($_SERVER['REQUEST_URI'], AGE_GATE_PATH)) {
         // Redirect to destination.

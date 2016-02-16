@@ -14,6 +14,7 @@ if (isset($_GET['search'])) {
     $clauses = explode(" ", $search);
     foreach ($clauses as $clause) {
         $isTypeSearch = false;
+        $isExactSearch = false;
         foreach ($TAG_TYPE_MAP as $char => $name) {
             $lower_name = strtolower($name);
             if ($clause == "type:$lower_name") {
@@ -21,7 +22,12 @@ if (isset($_GET['search'])) {
                 $clauseArray[] = "(Type='$char')";
             }
         }
-        if (!$isTypeSearch) {
+        if (preg_match("/^\".*\"$/", $clause)) {
+            $escaped_name = sql_escape(mb_substr($clause, 1, mb_strlen($clause) - 2));
+            $isExactSearch = true;
+            $clauseArray[] = "(LOWER(Name)='$escaped_name')";
+        }
+        if (!$isTypeSearch && !$isExactSearch) {
             $escaped_prefix = sql_escape($clause);
             $clauseArray[] = "(LOWER(Name) LIKE '$escaped_prefix%')";
         }
