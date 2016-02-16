@@ -20,14 +20,20 @@ $twig = new Twig_Environment($loader, array(
 
 header('Content-type: text/xml; charset=utf-8');
 
+$lastUpdateDate = null;
 $stories = array();
 if (sql_query_into($result, "SELECT * FROM ".FICS_STORY_TABLE." WHERE ApprovalStatus='A' ORDER BY DateUpdated DESC, StoryId DESC LIMIT ".FICS_RSS_NUM_ITEMS.";", 0)) {
     while ($story = $result->fetch_assoc()) {
         // Get pub date before story data updated with formatted date.
-        $story['pubDate'] = date("D, d M Y H:i:s O", $story['DateUpdated']);
+        $timestamp = $story['DateUpdated'];
+        $date = date("D, d M Y H:i:s O", $timestamp);
+        $story['pubDate'] = $date;
+        if ($lastUpdateDate == null) $lastUpdateDate = $date;
         FillStoryInfo($story);
         $chapters = GetChaptersInfo($story['StoryId']);
         $story['last_chapter'] = $chapters[sizeof($chapters) - 1];
+        $story['updateGuid'] = $story['StoryId']."-".sizeof($chapters)."-".md5($timestamp);
+        $story['lastChapterNum'] = sizeof($chapters);
         $stories[] = $story;
     }
 }
@@ -35,6 +41,9 @@ if (sql_query_into($result, "SELECT * FROM ".FICS_STORY_TABLE." WHERE ApprovalSt
 $vars = array(
     'stories' => $stories
 );
+if ($lastUpdateDate != null) {
+    $vars['lastUpdateDate'] = $lastUpdateDate;
+}
 
 RenderPage("fics/rss.tpl");
 return;
