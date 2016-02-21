@@ -9,6 +9,7 @@ Critical Bugfixes:
 X Gallery page title for pools
 - Investigate how imported accounts can be activated without prefix changing.
 - API post-by-md5
+- Wildcard matching in gallery/fics
 
 TODOs
 (* = Required for launch, - = Normal priority, X = Scrapped)

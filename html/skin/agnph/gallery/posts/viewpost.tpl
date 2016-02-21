@@ -239,8 +239,8 @@
                                 <li>
                                     <a id="poolaction" href="#"></a>
                                     <span id="poolactionworking" hidden><img src="/images/spinner.gif" /></span>
-                                    <div class="pooleditbox">
-                                        <input id="pool-edit-field" type="text" class="search" required />
+                                    <div id="pooleditbox" class="search">
+                                        <input id="pool-edit-field" type="text" class="search" required placeholder="Pool name" />
                                     </div>
                                 </li>
                             {% endif %}

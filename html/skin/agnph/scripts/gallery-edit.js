@@ -40,7 +40,7 @@ $(document).ready(function() {
 });
 function SetupAdd() {
     $("#poolaction").off("click").click(function() {
-        $(".pooleditbox").toggle();
+        $("#pooleditbox").toggle();
         $("#pool-edit-field").focus();
         return false;
     }).text("Add to pool");

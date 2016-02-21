@@ -148,3 +148,18 @@ RewriteRule ^admin/fics/save_tag/?$ /admin/fics/save_tag_ajax.php [QSA]
 RewriteRule ^admin/fics/log/?$ /admin/site/log.php?filter=fics [QSA]
 RewriteRule ^admin/oekaki/?$ /admin/oekaki/oekaki.php
 RewriteRule ^admin/oekaki/log/?$ /admin/site/log.php?filter=oekaki [QSA]
+
+
+# Set up caching
+<IfModule mod_headers.c>
+    Header set Connection keep-alive
+    # Cache-control headers
+    # 1 DAY
+    <filesMatch "\.(jpg|png|gif|swf|webm)$">
+        Header set Cache-Control "max-age=86400, public"
+    </filesMatch>
+    # 5 MINUTES
+    <filesMatch "\.(js|css)$">
+        Header set Cache-Control "max-age=300, public"
+    </filesMatch>
+</IfModule>
