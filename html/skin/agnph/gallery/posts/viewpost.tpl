@@ -71,6 +71,21 @@
     {% if user and user.NavigateGalleryPoolsWithKeyboard %}
         <script src="{{ asset('/scripts/gallery-keyboard.js') }}"></script>
     {% endif %}
+
+    {# Script for adding tags in fancy-tagger UI #}
+    {% if post.Status!="D" %}
+        {% if not user.PlainGalleryTagging %}
+            <script>
+                $(document).ready(function() {
+                    {% for category in post.tagCategories %}
+                        {% for tag in category.tags %}
+                            AddTag('{{ tag.Name }}', '{{ tag.Type|lower }}');
+                        {% endfor %}
+                    {% endfor %}
+                });
+            </script>
+        {% endif %}
+    {% endif %}
 {% endblock %}
 
 {% use 'includes/comment-block.tpl' %}
@@ -345,15 +360,6 @@
                             <td><input id="imgsource" class="textbox" type="text" size=35 name="source" value="{{ post.Source }}" /></td>
                         </tr>
                         {% if not user.PlainGalleryTagging %}
-                            <script>
-                                $(document).ready(function() {
-                                    {% for category in post.tagCategories %}
-                                        {% for tag in category.tags %}
-                                            AddTag('{{ tag.Name }}', '{{ tag.Type|lower }}');
-                                        {% endfor %}
-                                    {% endfor %}
-                                });
-                            </script>
                             <tr>
                                 <td><label>Tags</label></td>
                                 <td><ul class="g autocomplete-tag-list"></ul><textarea class="autocomplete-tags" name="tags" hidden>{{ post.tagstring }}</textarea></td>

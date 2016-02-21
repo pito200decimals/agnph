@@ -58,6 +58,19 @@
     </script>
     <script src="{{ asset('/scripts/jquery.autocomplete.min.js') }}"></script>
     <script src="{{ asset('/scripts/tag-complete.js') }}"></script>
+
+    {# script for fancy tagger UI #}
+    {% if not user.PlainGalleryTagging %}
+        <script>
+            $(document).ready(function() {
+                {% for category in post.tagCategories %}
+                    {% for tag in category.tags %}
+                        AddTag('{{ tag.Name }}', '{{ tag.Type|lower }}');
+                    {% endfor %}
+                {% endfor %}
+            });
+        </script>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -74,15 +87,6 @@
                     <td><input id="imgsource" class="textbox" type="textbox" size=35 name="source" /></td>
                 </tr>
                 {% if not user.PlainGalleryTagging %}
-                    <script>
-                        $(document).ready(function() {
-                            {% for category in post.tagCategories %}
-                                {% for tag in category.tags %}
-                                    AddTag('{{ tag.Name }}', '{{ tag.Type|lower }}');
-                                {% endfor %}
-                            {% endfor %}
-                        });
-                    </script>
                     <tr>
                         <td><label class="formlabel">Tags</label></td>
                         <td><ul class="g autocomplete-tag-list"></ul><textarea class="autocomplete-tags" name="tags" hidden>{{ post.tagstring }}</textarea></td>
