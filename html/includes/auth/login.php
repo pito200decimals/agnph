@@ -86,7 +86,10 @@ function LoginImported($username, $password) {
                 }
                 // Log action.
                 $username = $db_username;
+                global $user;
+                $user = array("UserId" => $uid);
                 LogAction("<strong><a href='/user/$uid/'>$username</a></strong> logged in and imported their old account.", "");
+                unset($user);
                 
                 // Actually log user in.
                 $salt = md5($email.$encryptedPassword);

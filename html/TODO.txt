@@ -10,6 +10,8 @@ X Gallery page title for pools
 - Investigate how imported accounts can be activated without prefix changing.
 - API post-by-md5
 - Wildcard matching in gallery/fics
+- Fix search box on admin pages
+- Put message to click-and-drag for pools for users that can edit them
 
 TODOs
 (* = Required for launch, - = Normal priority, X = Scrapped)

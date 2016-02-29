@@ -143,7 +143,10 @@ function HandlePostSuccess($username, $email, $password, $bday) {
     if (!$success) ShowErrorBanner("Error creating account, please try again later");
     if ($success) {
         $ip = $_SERVER['REMOTE_ADDR'];
+        global $user;
+        $user = array("UserId" => $uid);
         LogAction("<strong><a href='/user/$uid/'>$username</a></strong> registered from IP address $ip", "");
+        unset($user);
     }
     return $success;
 }

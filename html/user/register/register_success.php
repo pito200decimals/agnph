@@ -29,9 +29,9 @@ if (isset($_SESSION['auth_row'])) {
 }
 return;
 
-function PrepareAllUserTables($user) {
+function PrepareAllUserTables($usr) {
     $success = true;
-    $uid = $user['UserId'];
+    $uid = $usr['UserId'];
 
     // Create bio file.
     mkdirs("/user/data/bio/");  // Make sure directory is created.
@@ -55,9 +55,12 @@ function PrepareAllUserTables($user) {
 
     if ($success) {
         // Note: Username and display name are the same at this point when activating a newly-registered account.
-        $username = $user['DisplayName'];
-        $ip = $user['RegisterIP'];
+        $username = $usr['DisplayName'];
+        $ip = $usr['RegisterIP'];
+        global $user;
+        $user = array("UserId" => $usr['UserId']);
         LogAction("<strong><a href='/user/$uid/'>$username</a></strong> activated new account", "");
+        unset($user);
     } else {
         // Try to delete files/table entries that were created.
         delete_files($bio_path);
