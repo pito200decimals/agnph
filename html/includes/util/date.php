@@ -29,6 +29,38 @@ function ParseDate($date_str) {
     return sprintf("%04d-%02d-%02d", $year, $month, $day);
 }
 
+function GetDateYear($date_str) {
+    $split = mb_split("-", $date_str);
+    if (sizeof($split) != 3) return -1;
+    return (int)$split[0];
+}
+
+function GetDateMonth($date_str) {
+    $split = mb_split("-", $date_str);
+    if (sizeof($split) != 3) return -1;
+    return (int)$split[1];
+}
+
+function GetDateDay($date_str) {
+    $split = mb_split("-", $date_str);
+    if (sizeof($split) != 3) return -1;
+    return (int)$split[2];
+}
+
+function Get18YearsLaterDateStr($date_str) {
+    // DOB is YYYY-MM-DD. Add 18 to year.
+    $year = GetDateYear($date_str);
+    $month = GetDateMonth($date_str);
+    $day = GetDateDay($date_str);
+    if ($month == 2 && $day == 29) {
+        // 18 years later is not a leap-year.
+        $month = 3;
+        $day = 1;
+    }
+    $year += 18;
+    return sprintf("%04d-%02d-%02d", $year, $month, $day);
+}
+
 function FormatShortDuration($val) {
     // For now, always format in terms of days.
     $days = $val / (24 * 60 * 60);

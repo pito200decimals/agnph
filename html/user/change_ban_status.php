@@ -5,6 +5,7 @@
 
 include_once("../header.php");
 include_once(SITE_ROOT."includes/util/core.php");
+include_once(SITE_ROOT."includes/util/date.php");
 include_once(SITE_ROOT."includes/util/user.php");
 include_once(SITE_ROOT."user/includes/functions.php");
 
@@ -57,6 +58,30 @@ switch ($action) {
             }
         } else {
             PostSessionBanner("Invalid temporary ban duration", "red");
+        }
+        break;
+    case "underageban":
+        $ban_expire_date = Get18YearsLaterDateStr($profile_user['DOB']);
+        $expire_time = strtotime($ban_expire_date);
+        if ($expire_time === FALSE) {
+            PostSessionBanner("Failed to set ban", "red");
+            break;
+        }
+        if ($expire_time < time()) {
+            PostSessionBanner("Failed to set ban (ban expire date set in the past)", "red");
+            break;
+        }
+        $escaped_reason = "User is not 18+ years old.";
+        if (sql_query("UPDATE ".USER_TABLE." SET Usermode=-1, BanReason='$escaped_reason', BanExpireTime=$expire_time WHERE UserId=$puid;")) {
+            $duration = FormatDuration((int)$_POST['duration']);
+            PostSessionBanner("User banned until $ban_expire_date", "green");
+            $uid = $user['UserId'];
+            $username = $user['DisplayName'];
+            $puid = $profile_user['UserId'];
+            $pusername = $profile_user['DisplayName'];
+            LogAction("<strong><a href='/user/$uid/'>$username</a></strong> banned user <strong><a href='/user/$puid/'>$pusername</a></strong> due to underage status (expires $ban_expire_date)", "");
+        } else {
+            PostSessionBanner("Failed to set temporary ban", "red");
         }
         break;
     case "unban":

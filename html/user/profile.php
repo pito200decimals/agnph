@@ -6,6 +6,7 @@
 include_once("../header.php");
 include_once(SITE_ROOT."includes/util/file.php");
 include_once(SITE_ROOT."includes/util/core.php");
+include_once(SITE_ROOT."includes/util/date.php");
 include_once(SITE_ROOT."includes/util/user.php");
 include_once(SITE_ROOT."includes/util/html_funcs.php");
 include_once(SITE_ROOT."user/includes/functions.php");
@@ -131,20 +132,31 @@ if (isset($user)) {
                 "action" => "unban",
                 "duration" => 0,
                 "text" => "Unban user",
-                "isBan" => false);
+                "needsBanReason" => false);
         } else {
+            // Add underage ban link if user is underage.
+            $underage_expire_date = Get18YearsLaterDateStr($profile_user['DOB']);
+            $expire_time = strtotime($underage_expire_date);
+            if ($expire_time !== FALSE && $expire_time >= time()) {
+                $ban_links[] = array(
+                    "formId" => 0,
+                    "action" => "underageban",
+                    "duration" => 0,
+                    "text" => "Ban user until $underage_expire_date",
+                    "needsBanReason" => false);
+            }
             $ban_links[] = array(
-                "formId" => 0,
+                "formId" => 1,
                 "action" => "tempban",
                 "duration" => (int)GetSiteSetting(SHORT_BAN_DURATION_KEY, DEFAULT_SHORT_BAN_DURATION),
                 "text" => "Temporarily ban user",
-                "isBan" => true);
+                "needsBanReason" => true);
             $ban_links[] = array(
-                "formId" => 1,
+                "formId" => 2,
                 "action" => "permban",
                 "duration" => 0,
                 "text" => "Permanently ban user",
-                "isBan" => true);
+                "needsBanReason" => true);
         }
     }
     $vars['banLinks'] = $ban_links;

@@ -6,12 +6,14 @@ Critical Bugfixes:
 - Slideshow timer adjustment
 - Admin tag history search
 - Separate zoom levels for fics stories and main site?
-X Gallery page title for pools
 - Investigate how imported accounts can be activated without prefix changing.
 - API post-by-md5
 - Wildcard matching in gallery/fics
 - Fix search box on admin pages
 - Put message to click-and-drag for pools for users that can edit them
+- Skip splash screen on advert/feature links
+- Search bar font size
+- Spoiler tag for embedded images in forums/posts
 
 TODOs
 (* = Required for launch, - = Normal priority, X = Scrapped)
@@ -85,8 +87,6 @@ X Search string length attacks (Unlikely to be a huge problem).
 - Non-user IP tracking (DoS investigating, user demographic statistics, etc?)
     - Show statistic about # of guests browsing? (not including bots?)
 - Display section permissions (better badge icons) [PARTIALLY DONE]
-- Give admins ability to ban until a user turns 18
-    - Possibly not automatic, should notify/ticket when a user sets birthday to invalid value
 X Enable login via display name???
 X Allow user account deletion?
     - Messy, but doable now that account import is done.

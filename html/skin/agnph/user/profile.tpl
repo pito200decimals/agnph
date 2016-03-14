@@ -100,11 +100,11 @@
             {% for link in banLinks %}
                 <li>
                     <form id="{{ link.formId }}-ban-form" action="/user/{{ profile.user.UserId }}/ban/" method="POST" accept-encoding="UTF-8" hidden>
-                        <input type="hidden" name="action" value="{{ link.action }}" />
-                        <input type="hidden" name="duration" value="{{ link.duration }}" />
-                        {% if link.isBan %}<input id="{{ link.formId }}-ban-reason" type="hidden" name="reason" value="" />{% endif %}
+                        {% if link.action %}<input type="hidden" name="action" value="{{ link.action }}" />{% endif %}
+                        {% if link.duration %}<input type="hidden" name="duration" value="{{ link.duration }}" />{% endif %}
+                        {% if link.needsBanReason %}<input id="{{ link.formId }}-ban-reason" type="hidden" name="reason" value="" />{% endif %}
                     </form>
-                    <a href="#" onclick="{% if link.isBan %}ban('{{ link.formId }}'){% else %}document.getElementById('{{ link.formId }}-ban-form').submit(){% endif %}">
+                    <a href="#" onclick="{% if link.needsBanReason %}ban('{{ link.formId }}'){% else %}document.getElementById('{{ link.formId }}-ban-form').submit(){% endif %}">
                         {% autoescape false %}
                             {{ link.text|replace({' ': '&nbsp;'}) }}  {# Ensure that each action is only one line #}
                         {% endautoescape %}
