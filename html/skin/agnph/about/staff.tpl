@@ -48,11 +48,8 @@
         </div>
     </div>
     <div class="block">
-        <div class="header">Site Owners</div>
+        <div class="header">Site Owner</div>
         <div class="content">
-            {#<div class="staff-group-img">
-                <img class="profile-img" src="/images/staff/flygon_wilon.png" />
-            </div>#}
             <ul class="staff-list">
                 <li>
                     <div class="staff-group-img">
@@ -68,20 +65,6 @@
                     </p>
                     <div class="Clear">&nbsp;</div>
                 </li>
-                <li>
-                    <div class="staff-group-img">
-                        <img class="profile-img" src="/images/staff/wilon.png" />
-                    </div>
-                    <a class="profile-name" href="/user/3/">Wilon</a>
-                    <p class="profile-bio">
-                        Fluffy and approachable wuff.
-                    </p>
-                    <p class="contact">
-                        <span>Contact via:</span> Site PM
-                    </p>
-                    <div class="Clear">&nbsp;</div>
-                </li>
-            </ul>
             <div class="Clear">&nbsp;</div>
         </div>
     </div>
@@ -107,7 +90,7 @@
                         Chubby dragon. In charge of site tech and Minecraft.
                     </p>
                     <p class="contact">
-                        <span>Contact via:</span> Site PM
+                        <span>Contact via:</span> IRC, Site PM
                     </p>
                 </li>
             </ul>
