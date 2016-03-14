@@ -43,10 +43,14 @@
 {% block content %}
     <h3>Gallery Edit History</h3>
     {{ block('banner') }}
-    <form method="GET" accept-encoding="UTF-8">
-    Search: <input type="text" class="search" name="search" value="{{ search }}" required />
-    </form>
-    {# Display tag history index. #}
+    <div class="list-search-bar">
+        <form method="GET" accept-charset="UTF-8">
+            <div class="search">
+                <input class="search" name="search" value="{{ search }}" type="text" required placeholder="Search" />
+                <input type="submit" class="search-button" value="" />
+            </div>
+        </form>
+    </div>
     <form action="/admin/gallery/revert-edit/" method="POST" accept-encoding="UTF-8">
         <table class="list-table">
             <thead>

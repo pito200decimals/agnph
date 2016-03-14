@@ -227,8 +227,12 @@ div.search {
     position: relative;
     display: inline-block;
     width: 180px;
+    height: 27px;
 }
 input[type='text'].search {
+    position: absolute;
+    top: 0;
+    left: 0;
     outline: none;
 	border: 1px solid rgba(0,0,0,0.8);
     border-radius: 10px 0px 0px 10px;
