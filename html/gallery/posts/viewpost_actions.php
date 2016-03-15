@@ -167,7 +167,7 @@ function HandleAddCommentAction($post) {
         PostSessionBanner("Comment length is too short", "red");
         return;
     }
-    $escaped_text = sql_escape(GetSanitizedTextTruncated($text, DEFAULT_ALLOWED_TAGS, MAX_GALLERY_POST_FLAG_REASON_LENGTH));
+    $escaped_text = sql_escape(GetSanitizedTextTruncated($text, DEFAULT_ALLOWED_TAGS, MAX_GALLERY_COMMENT_LENGTH));
     $uid = $user['UserId'];
     $pid = $post['PostId'];
     $now = time();

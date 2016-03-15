@@ -68,7 +68,6 @@ function ParseBBCode($html) {
 }
 
 function GetSanitizedTextTruncated($text, $allowed_html_config, $max_byte_size, $add_ellipsis=false) {
-    $text = html_entity_decode($text);
     $sanitized = SanitizeHTMLTags($text, $allowed_html_config);
     $ellipsis = "";
     if ($add_ellipsis) $ellipsis = "...";

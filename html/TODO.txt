@@ -12,7 +12,6 @@ Critical Bugfixes:
 - Fix search box on admin pages
 - Put message to click-and-drag for pools for users that can edit them
 - Skip splash screen on advert/feature links
-- Search bar font size
 - Spoiler tag for embedded images in forums/posts
 
 TODOs

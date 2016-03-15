@@ -58,7 +58,7 @@ RenderPage("fics/index.tpl");
 return;
 
 function ShortSummary($summary) {
-    return html_entity_decode(GetSanitizedTextTruncated($summary, NO_HTML_TAGS, MAX_FICS_SHORT_SUMMARY_LEGNTH, true));
+    return GetSanitizedTextTruncated($summary, NO_HTML_TAGS, MAX_FICS_SHORT_SUMMARY_LEGNTH, true);
 }
 
 function GetRandomStories($num_stories) {
