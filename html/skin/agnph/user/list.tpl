@@ -52,12 +52,13 @@
                                 <div class="status-container">
                                     <span class="status-alignment" />
                                     <img class="status-icon" src="/images/user-online.png" />
-                                    <img class="user-avatar" src="{{ account.avatarURL }}" />
+                                    {% if account.hasAvatar %}<img class="user-avatar" src="{{ account.avatarURL }}" />{% endif %}
                                 </div>
                             {% else %}
                                 <div class="status-container">
                                     <span class="status-alignment" />
                                     <img class="status-icon"  src="/images/user-offline.png" />
+                                    {% if account.hasAvatar %}<img class="user-avatar" src="{{ account.avatarURL }}" />{% endif %}
                                 </div>
                             {% endif %}
                         </td>

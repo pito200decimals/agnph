@@ -13,6 +13,9 @@ Critical Bugfixes:
 - Put message to click-and-drag for pools for users that can edit them
 - Skip splash screen on advert/feature links
 - Spoiler tag for embedded images in forums/posts
+* Fix fic author search
+- Investigate why users are able to log in with duplicate usernames.
+    - Do we still want to allow duplicate-usernames with unactivated accounts?
 
 TODOs
 (* = Required for launch, - = Normal priority, X = Scrapped)

@@ -24,11 +24,11 @@ if (isset($_GET['search'])) {
         $date = substr($threshold, 4);
         $year = ((int)$year) - 18;
         $threshold = $year.$date;
-        $search_clause = "DOB > '$threshold'";
+        $search_clause = "DOB > '$threshold' AND (Usermode=1 OR Usermode=-1)";
     } else if ($admin_search && preg_match("/^(\d+\.\d+\.\d+\.\d+)$/", $search, $match)) {
         $ip = $match[1];
         $escaped_ip = sql_escape($ip);
-        $search_clause = "RegisterIP='$escaped_ip' OR KnownIPs LIKE ('%$escaped_ip%')";
+        $search_clause = "(RegisterIP='$escaped_ip' OR KnownIPs LIKE ('%$escaped_ip%')) AND Usermode=1";
     } else {
         $escaped_search = sql_escape($search);
         $search_clause = "UPPER(DisplayName) LIKE UPPER('%$escaped_search%') AND Usermode=1";
@@ -85,6 +85,7 @@ foreach ($accounts as &$account) {
     $account['inactive'] = startsWith($account['UserName'], IMPORTED_ACCOUNT_USERNAME_PREFIX);
     $account['banned'] = ($account['Usermode'] == -1);
     $account['avatarURL'] = GetAvatarURL($account);
+    $account['hasAvatar'] = !($account['AvatarPostId'] == -1 && $account['AvatarFname'] == "");
 }
 
 $vars['users'] = $accounts;

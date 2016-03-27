@@ -291,9 +291,11 @@ function AddUserPermissions(&$post, $user) {
 function FetchPostProperties(&$post) {
     $postdate = $post['DateUploaded'];
     $poster_id = $post['UploaderId'];
-    if (!sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId=$poster_id;", 1)) return false;
-    $poster = $result->fetch_assoc();
-    $post['postedHtml'] = "<span title='".FormatDate($postdate, GALLERY_DATE_LONG_FORMAT)."'>".FormatDuration(time() - $postdate)." ago</span> by <a href='/user/".$poster['UserId']."/gallery/'>".$poster['DisplayName']."</a>";
+    $post['postedHtml'] = "<span title='".FormatDate($postdate, GALLERY_DATE_LONG_FORMAT)."'>".FormatDuration(time() - $postdate)." ago</span>";
+    if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId=$poster_id;", 1)){
+        $poster = $result->fetch_assoc();
+        $post['postedHtml'] = $post['postedHtml']." by <a href='/user/".$poster['UserId']."/gallery/'>".$poster['DisplayName']."</a>";
+    }
     switch ($post['Rating']) {
       case "s":
         $post['ratingHtml'] = "<span class='srating'>Safe</span>";
