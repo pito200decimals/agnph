@@ -105,6 +105,7 @@ $tagNameStr = ToTagNameString($tags);
 $tagCategories = ToTagCategorized($tags);
 $post['tagstring'] = $tagNameStr;
 $post['tagCategories'] = $tagCategories;
+$post['artists'] = GetArtistTags($tags);
 $vars['_title'] = "AGNPH - Gallery - ".$post['PostId']." - $tagNameStr";
 
 // Get other properties like uploader, rating HTML, etc.
@@ -180,6 +181,21 @@ function ToTagCategorized($allTags) {
         }
     }
     return $tagCategories;
+}
+
+function GetArtistTags($allTags) {
+    global $GALLERY_TAG_TYPES;
+    $result = array();
+    foreach ($GALLERY_TAG_TYPES as $char => $name) {
+        if ($name == "Artist") {
+            foreach ($allTags as $tag) {
+                if ($tag['Type'] == $char) {
+                    $result[] = $tag;
+                }
+            }
+        }
+    }
+    return $result;
 }
 
 function GetUsers($user_ids) {

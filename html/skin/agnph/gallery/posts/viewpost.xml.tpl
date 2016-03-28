@@ -49,6 +49,8 @@
     <height type="integer">{{ post.Height }}</height>
     <num_comments type="integer">{{ post.NumComments }}</num_comments>
     {# has_notes #}
-    {# artist #}
+    {% for tag in post.artists %}
+        <artist>{{ tag.Name }}</artist>
+    {% endfor %}
     {# sources #}
 </post>
