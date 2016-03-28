@@ -14,7 +14,7 @@
             {% if post.Status != 'D' %}
                 <md5>{{ post.Md5 }}</md5>
                 {# file_size #}
-                <file_url>http://agn.ph{{ post.downloadUrl }}</file_url>
+                <file_url>http://agn.ph{{ post.image_path }}</file_url>
                 <file_ext>{{ post.Extension }}</file_ext>
                 <thumbnail_url>http://agn.ph{{ post.thumbnail }}</thumbnail_url>
                 {# thumbnail width/height #}
