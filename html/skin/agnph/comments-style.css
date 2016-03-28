@@ -1,3 +1,6 @@
+.direct-link {
+    display: inline-block;
+}
 .comment-list {
     list-style: none;
     margin: 0px;

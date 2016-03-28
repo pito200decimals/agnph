@@ -40,5 +40,9 @@
             </div>
         </div>
         <div class="Clear">&nbsp;</div>
+        {% if comment.anchor %}
+            <div><small class="direct-link"><a href="#{{ comment.anchor }}">Link to post</a></small></div>
+            <div class="Clear">&nbsp;</div>
+        {% endif %}
     </li>
 {% endblock %}
