@@ -35,6 +35,11 @@
         {% block styles %}
             {# Custom page styles go here #}
         {% endblock %}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="{{ asset('/base.js') }}"></script>
+        {% block scripts %}
+            {# Custom page scripts go here #}
+        {% endblock %}
         <link rel="stylesheet" type="text/css" href="{{ asset('/color.css') }}" />
         {% if debug %}
             {# Dot all borders to help style debugging #}
@@ -179,10 +184,5 @@
             <div><span><small>All fanworks within are based on Pokémon. Pokémon © Nintendo/Creatures, Inc./GAME FREAK/The Pokémon Company. All work contained within this website are user-submitted, fan-made contributions. No copyright infringement is intended.</small></span></div>
         </div>
     </body>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="{{ asset('/base.js') }}"></script>
-    {% block scripts %}
-        {# Custom page scripts go here #}
-    {% endblock %}
 </html>
 {% endspaceless %}
