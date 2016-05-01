@@ -20,9 +20,9 @@
                 to any site, we recommend putting a 'Do Not Distribute' label on each of your works.
             </p>
             <p>
-                If you wish to be added to the DNP list, send a private message to <a href="/user/3/"><strong>Wilon</strong></a>. This can be via AGNPH, or you can use another site such as
-                <a href="http://www.furaffinity.net/user/wilon">Fur Affinity</a> or <a href="https://inkbunny.net/Wilon">InkBunny</a>. Please do not use email.
-                If you do not receive a reply from Wilon within three working days, you can resend the request to <a href="/user/2/">Flygon</a>.
+                If you wish to be added to the DNP list, send a private message to <a href="/user/2/"><strong>Flygon</strong></a>. This can be via AGNPH, or you can use another site such as
+                <a href="http://www.furaffinity.net/user/flygon">Fur Affinity</a> or <a href="https://inkbunny.net/flygon">InkBunny</a>. Please do not use email.
+                If you do not receive a reply from Flygon within three working days, you can resend the request to any of the <a href="/about/staff/">gallery admins</a>.
                 You will also be asked to provide proof of your identity as the artist. Usually, this will be for you to send a confirmatory Private Message from your artist
                 account on a website where your art is posted.
             </p>
@@ -35,6 +35,23 @@
                 If you scream, accuse or threaten, you can expect your request to be ignored.
             </p>
             <a href="/forums/thread/1600/">The current Do Not Post list can be viewed on the forums here.</a>
+        </div>
+    </div>
+    <div class="block">
+        <div class="header">Takedown Requests</div>
+        <div class="content">
+            <p>
+                We will respect takedown requests from the <strong>Artist</strong> of the post in question. Owners of any characters must have the <strong>Artist</strong> request the post takedown.
+                If the artwork is a commissioned piece, the commissioner may request a takedown <strong>only if</strong> either:
+                <ol>
+                    <li>Explicit permission is granted from the artist for the takedown of the posted image.</li>
+                    <li>The artist does not have any publicly-viewable sources of the posted image.</li>
+                </ol>
+                In either case, the <strong>Artist</strong> has final say if the post should be taken down or restored.
+            </p>
+            <p>
+                Contact <a href="/user/2/"><strong>Flygon</strong></a> or a Gallery Admin to request a takedown. 
+            </p>
         </div>
     </div>
     <div class="block">

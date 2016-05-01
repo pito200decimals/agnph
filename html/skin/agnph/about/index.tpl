@@ -58,7 +58,8 @@
                 <li>
                     <strong>Pienji</strong> - <a href="http://www.furaffinity.net/user/pienji/">Fur Affinity</a> / <a href="http://pienji.tumblr.com/">Tumblr</a><br />
                     <strong>Watermelon</strong> - <a href="https://inkbunny.net/Watermelon">Inkbunny</a><br />
-                    <strong>Shikaro</strong> - <a href="http://www.furaffinity.net/user/shikaro/">Fur Affinity</a> / <a href="http://www.pixiv.net/member.php?id=1196214">Pixiv</a> / <a href="http://shikaro.tumblr.com/">Tumblr</a><br />
+                    <strong>Sefuart</strong> - <a href="http://www.sefuart.net/">Website</a><br />
+                    <strong>Shikaro</strong> - <a href="http://www.furaffinity.net/user/shikaro/">Fur Affinity</a> / <a href="http://www.pixiv.net/member.php?id=1196214">Pixiv</a> / <a href="http://shikaro.tumblr.com/">Tumblr</a>
                     <p>
                     These artists have contributed toward AGNPH by allowing their artwork to be used to promote AGNPH.
                     </p>
