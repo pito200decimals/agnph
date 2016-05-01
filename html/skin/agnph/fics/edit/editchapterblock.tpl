@@ -5,8 +5,8 @@
         target_list: [ {title: 'New page', value: '_blank'} ],
         toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor | link | code",
         contextmenu: "image link | hr",
-        autoresize_max_height: 200,
-        resize: false,
+        autoresize_max_height: 300,
+        resize: true,
         menubar: false,
         relative_urls: false
     });
@@ -17,7 +17,7 @@
         toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor | link | code fullscreen preview",
         contextmenu: "image link | hr",
         autoresize_max_height: 500,
-        resize: false,
+        resize: true,
         setup: function(editor) {
           editor.on('FullscreenStateChanged', function(e) {
             $(document).scrollTop($("#chaptertextanchor").offset().top);
@@ -31,8 +31,8 @@
         target_list: [ {title: 'New page', value: '_blank'} ],
         toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor | link | code",
         contextmenu: "image link | hr",
-        autoresize_max_height: 200,
-        resize: false,
+        autoresize_max_height: 300,
+        resize: true,
         menubar: false,
         relative_urls: false
     });

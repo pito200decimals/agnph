@@ -16,6 +16,7 @@ Critical Bugfixes:
 * Fix fic author search
 - Investigate why users are able to log in with duplicate usernames.
     - Do we still want to allow duplicate-usernames with unactivated accounts?
+- Fix event schedule 15 minute security email SQL.
 
 TODOs
 (* = Required for launch, - = Normal priority, X = Scrapped)

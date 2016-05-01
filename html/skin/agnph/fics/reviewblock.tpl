@@ -45,8 +45,8 @@
                     target_list: [ {title: 'New page', value: '_blank'} ],
                     toolbar: "undo redo | bold italic underline | bullist numlist | image link | code blockquote spoiler",
                     contextmenu: "image link | hr",
-                    autoresize_max_height: 150,
-                    resize: false,
+                    autoresize_max_height: 300,
+                    resize: true,
                     menubar: false,
                     relative_urls: false,
                     content_css: "{{ asset('/comments-style.css') }}"
@@ -69,8 +69,8 @@
         target_list: [ {title: 'New page', value: '_blank'} ],
         toolbar: "undo redo | bold italic underline | bullist numlist | image link | code blockquote spoiler",
         contextmenu: "image link | hr",
-        autoresize_max_height: 150,
-        resize: false,
+        autoresize_max_height: 300,
+        resize: true,
         menubar: false,
         relative_urls: false,
         content_css: "{{ asset('/comments-style.css') }}"
