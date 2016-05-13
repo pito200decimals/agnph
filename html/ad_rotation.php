@@ -3,16 +3,23 @@ session_start();
 
 //$domain_prefix = "http://agn.ph";
 $domain_prefix = "";
+$source_prefix = "/images/banner_rotation/";
 $mapping = array(
-        array("/images/banner_rotation/shikaro89826.png", "/gallery/post/?search=vaporeon&feature=89826"),
-        array("/images/banner_rotation/sefuart101447.png", "/gallery/post/?search=flareon&feature=101447"),
-        array("/images/banner_rotation/watermelon87100.png", "/gallery/post/?search=flygon&feature=87100"),
-        array("/images/banner_rotation/pienji101284.png", "/gallery/post/?search=goodra&feature=101284"),
+        array("shikaro89826.png", "/gallery/post/?search=vaporeon&feature=89826"),
+        array("sefuart101447.png", "/gallery/post/?search=flareon&feature=101447"),
+        array("watermelon87100.png", "/gallery/post/?search=flygon&feature=87100"),
+        array("pienji101284.png", "/gallery/post/?search=goodra&feature=101284"),
+        array("agnphbannerchangingseasonsmeranceprpr.png", "/fics/"),
+        array("agnphbannerchangingseasonsmeranceprpr.png", "/fics/"),
+        array("agnphchangingseasonssefuartbeachv2.png", "/fics/"),
+        array("agnphchangingseasonssefuartbeachv2.png", "/fics/"),
+        array("agnphchangingseasonsshikarokrokodile.png", "/fics/"),
+        array("agnphchangingseasonsshikarokrokodile.png", "/fics/"),
     );
 
 if (isset($_GET['image'])) {
     $index = rand(0, sizeof($mapping) - 1);
-    $img_src = $domain_prefix.$mapping[$index][0];
+    $img_src = $domain_prefix.$source_prefix.$mapping[$index][0];
     $link = $domain_prefix.$mapping[$index][1];
 
     $_SESSION['ad_link'] = $link;

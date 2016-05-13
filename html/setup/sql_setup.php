@@ -420,7 +420,7 @@ do_or_die(sql_query(
     ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 
 // Table cleanup events.
-sql_query("CREATE EVENT delete_security_email_entries ON SCHEDULE EVERY 0:15 HOUR_MINUTE DO DELETE FROM ".SECURITY_EMAIL_TABLE." WHERE CURRENT_TIMESTAMP > MaxTimestamp;");
+sql_query("CREATE EVENT delete_security_email_entries ON SCHEDULE EVERY ".SECURITY_EMAIL_TABLE_SQL_CHECK_DELETE_INTERVAL." DO DELETE FROM ".SECURITY_EMAIL_TABLE." WHERE CURRENT_TIMESTAMP > MaxTimestamp;");
 
 // Creates the tag table and a item-tag map table. Default tag type is 'M'.
 function CreateItemTagTables($tag_table_name, $item_tag_table_name, $alias_table_name, $implication_table_name, $item_id) {
@@ -467,6 +467,5 @@ function CreateItemTagTables($tag_table_name, $item_tag_table_name, $alias_table
         ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 }
 
-
-include_once("load_sql_mock_data.php");
+// include_once("load_sql_mock_data.php");
 ?>
