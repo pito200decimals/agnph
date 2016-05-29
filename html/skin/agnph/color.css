@@ -244,6 +244,11 @@ blockquote blockquote blockquote {
     background-color: rgb(191,223,255);
 }
 
+/* Oekaki */
+.oekaki-post-header {
+    background-color: rgb(191,223,255);
+}
+
 /* User profile */
 .sidepanel-section {
     background-color: rgb(127,191,255);

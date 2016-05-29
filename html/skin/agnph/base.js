@@ -38,7 +38,7 @@ $(document).ready(function() {
     function setZoom(zoom) {
         var found = false;
         var options = $(".font-size-select").children().each(function() {
-            if (zoom == $(this).text()) {
+            if (zoom.trim() == $(this).text().trim()) {
                 found = true;
                 $(this).prop("selected", true);
                 setCookie("zoom", zoom);

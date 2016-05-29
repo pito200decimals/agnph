@@ -29,17 +29,20 @@ $ACTION_TABLE = array(
     "site" => USER_TABLE,
     "forums" => FORUMS_USER_PREF_TABLE,
     "gallery" => GALLERY_USER_PREF_TABLE,
-    "fics" => FICS_USER_PREF_TABLE);
+    "fics" => FICS_USER_PREF_TABLE,
+    "oekaki" => OEKAKI_USER_PREF_TABLE);
 $ACTION_KEYS = array(
     "site" => "Permissions",
     "forums" => "ForumsPermissions",
     "gallery" => "GalleryPermissions",
-    "fics" => "FicsPermissions");
+    "fics" => "FicsPermissions",
+    "oekaki" => "OekakiPermissions");
 $ALLOWED_CHARS = array(
     "site" => "ARGFOIM",
     "forums" => "ANR",
     "gallery" => "ACNR",
-    "fics" => "ANR");
+    "fics" => "ANR",
+    "oekaki" => "ANR");
 foreach ($actions as $action) {
     foreach ($ACTION_TABLE as $prefix => $table) {
         if (startsWith($action, $prefix)) {

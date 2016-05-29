@@ -169,7 +169,14 @@ function InvalidURL() {
 }
 
 function Redirect($url) {
-    header("Location: $url", true, 302);
+    if (startsWith($url, "http")) {
+        header("Location: $url", true, 302);
+    } else if (startsWith($url, "/")) {
+        header("Location: ".SITE_DOMAIN.$url, true, 302);
+    } else {
+        // Might not work with IE.
+        header("Location: $url", true, 302);
+    }
     exit();
 }
 
@@ -209,6 +216,9 @@ function SetHeaderHighlight() {
     } else if (startsWith($url, "/fics")) {
         $vars['nav_section'] = "fics";
         $vars['_title'] = "AGNPH - Fics";
+    } else if (startsWith($url, "/oekaki")) {
+        $vars['nav_section'] = "oekaki";
+        $vars['_title'] = "AGNPH - Oekaki";
     } else if (startsWith($url, "/user/list")) {
         $vars['nav_section'] = "user";
         $vars['_title'] = "AGNPH - Users";

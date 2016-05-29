@@ -364,6 +364,7 @@ do_or_die(sql_query(
         Extension CHAR(3) NOT NULL,
         Adult TINYINT(1) DEFAULT 0 NOT NULL,
         Duration INT(11) NOT NULL,
+        Status CHAR(1) DEFAULT 'A' NOT NULL,
         PRIMARY KEY(PostId)
     ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 // Table for oekaki user preferences.
@@ -371,7 +372,8 @@ do_or_die(sql_query(
    "CREATE TABLE ".OEKAKI_USER_PREF_TABLE." (
         UserId INT(11) NOT NULL,
         OekakiPostsPerPage INT(11) DEFAULT ".DEFAULT_OEKAKI_POSTS_PER_PAGE.",
-        PRIMARY KEY(UserId)
+        OekakiPermissions CHAR(1) DEFAULT 'N',".  // R - Restricted user, N - Normal user, A - Admin
+       "PRIMARY KEY(UserId)
     ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 
 

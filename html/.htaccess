@@ -61,6 +61,7 @@ RewriteRule ^user/(\d+)/?$ /user/profile.php?uid=$1
 RewriteRule ^user/(\d+)/forums/?$ /forums/user.php?uid=$1
 RewriteRule ^user/(\d+)/gallery/?$ /gallery/user.php?uid=$1
 RewriteRule ^user/(\d+)/fics/?$ /fics/user.php?uid=$1
+RewriteRule ^user/(\d+)/oekaki/?$ /oekaki/site/user.php?uid=$1
 #RewriteRule ^user/(\d+)/oekaki/?$ /user/profile.php?uid=$1
 RewriteRule ^user/(\d+)/preferences/?$ /user/preferences.php?uid=$1
 RewriteRule ^user/(\d+)/preferences/bio/save/?$ /user/save_bio_ajax.php?uid=$1
@@ -114,6 +115,15 @@ RewriteRule ^fics/favorite/?$ /fics/edit_favorites.php
 RewriteRule ^fics/tagsearch/?$ /fics/tag_ajax.php [QSA]
 RewriteRule ^fics/help/?$ /fics/tag_help.php
 RewriteRule ^fics/rss.xml$ /fics/rss.php
+
+#Rewrites for oekaki pages
+RewriteRule ^oekaki/?$ /oekaki/site/browse.php [QSA]
+RewriteRule ^oekaki/comment/?$ /oekaki/site/browse.php
+RewriteRule ^oekaki/image/(.*)$ /oekaki/site/data/$1
+RewriteRule ^oekaki/draw/?$ /oekaki/app/index.html
+RewriteRule ^oekaki/slots/list/?$ /oekaki/site/slots.php?list
+RewriteRule ^oekaki/slots/(\d+)/?$ /oekaki/site/slots.php?metadata=$1
+RewriteRule ^oekaki/slots/(\d+)/save/?$ /oekaki/site/slots.php?save=$1
 
 #Rewrites for user pages.
 RewriteRule ^user/list/?$ /user/list.php?sort=name&order=asc [QSA]

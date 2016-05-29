@@ -65,6 +65,7 @@
                     </p>
                     <div class="Clear">&nbsp;</div>
                 </li>
+            </ul>
             <div class="Clear">&nbsp;</div>
         </div>
     </div>

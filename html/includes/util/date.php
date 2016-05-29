@@ -91,4 +91,33 @@ function ParseShortDuration($val) {
     if ($val <= 0) return -1;
     return $val * $mult;
 }
+
+function FormatVeryShortDuration($seconds) {
+    $seconds_per_minute = 60;
+    $seconds_per_hour = 60 * $seconds_per_minute;
+    $seconds_per_day = 24 * $seconds_per_hour;
+
+    if ($seconds < 0) $seconds = -$seconds;
+
+    $result = "";
+    if ($seconds >= $seconds_per_day) {
+        $days = floor($seconds / $seconds_per_day);
+        $seconds -= $days * $seconds_per_day;
+        $result = $result.$days."d ";
+    }
+    if ($seconds >= $seconds_per_hour) {
+        $hours = floor($seconds / $seconds_per_hour);
+        $seconds -= $hours * $seconds_per_hour;
+        $result = $result.$hours."h ";
+    }
+    if ($seconds >= $seconds_per_minute) {
+        $minutes = floor($seconds / $seconds_per_minute);
+        $seconds -= $minutes * $seconds_per_minute;
+        $result = $result.$minutes."m ";
+    }
+    if ($seconds >= 1) {
+        $result = $result.$seconds."s ";
+    }
+    return trim($result);
+}
 ?>

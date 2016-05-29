@@ -17,7 +17,7 @@ $profile_user = &$vars['profile']['user'];
 // Read in bio text file.
 $uid = $profile_user['UserId'];
 $file_path = SITE_ROOT."user/data/bio/$uid.txt";
-if (!read_file($file_path, $bio_contents)) {
+if (!file_exists($file_path) || !read_file($file_path, $bio_contents)) {
     $bio_contents = "";
 }
 $bio_contents = trim(SanitizeHTMLTags($bio_contents, DEFAULT_ALLOWED_TAGS));
@@ -64,10 +64,10 @@ if (isset($user)) {
         if ($user['UserId'] == $profile_user['UserId']) {
             // Don't allow admins to revoke their own admin status by accident.
         } else {
-            AddAdminActionLink($admin_links, array("site-A", "forums=N", "gallery=N", "fics=N"), "Revoke Site Administrator");
+            AddAdminActionLink($admin_links, array("site-A", "forums=N", "gallery=N", "fics=N", "oekaki=N"), "Revoke Site Administrator");
         }
     } else {
-        AddAdminActionLink($admin_links, array("site=A", "forums=A", "gallery=A", "fics=A"), "Make Site Administrator");
+        AddAdminActionLink($admin_links, array("site=A", "forums=A", "gallery=A", "fics=A", "oekaki=A"), "Make Site Administrator");
         AddAdminActionLinkBreak($admin_links);
         // Forums options.
         if ($profile_user['ForumsPermissions'] == 'R') {
@@ -105,6 +105,17 @@ if (isset($user)) {
             AddAdminActionLink($admin_links, array("site+F", "fics=A"), "Make Fics Administrator");
         } else if ($profile_user['FicsPermissions'] == 'A') {
             AddAdminActionLink($admin_links, array("site-F", "fics=N"), "Revoke Fics Administrator");
+        }
+        AddAdminActionLinkBreak($admin_links);
+        // Oekaki options.
+        if ($profile_user['OekakiPermissions'] == 'R') {
+            AddAdminActionLink($admin_links, array("oekaki=N"), "Unrestrict Oekaki Edits");
+            AddAdminActionLink($admin_links, array("site+O", "oekaki=A"), "Make Oekaki Administrator");
+        } else if ($profile_user['OekakiPermissions'] == 'N') {
+            AddAdminActionLink($admin_links, array("oekaki=R"), "Restrict Oekaki Edits");
+            AddAdminActionLink($admin_links, array("site+O", "oekaki=A"), "Make Oekaki Administrator");
+        } else if ($profile_user['OekakiPermissions'] == 'A') {
+            AddAdminActionLink($admin_links, array("site-O", "oekaki=N"), "Revoke Oekaki Administrator");
         }
     }
     $vars['adminLinks'] = $admin_links;

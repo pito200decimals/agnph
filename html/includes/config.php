@@ -1,8 +1,10 @@
 <?php
 // General site-authentication code, used to define access to server db's and such.
 
-$use_debug_php_settings = false;
-if ($use_debug_php_settings) {
+if(!defined("USE_DEBUG_PHP_SETTINGS")) {
+    define("USE_DEBUG_PHP_SETTINGS", false);
+}
+if (USE_DEBUG_PHP_SETTINGS) {
     // Debug settings.
     ini_set("display_errors", "On");
     ini_set("display_startup_errors", "On");

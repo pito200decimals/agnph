@@ -156,10 +156,11 @@ define("FICS_MAX_NUM_COAUTHORS", 3);
 define("MAX_FICS_SEARCH_TERMS", 6);
 define("MAX_FICS_BLACKLIST_TAGS", 50);  // Max data input limit.
 define("UNTHREADED_CONVERSATION_LINK_TIME", 7 * 24 * 60 * 60);
+define("MAX_OEKAKI_SAVE_SLOTS", 3);  // Also in oekaki app constants.
 
 // Site constants (display-related).
 define("DEFAULT_PAGE_ITERATOR_SIZE", 2);  // 2 => 1 ... 5 6 [7] 8 9 ... 12
-define("DEFAULT_MOBILE_PAGE_ITERATOR_SIZE", 1);  // 2 => 1 ... 6 [7] 8 ... 12
+define("DEFAULT_MOBILE_PAGE_ITERATOR_SIZE", 1);  // 1 => 1 ... 6 [7] 8 ... 12
 define("BASE_SKIN", "agnph");  // Skin to default values to if skin omits files.
 define("DEFAULT_AVATAR_PATH", "/images/default-avatar.png");
 define("DEFAULT_DATE_FORMAT", "Y-m-d H:i:s");
@@ -204,7 +205,7 @@ define("IMPORT_USER_WELCOME_PM_KEY", "ImportUserLoginPMKey");
 
 // Other default constant values.
 // TODO: Change on live site.
-define("SITE_DOMAIN", "http://newgallery.agn.ph");  // Used for post-image-search urls, email auth.
+define("SITE_DOMAIN", "http://agn.ph");  // Used for post-image-search urls, email auth.
 define("VERSION", "2.0");
 define("SITE_WELCOME_MESSAGE_KEY", "SiteWelcomeMessage");
 define("REGISTER_DISCLAIMER_KEY", "RegisterDisclaimer");

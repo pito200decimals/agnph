@@ -5,6 +5,8 @@ html/gallery/data/*
 html/fics/data/*
 html/user/data/*
 html/images/uploads/*
-html/oekaki/*
+html/oekaki/app/*
+html/oekaki/lib/*
+html/oekaki/site/data/*
 html/images/staff/*
 html/setup/*
