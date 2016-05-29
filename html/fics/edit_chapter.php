@@ -42,7 +42,7 @@ if ($action == "create") {
     if ($chapternum <= 0 || $chapternum > sizeof($chapters)) RenderErrorPage("Chapter not found.");
     $chapter = $chapters[$chapternum - 1];
     $vars['chaptertitle'] = $chapter['Title'];
-    $vars['chapternotes'] = $chapter['ChapterNotes'];
+    $vars['chapternotes'] = SanitizeHTMLTags($chapter['ChapterNotes'], DEFAULT_ALLOWED_TAGS);
     $cid = $chapter['ChapterId'];
     $chaptertext = GetChapterText($cid);
     if ($chaptertext === null) {
@@ -50,7 +50,7 @@ if ($action == "create") {
     } else {
         $vars['chaptertext'] = $chaptertext;
     }
-    $vars['chapterendnotes'] = $chapter['ChapterEndNotes'];
+    $vars['chapterendnotes'] = SanitizeHTMLTags($chapter['ChapterEndNotes'], DEFAULT_ALLOWED_TAGS);
     $vars['chapterid'] = GetHashForChapter($sid, $cid);
     $vars['edit'] = true;
 } else {

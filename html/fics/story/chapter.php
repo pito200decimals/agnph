@@ -31,6 +31,8 @@ if (!LoadTableData(array(USER_TABLE), "UserId", $chapter_author_ids, $authors)) 
 $chapter['author'] = $authors[$chapter['AuthorUserId']];
 
 $vars['story'] = $story;
+$chapter['ChapterNotes'] = SanitizeHTMLTags($chapter['ChapterNotes'], DEFAULT_ALLOWED_TAGS);
+$chapter['ChapterEndNotes'] = SanitizeHTMLTags($chapter['ChapterEndNotes'], DEFAULT_ALLOWED_TAGS);
 $vars['chapter'] = $chapter;
 $vars['_title'] = $story['Title'].", Chapter $chapternum - AGNPH - Fics";
 $vars['numchapters'] = sizeof($chapters);
