@@ -27,7 +27,7 @@ function CanUserDeletePost($user, $post) {
     // Restrict user based on permissions. Restricted users cannot delete their own comments/posts.
     if ($user['OekakiPermissions'] == 'R') return false;
     if ($user['UserId'] == $post['UserId']) return true;  // Creator can delete.
-    return true;
+    return false;
 }
 
 ?>

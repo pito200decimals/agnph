@@ -7,12 +7,12 @@ include_once(SITE_ROOT."includes/constants.php");
 include_once(SITE_ROOT."includes/util/core.php");
 
 $search_clause = "WHERE TRUE";
-if (isset($_GET['prefix'])) {
-    $prefix = mb_strtolower($_GET['prefix'], "UTF-8");
-    $escaped_prefix = sql_escape($prefix);
-    $search_clause = "WHERE LOWER(DisplayName) LIKE '$prefix%'";
+if (isset($_GET['search'])) {
+    $search = mb_strtolower($_GET['search'], "UTF-8");
+    $escaped_prefix = sql_escape($search);
+    $search_clause = "WHERE LOWER(DisplayName) LIKE '$escaped_prefix%'";
 } else {
-    $prefix = "";
+    $search = "";
 }
 // TODO: Include co-authors?
 $search_clause .= " AND EXISTS(SELECT 1 FROM ".FICS_STORY_TABLE." S WHERE T.UserId=S.AuthorUserId)";
@@ -40,7 +40,7 @@ if (sql_query_into($result, "SELECT * FROM ".FICS_STORY_TABLE." WHERE AuthorUser
 }
 
 $vars['authors'] = $authors;
-$vars['searchPrefix'] = $prefix;
+$vars['searchTerms'] = $search;
 $vars['iterator'] = $iterator;
 
 RenderPage("fics/authorindex.tpl");

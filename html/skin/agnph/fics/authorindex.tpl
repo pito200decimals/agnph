@@ -10,7 +10,7 @@
     <div class="list-search-bar">
         <form action="/fics/authors/" accept-charset="UTF-8">
             <div class="search">
-                <input class="search" name="search" value="{{ searchPrefix }}" type="text" required placeholder="Search Authors" />
+                <input class="search" name="search" value="{{ searchTerms }}" type="text" required placeholder="Search Authors" />
                 <input type="submit" class="search-button" value="" />
             </div>
         </form>
