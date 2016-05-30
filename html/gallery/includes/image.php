@@ -10,7 +10,7 @@ class SimpleImage
     var $image_type;
     function load($filename)
     {
-        $image_info       = getimagesize($filename);
+        $image_info = getimagesize($filename);
         $this->image_type = $image_info[2];
         if ($this->image_type == IMAGETYPE_JPEG) {
             $this->image = imagecreatefromjpeg($filename);
@@ -19,6 +19,13 @@ class SimpleImage
         } elseif ($this->image_type == IMAGETYPE_PNG) {
             $this->image = imagecreatefrompng($filename);
         }
+    }
+    function loadFromBase64($base64)
+    {
+        $base64 = base64_decode($base64);
+        $image_info = getimagesizefromstring($base64);
+        $this->image_type = $image_info[2];
+        $this->image = imagecreatefromstring($base64);
     }
     function save($filename, $compression = 75, $permissions = null)
     {

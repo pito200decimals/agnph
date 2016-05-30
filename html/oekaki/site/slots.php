@@ -2,8 +2,9 @@
 
 define("SITE_ROOT", "../../");
 include_once(SITE_ROOT."ajax_header.php");
-
-define("METADATA_FILE_NAME", "data.txt");
+include_once(SITE_ROOT."includes/constants.php");
+include_once(SITE_ROOT."oekaki/site/includes/functions.php");
+include_once(SITE_ROOT."gallery/includes/image.php");  // For image resize functions.
 
 if (!isset($user)) {
     AJAXErr();
@@ -37,77 +38,6 @@ if (isset($_GET['list'])) {
 // Else, AJAX error.
 AJAXErr();
 
-function IsMetadataValid($metadata) {
-    if (isset($metadata['name']) &&
-        isset($metadata['slot']) &&
-        isset($metadata['width']) &&
-        isset($metadata['height']) &&
-        isset($metadata['elapsedSeconds']) &&
-        isset($metadata['color1']) &&
-        isset($metadata['color1']['r']) &&
-        isset($metadata['color1']['g']) &&
-        isset($metadata['color1']['b']) &&
-        isset($metadata['color2']) &&
-        isset($metadata['color2']['r']) &&
-        isset($metadata['color2']['g']) &&
-        isset($metadata['color2']['b']) &&
-        isset($metadata['layers'])) {
-        $layers = $metadata['layers'];
-        $valid_layers = (sizeof($layers) > 0);
-        foreach ($layers as $layer) {
-            if (!isset($layer['name']) ||
-                !isset($layer['lockOpacity']) ||
-                !isset($layer['opacity']) ||
-                !(isset($layer['src']) || isset($layer['data']))) {
-                $valid_layers = false;
-            }
-        }
-        if ($valid_layers) {
-            return true;
-        }
-    }
-    return false;
-}
-
-function SanitizeMetadata($metadata) {
-    $result = array();
-    $fields = array('name', 'slot', 'width', 'height', 'elapsedSeconds');
-    foreach ($fields as $name) {
-        $result[$name] = $metadata[$name];
-    }
-    $result['color1'] = array(
-        'r' => $metadata['color1']['r'],
-        'g' => $metadata['color1']['g'],
-        'b' => $metadata['color1']['b']);
-    $result['color2'] = array(
-        'r' => $metadata['color2']['r'],
-        'g' => $metadata['color2']['g'],
-        'b' => $metadata['color2']['b']);
-    $result['layers'] = array();
-    foreach ($metadata['layers'] as &$layer) {
-        $temp_layer = array(
-            'name' => $layer['name'],
-            'lockOpacity' => $layer['lockOpacity'],
-            'opacity' => $layer['opacity']);
-        if (isset($layer['src'])) $temp_layer['src'] = $layer['src'];
-        if (isset($layer['data'])) $temp_layer['data'] = $layer['data'];
-        $result['layers'][] = $temp_layer;
-    }
-    return $result;
-}
-
-function GetValidMetadataOrNull($slot_index) {
-    global $user;
-    global $user_dir_path;
-    $path = $user_dir_path."slot$slot_index/";
-    $meta_path = $path.METADATA_FILE_NAME;
-    $empty = true;
-    if (file_exists($path) && file_exists($meta_path)) {
-        $metadata = json_decode(file_get_contents($meta_path), true);
-        if (IsMetadataValid($metadata)) return $metadata;
-    }
-    return NULL;
-}
 
 function ListSlots() {
     global $user;
@@ -152,31 +82,45 @@ function SaveImage($slot_index, $metadata) {
     global $user;
     global $user_dir_path;
     $path = $user_dir_path."slot$slot_index/";
-    $meta_path = $path.METADATA_FILE_NAME;
-    function check_base64_image($base64) {
-        $img = imagecreatefromstring(base64_decode($base64));
-        if (!$img) return false;
-        $tmp_path = 'tmp.png';
-        imagepng($img, $tmp_path);
-        $info = getimagesize($tmp_path);
-        unlink($tmp_path);
-        if ($info[0] > 0 && $info[1] > 0 && $info['mime']) return true;
-        return false;
+    $meta_path = $path.OEKAKI_METADATA_FILE_NAME;
+    $thumb_path = $path.OEKAKI_THUMB_FILE_NAME;
+
+    function CreateImageThumb($base64, $path) {
+        $expected_base64_prefix = "data:image/png;base64,";
+        if (!startsWith($base64, $expected_base64_prefix)) return false;
+        $base64_data = substr($base64, strlen($expected_base64_prefix));
+        $img = new SimpleImage();
+        $img->loadFromBase64($base64_data);
+        if ($img->getWidth() >= $img->getHeight()) {
+            if ($img->getWidth() > MAX_OEKAKI_IMAGE_THUMB_SIZE) {
+                $img->resizeToWidth(MAX_OEKAKI_IMAGE_THUMB_SIZE);
+            }
+        } else {
+            if ($img->getHeight() > MAX_OEKAKI_IMAGE_THUMB_SIZE) {
+                $img->resizeToHeight(MAX_OEKAKI_IMAGE_THUMB_SIZE);
+            }
+        }
+        $img->save($path);
+    }
+    function CheckImageData($data) {
+        $expected_base64_prefix = "data:image/png;base64,";
+        if (!startsWith($data, $expected_base64_prefix)) return false;
+        $base64_data = substr($data, strlen($expected_base64_prefix));
+        if (getimagesizefromstring(base64_decode($base64_data)) === FALSE) {
+            return false;
+        }
+        return true;
     }
 
     if (!IsMetadataValid($metadata)) {
         AJAXErr();
     }
     // Check for image data.
-    $expected_base64_prefix = "data:image/png;base64,";
     foreach ($metadata['layers'] as $layer) {
         if (!isset($layer['data'])) AJAXErr();
-        if (!startsWith($layer['data'], $expected_base64_prefix)) AJAXErr();
-        $base64_data = substr($layer['data'], strlen($expected_base64_prefix));
-        if (!check_base64_image($base64_data)) {
-            AJAXErr();
-        }
+        if (!CheckImageData($layer['data'])) AJAXErr();
     }
+    if (!CheckImageData($metadata['imageData'])) AJAXErr();
     $metadata = SanitizeMetadata($metadata);
     if (!file_exists($path)) {
         mkdir($path, 0777, true /* recursive */);
@@ -184,6 +128,8 @@ function SaveImage($slot_index, $metadata) {
     if (!file_put_contents($meta_path, json_encode($metadata))) {
         AJAXErr();
     }
+    // Save thumbnail.
+    CreateImageThumb($metadata['imageData'], $thumb_path);
     echo json_encode(array("status" => "success"));
     exit();
 }

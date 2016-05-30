@@ -1,4 +1,4 @@
-{% extends "base.tpl" %}
+{% extends "oekaki/base.tpl" %}
 
 {% block scripts %}
     {{ parent() }}
@@ -60,19 +60,7 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/oekaki/style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('/comments-style.css') }}" />
-{% endblock %}
-
-{% block section_navigation %}
-    <ul class="section-nav">
-        <li><a href="/oekaki/">Index</a></li>
-        {#<li><a href="/oekaki/">Browse</a></li>#}
-        {% if user %}
-            {#<li><a href="/oekaki/draw/">Draw</a></li>#}
-            <li><a href="/user/{{ user.UserId }}/oekaki/">My Oekaki</a></li>
-        {% endif %}
-    </ul>
 {% endblock %}
 
 {% use 'includes/comment-block.tpl' %}

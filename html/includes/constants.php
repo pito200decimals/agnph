@@ -157,6 +157,10 @@ define("MAX_FICS_SEARCH_TERMS", 6);
 define("MAX_FICS_BLACKLIST_TAGS", 50);  // Max data input limit.
 define("UNTHREADED_CONVERSATION_LINK_TIME", 7 * 24 * 60 * 60);
 define("MAX_OEKAKI_SAVE_SLOTS", 3);  // Also in oekaki app constants.
+define("OEKAKI_THUMB_FILE_EXTENSION", "png");  // Don't change once oekaki is launched.
+define("MAX_OEKAKI_IMAGE_THUMB_SIZE", 300);
+define("OEKAKI_THUMB_FILE_NAME", "thumb.".OEKAKI_THUMB_FILE_EXTENSION);
+define("OEKAKI_METADATA_FILE_NAME", "data.txt");
 
 // Site constants (display-related).
 define("DEFAULT_PAGE_ITERATOR_SIZE", 2);  // 2 => 1 ... 5 6 [7] 8 9 ... 12

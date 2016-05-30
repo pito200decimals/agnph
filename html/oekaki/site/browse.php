@@ -35,10 +35,23 @@ if (isset($_POST['action'])) {
 
 $posts_per_page = 25;
 
+$post_sql_condition = "TRUE";
+// Check for custom search parameters.
+if (isset($_GET['search'])) {
+    $search = $_GET['search'];
+    $lower_search = mb_strtolower($search);
+    $escaped_lower_search = sql_escape($lower_search);
+    $post_sql_condition =
+        "LOWER(Title) LIKE '%$escaped_lower_search%' OR ".
+        "LOWER(Text) LIKE '%$escaped_lower_search%' OR ".
+        "EXISTS(SELECT 1 FROM ".USER_TABLE." Q WHERE LOWER(DisplayName) LIKE '%$escaped_lower_search%' AND Q.UserId=T.UserId)";
+    $vars['searchTerms'] = $search;
+}
+
 // Get all parent posts.
 $sql_select = "*";
 $sql_comments_select = "*";
-$sql_order = "WHERE ParentPostId=-1 AND Status='A' ORDER BY Timestamp DESC, PostId DESC";
+$sql_order = "WHERE ParentPostId=-1 AND (Status='A' OR Status='M') AND ($post_sql_condition) ORDER BY Timestamp DESC, PostId DESC";
 CollectItemsComplex(OEKAKI_POST_TABLE, "SELECT $sql_select FROM ".OEKAKI_POST_TABLE." T", $sql_order, $sql_order, $posts, $posts_per_page, $iterator, "Error displaying oekaki posts");
 $posts_by_id = array();
 foreach ($posts as &$post) {
@@ -47,6 +60,7 @@ foreach ($posts as &$post) {
 }
 // Get all child comments.
 $post_ids_list = "(".implode(",", array_map(function($post) { return $post['PostId']; }, $posts)).")";
+// Note: Comments can't have status 'M', only 'A' and 'D'.
 $get_comments_sql = "SELECT $sql_comments_select FROM ".OEKAKI_POST_TABLE." WHERE ParentPostId IN $post_ids_list AND Status='A' ORDER BY Timestamp ASC, PostId ASC;";
 if (sql_query_into($result, $get_comments_sql, 0)) {
     while ($row = $result->fetch_assoc()) {

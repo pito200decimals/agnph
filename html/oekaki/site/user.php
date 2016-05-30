@@ -4,8 +4,9 @@
 // File: /oekaki/site/user.php?uid={user-id}
 
 include_once("../../header.php");
-include_once(SITE_ROOT."includes/util/file.php");
 include_once(SITE_ROOT."includes/util/core.php");
+include_once(SITE_ROOT."includes/util/file.php");
+include_once(SITE_ROOT."includes/util/date.php");
 include_once(SITE_ROOT."includes/util/user.php");
 include_once(SITE_ROOT."user/includes/functions.php");
 include_once(SITE_ROOT."oekaki/site/includes/functions.php");
@@ -33,7 +34,24 @@ $profile_user['numComments'] = $result->fetch_assoc()['count(*)'];
 //    $profile_user['sample_posts'] = $sample_posts;
 //}
 
-// TODO: Add section for pending images.
+$slots = array();
+$uid = $profile_user['UserId'];
+if (isset($user) && $profile_user['UserId'] == $user['UserId']) {
+    for ($i = 0; $i < MAX_OEKAKI_SAVE_SLOTS; $i++) {
+        $metadata = GetValidMetadataOrNull($i);
+        if ($metadata != null && file_exists(SITE_ROOT."user/data/oekaki/$uid/slot$i/".OEKAKI_THUMB_FILE_NAME)) {
+            $formatted_duration = FormatVeryShortDuration($metadata['elapsedSeconds']);
+            $slot = array(
+                "thumb" => "/oekaki/thumb/$i.png",
+                "href" => "/oekaki/draw/#".($i + 1),
+                "duration" => $formatted_duration,
+                "name" => $metadata['name'],
+                );
+            $slots[] = $slot;
+        }
+    }
+}
+$vars['slots'] = $slots;
 
 // Set up global admin links.
 $admin_links = array();

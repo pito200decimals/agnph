@@ -119,11 +119,13 @@ RewriteRule ^fics/rss.xml$ /fics/rss.php
 #Rewrites for oekaki pages
 RewriteRule ^oekaki/?$ /oekaki/site/browse.php [QSA]
 RewriteRule ^oekaki/comment/?$ /oekaki/site/browse.php
+RewriteRule ^oekaki/post/?$ /oekaki/site/post.php
 RewriteRule ^oekaki/image/(.*)$ /oekaki/site/data/$1
 RewriteRule ^oekaki/draw/?$ /oekaki/app/index.html
 RewriteRule ^oekaki/slots/list/?$ /oekaki/site/slots.php?list
 RewriteRule ^oekaki/slots/(\d+)/?$ /oekaki/site/slots.php?metadata=$1
 RewriteRule ^oekaki/slots/(\d+)/save/?$ /oekaki/site/slots.php?save=$1
+RewriteRule ^oekaki/thumb/(\d+).png?$ /oekaki/site/getThumb.php?slot=$1
 
 #Rewrites for user pages.
 RewriteRule ^user/list/?$ /user/list.php?sort=name&order=asc [QSA]

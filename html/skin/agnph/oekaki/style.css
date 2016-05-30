@@ -1,3 +1,11 @@
+#oekaki-search {
+    float: right;
+    display: inline-block;
+}
+#oekaki-search input[type='text'].search {
+    margin-right: 0px;
+}
+
 .oekaki-post-list {
     list-style: none;
     margin: 0px;
