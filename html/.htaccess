@@ -46,6 +46,8 @@ RewriteRule ^change-skin/?$ /skin_switch.php
 RewriteRule ^rotation/example/?$ /ad_rotation.php
 RewriteRule ^rotation/image/?$ /ad_rotation.php?image
 RewriteRule ^rotation/link/?$ /ad_rotation.php?link
+RewriteRule ^irc/status/update/?$ /irc_mirror.php
+RewriteRule ^irc/status/?$ /irc_mirror.php
 
 # Rewrites for forums pages
 RewriteRule ^forums/?$ /forums/view_board.php?board=-1

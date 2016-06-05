@@ -26,5 +26,6 @@ $dbpass = "";  // Don't show this in github :)
 $dbname = "agnph";
 define("GALLERY_CRYPT_SALT", "");  // Don't show this in github :)
 define("OEKAKI_CRYPT_SALT", "");  // Don't show this in github :)
+define("IRC_MIRROR_POST_SECRET_KEY", "");  // Don't show this in github :)
 
 ?>

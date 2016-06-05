@@ -11,6 +11,8 @@ include_once(SITE_ROOT."includes/util/date.php");
 
 // Handle comment posting.
 if (isset($_POST['action'])) {
+    // Skip if in maintenance mode.
+    if (!CanPerformSitePost()) MaintenanceError();
     if ($_POST['action'] == "comment" &&
         isset($_POST['post-id']) && is_numeric($_POST['post-id']) &&
         isset($_POST['text'])) {

@@ -34,6 +34,11 @@
             <p>
                 <strong>Mozilla Firefox</strong><br />
                 Wacom tablet drivers should include firefox plugin support when you install them. You will be prompted to allow the plugin when first visiting the oekaki.<br />
+                <ul>
+                    <li>
+                        <a href="http://www.wacomeng.com/web/fbWTPInstall.zip">Wacom Plugin</a>
+                    </li>
+                </ul>
                 <small><strong>Note:</strong> Native plugin support may be removed from Firefox later in 2016.</small>
             </p>
             <p>

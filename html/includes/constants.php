@@ -169,6 +169,7 @@ define("BASE_SKIN", "agnph");  // Skin to default values to if skin omits files.
 define("DEFAULT_AVATAR_PATH", "/images/default-avatar.png");
 define("DEFAULT_DATE_FORMAT", "Y-m-d H:i:s");
 define("NEWS_POST_DATE_FORMAT", "M j Y");
+define("IRC_MIRROR_TIME_FORMAT", "H:i");
 define("MAX_SITE_NEWS_POSTS_KEY", "MaxSiteNewsPosts");
 define("DEFAULT_MAX_SITE_NEWS_POSTS", 5);
 define("PROFILE_DATE_FORMAT", "M j Y");  // For register date.

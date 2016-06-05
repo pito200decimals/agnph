@@ -8,6 +8,9 @@ include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."includes/util/html_funcs.php");
 include_once(SITE_ROOT."gallery/includes/functions.php");
 
+// Skip if in maintenance mode.
+if (!CanPerformSitePost()) AJAXErr();
+
 if (!isset($user)) AJAXErr();
 
 // Get POST params (json format from angularjs).
