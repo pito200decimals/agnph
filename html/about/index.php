@@ -34,6 +34,10 @@ if (isset($_GET['q'])) {
             $vars['_title'] = "AGNPH - Oekaki Help";
             RenderPage("about/oekaki.tpl");
             return;
+        case "account":
+            $vars['_title'] = "AGNPH - Account Help";
+            RenderPage("about/account.tpl");
+            return;
         default:
             break;
     }

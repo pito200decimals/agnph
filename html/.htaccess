@@ -143,6 +143,7 @@ RewriteRule ^about/gallery/?$ /about/index.php?q=gallery
 RewriteRule ^about/irc/?$ /about/index.php?q=irc
 RewriteRule ^about/minecraft/?$ /about/index.php?q=minecraft
 RewriteRule ^about/oekaki/?$ /about/index.php?q=oekaki
+RewriteRule ^about/account/?$ /about/index.php?q=account
 
 #Rewrites for admin pages
 RewriteRule ^admin/?$ /admin/site/site.php
