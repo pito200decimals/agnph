@@ -1,0 +1,48 @@
+.irc-active {
+    font-size: 80%;
+}
+.irc-log-container {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: 300px;
+    min-height: 100px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    background-color: white;
+}
+.irc-log {
+    background-color: white;
+    font-family: monospace;
+    font-size: 75%;
+    padding: 5px;
+}
+.irc-links {
+    text-align: center;
+}
+.irc-timestamp {
+    margin-right: 5px;
+}
+.irc-nick {
+    margin-right: 5px;
+}
+.irc-msg {
+}
+.irc-action {
+}
+.irc-changenick {
+}
+.irc-join {
+    color: rgb(0, 127, 0);
+}
+.irc-part {
+    color: rgb(127, 63, 0);
+}
+.irc-quit {
+    color: rgb(127, 63, 0);
+}
+
+@media only handheld, screen and (max-device-width: 1024px), screen and (max-width: 1024px) {
+    .irc-timestamp {
+        display: none;
+    }
+}

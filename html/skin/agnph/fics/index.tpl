@@ -5,15 +5,20 @@
     {% if not user or user.AutoDetectTimezone %}
         <script src="{{ asset('timezone.js') }}"></script>
     {% endif %}
+    {% if user %}
+        <script src="{{ asset('/scripts/irc.js') }}"></script>
+    {% endif %}
 {% endblock %}
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/index-style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/irc-style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('/comments-style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/index-style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('/fics/index-style.css') }}" />
 {% endblock %}
 
+{% use 'includes/irc-block.tpl' %}
 
 {% macro storyitem(story) %}
     {% import 'fics/stars.tpl' as stars %}
@@ -119,6 +124,11 @@
                     <div class="block">
                         <div class="header">Events</div>
                         <div class="content">{% autoescape false %}{{ events }}{% endautoescape %}</div>
+                    </div>
+                {% endif %}
+                {% if user %}
+                    <div class="desktop-only">
+                        {{ block('irc_block') }}
                     </div>
                 {% endif %}
             </div>
