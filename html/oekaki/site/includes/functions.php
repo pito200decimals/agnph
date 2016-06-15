@@ -47,8 +47,9 @@ function IsMetadataValid($metadata) {
         isset($metadata['color2']['g']) &&
         isset($metadata['color2']['b']) &&
         isset($metadata['layers'])) {
+        if ($metadata['width'] > MAX_OEKAKI_IMAGE_SIZE || $metadata['height'] > MAX_OEKAKI_IMAGE_SIZE) return false;
         $layers = $metadata['layers'];
-        $valid_layers = (sizeof($layers) > 0);
+        $valid_layers = (0 < sizeof($layers) && sizeof($layers) <= MAX_OEKAKI_NUM_LAYERS);
         foreach ($layers as $layer) {
             if (!isset($layer['name']) ||
                 !isset($layer['lockOpacity']) ||

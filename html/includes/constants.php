@@ -161,6 +161,8 @@ define("OEKAKI_THUMB_FILE_EXTENSION", "png");  // Don't change once oekaki is la
 define("MAX_OEKAKI_IMAGE_THUMB_SIZE", 300);
 define("OEKAKI_THUMB_FILE_NAME", "thumb.".OEKAKI_THUMB_FILE_EXTENSION);
 define("OEKAKI_METADATA_FILE_NAME", "data.txt");
+define("MAX_OEKAKI_IMAGE_SIZE", 1200);
+define("MAX_OEKAKI_NUM_LAYERS", 24);
 
 // Site constants (display-related).
 define("DEFAULT_PAGE_ITERATOR_SIZE", 2);  // 2 => 1 ... 5 6 [7] 8 9 ... 12
@@ -209,7 +211,6 @@ define("ADMIN_LOG_ENTRIES_PER_PAGE", 50);
 define("IMPORT_USER_WELCOME_PM_KEY", "ImportUserLoginPMKey");
 
 // Other default constant values.
-// TODO: Change on live site.
 define("SITE_DOMAIN", "http://agn.ph");  // Used for post-image-search urls, email auth.
 define("VERSION", "2.0");
 define("SITE_WELCOME_MESSAGE_KEY", "SiteWelcomeMessage");

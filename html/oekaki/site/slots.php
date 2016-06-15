@@ -1,4 +1,5 @@
 <?php
+// Creates metadata json ajax response for all slots.
 
 define("SITE_ROOT", "../../");
 include_once(SITE_ROOT."ajax_header.php");
