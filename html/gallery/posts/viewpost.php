@@ -93,7 +93,7 @@ if ($post['HasPreview']) {
 $post['downloadUrl'] = GetSiteImagePath($md5, $ext);
 $post['Description'] = SanitizeHTMLTags($post['Description'], NO_HTML_TAGS);  // Sanitize input.
 // Concatenate reverse-image search urls.
-$post['googleUrl'] = "http://google.com/searchbyimage?image_url=".SITE_DOMAIN.GetSiteImagePath($md5, $ext);
+$post['googleUrl'] = "https://www.google.com/searchbyimage?image_url=".SITE_DOMAIN.GetSiteImagePath($md5, $ext);
 $post['saucenaoUrl'] = "http://saucenao.com/search.php?url=".SITE_DOMAIN.GetSiteImagePath($md5, $ext);
 $post['iqdbUrl'] = "http://iqdb.org/?url=".SITE_DOMAIN.GetSiteImagePath($md5, $ext);
 $post['harryluUrl'] = "http://iqdb.harry.lu/?url=".SITE_DOMAIN.GetSiteImagePath($md5, $ext);
