@@ -71,10 +71,6 @@ if (sizeof($board['childBoards']) == 0) {
 }
 return;
 
-function GetBoardStats(&$boardTree) {
-
-}
-
 function GetThreadSortOrder() {
     $order_clause = "EditDate DESC";
     if (isset($_GET['sort'])) {
@@ -204,6 +200,8 @@ function HandlePost($board) {
             foreach ($new_id_order_mapping as $id => $order) {
                 sql_query("UPDATE ".FORUMS_BOARD_TABLE." SET BoardSortOrder=$order WHERE BoardId=$id;");
             }
+            UpdateBoardStats($pid);
+            UpdateBoardStats($old_pid);
             PostSessionBanner("Board moved", "green");
             break;
         case "create":
@@ -278,7 +276,9 @@ function HandlePost($board) {
                 $parentName = $result->fetch_assoc()['Name'];
                 $final_url = "/forums/board/".urlencode($parentName)."/";
             }
+            UpdateBoardStats($pid);
             Redirect("$final_url");
+            return;
         case "rename":
             if ($board['BoardId'] == -1) break;
             if (!isset($_POST['name']) || !isset($_POST['description'])) {
@@ -302,6 +302,7 @@ function HandlePost($board) {
             // Manually redirect to new board name.
             $final_url = "/forums/board/".urlencode(mb_strtolower($name, "UTF-8"))."/";
             Redirect("$final_url");
+            return;
         default:
             // Not a valid POST.
             return;

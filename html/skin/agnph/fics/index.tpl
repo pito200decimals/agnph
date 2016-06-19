@@ -44,7 +44,7 @@
             <a href="/fics/story/{{ story.StoryId }}/">{{ story.Title }}</a> by <a href="/user/{{ story.author.UserId }}/fics/">{{ story.author.DisplayName }}</a>
             <span class="stars">{{ stars.stars(story) }}</span>
         </div>
-        <div class="summary">{{ story.shortSummary }}</div>
+        <div class="summary">{% autoescape false %}{{ story.shortSummary }}{% endautoescape %}</div>
         <div class="rating"><strong>Rating:</strong>{{ story.rating }}</div>
     </div>
 {% endmacro %}

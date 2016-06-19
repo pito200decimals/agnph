@@ -2,7 +2,8 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/comments-style.css') }}" />
+    {# included in parent #}
+    {#<link rel="stylesheet" type="text/css" href="{{ asset('/comments-style.css') }}" />#}
     <style>
         .signature {
             max-height: 200px;

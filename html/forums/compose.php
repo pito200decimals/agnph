@@ -240,6 +240,7 @@ function HandleEditPost() {
             $sets[] = "Locked=$locked";
             $sets[] = "NewsPost=$news";
         }
+        $boards_to_update = array();
         if (CanUserMoveThread($user) && isset($_POST['move-board']) && is_numeric($_POST['move-board'])) {
             // Assume "move-board" will not be set on non-threads (as only authenticated administrators can do this anyways).
             $new_bid = (int)$_POST['move-board'];
@@ -251,6 +252,8 @@ function HandleEditPost() {
                 $board = $result->fetch_assoc();
                 $boardname = $board['Name'];
                 if ($new_bid != $vars['post']['ParentId']) {
+                    $boards_to_update[] = $vars['post']['ParentId'];
+                    $boards_to_update[] = $new_bid;
                     $sets[] = "ParentId='$escaped_bid'";
                     LogAction("<strong><a href='/user/$uid/'>$name</a></strong> moved thread <strong>$title</strong> to board <strong>$boardname</strong>", "R");
                 }
@@ -269,6 +272,11 @@ function HandleEditPost() {
                 UpdateBoardStats($new_bid);
             }
             PostSessionBanner("Saved post changes", "green");
+        }
+        if (sizeof($boards_to_update) > 0) {
+            foreach ($boards_to_update as $bid) {
+                UpdateBoardStats($bid);
+            }
         }
         GoToForumPost($pid);
     } else {
