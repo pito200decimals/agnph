@@ -10,10 +10,6 @@ include_once(SITE_ROOT."includes/util/file.php");
 include_once(SITE_ROOT."includes/auth/email_auth.php");
 include_once(SITE_ROOT."user/includes/register_functions.php");
 
-if (isset($user)) {
-    Redirect("/");
-    return;
-}
 if (isset($_SESSION['auth_row'])) {
     $data = $_SESSION['auth_row'];
     unset($_SESSION['auth_row']);

@@ -1,4 +1,3 @@
-{% spaceless %}
 {# Define blocks to be used elsewhere #}
 {% if false %}
     {# Notification banners #}
@@ -29,16 +28,18 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {# Disable all HTML caching #}
+        <meta http-equiv="cache-control" content="max-age=0" />
+        <meta http-equiv="cache-control" content="no-cache" />
+        <meta http-equiv="expires" content="0" />
+        <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+        <meta http-equiv="pragma" content="no-cache" />
+        {# end disable-caching #}
         <link rel="icon" type="image/png" href="/images/favicon.png" />
         <title>{% if _title %}{{ _title }}{% else %}{% block title %}AGNPH{% endblock %}{% endif %}</title>
         <link rel="stylesheet" type="text/css" href="{{ asset('/style.css') }}" />
         {% block styles %}
             {# Custom page styles go here #}
-        {% endblock %}
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-        <script src="{{ asset('/base.js') }}"></script>
-        {% block scripts %}
-            {# Custom page scripts go here #}
         {% endblock %}
         <link rel="stylesheet" type="text/css" href="{{ asset('/color.css') }}" />
         {% if debug %}
@@ -51,6 +52,11 @@
                 }
             </style>
         {% endif %}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="{{ asset('/base.js') }}"></script>
+        {% block scripts %}
+            {# Custom page scripts go here #}
+        {% endblock %}
     </head>
     <body>
         <div class="site-navbar">
@@ -115,7 +121,7 @@
                     <li{% if nav_section=="forums" %} class="selected-nav"{% endif %}><a href="/forums/board/">Forums</a></li>
                     <li{% if nav_section=="gallery" %} class="selected-nav"{% endif %}><a href="/gallery/post/">Gallery</a></li>
                     <li{% if nav_section=="fics" %} class="selected-nav"{% endif %}><a href="/fics/">Fics</a></li>
-                    <li{% if nav_section=="oekaki" %} class="selected-nav"{% endif %}><a href="/oekaki/">Oekaki<span id="new-section-badge">New!</span></a></li>
+                    <li{% if nav_section=="oekaki" %} class="selected-nav"{% endif %}><a href="/oekaki/">Oekaki <span id="new-section-badge">New!</span></a></li>
                     <li{% if nav_section=="user" %} class="selected-nav"{% endif %}><a href="/user/list/">Users</a></li>
                     <li><a href="/about/irc/">IRC</a></li>
                     <li{% if nav_section=="about" %} class="selected-nav"{% endif %}><a href="/about/">About</a></li>
@@ -185,4 +191,3 @@
         </div>
     </body>
 </html>
-{% endspaceless %}

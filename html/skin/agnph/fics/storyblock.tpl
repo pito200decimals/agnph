@@ -70,16 +70,16 @@
                             {% endif %}
                         </span>
                     </li>
-                    <li><span class="metalabel">Chapters:</span><span class="metavalue">{{ story.ChapterCount }}</span></li>
+                    <li><span class="metalabel">Chapters:</span> <span class="metavalue">{{ story.ChapterCount }}</span></li>
                     {% if not story.shortDesc %}
                     <li>
-                        <span class="metalabel">Completed:</span><span class="metavalue">{% if story.Completed %}Yes{% else %}No{% endif %}</span>
-                        <span class="metalabel">Word Count:</span><span class="metavalue">{{ story.WordCount }}</span>
-                        <span class="metalabel">Views:</span><span class="metavalue">{{ story.Views }}</span>
+                        <span class="metalabel">Completed:</span> <span class="metavalue">{% if story.Completed %}Yes{% else %}No{% endif %}</span>
+                        <span class="metalabel">Word Count:</span> <span class="metavalue">{{ story.WordCount }}</span>
+                        <span class="metalabel">Views:</span> <span class="metavalue">{{ story.Views }}</span>
                     </li>
                     <li>
-                        <span class="metalabel">Published:</span><span class="metavalue">{{ story.DateCreated }}</span>
-                        {% if story.DateCreated != story.DateUpdated %}<span class="metalabel">Updated:</span><span class="metavalue">{{ story.DateUpdated }}</span>{% endif %}
+                        <span class="metalabel">Published:</span> <span class="metavalue">{{ story.DateCreated }}</span>
+                        {% if story.DateCreated != story.DateUpdated %}<span class="metalabel">Updated:</span> <span class="metavalue">{{ story.DateUpdated }}</span>{% endif %}
                     </li>
                     {% endif %}
                 </ul>

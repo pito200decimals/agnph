@@ -154,16 +154,16 @@ function ConstructDefaultPageIterator($currpage, $maxpage, $iterator_size, $url_
 }
 
 // Renders the page to the given template.
-function RenderPage($template, $tidy = true) {
+function RenderPage($template, $tidy = false) {
     global $twig, $vars;
     $text = mb_ereg_replace("\s+", " ", $twig->render($template, $vars));
-    $text = mb_ereg_replace(">\s+", ">", $text);
-    $text = mb_ereg_replace("\s+<", "<", $text);
     if (DEBUG) {
         echo "\n\n\n\n\n";
         echo "----------------------------------------------------------------------------------------------\n";
     }
     if ($tidy) {
+        $text = mb_ereg_replace(">\s+", ">", $text);
+        $text = mb_ereg_replace("\s+<", "<", $text);
         $text = TidyHTML($text);
     }
     echo ($text);

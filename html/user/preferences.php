@@ -84,7 +84,12 @@ if (isset($_POST['display-name']) &&
                     $user_table_sets[] = "DisplayNameChangeTime=$now";
                     $username = $user['DisplayName'];
                     $newUsername = $display_name;
-                    LogAction("<strong><a href='/user/$uid/'>$username</a></strong> changed names to <strong>$newUsername</strong>", "");
+                    if ($user['UserId'] == $profile_user['UserId']) {
+                        LogAction("<strong><a href='/user/$uid/'>$username</a></strong> changed names to <strong>$newUsername</strong>", "");
+                    } else {
+                        $profile_username = $profile_user['DisplayName'];
+                        LogAction("<strong><a href='/user/$uid/'>$username</a></strong> changed the name of account <strong><a href='/user/$uid/'>$profile_username</a></strong> to <strong>$newUsername</strong>", "");
+                    }
                 }
             }
         }

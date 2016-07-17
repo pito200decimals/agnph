@@ -149,7 +149,7 @@
                                     <ul class="taglist">
                                         {% for tag in category.tags %}
                                             <li class="tag">
-                                                <a href="/gallery/post/?search={{ tag.quotedName|url_encode }}" class="{{ tag.Type|lower }}typetag">{{ tag.displayName }}</a><small>{{ tag.ItemCount }}</small>
+                                                <a href="/gallery/post/?search={{ tag.quotedName|url_encode }}" class="{{ tag.Type|lower }}typetag">{{ tag.displayName }}</a> <small>{{ tag.ItemCount }}</small>
                                             </li>
                                         {% endfor %}
                                     </ul>

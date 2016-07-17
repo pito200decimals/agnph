@@ -31,54 +31,90 @@ function CreateSQLClauses($search) {
     return CreateSQLClausesFromTerms($terms);
 }
 
-function CreateSQLClausesFromTerms($terms, $mode="AND") {
+function RemoveTermPrefix($term) {
+    while (startsWith($term, "-") || startsWith($term, "~")) {
+        $term = mb_substr($term, 1);
+    }
+    return $term;
+}
+function CleanSearchTerms($terms) {
+    $result = array();
+    foreach ($terms as $term) {
+        if (startsWith($term, "-")) {
+            $term = "-".RemoveTermPrefix($term);
+        } else if (startsWith($term, "~")) {
+            $term = "~".RemoveTermPrefix($term);
+        }
+        $result[] = $term;
+    }
+    return $result;
+}
+
+function CreateSQLClausesFromTerms($terms) {
     global $user;
-    $or_terms = array();
+    if ($terms == array("")) {
+        return "TRUE";
+    }
+    // AND: ABC
+    // OR: A+B+C
+    // NOT: !A!B!C
+    //
+    // This can be simplified as:
+    // AND: (A)(B)(C)
+    // OR: (A+B+C)
+    // NOT: !(A+B+C)
+    //
+    // If a term is of the form -~$term, ~-$term, --$term, ~~$term, only the first modifier character is used. So NOT OR terms are not supported.
+    $terms = CleanSearchTerms($terms);
     $and_terms = array();
+    $or_terms = array();
+    $not_terms = array();
     $filter_clauses = array();
     if ($terms != array("")) {
         foreach ($terms as $term) {
-            if (startsWith($term, "~")) {
-                $or_terms[] = mb_substr($term, 1);
-            } else if (mb_strpos($term, ":") !== FALSE) {
+            if (mb_strpos($term, ":") !== FALSE) {
                 $filter_clauses[] = $term;
+            } else if (startsWith($term, "~")) {
+                $or_terms[] = mb_substr($term, 1);
+            } else if (startsWith($term, "-")) {
+                $not_terms[] = mb_substr($term, 1);
             } else {
                 $and_terms[] = $term;
             }
         }
     }
-    if ($mode == "AND") {
-        $and_terms = array_merge($and_terms, GetGalleryBlacklistClauses($and_terms, $or_terms));
-    }
+    $not_terms = array_merge($not_terms, GetGalleryBlacklistClauses($and_terms, $or_terms, $not_terms));
     $sql = array();
-    if (sizeof($or_terms) > 0) {
-        $sql[] = "(".CreateSQLClausesFromTerms($or_terms, "OR").")";
-    }
     if (sizeof($and_terms) > 0) {
-        foreach ($and_terms as $term) {
-            $sql[] = "(".CreateSQLClauseFromTerm($term).")";
-        }
+        $sql[] = "(".CreateANDSQLClauseFromTerms($and_terms).")";
     }
-    if ($mode == "AND" &&
-        !FilterHasClause($filter_clauses, "-*status:deleted")&&
-        !FilterHasClause($or_terms, "-*status:deleted")) {
+    if (sizeof($or_terms) > 0) {
+        $sql[] = CreateORSQLClauseFromTerms($or_terms);
+    }
+    if (sizeof($not_terms) > 0) {
+        $sql[] = CreateNOTSQLClauseFromTerms($not_terms);
+    }
+    // Don't show deleted posts unless explicitly requesting them.
+    if (!FilterHasClause($filter_clauses, "-*status:deleted")&&
+        !FilterHasClause($or_terms, "status:deleted")&&
+        !FilterHasClause($not_terms, "status:deleted")) {
         $filter_clauses[] = "-status:deleted";
     }
-    if ($mode == "AND" &&
-        FilterHasClause($filter_clauses, "order:popular") &&
+    // Don't show swf and webm posts on popular page unless explicitly requesting them.
+    if (FilterHasClause($filter_clauses, "order:popular") &&
         !FilterHasClause($filter_clauses, "-*file:swf") &&
         !FilterHasClause($filter_clauses, "-*file:webm") &&
-        !FilterHasClause($or_terms, "-*file:swf") &&
-        !FilterHasClause($or_terms, "-*file:webm")) {
+        !FilterHasClause($or_terms, "file:swf") &&
+        !FilterHasClause($or_terms, "file:webm") &&
+        !FilterHasClause($not_terms, "file:swf") &&
+        !FilterHasClause($not_terms, "file:webm")) {
         $filter_clauses[] = "-file:swf";
         $filter_clauses[] = "-file:webm";
     }
     if (sizeof($filter_clauses) > 0) {
-        foreach($filter_clauses as $term) {
-            $sql[] = "(".CreateSQLClauseFromFilter($term).")";
-        }
+        $sql[] = CreateFilterSQLClauseFromTerms($filter_clauses);
     }
-    $sql = implode(" $mode ", $sql);
+    $sql = implode(" AND ", $sql);
     if (isset($user) && CanUserSearchDeletedPosts($user)) {
         // Any sql is fine.
     } else {
@@ -94,20 +130,65 @@ function FilterHasClause($filter_clauses, $reg) {
       })) == 1;
 }
 
-function CreateSQLClauseFromTerm($term) {
-    if (startsWith($term, "-")) {
-        return "NOT(".CreateSQLClauseFromTerm(mb_substr($term, 1)).")";
-    } else if (mb_strtolower($term, "UTF-8") == "missing_artist") {
+function GetTagIds($terms) {
+    if (!is_array($terms)) return GetTagIds(array($terms));
+    $tags = GetTagsByNameWithAliasAndImplied(GALLERY_TAG_TABLE, GALLERY_TAG_ALIAS_TABLE, GALLERY_TAG_IMPLICATION_TABLE, $terms, false, -1, true, false, false);  // Apply alias, but don't drop tags.
+    $tag_ids = array_keys($tags);
+    return $tag_ids;
+}
+function SQLForHasOneOfTagIds($tag_ids) {
+    $joined = implode(",", $tag_ids);
+    return "EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." WHERE T.PostId=PostId AND TagId IN ($joined) LIMIT 1)";
+}
+
+function CreateANDSQLClauseFromTerms($and_terms) {
+    $sql = array();
+    foreach ($and_terms as $term) {
+        $value = GetSpecialSQLClauseForTerm($term);
+        if ($value != null) {
+            $sql[] = "($value)";
+        } else {
+            $tag_ids = GetTagIds($term);
+            if (sizeof($tag_ids) > 0) {
+                $sql[] = "(".SQLForHasOneOfTagIds($tag_ids).")";
+            }
+        }
+    }
+    return "(".implode(" AND ", $sql).")";
+}
+function CreateORSQLClauseFromTerms($or_terms) {
+    $sql = array();
+    $tag_ids = array();
+    foreach ($or_terms as $term) {
+        $value = GetSpecialSQLClauseForTerm($term);
+        if ($value != null) {
+            $sql[] = "($value)";
+        } else {
+            $tag_ids = array_merge($tag_ids, GetTagIds($term));
+        }
+    }
+    if (sizeof($tag_ids) > 0) {
+        $sql[] = SQLForHasOneOfTagIds($tag_ids);
+    }
+    return "(".implode(" OR ", $sql).")";
+}
+function CreateNOTSQLClauseFromTerms($not_terms) {
+    return "NOT(".CreateORSQLClauseFromTerms($not_terms).")";
+}
+function CreateFilterSQLClauseFromTerms($filter_terms) {
+    foreach ($filter_terms as $term) {
+        $sql[] = "(".CreateSQLClauseFromFilter($term).")";
+    }
+    return "(".implode(" AND ", $sql).")";
+}
+
+function GetSpecialSQLClauseForTerm($term) {
+    if (mb_strtolower($term, "UTF-8") == "missing_artist") {
         return "NOT(EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." PT WHERE T.PostId=PT.PostId AND EXISTS(SELECT 1 FROM ".GALLERY_TAG_TABLE." TG WHERE TG.TagId=PT.TagId AND TG.Type='A')))";
     } else if (mb_strtolower($term, "UTF-8") == "missing_species") {
         return "NOT(EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." PT WHERE T.PostId=PT.PostId AND EXISTS(SELECT 1 FROM ".GALLERY_TAG_TABLE." TG WHERE TG.TagId=PT.TagId AND TG.Type='D')))";
     } else {
-        // Get appropriate tag id.
-        $tags = GetTagsByNameWithAliasAndImplied(GALLERY_TAG_TABLE, GALLERY_TAG_ALIAS_TABLE, GALLERY_TAG_IMPLICATION_TABLE, array($term), false, -1, true, false, false);  // Apply alias, but don't drop tags.
-        $tag_ids = array_keys($tags);
-        if (sizeof($tag_ids) == 0) return "FALSE";
-        $joined = implode(",", $tag_ids);
-        return "EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." WHERE T.PostId=PostId AND TagId IN ($joined) LIMIT 1)";
+        return null;
     }
 }
 
@@ -170,6 +251,7 @@ function CreateSQLClauseFromFilter($filter) {
             } else if ($status == "deleted") {
                 return "T.Status='D'";
             } else {
+                // Unknown status.
                 return "FALSE";
             }
         } else if (startsWith($filter, "pool:")) {
@@ -190,25 +272,25 @@ function CreateSQLClauseFromFilter($filter) {
                 return "FALSE";
             }
         } else if (startsWith($filter, "order:")) {
+            // Ignore "order" clauses as a search filter term.
             return "TRUE";
         } else {
-            // Fallback on normal search clauses.
-            return CreateSQLClauseFromTerm($filter);
+            // Make query fail.
+            return "FALSE";
         }
     }
 }
 
-function GetGalleryBlacklistClauses($and_terms, $or_terms) {
+function GetGalleryBlacklistClauses($and_terms, $or_terms, $not_terms) {
     global $user;
     if (!isset($user)) return array();
-    $terms = array_merge($and_terms, $or_terms);
+    $terms = array_merge($and_terms, $or_terms, $not_terms);
     $blacklist_terms = explode(" ", $user['GalleryTagBlacklist']);
     $blacklist_terms = array_filter($blacklist_terms, "mb_strlen");
     $blacklist_terms = array_slice($blacklist_terms, 0, MAX_GALLERY_BLACKLIST_TAGS);
     $blacklist_terms = array_filter($blacklist_terms, function($term) use ($terms) {
         return !in_array($term, $terms);
     });
-    $blacklist_terms = array_map(function($term) { return "-$term"; }, $blacklist_terms);
     return $blacklist_terms;
 }
 ?>

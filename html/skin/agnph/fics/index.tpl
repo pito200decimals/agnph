@@ -45,7 +45,7 @@
             <span class="stars">{{ stars.stars(story) }}</span>
         </div>
         <div class="summary">{% autoescape false %}{{ story.shortSummary }}{% endautoescape %}</div>
-        <div class="rating"><strong>Rating:</strong>{{ story.rating }}</div>
+        <div class="rating"><strong>Rating:</strong> {{ story.rating }}</div>
     </div>
 {% endmacro %}
 

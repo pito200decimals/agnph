@@ -9,12 +9,6 @@ $mapping = array(
         array("sefuart101447.png", "/gallery/post/?search=flareon&feature=101447"),
         array("watermelon87100.png", "/gallery/post/?search=flygon&feature=87100"),
         array("pienji101284.png", "/gallery/post/?search=goodra&feature=101284"),
-        array("agnphbannerchangingseasonsmeranceprpr.png", "/fics/"),
-        array("agnphbannerchangingseasonsmeranceprpr.png", "/fics/"),
-        array("agnphchangingseasonssefuartbeachv2.png", "/fics/"),
-        array("agnphchangingseasonssefuartbeachv2.png", "/fics/"),
-        array("agnphchangingseasonsshikarokrokodile.png", "/fics/"),
-        array("agnphchangingseasonsshikarokrokodile.png", "/fics/"),
     );
 
 if (isset($_GET['image'])) {
