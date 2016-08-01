@@ -141,10 +141,10 @@ function HandlePostSuccess($username, $email, $password, $bday) {
             ON SCHEDULE AT CURRENT_TIMESTAMP + INTERVAL $interval DO
             DELETE FROM ".USER_TABLE." WHERE UserId=$uid AND Usermode=0;");
     }
-    
+
     global $user;
     $user = array("UserId" => $uid);  // Set mock user so that logging can occur.
-    
+
     if ($success) {
         $success = SendValidationEmailLink($uid, $username, $email, $register_time);
     }
