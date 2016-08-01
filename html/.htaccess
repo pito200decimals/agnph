@@ -165,7 +165,7 @@ RewriteRule ^admin/fics/save_tag/?$ /admin/fics/save_tag_ajax.php [QSA]
 RewriteRule ^admin/fics/log/?$ /admin/site/log.php?filter=fics [QSA]
 RewriteRule ^admin/oekaki/?$ /admin/oekaki/oekaki.php
 RewriteRule ^admin/oekaki/log/?$ /admin/site/log.php?filter=oekaki [QSA]
-
+RewriteRule ^admin/register/resend/?$ /user/register/resend_register_email.php [QSA]
 
 # Set up caching
 <IfModule mod_headers.c>

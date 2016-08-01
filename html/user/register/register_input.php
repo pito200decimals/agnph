@@ -9,6 +9,7 @@ include_once(SITE_ROOT."includes/util/user.php");
 include_once(SITE_ROOT."includes/util/html_funcs.php");
 include_once(SITE_ROOT."includes/util/date.php");
 include_once(SITE_ROOT."includes/auth/email_auth.php");
+include_once(SITE_ROOT."user/register/send_register_email_functions.php");
 
 if (IsMaintenanceMode()) PostBanner("Site is in read-only mode, account registration has been disabled", "red", false);
 
@@ -114,6 +115,7 @@ $vars['registerDisclaimerMessage'] = GetSiteSetting(REGISTER_DISCLAIMER_KEY, "")
 RenderPage("user/register.tpl");
 return;
 
+// Delayed session banner due to redirect.
 function ShowErrorBanner($msg) {
     PostSessionBanner($msg, "red");
 }
@@ -139,54 +141,21 @@ function HandlePostSuccess($username, $email, $password, $bday) {
             ON SCHEDULE AT CURRENT_TIMESTAMP + INTERVAL $interval DO
             DELETE FROM ".USER_TABLE." WHERE UserId=$uid AND Usermode=0;");
     }
-    if ($success) $success = SendValidationEmailLink($uid, $username, $email, $register_time);
-    if (!$success) ShowErrorBanner("Error creating account, please try again later");
+    
+    global $user;
+    $user = array("UserId" => $uid);  // Set mock user so that logging can occur.
+    
+    if ($success) {
+        $success = SendValidationEmailLink($uid, $username, $email, $register_time);
+    }
     if ($success) {
         $ip = $_SERVER['REMOTE_ADDR'];
-        global $user;
-        $user = array("UserId" => $uid);
         LogAction("<strong><a href='/user/$uid/'>$username</a></strong> registered from IP address $ip", "");
-        unset($user);
+    } else {
+        ShowErrorBanner("Error creating account, please try again later");
+        LogAction("<strong><a href='/user/$uid/'>$username</a></strong> failed to register from IP address $ip", "");
     }
-    return $success;
-}
-
-function SendValidationEmailLink($uid, $username, $email, $joinTime) {
-    $to = "$username <$email>";
-    $subject = "Account Registration for AGNPH";
-    // Don't have to worry about duplicate codes, as only one account can exist per-email.
-    $code = CreateCodeEntry($email, "registration", "$uid", "/register/success/", REGISTER_ACCOUNT_TIMESTAMP_DURATION);
-    if ($code === FALSE) return false;
-    $url = GetAuthURL($code);
-    $time = REGISTER_ACCOUNT_HUMAN_READABLE_STRING;
-    $message = <<<EOT
-<html>
-    <head>
-        <title>
-            $subject
-        </title>
-    </head>
-    <body>
-        <p>
-            Thank you for joining AGNPH! An account with username <strong>$username</strong> has been registered with this email address (<strong>$email</strong>). Please click the link below within $time to complete your account registration:
-        </p>
-        <p>
-            <a href="$url">$url</a>
-        </p>
-        <p>
-            If you did not request to join AGNPH, please disregard this message.
-        </p>
-    </body>
-</html>
-EOT;
-
-    $headers = <<<EOT
-MIME-Version: 1.0
-Content-type: text/html; charset=utf-8
-From: AGNPH <do-not-reply@agn.ph>
-EOT;
-
-    $success = mail($to, $subject, $message, $headers);
+    unset($user);  // Keep user unset outside of this function.
     return $success;
 }
 ?>
