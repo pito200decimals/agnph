@@ -1,72 +1,90 @@
 /* Global site skin colors */
 
 /*
-Header-green:        31,191,31
-Background-green:    31,95,31
-Bold-green:          31,95,31
-Medium-green:        95,191,95
-Light-green:         191,223,191
-Gray-green:          159,211,127
+Header-black:        63,63,63
+Background-black:    15,15,15
+Bold-black:          15,15,15
+Medium-red:        63,63,63
+Light-red:         47,47,47
+Gray-red:          63,63,63
 
-Tray-green:         63,91,55
-Tray-highlight:     63,127,63
+Tray-red:         31,47,63
+Tray-highlight:     15,15,15
 */
 
 /* Sitewide */
 body {
-    background-color: rgb(31,95,31);
+    background-color: rgb(15,15,15);
+    /* CUSTOM */
+    color: rgb(191,191,191);
 }
 a {
-    color: rgb(0,0,127);
+    /* CUSTOM */
+    color: rgb(63,127,191);
+}
+/* CUSTOM */
+thead a {
+    color: rgb(191,191,191);
 }
 /* Background */
 .site-navbar, .site-navbar * {
-    background-color: rgb(31,191,31);
+    background-color: rgb(63,63,63);
 }
 /* Selected section background */
 .site-navbar li.selected-nav a {
-    background-color: rgb(31,95,31);
+    background-color: rgb(15,15,15);
 }
 /* Text color */
 .site-navbar a,.site-navbar input {
-    color: white;
+    /* CUSTOM */
+    color: rgb(191,191,191);
 }
 .site-navbar a:hover,.site-navbar input:hover {
-    text-shadow: 0 0 3px rgb(255,255,255);
+    /* CUSTOM */
+    text-shadow: 0 0 3px rgb(191,191,191);
 }
 /* Main hover color */
 .navigation_left a:hover, .navigation_left li.selected-nav a:hover {
-    background-color: rgb(31,95,31);
+    background-color: rgb(15,15,15);
 }
 #top-logo:hover {
-    background-color: rgb(31,95,31);
+    background-color: rgb(15,15,15);
 }
 /* Dropdown tray background color */
 .nav-dropdown-tray a, .nav-dropdown-tray input, .nav-dropdown-tray span {
-    background-color: rgb(63,91,55);
+    background-color: rgb(31,47,63);
 }
 /* Dropdown tray hover color */
 #account_dropdown a:hover,#account_dropdown input:hover {
-    background-color: rgb(63,127,63);
+    background-color: rgb(15,15,15);
 }
 #mainbody {
-    background-color: white;
+    /* CUSTOM */
+    background-color: rgb(31,31,31);
 }
 .section-nav a {
-    color: rgb(0,0,0);
+    /* CUSTOM */
+    color: rgb(191,191,191);
 }
 .form-box {
-    background-color: rgb(159,211,127);
+    background-color: rgb(63,63,63);
 }
 .search {
     background-color: rgba(255,255,255,0);
 	border-color: rgba(0,0,0,0.8);
 }
 input.search {
-    background-color: rgb(255,255,255);
+    /* CUSTOM */
+    background-color: rgb(63,63,63);
+    color: rgb(255,255,255);
 }
 .search-button {
-    background-color: rgb(95,191,95)
+    /* CUSTOM */
+    background-color: rgb(63,127,191)
+}
+.banner-notification {
+    /* CUSTOM */
+    color: black;
 }
 .banner-notification input {
     background-color:rgba(0,0,0,0);
@@ -85,34 +103,38 @@ input.search {
 }
 /* Index */
 .block .header {
-    background-color: rgb(159,211,127);
+    background-color: rgb(63,63,63);
 }
 .block .content {
-    background-color: rgb(191,223,191);
+    background-color: rgb(47,47,47);
+}
+.irc-log {
+    background-color: rgb(31,31,31);
+    color: rgb(127,127,127);
 }
 /* Lists */
 .list-table thead td {
-    background-color: rgb(130,185,100);
+    background-color: rgb(79,79,79);
 }
 .list-table tbody tr:nth-child(odd) td {
-    background-color: rgb(180,235,150);
+    background-color: rgb(47,47,47);
 }
 .list-table tbody tr:nth-child(even) td {
-    background-color: rgb(160,215,130);
+    background-color: rgb(63,63,63);
 }
 .iterator a {
-    border-color: rgb(31,95,31);
-    background-color: rgb(191,223,191);
-    color: rgb(0,0,127);
+    border-color: rgb(15,15,15);
+    background-color: rgb(47,47,47);
+    color: rgb(63,127,191);
 }
 .iterator a:hover {
-    background-color: rgb(95,191,95);
+    background-color: rgb(63,63,63);
 }
 .iterator .currentpage {
-    color: rgb(0,0,127);
+    color: rgb(191,191,191);
 }
 .base-error-msg {
-    background-color: rgb(191,223,191);
+    background-color: rgb(47,47,47);
 }
 .autocomplete-tag-list {
     border-color: rgb(127,127,127);
@@ -124,13 +146,13 @@ input.search {
 /* Comments */
 .comment {
     border-color: black;
-    background-color: white;
+    background-color: rgb(63,63,63);
 }
 .commentheader {
-    background-color: rgb(191,223,191);
+    background-color: rgb(47,47,47);
 }
 blockquote {
-    background-color: rgb(191,223,191);
+    background-color: rgb(47,47,47);
     border-color: rgb(127,127,127);
 }
 blockquote blockquote {
@@ -149,13 +171,13 @@ blockquote blockquote blockquote {
 
 /* Forums */
 .board-group {
-    background-color: rgb(95,191,95);
+    background-color: rgb(63,63,63);
 }
 .board-row td {
-    background-color: rgb(191,223,191);
+    background-color: rgb(47,47,47);
 }
 .forums-help-block {
-    background-color: rgb(95,191,95);
+    background-color: rgb(63,63,63);
 }
 .new-post-label {
     /* Custom color */
@@ -165,13 +187,13 @@ blockquote blockquote blockquote {
 /* Gallery */
 .floatactionpanel {
     border-color: rgb(0,0,0);
-    background-color: rgb(95,191,95);
+    background-color: rgb(63,63,63);
 }
 .post-tile {
     color: rgb(0,0,127);
 }
 .post-label {
-    background-color: rgb(159,211,127);
+    background-color: rgb(63,63,63);
 }
 .childoutline {
     border-color: rgb(255,255,0);
@@ -195,16 +217,16 @@ blockquote blockquote blockquote {
     background-color: rgb(85,153,85); /* Pool box green */
 }
 .post-description {
-    background-color: rgb(191,223,191);
+    background-color: rgb(47,47,47);
 }
 .tag a:hover {
-    color: rgb(31,95,31)
+    color: rgb(15,15,15)
 }
 .tag small {
     opacity: 0.5;
 }
 .posteditbox {
-    background-color: rgb(159,211,127);
+    background-color: rgb(63,63,63);
 }
 .comment-section {
     background-color: white;
@@ -212,52 +234,52 @@ blockquote blockquote blockquote {
 
 /* Fics */
 .notesbox {
-    background-color: rgb(191,223,191);
+    background-color: rgb(47,47,47);
     border-color: black;
 }
 .comments ul.tabs li{
-    background-color: rgb(191,223,191);
+    background-color: rgb(47,47,47);
     border-color: black;
 }
 .comments ul.tabs li.current{
-    background-color: rgb(95,191,95);
+    background-color: rgb(63,63,63);
     border-color: black;
     border-bottom-color: rgba(0,0,0,0);
 }
 .comments .tab-content{
-    background-color: rgb(95,191,95);
+    background-color: rgb(63,63,63);
     border-color: black;
 }
 .storyblock {
-    background-color: rgb(95,191,95);
+    background-color: rgb(63,63,63);
 }
 .storyblockcontainer {
-    background-color: white;
+    background-color: rgb(63,63,63);
 }
 .storyblockheader {
-    background-color: rgb(191,223,191);
+    background-color: rgb(47,47,47);
 }
 .storyblockinfo {
-    background-color: white;
+    background-color: rgb(63,63,63);
 }
 .storyblockfooter {
-    background-color: rgb(191,223,191);
+    background-color: rgb(47,47,47);
 }
 .chapter-row:hover {
-    background-color: rgb(191,223,191);
+    background-color: rgb(47,47,47);
 }
 
 /* Oekaki */
 .oekaki-post-header {
-    background-color: rgb(191,223,191);
+    background-color: rgb(47,47,47);
 }
 
 /* User profile */
 .sidepanel-section {
-    background-color: rgb(95,191,95);
+    background-color: rgb(63,63,63);
 }
 .infoblock {
-    background-color: rgb(191,223,191);
+    background-color: rgb(47,47,47);
 }
 .unread-messages {
     /* Custom color */
@@ -267,24 +289,24 @@ blockquote blockquote blockquote {
 @media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
     /* Main site nav tray color */
     ul.navigation_left a {
-        background-color: rgb(63,91,55);
+        background-color: rgb(31,47,63);
     }
     /* Main site nav tray hover color */
     ul.navigation_left a:hover {
-        background-color: rgb(63,127,63);
+        background-color: rgb(15,15,15);
     }
     .site-navbar li.selected-nav a {
-        background-color: rgb(63,127,63);
+        background-color: rgb(15,15,15);
     }
     .site-navbar li.selected-nav a:hover {
-        background-color: rgb(63,127,63);
+        background-color: rgb(15,15,15);
     }
     .nav-dropdown-tray#main_menu_icon {
-        background-color: rgb(63,91,55);
+        background-color: rgb(31,47,63);
     }
 }
 @media only handheld, screen and (max-device-height: 400px), screen and (max-height: 400px) {
     ul.navigation_left {
-        background-color: rgb(63,91,55);
+        background-color: rgb(31,47,63);
     }
 }

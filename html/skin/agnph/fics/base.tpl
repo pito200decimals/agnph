@@ -19,7 +19,7 @@
         <li id="fics-search">
             <form action="/fics/browse/" accept-charset="UTF-8">
                 <div class="search">
-                    <input class="search" name="search" value="{{ searchTerms }}" type="text" required placeholder="Search" onfocus="javascript:$(this).attr('placeholder', '');" onblur="javascript:$(this).attr('placeholder', 'Search');" />
+                    <input class="search" name="search" value="{{ searchTerms }}" type="text" required placeholder="Search" />
                     <input type="submit" class="search-button" value="" />
                 </div>
                 <a id="search-help-link" href="/fics/help/" title="Search Help">?</a>

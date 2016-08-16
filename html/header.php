@@ -130,9 +130,12 @@ function FetchUserHeaderVars() {
     if (contains($skin, ".") || contains($skin, "/") || contains($skin, "\\")) {
         $skin = DEFAULT_SKIN;
     }
+    // Also fetch all possible skins (minus the base skin templates).
+    $vars['availableSkins'] = array_filter(array_map("basename", array_filter(glob(SITE_ROOT."skin/*"), "is_dir")), function($skin) { return $skin != BASE_SKIN; });
+    if (!in_array($skin, $vars['availableSkins'])) {
+        $skin = DEFAULT_SKIN;
+    }
     $vars['skin'] = $skin;
-    // Also fetch all possible skins, if the theme has the theme switcher on every page.
-    $vars['availableSkins'] = array_map("basename", array_filter(glob(SITE_ROOT."skin/*"), "is_dir"));
 
     // Use these paths to load template assets. If an expected skin directory does not exist, use base skin directory.
     $skin_dirs = array_filter(array("/skin/$skin/", "/skin/".BASE_SKIN."/"), function($path) { return file_exists(__DIR__.$path); });

@@ -3,7 +3,7 @@
     {# Notification banners #}
     {% block banner %}
         {% for notification in banner_notifications %}
-            <div class="banner-nofication{% for class in notification.classes %} {{ class }}{% endfor %}">
+            <div class="banner-notification{% for class in notification.classes %} {{ class }}{% endfor %}">
                 <p>
                     {% if notification.strong %}<strong>{% endif %}
                         {% if notification.noescape %}
@@ -35,6 +35,7 @@
         <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
         <meta http-equiv="pragma" content="no-cache" />
         {# end disable-caching #}
+        {% include 'meta.tpl' %}
         <link rel="icon" type="image/png" href="/images/favicon.png" />
         <title>{% if _title %}{{ _title }}{% else %}{% block title %}AGNPH{% endblock %}{% endif %}</title>
         <link rel="stylesheet" type="text/css" href="{{ asset('/style.css') }}" />

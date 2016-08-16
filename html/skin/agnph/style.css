@@ -256,20 +256,20 @@ input[type='submit'].search-button {
 .list-search-bar {
     margin-bottom: 10px;
 }
-.banner-nofication {
+.banner-notification {
     margin: 5px;
     border-radius: 5px;
     padding: 5px;
     box-shadow: 2px 2px 5px #07162D;
 }
-.banner-nofication input {
+.banner-notification input {
     float:right;
     background-color: rgba(0,0,0,0);
     border:none;
     cursor:pointer;
     font-weight:bold;
 }
-.banner-nofication p{
+.banner-notification p{
     margin: 0px;
 }
 .green-banner {
