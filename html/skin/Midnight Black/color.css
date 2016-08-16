@@ -215,12 +215,16 @@ blockquote blockquote blockquote {
 }
 .parentbox, .poolbox {
     background-color: rgb(85,153,85); /* Pool box green */
+    color: black;
+}
+.parentbox a, .poolbox a {
+    color: rgb(0,0,127);
 }
 .post-description {
     background-color: rgb(47,47,47);
 }
 .tag a:hover {
-    color: rgb(15,15,15)
+    color: rgb(127,127,127)
 }
 .tag small {
     opacity: 0.5;
@@ -229,7 +233,7 @@ blockquote blockquote blockquote {
     background-color: rgb(63,63,63);
 }
 .comment-section {
-    background-color: white;
+    background-color: rgb(63,63,63);
 }
 
 /* Fics */
