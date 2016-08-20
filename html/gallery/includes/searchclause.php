@@ -91,25 +91,23 @@ function CreateSQLClausesFromTerms($terms) {
     if (sizeof($or_terms) > 0) {
         $sql[] = CreateORSQLClauseFromTerms($or_terms);
     }
-    if (sizeof($not_terms) > 0) {
-        $sql[] = CreateNOTSQLClauseFromTerms($not_terms);
-    }
     // Don't show deleted posts unless explicitly requesting them.
-    if (!FilterHasClause($filter_clauses, "-*status:deleted")&&
-        !FilterHasClause($or_terms, "status:deleted")&&
-        !FilterHasClause($not_terms, "status:deleted")) {
+    if (!FilterHasClause($filter_clauses, "-*status:deleted")) {
         $filter_clauses[] = "-status:deleted";
     }
-    // Don't show swf and webm posts on popular page unless explicitly requesting them.
+    // Don't show swf/webm/comic posts on popular page unless explicitly requesting them.
     if (FilterHasClause($filter_clauses, "order:popular") &&
         !FilterHasClause($filter_clauses, "-*file:swf") &&
         !FilterHasClause($filter_clauses, "-*file:webm") &&
-        !FilterHasClause($or_terms, "file:swf") &&
-        !FilterHasClause($or_terms, "file:webm") &&
-        !FilterHasClause($not_terms, "file:swf") &&
-        !FilterHasClause($not_terms, "file:webm")) {
+        !FilterHasClause($and_terms, "comic") &&
+        !FilterHasClause($or_terms, "comic") &&
+        !FilterHasClause($not_terms, "comic")) {
         $filter_clauses[] = "-file:swf";
         $filter_clauses[] = "-file:webm";
+        $not_terms[] = "comic";
+    }
+    if (sizeof($not_terms) > 0) {
+        $sql[] = CreateNOTSQLClauseFromTerms($not_terms);
     }
     if (sizeof($filter_clauses) > 0) {
         $sql[] = CreateFilterSQLClauseFromTerms($filter_clauses);

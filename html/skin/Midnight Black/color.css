@@ -4,11 +4,11 @@
 Header-black:        63,63,63
 Background-black:    15,15,15
 Bold-black:          15,15,15
-Medium-red:        63,63,63
-Light-red:         47,47,47
-Gray-red:          63,63,63
+Medium-black:        63,63,63
+Light-black:         47,47,47
+Gray-black:          63,63,63
 
-Tray-red:         31,47,63
+Tray-black:         31,47,63
 Tray-highlight:     15,15,15
 */
 
@@ -58,6 +58,9 @@ thead a {
 #account_dropdown a:hover,#account_dropdown input:hover {
     background-color: rgb(15,15,15);
 }
+#new-section-badge {
+    color: white;
+}
 #mainbody {
     /* CUSTOM */
     background-color: rgb(31,31,31);
@@ -77,6 +80,9 @@ input.search {
     /* CUSTOM */
     background-color: rgb(63,63,63);
     color: rgb(255,255,255);
+}
+input.search:focus {
+    background-color: rgb(95,95,95);
 }
 .search-button {
     /* CUSTOM */

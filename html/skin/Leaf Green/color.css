@@ -49,6 +49,9 @@ a {
 #account_dropdown a:hover,#account_dropdown input:hover {
     background-color: rgb(63,127,63);
 }
+#new-section-badge {
+    color: white;
+}
 #mainbody {
     background-color: white;
 }
