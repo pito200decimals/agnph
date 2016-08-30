@@ -56,10 +56,13 @@
             </p>
             <ul id="contributors-list">
                 <li>
+                    <strong>Claytail</strong> - <a href="http://www.furaffinity.net/user/claytail/">Fur Affinity</a><br />
                     <strong>Pienji</strong> - <a href="http://www.furaffinity.net/user/pienji/">Fur Affinity</a> / <a href="http://pienji.tumblr.com/">Tumblr</a><br />
-                    <strong>Watermelon</strong> - <a href="https://inkbunny.net/Watermelon">Inkbunny</a><br />
                     <strong>Sefuart</strong> - <a href="http://www.sefuart.net/">Website</a><br />
-                    <strong>Shikaro</strong> - <a href="http://www.furaffinity.net/user/shikaro/">Fur Affinity</a> / <a href="http://www.pixiv.net/member.php?id=1196214">Pixiv</a> / <a href="http://shikaro.tumblr.com/">Tumblr</a>
+                    <strong>Shikaro</strong> - <a href="http://www.furaffinity.net/user/shikaro/">Fur Affinity</a> / <a href="http://www.pixiv.net/member.php?id=1196214">Pixiv</a> / <a href="http://shikaro.tumblr.com/">Tumblr</a><br />
+                    <strong>StreetDragon95</strong> - <a href="http://www.furaffinity.net/user/streetdragon95/">Fur Affinity</a> / <a href="http://streetdragon95.deviantart.com/">DeviantArt</a><br />
+                    <strong>Watermelon</strong> - <a href="https://inkbunny.net/Watermelon/">Inkbunny</a><br />
+                    <strong>ZwitterKitsune</strong> - <a href="http://www.furaffinity.net/user/zwitterkitsune/">Fur Affinity</a><br />
                     <p>
                     These artists have contributed toward AGNPH by allowing their artwork to be used to promote AGNPH.
                     </p>

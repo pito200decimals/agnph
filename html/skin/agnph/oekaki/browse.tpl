@@ -81,6 +81,7 @@
             <div class="oekaki-post-image-container">
                 {% if post.Status == 'A' %}
                     <a href="/oekaki/image/{{ post.PostId }}.{{ post.Extension }}"><img class="oekaki-post-image" src="/oekaki/image/{{ post.PostId }}.{{ post.Extension }}" /></a>
+                    {% if post.HasAnimation %}<p><a href="/oekaki/animation/{{ post.PostId }}/">(Show Animation)</a><p>{% endif %}
                 {% elseif post.Status == 'M' %}
                     <img class="oekaki-post-image" src="/images/deleted-preview.png" />
                 {% elseif post.Status == 'D' %}

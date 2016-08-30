@@ -58,17 +58,29 @@ $timestamp = time();
 $escaped_title = sql_escape($title);
 $escaped_text = sql_escape($text);
 $extension = OEKAKI_THUMB_FILE_EXTENSION;
+$has_animation = 0;
+if (isset($params['replayData'])) {
+    $animation_data = $params['replayData'];
+    $has_animation = 1;
+}
 if (sql_query("INSERT INTO ".OEKAKI_POST_TABLE."
-    (UserId, ParentPostId, Timestamp, Title, Text, Width, Height, Extension, Adult, Duration)
+    (UserId, ParentPostId, Timestamp, Title, Text, Width, Height, Extension, Adult, Duration, HasAnimation)
     VALUES
-    ($uid, -1, $timestamp, '$escaped_title', '$escaped_text', $width, $height, '$extension', $adult, $duration)")) {
+    ($uid, -1, $timestamp, '$escaped_title', '$escaped_text', $width, $height, '$extension', $adult, $duration, $has_animation)")) {
     $pid = sql_last_id();
     // Save image file.
     $img_path = "oekaki/site/data/$pid.".OEKAKI_THUMB_FILE_EXTENSION;
     $img->save(SITE_ROOT.$img_path);
+    // Save animation data.
+    if (isset($animation_data)) {
+        $animation_data_path = SITE_ROOT."user/data/oekaki/animations/$pid.oekaki";
+        $fp = fopen($animation_data_path, 'w');
+        fwrite($fp, json_encode($animation_data));
+        fclose($fp);
+    }
     // Log action.
     $username = $user['DisplayName'];
-    LogAction("<strong><a href='/user/$uid/'>$username</a></strong> published new post #$pid", "O");
+    LogAction("<strong><a href='/user/$uid/'>$username</a></strong> published new post #$pid".(isset($animation_data) ? " (with animation)" : ""), "O");
     // Return success.
     echo json_encode(array("status" => "success"));
     exit();

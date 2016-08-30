@@ -11,7 +11,7 @@
         <div class="header">I want to get on IRC right now!</div>
         <div class="content">
             Use our Browser IRC Client! Its fun and its easy.<br />
-            Just <a href="http://irc.agn.ph/"><strong>Click Here</strong></a>.
+            Just <a href="http://irc.agn.ph/?initial_chans=#agnph{% if user %}&initial_nick={{user.DisplayName|replace({" ":"_"})}}{% endif %}"><strong>Click Here</strong></a>.
         </div>
     </div>
     <div class="block">

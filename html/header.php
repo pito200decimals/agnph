@@ -100,6 +100,10 @@ if (!isset($_SESSION['banner_notifications'])) {
     $vars['banner_notifications'] = array();
 }
 
+if (isset($user)) {
+    $vars['user'] = $user;
+}
+
 return;
 
 function FetchUserHeaderVars() {

@@ -117,4 +117,12 @@
             If you've managed to sit through all that, congratulations, you now know all the basics of tagging using the AGNPH system! Don't be afraid to ask your peers via the forums whenever you're in doubt, as there will always be ambiguous cases that will make even the most experienced tagger hesitate. Have fun!
         </div>
     </div>
+    <div class="block">
+        <div class="header">API</div>
+        <div class="content">
+            <p>
+                The gallery supports an API for read-only access to gallery data. Just add <strong>?api=xml</strong> to the end of any gallery page for an XML-formatted view of the page data.
+            </p>
+        </div>
+    </div>
 {% endblock %}

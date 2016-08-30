@@ -32,44 +32,68 @@ function CanUserDeletePost($user, $post) {
 
 
 function IsMetadataValid($metadata) {
-    if (isset($metadata['name']) &&
-        isset($metadata['slot']) &&
-        isset($metadata['width']) &&
-        isset($metadata['height']) &&
-        isset($metadata['imageData']) &&
-        isset($metadata['elapsedSeconds']) &&
-        isset($metadata['color1']) &&
-        isset($metadata['color1']['r']) &&
-        isset($metadata['color1']['g']) &&
-        isset($metadata['color1']['b']) &&
-        isset($metadata['color2']) &&
-        isset($metadata['color2']['r']) &&
-        isset($metadata['color2']['g']) &&
-        isset($metadata['color2']['b']) &&
-        isset($metadata['layers'])) {
-        if ($metadata['width'] > MAX_OEKAKI_IMAGE_SIZE || $metadata['height'] > MAX_OEKAKI_IMAGE_SIZE) return false;
-        $layers = $metadata['layers'];
-        $valid_layers = (0 < sizeof($layers) && sizeof($layers) <= MAX_OEKAKI_NUM_LAYERS);
-        foreach ($layers as $layer) {
-            if (!isset($layer['name']) ||
-                !isset($layer['lockOpacity']) ||
-                !isset($layer['opacity']) ||
-                !(isset($layer['src']) || isset($layer['data']))) {
-                $valid_layers = false;
+    if (!isset($metadata['name'])) return false;
+    if (!isset($metadata['slot'])) return false;
+    if (!isset($metadata['width'])) return false;
+    if (!isset($metadata['height'])) return false;
+    if (!isset($metadata['imageData'])) return false;
+    if (!isset($metadata['elapsedSeconds'])) return false;
+    if (!isset($metadata['color1'])) return false;
+    if (!isset($metadata['color1']['r'])) return false;
+    if (!isset($metadata['color1']['g'])) return false;
+    if (!isset($metadata['color1']['b'])) return false;
+    if (!isset($metadata['color2'])) return false;
+    if (!isset($metadata['color2']['r'])) return false;
+    if (!isset($metadata['color2']['g'])) return false;
+    if (!isset($metadata['color2']['b'])) return false;
+    if (isset($metadata['version'])) {
+        if (strcmp($metadata['version'], "1.00.00") >= 0) {
+            if (!isset($metadata['toolStates'])) return false;
+            foreach ($metadata['toolStates'] as $state) {
+                if (!isset($state['name'])) return false;
+                if (!isset($state['state'])) return false;
+            }
+            if (isset($metadata['hasReplay']) && $metadata['hasReplay']) {
+                if (!isset($metadata['replayData'])) return false;
+                foreach ($metadata['replayData'] as $actionItem) {
+                    if (!isset($actionItem['id'])) return false;
+                }
             }
         }
-        if ($valid_layers) {
-            return true;
-        }
     }
-    return false;
+    if (!isset($metadata['layers'])) return false;
+    if ($metadata['width'] > MAX_OEKAKI_IMAGE_SIZE || $metadata['height'] > MAX_OEKAKI_IMAGE_SIZE) return false;
+    $layers = $metadata['layers'];
+    if (!(0 < sizeof($layers) && sizeof($layers) <= MAX_OEKAKI_NUM_LAYERS)) return false;
+    foreach ($layers as $layer) {
+        if (!isset($layer['name'])) return false;
+        if (!isset($layer['lockOpacity'])) return false;
+        if (!isset($layer['opacity'])) return false;
+        if (!(isset($layer['src']) || isset($layer['data']))) return false;
+    }
+    return true;
 }
 
 function SanitizeMetadata($metadata) {
+    // TODO: Properly analyze version, toolStates, hasReplay, replayData.
     $result = array();
-    $fields = array('name', 'slot', 'width', 'height', 'imageData', 'elapsedSeconds');
-    foreach ($fields as $name) {
-        $result[$name] = $metadata[$name];
+    $fields = array(
+        'name' => "",
+        'version' => "0.00.00",
+        'slot' => -1,
+        'width' => 800,
+        'height' => 600,
+        'imageData' => "",
+        'elapsedSeconds' => 0,
+        'toolStates' => array(),
+        'hasReplay' => false,
+        'replayData' => array());
+    foreach ($fields as $name => $value) {
+        if (isset($metadata[$name])) {
+            $result[$name] = $metadata[$name];
+        } else {
+            $result[$name] = $value;
+        }
     }
     $result['color1'] = array(
         'r' => $metadata['color1']['r'],

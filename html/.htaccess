@@ -123,7 +123,8 @@ RewriteRule ^oekaki/?$ /oekaki/site/browse.php [QSA]
 RewriteRule ^oekaki/comment/?$ /oekaki/site/browse.php
 RewriteRule ^oekaki/post/?$ /oekaki/site/post.php
 RewriteRule ^oekaki/image/(.*)$ /oekaki/site/data/$1
-RewriteRule ^oekaki/draw/?$ /oekaki/app/index.html
+RewriteRule ^oekaki/draw/?$ /oekaki/app/index.php
+RewriteRule ^oekaki/animation/(\d+)/?$ /oekaki/app/index.php?animation=$1 [QSA]
 RewriteRule ^oekaki/slots/list/?$ /oekaki/site/slots.php?list
 RewriteRule ^oekaki/slots/(\d+)/?$ /oekaki/site/slots.php?metadata=$1
 RewriteRule ^oekaki/slots/(\d+)/save/?$ /oekaki/site/slots.php?save=$1
