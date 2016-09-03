@@ -9,6 +9,18 @@ $mapping = array(
         array("sefuart101447.png", "/gallery/post/?search=flareon&feature=101447"),
         array("watermelon87100.png", "/gallery/post/?search=flygon&feature=87100"),
         array("pienji101284.png", "/gallery/post/?search=goodra&feature=101284"),
+        
+        array("agnphmakeitreallucarioclaytailsep16.png", "/gallery/post/?search=lucario&feature=117331"),
+        array("agnphmakeitrealstreetdragon95latissep16.png", "/gallery/post/?search=latias+latios&feature=122521"),
+        array("agnphmakeitrealztitterkitsuneflygonsep16.png", "/gallery/post/?search=flygon&feature=124652"),
+        
+        array("agnphmakeitreallucarioclaytailsep16.png", "/gallery/post/?search=lucario&feature=117331"),
+        array("agnphmakeitrealstreetdragon95latissep16.png", "/gallery/post/?search=latias+latios&feature=122521"),
+        array("agnphmakeitrealztitterkitsuneflygonsep16.png", "/gallery/post/?search=flygon&feature=124652"),
+        
+        array("agnphmakeitreallucarioclaytailsep16.png", "/gallery/post/?search=lucario&feature=117331"),
+        array("agnphmakeitrealstreetdragon95latissep16.png", "/gallery/post/?search=latias+latios&feature=122521"),
+        array("agnphmakeitrealztitterkitsuneflygonsep16.png", "/gallery/post/?search=flygon&feature=124652"),
     );
 
 if (isset($_GET['image'])) {

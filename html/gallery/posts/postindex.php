@@ -44,7 +44,8 @@ if (sql_query_into($result, $sql, 0)) {
 }
 
 // Add a featured post.
-if (!isset($_GET['api']) && isset($_GET['feature']) && is_numeric($_GET['feature']) && !contains(mb_strtolower($searchterms), "pool:")) {
+$has_feature = !isset($_GET['api']) && isset($_GET['feature']) && is_numeric($_GET['feature']) && !contains(mb_strtolower($searchterms), "pool:");
+if ($has_feature) {
     $escaped_post_id = sql_escape($_GET['feature']);
     if (sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE PostId='$escaped_post_id' LIMIT 1;", 1)) {
         $row = $result->fetch_assoc();
@@ -107,6 +108,11 @@ if (isset($_GET['api'])) {
         return;
     }
 }
+
+if (($searchterms == "" && $page == 1) || $has_feature) {
+    PostBanner("Check out the current Fics/Oekaki theme <a href='http://agn.ph/forums/thread/2133/'>here</a>. Prizes for the best entries!", "green", true, true);
+}
+
 RenderPage("gallery/posts/postindex.tpl");
 return;
 
