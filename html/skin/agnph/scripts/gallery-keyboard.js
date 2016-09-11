@@ -33,6 +33,12 @@ $(document).ready(function() {
             case 70:  // F
                 document.getElementById('favorite-form').submit();
             break;
+            case 76:  // L
+                if ($(".poolbox").length == 0) {
+                    // Action is "Add to pool". Don't have a shortcut for "Remove from pool".
+                    $("#poolaction").click();
+                }
+            break;
             case 80:  // P
                 $(".posteditbox").show()[0].scrollIntoView();
                 $('#parent').focus();

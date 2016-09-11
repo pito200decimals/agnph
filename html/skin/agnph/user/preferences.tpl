@@ -89,7 +89,8 @@
             <li>E/P - Edit post tags/parent</li>
             <li>D - Download file</li>
             <li>S - Search</li>
-            <li>F - Toggle Favorite</li>
+            <li>F - Add/Remove Favorites</li>
+            <li>L - Add to Pool</li>
         </ul>
     </div>
     <form action="" method="POST" enctype="multipart/form-data" accept-charset="UTF=8">

@@ -82,10 +82,6 @@ ul#basic-info li {
     max-width: 400px;
     height: 100px;
 }
-.unread-messages {
-    font-weight: bold;
-    color: rgb(255,95,0);
-}
 .admin-badges {
     list-style: none;
     padding: 0px;

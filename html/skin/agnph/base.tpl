@@ -73,7 +73,7 @@
                         </li>
 </noscript>
                         <li class="navigation_left">
-                            <a id="mail_icon" href="/user/{{ user.UserId }}/mail/">
+                            <a class="desktop-only" href="/user/{{ user.UserId }}/mail/">
                                 {% if unread_message_count > 0 %}
                                     {% if unread_message_count <= 9 %}
                                         <img src="/images/message-unread-{{ unread_message_count }}.png" />
@@ -89,6 +89,9 @@
                             <a href="/user/{{ user.UserId }}/"><img src="{{ user.avatarURL }}" /><span class="desktop-only">{{ user.DisplayName }}</span></a>
                             <ul id="account_dropdown" hidden>
                                 <li><a href="/user/{{ user.UserId }}/">Profile</a></li>
+                                <li>
+                                    <div class="mobile-only"><a href="/user/{{ user.UserId }}/mail/">Messages{% if unread_message_count > 0 %} <span class="unread-messages">({{ unread_message_count }})</span>{% endif %}</a></div>
+                                </li>
                                 <li><a href="/user/{{ user.UserId }}/preferences/">Settings</a></li>
                                 <li>
                                     <form action="/logout/" method="POST" accept-encoding="UTF-8">

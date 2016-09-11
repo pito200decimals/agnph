@@ -256,6 +256,10 @@ input[type='submit'].search-button {
 .list-search-bar {
     margin-bottom: 10px;
 }
+.unread-messages {
+    font-weight: bold;
+    color: rgb(255,95,0);
+}
 .banner-notification {
     margin: 5px;
     border-radius: 5px;
@@ -374,9 +378,6 @@ span.radio-button-group {
     }
     #account_dropdown a,#account_dropdown input {
         padding: 15px;
-    }
-    #mail_icon {
-        display: none;
     }
     .site-navbar img {
         max-width: 66px;

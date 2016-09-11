@@ -162,10 +162,10 @@ blockquote {
     border-color: rgb(127,127,127);
 }
 blockquote blockquote {
-    background-color: rgb(167,195,223); /* Darker */
+    background-color: rgb(31,31,31); /* Darker */
 }
 blockquote blockquote blockquote {
-    background-color: rgb(127,191,223); /* Even darker */
+    background-color: rgb(15,15,15); /* Even darker */
 }
 .spoiler {
     color: black;
