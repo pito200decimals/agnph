@@ -5,7 +5,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('/list-style.css') }}" />
     <style>
         .tag-edit {
-            margin: 5px;
+            margin: 2px;
+            display: inline-block;
         }
     </style>
 {% endblock %}

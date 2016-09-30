@@ -35,6 +35,9 @@
                     unknown
                 {% endif %}
             </type_name>
+            {% if tag.alias %}
+                <preferred_tag>{{ tag.alias }}</preferred_tag>
+            {% endif %}
         </tag>
     {% endfor %}
 </tags>

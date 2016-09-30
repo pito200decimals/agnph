@@ -5,6 +5,7 @@
 
 // Assumes a constant named TABLE defines the tag table and TAGS_PER_PAGE defines how many elements to show per page.
 // Also that $TAG_TYPE_MAP is initialized to (from letter to label) and optionally $search_clause as the WHERE search clause.
+// Also assume the alias table is named ALIAS_TABLE
 
 include_once(SITE_ROOT."includes/util/listview.php");
 
@@ -35,6 +36,10 @@ if (isset($_GET['search'])) {
 }
 // Only include tags that have at least one item.
 $clauseArray[] = "T.ItemCount > 0";
+if (!$is_api) {
+    // Only include tags that have not been aliased.
+    $clauseArray[] = "NOT(EXISTS(SELECT 1 FROM ".ALIAS_TABLE." A WHERE A.TagId=T.TagId))";
+}
 $search_clause = "WHERE ".implode(" AND ", $clauseArray);
 
 if (!isset($search_clause)) $search_clause = "";
@@ -43,12 +48,26 @@ if (!isset($search)) $search = "";
 $tags = array();
 CollectItems(TABLE, "$search_clause ORDER BY ".GetQueryOrder(true), $tags, TAGS_PER_PAGE, $iterator, "No tags found.");
 
+$alias_mapping = array();
+if ($is_api) {
+    $alias_ids_to_fetch = array_map(function($tag) { return $tag['TagId']; }, $tags);
+    $joined_ids = implode(",", $alias_ids_to_fetch);
+    if (sql_query_into($result, "SELECT Q.TagId AS TagId, T.Name AS AliasName FROM ".TABLE." T INNER JOIN ".ALIAS_TABLE." Q ON Q.AliasTagId=T.TagId WHERE Q.TagId IN ($joined_ids);", 1)) {
+        while ($row = $result->fetch_assoc()) {
+            $alias_mapping[$row['TagId']] = $row['AliasName'];
+        }
+    }
+}
+
 foreach ($tags as &$tag) {
     $tag['displayName'] = TagNameToDisplayName($tag['Name']);
     $tag['quotedName'] = contains($tag['Name'], ":") ? "\"".$tag['Name']."\"" : $tag['Name'];
     $tag['tagCounts'] = $tag['ItemCount'];
     $tag['typeName'] = $TAG_TYPE_MAP[$tag['Type']];
     $tag['typeClass'] = mb_strtolower($tag['Type'], "UTF-8")."typetag tagname";
+    if (isset($alias_mapping[$tag['TagId']])) {
+        $tag['alias'] = $alias_mapping[$tag['TagId']];
+    }
 }
 
 $vars['tags'] = $tags;

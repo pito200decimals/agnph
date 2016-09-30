@@ -8,6 +8,7 @@ include_once(SITE_ROOT."includes/util/core.php");
 
 define("TABLE", GALLERY_TAG_TABLE);
 define("TAGS_PER_PAGE", GALLERY_LIST_ITEMS_PER_PAGE);
+define("ALIAS_TABLE", GALLERY_TAG_ALIAS_TABLE);
 $TAG_TYPE_MAP = $GALLERY_TAG_TYPES;
 
 include_once(SITE_ROOT."includes/tagging/tags.php");
