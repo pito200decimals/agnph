@@ -23,11 +23,11 @@ foreach ($tag_history_items as &$item) {
     $tag_changes = "";
     $adds = array_map(function($tag_id) use ($tags) {
         $typeclass = mb_strtolower($tags[$tag_id]['Type'], "UTF-8")."typetag";
-        return "<span class='pscore'>+</span><a href='/gallery/post/?search=".$tags[$tag_id]['Name']."'><span class='$typeclass'>".$tags[$tag_id]['Name']."</span></a>";
+        return "<span class='pscore'>+</span><a href='/gallery/post/?search=".urlencode($tags[$tag_id]['Name'])."'><span class='$typeclass'>".$tags[$tag_id]['Name']."</span></a>";
     }, array_filter(explode(",", $item['TagsAdded']), "mb_strlen"));
     $removes = array_map(function($tag_id) use ($tags) {
         $typeclass = mb_strtolower($tags[$tag_id]['Type'], "UTF-8")."typetag";
-        return "<span class='nscore'>-</span><a href='/gallery/post/?search=".$tags[$tag_id]['Name']."'><span class='$typeclass'>".$tags[$tag_id]['Name']."</span></a>";
+        return "<span class='nscore'>-</span><a href='/gallery/post/?search=".urlencode($tags[$tag_id]['Name'])."'><span class='$typeclass'>".$tags[$tag_id]['Name']."</span></a>";
     }, array_filter(explode(",", $item['TagsRemoved']), "mb_strlen"));
     $edits = array_merge($adds, $removes);
     // Add in rating/source/parent changes.

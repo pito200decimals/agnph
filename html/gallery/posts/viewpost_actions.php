@@ -4,6 +4,7 @@
 include_once(SITE_ROOT."gallery/includes/functions.php");
 include_once(SITE_ROOT."gallery/includes/image.php");
 include_once(SITE_ROOT."includes/util/file.php");
+include_once(SITE_ROOT."includes/tagging/tag_functions.php");
 
 function InvalidActionBanner() {
     PostSessionBanner("Invalid action", "red");
@@ -130,6 +131,8 @@ function HandleDeleteAction($post) {
     // TODO: Move favorites to parent post?
     sql_query("DELETE FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE PostId=$pid;");
     UpdatePostStatistics($pid);
+    // Update all tag counts for tags on this post.
+    UpdateAllTagCounts(GALLERY_TAG_TABLE, GALLERY_POST_TAG_TABLE, GALLERY_POST_TABLE, "PostId", "I.Status<>'D'", "EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." PT WHERE PT.TagId=T.TagId AND PT.PostId=$pid)");
     PostSessionBanner("Post deleted", "green");
 }
 function HandleUndeleteAction($post) {
@@ -148,6 +151,8 @@ function HandleUndeleteAction($post) {
         ErrorBanner();
         return;
     }
+    // Update all tag counts for tags on this post.
+    UpdateAllTagCounts(GALLERY_TAG_TABLE, GALLERY_POST_TAG_TABLE, GALLERY_POST_TABLE, "PostId", "I.Status<>'D'", "EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." PT WHERE PT.TagId=T.TagId AND PT.PostId=$pid)");
     $username = $user['DisplayName'];
     LogAction("<strong><a href='/user/$uid/'>$username</a></strong> un-deleted <strong><a href='/gallery/post/show/$pid/'>post #$pid</a></strong>", "G");
     PostSessionBanner("Post undeleted", "green");

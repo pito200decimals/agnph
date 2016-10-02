@@ -162,6 +162,7 @@ RewriteRule ^admin/gallery/?$ /admin/gallery/gallery.php
 RewriteRule ^admin/gallery/tags/?$ /admin/gallery/tag_management.php
 RewriteRule ^admin/gallery/fetch_tag/?$ /admin/gallery/fetch_tag_ajax.php [QSA]
 RewriteRule ^admin/gallery/save_tag/?$ /admin/gallery/save_tag_ajax.php [QSA]
+RewriteRule ^admin/gallery/update_tag_counts/?$ /admin/gallery/update_tag_counts_ajax.php
 RewriteRule ^admin/gallery/edit-history/?$ /admin/gallery/edit_history.php
 RewriteRule ^admin/gallery/revert-edit/?$ /admin/gallery/revert_edit.php
 RewriteRule ^admin/gallery/description-history/?$ /admin/gallery/description_history.php
@@ -170,6 +171,7 @@ RewriteRule ^admin/fics/?$ /admin/fics/fics.php
 RewriteRule ^admin/fics/tags/?$ /admin/fics/tag_management.php
 RewriteRule ^admin/fics/fetch_tag/?$ /admin/fics/fetch_tag_ajax.php [QSA]
 RewriteRule ^admin/fics/save_tag/?$ /admin/fics/save_tag_ajax.php [QSA]
+RewriteRule ^admin/fics/update_tag_counts/?$ /admin/fics/update_tag_counts_ajax.php
 RewriteRule ^admin/fics/log/?$ /admin/site/log.php?filter=fics [QSA]
 RewriteRule ^admin/oekaki/?$ /admin/oekaki/oekaki.php
 RewriteRule ^admin/oekaki/log/?$ /admin/site/log.php?filter=oekaki [QSA]

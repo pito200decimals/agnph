@@ -233,7 +233,7 @@ function ProcessTagChanges($tag_string, $story_id) {
     UpdateStoryTags($descriptors, $story_id, $user);
     UpdateTagTypes(FICS_TAG_TABLE, $FICS_TAG_TYPES, $descriptors, $user);  // Do after creating tags above when setting post tags.
     $tag_ids = array_unique(array_merge($tag_ids, GetTagsIdsForStory($story_id)));  // Add tag ids after edit.
-    UpdateTagItemCounts(FICS_TAG_TABLE, FICS_STORY_TAG_TABLE, $tag_ids);  // Update tag counts on touched tags.
+    UpdateTagItemCounts(FICS_TAG_TABLE, FICS_STORY_TAG_TABLE, FICS_STORY_TABLE, "StoryId", "I.ApprovalStatus<>'D'", $tag_ids);  // Update tag counts on touched tags.
 }
 
 // Updates tags attached to a story.

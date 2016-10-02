@@ -187,7 +187,7 @@ function UpdatePost($tag_string, $post_id, $user, $update_tag_types=true, $batch
         UpdateTagTypes(GALLERY_TAG_TABLE, $GALLERY_TAG_TYPES, $descriptors, $user);  // Do after creating tags above when setting post tags.
     }
     $tag_ids = array_unique(array_merge($tag_ids, GetPostTags($post_id)));  // Get tags after post was edited.
-    UpdateTagItemCounts(GALLERY_TAG_TABLE, GALLERY_POST_TAG_TABLE, $tag_ids);  // Update tag counts on touched tags.
+    UpdateTagItemCounts(GALLERY_TAG_TABLE, GALLERY_POST_TAG_TABLE, GALLERY_POST_TABLE, "PostId", "I.Status<>'D'", $tag_ids);  // Update tag counts on touched tags.
 }
 
 function GetPostTags($pid) {

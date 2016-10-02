@@ -6,17 +6,21 @@
         var tag_data = null;
         $(document).ready(function() {
             var in_flight_ajax = null;
-            $("#search, #tag-filter, #alias-filter, #implication-filter, #create-filter").change(function() {
+            function DoSearchAjax() {
                 if (in_flight_ajax) {
                     in_flight_ajax.abort();
                 }
                 in_flight_ajax = DoAjax(SelectTag);
-            });
+            }
+            $("#search, #tag-filter, #alias-filter, #implication-filter").change(DoSearchAjax);
+            $("#create-filter").click(DoSearchAjax);
             $("#tag-list").change(function(e) {
                 var elem = $("#tag-list option:selected")[0];
                 var tag = $.data(elem, "tag");
                 SelectTag(tag);
             });
+            $("#update-tag-counts").click(UpdateAllTagCounts);
+            $("#processing-span").hide();
             DoAjax();
         });
         function DoAjax(cb) {
@@ -145,6 +149,24 @@
                 });
             });
         }
+        function UpdateAllTagCounts() {
+            $("#update-tag-counts").prop("disabled", true);
+            $("#processing-span").show();
+            $.ajax({
+                url: "/admin/{{ section }}/update_tag_counts/",
+                data: {},
+                dataType: "html",
+                method: "POST",
+                success: function() {
+                    $("#processing-span").hide();
+                    $("#update-tag-counts").prop("disabled", false);
+                },
+                error: function() {
+                    $("#processing-span").hide();
+                    $("#update-tag-counts").prop("disabled", false);
+                    alert("Failed to update tag counts");
+                }});
+        }
     </script>
 {% endblock %}
 
@@ -154,8 +176,9 @@
         <input id="tag-filter" name="filter" type="radio" checked />Tags
         <input id="alias-filter" name="filter" type="radio" />Aliases
         <input id="implication-filter" name="filter" type="radio" />Implications
-        <input id="create-filter" name="filter" type="radio" />Create New Tag</p>
-    <p><small id="searching-span">Searching...</small></p>
+        <input id="create-filter" type="button" value="Create New Tag" />
+        <input id="update-tag-counts" type="button" value="Update Tag Counts" /></p>
+    <p><small id="searching-span">Searching...</small><small id="processing-span">Processing...</small></p>
     <select id="tag-list" size="10" style="width: 100%;">
     </select>
     <div id="tag-container">

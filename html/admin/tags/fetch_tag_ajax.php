@@ -73,9 +73,16 @@ if (strlen($search_term) > 0) {
             $sql_clauses[] = "T.HideTag=0";
             continue;
         }
-        // Normal search.
-        $escaped_name = sql_escape($term);
-        $sql_clauses[] = "UPPER(T.Name) LIKE UPPER('%$escaped_name%')";
+        // Search for term.
+        if (startsWith($term, "\"") && endsWith($term, "\"")) {
+            // Exact search.
+            $escaped_name = sql_escape(mb_substr($term, 1, mb_strlen($term) - 2));
+            $sql_clauses[] = "UPPER(T.Name) LIKE UPPER('$escaped_name')";
+        } else {
+            // Substring search.
+            $escaped_name = sql_escape($term);
+            $sql_clauses[] = "UPPER(T.Name) LIKE UPPER('%$escaped_name%')";
+        }
     }
 }
 if (sizeof($sql_clauses) > 0) {

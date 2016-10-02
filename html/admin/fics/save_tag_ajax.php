@@ -27,12 +27,13 @@ if (isset($original_tag_id) && isset($new_alias_tag_id)) {
             $now = time();
             while ($row = $result->fetch_assoc()) {
                 $sid = $row['StoryId'];
-                sql_query("UPDATE ".GALLERY_POST_TAG_TABLE." SET TagId=$new_alias_tag_id WHERE StoryId=$sid AND TagId=$original_tag_id;");
+                sql_query("UPDATE ".FICS_STORY_TAG_TABLE." SET TagId=$new_alias_tag_id WHERE StoryId=$sid AND TagId=$original_tag_id;");
             }
         }
     }
-    UpdateTagItemCounts(GALLERY_TAG_TABLE, GALLERY_POST_TAG_TABLE, array($original_tag_id, $new_alias_tag_id));  // Update tag counts on touched tags.
+    UpdateTagItemCounts(FICS_TAG_TABLE, FICS_STORY_TAG_TABLE, FICS_STORY_TABLE, "StoryId", "I.ApprovalStatus<>'D'", array($original_tag_id, $new_alias_tag_id));  // Update tag counts on touched tags.
 }
+UpdateTagItemCounts(FICS_TAG_TABLE, FICS_STORY_TAG_TABLE, FICS_STORY_TABLE, "StoryId", "I.ApprovalStatus<>'D'", array($tag_id));
 return;
 
 ?>

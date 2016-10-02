@@ -245,29 +245,21 @@ function UpdateTagTypes($tag_table_name, $char_to_tag_type_map, $descriptors, $u
     }, $tag_descriptors);
 }
 
-function UpdateTagItemCounts($tag_table_name, $tag_item_table_name, $tag_ids) {
-    $id_count_map = GetTagCountsById($tag_item_table_name, $tag_ids);
-    foreach ($id_count_map as $id => $count) {
-        sql_query("UPDATE $tag_table_name SET ItemCount=$count WHERE TagId=$id;");
-    }
+function UpdateTagItemCounts($tag_table_name, $tag_item_table_name, $item_table_name, $item_name, $post_filter, $tag_ids) {
+    $joined_ids = implode(",", $tag_ids);
+    $tag_filter = "T.TagId IN ($joined_ids)";
+    UpdateAllTagCounts($tag_table_name, $tag_item_table_name, $item_table_name, $item_name, $post_filter, $tag_filter);
 }
 
-// From an array of ids, returns a map from id to item counts. Returns null on failure.
-function GetTagCountsById($tag_item_table_name, $ids) {
-    $queries = implode(", ", array_map(function($id) {
-        return "COUNT(CASE WHEN TagId=$id THEN 1 ELSE NULL END) AS C$id";
-    }, $ids));
-    $joined = implode(",", $ids);
-    if (!sql_query_into($result, "SELECT $queries FROM $tag_item_table_name WHERE TagId IN ($joined);", 1)) {
-        return null;
-    }
-    $ret = array();
-    while ($row = $result->fetch_assoc()) {
-        foreach ($ids as $id) {
-            $ret[$id] = $row["C$id"];
-        }
-    }
-    return $ret;
+function UpdateAllTagCounts($tag_table_name, $tag_item_table_name, $item_table_name, $item_id_name, $post_filter="TRUE", $tag_filter="TRUE") {
+    sql_query("UPDATE $tag_table_name T 
+    SET T.ItemCount=(
+        SELECT COUNT(*) FROM
+            $tag_item_table_name TI
+            INNER JOIN $item_table_name I
+            ON TI.$item_id_name=I.$item_id_name
+        WHERE ($post_filter) AND TI.TagId=T.TagId)
+    WHERE ($tag_filter);");
 }
 
 ?>
