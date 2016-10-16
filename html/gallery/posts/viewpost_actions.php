@@ -64,6 +64,8 @@ function HandleApproveAction($post) {
         ErrorBanner();
         return;
     }
+    $username = $user['DisplayName'];
+    LogAction("<strong><a href='/user/$uid/'>$username</a></strong> approved <strong><a href='/gallery/post/show/$pid/'>post #$pid</a></strong>", "G");
     PostSessionBanner("Post approved", "green");
 }
 function HandleFlagAction($post) {
@@ -90,6 +92,8 @@ function HandleFlagAction($post) {
         ErrorBanner();
         return;
     }
+    $username = $user['DisplayName'];
+    LogAction("<strong><a href='/user/$uid/'>$username</a></strong> flagged <strong><a href='/gallery/post/show/$pid/'>post #$pid</a></strong> <small><strong>Reason: </strong>$reason</small>", "G");
     PostSessionBanner("Post flagged", "green");
 }
 function HandleUnflagAction($post) {
@@ -107,6 +111,8 @@ function HandleUnflagAction($post) {
         ErrorBanner();
         return;
     }
+    $username = $user['DisplayName'];
+    LogAction("<strong><a href='/user/$uid/'>$username</a></strong> unflagged <strong><a href='/gallery/post/show/$pid/'>post #$pid</a></strong>", "G");
     PostSessionBanner("Post unflagged", "green");
 }
 function HandleDeleteAction($post) {

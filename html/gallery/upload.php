@@ -91,6 +91,10 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
             break;
     }
     $uploader_id = $user['UserId'];
+    // If correct parameter is set, don't include uploader id. This isn't in the normal web form, just a supported POST parameter for private API access.
+    if (isset($_POST['hide_uploader_id']) && $_POST['hide_uploader_id'] == "1" && CanUserUploadWithHiddenUserId($user)) {
+        $uploader_id = -1;
+    }
 
     if (mb_strlen($_POST['source']) > 0) {
         $source = mb_substr(str_replace(" ", "%20", $_POST['source']), 0, 256);

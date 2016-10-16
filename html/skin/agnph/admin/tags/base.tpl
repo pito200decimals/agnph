@@ -6,14 +6,14 @@
         var tag_data = null;
         $(document).ready(function() {
             var in_flight_ajax = null;
-            function DoSearchAjax() {
+            function DoSearchAjax(do_create) {
                 if (in_flight_ajax) {
                     in_flight_ajax.abort();
                 }
-                in_flight_ajax = DoAjax(SelectTag);
+                in_flight_ajax = DoAjax(do_create, SelectTag);
             }
-            $("#search, #tag-filter, #alias-filter, #implication-filter").change(DoSearchAjax);
-            $("#create-filter").click(DoSearchAjax);
+            $("#search, #tag-filter, #alias-filter, #implication-filter").change(function() {DoSearchAjax(false);});
+            $("#create-filter").click(function() {DoSearchAjax(true);});
             $("#tag-list").change(function(e) {
                 var elem = $("#tag-list option:selected")[0];
                 var tag = $.data(elem, "tag");
@@ -21,15 +21,20 @@
             });
             $("#update-tag-counts").click(UpdateAllTagCounts);
             $("#processing-span").hide();
-            DoAjax();
+            DoAjax(false);
         });
-        function DoAjax(cb) {
+        function DoAjax(do_create, cb) {
             var searchTerm = $("#search").val();
             var filter = "tag";
             if ($("#tag-filter").is(":checked")) filter = "tag";
             if ($("#alias-filter").is(":checked")) filter = "alias";
             if ($("#implication-filter").is(":checked")) filter = "implication";
-            if ($("#create-filter").is(":checked")) filter = "create";
+            if (do_create) {
+                if (searchTerm.length == 0) {
+                    cb(false);
+                }
+                filter = "create";
+            }
             $("#searching-span").show();
             return $.ajax({
                 url: "/admin/{{ section }}/fetch_tag/",
@@ -141,7 +146,7 @@
                     if (!success) alert("Failed to save changes");
                     var selected_value = $("#tag-list").val();
                     $("#tag-list").val("");
-                    DoAjax(function() {
+                    DoAjax(false, function() {
                         if ($("#tag-list option[value='"+selected_value+"']").length > 0) {
                             $("#tag-list").val(selected_value).change();
                         }

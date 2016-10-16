@@ -16,7 +16,7 @@ sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE PostId=$pid;
 $post = $result->fetch_assoc();
 $pid = $post['PostId'];  // Get database value, not user input.
 
-CollectItems(GALLERY_POST_TAG_HISTORY_TABLE, "WHERE PostId=$pid ORDER BY Timestamp DESC", $tag_history_items, GALLERY_LIST_ITEMS_PER_PAGE, $iterator, "Post not found");
+CollectItems(GALLERY_POST_TAG_HISTORY_TABLE, "WHERE PostId=$pid ORDER BY Timestamp DESC, Id DESC", $tag_history_items, GALLERY_LIST_ITEMS_PER_PAGE, $iterator, "Post not found");
 
 if (sizeof($tag_history_items) > 0) {
 include(SITE_ROOT."gallery/includes/tag_history_include.php");

@@ -100,7 +100,7 @@ a:hover div.post-label {
         text-align: center;
     }
 }
-@media only handheld, screen and (max-width: 402px) {
+@media only handheld, screen and (max-width: 586px) {
     .toggle-mobile-layout {
         display: inherit;
     }

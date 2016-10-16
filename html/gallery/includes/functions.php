@@ -19,6 +19,11 @@ function CanUserUploadPost($user) {
     if ($user['JoinTime'] + ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE > time()) return false;
     return true;
 }
+function CanUserUploadWithHiddenUserId($user) {
+    if (!IsUserActivated($user)) return false;
+    if ($user['GalleryPermissions'] == 'A') return true;
+    return false;
+}
 function CanUserEditGalleryPost($user) {
     if (!IsUserActivated($user)) return false;
     if ($user['GalleryPermissions'] == 'A') return true;

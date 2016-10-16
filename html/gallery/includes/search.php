@@ -9,10 +9,7 @@ include_once(SITE_ROOT."gallery/includes/searchclause.php");
 // order:age (Oldest to Newest)
 // order:fav (Most to Least favorites)
 // order:popular (By popularity formula)
-//
-// === Not implemented yet ===
-// order:favorites
-// order:date
+// order:comments (Most to least comments)
 
 function CreatePostSearchSQL($search_string, $posts_per_page, $page, &$can_sort_pool, &$pool_sort_id, $return_where_only=false) {
     $offset = ($page - 1) * $posts_per_page;
@@ -76,6 +73,12 @@ function CreatePostSearchSQL($search_string, $posts_per_page, $page, &$can_sort_
             // Don't remove "order:popular" from query string; used when filtering out swf/webm posts.
             // $search_string = mb_eregi_replace("order:popular", "", $search_string);
             $sortOrder = "LOG(GREATEST(T.NumViews - 10, 1) + 100 * T.NumFavorites) * 1.0 / POWER(LOG(GREATEST($now - T.DateUploaded, $grace_period)), 2) DESC, ".$sortOrder;
+            $can_sort_pool = false;
+        }
+        // Since comments can bucket by count, prioritize this over order:popular.
+        if (contains($lower_search_string, "order:comments") !== FALSE) {
+            $search_string = mb_eregi_replace("order:comments", "", $search_string);
+            $sortOrder = "T.NumComments DESC, ".$sortOrder;
             $can_sort_pool = false;
         }
     }

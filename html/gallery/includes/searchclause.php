@@ -11,6 +11,7 @@
 // md5:{Md5}
 // parent:{PostId}
 // status:{deleted/flagged/pending/none} (If omitted, defaults to -status:deleted)
+// flagger:{user-display-name}
 // pool:{PoolId}
 // file:{jpg, webm, etc}
 // source:
@@ -252,6 +253,10 @@ function CreateSQLClauseFromFilter($filter) {
                 // Unknown status.
                 return "FALSE";
             }
+        } else if (startsWith($filter, "flagger:")) {
+            $name = mb_substr($filter, 8);
+            $escaped_name = sql_escape($name);
+            return "(T.Status='F' AND EXISTS(SELECT 1 FROM ".USER_TABLE." U WHERE UPPER(U.DisplayName)=UPPER('$escaped_name') AND T.FlaggerUserId=U.UserId))";
         } else if (startsWith($filter, "pool:")) {
             $pool = mb_substr($filter, 5);
             if (mb_strtolower($pool, "UTF-8") == "none" || !is_numeric($pool) || $pool <= 0) return "FALSE";  // Don't let searching for all non-pool posts.

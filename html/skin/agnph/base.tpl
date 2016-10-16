@@ -125,7 +125,7 @@
                     <li{% if nav_section=="forums" %} class="selected-nav"{% endif %}><a href="/forums/board/">Forums</a></li>
                     <li{% if nav_section=="gallery" %} class="selected-nav"{% endif %}><a href="/gallery/post/">Gallery</a></li>
                     <li{% if nav_section=="fics" %} class="selected-nav"{% endif %}><a href="/fics/">Fics</a></li>
-                    <li{% if nav_section=="oekaki" %} class="selected-nav"{% endif %}><a href="/oekaki/">Oekaki <span id="new-section-badge">New!</span></a></li>
+                    <li{% if nav_section=="oekaki" %} class="selected-nav"{% endif %}><a href="/oekaki/">Oekaki</a></li>
                     <li{% if nav_section=="user" %} class="selected-nav"{% endif %}><a href="/user/list/">Users</a></li>
                     <li><a href="/about/irc/">IRC</a></li>
                     <li{% if nav_section=="about" %} class="selected-nav"{% endif %}><a href="/about/">About</a></li>
@@ -159,33 +159,33 @@
                         {% endblock %}
                     {% endif %}
                 </div>
-            </div>
-            <div id="mainfooter">
-                {% block theme_select %}
-                    <span id="theme-switcher">
-                        Theme:
-                        <form id="theme-switcher-form" action="/change-skin/" method="POST" accept-encoding="UTF-8">
-                            <select name="skin" onchange="document.getElementById('theme-switcher-form').submit();">
-                                {% for s in availableSkins %}
-                                    <option{% if s == skin %} selected{% endif %}>{{ s }}</option>
-                                {% endfor %}
+                <div id="mainfooter">
+                    {% block theme_select %}
+                        <span id="theme-switcher">
+                            Theme:
+                            <form id="theme-switcher-form" action="/change-skin/" method="POST" accept-encoding="UTF-8">
+                                <select name="skin" onchange="document.getElementById('theme-switcher-form').submit();">
+                                    {% for s in availableSkins %}
+                                        <option{% if s == skin %} selected{% endif %}>{{ s }}</option>
+                                    {% endfor %}
+                                </select>
+                            </form>
+                        </span>
+                    {% endblock %}
+                    {% block font_size_select %}
+                        <span class="font-size-switcher" hidden>
+                            Font Size:
+                            <select class="font-size-select">
+                                <option>80%</option>
+                                <option>90%</option>
+                                <option>100%</option>
+                                <option>120%</option>
+                                <option>150%</option>
                             </select>
-                        </form>
-                    </span>
-                {% endblock %}
-                {% block font_size_select %}
-                    <span class="font-size-switcher" hidden>
-                        Font Size:
-                        <select class="font-size-select">
-                            <option>80%</option>
-                            <option>90%</option>
-                            <option>100%</option>
-                            <option>120%</option>
-                            <option>150%</option>
-                        </select>
-                    </span>
-                {% endblock %}
-                <div class="Clear">&nbsp;</div>
+                        </span>
+                    {% endblock %}
+                    <div class="Clear">&nbsp;</div>
+                </div>
             </div>
         </div>
         <div id="footer">

@@ -17,7 +17,11 @@
                 return false;
             });
             $("#newpanel input").blur(function() {
-                $("#newpanel").hide();
+                setTimeout(function() {
+                    if (!$("#newpanel").is(":focus")) {
+                        $("#newpanel").hide();
+                    }
+                }, 100);
             });
         });
     </script>
