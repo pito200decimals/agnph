@@ -109,7 +109,7 @@ if (isset($_GET['api'])) {
     }
 }
 
-$promotion_banner_enabled = true;
+$promotion_banner_enabled = false;
 if ($promotion_banner_enabled) {
     if (($searchterms == "" && $page == 1) || $has_feature) {
         PostBanner("Check out the current Fics/Oekaki theme <a href='http://agn.ph/forums/thread/2133/'>here</a>. Prizes for the best entries!", "green", true, true);
