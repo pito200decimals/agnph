@@ -159,6 +159,7 @@
                         {% endblock %}
                     {% endif %}
                 </div>
+                <div class="Clear">&nbsp;</div>
                 <div id="mainfooter">
                     {% block theme_select %}
                         <span id="theme-switcher">

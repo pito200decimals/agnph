@@ -197,6 +197,7 @@ function GetSimilarTagsByName($tag_table_name, $tag_names, $alias_tag_table_name
     if ($alias_tag_table_name != null) {
         $clauses = "NOT(EXISTS(SELECT 1 FROM $alias_tag_table_name A WHERE A.TagId=T.TagId)) AND $clauses";
     }
+    $clauses = "$clauses AND HideTag=0";
     $sql = "SELECT * FROM $tag_table_name T WHERE $clauses ORDER BY ItemCount DESC LIMIT ".GALLERY_NUM_SUGGESTED_SPELLING_TAGS.";";
     if (!sql_query_into($result, $sql, 1)) return array();  // Return empty on error or none found.
     $ret = array();
