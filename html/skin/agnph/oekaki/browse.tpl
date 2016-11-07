@@ -27,18 +27,6 @@
                     }
                 }
             });
-            tinymce.init({
-                selector: "textarea.oekaki-make-comment-textbox",
-                plugins: [ "paste", "link", "autoresize", "code", "contextmenu", "emoticons", "image", "textcolor", "spoiler" ],
-                target_list: [ {title: 'New page', value: '_blank'} ],
-                toolbar: "undo redo | bold italic underline | bullist numlist | image link | code blockquote spoiler",
-                contextmenu: "image link",
-                autoresize_max_height: 300,
-                resize: true,
-                menubar: false,
-                relative_urls: false,
-                content_css: "{{ asset('/comments-style.css') }}"
-            });
 
             $("form.oekaki-make-comment-container").each(function(i, container) {
                 container = $(container);
@@ -48,6 +36,18 @@
                 button.click(function() {
                     if (!pane.is(":visible")) {
                         pane.show();
+                        tinymce.init({
+                            selector: "#" + container.attr("id") + " textarea.oekaki-make-comment-textbox",
+                            plugins: [ "paste", "link", "autoresize", "code", "contextmenu", "emoticons", "image", "textcolor", "spoiler" ],
+                            target_list: [ {title: 'New page', value: '_blank'} ],
+                            toolbar: "undo redo | bold italic underline | bullist numlist | image link | code blockquote spoiler",
+                            contextmenu: "image link",
+                            autoresize_max_height: 300,
+                            resize: true,
+                            menubar: false,
+                            relative_urls: false,
+                            content_css: "{{ asset('/comments-style.css') }}"
+                        });
                     } else {
                         {# Post comment #}
                         container[0].submit();
@@ -80,7 +80,7 @@
         <div class="oekaki-post-content">
             <div class="oekaki-post-image-container">
                 {% if post.Status == 'A' %}
-                    <a href="/oekaki/image/{{ post.PostId }}.{{ post.Extension }}"><img class="oekaki-post-image" src="/oekaki/image/{{ post.PostId }}.{{ post.Extension }}" /></a>
+                    <a href="/oekaki/image/{{ post.PostId }}.{{ post.Extension }}"><img class="oekaki-post-image" data-src="/oekaki/image/{{ post.PostId }}.{{ post.Extension }}" /></a>
                     {% if post.HasAnimation %}<p><a href="/oekaki/animation/{{ post.PostId }}/">(Show Animation)</a><p>{% endif %}
                 {% elseif post.Status == 'M' %}
                     <img class="oekaki-post-image" src="/images/deleted-preview.png" />
@@ -103,7 +103,7 @@
                         {% endfor %}
                     </ul>
                 </div>
-                <form class="oekaki-make-comment-container" action="/oekaki/comment/" method="POST" accept-encoding="UTF-8">
+                <form id="p{{ post.PostId }}" class="oekaki-make-comment-container" action="/oekaki/comment/" method="POST" accept-encoding="UTF-8">
                     <input type="hidden" name="post-id" value="{{ post.PostId }}" />
                     <input type="hidden" name="action" value="comment" />
                     <div class="oekaki-make-comment-editor-container">

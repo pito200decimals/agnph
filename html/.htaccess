@@ -4,7 +4,7 @@ AddDefaultCharset utf-8
 
 # Set up PHP.
 php_value upload_max_filesize 50M
-php_value post_max_size 50M
+php_value post_max_size 150M
 
 # Block blacklisted referrers.
 # NC = NoCase

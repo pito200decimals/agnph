@@ -183,9 +183,9 @@ function CreateFilterSQLClauseFromTerms($filter_terms) {
 
 function GetSpecialSQLClauseForTerm($term) {
     if (mb_strtolower($term, "UTF-8") == "missing_artist") {
-        return "NOT(EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." PT WHERE T.PostId=PT.PostId AND EXISTS(SELECT 1 FROM ".GALLERY_TAG_TABLE." TG WHERE TG.TagId=PT.TagId AND TG.Type='A')))";
+        return "NOT(EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." PT INNER JOIN ".GALLERY_TAG_TABLE." TG ON PT.TagId=TG.TagId WHERE T.PostId=PT.PostId AND TG.Type='A'))";
     } else if (mb_strtolower($term, "UTF-8") == "missing_species") {
-        return "NOT(EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." PT WHERE T.PostId=PT.PostId AND EXISTS(SELECT 1 FROM ".GALLERY_TAG_TABLE." TG WHERE TG.TagId=PT.TagId AND TG.Type='D')))";
+        return "NOT(EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." PT INNER JOIN ".GALLERY_TAG_TABLE." TG ON PT.TagId=TG.TagId WHERE T.PostId=PT.PostId AND TG.Type='D'))";
     } else {
         return null;
     }

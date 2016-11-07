@@ -63,6 +63,21 @@ $(document).ready(function() {
             $(this).attr("placeholder", placeholder);
         });
     });
+    
+    // Async load all images.
+    $("[data-src]").each(function(i, tag) {
+        tag = $(tag);
+        var src = tag.attr("data-src");
+        var im = new Image();
+        function OnLoad() {
+            tag.attr("src", src);
+        }
+        im.onload = OnLoad;
+        im.src = src;
+        if (im.complete) {
+            OnLoad();
+        }
+    });
 });
 
 function getCookie(cname) {
