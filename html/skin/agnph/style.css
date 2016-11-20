@@ -170,7 +170,7 @@ a:hover {
 #theme-switcher-form {
     display: inline-block;
 }
-.font-size-switcher {
+.font-size-switcher-container {
     float: right;
     font-size: 80%;
 }

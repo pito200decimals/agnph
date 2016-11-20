@@ -34,28 +34,7 @@ $(document).ready(function() {
         return false;
     });
     
-    // Set up font size switcher cookie.
-    function setZoom(zoom) {
-        var found = false;
-        var options = $(".font-size-select").children().each(function() {
-            if (zoom.trim() == $(this).text().trim()) {
-                found = true;
-                $(this).prop("selected", true);
-                setCookie("zoom", zoom);
-                refreshZoom(zoom);
-            }
-        });
-        if (!found) setZoom("100%");
-    }
-
-    function refreshZoom(zoom) {
-        $(".font-scalable").children(":not(.not-font-scalable)").css("font-size", zoom);
-    }
-    setZoom(getCookie("zoom"));
-    $(".font-size-select").change(function() {
-        setZoom($(this).val());
-    });
-    $(".font-size-switcher").show();
+    // Set up removing placeholder text in search boxes.
     $("div.search input[type='text'].search").focus(function() {
         var placeholder = $(this).attr("placeholder");
         $(this).attr("placeholder", "");
@@ -64,7 +43,7 @@ $(document).ready(function() {
         });
     });
     
-    // Async load all images.
+    // Maybe async-load all images.
     $("[data-src]").each(function(i, tag) {
         tag = $(tag);
         var src = tag.attr("data-src");

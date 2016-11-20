@@ -55,6 +55,7 @@
         {% endif %}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script src="{{ asset('/base.js') }}"></script>
+        <script src="{{ asset('/scripts/zoom.js') }}"></script>
         {% block scripts %}
             {# Custom page scripts go here #}
         {% endblock %}
@@ -173,18 +174,16 @@
                             </form>
                         </span>
                     {% endblock %}
-                    {% block font_size_select %}
-                        <span class="font-size-switcher" hidden>
-                            Font Size:
-                            <select class="font-size-select">
-                                <option>80%</option>
-                                <option>90%</option>
-                                <option>100%</option>
-                                <option>120%</option>
-                                <option>150%</option>
-                            </select>
-                        </span>
-                    {% endblock %}
+                    <span class="font-size-switcher-container site-font-size-switcher" hidden>
+                        Font Size:
+                        <select>
+                            <option>80%</option>
+                            <option>90%</option>
+                            <option>100%</option>
+                            <option>120%</option>
+                            <option>150%</option>
+                        </select>
+                    </span>
                     <div class="Clear">&nbsp;</div>
                 </div>
             </div>
