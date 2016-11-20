@@ -85,6 +85,7 @@ function SanitizeMetadata($metadata) {
         'height' => 600,
         'imageData' => "",
         'elapsedSeconds' => 0,
+        'selectedLayer' => 0,
         'toolStates' => array(),
         'hasReplay' => false,
         'replayData' => array());

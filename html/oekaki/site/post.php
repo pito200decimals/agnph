@@ -73,6 +73,7 @@ if (sql_query("INSERT INTO ".OEKAKI_POST_TABLE."
     $img->save(SITE_ROOT.$img_path);
     // Save animation data.
     if (isset($animation_data)) {
+        mkdir(SITE_ROOT."user/data/oekaki/animations/");
         $animation_data_path = SITE_ROOT."user/data/oekaki/animations/$pid.oekaki";
         $fp = fopen($animation_data_path, 'w');
         fwrite($fp, json_encode($animation_data));

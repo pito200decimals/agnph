@@ -24,6 +24,15 @@
     {% if not user or user.AutoDetectTimezone %}
         <script src="{{ asset('timezone.js') }}"></script>
     {% endif %}
+    <script>
+        $(document).ready(function() {
+            $(".confirm-link a").click(function(e) {
+                setCookie("confirmed_age", "true");
+                location.reload();
+                return false;
+            });
+        });
+    </script>
 {% endblock %}
 
 {% block content %}
@@ -32,7 +41,7 @@
             Warning: You must be at least 18 years of age to view this page.
         </p>
         <div>
-            <div class="confirm-link"><a href="{{ confirm_age_url }}">Yes, let me in!</a></div><div class="confirm-link"><a href="http://www.pokemon.com/">No, get me out of here!</a></div>
+            <div class="confirm-link"><a href="#">Yes, let me in!</a></div><div class="confirm-link"><a href="http://www.pokemon.com/">No, get me out of here!</a></div>
         </div>
     </div>
 {% endblock %}

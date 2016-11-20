@@ -47,7 +47,6 @@ RewriteRule ^recover/?$ /user/recover/recover_account_input.php
 RewriteRule ^recover/confirm/?$ /user/recover/recover_account_confirm.php
 RewriteRule ^recover/success/?$ /user/recover/recover_account_success.php
 RewriteRule ^timezone/?$ /timezone_ajax.php
-RewriteRule ^confirm_age/?$ /header.php
 RewriteRule ^change-skin/?$ /skin_switch.php
 #RewriteRule ^setup/?$ /setup/sql_setup.php
 RewriteRule ^rotation/example/?$ /ad_rotation.php

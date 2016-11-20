@@ -72,22 +72,9 @@ if (isset($user)) {
     // Do nothing if logged in.
 } else if ($is_api) {
     // Do nothing for API interface.
-} else if (!isset($_SESSION['age_gate']) && IsRealUser()) {
-    if (contains($_SERVER['REQUEST_URI'], AGE_GATE_PATH)) {
-        // Redirect to destination.
-        $_SESSION['age_gate'] = true;
-        Redirect($_SERVER['HTTP_REFERER']);
-    } else {
-        $uri = strtolower($_SERVER['REQUEST_URI']);
-        foreach ($AGE_GATE_SECTIONS as $section) {
-            if (startsWith($uri, "/".strtolower($section))) {
-                // Show age gate.
-                $vars['confirm_age_url'] = "/".AGE_GATE_PATH."/";
-                RenderPage("age_splash.tpl");
-                exit();
-            }
-        }
-    }
+} else if (IsRealUser()) {
+    // If a guest, maybe block on age.
+    MaybeShowAgeGate();
 }
 
 // Set up for banner notifications. Initialize session banners if not created yet.
@@ -147,7 +134,7 @@ function FetchUserHeaderVars() {
 
     $loader = new Twig_Loader_Filesystem($tpl_base_dirs);
     $twig = new Twig_Environment($loader, array(
-        "cache" => SITE_ROOT."skin_template_cache",
+        //"cache" => SITE_ROOT."skin_template_cache",
     ));
     $asset_fn = new Twig_SimpleFunction('asset', function($path) use ($skin_dirs) {
         foreach ($skin_dirs as $base) {
@@ -170,5 +157,21 @@ function GetUnreadPMCount() {
             $vars['unread_message_count'] = $result->fetch_assoc()['C'];
         }
     }
+}
+
+function MaybeShowAgeGate() {
+    global $AGE_GATE_SECTIONS;
+    if (isset($_COOKIE['confirmed_age']) && $_COOKIE['confirmed_age'] == "true") return;
+    // Check if page should show age restrictions.
+    $uri = strtolower($_SERVER['REQUEST_URI']);
+    foreach ($AGE_GATE_SECTIONS as $section) {
+        if (startsWith($uri, "/".strtolower($section))) {
+            // Show age gate.
+            RenderPage("age_splash.tpl");
+            exit();
+        }
+    }
+    // Show page normally.
+    return;
 }
 ?>

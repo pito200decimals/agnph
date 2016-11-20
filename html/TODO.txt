@@ -4,18 +4,17 @@ Critical Bugfixes:
 - Theme/Skinning adjustments
 - Mass-edit undo
 - Slideshow timer adjustment
-- Admin tag history search
 - Separate zoom levels for fics stories and main site?
-- Investigate how imported accounts can be activated without prefix changing.
-- API post-by-md5
+? Investigate how imported accounts can be activated without prefix changing.
+? API post-by-md5
 - Wildcard matching in gallery/fics
-- Fix search box on admin pages
+? Fix search box on admin pages
 - Put message to click-and-drag for pools for users that can edit them
 - Skip splash screen on advert/feature links
 - Spoiler tag for embedded images in forums/posts
-- Investigate why users are able to log in with duplicate usernames.
+? Investigate why users are able to log in with duplicate usernames.
     - Do we still want to allow duplicate-usernames with unactivated accounts?
-- Fix event schedule 15 minute security email SQL.
+? Fix event schedule 15 minute security email SQL.
 
 TODOs
 (* = Required for launch, - = Normal priority, X = Scrapped)
@@ -30,16 +29,12 @@ TODOs
 X Optional large first posts in a thread (for news posts?)
 
 == GALLERY ==
-- Update tag counts to handle deleted posts
 - Edit pool names
 - Related tag suggestions in sidebar on index page
 - Add users that favorited to gallery posts
-- Order priority should be based on query, not tokens
-- Add tags on posts already uploaded from upload form
-    - Special-case don't add unknown_artist on posts with artists already.
+- Order priority should be based on query order, not tokens type priority
 X Some sort of tag exploration feature, perhaps tag cloud?
 X Handle parent cleanup on post delete (Move favorites over to parent?)
-X "Popular" recent posts, maybe by # of views in last day/week/month?
 X Search by newly-tagged?
 X Gallery linking to source on delete
 X Collapse adjacent image pools
@@ -49,20 +44,16 @@ X Gallery notes
 X Custom swf/webm thumbs when parent is set to image.
 
 == FICS ==
-- Update tag counts to handle deleted stories
 - Chapter template should have better margins (is 30px enough?)
     - Narrow-column toggle
 - Include co-authors in author list.
 X Author/Story following?
 X Ability to subscribe for email/PM notifications (for your stories and watching others)
-X RSS Feed?
 
 == SITE ==
 * Check for vuln's for style background-image URL
 * Splash for Disclaimer/Warning/Age gate.
     - Add disclaimer banner to non-splash-blocked pages.
-* Oekaki section
-    - Just a direct way to post to the forums?
 - Check htmlentities decoding everywhere.
 - Custom 404/error pages
     - 404 done, error pages not all working quite yet.
