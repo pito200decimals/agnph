@@ -161,14 +161,25 @@ function GetUnreadPMCount() {
 
 function MaybeShowAgeGate() {
     global $AGE_GATE_SECTIONS;
-    if (isset($_COOKIE['confirmed_age']) && $_COOKIE['confirmed_age'] == "true") return;
-    // Check if page should show age restrictions.
-    $uri = strtolower($_SERVER['REQUEST_URI']);
-    foreach ($AGE_GATE_SECTIONS as $section) {
-        if (startsWith($uri, "/".strtolower($section))) {
-            // Show age gate.
-            RenderPage("age_splash.tpl");
-            exit();
+    global $vars;
+    // Fallback session cookie for redirect. If this URL is visited, redirect to referring page.
+    if (contains($_SERVER['REQUEST_URI'], AGE_GATE_PATH)) {
+        // Redirect to destination.
+        $_SESSION['age_gate'] = true;
+        Redirect($_SERVER['HTTP_REFERER']);
+    } else {
+        // Visiting the actual page URL. Check if valid client-side cookie.
+        if (isset($_COOKIE['confirmed_age']) && $_COOKIE['confirmed_age'] == "true") return;
+        if (isset($_SESSION['age_gate']) && $_SESSION['age_gate']) return;
+        // Check if page should show age restrictions in the first place.
+        $uri = strtolower($_SERVER['REQUEST_URI']);
+        foreach ($AGE_GATE_SECTIONS as $section) {
+            if (startsWith($uri, "/".strtolower($section))) {
+                // Show age gate.
+                $vars['confirm_age_url'] = "/".AGE_GATE_PATH."/";
+                RenderPage("age_splash.tpl");
+                exit();
+            }
         }
     }
     // Show page normally.

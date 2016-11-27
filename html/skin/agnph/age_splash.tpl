@@ -41,7 +41,7 @@
             Warning: You must be at least 18 years of age to view this page.
         </p>
         <div>
-            <div class="confirm-link"><a href="#">Yes, let me in!</a></div><div class="confirm-link"><a href="http://www.pokemon.com/">No, get me out of here!</a></div>
+            <div class="confirm-link"><a href="{{ confirm_age_url }}">Yes, let me in!</a></div><div class="confirm-link"><a href="http://www.pokemon.com/">No, get me out of here!</a></div>
         </div>
     </div>
 {% endblock %}
