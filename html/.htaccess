@@ -47,6 +47,7 @@ RewriteRule ^recover/?$ /user/recover/recover_account_input.php
 RewriteRule ^recover/confirm/?$ /user/recover/recover_account_confirm.php
 RewriteRule ^recover/success/?$ /user/recover/recover_account_success.php
 RewriteRule ^timezone/?$ /timezone_ajax.php
+RewriteRule ^confirm_age/?$ /header.php
 RewriteRule ^change-skin/?$ /skin_switch.php
 #RewriteRule ^setup/?$ /setup/sql_setup.php
 RewriteRule ^rotation/example/?$ /ad_rotation.php
@@ -70,7 +71,6 @@ RewriteRule ^user/(\d+)/forums/?$ /forums/user.php?uid=$1
 RewriteRule ^user/(\d+)/gallery/?$ /gallery/user.php?uid=$1
 RewriteRule ^user/(\d+)/fics/?$ /fics/user.php?uid=$1
 RewriteRule ^user/(\d+)/oekaki/?$ /oekaki/site/user.php?uid=$1
-#RewriteRule ^user/(\d+)/oekaki/?$ /user/profile.php?uid=$1
 RewriteRule ^user/(\d+)/preferences/?$ /user/preferences.php?uid=$1
 RewriteRule ^user/(\d+)/preferences/bio/save/?$ /user/save_bio_ajax.php?uid=$1
 RewriteRule ^user/(\d+)/mail/?$ /user/mail/mail.php?uid=$1 [QSA]

@@ -134,7 +134,7 @@ function FetchUserHeaderVars() {
 
     $loader = new Twig_Loader_Filesystem($tpl_base_dirs);
     $twig = new Twig_Environment($loader, array(
-        //"cache" => SITE_ROOT."skin_template_cache",
+        "cache" => SITE_ROOT."skin_template_cache",
     ));
     $asset_fn = new Twig_SimpleFunction('asset', function($path) use ($skin_dirs) {
         foreach ($skin_dirs as $base) {

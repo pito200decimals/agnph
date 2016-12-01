@@ -1,6 +1,8 @@
 <?php
 // Creates metadata json ajax response for all slots.
 
+ini_set("zlib.output_compression", "On");
+
 define("SITE_ROOT", "../../");
 include_once(SITE_ROOT."ajax_header.php");
 include_once(SITE_ROOT."includes/constants.php");
