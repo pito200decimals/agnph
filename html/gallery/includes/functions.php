@@ -10,13 +10,16 @@ include_once(SITE_ROOT."includes/util/user.php");
 include_once(SITE_ROOT."includes/comments/comments_functions.php");
 
 // Permissions functions.
+function GalleryEditRegistrationPeriodNotOver($user) {
+    return $user['JoinTime'] + ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE > time();
+}
 function CanUserUploadPost($user) {
     if (!IsUserActivated($user)) return false;
     if ($user['GalleryPermissions'] == 'A') return true;
     if ($user['GalleryPermissions'] == 'C') return true;
     // Restrict user based on permissions and time since registration.
     if ($user['GalleryPermissions'] == 'R') return false;
-    if ($user['JoinTime'] + ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE > time()) return false;
+    if (GalleryEditRegistrationPeriodNotOver($user)) return false;
     return true;
 }
 function CanUserUploadWithHiddenUserId($user) {
@@ -30,7 +33,7 @@ function CanUserEditGalleryPost($user) {
     if ($user['GalleryPermissions'] == 'C') return true;
     // Restrict user based on permissions and time since registration.
     if ($user['GalleryPermissions'] == 'R') return false;
-    if ($user['JoinTime'] + ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE > time()) return false;
+    if (GalleryEditRegistrationPeriodNotOver($user)) return false;
     return true;
 }
 function CanUserCreateGalleryTags($user) {
@@ -39,7 +42,7 @@ function CanUserCreateGalleryTags($user) {
     if ($user['GalleryPermissions'] == 'C') return true;
     // Restrict user based on permissions and time since registration.
     if ($user['GalleryPermissions'] == 'R') return false;
-    if ($user['JoinTime'] + ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE > time()) return false;
+    if (GalleryEditRegistrationPeriodNotOver($user)) return false;
     return true;
 }
 function CanUserUploadNonPending($user) {
@@ -54,7 +57,7 @@ function CanUserAddOrRemoveFromPools($user) {
     if ($user['GalleryPermissions'] == 'C') return true;
     // Restrict user based on permissions and time since registration.
     if ($user['GalleryPermissions'] == 'R') return false;
-    if ($user['JoinTime'] + ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE > time()) return false;
+    if (GalleryEditRegistrationPeriodNotOver($user)) return false;
     return true;
 }
 function CanUserChangePoolOrdering($user) {
@@ -63,7 +66,7 @@ function CanUserChangePoolOrdering($user) {
     if ($user['GalleryPermissions'] == 'C') return true;
     // Restrict user based on permissions and time since registration.
     if ($user['GalleryPermissions'] == 'R') return false;
-    if ($user['JoinTime'] + ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE > time()) return false;
+    if (GalleryEditRegistrationPeriodNotOver($user)) return false;
     return true;
 }
 function CanUserCreatePool($user) {
@@ -72,7 +75,7 @@ function CanUserCreatePool($user) {
     if ($user['GalleryPermissions'] == 'C') return true;
     // Restrict user based on permissions and time since registration.
     if ($user['GalleryPermissions'] == 'R') return false;
-    if ($user['JoinTime'] + ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE > time()) return false;
+    if (GalleryEditRegistrationPeriodNotOver($user)) return false;
     return true;
 }
 function CanUserDeletePool($user) {
@@ -99,7 +102,7 @@ function CanUserFlagGalleryPost($user) {
     if ($user['GalleryPermissions'] == 'C') return true;
     // Restrict user based on permissions and time since registration.
     if ($user['GalleryPermissions'] == 'R') return false;
-    if ($user['JoinTime'] + ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE > time()) return false;
+    if (GalleryEditRegistrationPeriodNotOver($user)) return false;
     return true;
 }
 function CanUserUnflagGalleryPost($user) {

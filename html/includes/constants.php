@@ -229,6 +229,7 @@ define("REGISTER_ACCOUNT_SQL_EVENT_DURATION", "24 HOUR");  // Delete user entry 
 define("DEFAULT_EMAIL_EXPIRE_TIMESTAMP_DURATION", 15*60);  // Set to expire after 15 minutes.
 define("DEFAULT_EMAIL_EXPIRE_HUMAN_READABLE_STRING", "15 minutes");
 define("ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE", 7 * 24 * 60 * 60);  // 7 days.
+define("GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE_STRING", "7 days");
 define("REFRESH_ONLINE_TIMEOUT", 5 * 60);  // 5 minutes.
 define("CONSIDERED_ONLINE_DURATION", 15 * 60);  // 15 minutes.
 define("AGE_GATE_PATH", "confirm_age");

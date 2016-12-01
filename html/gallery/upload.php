@@ -11,11 +11,15 @@ if (!isset($user)) {
     return;
 }
 if (!CanUserUploadPost($user)) {
-    RenderErrorPage("You are not authorized to upload a new posts");
+    if (GalleryEditRegistrationPeriodNotOver($user)) {
+        RenderErrorPage("You are not authorized to upload new posts. You must wait ".GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE_STRING." after registering before you can upload new posts");
+    } else {
+        RenderErrorPage("You are not authorized to upload new posts");
+    }
     return;
 }
 if (!QuickCanUserUpload($user)) {
-    RenderErrorPage("You have reached your upload limit. Please wait for your pending uploads to be approved.");
+    RenderErrorPage("You have reached your upload limit. Please wait for your pending uploads to be approved");
     return;
 }
 if (!CanPerformSitePost()) MaintenanceError();

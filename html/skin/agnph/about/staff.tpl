@@ -77,7 +77,7 @@
             </div>
             <ul class="staff-list">
                 <li>
-                    <a class="profile-name" href="/user/43/">Cyn</a>
+                    <a class="profile-name" href="/user/43/">Cyn</a> <strong>(Fics)</strong>
                     <p class="profile-bio">
                         Friendly resident Cyndaquil. In charge of site software and Fics.
                     </p>
@@ -86,7 +86,7 @@
                     </p>
                 </li>
                 <li>
-                    <a class="profile-name" href="/user/1/">HatchlingByHeart</a>
+                    <a class="profile-name" href="/user/1/">HatchlingByHeart</a> <strong>(Minecraft)</strong>
                     <p class="profile-bio">
                         Chubby dragon. In charge of site tech and Minecraft.
                     </p>
@@ -106,7 +106,7 @@
                     <div class="staff-group-img">
                         <img class="profile-img" src="/images/staff/anonymless.png" />
                     </div>
-                    <a class="profile-name" href="/user/204/">Anonymless</a> (Gallery)
+                    <a class="profile-name" href="/user/204/">Anonymless</a> <strong>(Gallery)</strong>
                     <p class="profile-bio">
                         Cone connoisseur. Also known as Nymlus.
                     </p>
@@ -119,7 +119,7 @@
                     <div class="staff-group-img">
                         <img class="profile-img" src="/images/staff/smbcha.gif" />
                     </div>
-                    <a class="profile-name" href="/user/8/">smbcha</a> (Gallery)
+                    <a class="profile-name" href="/user/8/">smbcha</a> <strong>(Gallery)</strong>
                     <p class="profile-bio">
                     </p>
                     <p class="contact">
@@ -131,7 +131,7 @@
                     <div class="staff-group-img">
                         <img class="profile-img" src="/images/staff/alynna.png" />
                     </div>
-                    <a class="profile-name" href="/user/93/">Alynna</a> (IRC)
+                    <a class="profile-name" href="/user/93/">Alynna</a> <strong>(IRC)</strong>
                     <p class="profile-bio">
                         Classy, rainbow Sylveon.
                     </p>
@@ -144,7 +144,7 @@
                     <div class="staff-group-img">
                         <img class="profile-img" src="/images/staff/kupok.gif" />
                     </div>
-                    <a class="profile-name" href="/user/6298/">Kupok</a> (IRC)
+                    <a class="profile-name" href="/user/6298/">Kupok</a> <strong>(IRC)</strong>
                     <p class="profile-bio">
                         The oldest, Grumpiest IRC Troll of a Moogle on AGNPH.
                     </p>
@@ -157,7 +157,7 @@
                     <div class="staff-group-img">
                         <img class="profile-img" src="/images/staff/anon.png" />
                     </div>
-                    <a class="profile-name">leiger</a> (Minecraft)
+                    <a class="profile-name">leiger</a> <strong>(Minecraft)</strong>
                     <p class="profile-bio">
                     </p>
                     <p class="contact">
