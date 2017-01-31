@@ -224,10 +224,10 @@ define("DISPLAY_NAME_CHANGE_TIME_LIMIT", 24*60*60);  // Once a day.
 define("DISPLAY_NAME_CHANGE_TIME_LIMIT_STR", "24 hours");
 define("SECURITY_EMAIL_TABLE_SQL_CHECK_DELETE_INTERVAL", "'0:15' HOUR_MINUTE");  // Check every 15 minutes.
 define("REGISTER_ACCOUNT_TIMESTAMP_DURATION", 24*60*60);  // Set to expire after 24 hours.
-define("REGISTER_ACCOUNT_HUMAN_READABLE_STRING", "24 hours");
-define("REGISTER_ACCOUNT_SQL_EVENT_DURATION", "24 HOUR");  // Delete user entry after 24 hours.
-define("DEFAULT_EMAIL_EXPIRE_TIMESTAMP_DURATION", 15*60);  // Set to expire after 15 minutes.
-define("DEFAULT_EMAIL_EXPIRE_HUMAN_READABLE_STRING", "15 minutes");
+define("REGISTER_ACCOUNT_HUMAN_READABLE_STRING", "72 hours");
+define("REGISTER_ACCOUNT_SQL_EVENT_DURATION", "72 HOUR");  // Delete user entry after 24 hours.
+define("DEFAULT_EMAIL_EXPIRE_TIMESTAMP_DURATION", 60*60);  // Set to expire after 1 hour.
+define("DEFAULT_EMAIL_EXPIRE_HUMAN_READABLE_STRING", "1 hour");
 define("ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE", 7 * 24 * 60 * 60);  // 7 days.
 define("GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE_STRING", "7 days");
 define("REFRESH_ONLINE_TIMEOUT", 5 * 60);  // 5 minutes.

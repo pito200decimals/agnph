@@ -1,17 +1,11 @@
 # Set up Apache.
 RewriteEngine On
 AddDefaultCharset utf-8
+RewriteOptions inherit
 
 # Set up PHP.
 php_value upload_max_filesize 50M
 php_value post_max_size 150M
-
-# Block blacklisted referrers.
-# NC = NoCase
-# OR = or
-RewriteCond %{HTTP_REFERER} pokemonyiff\.com [NC,OR]
-RewriteCond %{HTTP_HOST} pokemonyiff\.com [NC]
-RewriteRule .* - [R=410]
 
 # Needed so that we can name URL's with the same filename as php files (e.g. /gallery/upload/)
 Options -MultiViews

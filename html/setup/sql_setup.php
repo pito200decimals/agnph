@@ -364,8 +364,9 @@ do_or_die(sql_query(
         Extension CHAR(3) NOT NULL,
         Adult TINYINT(1) DEFAULT 0 NOT NULL,
         Duration INT(11) NOT NULL,
-        Status CHAR(1) DEFAULT 'A' NOT NULL,
-        PRIMARY KEY(PostId)
+        HasAnimation TINYINT(1) DEFAULT 0 NOT NULL,
+        Status CHAR(1) DEFAULT 'A' NOT NULL,".  // A - Approved, M - ???, D - Deleted.
+       "PRIMARY KEY(PostId)
     ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 // Table for oekaki user preferences.
 do_or_die(sql_query(
