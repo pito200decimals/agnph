@@ -17,9 +17,9 @@ function TagDisplayNameToTagName($tag_name) {
     return $ret;
 }
 
-// Replaces spaces with _, and removes all other whitespace.
+// Replaces spaces with _, and removes all other whitespace/illegal characters.
 function SanitizeTagName($name) {
-    return mb_ereg_replace("[\s<>\\[\\]{};#\$%^*+=|\\\\\",?`]+", "", TagDisplayNameToTagName($name));
+    return mb_ereg_replace("[\s<>\\[\\]{};#\$%^*+=|\\\\\",?`:]+", "", TagDisplayNameToTagName($name));
 }
 
 // Gets rid of newlines and other junk characters and replaces them with spaces.

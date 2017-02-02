@@ -73,12 +73,15 @@ function CreateSQLClausesFromTerms($terms) {
     $filter_clauses = array();
     if ($terms != array("")) {
         foreach ($terms as $term) {
-            if (mb_strpos($term, ":") !== FALSE) {
-                $filter_clauses[] = $term;
-            } else if (startsWith($term, "~")) {
+            if (preg_match("/^\".*\"$/", $term)) {  // Exact match.
+                $term = mb_substr($term, 1, mb_strlen($term) - 2);
+                $and_terms[] = $term;
+            } else if (startsWith($term, "~")) {  // OR.
                 $or_terms[] = mb_substr($term, 1);
-            } else if (startsWith($term, "-")) {
+            } else if (startsWith($term, "-")) {  // NOT.
                 $not_terms[] = mb_substr($term, 1);
+            } else if (mb_strpos($term, ":") !== FALSE) {  // Check for filter after OR/NOT checks.
+                $filter_clauses[] = $term;
             } else {
                 $and_terms[] = $term;
             }
