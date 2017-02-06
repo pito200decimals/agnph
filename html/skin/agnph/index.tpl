@@ -32,7 +32,6 @@
             </div>
         </div>
 
-
         <div class="center-column">
             <div class="column-contents">
                 {% if welcome_message %}
@@ -60,7 +59,6 @@
                 {% endif %}
             </div>
         </div>
-
 
         <div class="left-column">
             <div class="column-contents">

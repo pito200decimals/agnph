@@ -1,9 +1,11 @@
 /* Global site style CSS */
-/* Media transitions at 820px, 1024px width and 400px height. */
+
 body {
-    margin: 0px;
-    font-family: verdana,sans-serif;
+    font: Arial;
+    font-family: Verdana, Helvetica, Arial, sans-serif;
     overflow-x: hidden;
+    margin: 0px;
+    background-color: rgb(63,127,255);
 }
 a {
     text-decoration: none;
@@ -15,152 +17,137 @@ a:hover {
 
 
 /* === Site Navbar === */
-/* Background */
-.site-navbar, .site-navbar * {
+#site-top-full-bar {
+    background-color: rgb(63,191,255);
 }
-/* Selected section background */
-.site-navbar li.selected-nav a {
-}
-/* Text color */
-.site-navbar a,.site-navbar input {
-    color: white;
-}
-.site-navbar a:hover,.site-navbar input:hover {
-    text-shadow: 0 0 3px rgb(255,255,255);
-    text-decoration: none;
-}
-/* Main hover color */
-.navigation_left a:hover, .navigation_left li.selected-nav a:hover {
-    text-decoration: none;
-}
-#top-logo:hover {
-}
-/* Dropdown tray background color */
-.nav-dropdown-tray a, .nav-dropdown-tray input, .nav-dropdown-tray span {
-}
-/* Dropdown tray hover color */
-#account_dropdown a:hover,#account_dropdown input:hover {
-    text-decoration: none;
-}
-/* Section navigation color */
-.section-nav, .section-nav a {
-}
-@media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
-    /* Main site nav tray color */
-    ul.navigation_left a {
-        padding: 15px;
-    }
-    /* Main site nav tray hover color */
-    ul.navigation_left a:hover {
-        text-decoration: none;
-    }
-    .site-navbar li.selected-nav a {
-    }
-    .nav-dropdown-tray#main_menu_icon {
-    }
-}
-
-/* Rest of navbar CSS */
-.site-navbar ul {
-    list-style-type: none;
+#site-top-full-bar ul {
+    list-style: none;
     margin: 0px;
     padding: 0px;
 }
-.site-navbar input {
-    background:none;
-    border:none;
+/* Behavior of nav menu */
+.nav-menu li {
+    float: left;
+}
+.nav-menu li a, .nav-menu li input {
+    padding: 5px 10px;
+    display: block;
+    color: white;
+    font-weight: bold;
+    background: none;
+}
+.nav-menu input {
+    padding: 5px 10px;
+    border: none;
     font: inherit;
     cursor: pointer;
     width: 100%;
     text-align: left;
 }
-.site-navbar a,.site-navbar input {
+.nav-menu li a:hover, .nav-menu li input:hover {
     text-decoration: none;
-    padding: 5px 10px;
+    text-shadow: 0 0 3px rgb(255,255,255);
+}
+/* Behavior of nav menu open trays */
+.nav-menu-tray:not(.nav-menu) {  /* Hide trays that aren't also visible menus. */
+    display: none;
+}
+.nav-menu-tray.tray-open {  /* Show trays that are open. */
+    display: inherit;
+}
+.nav-menu-tray.tray-open li {
+    float: none;
+}
+.nav-menu-tray.tray-open li a, .nav-menu-tray.tray-open li input {
     font-weight: bold;
+    background-color: rgb(63,91,55);
 }
-.site-navbar > div > ul li > a {
-    display: block;
+ .nav-menu-tray.tray-open li.selected-nav a, .nav-menu-tray.tray-open li a:hover, .nav-menu-tray.tray-open li input:hover {
+    background-color: rgb(63,127,63);
 }
-.navigation_left li {
-    float: left;
+.nav-menu-tray-button {
+    background-color: rgb(63,91,55);
 }
-.navigation_right li {
+#account-links>li, #account-links>noscript>li {  /* Position account links appropriately. */
     position: relative;
     float: right;
 }
-.site-navbar img {
+#main-nav-menu>li.selected-nav,
+#main-nav-menu>li:hover,
+#account-links>li:hover:not(#account-menu-button):not(.mobile-navbar-right-links),
+#account-links>li:not(#account-menu-button) a:hover {  /* Set selected nav/hover color. */
+    background-color: rgb(63,127,255);
+}
+#site-top-full-bar-container { /* Restrict to site width, Desktop Large */
+    margin: 0 auto;
+    min-width: 1024px;
+    max-width: 1600px;
+    width: 80%;
+}
+#site-top-full-bar img { /* Desktop */
     max-width: 32px;
     max-height: 19px;
     vertical-align: top;
     margin: 0xp;
     margin-right: 5px;
 }
-.nav-dropdown-tray {
-    display: block;  /* For visibility */
+#mobile-logo {
+    padding: 5px;
+    max-width: 200px;
 }
-.nav-dropdown-tray a {
-    display: block;
-}
-#account_dropdown {
+#account-menu {  /* Position account dropdown menu appropriately. */
     position: absolute;
     right: 0px;
     z-index: 9999;
     text-align: left;
 }
-#account_dropdown li {
-    display: block;
-    float: none;
-    left: 0px;
-}
-#main_menu_icon {
-    display: none;
-}
-#top-logo {
-    max-width: inherit;
-    max-height: 29px;
-    margin: 0px;
-}
-#top-logo-link {
-    padding: 0px;
-}
 
-
-/* === Main site content === */
-#mainbody {
+/* === Site Body === */
+#main-body {  /* Main white space content area. */
     background-color: white;
     margin: 0 auto;
     min-width: 1024px;
     max-width:1600px;
     width: 80%;
-}
-#maincontent {
     min-height: 800px;
 }
-#site-navbar-container {
-    margin: 0 auto;
-    min-width: 1024px;
-    max-width:1600px;
-    width: 80%;
+#desktop-logo-container {
+    text-align: center;
 }
 #desktop-logo {
     padding: 10px;
     max-width: 200px;
 }
-#mobile-logo {
-    padding: 5px;
-    max-width: 200px;
-}
-#desktop-logo-container {
-    text-align: center;
-}
-#header {
+#main-content-header {
     padding: 0px;
 }
-#content {
+/* Within section navigation (usually located in main-content-header) */
+.section-nav {
+    list-style-type: none;
+    margin: 0px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 0px;
+    position: relative;
+}
+.section-nav li {
+    display: inline-block;
+    padding: 5px 10px;
+    font-weight: bold;
+}
+.section-nav a {
+    color: rgb(0,0,0);
+    display: inline-block;
+    text-decoration: none;
+    border: none;
+}
+.section-nav a:hover {
+    text-decoration: underline;
+}
+#main-content {
     padding: 10px;
 }
-#mainfooter {
+#main-content-footer {
     padding: 10px;
 }
 #theme-switcher {
@@ -187,71 +174,13 @@ a:hover {
     display: inline-block;
     max-width: 800px;
 }
-#content {
-}
 
-
-/* Within section navigation */
-/* TODO: Fix this */
-.section-nav {
-    list-style-type: none;
-    margin: 0px;
-    margin-left: 10px;
-    margin-right: 10px;
-    padding: 0px;
-    position: relative;
-}
-.section-nav li {
-    display: inline-block;
-    padding: 5px 10px;
-    font-weight: bold;
-}
-.section-nav a {
-    display: inline-block;
-    text-decoration: none;
-    border: none;
-}
-.section-nav a:hover {
-    text-decoration: underline;
-}
-
-
-/* Other site-wide related CSS */
+/* === Misc CSS === */
 .form-box {
+    background-color: rgb(159,182,211);
     margin: 10px auto;
     padding: 15px;
     border-radius: 15px;
-}
-div.search {
-    position: relative;
-    display: inline-block;
-    width: 180px;
-    height: 27px;
-}
-input[type='text'].search {
-    position: absolute;
-    top: 0;
-    left: 0;
-    outline: none;
-	border: 1px solid rgba(0,0,0,0.8);
-    border-radius: 10px 0px 0px 10px;
-    height: 15px;
-    padding: 5px;
-    margin: auto;
-    width: 143px;
-}
-input[type='submit'].search-button {
-    position: absolute;
-    right: 0;
-    top: 0;
-	border: 1px solid rgba(0,0,0,0.8);
-    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAAcuQAAHLkBV+XtRgAAAAd0SU1FB+ACCgYGGflRcdIAAAK+SURBVFjDvZdLbE5BFMf/U/Hopy1abS1FJDZ2pY9IKiI2JfFIBInXBhsWlrbEwo4lEYKFBfEIi1pYqEWFlaXQr9FqbCyQkia0P5u5dXIzc+feL+okN9/cb2bO+Z//OXPmXCcjgJxz2bhJUk3SgKT9kvolrZXUImla0pikUUn3JL2R9MM5ByBJ83pKS7bRjzuBU8Ak5eQDcBRYHdJX1fgW4KVRPuefkOTnhoHeSiByxncDn4xyAuOQcTuuA0OZ7tJMeM8nA0as/AQ+AzOJde+BgSosdAIjEYW/gOtAj1/XAXQBvcAdYDYSjqdAdxIE0OQTLkT7OLApFjL/Pgh8jOTIkSQDQAswEfB+vMgDG19gg9FhmXgNdKQA7Ah4/zvzPOWBATFkwmGlLxWCqwHkN6qcZQNiOMDk+RSAtwHUmxspYsCuAJvPAFe0+XvO+AzQpQYEaA84864IQJOv7Va+SZqtVEr/sjAdmKoV7WsKbFolaVHVy8Svb8vwmKnpFIAx64ikxZLWN5KEkrZmeMx0PQVgNID6TBXqDVunc87I66dIwbZIFdyeYiFXjA5GqmFP6hi2AGOBWjABbIzdarlbdBCYCugYAVamKHTAsRwL2e8UsCdxFxzKGbeyt2wcO33BiN31z4F9ft0SYA1wAHiR6BkuAM2FoTQx7PXNBAmlsc4o1qxcBGpRELlYDvlmokhx2f8tiCtAa1kQ/cCTkkxUadVuAasKQZhwdAOHgVclQzDic+RuBEQm97POeb59DzHhnMvGHZLWSdopqc9/F9R8ea37IjMsqe6c+wqskHRZ0nFTfJwfZ7YeSTrhnPuSTEzLjD+u+Sd0LNuAm4n8eAi061+LCWEbcDuRN4+znFgoEK0exFzBd8YDLYQYEMuBa5FTM0fVpqNBEM3ApVhOaCHFgFgGnAsxof8IYilwNte6n/wDp978GmnLAn8AAAAASUVORK5CYII=');
-    background-size: 16px 16px;
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
-    height: 27px;
-    width: 27px;
-    border-radius: 0px 10px 10px 0px;
 }
 .list-search-bar {
     margin-bottom: 10px;
@@ -260,78 +189,16 @@ input[type='submit'].search-button {
     font-weight: bold;
     color: rgb(255,95,0);
 }
-.banner-notification {
-    margin: 5px;
-    border-radius: 5px;
-    padding: 5px;
-    box-shadow: 2px 2px 5px #07162D;
-}
-.banner-notification input {
-    float:right;
-    background-color: rgba(0,0,0,0);
-    border:none;
-    cursor:pointer;
-    font-weight:bold;
-}
-.banner-notification p{
-    margin: 0px;
-}
-.green-banner {
-    background-color: rgb(85,153,85);
-}
-.red-banner {
-    background-color: rgb(153,85,85);
-}
-.blue-banner {
-    background-color: rgb(85,85,153);
-}
-.none-tag {
-    color: rgb(221,63,31);
-    font-weight: bold;
-}
 span.radio-button-group {
     display: inline-block;
     margin-right: 20px;
 }
-.Clear {
-  clear: both;
-  height: 0;
-  overflow: hidden;
-}
-
-/* Iterator styles */
-.iterator {
-    display: block;
-    padding: 10px;
-    text-align: center;
-}
-.iterator a {
-    display: inline-block;
-    border-radius: 5px;
-    border: 1px solid rgb(63,127,255);
-    padding: 3px 8px;
-    margin: 5px;
-    background-color: rgb(223,255,223);
-    color: rgb(0,0,127);
-}
-.iterator a:hover {
-    background-color: rgb(63,191,255);
-    text-decoration: none;
-}
-.iterator .currentpage {
-    display: inline-block;
-    border-radius: 5px;
-    padding: 3px 8px;
-    margin: 5px;
-    color: rgb(0,0,127);
-    padding: 3px 8px;
-}
 .base-error-msg {
+    background-color: rgb(191,223,255);
     margin: 10px auto;
     padding: 15px;
     max-width: 600px;
     border-radius: 15px;
-    background-color: rgb(191,223,255);
     text-align: center;
 }
 .base-error-msg p {
@@ -340,97 +207,82 @@ span.radio-button-group {
     padding: 15px;
 }
 
-/* For autocomplete */
-.autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
-.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; cursor: pointer; }
-.autocomplete-selected { background: #F0F0F0; }
-.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
-.autocomplete-group { padding: 2px 5px; }
-.autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
 
-/*.desktop-only {
-    display: inherit;
-}*/
-.mobile-only {
-    display: none;
-}
-
-/* For devices that aren't mobile, but shouldn't have borders at the edges. */
+/* Desktop small */
 @media only handheld, screen and (max-device-width: 1024px), screen and (max-width: 1024px) {
-    #mainbody {
+    /* === Site Navbar === */
+    #main-body {
         min-width: 100%;
         width: 100%;
     }
-    #site-navbar-container {
+    #site-top-full-bar-container {
         min-width: 100%;
         width: 100%;
     }
 }
-
+/* Mobile */
 @media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
+    /* === Site-wide changes === */
     .font-scalable {
         font-size: 80%;
     }
-    #main_menu_icon {
-        display: inline-block;
-        cursor: pointer;
-        padding: 5px 15px;
+    #main-body {
+        width: 100%;
+        min-width: 100%;
+        min-height: inherit;
     }
-    #account_dropdown a,#account_dropdown input {
-        padding: 15px;
+    #site-top-full-bar {
+        width: 100%;
+        min-width: 100%;
     }
-    .site-navbar img {
+    /* === Site Navbar === */
+    #site-top-full-bar img {
         max-width: 66px;
         max-height: 40px;
         vertical-align: top;
         margin: 0px;
         margin-right: 5px;
     }
-    ul.navigation_left {
-        display: none;
-        position: absolute;
-        z-index: 9999;
-    }
-    ul.navigation_left li {
-        width: 100%;
-        float: none;
-        display: block;
-    }
-    #mainbody {
-        width: 100%;
-        min-width: 100%;
-        min-height: inherit;
-    }
-    #site-navbar-container {
-        width: 100%;
-        min-width: 100%;
+    #main-menu-icon {
+        display: inline-block;
+        cursor: pointer;
+        padding: 5px 15px;
     }
     #mobile-logo-container {
         display: inline-block;
     }
+    img#mobile-logo {
+        max-width: 200px;
+    }
+    .nav-menu-tray {
+        display: none;
+        position: absolute;
+        z-index: 9999;
+    }
+    .nav-menu-tray li {
+        width: 100%;
+        float: none;
+        display: block;
+        left: 0px;
+    }
+    .nav-menu-tray li a, .nav-menu-tray li input {
+        float: none;
+        display: block;
+        padding: 15px;
+        font-weight: bold;
+        background-color: rgb(63, 91, 55);
+        color: white;
+    }
     .mobile-navbar-right-links {
         font-size: 90%;
     }
-    .iterator a {
-        padding: 13px 18px;
-    }
-    .iterator .currentpage {
-        padding: 13px 18px;
-    }
-    .desktop-only {
-        display: none !important;
-    }
-    .mobile-only {
-        display: inherit;
-    }
 }
-/* For horizontal site menu */
 @media only handheld, screen and (max-device-height: 400px), screen and (max-height: 400px) {
-    ul.navigation_left {
-        background: none;
-        max-width: 450px;
+    /* === Site Navbar === */
+    .nav-menu-tray {
+        background-color: rgb(63, 91, 55);
     }
-    ul.navigation_left li {
+    .nav-menu-tray li {
         width: inherit;
         float: left;
         display: inline-block;
@@ -443,11 +295,133 @@ span.radio-button-group {
     }
 }
 
-/* Any other temporary styles */
-#new-section-badge {
-    background-color: rgb(223,159,0);
-    padding: 2px;
-    border-radius: 3px;
-    vertical-align: super;
-    font-size: 50%;
+
+
+
+
+
+
+/* Colors */
+/* Index */
+.block .header {
+    background-color: rgb(159,182,211);
+}
+.block .content {
+    background-color: rgb(191,223,255);
+}
+/* Lists */
+.list-table thead td {
+    background-color: rgb(100,130,185);
+}
+.list-table tbody tr:nth-child(odd) td {
+    background-color: rgb(150,180,235);
+}
+.list-table tbody tr:nth-child(even) td {
+    background-color: rgb(130,160,215);
+}
+/* Comments */
+.comment {
+    border-color: black;
+    background-color: white;
+}
+.commentheader {
+    background-color: rgb(191,223,255);
+}
+blockquote {
+    background-color: rgb(191,223,255);
+    border-color: rgb(127,127,127);
+}
+blockquote blockquote {
+    background-color: rgb(167,195,223); /* Darker */
+}
+blockquote blockquote blockquote {
+    background-color: rgb(127,191,223); /* Even darker */
+}
+.spoiler {
+    color: black;
+    background-color: black;
+}
+.spoiler:hover {
+    border-color: black;
+}
+/* Forums */
+.board-group {
+    background-color: rgb(127,191,255);
+}
+.board-row td {
+    background-color: rgb(191,223,255);
+}
+.forums-help-block {
+    background-color: rgb(127,191,255);
+}
+.new-post-label {
+    background-color: rgb(255,191,0);
+}
+
+/* Gallery */
+.floatactionpanel {
+    border-color: rgb(0,0,0);
+    background-color: rgb(127,191,255);
+}
+.post-tile {
+    color: rgb(0,0,127);
+}
+.post-label {
+    background-color: rgb(159,182,211);
+}
+.posteditbox {
+    background-color: rgb(159,182,211);
+}
+.comment-section {
+    background-color: white;
+}
+
+/* Fics */
+.notesbox {
+    background-color: rgb(191,223,255);
+    border-color: black;
+}
+.comments ul.tabs li{
+    background-color: rgb(191,223,255);
+    border-color: black;
+}
+.comments ul.tabs li.current{
+    background-color: rgb(127,191,255);
+    border-color: black;
+    border-bottom-color: rgba(0,0,0,0);
+}
+.comments .tab-content{
+    background-color: rgb(127,191,255);
+    border-color: black;
+}
+.storyblock {
+    background-color: rgb(127,191,255);
+}
+.storyblockcontainer {
+    background-color: white;
+}
+.storyblockheader {
+    background-color: rgb(191,223,255);
+}
+.storyblockinfo {
+    background-color: white;
+}
+.storyblockfooter {
+    background-color: rgb(191,223,255);
+}
+.chapter-row:hover {
+    background-color: rgb(191,223,255);
+}
+
+/* Oekaki */
+.oekaki-post-header {
+    background-color: rgb(191,223,255);
+}
+
+/* User profile */
+.sidepanel-section {
+    background-color: rgb(127,191,255);
+}
+.infoblock {
+    background-color: rgb(191,223,255);
 }

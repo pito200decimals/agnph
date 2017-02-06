@@ -1,36 +1,30 @@
 $(document).ready(function() {
-    $("#account_link").hover(function() {
-        $("#account_dropdown").addClass("nav-dropdown-tray");
-        $("#account_link").addClass("nav-dropdown-tray");
+    $("#account-menu-button").hover(function() {
+        $("#account-menu-button").addClass("nav-menu-tray-button");
+        $("#account-menu").addClass("tray-open");
     }, function() {
-        $("#account_dropdown").removeClass("nav-dropdown-tray");
-        $("#account_link").removeClass("nav-dropdown-tray");
+        $("#account-menu-button").removeClass("nav-menu-tray-button");
+        $("#account-menu").removeClass("tray-open");
     });
     /* For mobile, on touch, toggle dropdown and ignore click. */
     var supports_touch = ((document.ontouchstart===null)?true:false);
     var account_link_flag = false;
-    $("#account_link>a").bind("touchstart click", function(e) {
+    $("#account-menu-button").bind("touchstart click", function(e) {
         if (supports_touch) {
             e.preventDefault();
             if (!account_link_flag) {
                 account_link_flag = true;
                 setTimeout(function() { account_link_flag = false; }, 100);
-                $("#account_dropdown").toggleClass("nav-dropdown-tray");
-                $("#account_link").toggleClass("nav-dropdown-tray");
+                $("#account-menu").toggleClass("tray-open");
+                $("#account-menu-button").toggleClass("tray-open");
             }
             return false;
         }
     });
-    var toggled_visible_mobile = false;
-    $("#main_menu_icon").bind("touchstart click", function(e) {
+    $("#main-menu-icon").bind("touchstart click", function(e) {
         e.preventDefault();
-        $(this).toggleClass("nav-dropdown-tray");
-        if (toggled_visible_mobile) {
-            $(".navigation_left").removeAttr("style");
-        } else {
-            $(".navigation_left").css("display", "inherit");
-        }
-        toggled_visible_mobile = !toggled_visible_mobile;
+        $(this).toggleClass("nav-menu-tray-button");
+        $("#main-nav-menu").toggleClass("tray-open");
         return false;
     });
     

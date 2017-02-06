@@ -1,91 +1,90 @@
 /* Global site skin colors */
 
 /*
-Header-red:        255,31,31
-Background-red:    127,31,31
-Bold-red:          127,31,31
-Medium-red:        255,95,95
-Light-red:         255,223,223
-Gray-red:          191,159,159
+Header-red:         255,31,31
+Background-red:     127,31,31
+Bold-red:           127,31,31
+Medium-red:         255,95,95
+Light-red:          255,223,223
+Gray-red:           191,159,159
 
-Tray-red:         95,31,31
+Tray-red:           95,31,31
 Tray-highlight:     127,63,63
 */
+/* Global site style CSS */
 
-/* Sitewide */
 body {
     background-color: rgb(127,31,31);
 }
 a {
-    color: rgb(0,0,63);
+    color: rgb(0,0,63);  /* NOTE: Custom! */
 }
-/* Background */
-.site-navbar, .site-navbar * {
+/* === Site Navbar === */
+#site-top-full-bar {
     background-color: rgb(255,31,31);
 }
-/* Selected section background */
-.site-navbar li.selected-nav a {
-    background-color: rgb(127,31,31);
-}
-/* Text color */
-.site-navbar a,.site-navbar input {
+/* Behavior of nav menu */
+.nav-menu li a, .nav-menu li input {
     color: white;
 }
-.site-navbar a:hover,.site-navbar input:hover {
+.nav-menu li a:hover, .nav-menu li input:hover {
     text-shadow: 0 0 3px rgb(255,255,255);
 }
-/* Main hover color */
-.navigation_left a:hover, .navigation_left li.selected-nav a:hover {
-    background-color: rgb(127,31,31);
-}
-#top-logo:hover {
-    background-color: rgb(127,31,31);
-}
-/* Dropdown tray background color */
-.nav-dropdown-tray a, .nav-dropdown-tray input, .nav-dropdown-tray span {
+/* Behavior of nav menu open trays */
+.nav-menu-tray.tray-open li a, .nav-menu-tray.tray-open li input {
     background-color: rgb(95,31,31);
 }
-/* Dropdown tray hover color */
-#account_dropdown a:hover,#account_dropdown input:hover {
+ .nav-menu-tray.tray-open li.selected-nav a, .nav-menu-tray.tray-open li a:hover, .nav-menu-tray.tray-open li input:hover {
     background-color: rgb(127,63,63);
 }
-#new-section-badge {
-    color: white;
+.nav-menu-tray-button {
+    background-color: rgb(95,31,31);
 }
-#mainbody {
+#main-nav-menu>li.selected-nav,
+#main-nav-menu>li:hover,
+#account-links>li:hover:not(#account-menu-button):not(.mobile-navbar-right-links),
+#account-links>li:not(#account-menu-button) a:hover {  /* Set selected nav/hover color. */
+    background-color: rgb(127,31,31);
+}
+
+/* === Site Body === */
+#main-body {  /* Main white space content area. */
     background-color: white;
+}
+/* Within section navigation (usually located in main-content-header) */
+.section-nav {
+    color: rgb(0,0,0);
 }
 .section-nav a {
     color: rgb(0,0,0);
 }
+
+/* === Misc CSS === */
 .form-box {
     background-color: rgb(191,159,159);
 }
-.search {
-    background-color: rgba(255,255,255,0);
-	border-color: rgba(0,0,0,0.8);
+.unread-messages {
+    color: rgb(255,95,0);
 }
-input.search {
-    background-color: rgb(255,255,255);
+.base-error-msg {
+    background-color: rgb(255,223,223);
 }
-.search-button {
-    background-color: rgb(255,95,95)
+
+/* Mobile */
+@media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
+    /* === Site Navbar === */
+    .nav-menu-tray li a, .nav-menu-tray li input {
+        background-color: rgb(63, 91, 55);
+    }
 }
-.banner-notification input {
-    background-color:rgba(0,0,0,0);
+@media only handheld, screen and (max-device-height: 400px), screen and (max-height: 400px) {
+    /* === Site Navbar === */
+    .nav-menu-tray {
+        background-color: rgb(63, 91, 55);
+    }
 }
-.green-banner {
-    background-color: rgb(85,153,85);
-}
-.red-banner {
-    background-color: rgb(153,85,85);
-}
-.blue-banner {
-    background-color: rgb(85,85,153);
-}
-.none-tag {
-    color: rgb(221,63,31);
-}
+
+/* Misc Colors */
 /* Index */
 .block .header {
     background-color: rgb(191,159,159);
@@ -103,27 +102,6 @@ input.search {
 .list-table tbody tr:nth-child(even) td {
     background-color: rgb(180,130,130);
 }
-.iterator a {
-    border-color: rgb(127,31,31);
-    background-color: rgb(255,223,223);
-    color: rgb(0,0,127);
-}
-.iterator a:hover {
-    background-color: rgb(255,95,95);
-}
-.iterator .currentpage {
-    color: rgb(0,0,63);
-}
-.base-error-msg {
-    background-color: rgb(255,223,223);
-}
-.autocomplete-tag-list {
-    border-color: rgb(127,127,127);
-}
-.autocomplete-tag-list > li {
-    border-color: rgb(127,127,127);
-}
-
 /* Comments */
 .comment {
     border-color: black;
@@ -149,7 +127,6 @@ blockquote blockquote blockquote {
 .spoiler:hover {
     border-color: black;
 }
-
 /* Forums */
 .board-group {
     background-color: rgb(255,95,95);
@@ -161,7 +138,6 @@ blockquote blockquote blockquote {
     background-color: rgb(255,95,95);
 }
 .new-post-label {
-    /* Custom color */
     background-color: rgb(255,191,0);
 }
 
@@ -175,36 +151,6 @@ blockquote blockquote blockquote {
 }
 .post-label {
     background-color: rgb(191,159,159);
-}
-.childoutline {
-    border-color: rgb(255,255,0);
-}
-.parentoutline {
-    border-color: rgb(0,255,0);
-}
-.pendingoutline {
-    border-color: rgb(0,0,255);
-}
-.flaggedoutline {
-    border-color: rgb(255,0,0);
-}
-.pscore {
-    color: rgb(22,118,33);
-}
-.nscore {
-    color: rgb(225,95,95);
-}
-.parentbox, .poolbox {
-    background-color: rgb(85,153,85); /* Pool box green */
-}
-.post-description {
-    background-color: rgb(255,223,223);
-}
-.tag a:hover {
-    color: rgb(127,31,31)
-}
-.tag small {
-    opacity: 0.5;
 }
 .posteditbox {
     background-color: rgb(191,159,159);
@@ -262,32 +208,104 @@ blockquote blockquote blockquote {
 .infoblock {
     background-color: rgb(255,223,223);
 }
-.unread-messages {
-    /* Custom color */
-    color: rgb(255,95,0);
+
+
+/* Shared site-wide settings */
+/* For autocomplete
+.autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
+.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; cursor: pointer; }
+.autocomplete-selected { background: #F0F0F0; }
+.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+.autocomplete-group { padding: 2px 5px; }
+.autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
+.autocomplete-tag-list {
+    border-color: rgb(127,127,127);
+}
+.autocomplete-tag-list > li {
+    border-color: rgb(127,127,127);
+}
+*/
+/* Search box */
+div.search {
+    background-color: rgba(255,255,255,0);
+	border-color: rgba(0,0,0,0.8);
+}
+input[type='text'].search {
+    background-color: rgb(255,255,255);
+	border: 1px solid rgba(0,0,0,0.8);
+}
+input[type='submit'].search-button {
+    background-color: rgb(255,95,95);
+	border: 1px solid rgba(0,0,0,0.8);
+}
+/* Banners */
+.banner-notification {
+    box-shadow: 2px 2px 5px #07162D;
+}
+.banner-notification input {
+    background-color: rgba(0,0,0,0);
+}
+.green-banner {
+    background-color: rgb(85,153,85);
+}
+.red-banner {
+    background-color: rgb(153,85,85);
+}
+.blue-banner {
+    background-color: rgb(85,85,153);
+}
+/* Iterator styles */
+.iterator a {
+    border-color: rgb(127,31,31);
+    background-color: rgb(255,223,223);
+    color: rgb(0,0,127);
+    border: 1px solid rgb(127,31,31);
+}
+.iterator a:hover {
+    background-color: rgb(255,95,95);
+}
+.iterator .currentpage {
+    color: rgb(0,0,127);
 }
 
-@media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
-    /* Main site nav tray color */
-    ul.navigation_left a {
-        background-color: rgb(95,31,31);
-    }
-    /* Main site nav tray hover color */
-    ul.navigation_left a:hover {
-        background-color: rgb(127,63,63);
-    }
-    .site-navbar li.selected-nav a {
-        background-color: rgb(127,63,63);
-    }
-    .site-navbar li.selected-nav a:hover {
-        background-color: rgb(127,63,63);
-    }
-    .nav-dropdown-tray#main_menu_icon {
-        background-color: rgb(95,31,31);
-    }
+/* Section-specific settings */
+/* Gallery */
+.childoutline {
+    border-color: rgb(255,255,0);
 }
-@media only handheld, screen and (max-device-height: 400px), screen and (max-height: 400px) {
-    ul.navigation_left {
-        background-color: rgb(95,31,31);
-    }
+.parentoutline {
+    border-color: rgb(0,255,0);
+}
+.pendingoutline {
+    border-color: rgb(0,0,255);
+}
+.flaggedoutline {
+    border-color: rgb(255,0,0);
+}
+.pscore {
+    color: rgb(22,118,33);
+}
+.nscore {
+    color: rgb(225,95,95);
+}
+.parentbox, .poolbox {
+    background-color: rgb(85,153,85); /* Pool box green */
+}
+.post-description {
+    background-color: rgb(255,223,223);
+}
+.tag a:hover {
+    color: rgb(127,31,31)
+}
+.tag small {
+    opacity: 0.5;
+}
+.none-tag {
+    color: rgb(221,63,31);
+}
+
+/* Any other temporary styles */
+#new-section-badge {
+    background-color: rgb(223,159,0);
+    color: white;
 }

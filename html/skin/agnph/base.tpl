@@ -38,6 +38,7 @@
         {% include 'meta.tpl' %}
         <link rel="icon" type="image/png" href="/images/favicon.png" />
         <title>{% if _title %}{{ _title }}{% else %}{% block title %}AGNPH{% endblock %}{% endif %}</title>
+        <link rel="stylesheet" type="text/css" href="{{ asset('/shared.css') }}" />
         <link rel="stylesheet" type="text/css" href="{{ asset('/style.css') }}" />
         {% block styles %}
             {# Custom page styles go here #}
@@ -61,19 +62,18 @@
         {% endblock %}
     </head>
     <body>
-        <div class="site-navbar">
-            <div id="site-navbar-container">
-                {# float right goes before normal nav, so it positions correctly #}
-                <ul class="navigation_right">
+        <div id="site-top-full-bar">
+            <div id="site-top-full-bar-container">{# For restricting nav to site main width #}
+                <ul id="account-links" class="nav-menu">
                     {% if user %}
 <noscript>
-                        <li class="navigation_left">
+                        <li>
                             <form action="/logout/" method="POST" accept-encoding="UTF-8">
                                 <input type="submit" name="submit" value="Log out" />
                             </form>
                         </li>
 </noscript>
-                        <li class="navigation_left">
+                        <li>
                             <a class="desktop-only" href="/user/{{ user.UserId }}/mail/">
                                 {% if unread_message_count > 0 %}
                                     {% if unread_message_count <= 9 %}
@@ -86,9 +86,9 @@
                                 {% endif %}
                             </a>
                         </li>
-                        <li id="account_link">
+                        <li id="account-menu-button">
                             <a href="/user/{{ user.UserId }}/"><img src="{{ user.avatarURL }}" /><span class="desktop-only">{{ user.DisplayName }}</span></a>
-                            <ul id="account_dropdown" hidden>
+                            <ul id="account-menu" class="nav-menu-tray">
                                 <li><a href="/user/{{ user.UserId }}/">Profile</a></li>
                                 <li>
                                     <div class="mobile-only"><a href="/user/{{ user.UserId }}/mail/">Messages{% if unread_message_count > 0 %} <span class="unread-messages">({{ unread_message_count }})</span>{% endif %}</a></div>
@@ -111,17 +111,11 @@
                         </li>
                     {% endif %}
                 </ul>
-                <img id="main_menu_icon" src="/images/menu-icon.png" />
-                {# TODO: Adjust logo #}
+                <img id="main-menu-icon" class="mobile-only" src="/images/menu-icon.png" />
                 <div id="mobile-logo-container" class="mobile-only">
                     <img id="mobile-logo" src="/images/logo_300.png" />
                 </div>
-                <ul class="navigation_left">
-                    {# Uncomment if logo as home is desired #}
-                    {#
-                    <li class="desktop-only"><a id="top-logo-link" href="/"><img id="top-logo" src="/images/logo.png" /></a></li>
-                    <li class="mobile-only{% if nav_section=="home" %} selected-nav{% endif %}"><a href="/">Home</a></li>
-                    #}
+                <ul id="main-nav-menu" class="nav-menu nav-menu-tray">
                     <li{% if nav_section=="home" %} class="selected-nav"{% endif %}><a href="/">Home</a></li>
                     <li{% if nav_section=="forums" %} class="selected-nav"{% endif %}><a href="/forums/board/">Forums</a></li>
                     <li{% if nav_section=="gallery" %} class="selected-nav"{% endif %}><a href="/gallery/post/">Gallery</a></li>
@@ -135,57 +129,57 @@
             </div>
             <div class="Clear">&nbsp;</div>
         </div>
-        <div id="mainbody">
-            <div id="maincontent">
-                <div id="desktop-logo-container" class="desktop-only">
-                    <img id="desktop-logo" src="/images/logo_300.png" />
-                </div>
-                <div id="header">
-                    {% block section_navigation %}
+        <div id="main-body">
+            <div id="desktop-logo-container" class="desktop-only">
+                <img id="desktop-logo" src="/images/logo_300.png" />
+            </div>
+            <div class="Clear">&nbsp;</div>
+            <div id="main-content-header">
+                {% block section_navigation %}
+                {% endblock %}
+            </div>
+            <div class="Clear">&nbsp;</div>
+            <div id="main-content" class="font-scalable">
+                {% if error_msg %}
+                    <div class="base-error-msg">
+                        <p>
+                            {{ error_msg }}
+                        </p>
+                    </div>
+                {% else %}
+                    {% block content %}
+                        {# Default error message if template is broken, should never show #}
+                        <p style="text-align: center;">
+                            Page not found
+                        </p>
                     {% endblock %}
-                </div>
-                <div id="content" class="font-scalable">
-                    {% if error_msg %}
-                        <div class="base-error-msg">
-                            <p>
-                                {{ error_msg }}
-                            </p>
-                        </div>
-                    {% else %}
-                        {% block content %}
-                            {# Default error message if template is broken, should never show #}
-                            <p style="text-align: center;">
-                                Page not found
-                            </p>
-                        {% endblock %}
-                    {% endif %}
-                </div>
-                <div class="Clear">&nbsp;</div>
-                <div id="mainfooter">
-                    {% block theme_select %}
-                        <span id="theme-switcher">
-                            Theme:
-                            <form id="theme-switcher-form" action="/change-skin/" method="POST" accept-encoding="UTF-8">
-                                <select name="skin" onchange="document.getElementById('theme-switcher-form').submit();">
-                                    {% for s in availableSkins %}
-                                        <option{% if s == skin %} selected{% endif %}>{{ s }}</option>
-                                    {% endfor %}
-                                </select>
-                            </form>
-                        </span>
-                    {% endblock %}
-                    <span class="font-size-switcher-container site-font-size-switcher" hidden>
-                        Font Size:
-                        <select>
-                            <option>80%</option>
-                            <option>90%</option>
-                            <option>100%</option>
-                            <option>120%</option>
-                            <option>150%</option>
-                        </select>
+                {% endif %}
+            </div>
+            <div class="Clear">&nbsp;</div>
+            <div id="main-content-footer">
+                {% block theme_select %}
+                    <span id="theme-switcher">
+                        Theme:
+                        <form id="theme-switcher-form" action="/change-skin/" method="POST" accept-encoding="UTF-8">
+                            <select name="skin" onchange="document.getElementById('theme-switcher-form').submit();">
+                                {% for s in availableSkins %}
+                                    <option{% if s == skin %} selected{% endif %}>{{ s }}</option>
+                                {% endfor %}
+                            </select>
+                        </form>
                     </span>
-                    <div class="Clear">&nbsp;</div>
-                </div>
+                {% endblock %}
+                <span class="font-size-switcher-container site-font-size-switcher" hidden>
+                    Font Size:
+                    <select>
+                        <option>80%</option>
+                        <option>90%</option>
+                        <option>100%</option>
+                        <option>120%</option>
+                        <option>150%</option>
+                    </select>
+                </span>
+                <div class="Clear">&nbsp;</div>
             </div>
         </div>
         <div id="footer">
