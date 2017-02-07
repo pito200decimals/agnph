@@ -53,10 +53,8 @@
 
 {% block content %}
     {{ block('banner') }}
-    <div class="Clear">&nbsp;</div>
     <h3><a href="/fics/story/{{ story.StoryId }}/">{{ story.Title }}</a> by <a href="/user/{{ story.author.UserId }}/fics/">{{ story.author.DisplayName }}</a></h3>
     {{ block('fics_font_size') }}
-    <div class="Clear">&nbsp;</div>
     {{ block('prevnext') }}
     <div class="fics-text-content">
         {% if story.StoryNotes|length > 0 %}

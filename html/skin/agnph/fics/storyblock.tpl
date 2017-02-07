@@ -85,30 +85,32 @@
                 </ul>
             </div>
             {% if not story.shortDesc %}
-            <div class="storyblockfooter">
-                {% if story.canEdit %}
-                    {# canFeature will always have canEdit #}
-                    [<a href="/fics/edit/{{ story.StoryId }}/">Edit</a>]
+                {% if story.canEdit or (story.canDelete and story.ApprovalStatus=='A') or (story.canUnDelete and story.ApprovalStatus=='D') or story.canFavorite or story.canUnfavorite %}
+                    <div class="storyblockfooter">
+                        {% if story.canEdit %}
+                            {# canFeature will always have canEdit #}
+                            [<a href="/fics/edit/{{ story.StoryId }}/">Edit</a>]
+                        {% endif %}
+                        {% if story.canDelete and story.ApprovalStatus=='A' %}
+                            [<a href="/fics/delete/{{ story.StoryId }}/">Delete</a>]
+                        {% elseif story.canUnDelete and story.ApprovalStatus=='D' %}
+                            [<a href="/fics/undelete/{{ story.StoryId }}/">Un-Delete</a>]
+                        {% endif %}
+                        {% if story.canFavorite %}
+                            <form id="favform-{{ story.StoryId }}" action="/fics/favorite/" method="POST" accept-charset="UTF-8">
+                                <input type="hidden" name="action" value="add-favorite" />
+                                <input type="hidden" name="id" value="{{ story.StoryId }}" />
+                            </form>
+                            [<a href="#" onclick="$('#favform-{{ story.StoryId }}')[0].submit();return false;">Add to Favorites</a>]
+                        {% elseif story.canUnfavorite %}
+                            <form id="favform-{{ story.StoryId }}" action="/fics/favorite/" method="POST" accept-charset="UTF-8">
+                                <input type="hidden" name="action" value="remove-favorite" />
+                                <input type="hidden" name="id" value="{{ story.StoryId }}" />
+                            </form>
+                            [<a href="#" onclick="$('#favform-{{ story.StoryId }}')[0].submit();return false;">Remove from Favorites</a>]
+                        {% endif %}
+                    </div>
                 {% endif %}
-                {% if story.canDelete and story.ApprovalStatus=='A' %}
-                    [<a href="/fics/delete/{{ story.StoryId }}/">Delete</a>]
-                {% elseif story.canUnDelete and story.ApprovalStatus=="D" %}
-                    [<a href="/fics/undelete/{{ story.StoryId }}/">Un-Delete</a>]
-                {% endif %}
-                {% if story.canFavorite %}
-                    <form id="favform-{{ story.StoryId }}" action="/fics/favorite/" method="POST" accept-charset="UTF-8">
-                        <input type="hidden" name="action" value="add-favorite" />
-                        <input type="hidden" name="id" value="{{ story.StoryId }}" />
-                    </form>
-                    [<a href="#" onclick="$('#favform-{{ story.StoryId }}')[0].submit();return false;">Add to Favorites</a>]
-                {% elseif story.canUnfavorite %}
-                    <form id="favform-{{ story.StoryId }}" action="/fics/favorite/" method="POST" accept-charset="UTF-8">
-                        <input type="hidden" name="action" value="remove-favorite" />
-                        <input type="hidden" name="id" value="{{ story.StoryId }}" />
-                    </form>
-                    [<a href="#" onclick="$('#favform-{{ story.StoryId }}')[0].submit();return false;">Remove from Favorites</a>]
-                {% endif %}
-            </div>
             {% endif %}
         </div>
     </div>
