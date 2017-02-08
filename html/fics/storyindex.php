@@ -32,7 +32,7 @@ if (isset($_GET['search'])) {
     $search_terms = "";
     $search_clauses = GetSearchClauses("");
 }
-$vars['searchTerms'] = $search_terms;
+$vars['search'] = $search_terms;
 
 $stories = array();
 if (sql_query_into($result,

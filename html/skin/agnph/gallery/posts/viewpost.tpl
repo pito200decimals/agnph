@@ -117,7 +117,7 @@
 {% endblock %}
 
 {% block search_block %}
-    <div class="searchbox">
+    <div id="gallery-search">
         <h3>Search<a id="search-help-link" href="/gallery/help/" title="Search Help">?</a></h3>
         <form action="/gallery/post/" accept-charset="UTF-8">
             <div class="search">
@@ -133,7 +133,7 @@
     <div class="post-layout-container">
         <div class="sidepanel">
             {{ block('parent_child_block') }}
-            <div class="side-search-pool">
+            <div id="side-search-pool-container" class="desktop-only">
                 {{ block('search_block') }}
                 <hr />
                 {{ block('pool_iterator_block') }}
@@ -303,7 +303,8 @@
             </ul>
         </div>
         <div class="mainpanel">
-            <div class="top-search-pool">
+            <div id="top-search-pool-container" class="mobile-only">
+                {# For mobile display #}
                 {{ block('search_block') }}
                 {{ block('pool_iterator_block') }}
                 <hr />

@@ -140,7 +140,7 @@
         </div>
     {% endif %}
     <div class="sidepanel">
-        <div class="searchbox">
+        <div id="gallery-search">
             <h3>Search<a id="search-help-link" href="/gallery/help/" title="Search Help">?</a></h3>
             <form accept-charset="UTF-8">
                 <div class="search">

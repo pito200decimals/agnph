@@ -44,7 +44,7 @@ $(document).ready(function() {
                 $('#parent').focus();
             break;
             case 83:  // S
-                $(".searchbox .search").focus().select();
+                $("#gallery-search input[type='text'].search").focus().select();
             break;
             default: return;
         }
