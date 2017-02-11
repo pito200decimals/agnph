@@ -112,9 +112,9 @@
                 <tr>
                     <td><label class="formlabel">Rating</label></td>
                     <td>
-                        <span class="radio-button-group"><input name="rating" type="radio" value="e" required /><label>Explicit</label></span>
-                        <span class="radio-button-group"><input name="rating" type="radio" value="q" required /><label>Questionable</label></span>
-                        <span class="radio-button-group"><input name="rating" type="radio" value="s" required /><label>Safe</label></span>
+                        <span class="radio-button-group"><input id="rating-e-box" name="rating" type="radio" value="e" required /><label for="rating-e-box">Explicit</label></span>
+                        <span class="radio-button-group"><input id="rating-q-box" name="rating" type="radio" value="q" required /><label for="rating-q-box">Questionable</label></span>
+                        <span class="radio-button-group"><input id="rating-s-box" name="rating" type="radio" value="s" required /><label for="rating-s-box">Safe</label></span>
                     </td>
                 </tr>
                 <tr>

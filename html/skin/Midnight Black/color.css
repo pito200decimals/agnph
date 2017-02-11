@@ -40,7 +40,7 @@ thead a {
     text-shadow: 0 0 3px rgb(191,191,191);
 }
 /* Behavior of nav menu open trays */
-.nav-menu-tray.tray-open li a, .nav-menu-tray.tray-open li input {
+.nav-menu-tray.tray-open li a, .nav-menu-tray.tray-open li input, #account-menu-button.tray-open {
     background-color: rgb(31,47,63);
 }
  .nav-menu-tray.tray-open li.selected-nav a, .nav-menu-tray.tray-open li a:hover, .nav-menu-tray.tray-open li input:hover {

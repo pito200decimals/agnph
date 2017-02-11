@@ -5,19 +5,11 @@ $(document).ready(function() {
     }, function() {
         $("#account-menu-button").removeClass("nav-menu-tray-button");
         $("#account-menu").removeClass("tray-open");
-    });
-    /* For mobile, on touch, toggle dropdown and ignore click. */
-    var supports_touch = ((document.ontouchstart===null)?true:false);
-    var account_link_flag = false;
-    $("#account-menu-button").bind("touchstart click", function(e) {
-        if (supports_touch) {
+    }).bind("touchstart", function(e) {
+        if ($(e.target).closest("#account-menu").length == 0) {
+            $("#account-menu").toggleClass("tray-open");
+            $("#account-menu-button").toggleClass("tray-open");
             e.preventDefault();
-            if (!account_link_flag) {
-                account_link_flag = true;
-                setTimeout(function() { account_link_flag = false; }, 100);
-                $("#account-menu").toggleClass("tray-open");
-                $("#account-menu-button").toggleClass("tray-open");
-            }
             return false;
         }
     });

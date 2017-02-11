@@ -43,10 +43,10 @@
         <p>
             Select the service your original account was signed up for:
         </p>
-        <input class="service-select" type="radio" name="service" value="forums" /> Forums<br />
-        <input class="service-select" type="radio" name="service" value="gallery" /> Gallery<br />
-        <input class="service-select" type="radio" name="service" value="fics" /> Fics<br />
-        <input class="service-select" type="radio" name="service" value="oekaki" /> Oekaki<br />
+        <input id="type-forums" class="service-select" type="radio" name="service" value="forums" /><label for="type-forums">Forums</label><br />
+        <input id="type-gallery" class="service-select" type="radio" name="service" value="gallery" /><label for="type-gallery">Gallery</label><br />
+        <input id="type-fics" class="service-select" type="radio" name="service" value="fics" /><label for="type-fics">Fics</label><br />
+        <input id="type-oekaki" class="service-select" type="radio" name="service" value="oekaki" /><label for="type-oekaki">Oekaki</label><br />
     </div>
     <div id="step-2-forums" class="step step-2">
         <p>
