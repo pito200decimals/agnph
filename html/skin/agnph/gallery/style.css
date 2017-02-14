@@ -55,7 +55,7 @@
     color: rgb(144,147,255);
 }
 .tag small {
-    opacity: 0.5;
+    color: rgba(0,0,0,0.5);
 }
 
 /*artist*/

@@ -239,7 +239,11 @@ input[type='submit'].search-button {
 }
 /* Banners */
 .banner-notification {
+    color: black;
     box-shadow: 2px 2px 5px #07162D;
+}
+.banner-notification a {
+    color: rgb(0,0,127);
 }
 .banner-notification input {
     background-color: rgba(0,0,0,0);
@@ -288,7 +292,11 @@ input[type='submit'].search-button {
     color: rgb(225,95,95);
 }
 .parentbox, .poolbox {
+    color: black;
     background-color: rgb(85,153,85); /* Pool box green */
+}
+.parentbox a, .poolbox a {
+    color: rgb(0,0,127);
 }
 .post-description {
     background-color: rgb(191,223,255);
@@ -297,7 +305,7 @@ input[type='submit'].search-button {
     color: rgb(63,127,255)
 }
 .tag small {
-    opacity: 0.5;
+    color: rgba(0,0,0,0.5);
 }
 .none-tag {
     color: rgb(221,63,31);

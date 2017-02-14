@@ -173,7 +173,8 @@ blockquote blockquote blockquote {
     background-color: rgb(63,63,63);
 }
 .comment-section {
-    background-color: white;
+    /* CUSTOM */
+    background-color: rgb(63,63,63);
 }
 
 /* Fics */
@@ -265,9 +266,11 @@ input[type='submit'].search-button {
 }
 /* Banners */
 .banner-notification {
-    /* CUSTOM */
     color: black;
     box-shadow: 2px 2px 5px #07162D;
+}
+.banner-notification a {
+    color: rgb(0,0,127);
 }
 .banner-notification input {
     background-color: rgba(0,0,0,0);
@@ -317,6 +320,9 @@ input[type='submit'].search-button {
 .parentbox, .poolbox {
     background-color: rgb(85,153,85); /* Pool box green */
 }
+.parentbox a, .poolbox a {
+    color: rgb(0,0,127);
+}
 .post-description {
     background-color: rgb(47,47,47);
 }
@@ -324,7 +330,8 @@ input[type='submit'].search-button {
     color: rgb(15,15,15)
 }
 .tag small {
-    opacity: 0.5;
+    /* CUSTOM */
+    color: rgba(191,191,191,0.5);
 }
 .none-tag {
     color: rgb(221,63,31);

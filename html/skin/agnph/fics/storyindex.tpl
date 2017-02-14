@@ -47,8 +47,8 @@
     {{ block('banner') }}
     {# Avoid taking up too much vertical space in the story index #}
     {% set restrictSummaryHeight=true %}
-    {% if searchTerms %}
-        <h3>Search Results: {{ searchTerms }}</h3>
+    {% if search %}
+        <h3>Search Results: {{ search }}</h3>
     {% endif %}
     {% if stories|length > 0 %}
         {% for story in stories %}
