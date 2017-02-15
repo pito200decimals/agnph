@@ -30,9 +30,7 @@
                     {% endfor %}
                 </form>
                 <a href="/user/{{ profile.user.UserId }}/admin/" onclick="document.getElementById('{{ link.formId }}-form').submit();return false;">
-                    {% autoescape false %}
-                        {{ link.text|replace({' ': '&nbsp;'}) }}  {# Ensure that each action is only one line #}
-                    {% endautoescape %}
+                    {{ link.text }}
                 </a>
             </li>
         {% endif %}
@@ -58,6 +56,14 @@
                     {# Other actions to perform on this user #}
                     <div class="sidepanel-section">
                         {% block sidebar %}
+                            {% if user %}
+                                <input type="checkbox" hidden id="expand-action-checkbox" />
+                                <label for="expand-action-checkbox" id="expand-action-checkbox-label"><h4>Actions</h4></label>
+                                <div class="expand-action-tray">
+                                    {% block sidebar_actions %}
+                                    {% endblock %}
+                                </div>
+                            {% endif %}
                         {% endblock %}
                     </div>
                 {% endblock %}

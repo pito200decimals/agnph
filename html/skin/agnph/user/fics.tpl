@@ -1,4 +1,4 @@
-{% extends "user/base.tpl" %}
+{% extends "user/skin-base.tpl" %}
 
 {% block styles %}
     {{ parent() }}
@@ -15,11 +15,13 @@
 
 {% block sidebar %}
     {% if user and adminLinks|length > 0 %}
-        <h4>Actions</h4>
-        <ul>
-            {{ block('admin_link_block') }}
-        </ul>
+        {{ parent() }}
     {% endif %}
+{% endblock %}
+{% block sidebar_actions %}
+    <ul>
+        {{ block('admin_link_block') }}
+    </ul>
 {% endblock %}
 
 {% use "fics/storyblock.tpl" %}
@@ -27,7 +29,7 @@
 {% block usercontent %}
     <div class="infoblock">
         <h3>Fics Statistics</h3>
-        <ul id="basic-info">
+        <ul class="basic-info">
             <li><span class="basic-info-label">Stories Uploaded:</span><span>{{ profile.user.numStoriesUploaded }}</span></li>
             <li><span class="basic-info-label">Reviews Posted:</span><span>{{ profile.user.numReviewsPosted }}</span></li>
             {% if showFavorites %}

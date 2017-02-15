@@ -1,4 +1,4 @@
-{% extends "user/base.tpl" %}
+{% extends "user/skin-base.tpl" %}
 
 {% block styles %}
     {{ parent() }}
@@ -96,7 +96,7 @@
     <form action="" method="POST" enctype="multipart/form-data" accept-charset="UTF=8">
         <div class="infoblock">
             <h3>Basic Info</h3>
-            <ul id="basic-info">
+            <ul class="basic-info">
                 <li><span class="basic-info-label">Displayed Name:</span>         <span><input type="text" name="display-name" value="{{ profile.user.DisplayName }}" /></span></li>
                 <li><span class="basic-info-label">Gender:</span>           <span>
                     <select name="gender">
@@ -123,7 +123,7 @@
                 <span class="twiddle"><h3>+</h3></span>
                 <h3>Account Settings</h3>
             </div>
-            <ul id="basic-info">
+            <ul class="basic-info">
                 <li><span class="basic-info-label">Group PM's:</span>           <span><input type="checkbox" name="group-pm" value="group"{% if profile.user.GroupMailboxThreads %} checked{% endif %} /></span></li>
                 <li><span class="basic-info-label">Hide online status:</span>   <span><input type="checkbox" name="hide-online" value="hide"{% if profile.user.HideOnlineStatus %} checked{% endif %} /></span></li>
                 <li><span class="basic-info-label">Site skin:</span>            <span><select name="skin">
@@ -138,7 +138,7 @@
                 <span class="twiddle"><h3>+</h3></span>
                 <h3>Security Settings</h3>
             </div>
-            <ul id="basic-info">
+            <ul class="basic-info">
                 <li><span class="basic-info-label">Username:</span>         <span>{{ profile.user.UserName }}</span></li>
                 <li><span class="basic-info-label">Email:</span>            <span><input type="text" name="email" value="{{ profile.user.Email }}" /></span></li>
                 <li><span class="basic-info-label">New Password:</span>     <span><input type="password" name="password" value="" /></span></li>
@@ -150,7 +150,7 @@
                 <span class="twiddle"><h3>+</h3></span>
                 <h3>Forums Settings</h3>
             </div>
-            <ul id="basic-info">
+            <ul class="basic-info">
                 <li><span class="basic-info-label">Threads per Page:</span><span><input type="text" name="forums-threads-per-page" value="{{ profile.user.ForumThreadsPerPage }}" /></span></li>
                 <li><span class="basic-info-label">Posts per Page:</span><span><input type="text" name="forums-posts-per-page" value="{{ profile.user.ForumPostsPerPage }}" /></span></li>
                 <li><span class="basic-info-label">Signature:</span><br /><span><textarea name="signature" id="signature">{{ profile.user.Signature }}</textarea></span></li>
@@ -161,7 +161,7 @@
                 <span class="twiddle"><h3>+</h3></span>
                 <h3>Gallery Settings</h3>
             </div>
-            <ul id="basic-info">
+            <ul class="basic-info">
                 <li><span class="basic-info-label">Posts per Page:</span><span><input type="text" name="gallery-posts-per-page" value="{{ profile.user.GalleryPostsPerPage }}" /></span></li>
                 <li><span class="basic-info-label">Tag Blacklist:</span><br /><span><textarea name="gallery-tag-blacklist">{{ profile.user.GalleryTagBlacklist }}</textarea></span></li>
                 <li><span class="basic-info-label" id="keyboard-label">Enable keyboard shortcuts:</span><span><input type="checkbox" name="gallery-enable-keyboard" value="1" {% if profile.user.NavigateGalleryPoolsWithKeyboard %}checked {% endif %}/></span></li>
@@ -174,7 +174,7 @@
                 <span class="twiddle"><h3>+</h3></span>
                 <h3>Fics Settings</h3>
             </div>
-            <ul id="basic-info">
+            <ul class="basic-info">
                 <li><span class="basic-info-label">Stories per Page:</span><span><input type="text" name="fics-stories-per-page" value="{{ profile.user.FicsStoriesPerPage }}" /></span></li>
                 <li><span class="basic-info-label">Tag Blacklist:</span><br /><span><textarea name="fics-tag-blacklist">{{ profile.user.FicsTagBlacklist }}</textarea></span></li>
                 <li><span class="basic-info-label">Disable tagging UI:</span><span><input type="checkbox" name="fics-plain-tagging" value="1" {% if profile.user.PlainFicsTagging %}checked {% endif %}/></span></li>
@@ -187,7 +187,7 @@
                 <span class="twiddle"><h3>+</h3></span>
                 <h3>Oekaki Settings</h3>
             </div>
-            <ul id="basic-info">
+            <ul class="basic-info">
                 <li><span class="basic-info-label">Posts per page:</span><span><input type="text" name="oekaki-posts-per-page" value="N/A" /></span></li>
             </ul>
         </div>
