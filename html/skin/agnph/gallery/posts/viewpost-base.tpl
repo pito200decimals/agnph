@@ -284,12 +284,14 @@
                 <li><a href="/gallery/post/random/">Random</a></li>
                 <li>&nbsp;</li>
             </ul>
-            <ul class="reverse-image-search-list">
-                <li><a href="{{ post.googleUrl }}">Reverse Google Search</a></li>
-                <li><a href="{{ post.saucenaoUrl }}">Reverse SauceNao Search</a></li>
-                <li><a href="{{ post.iqdbUrl }}">Reverse IQDB Search</a></li>
-                <li><a href="{{ post.harryluUrl }}">Reverse harry.lu Search</a></li>
-            </ul>
+            {% if post.Status!="D" %}
+                <ul class="reverse-image-search-list">
+                    <li><a href="{{ post.googleUrl }}">Reverse Google Search</a></li>
+                    <li><a href="{{ post.saucenaoUrl }}">Reverse SauceNao Search</a></li>
+                    <li><a href="{{ post.iqdbUrl }}">Reverse IQDB Search</a></li>
+                    <li><a href="{{ post.harryluUrl }}">Reverse harry.lu Search</a></li>
+                </ul>
+            {% endif %}
         </li>
     </ul>
 {% endblock %}
