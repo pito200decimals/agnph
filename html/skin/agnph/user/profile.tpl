@@ -26,29 +26,26 @@
             {% endif %}
             {% if canEditBio %}
                 $('#edit-bio-button').click(ShowEditor);
-                $('#edit-bio-button').val("Edit");
+                $('#save-bio-button').click(SaveBio);
                 function ShowBio(e) {
                     $('#bio-container').html(e);
+                    $('#save-bio-button').prop('disabled', false);
                     $('#edit-bio-container').hide();
+                    $('#save-bio-button').hide();
                     $('#bio-container').show();
-                    $('#edit-bio-button').unbind("click");
-                    $('#edit-bio-button').click(ShowEditor);
-                    $('#edit-bio-button').val("Edit");
-                    $('#edit-bio-button').prop('disabled', false);
+                    $('#edit-bio-button').show();
                 }
                 function ShowEditor() {
                     tinymce.get('edit-bio-text').getBody().setAttribute('contenteditable', true);
                     tinyMCE.get('edit-bio-text').setContent($('#bio-container').html());
-                    $('#edit-bio-container').show();
                     $('#bio-container').hide();
-                    $('#edit-bio-button').unbind("click");
-                    $('#edit-bio-button').click(SaveBio);
-                    $('#edit-bio-button').val("Save");
-                    $('#edit-bio-button').prop('disabled', false);
+                    $('#edit-bio-button').hide();
+                    $('#edit-bio-container').show();
+                    $('#save-bio-button').show();
                 }
                 function SaveBio() {
                     {# Disable text area to prep for ajax #}
-                    $('#edit-bio-button').prop('disabled', true);
+                    $('#save-bio-button').prop('disabled', true);
                     tinymce.get('edit-bio-text').getBody().setAttribute('contenteditable', false);
                     tinyMCE.triggerSave();
 
@@ -63,6 +60,7 @@
                         error: function(e) {
                             {# On failure, re-enable text area #}
                             alert("Error saving bio.");
+                            $('#save-bio-button').prop('disabled', false);
                             tinymce.get('edit-bio-text').getBody().setAttribute('contenteditable', true);
                         }
                     });
@@ -126,10 +124,10 @@
                             {{ profile.user.bio }}
                         {% endautoescape %}
                     </textarea>
+                    <input id="save-bio-button" class="save-info-button" type="button" value="Save" />
                 </div>
                 <input id="edit-bio-button" class="edit-info-button" type="button" value="Edit" />
             {% endif %}
-            <div class="Clear">&nbsp;</div>
         </div>
     {% endif %}
     {% if profile.user.hasBasicInfo %}
@@ -155,7 +153,6 @@
         {% if canEditBasicInfo %}
             <input id="edit-info-button" class="edit-info-button" type="button" value="Edit" />
         {% endif %}
-        <div class="Clear">&nbsp;</div>
     </div>
     {% endif %}
     <div class="infoblock">
