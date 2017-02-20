@@ -42,11 +42,25 @@ $post_sql_condition = "TRUE";
 if (isset($_GET['search'])) {
     $search = $_GET['search'];
     $lower_search = mb_strtolower($search);
-    $escaped_lower_search = sql_escape($lower_search);
-    $post_sql_condition =
-        "LOWER(Title) LIKE '%$escaped_lower_search%' OR ".
-        "LOWER(Text) LIKE '%$escaped_lower_search%' OR ".
-        "EXISTS(SELECT 1 FROM ".USER_TABLE." Q WHERE LOWER(DisplayName) LIKE '%$escaped_lower_search%' AND Q.UserId=T.UserId)";
+    $clauses = array();
+    if (startswith($lower_search, "id:")) {
+        $lower_search = substr($lower_search, 3);
+        $escaped_lower_search = sql_escape($lower_search);
+        $clauses[] = "PostId='$escaped_lower_search'";
+    } else if (startswith($lower_search, "user:")) {
+        $lower_search = substr($lower_search, 5);
+        $escaped_lower_search = sql_escape($lower_search);
+        $clauses[] = "EXISTS(SELECT 1 FROM ".USER_TABLE." Q WHERE LOWER(DisplayName) LIKE '%$escaped_lower_search%' AND Q.UserId=T.UserId)";
+    } else if (startswith($lower_search, "title:")) {
+        $lower_search = substr($lower_search, 6);
+        $escaped_lower_search = sql_escape($lower_search);
+        $clauses[] = "LOWER(Text) LIKE '%$escaped_lower_search%'";
+    } else {
+        $escaped_lower_search = sql_escape($lower_search);
+        $clauses[] = "LOWER(Title) LIKE '%$escaped_lower_search%'";
+        $clauses[] = "LOWER(Text) LIKE '%$escaped_lower_search%'";
+    }
+    $post_sql_condition = join(" OR ", $clauses);
     $vars['searchTerms'] = $search;
 }
 

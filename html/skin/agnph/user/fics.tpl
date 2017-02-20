@@ -39,7 +39,7 @@
     </div>
     {% if profile.user.stories|length > 0 %}
         <div class="infoblock">
-            <h3>Recent Stories</h3>
+            <h3><a href="/fics/browse/?search=author%3A{{ profile.user.underscore_name|url_encode }}">Recent Stories</a></h3>
             <ul class="story-list">
                 {% for story in profile.user.stories %}
                     <li>
@@ -53,7 +53,7 @@
     {% endif %}
     {% if showFavorites and profile.user.favorites|length > 0 %}
         <div class="infoblock">
-            <h3>Favorited Stories</h3>
+            <h3><a href="/fics/browse/?search=fav%3A{{ profile.user.underscore_name|url_encode }}">Favorited Stories</a></h3>
             <ul class="story-list">
                 {% for story in profile.user.favorites %}
                     <li>

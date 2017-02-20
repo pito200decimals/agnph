@@ -2,6 +2,8 @@
 
 {% block styles %}
     {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/postindex-style.css') }}" />
     <style>
         a.thumb-link:hover {
             text-decoration: none;
@@ -49,6 +51,23 @@
             <li><span class="basic-info-label">Comments:</span><span>{{ profile.user.numComments }}</span></li>
         </ul>
     </div>
+    {% if profile.user.sample_posts|length > 0 %}
+        <div class="infoblock">
+            <h3><a href="/oekaki/?search=user%3A{{ profile.user.DisplayName|url_encode }}">Images</a></h3>
+            <ul class="post-list">
+                {% for post in profile.user.sample_posts %}
+                    <li class="dragitem">
+                        <a class="postlink" href="/oekaki/?search=id%3A{{ post.PostId }}">
+                            <div class="post-tile">
+                                <img class="post-preview-img" src="{{ post.thumbnail }}" />
+                            </div>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <div class="Clear">&nbsp;</div>
+            <a href="/oekaki/?search=user%3A{{ profile.user.DisplayName|url_encode }}">Show all</a>
+    {% endif %}
     {% if slots|length > 0 %}
         <div class="infoblock">
             <h3>Drawings in Progress (Private)</h3>

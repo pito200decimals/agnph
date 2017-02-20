@@ -33,13 +33,12 @@
     </div>
     {% if profile.user.uploads|length > 0 %}
         <div class="infoblock">
-            <h3>Recent Uploads</h3>
+            <h3><a href="/gallery/post/?search=user%3A{{ profile.user.DisplayName|url_encode }}">Recent Uploads</a></h3>
             <ul class="post-list">
                 {% for post in profile.user.uploads %}
                     <li class="dragitem">
                         <a class="postlink" href="/gallery/post/show/{{ post.PostId }}/">
                             <div class="post-tile">
-                                {# TODO: Deleted thumbnail instead of preview? #}
                                 <img class="post-preview-img {{ post.outlineClass }}" src="{{ post.thumbnail }}" />
                                 <div class="post-label">
                                     {% autoescape false %}
@@ -57,7 +56,7 @@
     {% endif %}
     {% if showFavorites and profile.user.favorites|length > 0 %}
         <div class="infoblock">
-            <h3>User Favorites</h3>
+            <h3><a href="/gallery/post/?search=fav%3A{{ profile.user.DisplayName|url_encode }}">User Favorites</a></h3>
             <ul class="post-list">
                 {% for post in profile.user.favorites %}
                     <li class="dragitem">

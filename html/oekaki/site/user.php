@@ -24,15 +24,15 @@ $profile_user['numOekakiImagePosts'] = $result->fetch_assoc()['count(*)'];
 sql_query_into($result, "SELECT count(*) FROM ".OEKAKI_POST_TABLE." WHERE UserId=$profile_uid AND ParentPostId<>-1 AND Status='A';", 1) or RenderErrorPage("Failed to fetch user profile");
 $profile_user['numComments'] = $result->fetch_assoc()['count(*)'];
 
-// TODO: Add section showing some sample image posts for the user.
 // Fetch some links to posts.
-//if (sql_query_into($result, "SELECT * FROM ".OEKAKI_POST_TABLE." WHERE UserId=$profile_uid AND ParentPostId=-1 AND Status='A' ORDER Timestamp DESC LIMIT 5;", 1)) {
-//    $sample_posts = array();
-//    while ($row = $result->fetch_assoc()) {
-//        $sample_posts[] = $row;
-//    }
-//    $profile_user['sample_posts'] = $sample_posts;
-//}
+if (sql_query_into($result, "SELECT * FROM ".OEKAKI_POST_TABLE." WHERE UserId=$profile_uid AND ParentPostId=-1 AND Status='A' ORDER BY Timestamp DESC LIMIT ".OEKAKI_PROFILE_SHOW_NUM_POSTS.";", 1)) {
+    $sample_posts = array();
+    while ($row = $result->fetch_assoc()) {
+        $row['thumbnail'] = "/oekaki/image/".$row['PostId'].".png";
+        $sample_posts[] = $row;
+    }
+    $profile_user['sample_posts'] = $sample_posts;
+}
 
 $slots = array();
 $uid = $profile_user['UserId'];
