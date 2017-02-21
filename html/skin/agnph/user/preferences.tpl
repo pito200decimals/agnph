@@ -62,7 +62,7 @@
             <label for="basic-info-toggle" class="info-section-header"><h3><span class="toggle-label"></span>Basic Info</h3></label>
             <ul class="basic-info">
                 <li>
-                    <label for="display-name-input" class="basic-info-label">Displayed Name:</span>
+                    <label for="display-name-input" class="basic-info-label">Displayed Name:</label>
                     <input type="text" id="display-name-input" name="display-name" value="{{ profile.user.DisplayName }}" />
                 </li>
                 <li>

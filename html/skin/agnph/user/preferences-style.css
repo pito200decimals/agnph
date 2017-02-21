@@ -18,6 +18,10 @@ textarea {
     margin: 0px;
 }
 
+ul.basic-info li {
+    margin: 5px;
+}
+
 .settings-toggle {
     display: none;
 }
