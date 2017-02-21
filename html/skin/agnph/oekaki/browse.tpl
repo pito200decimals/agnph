@@ -1,4 +1,4 @@
-{% extends "oekaki/base.tpl" %}
+{% extends "oekaki/skin-base.tpl" %}
 
 {% block scripts %}
     {{ parent() }}

@@ -127,6 +127,7 @@
                     <input id="save-bio-button" class="save-info-button" type="button" value="Save" />
                 </div>
                 <input id="edit-bio-button" class="edit-info-button" type="button" value="Edit" />
+                <div class="Clear">&nbsp;</div>
             {% endif %}
         </div>
     {% endif %}

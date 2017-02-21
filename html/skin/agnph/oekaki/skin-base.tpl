@@ -1,0 +1,1 @@
+{% extends "oekaki/base.tpl" %}

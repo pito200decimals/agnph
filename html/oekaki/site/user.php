@@ -28,7 +28,7 @@ $profile_user['numComments'] = $result->fetch_assoc()['count(*)'];
 if (sql_query_into($result, "SELECT * FROM ".OEKAKI_POST_TABLE." WHERE UserId=$profile_uid AND ParentPostId=-1 AND Status='A' ORDER BY Timestamp DESC LIMIT ".OEKAKI_PROFILE_SHOW_NUM_POSTS.";", 1)) {
     $sample_posts = array();
     while ($row = $result->fetch_assoc()) {
-        $row['thumbnail'] = "/oekaki/image/".$row['PostId'].".png";
+        $row['thumbnail'] = "/oekaki/image/".$row['PostId'].".".$row['Extension'];
         $sample_posts[] = $row;
     }
     $profile_user['sample_posts'] = $sample_posts;
