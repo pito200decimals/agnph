@@ -1,0 +1,44 @@
+textarea {
+    width: 100%;
+}
+#keyboard-label {
+    cursor: help;
+}
+#keyboard-help {
+    display:none;
+    position:fixed;
+    border: 1px solid black;
+    background-color: white;
+    border-radius:5px;
+    padding:10px;
+}
+#keyboard-help ul {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+.settings-toggle {
+    display: none;
+}
+
+.info-section-header {
+    cursor: pointer;
+}
+
+.toggle-label {
+    display: inline-block;
+    width: 20px;
+}
+
+.settings-toggle:checked + .info-section-header .toggle-label::before {
+    content: "-";
+}
+
+.settings-toggle:not(:checked) + .info-section-header .toggle-label::before {
+    content: "+";
+}
+
+.settings-toggle:not(:checked) ~ ul.basic-info {
+    display: none;
+}

@@ -2,27 +2,7 @@
 
 {% block styles %}
     {{ parent() }}
-    <style>
-        textarea {
-            width: 100%;
-        }
-        #keyboard-label {
-            cursor: help;
-        }
-        #keyboard-help {
-            display:none;
-            position:absolute;
-            border: 1px solid black;
-            background-color: white;
-            border-radius:5px;
-            padding:10px;
-        }
-        #keyboard-help ul {
-            list-style: none;
-            padding: 0px;
-            margin: 0px;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{{ asset('/user/preferences-style.css') }}" />
 {% endblock %}
 
 {% block scripts %}
@@ -31,7 +11,7 @@
         <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
         <script type="text/javascript">
             tinymce.init({
-                selector: "textarea#signature",
+                selector: "textarea#signature-input",
                 plugins: [ "paste", "link", "autoresize", "hr", "code", "contextmenu", "emoticons", "image", "textcolor" ],
                 target_list: [ {title: 'New page', value: '_blank'} ],
                 toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor | link | code",
@@ -45,30 +25,13 @@
     {% endif %}
     <script type="text/javascript">
         $(document).ready(function() {
-            HideSection($('.expand-click'));
-            function ShowSection(ex) {
-                ex.unbind("click");
-                ex.find('.twiddle').html("<h3>-</h3>");
-                ex.next().show();
-                ex.click(function() {
-                    HideSection($(this));
-                });
-            }
-            function HideSection(ex) {
-                ex.unbind("click");
-                ex.find('.twiddle').html("<h3>+</h3>");
-                ex.next().hide();
-                ex.click(function() {
-                    ShowSection($(this));
-                });
-            }
             $("#keyboard-label").hover(function() {
                 $("#keyboard-help").show();
             }, function() {
                 $("#keyboard-help").hide();
             }).mousemove(function(e) {
-                var mousex = e.pageX + 20;
-                var mousey = e.pageY + 10;
+                var mousex = e.clientX + 20;
+                var mousey = e.clientY + 10;
                 $('#keyboard-help').css({ top: mousey, left: mousex });
             });
         });
@@ -95,103 +58,174 @@
     </div>
     <form action="" method="POST" enctype="multipart/form-data" accept-charset="UTF=8">
         <div class="infoblock">
-            <h3>Basic Info</h3>
+            <input type="checkbox" id="basic-info-toggle" class="settings-toggle" checked />
+            <label for="basic-info-toggle" class="info-section-header"><h3><span class="toggle-label"></span>Basic Info</h3></label>
             <ul class="basic-info">
-                <li><span class="basic-info-label">Displayed Name:</span>         <span><input type="text" name="display-name" value="{{ profile.user.DisplayName }}" /></span></li>
-                <li><span class="basic-info-label">Gender:</span>           <span>
-                    <select name="gender">
+                <li>
+                    <label for="display-name-input" class="basic-info-label">Displayed Name:</span>
+                    <input type="text" id="display-name-input" name="display-name" value="{{ profile.user.DisplayName }}" />
+                </li>
+                <li>
+                    <label for="gender-input" class="basic-info-label">Gender:</label>           
+                    <select id="gender-input" name="gender">
                         <option value=""{% if profile.user.Gender == 'U' %} selected{% endif %}>- - -</option>
                         <option value="male"{% if profile.user.Gender == 'M' %} selected{% endif %}>Male</option>
                         <option value="female"{% if profile.user.Gender == 'F' %} selected{% endif %}>Female</option>
                         <option value="other"{% if profile.user.Gender == 'O' %} selected{% endif %}>Other</option>
-                    </select></span></li>
-                <li><span class="basic-info-label">Birthday:</span>         <span><input type="date" name="dob" value="{{ profile.user.DOB }}" /></span>
-                    <span class="radio-button-group"><input type="checkbox" name="show-dob" value="show"{% if profile.user.ShowDOB %} checked{% endif %} />Show Birthday</span></li>
-                <li><span class="basic-info-label">Species:</span>          <span><input type="text" name="species" value="{{ profile.user.Species }}" /></span></li>
-                <li><span class="basic-info-label">Title:</span>            <span><input type="text" name="title" value="{{ profile.user.Title }}" /></span></li>
-                <li><span class="basic-info-label">Location:</span>         <span><input type="text" name="location" value="{{ profile.user.Location }}" /></span></li>
-                <li><span class="basic-info-label">Timezone:</span>         <span><input type="text" name="timezone" value="{{ profile.user.timezoneOffset }}" /></span>
-                    <span class="radio-button-group"><input type="checkbox" name="auto-detect-timezone" value="yes" {% if user.AutoDetectTimezone %}checked {% endif %}/>Auto-Detect Timezone</span>
-                    <span class="radio-button-group"><input type="checkbox" name="show-local-time" value="yes" {% if user.ShowLocalTime %}checked {% endif %}/>Show local time</span></li>
-                <li><span class="basic-info-label">Upload Avatar:</span>    <span><input type="file" name="file" accept="image/jpeg,image/png,image/gif" /></span>
-                    <span class="radio-button-group"><input type="checkbox" name="reset-avatar" value="yes" />Reset Avatar</span></li>
-            </ul>
-            <div class="Clear">&nbsp;</div>
-        </div>
-        <div class="infoblock">
-            <div class="expand-click">
-                <span class="twiddle"><h3>+</h3></span>
-                <h3>Account Settings</h3>
-            </div>
-            <ul class="basic-info">
-                <li><span class="basic-info-label">Group PM's:</span>           <span><input type="checkbox" name="group-pm" value="group"{% if profile.user.GroupMailboxThreads %} checked{% endif %} /></span></li>
-                <li><span class="basic-info-label">Hide online status:</span>   <span><input type="checkbox" name="hide-online" value="hide"{% if profile.user.HideOnlineStatus %} checked{% endif %} /></span></li>
-                <li><span class="basic-info-label">Site skin:</span>            <span><select name="skin">
-                    {% for skinName in availableSkins %}
-                        <option value="{{ skinName }}"{% if skin == skinName %} selected{% endif %}>{{ skinName }}</option>
-                    {% endfor %}
-                </select></span></li>
-            </ul>
-        </div>
-        <div class="infoblock">
-            <div class="expand-click">
-                <span class="twiddle"><h3>+</h3></span>
-                <h3>Security Settings</h3>
-            </div>
-            <ul class="basic-info">
-                <li><span class="basic-info-label">Username:</span>         <span>{{ profile.user.UserName }}</span></li>
-                <li><span class="basic-info-label">Email:</span>            <span><input type="text" name="email" value="{{ profile.user.Email }}" /></span></li>
-                <li><span class="basic-info-label">New Password:</span>     <span><input type="password" name="password" value="" /></span></li>
-                <li><span class="basic-info-label">Retype Password:</span>  <span><input type="password" name="password-confirm" value="" /></span></li>
-            </ul>
-        </div>
-        <div class="infoblock">
-            <div class="expand-click">
-                <span class="twiddle"><h3>+</h3></span>
-                <h3>Forums Settings</h3>
-            </div>
-            <ul class="basic-info">
-                <li><span class="basic-info-label">Threads per Page:</span><span><input type="text" name="forums-threads-per-page" value="{{ profile.user.ForumThreadsPerPage }}" /></span></li>
-                <li><span class="basic-info-label">Posts per Page:</span><span><input type="text" name="forums-posts-per-page" value="{{ profile.user.ForumPostsPerPage }}" /></span></li>
-                <li><span class="basic-info-label">Signature:</span><br /><span><textarea name="signature" id="signature">{{ profile.user.Signature }}</textarea></span></li>
+                    </select>
+                </li>
+                <li>
+                    <label for="dob-input" class="basic-info-label">Birthday:</label>
+                    <input type="date" id="dob-input" name="dob" value="{{ profile.user.DOB }}" />
+                    <label for="show-dob-input" class="basic-info-label">
+                        <input type="checkbox" id="show-dob-input" name="show-dob" value="show"{% if profile.user.ShowDOB %} checked{% endif %} />
+                        Show Birthday
+                    </label>
+                </li>
+                <li>
+                    <label for="species-input" class="basic-info-label">Species:</label>
+                    <input type="text" id="species-input" name="species" value="{{ profile.user.Species }}" />
+                </li>
+                <li>
+                    <label class="basic-info-label" for="title-input">Title:</label>
+                    <input type="text" id="title-input" name="title" value="{{ profile.user.Title }}" />
+                </li>
+                <li>
+                    <label for="location-input" class="basic-info-label">Location:</label>
+                    <input type="text" id="location-input" name="location" value="{{ profile.user.Location }}" />
+                </li>
+                <li>
+                    <label for="timezone-input" class="basic-info-label">Timezone:</label>
+                    <input type="text" id="timezone-input" name="timezone" value="{{ profile.user.timezoneOffset }}" />
+                    <label for="auto-detect-timezone-input" class="basic-info-label">
+                        <input type="checkbox" id="auto-detect-timezone-input" name="auto-detect-timezone" value="yes" {% if user.AutoDetectTimezone %}checked {% endif %}/>
+                        Auto-Detect Timezone
+                    </label>
+                    <label for="show-local-time-input" class="basic-info-label">
+                        <input type="checkbox" id="show-local-time-input" name="show-local-time" value="yes" {% if user.ShowLocalTime %}checked {% endif %}/>
+                        Show local time
+                    </label>
+                </li>
+                <li>
+                    <label for="file-input" class="basic-info-label">Upload Avatar:</label>
+                    <input type="file" id="file-input" name="file" accept="image/jpeg,image/png,image/gif" />
+                    <label for="reset-avatar-input" class="basic-info-label">
+                        <input type="checkbox" id="reset-avatar-input" name="reset-avatar" value="yes" />
+                        Reset Avatar
+                    </label>
+                </li>
             </ul>
         </div>
         <div class="infoblock">
-            <div class="expand-click">
-                <span class="twiddle"><h3>+</h3></span>
-                <h3>Gallery Settings</h3>
-            </div>
+            <input type="checkbox" id="account-settings-toggle" class="settings-toggle" />
+            <label for="account-settings-toggle" class="info-section-header"><h3><span class="toggle-label"></span>Account Settings</h3></label>
             <ul class="basic-info">
-                <li><span class="basic-info-label">Posts per Page:</span><span><input type="text" name="gallery-posts-per-page" value="{{ profile.user.GalleryPostsPerPage }}" /></span></li>
-                <li><span class="basic-info-label">Tag Blacklist:</span><br /><span><textarea name="gallery-tag-blacklist">{{ profile.user.GalleryTagBlacklist }}</textarea></span></li>
-                <li><span class="basic-info-label" id="keyboard-label">Enable keyboard shortcuts:</span><span><input type="checkbox" name="gallery-enable-keyboard" value="1" {% if profile.user.NavigateGalleryPoolsWithKeyboard %}checked {% endif %}/></span></li>
-                <li><span class="basic-info-label">Disable tagging UI:</span><span><input type="checkbox" name="gallery-plain-tagging" value="1" {% if profile.user.PlainGalleryTagging %}checked {% endif %}/></span></li>
-                <li><span class="basic-info-label">Private Favorites:</span><span><input type="checkbox" name="gallery-hide-favorites" value="1" {% if profile.user.PrivateGalleryFavorites %}checked {% endif %}/></span></li>
+                <li>
+                    <label for="group-pm-input" class="basic-info-label">Group PM's:</label>
+                    <input type="checkbox" id="group-pm-input" name="group-pm" value="group"{% if profile.user.GroupMailboxThreads %} checked{% endif %} />
+                </li>
+                <li>
+                    <label for="hide-online-input" class="basic-info-label">Hide online status:</label>
+                    <input type="checkbox" id="hide-online-input" name="hide-online" value="hide"{% if profile.user.HideOnlineStatus %} checked{% endif %} />
+                </li>
+                <li>
+                    <label for="skin-input" class="basic-info-label">Site skin:</label>
+                    <select id="skin-input" name="skin">
+                        {% for skinName in availableSkins %}
+                            <option value="{{ skinName }}"{% if skin == skinName %} selected{% endif %}>{{ skinName }}</option>
+                        {% endfor %}
+                    </select>
+                </li>
             </ul>
         </div>
         <div class="infoblock">
-            <div class="expand-click">
-                <span class="twiddle"><h3>+</h3></span>
-                <h3>Fics Settings</h3>
-            </div>
+            <input type="checkbox" id="security-settings-toggle" class="settings-toggle" />
+            <label for="security-settings-toggle" class="info-section-header"><h3><span class="toggle-label"></span>Security Settings</h3></label>
             <ul class="basic-info">
-                <li><span class="basic-info-label">Stories per Page:</span><span><input type="text" name="fics-stories-per-page" value="{{ profile.user.FicsStoriesPerPage }}" /></span></li>
-                <li><span class="basic-info-label">Tag Blacklist:</span><br /><span><textarea name="fics-tag-blacklist">{{ profile.user.FicsTagBlacklist }}</textarea></span></li>
-                <li><span class="basic-info-label">Disable tagging UI:</span><span><input type="checkbox" name="fics-plain-tagging" value="1" {% if profile.user.PlainFicsTagging %}checked {% endif %}/></span></li>
-                <li><span class="basic-info-label">Private Favorites:</span><span><input type="checkbox" name="fics-hide-favorites" value="1" {% if profile.user.PrivateFicsFavorites %}checked {% endif %}/></span></li>
+                <li>
+                    <label class="basic-info-label">Username:</label>
+                    {{ profile.user.UserName }}
+                </li>
+                <li>
+                    <label for="email-input" class="basic-info-label">Email:</label>
+                    <input type="text" id="email-input" name="email" value="{{ profile.user.Email }}" />
+                </li>
+                <li>
+                    <label for="password-input" class="basic-info-label">New Password:</label>
+                    <input type="password" id="password-input" name="password" value="" />
+                </li>
+                <li>
+                    <label for="password-confirm-input" class="basic-info-label">Retype Password:</label>
+                    <input type="password" id="password-confirm-input" name="password-confirm" value="" />
+                </li>
             </ul>
         </div>
-        {#
         <div class="infoblock">
-            <div class="expand-click">
-                <span class="twiddle"><h3>+</h3></span>
-                <h3>Oekaki Settings</h3>
-            </div>
+            <input type="checkbox" id="forums-settings-toggle" class="settings-toggle" />
+            <label for="forums-settings-toggle" class="info-section-header"><h3><span class="toggle-label"></span>Forums Settings</h3></label>
             <ul class="basic-info">
-                <li><span class="basic-info-label">Posts per page:</span><span><input type="text" name="oekaki-posts-per-page" value="N/A" /></span></li>
+                <li>
+                    <label for="forums-threads-per-page-input" class="basic-info-label">Threads per Page:</label>
+                    <input type="text" id="forums-threads-per-page-input" name="forums-threads-per-page" value="{{ profile.user.ForumThreadsPerPage }}" />
+                </li>
+                <li>
+                    <label for="forums-posts-per-page-input" class="basic-info-label">Posts per Page:</label>
+                    <input type="text" id="forums-posts-per-page-input" name="forums-posts-per-page" value="{{ profile.user.ForumPostsPerPage }}" />
+                </li>
+                <li>
+                    <label for="signature-input" class="basic-info-label">Signature:</label>
+                    <textarea id="signature-input" name="signature">{{ profile.user.Signature }}</textarea>
+                </li>
             </ul>
         </div>
-        #}
+        <div class="infoblock">
+            <input type="checkbox" id="gallery-settings-toggle" class="settings-toggle" />
+            <label for="gallery-settings-toggle" class="info-section-header"><h3><span class="toggle-label"></span>Gallery Settings</h3></label>
+            <ul class="basic-info">
+                <li>
+                    <label for="gallery-posts-per-page-input" class="basic-info-label">Posts per Page:</label>
+                    <input type="text" id="gallery-posts-per-page-input" name="gallery-posts-per-page" value="{{ profile.user.GalleryPostsPerPage }}" />
+                </li>
+                <li>
+                    <label for="gallery-tag-blacklist-input" class="basic-info-label">Tag Blacklist:</label>
+                    <textarea id="gallery-tag-blacklist-input" name="gallery-tag-blacklist">{{ profile.user.GalleryTagBlacklist }}</textarea>
+                </li>
+                <li>
+                    <label for="gallery-enable-keyboard-input" class="basic-info-label" id="keyboard-label">Enable keyboard shortcuts:</label>
+                    <input type="checkbox" id="gallery-enable-keyboard-input" name="gallery-enable-keyboard" value="1" {% if profile.user.NavigateGalleryPoolsWithKeyboard %}checked {% endif %}/>
+                </li>
+                <li>
+                    <label for="gallery-plain-tagging-input" class="basic-info-label">Disable tagging UI:</label>
+                    <input type="checkbox" id="gallery-plain-tagging-input" name="gallery-plain-tagging" value="1" {% if profile.user.PlainGalleryTagging %}checked {% endif %}/>
+                </li>
+                <li>
+                    <label for="gallery-hide-favorites-input" class="basic-info-label">Private Favorites:</label>
+                    <input type="checkbox" id="gallery-hide-favorites-input" name="gallery-hide-favorites" value="1" {% if profile.user.PrivateGalleryFavorites %}checked {% endif %}/>
+                </li>
+            </ul>
+        </div>
+        <div class="infoblock">
+            <input type="checkbox" id="fics-settings-toggle" class="settings-toggle" />
+            <label for="fics-settings-toggle" class="info-section-header"><h3><span class="toggle-label"></span>Fics Settings</h3></label>
+            <ul class="basic-info">
+                <li>
+                    <label for="fics-stories-per-page-input" class="basic-info-label">Stories per Page:</label>
+                    <input type="text" id="fics-stories-per-page-input" name="fics-stories-per-page" value="{{ profile.user.FicsStoriesPerPage }}" />
+                </li>
+                <li>
+                    <label for="fics-tag-blacklist-input" class="basic-info-label">Tag Blacklist:</label>
+                    <textarea id="fics-tag-blacklist-input" name="fics-tag-blacklist">{{ profile.user.FicsTagBlacklist }}</textarea>
+                </li>
+                <li>
+                    <label for="fics-plain-tagging-input" class="basic-info-label">Disable tagging UI:</label>
+                    <input type="checkbox" id="fics-plain-tagging-input" name="fics-plain-tagging" value="1" {% if profile.user.PlainFicsTagging %}checked {% endif %}/>
+                </li>
+                <li>
+                    <label for="fics-hide-favorites-input" class="basic-info-label">Private Favorites:</label>
+                    <input type="checkbox" id="fics-hide-favorites-input" name="fics-hide-favorites" value="1" {% if profile.user.PrivateFicsFavorites %}checked {% endif %}/>
+                </li>
+            </ul>
+        </div>
         <p></p>
         <input type="submit" value="Save Changes" />
     </form>
