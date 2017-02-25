@@ -118,6 +118,7 @@ if (isset($user)) {
             AddAdminActionLink($admin_links, array("site-O", "oekaki=N"), "Revoke Oekaki Administrator");
         }
     }
+    TrimLastAdminActionLinkBreak($admin_links);
     $vars['adminLinks'] = $admin_links;
 
     $ban_links = array();

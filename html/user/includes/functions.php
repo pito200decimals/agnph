@@ -156,6 +156,14 @@ function AddAdminActionLink(&$admin_links, $actions, $text) {
     $admin_links[] = $link;
 }
 function AddAdminActionLinkBreak(&$admin_links) {
+    if (sizeof($admin_links) == 0) return;
+    if ($admin_links[sizeof($admin_links) - 1] == "break") return;
     $admin_links[] = "break";
+}
+function TrimLastAdminActionLinkBreak(&$admin_links) {
+    if (sizeof($admin_links) == 0) return;
+    if ($admin_links[sizeof($admin_links) - 1] == "break") {
+        unset($admin_links[sizeof($admin_links) - 1]);
+    }
 }
 ?>
