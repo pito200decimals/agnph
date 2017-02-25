@@ -19,7 +19,9 @@ function TagDisplayNameToTagName($tag_name) {
 
 // Replaces spaces with _, and removes all other whitespace/illegal characters.
 function SanitizeTagName($name) {
-    return mb_ereg_replace("[\s<>\\[\\]{};#\$%^*+=|\\\\\",?`:]+", "", TagDisplayNameToTagName($name));
+    $name = mb_ereg_replace("[\s<>\\[\\]{};#\$%^*+=|\\\\\",?`:]+", "", TagDisplayNameToTagName($name));
+    $name = GetSanitizedTextTruncated($name, NO_HTML_TAGS, MAX_TAG_NAME_LENGTH);
+    return $name;
 }
 
 // Gets rid of newlines and other junk characters and replaces them with spaces.
@@ -69,8 +71,8 @@ function GetTagsByName($tag_table_name, $tag_names, $create_new = false, $user_i
         $tag_names = array_map("SanitizeTagName", $tag_names);
         if (sizeof($tag_names) == 0) return array();
         $joined = implode(",", array_map(function($name) use ($user_id) {
-            $name = sql_escape(GetSanitizedTextTruncated($name, NO_HTML_TAGS, MAX_TAG_NAME_LENGTH));
-            return "('$name', $user_id, $user_id)";
+            $escaped_name = sql_escape($name);
+            return "('$escaped_name', $user_id, $user_id)";
         }, array_filter($tag_names, "mb_strlen")));
         if (!sql_query("INSERT INTO $tag_table_name (Name, CreatorUserId, ChangeTypeUserId) VALUES $joined;")) return null;
         return GetTagsByName($tag_table_name, $tag_names, false, $user_id);

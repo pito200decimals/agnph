@@ -151,10 +151,12 @@ if (sql_query_into($result, "SELECT * FROM ".ALIAS_TABLE." WHERE TagId IN ($join
         foreach ($alias_elems as $row) {
             $elems_by_id[$row['TagId']]['alias'] = array(
                 "name" => $elems_by_id[$row['AliasTagId']]['name'],
-                "class" => $elems_by_id[$row['AliasTagId']]['class']);
+                "class" => $elems_by_id[$row['AliasTagId']]['class'],
+                "count" => $elems_by_id[$row['AliasTagId']]['count']);
             $elems_by_id[$row['AliasTagId']]['aliased_by'][] = array(
                 "name" => $elems_by_id[$row['TagId']]['name'],
-                "class" => $elems_by_id[$row['TagId']]['class']);
+                "class" => $elems_by_id[$row['TagId']]['class'],
+                "count" => $elems_by_id[$row['TagId']]['count']);
         }
     }
 }
@@ -208,7 +210,8 @@ function CreateElem($row) {
         "aliased_by" => array(),
         "implies" => array(),
         "implied_by" => array(),
-        "note" => $row['Note']
+        "note" => $row['Note'],
+        "count" => $row['ItemCount'],
     );
 }
 
