@@ -41,11 +41,11 @@
 }
 .tagcategory {
     margin-top: 10px;
-    margin-left: 10px;
+    margin-left: 0px;
     display: block;
 }
 .taglist .tag {
-    margin-left: 10px;
+    margin-left: 20px;
 }
 .tag a {
     text-decoration: none;

@@ -16,31 +16,9 @@
     <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
     <script src="{{ asset('/scripts/tinymce-spoiler-plugin.js') }}"></script>
     <script>
-        $(document).ready(function() {
-            tinymce.init({
-                selector: "textarea.commenttextbox",
-                plugins: [ "paste", "link", "autoresize", "hr", "code", "contextmenu", "emoticons", "image", "textcolor", "spoiler" ],
-                target_list: [ {title: 'New page', value: '_blank'} ],
-                toolbar: "undo redo | bold italic underline | bullist numlist | image link | code blockquote spoiler",
-                contextmenu: "image link | hr",
-                autoresize_max_height: 300,
-                resize: true,
-                menubar: false,
-                relative_urls: false,
-                content_css: "{{ asset('/comments-style.css') }}"
-            });
-            $("#commentbutton").click(function() {
-                $("#commentbutton").hide();
-                $("#commentform").show();
-                $("html body").animate(
-                    { scrollTop: $("#commentform").offset().top },
-                    { duration: 0,
-                      complete: function() {
-                        tinyMCE.get("commenttextbox").focus();
-                    }});
-            });
-        });
+        var COMMENTS_STYLE_CSS = "{{ asset('/comments-style.css') }}";
     </script>
+    <script src="{{ asset('/scripts/gallery.js') }}"></script>
     {% if post.canEdit %}
         <script src="{{ asset('/scripts/jquery.autocomplete.min.js') }}"></script>
         <script src="{{ asset('/scripts/gallery-edit.js') }}"></script>
@@ -129,6 +107,9 @@
 {% endblock %}
 
 {% block sidepanel_block %}
+    {% if tag_toggle_prefix is not defined %}
+        {% set tag_toggle_prefix = "" %}
+    {% endif %}
     <ul class="sidepanel-list">
         <li>
             <h3>Tags:</h3>
@@ -136,7 +117,8 @@
                 {% if post.tagCategories|length > 0 %}
                     {% for category in post.tagCategories %}
                         <li class="tagcategory">
-                            <strong>{{ category.name }}</strong>
+                            <input type="checkbox" class="tag-category-toggle" id="{{ tag_toggle_prefix }}{{ category.name }}-toggle" hidden checked />
+                            <label for="{{ tag_toggle_prefix }}{{ category.name }}-toggle" class="tag-category-toggle-button"><strong>{{ category.name }}</strong></label>
                             <ul class="taglist">
                                 {% for tag in category.tags %}
                                     <li class="tag">

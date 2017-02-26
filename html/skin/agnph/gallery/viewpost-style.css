@@ -12,6 +12,20 @@
     margin-bottom: 0px;
 }
 
+/* Tag pane */
+.tag-category-toggle-button {
+    cursor: pointer;
+}
+.tag-category-toggle-button::before {
+    content: "▼";
+}
+.tag-category-toggle:not(:checked) ~ .tag-category-toggle-button::before {
+    content: "►";
+}
+.tag-category-toggle:not(:checked) ~ .taglist {
+    display: none;
+}
+
 /* Post parent/child/pool links */
 .parentbox, .poolbox {
     margin: 5px;
