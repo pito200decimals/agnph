@@ -113,7 +113,7 @@ if (!sql_query_into($result,
                     $alias_clauses
                 ))
             ))
-        ) ORDER BY Name LIMIT 50 OFFSET $offset;", 0)) {
+        ) ORDER BY Name LIMIT ".ADMIN_TAG_FETCH_LIMIT." OFFSET $offset;", 0)) {
     AJAXErr();
 }
 $tag_ids = array();

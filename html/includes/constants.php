@@ -110,6 +110,9 @@ define("MAX_SKIN_STRING_LENGTH", 16);
 // Tagging related.
 define("MAX_TAG_NAME_LENGTH", 32);
 define("MAX_TAG_NOTE_LENGTH", 1024);
+define("MIN_TAG_COUNT_FOR_AUTOCOMPLETE", 5);
+define("NUM_AUTOCOMPLETE_RESULTS", 3);
+define("ADMIN_TAG_FETCH_LIMIT", 250);
 // Logging related.
 define("MAX_LOG_ACTION_STRING_LENGTH", 256);
 

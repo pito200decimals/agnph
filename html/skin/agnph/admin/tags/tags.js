@@ -62,8 +62,11 @@ function SetTags(tags) {
             }
             var option = $("<option>"+option_text+"</option>");
             option.addClass(tag.class).val(tag.name);
-            if (tag.alias != null) {
+            if (tag.hide_tag == true) {
                 option.addClass("hidden-autocomplete-strikethrough");
+            }
+            if (tag.addLock == true) {
+                option.css("font-weight", "bold");
             }
             tag_list.append(option);
             $.data(option[0], "tag", tag);
@@ -81,7 +84,7 @@ function SelectTag(tag) {
         });
         container.append($("<p></p>").append($("<label>Type:</label>")).append(type_select));
         container.append($("<p><label>Type Lock:</label><select id='edit-lock'><option "+(tag.editLock==1?"":"selected")+">- - -</option><option "+(tag.editLock==1?"selected":"")+">Locked</option></select></p>"));
-        container.append($("<p><label>Add Lock:</label><select id='add-lock'><option "+(tag.addLock==1?"":"selected")+">- - -</option><option "+(tag.addLock==1?"selected":"")+">Locked</option></select></p>"));
+        container.append($("<p><label>Add/Remove Lock:</label><select id='add-lock'><option "+(tag.addLock==1?"":"selected")+">- - -</option><option "+(tag.addLock==1?"selected":"")+">Locked</option></select></p>"));
         container.append($("<p><label>Alias:</label><input id='alias' type='text' value='"+(tag.alias==null?"":tag.alias.name)+"' /><span class='radio-button-group'><input type='checkbox' id='hide-tag' value='hide' "+(tag.hide_tag==true?"checked":"")+"/>Hide tag from Autocomplete</span></p>"));
         if (tag.aliased_by != null && tag.aliased_by.length > 0) {
             var alias_list = $("<ul style='list-style: none; display: inline-block; padding: 0px; margin: 0px;'></ul>");
