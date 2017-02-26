@@ -18,8 +18,8 @@ if ($index > -1) {
 $escaped_search = sql_escape($search);
 if (sql_query_into($result,
     "SELECT TagId, Name, Type FROM ".TABLE_NAME." ".
-    "WHERE HideTag=0 AND AddLocked=0 AND UPPER(Name) LIKE UPPER('$escaped_search%') AND TagCount>".MIN_TAG_COUNT_FOR_AUTOCOMPLETE." ".
-    "LIMIT ".NUM_AUTOCOMPLETE_RESULTS." ORDER BY Name;", 1)) {
+    "WHERE HideTag=0 AND AddLocked=0 AND UPPER(Name) LIKE UPPER('$escaped_search%') AND ItemCount>=".MIN_TAG_COUNT_FOR_AUTOCOMPLETE." ".
+    "ORDER BY Name LIMIT ".NUM_AUTOCOMPLETE_RESULTS.";", 1)) {
     $elems = array();
     while ($row = $result->fetch_assoc()) {
         if ($prefix == "") $prefix = strtolower($GALLERY_TAG_TYPES[$row['Type']]);
