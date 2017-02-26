@@ -240,8 +240,8 @@ define("AGE_GATE_PATH", "confirm_age");
 
 $GALLERY_TAG_TYPES = array(  // Note: Present in edit-post template and CSS.
     "A" => "Artist",
-    "B" => "Copyright",
     "C" => "Character",
+    "B" => "Copyright",
     "D" => "Species",
     "M" => "General");
 $FICS_TAG_TYPES = array(  // Note: Present in edit-story template and CSS.
