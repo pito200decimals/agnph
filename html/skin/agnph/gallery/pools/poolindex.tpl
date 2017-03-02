@@ -14,11 +14,12 @@
             $("#newpanel").hide().addClass("floatactionpanel");
             $("#create-pool-button").click(function() {
                 $("#newpanel").toggle();
+                $("#newpanel input[type=text]").focus();
                 return false;
             });
-            $("#newpanel input").blur(function() {
+            $("#newpanel").focusout(function() {
                 setTimeout(function() {
-                    if (!$("#newpanel").is(":focus")) {
+                    if ($("#newpanel").has(document.activeElement).length == 0) {
                         $("#newpanel").hide();
                     }
                 }, 100);
