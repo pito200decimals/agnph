@@ -29,9 +29,12 @@ if ($_POST['action'] == "add") {
     if ($post['ParentPoolId'] != -1) AJAXErr();
     sql_query_into($result, "SELECT * FROM ".GALLERY_POOLS_TABLE." WHERE PoolId='$escaped_pool_id';", 1) or AJAXErr();
     $pool = $result->fetch_assoc();
-    sql_query_into($result, "SELECT PoolItemOrder FROM ".GALLERY_POST_TABLE." WHERE ParentPoolId='$escaped_pool_id' ORDER BY PoolItemOrder DESC LIMIT 1;", 1) or AJAXErr();
-    $max_pool_order_index = $result->fetch_assoc()['PoolItemOrder'];
-    $desired_index = $max_pool_order_index + 1;
+    if (sql_query_into($result, "SELECT PoolItemOrder FROM ".GALLERY_POST_TABLE." WHERE ParentPoolId='$escaped_pool_id' ORDER BY PoolItemOrder DESC LIMIT 1;", 1)) {
+        $max_pool_order_index = $result->fetch_assoc()['PoolItemOrder'];
+        $desired_index = $max_pool_order_index + 1;
+    } else {
+        $desired_index = 0;
+    }
     // Append to end of pool.
     sql_query("UPDATE ".GALLERY_POST_TABLE." SET ParentPoolId='$escaped_pool_id', PoolItemOrder='$desired_index' WHERE PostId='$escaped_post_id';") or AJAXErr();
     $uid = $user['UserId'];
