@@ -32,16 +32,25 @@
     <h3>Account Recovery Console</h3>
     {{ block('banner') }}
     <p>
-        In late 2015, AGNPH moved to a new software system. If you had an old account prior to this migration, you can migrate it and all of its data to your current account using this console.
+        In late 2015, AGNPH moved to a new software system. Although all old site accounts were
+        retained, some users may have accidentally created new accounts on the new site
+        unknowingly, or may have had multiple previous accounts for different sections on the old
+        site.
+    </p>
+    <p>
+        You can use this page to import your old site account(s). This will merge all content
+        associated with that account into your currently-logged-in-account, and delete the old
+        username.
     </p>
     {% if similar_accounts %}
         <p>
             Potential accounts detected: <strong>{{ similar_accounts }}</strong>
         </p>
     {% endif %}
+    <p>&nbsp;</p>
     <div class="step">
         <p>
-            Select the service your original account was signed up for:
+            Select the service your old account was signed up for:
         </p>
         <input id="type-forums" class="service-select" type="radio" name="service" value="forums" /><label for="type-forums">Forums</label><br />
         <input id="type-gallery" class="service-select" type="radio" name="service" value="gallery" /><label for="type-gallery">Gallery</label><br />

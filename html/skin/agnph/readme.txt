@@ -8,5 +8,3 @@ directory.
 
 If a skin directory is removed, the template engine will fall back to the base
 AGNPH directory (this must not be deleted!).
-
-Note: skin directories must be lowercase.
