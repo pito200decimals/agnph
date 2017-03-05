@@ -1,13 +1,11 @@
 {% extends 'admin/tags/base.tpl' %}
 
 {% block sub_section_navigation %}
-    <ul class="section-nav">
-        <li><a href="/admin/gallery/">Settings</a></li>
-        <li class="selected-admin-tab"><a href="/admin/gallery/tags/">Tags</a></li>
-        <li><a href="/admin/gallery/edit-history/">Edit History</a></li>
-        <li><a href="/admin/gallery/description-history/">Description History</a></li>
-        <li><a href="/admin/gallery/log/">Log</a></li>
-    </ul>
+    <li><a href="/admin/gallery/">Settings</a></li>
+    <li class="selected-admin-tab"><a href="/admin/gallery/tags/">Tags</a></li>
+    <li><a href="/admin/gallery/edit-history/">Edit History</a></li>
+    <li><a href="/admin/gallery/description-history/">Description History</a></li>
+    <li><a href="/admin/gallery/log/">Log</a></li>
 {% endblock %}
 
 {% block styles %}

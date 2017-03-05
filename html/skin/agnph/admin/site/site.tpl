@@ -1,10 +1,8 @@
-{% extends 'admin/base.tpl' %}
+{% extends 'admin/skin-base.tpl' %}
 
 {% block sub_section_navigation %}
-    <ul class="section-nav">
-        <li class="selected-admin-tab"><a href="/admin/">Settings</a></li>
-        <li><a href="/admin/log/">Log</a></li>
-    </ul>
+    <li class="selected-admin-tab"><a href="/admin/">Settings</a></li>
+    <li><a href="/admin/log/">Log</a></li>
 {% endblock %}
 
 {% block styles %}

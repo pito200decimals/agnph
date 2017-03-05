@@ -1,4 +1,4 @@
-{% extends 'admin/base.tpl' %}
+{% extends 'admin/skin-base.tpl' %}
 
 {% block styles %}
     {{ parent() }}

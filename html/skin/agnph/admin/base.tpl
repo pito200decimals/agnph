@@ -7,10 +7,10 @@
         {% if canAdminGallery %}<li{% if admin_section=="gallery" %} class="selected-admin-tab" {% endif %}><a href="/admin/gallery/">Gallery</a></li>{% endif %}
         {% if canAdminFics %}<li{% if admin_section=="fics" %} class="selected-admin-tab" {% endif %}><a href="/admin/fics/">Fics</a></li>{% endif %}
         {% if canAdminOekaki %}<li{% if admin_section=="oekaki" %} class="selected-admin-tab" {% endif %}><a href="/admin/oekaki/">Oekaki</a></li>{% endif %}
+        <li class="divider"></li>
+        {% block sub_section_navigation %}
+        {% endblock %}
     </ul>
-    <div class="Clear">&nbsp;</div>
-    {% block sub_section_navigation %}
-    {% endblock %}
 {% endblock %}
 
 {% block styles %}
