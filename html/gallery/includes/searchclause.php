@@ -29,7 +29,8 @@ function CreateSQLClauses($search) {
     if (!isset($user) || !CanUserSearchUnlimitedClauses($user)) {
         $terms = array_slice($terms, 0, MAX_GALLERY_SEARCH_TERMS);
     }
-    return CreateSQLClausesFromTerms($terms);
+    $query = CreateSQLClausesFromTerms($terms);
+    return $query;
 }
 
 function RemoveTermPrefix($term) {
@@ -78,10 +79,12 @@ function CreateSQLClausesFromTerms($terms) {
                 $and_terms[] = $term;
             } else if (startsWith($term, "~")) {  // OR.
                 $or_terms[] = mb_substr($term, 1);
+            } else if (mb_strpos($term, ":") !== FALSE) {
+                // Check for filter after OR but before NOT checks.
+                // ~ doesn't apply to filters, but - does (- is checked separately).
+                $filter_clauses[] = $term;
             } else if (startsWith($term, "-")) {  // NOT.
                 $not_terms[] = mb_substr($term, 1);
-            } else if (mb_strpos($term, ":") !== FALSE) {  // Check for filter after OR/NOT checks.
-                $filter_clauses[] = $term;
             } else {
                 $and_terms[] = $term;
             }
@@ -95,8 +98,11 @@ function CreateSQLClausesFromTerms($terms) {
     if (sizeof($or_terms) > 0) {
         $sql[] = CreateORSQLClauseFromTerms($or_terms);
     }
-    // Don't show deleted posts unless explicitly requesting them.
-    if (!FilterHasClause($filter_clauses, "-*status:deleted")) {
+    // Unless we're specifically requesting deleted posts, are logged in, and are able to, then
+    // append -status:deleted to search query to prevent them from being shown.
+    if (!FilterHasClause($filter_clauses, "-*status:deleted") ||
+        !isset($user) ||
+        !CanUserSearchDeletedPosts($user)) {
         $filter_clauses[] = "-status:deleted";
     }
     // Don't show swf/webm/comic posts on popular page unless explicitly requesting them.
@@ -117,12 +123,6 @@ function CreateSQLClausesFromTerms($terms) {
         $sql[] = CreateFilterSQLClauseFromTerms($filter_clauses);
     }
     $sql = implode(" AND ", $sql);
-    if (isset($user) && CanUserSearchDeletedPosts($user)) {
-        // Any sql is fine.
-    } else {
-        // Ensure all results are not deleted.
-        $sql = "($sql) AND T.Status<>'D'";
-    }
     return $sql;
 }
 
@@ -159,7 +159,7 @@ function CreateANDSQLClauseFromTerms($and_terms) {
     return "(".implode(" AND ", $sql).")";
 }
 function CreateORSQLClauseFromTerms($or_terms) {
-    $sql = array();
+    $sql = array("FALSE");
     $tag_ids = array();
     foreach ($or_terms as $term) {
         $value = GetSpecialSQLClauseForTerm($term);
@@ -217,7 +217,8 @@ function CreateSQLClauseFromFilter($filter) {
             $escaped_name = sql_escape($name);
             return "EXISTS(SELECT 1 FROM ".USER_TABLE." U WHERE UPPER(U.DisplayName)=UPPER('$escaped_name') AND T.UploaderId=U.UserId)";
         } else if (preg_match("/^fav(e|orite[ds]?)?:(.*)$/", $filter, $match)) {
-            $name = $match[2];
+            $name = mb_strtolower($match[2]);
+            // Get user id, so that we can always show self faves even if settings prevent public view.
             if (isset($user)) {
                 $uid = $user['UserId'];
                 if ($name == "me") return "EXISTS(SELECT 1 FROM ".GALLERY_USER_FAVORITES_TABLE." F WHERE UserId=$uid AND F.PostId=T.PostId)";
