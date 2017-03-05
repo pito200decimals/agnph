@@ -21,9 +21,10 @@
     padding: 0px;
 }
 #toc li {
+    margin: 0.75em;
+    margin-top: 0px;
     display: inline-block;
     font-weight: bold;
-    font-size: 120%;
 }
 
 @media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {

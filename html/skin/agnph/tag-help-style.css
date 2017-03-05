@@ -1,0 +1,26 @@
+.tag-toc-list {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+}
+.tag-toc-list li {
+    margin: 0.75em;
+    margin-top: 0px;
+    display: inline-block;
+    font-weight: bold;
+}
+.tag-term-list {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+}
+.tag-term-list li {
+    margin: 1.5em;
+}
+.example {
+    margin-left: 2em;
+}
+.tag-term-list li p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
