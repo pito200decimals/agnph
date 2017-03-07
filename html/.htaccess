@@ -84,7 +84,7 @@ RewriteRule ^gallery/post/show/(\d+)/?$ /gallery/posts/viewpost.php?post=$1 [QSA
 RewriteRule ^gallery/post/random/?$ /gallery/posts/random_post.php
 RewriteRule ^gallery/upload/?$ /gallery/upload.php
 RewriteRule ^gallery/edit/?$ /gallery/posts/editpost.php
-RewriteRule ^gallery/pools/?$ /gallery/pools/poolindex.php [QSA]
+RewriteRule ^gallery/pools/?$ /gallery/pools/poolindex.php?sort=name&order=asc [QSA]
 RewriteRule ^gallery/pools/reorder/(\d+)/?$ /gallery/pools/reorder_pool_ajax.php?pid=$1
 RewriteRule ^gallery/poolsearch/$ /gallery/pools/pool_ajax.php [QSA]
 RewriteRule ^gallery/pools/modify/(\d+)/(\d+)/?$ /gallery/pools/addremove_pool_ajax.php?post=$1&pool=$2
@@ -109,7 +109,7 @@ RewriteRule ^fics/create/(\d+)/(\d+)/?$ /fics/edit_chapter.php?action=create&sid
 RewriteRule ^fics/edit/(\d+)/(\d+)/?$ /fics/edit_chapter.php?action=edit&sid=$1&chapternum=$2
 RewriteRule ^fics/story/chapter/order/?$ /fics/reorder_chapter_ajax.php
 RewriteRule ^fics/tags/?$ /fics/tags.php?sort=name&order=asc [QSA]
-RewriteRule ^fics/authors/?$ /fics/authorindex.php [QSA]
+RewriteRule ^fics/authors/?$ /fics/authorindex.php?sort=name&order=asc [QSA]
 RewriteRule ^fics/delete/(\d+)/?$ /fics/delete_story.php?sid=$1&action=delete&type=story
 RewriteRule ^fics/delete/(\d+)/(\d+)/?$ /fics/delete_story.php?sid=$1&action=delete&type=chapter&index=$2
 RewriteRule ^fics/undelete/(\d+)/?$ /fics/delete_story.php?sid=$1&action=undelete&type=story
@@ -131,7 +131,7 @@ RewriteRule ^oekaki/slots/(\d+)/save/?$ /oekaki/site/slots.php?save=$1
 RewriteRule ^oekaki/thumb/(\d+).png?$ /oekaki/site/getThumb.php?slot=$1
 
 #Rewrites for user pages.
-RewriteRule ^user/list/?$ /user/list.php?sort=name&order=asc [QSA]
+RewriteRule ^user/list/?$ /user/list.php?sort=status&order=desc [QSA]
 RewriteRule ^user/search/?$ /user/find_user_ajax.php [QSA]
 RewriteRule ^user/account/link/?$ /user/account_link.php [QSA]
 RewriteRule ^user/import/?$ /imported_user.php

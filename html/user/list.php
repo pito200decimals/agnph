@@ -9,7 +9,6 @@ include_once(SITE_ROOT."includes/util/user.php");
 include_once(SITE_ROOT."user/includes/functions.php");
 include_once(SITE_ROOT."includes/util/listview.php");
 
-$order_clause = "DisplayName ASC";
 $search = "";
 if (isset($_GET['search'])) {
     $search = $_GET['search'];
@@ -39,42 +38,10 @@ if (isset($_GET['search'])) {
 if (HIDE_IMPORTED_ACCOUNTS_FROM_USER_LIST) {
     $search_clause .= " AND RegisterIP<>''";
 }
-
-$now = time();
-if (isset($_GET['sort'])) {
-    $order_asc = true;
-    if (isset($_GET['order'])) {
-        if (mb_strtolower($_GET['order'], "UTF-8") == "asc") {
-            $order_asc = true;
-        } else if (mb_strtolower($_GET['order'], "UTF-8") == "desc") {
-            $order_asc = false;
-        }
-    }
-    $order = ($order_asc ? "ASC" : "DESC");
-    switch (mb_strtolower($_GET['sort'], "UTF-8")) {
-        case "status":
-            // First sort by "online" vs "offline", then by last visit time, then by name.
-            // Avoids situations where users marked as "don't show online" show up above online users.
-            $cutoff_time = $now - CONSIDERED_ONLINE_DURATION;
-            $order_clause = "(CASE WHEN LastVisitTime >= $cutoff_time AND HideOnlineStatus=0 THEN 1 ELSE 0 END) $order, LastVisitTime $order, DisplayName $order";
-            break;
-        case "name":
-            $order_clause = "DisplayName $order";
-            break;
-        case "position":
-            $order_clause = "CHAR_LENGTH(Permissions) $order, CASE WHEN UserName LIKE '".IMPORTED_ACCOUNT_USERNAME_PREFIX."%' THEN 0 ELSE 1 END $order, DisplayName $order";
-            break;
-        case "register":
-            $order_clause = "JoinTime $order, DisplayName $order";
-            break;
-        default:
-            $order_clause = "DisplayName $order";
-            break;
-    }
-}
+$search_clause = "WHERE $search_clause";
 
 $accounts = array();
-CollectItems(USER_TABLE, "WHERE $search_clause ORDER BY $order_clause", $accounts, USERS_LIST_ITEMS_PER_PAGE, $iterator, "No users found.");
+CollectItems(USER_TABLE, "$search_clause ORDER BY ".GetQueryOrder(), $accounts, USERS_LIST_ITEMS_PER_PAGE, $iterator, "No users found.");
 
 foreach ($accounts as &$account) {
     $account['dateJoined'] = FormatDate($account['JoinTime'], USERLIST_DATE_FORMAT);
@@ -94,8 +61,8 @@ if (isset($_GET['sort'])) $vars['sortParam'] = $_GET['sort'];
 if (isset($_GET['order'])) $vars['orderParam'] = $_GET['order'];
 $vars['iterator'] = $iterator;
 // Get column sort URL's. Resets page offset.
-$vars['statusSortUrl'] = GetURLForSortOrder("status", "desc");
-$vars['nameSortUrl'] = GetURLForSortOrder("name", "asc");
+$vars['statusSortUrl'] = GetURLForSortOrder("status", "asc");
+$vars['nameSortUrl'] = GetURLForSortOrder("name", "desc");
 $vars['positionSortUrl'] = GetURLForSortOrder("position", "desc");
 $vars['registerSortUrl'] = GetURLForSortOrder("register", "desc");
 
@@ -103,25 +70,32 @@ $vars['registerSortUrl'] = GetURLForSortOrder("register", "desc");
 RenderPage("user/list.tpl");
 return;
 
-// Gets the sorting URL when clicking column headers. Resets the pagination offset when resorting.
-function GetSortURL($sort) {
-    $base_sort_url = "/user/list/?";
-    foreach ($_GET as $key => $value) {
-        $base_sort_url .= "$key=".urlencode($value)."&";
-    }
-    $base_sort_url .= "sort=".urlencode($sort);
-    // Okay to not use multibyte string manipulation here.
-    if (isset($_GET['sort']) && strtolower($_GET['sort']) == strtolower($sort)) {
-        // Same sort type, reverse direction.
-        if (isset($_GET['order']) && strtolower($_GET['order']) == "desc") {
-            $base_sort_url .= "&order=asc";
-        } else {
-            $base_sort_url .= "&order=desc";
+function OnlineStatusOrder($order) {
+    // First sort by "online" vs "offline", then by last visit time, then by name.
+    // Avoids situations where users marked as "don't show online" show up above online users.
+    $now = time();
+    $cutoff_time = $now - CONSIDERED_ONLINE_DURATION;
+    return "(CASE WHEN LastVisitTime >= $cutoff_time AND HideOnlineStatus=0 THEN 1 ELSE 0 END) $order, LastVisitTime $order";
+}
+
+function GetQueryOrder() {
+    $result = GetSortClausesList(function($key, $order_asc) {
+        $order = ($order_asc ? "ASC" : "DESC");
+        switch ($key) {
+            case "status":
+                return OnlineStatusOrder($order);
+            case "name":
+                return "UPPER(DisplayName) $order";
+                break;
+            case "position":
+                return "CHAR_LENGTH(Permissions) $order, CASE WHEN UserName LIKE '".IMPORTED_ACCOUNT_USERNAME_PREFIX."%' THEN 0 ELSE 1 END $order";
+                break;
+            case "register":
+                return "JoinTime $order";
         }
-    } else if (!isset($_GET['sort'])) {
-        // Different sort type, use default descending order.
-        $base_sort_url .= "&order=desc";
-    }
-    return $base_sort_url;
+        return null;
+    });
+    $result[] = OnlineStatusOrder("DESC");
+    return implode(", ", $result);
 }
 ?>
