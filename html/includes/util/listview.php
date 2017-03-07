@@ -11,9 +11,10 @@ include_once(SITE_ROOT."includes/util/html_funcs.php");
 // Create function is of type $page => $link_url.
 // Error message is display on error.
 function CollectItems($table_name, $sql_order, &$items, $items_per_page, &$iterator, $error_msg = null) {
-    CollectItemsComplex($table_name, "SELECT * FROM $table_name T", $sql_order, $sql_order, $items, $items_per_page, $iterator, $error_msg);
+    CollectItemsComplex($table_name, "SELECT * FROM $table_name T $sql_order", "SELECT count(*) as ListSize FROM $table_name T $sql_order", $items, $items_per_page, $iterator, $error_msg);
 }
-function CollectItemsComplex($table_name, $complicated_sql, $sql_order, $count_sql_order, &$items, $items_per_page, &$iterator, $error_msg = null) {
+// See above for example args.
+function CollectItemsComplex($table_name, $complicated_sql_and_order, $complicated_count_sql_and_order, &$items, $items_per_page, &$iterator, $error_msg = null) {
     global $vars;
     if (isset($_GET['page']) && is_numeric($_GET['page']) && ((int)$_GET['page']) > 0) {
         $page = $_GET['page'];
@@ -22,7 +23,7 @@ function CollectItemsComplex($table_name, $complicated_sql, $sql_order, $count_s
     }
 
     $offset = $items_per_page * ($page - 1);
-    if (!sql_query_into($result, "$complicated_sql $sql_order LIMIT $items_per_page OFFSET $offset;", 0)) {
+    if (!sql_query_into($result, "$complicated_sql_and_order LIMIT $items_per_page OFFSET $offset;", 0)) {
         if ($error_msg != null) {
             RenderErrorPage($error_msg);
         }
@@ -34,7 +35,7 @@ function CollectItemsComplex($table_name, $complicated_sql, $sql_order, $count_s
     }
 
     // Get total number, and construct iterator.
-    sql_query_into($result, "SELECT count(*) as ListSize FROM $table_name T $count_sql_order;", 1) or RenderErrorPage($error_msg);
+    sql_query_into($result, "$complicated_count_sql_and_order;", 1) or RenderErrorPage($error_msg);
     $total_num_items = $result->fetch_assoc()['ListSize'];
     $maxpage = (int)(($total_num_items + $items_per_page - 1) / $items_per_page);
     if ($maxpage > 1) {
@@ -102,5 +103,24 @@ function GetURLForSortOrder($sort, $default_order = "asc", $reset_page_offset = 
     }
 
     return $url;
+}
+
+function GetSortClausesList($key_asc_to_clause_fn) {
+    $result = array();
+    if (isset($_GET['sort'])) {
+        $order_asc = true;
+        if (isset($_GET['order'])) {
+            if (mb_strtolower($_GET['order'], "UTF-8") == "asc") {
+                $order_asc = true;
+            } else if (mb_strtolower($_GET['order'], "UTF-8") == "desc") {
+                $order_asc = false;
+            }
+        }
+        $clause = $key_asc_to_clause_fn($_GET['sort'], $order_asc);
+        if ($clause != null) {
+            $result[] = $clause;
+        }
+    }
+    return $result;
 }
 ?>

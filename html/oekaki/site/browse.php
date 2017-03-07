@@ -65,10 +65,9 @@ if (isset($_GET['search'])) {
 }
 
 // Get all parent posts.
-$sql_select = "*";
 $sql_comments_select = "*";
 $sql_order = "WHERE ParentPostId=-1 AND (Status='A' OR Status='M') AND ($post_sql_condition) ORDER BY Timestamp DESC, PostId DESC";
-CollectItemsComplex(OEKAKI_POST_TABLE, "SELECT $sql_select FROM ".OEKAKI_POST_TABLE." T", $sql_order, $sql_order, $posts, $posts_per_page, $iterator, "Error displaying oekaki posts");
+CollectItems(OEKAKI_POST_TABLE, $sql_order, $posts, $posts_per_page, $iterator, "Error displaying oekaki posts.");
 $posts_by_id = array();
 foreach ($posts as &$post) {
     $post['comments'] = array();

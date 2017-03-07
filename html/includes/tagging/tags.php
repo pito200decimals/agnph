@@ -46,7 +46,7 @@ if (!isset($search_clause)) $search_clause = "";
 if (!isset($search)) $search = "";
 
 $tags = array();
-CollectItems(TABLE, "$search_clause ORDER BY ".GetQueryOrder(true), $tags, TAGS_PER_PAGE, $iterator, "No tags found.");
+CollectItems(TABLE, "$search_clause ORDER BY ".GetQueryOrder(), $tags, TAGS_PER_PAGE, $iterator, "No tags found.");
 
 $alias_mapping = array();
 if ($is_api) {
@@ -71,7 +71,7 @@ foreach ($tags as &$tag) {
 }
 
 $vars['tags'] = $tags;
-$vars['search'] = $search;
+$vars['tag_search'] = $search;
 $vars['iterator'] = $iterator;
 
 $vars['nameSortUrl'] = GetURLForSortOrder("name", "asc");
@@ -80,51 +80,21 @@ $vars['countSortUrl'] = GetURLForSortOrder("count", "desc");
 if (isset($_GET['sort'])) $vars['sortParam'] = $_GET['sort'];
 if (isset($_GET['order'])) $vars['orderParam'] = $_GET['order'];
 
-function GetQueryOrder($allow_count_order) {
-    $order_clause = "Name ASC";
-    $search = "";
-    if (isset($_GET['search'])) {
-        $search = $_GET['search'];
-        if (mb_strtolower($search, "UTF-8") == "status:banned") {
-            $search_clause = "Usermode=-1";
-        } else {
-            $escaped_search = sql_escape($search);
-            $search_clause = "UPPER(DisplayName) LIKE UPPER('%$escaped_search%') AND Usermode=1";
-        }
-    } else {
-        $search_clause = "Usermode=1";
-    }
-
-    if (isset($_GET['sort'])) {
-        $order_asc = true;
-        if (isset($_GET['order'])) {
-            if (mb_strtolower($_GET['order'], "UTF-8") == "asc") {
-                $order_asc = true;
-            } else if (mb_strtolower($_GET['order'], "UTF-8") == "desc") {
-                $order_asc = false;
-            }
-        }
-        $sort = "Name";
-        switch (mb_strtolower($_GET['sort'], "UTF-8")) {
-            case "name":
-                $sort = "Name";
-                break;
-            case "type":
-                $sort = "Type";
-                break;
-            case "count":
-                if ($allow_count_order) $sort = "ItemCount";
-                // Otherwise, use default.
-                break;
-            default:
-                $sort = "Name";
-                break;
-        }
+function GetQueryOrder() {
+    $result = GetSortClausesList(function($key, $order_asc) {
         $order = ($order_asc ? "ASC" : "DESC");
-        $order_clause = "$sort $order";
-    }
-    debug("Order clause: $order_clause");
-    return $order_clause;
+        switch ($key) {
+            case "name":
+                return "Name $order";
+            case "type":
+                return "Type $order";
+            case "count":
+                return "ItemCount $order";
+        }
+        return null;
+    });
+    $result[] = "Name ASC";
+    return implode(", ", $result);
 }
 
 ?>

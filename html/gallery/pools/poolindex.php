@@ -11,11 +11,12 @@ if (isset($_GET['search'])) {
     $escaped_term = sql_escape($term);
     $whereClause = "WHERE UPPER(Name) LIKE UPPER('%$escaped_term%')";
 } else {
+    $term = "";
     $whereClause = "";
 }
 
 $pools = array();
-CollectItems(GALLERY_POOLS_TABLE, "$whereClause ORDER BY Name ASC", $pools, GALLERY_LIST_ITEMS_PER_PAGE, $iterator, "No pools found.");
+CollectItems(GALLERY_POOLS_TABLE, "$whereClause ORDER BY ".GetQueryOrder(), $pools, GALLERY_LIST_ITEMS_PER_PAGE, $iterator, "No pools found.");
 
 if (sizeof($pools) > 0) {
     // Compute pool search names.
@@ -54,8 +55,13 @@ if (sizeof($pools) > 0) {
     }
 }
 
+$vars['pool_search'] = $term;
 $vars['pools'] = $pools;
 $vars['postIterator'] = $iterator;
+$vars['nameSortUrl'] = GetURLForSortOrder("name", "asc");
+if (isset($_GET['sort'])) $vars['sortParam'] = $_GET['sort'];
+if (isset($_GET['order'])) $vars['orderParam'] = $_GET['order'];
+
 if (isset($user) && CanUserCreateOrDeletePools($user)) {
     $vars['canEditPools'] = true;
 }
@@ -67,5 +73,19 @@ if (isset($user) && CanUserDeletePool($user)) {
 }
 RenderPage("gallery/pools/poolindex.tpl");
 return;
+
+function GetQueryOrder() {
+    $result = GetSortClausesList(function($key, $order_asc) {
+        $order = ($order_asc ? "ASC" : "DESC");
+        switch ($key) {
+            case "name":
+                return "Name $order";
+            // TODO: Support more sort orders.
+        }
+        return null;
+    });
+    $result[] = "Name ASC";
+    return implode(", ", $result);
+}
 
 ?>

@@ -26,7 +26,7 @@
             <input type="hidden" name="sort" value="{{ sortParam }}" />
             <input type="hidden" name="order" value="{{ orderParam }}" />
             <div class="search">
-                <input class="search" name="search" value="{{ search }}" type="text" required placeholder="Search Tags" />
+                <input class="search" name="search" value="{{ tag_search }}" type="text" required placeholder="Search Tags" />
                 <input type="submit" class="search-button" value="" />
             </div>
         </form>

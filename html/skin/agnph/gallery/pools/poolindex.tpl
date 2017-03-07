@@ -28,6 +28,14 @@
     </script>
 {% endblock %}
 
+{% block sortArrow %}
+    {% if orderParam == "desc" %}
+        ▼
+    {% else %}
+        ▲
+    {% endif %}
+{% endblock %}
+
 {% block content %}
     <h3>Pools</h3>
     {{ block('banner') }}
@@ -35,7 +43,7 @@
         <div class="list-search-bar">
             <form id="pool-search" method="GET" accept-encoding="UTF-8">
                 <div class="search">
-                    <input class="search" name="search" value="{{ search }}" type="text" required placeholder="Search Pools" />
+                    <input class="search" name="search" value="{{ pool_search }}" type="text" required placeholder="Search Pools" />
                     <input type="submit" class="search-button" value="" />
                 </div>
             </form>
@@ -58,7 +66,7 @@
     <table class="list-table">
         <thead>
             <tr>
-                <td><div><strong>Name</strong></div></td>
+                <td><strong><a href="{{ nameSortUrl }}">Name</a></strong>{% if sortParam == "name" %}{{ block('sortArrow') }}{% endif %}</td>
                 <td><div><strong>Number of Posts</strong></div></td>
                 <td><div><strong>Created By</strong></div></td>
                 {% if canDeletePools %}<td><div><strong>Actions</strong></div></td>{% endif %}

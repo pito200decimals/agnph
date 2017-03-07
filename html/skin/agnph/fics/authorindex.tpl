@@ -5,12 +5,20 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('/list-style.css') }}" />
 {% endblock %}
 
+{% block sortArrow %}
+    {% if orderParam == "desc" %}
+        ▼
+    {% else %}
+        ▲
+    {% endif %}
+{% endblock %}
+
 {% block content %}
     <h3>Authors</h3>
     <div class="list-search-bar">
         <form action="/fics/authors/" accept-charset="UTF-8">
             <div class="search">
-                <input class="search" name="search" value="{{ searchTerms }}" type="text" required placeholder="Search Authors" />
+                <input class="search" name="search" value="{{ author_search }}" type="text" required placeholder="Search Authors" />
                 <input type="submit" class="search-button" value="" />
             </div>
         </form>
@@ -19,8 +27,8 @@
     <table class="list-table">
         <thead>
             <tr>
-                <td><strong>Name</strong></td>
-                <td><strong>Number of Stories</strong></td>
+                <td><strong><a href="{{ nameSortUrl }}">Name</a></strong>{% if sortParam == "name" %}{{ block('sortArrow') }}{% endif %}</td>
+                <td><strong><a href="{{ countSortUrl }}">Number of Stories</a></strong>{% if sortParam == "count" %}{{ block('sortArrow') }}{% endif %}</td>
             </tr>
         </thead>
         <tbody>
@@ -28,7 +36,7 @@
                 {% for author in authors %}
                     <tr>
                         <td><a href="/user/{{ author.UserId }}/fics/">{{ author.DisplayName }}</a></td>
-                        <td>{{ author.storyCount }}</td>
+                        <td>{{ author.StoryCount }}</td>
                     </tr>
                 {% endfor %}
             {% else %}

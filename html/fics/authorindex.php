@@ -15,34 +15,45 @@ if (isset($_GET['search'])) {
     $search = "";
 }
 // TODO: Include co-authors?
-$search_clause .= " AND EXISTS(SELECT 1 FROM ".FICS_STORY_TABLE." S WHERE T.UserId=S.AuthorUserId)";
+$search_clause .= " AND S.ApprovalStatus<>'D'";
 
 include_once(SITE_ROOT."includes/util/listview.php");
 
 $authors = array();
-CollectItems(USER_TABLE, "$search_clause ORDER BY DisplayName ASC", $authors, FICS_LIST_ITEMS_PER_PAGE, $iterator, "No authors found.");
-
-$author_ids = array_map(function($author) {
-    return $author['UserId'];
-}, $authors);
-$joined_ids = implode(",", $author_ids);
-
-if (sql_query_into($result, "SELECT * FROM ".FICS_STORY_TABLE." WHERE AuthorUserId IN ($joined_ids) AND ApprovalStatus<>'D';", 0)) {
-    $author_id_map = array();
-    foreach ($authors as &$author) {
-        $author['storyCount'] = 0;
-        $author_id_map[$author['UserId']] = &$author;
-    }
-    while ($row = $result->fetch_assoc()) {
-        $author_id = $row['AuthorUserId'];
-        $author_id_map[$author_id]['storyCount']++;
-    }
-}
+CollectItemsComplex(
+    USER_TABLE,
+    "SELECT T.*, COUNT(StoryId) as StoryCount FROM ".USER_TABLE." T INNER JOIN ".FICS_STORY_TABLE." S ON T.UserId=S.AuthorUserId $search_clause GROUP BY T.UserId ORDER BY ".GetQueryOrder(),
+    "SELECT COUNT(*) AS ListSize FROM (SELECT T.*, COUNT(StoryId) as StoryCount FROM ".USER_TABLE." T INNER JOIN ".FICS_STORY_TABLE." S ON T.UserId=S.AuthorUserId $search_clause GROUP BY T.UserId) T2",
+    $authors,
+    FICS_LIST_ITEMS_PER_PAGE,
+    $iterator,
+    "No authors found.");
 
 $vars['authors'] = $authors;
-$vars['searchTerms'] = $search;
+$vars['author_search'] = $search;
 $vars['iterator'] = $iterator;
+
+$vars['nameSortUrl'] = GetURLForSortOrder("name", "asc");
+$vars['countSortUrl'] = GetURLForSortOrder("count", "desc");
+if (isset($_GET['sort'])) $vars['sortParam'] = $_GET['sort'];
+if (isset($_GET['order'])) $vars['orderParam'] = $_GET['order'];
 
 RenderPage("fics/authorindex.tpl");
 return;
+
+function GetQueryOrder() {
+    $result = GetSortClausesList(function($key, $order_asc) {
+        $order = ($order_asc ? "ASC" : "DESC");
+        switch ($key) {
+            case "name":
+                return "UPPER(DisplayName) $order";
+            case "count":
+                return "StoryCount $order";
+        }
+        return null;
+    });
+    $result[] = "UPPER(DisplayName) ASC";
+    return implode(", ", $result);
+}
+
 ?>
