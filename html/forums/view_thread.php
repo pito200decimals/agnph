@@ -80,11 +80,8 @@ if (isset($user)) {
     $vars['canReply'] = CanUserPostToThread($user, $thread);
 }
 GetBoard($thread['ParentBoardId'], $board);
-// Create a fake "board" for this thread in the breadcrumb.
-$vars['board'] = array(
-    "Name" => $thread['Title'],
-    "parentBoard" => $board,
-    "linkUrl" => "/forums/thread/$tid/");
+// For board, show the board containing this thread (no link for this thread in the breadcrumb bar).
+$vars['board'] = $board;
 $vars['iterator'] = $iterator;
 
 HandlePost();  // Handle post this late so we have thread already initialized.

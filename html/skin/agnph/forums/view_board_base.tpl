@@ -1,4 +1,4 @@
-{% extends 'forums/base.tpl' %}
+{% extends 'forums/skin-base.tpl' %}
 
 {% block styles %}
     {{ parent() }}

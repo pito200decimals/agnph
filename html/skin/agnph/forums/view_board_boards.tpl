@@ -77,6 +77,7 @@
 {% endblock %}
 
 {% block content %}
+    {{ block('breadcrumb_bar') }}
     {{ block('banner') }}
     {% if board.BoardId == -1 %}
         {% for board in board.childBoards %}
@@ -85,7 +86,6 @@
     {% else %}
         {{ _self.boardgroup(board, false) }}
     {% endif %}
-    {# TODO: Determine if these should be visible when there are no threads #}
     {% if board.BoardId != -1 %}
         {{ block('threadList') }}
     {% endif %}

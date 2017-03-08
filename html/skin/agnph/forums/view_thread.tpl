@@ -1,4 +1,4 @@
-{% extends 'forums/base.tpl' %}
+{% extends 'forums/skin-base.tpl' %}
 
 {% block styles %}
     {{ parent() }}
@@ -15,6 +15,7 @@
 {% use 'includes/comment-block.tpl' %}
 
 {% block content %}
+    {{ block('breadcrumb_bar') }}
     <h3>{{ thread.Title }}</h3>
     {{ block('banner') }}
     {% if thread.posts|length > 0 %}

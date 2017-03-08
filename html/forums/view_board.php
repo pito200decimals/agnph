@@ -36,7 +36,7 @@ if ($board_id == -1) {
     if (isset($user)) TagBoardsAsUnread($user, $board);
     // Fetch and display threads.
     $items_per_page = GetThreadsPerPageInBoard();
-    $sort_order = GetThreadSortOrder();
+    $sort_order = GetQueryOrder();
     CollectItems(FORUMS_POST_TABLE, "WHERE ParentId=$board_id AND IsThread=1 ORDER BY Sticky DESC, $sort_order", $threads, $items_per_page, $iterator, "Error accessing board");
     InitPosters($threads);
     if (isset($user)) TagThreadsAsUnread($user, $threads);
@@ -71,59 +71,24 @@ if (sizeof($board['childBoards']) == 0) {
 }
 return;
 
-function GetThreadSortOrder() {
-    $order_clause = "EditDate DESC";
-    if (isset($_GET['sort'])) {
-        $order_asc = true;
-        if (isset($_GET['order'])) {
-            if (mb_strtolower($_GET['order'], "UTF-8") == "asc") {
-                $order_asc = true;
-            } else if (mb_strtolower($_GET['order'], "UTF-8") == "desc") {
-                $order_asc = false;
-            }
-        }
-        switch (mb_strtolower($_GET['sort'], "UTF-8")) {
+function GetQueryOrder() {
+    $result = GetSortClausesList(function($key, $order_asc) {
+        $order = ($order_asc ? "ASC" : "DESC");
+        switch ($key) {
             case "title":
-                $sort = "Title";
+                return "Title $order";
                 break;
             case "replies":
-                $sort = "Replies";
-                break;
+                return "Replies $order";
             case "views":
-                $sort = "Views";
-                break;
+                return "Views $order";
             case "lastpost":
-                $sort = "LastPostDate";
-                break;
-            default:
-                $sort = "EditDate";
-                break;
+                return "LastPostDate $order";
         }
-        $order = ($order_asc ? "ASC" : "DESC");
-        $order_clause = "$sort $order";
-    }
-    return $order_clause;
-}
-
-function GetSortURL($board, $sort) {
-    $base_sort_url = "/forums/board/".urlencode(mb_strtolower($board['Name'], "UTF-8"))."/?";
-    foreach ($_GET as $key => $value) {
-        $base_sort_url .= "$key=".urlencode($value)."&";
-    }
-    $base_sort_url .= "sort=".urlencode($sort);
-    // Okay to not use multibyte string manipulation here.
-    if (isset($_GET['sort']) && strtolower($_GET['sort']) == strtolower($sort)) {
-        // Same sort type, reverse direction.
-        if (isset($_GET['order']) && strtolower($_GET['order']) == "desc") {
-            $base_sort_url .= "&order=asc";
-        } else {
-            $base_sort_url .= "&order=desc";
-        }
-    } else if (!isset($_GET['sort'])) {
-        // Different sort type, use default descending order.
-        $base_sort_url .= "&order=desc";
-    }
-    return $base_sort_url;
+        return null;
+    });
+    $result[] = "LastPostDate DESC";
+    return implode(", ", $result);
 }
 
 function HandlePost($board) {

@@ -6,14 +6,15 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('/comments-style.css') }}" />
 {% endblock %}
 
+{# In base template, use section navigation for breadcrumbs #}
 {% block section_navigation %}
     <ul class="section-nav font-scalable">
         {{ block('breadcrumb_block_recursive') }}
     </ul>
 {% endblock %}
 
-{% block breadcrumb_block %}
-    <ul class="breadcrumb">{{ block('breadcrumb_block_recursive') }}</ul>
+{# Separate bar on top of all content, if a skin wants to display crumbs differently. #}
+{% block breadcrumb_bar %}
 {% endblock %}
 
 {% block breadcrumb_block_recursive %}

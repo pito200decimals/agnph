@@ -1,0 +1,1 @@
+{% extends 'forums/base.tpl' %}

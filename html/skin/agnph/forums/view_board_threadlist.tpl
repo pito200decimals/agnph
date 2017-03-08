@@ -20,7 +20,7 @@
                 <tr>
                     <td></td>
                     <td><a href="{{ titleSortUrl }}">Title</a>{% if sortParam == "title" %}{{ block('sortArrow') }}{% endif %}</td>
-                    <td><a href="{{ repliesSortUrl }}">Replies</a>{% if sortParam == "replies" %}{{ block('sortArrow') }}{% endif %} / <a href="{{ viewsSortUrl }}">Views</a>{% if sortParam == "views" %}{{ block('sortArrow') }}{% endif %}</td>
+                    <td class="desktop-only"><a href="{{ repliesSortUrl }}">Replies</a>{% if sortParam == "replies" %}{{ block('sortArrow') }}{% endif %} / <a href="{{ viewsSortUrl }}">Views</a>{% if sortParam == "views" %}{{ block('sortArrow') }}{% endif %}</td>
                     <td><a href="{{ lastpostSortUrl }}">Last Post</a>{% if sortParam == "lastpost" %}{{ block('sortArrow') }}{% endif %}</td>
                 </tr>
             </thead>
@@ -48,7 +48,7 @@
                                 <br />
                                 <span class="thread-subline">Started by <a href="/user/{{ thread.user.UserId }}/">{{ thread.user.DisplayName }}</a></span>
                             </td>
-                            <td>
+                            <td class="desktop-only">
                                 {{ thread.Replies }} replies<br />
                                 {{ thread.Views }} views
                             </td>
@@ -65,7 +65,7 @@
                 {% else %}
                     <tr>
                         <td class="status"></td>
-                        <td></td>
+                        <td class="desktop-only"></td>
                         <td>No threads found</td>
                         <td class="lastpost"></td>
                     </tr>

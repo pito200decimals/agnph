@@ -108,15 +108,17 @@ function GetURLForSortOrder($sort, $default_order = "asc", $reset_page_offset = 
 function GetSortClausesList($key_asc_to_clause_fn) {
     $result = array();
     if (isset($_GET['sort'])) {
+    $GET_sort = mb_strtolower($_GET['sort'], "UTF-8");
         $order_asc = true;
         if (isset($_GET['order'])) {
-            if (mb_strtolower($_GET['order'], "UTF-8") == "asc") {
+            $GET_order = mb_strtolower($_GET['order'], "UTF-8");
+            if ($GET_order == "asc") {
                 $order_asc = true;
-            } else if (mb_strtolower($_GET['order'], "UTF-8") == "desc") {
+            } else if ($GET_order == "desc") {
                 $order_asc = false;
             }
         }
-        $clause = $key_asc_to_clause_fn($_GET['sort'], $order_asc);
+        $clause = $key_asc_to_clause_fn($GET_sort, $order_asc);
         if ($clause != null) {
             $result[] = $clause;
         }
