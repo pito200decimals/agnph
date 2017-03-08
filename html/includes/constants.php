@@ -73,6 +73,7 @@ define("MAX_USER_TITLE_LENGTH", 64);
 define("MAX_USER_LOCATION_LENGTH", 64);
 define("MAX_USER_SPECIES_LENGTH", 32);
 define("DEFAULT_SKIN", "Aqua Blue");
+define("DEFAULT_SKIN_SETTING", "default");
 // Forums related.
 define("MAX_FORUMS_BOARD_TITLE_LENGTH", 64);
 define("MAX_FORUMS_BOARD_DESCRIPTION_LENGTH", 512);

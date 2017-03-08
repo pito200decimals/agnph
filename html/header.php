@@ -110,12 +110,17 @@ function FetchUserHeaderVars() {
     }
     // User skin preferences.
     if (isset($user)) {
-        $skin = $user['Skin'];
+        $skin_setting = $user['Skin'];
     } else if (isset($_SESSION['Skin'])) {
-        $skin = $_SESSION['Skin'];
+        $skin_setting = $_SESSION['Skin'];
     } else {
+        $skin_setting = DEFAULT_SKIN_SETTING;
+        $_SESSION['Skin'] = $skin_setting;
+    }
+    if ($skin_setting == DEFAULT_SKIN_SETTING) {
         $skin = DEFAULT_SKIN;
-        $_SESSION['Skin'] = $skin;
+    } else {
+        $skin = $skin_setting;
     }
     // Check for malformed value. Do not allow dots or slashes.
     if (contains($skin, ".") || contains($skin, "/") || contains($skin, "\\")) {
@@ -127,6 +132,18 @@ function FetchUserHeaderVars() {
         $skin = DEFAULT_SKIN;
     }
     $vars['skin'] = $skin;
+
+    // For testing purposes, hide incomplete skins from all users except a specific whitelist.
+    $users_to_allow_for_test_skins = array();
+    if (!isset($user) || (array_search($user['UserId'], $users_to_allow_for_test_skins) === FALSE)) {
+        $skins_to_hide = array();
+        foreach($skins_to_hide as $hidden_skin) {
+            $key = array_search($hidden_skin, $vars['availableSkins']);
+            if($key !== FALSE){
+                unset($vars['availableSkins'][$key]);
+            }
+        }
+    }
 
     // Use these paths to load template assets. If an expected skin directory does not exist, use base skin directory.
     $skin_dirs = array_filter(array("/skin/$skin/", "/skin/".BASE_SKIN."/"), function($path) { return file_exists(__DIR__.$path); });
