@@ -132,7 +132,7 @@
                     <label for="skin-input" class="basic-info-label">Site skin:</label>
                     <select id="skin-input" name="skin">
                         {% for skinName in availableSkins %}
-                            <option value="{{ skinName }}"{% if skin == skinName %} selected{% endif %}>{{ skinName }}</option>
+                            <option value="{{ skinName }}"{% if profile.user.skin == skinName %} selected{% endif %}>{{ skinName }}</option>
                         {% endfor %}
                     </select>
                 </li>

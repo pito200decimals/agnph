@@ -416,6 +416,11 @@ if (isset($_POST['display-name']) &&
 
 $profile_user['timezoneOffset'] = GetGMTTimeZone($profile_user['Timezone']);
 $profile_user['admin'] = GetAdminBadge($profile_user);
+if ($profile_user['Skin'] == DEFAULT_SKIN_SETTING) {
+    $profile_user['skin'] = DEFAULT_SKIN;
+} else {
+    $profile_user['skin'] = $profile_user['Skin'];
+}
 
 // Init private visible statistics.
 if (isset($user)) {
