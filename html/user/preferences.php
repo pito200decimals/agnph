@@ -180,7 +180,7 @@ if (isset($_POST['display-name']) &&
         if (contains($_POST['skin'], ".") || contains($_POST['skin'], "/") || contains($_POST['skin'], "\\") || !in_array($_POST['skin'], $vars['availableSkins'])) {
             PostErrorMessage("Invalid site skin");
         } else {
-            $escaped_skin = sql_escape(GetSanitizedTextTruncated(mb_strtolower($_POST['skin'], "UTF-8"), NO_HTML_TAGS, MAX_SKIN_STRING_LENGTH));
+            $escaped_skin = sql_escape(GetSanitizedTextTruncated($_POST['skin'], NO_HTML_TAGS, MAX_SKIN_STRING_LENGTH));
             $user_table_sets[] = "Skin='$escaped_skin'";
         }
     }
