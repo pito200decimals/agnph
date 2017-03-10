@@ -61,7 +61,8 @@ if (isset($_GET['search'])) {
         $clauses[] = "LOWER(Text) LIKE '%$escaped_lower_search%'";
     }
     $post_sql_condition = join(" OR ", $clauses);
-    $vars['searchTerms'] = $search;
+} else {
+    $search = "";
 }
 
 // Get all parent posts.
@@ -129,6 +130,7 @@ foreach ($posts_by_id as &$post) {
 $vars['posts'] = $posts;
 $vars['iterator'] = $iterator;
 $vars['url'] = $_SERVER['REQUEST_URI'];
+$vars['search'] = $search;
 
 // Post news banner.
 PostBanner("News: The Oekaki now supports saving drawing animations! Just check the box when you create a new canvas.", "green", /*dismissable=*/false);
