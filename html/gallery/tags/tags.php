@@ -2,6 +2,8 @@
 // Page for displaying a list of gallery tags.
 // URL: /gallery/tags/?page={page}
 
+define("PRETTY_PAGE_NAME", "Gallery");
+
 include_once("../../header.php");
 include_once(SITE_ROOT."includes/constants.php");
 include_once(SITE_ROOT."includes/util/core.php");

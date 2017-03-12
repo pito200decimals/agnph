@@ -1,5 +1,8 @@
 <?php
 // About home page.
+
+define("PRETTY_PAGE_NAME", "About");
+
 include_once("../header.php");
 
 $vars['fics_min_word_count'] = GetSiteSetting(FICS_CHAPTER_MIN_WORD_COUNT_KEY, 1000);

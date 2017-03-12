@@ -3,6 +3,8 @@
 // URL: /oekaki/ => browse.php
 // URL: /oekaki/comment/ => browse.php
 
+define("PRETTY_PAGE_NAME", "Oekaki");
+
 include_once("../../header.php");
 include_once(SITE_ROOT."oekaki/site/includes/functions.php");
 include_once(SITE_ROOT."includes/util/user.php");

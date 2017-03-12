@@ -1,6 +1,8 @@
 <?php
 // Site home page.
 
+define("PRETTY_PAGE_NAME", "Homepage");
+
 // Site includes, including login authentication.
 include_once("header.php");
 include_once(SITE_ROOT."includes/news/news.php");

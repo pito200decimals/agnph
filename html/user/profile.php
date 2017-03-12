@@ -3,6 +3,8 @@
 // URL: /user/{user-id}/
 // URL: /user/profile.php?uid={user-id}
 
+define("PRETTY_PAGE_NAME", "User profile");
+
 include_once("../header.php");
 include_once(SITE_ROOT."includes/util/file.php");
 include_once(SITE_ROOT."includes/util/core.php");

@@ -2,6 +2,8 @@
 // Views a thread.
 // URL: /forums/thread/{thread-id}/ => view_thread.php?thread=-1
 
+define("PRETTY_PAGE_NAME", "Forums");
+
 include_once("../header.php");
 include_once(SITE_ROOT."forums/includes/functions.php");
 include_once(SITE_ROOT."includes/util/user.php");

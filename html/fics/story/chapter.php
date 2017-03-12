@@ -3,6 +3,8 @@
 // URL: /fics/story/{story-id}/{chapter-num}/
 // URL: /fics/story/story.php?sid={story-id}&chapter={chapter-num}
 
+define("PRETTY_PAGE_NAME", "Fics");
+
 include_once("../../header.php");
 include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."fics/includes/functions.php");

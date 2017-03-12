@@ -111,10 +111,11 @@ do_or_die(sql_query(
         GuestId VARCHAR(30) NOT NULL,".  // UserId or PHP Session id.
        "VisitTime INT(11) NOT NULL,
         VisitIP VARCHAR(45) NOT NULL,
-        PageUrl VARCHAR(40) NOT NULL,
+        PageUrl VARCHAR(120) NOT NULL,
         PhpPage VARCHAR(40) NOT NULL,
         PageName VARCHAR(40) NOT NULL,
-        PRIMARY KEY(GuestId)
+        UserAgent VARCHAR(200) NOT NULL,
+        UNIQUE(GuestId) PRIMARY KEY(VisitIP)
     ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 
 ///////////////////

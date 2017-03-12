@@ -4,6 +4,8 @@
 // URL: /forums/board/{board-id}/   => view_board.php?board={board-id}
 // URL: /forums/board/{board-name}/ => view_board.php?boardname={board-name}
 
+define("PRETTY_PAGE_NAME", "Forums");
+
 include_once("../header.php");
 include_once(SITE_ROOT."forums/includes/functions.php");
 include_once(SITE_ROOT."includes/util/user.php");

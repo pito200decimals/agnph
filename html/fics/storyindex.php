@@ -3,6 +3,8 @@
 // URL: /fics/browse/{offset}/
 // URL: /fics/storyindex.php?offset={item-offset}
 
+define("PRETTY_PAGE_NAME", "Fics");
+
 include_once("../header.php");
 include_once(SITE_ROOT."fics/includes/functions.php");
 include_once(SITE_ROOT."includes/util/html_funcs.php");

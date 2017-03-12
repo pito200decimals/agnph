@@ -1,6 +1,8 @@
 <?php
 // Page for viewing the search index of posts.
 
+define("PRETTY_PAGE_NAME", "Gallery");
+
 include_once("../../header.php");
 include_once(SITE_ROOT."gallery/includes/functions.php");
 include_once(SITE_ROOT."includes/util/html_funcs.php");

@@ -3,6 +3,8 @@
 // URL: /forums/board/{board-name}/
 // URL: /forums/compose/?action={action}&id={id}
 
+define("PRETTY_PAGE_NAME", "Forums");
+
 include_once("../header.php");
 include_once(SITE_ROOT."forums/includes/functions.php");
 include_once(SITE_ROOT."includes/util/user.php");

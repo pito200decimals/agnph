@@ -3,6 +3,8 @@
 // URL: /gallery/post/show/{post-id}/
 // URL: /gallery/posts/viewpost.php?post={post-id}
 
+define("PRETTY_PAGE_NAME", "Gallery");
+
 include_once("../../header.php");
 include_once(SITE_ROOT."gallery/includes/functions.php");
 include_once(SITE_ROOT."includes/util/user.php");

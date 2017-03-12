@@ -3,6 +3,8 @@
 // URL: /user/list/
 // URL: /user/list.php
 
+define("PRETTY_PAGE_NAME", "User list");
+
 include_once("../header.php");
 include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."includes/util/user.php");

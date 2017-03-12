@@ -1,6 +1,8 @@
 <?php
 // Page for viewing the index page of the fics section.
 
+define("PRETTY_PAGE_NAME", "Fics");
+
 include_once("../header.php");
 include_once(SITE_ROOT."includes/news/news.php");
 include_once(SITE_ROOT."fics/includes/functions.php");

@@ -4,6 +4,8 @@
 // URL: /user/{user-id}/messages/unread/
 // URL: /user/mail/mail.php?uid={user-id}[&offset=$1][&unread=1]
 
+define("PRETTY_PAGE_NAME", "User PMs");
+
 include_once("../../header.php");
 include_once(SITE_ROOT."includes/constants.php");
 include_once(SITE_ROOT."includes/util/core.php");

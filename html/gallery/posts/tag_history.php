@@ -2,6 +2,8 @@
 // Page for viewing the tag history of a post.
 // URL: /gallery/post/show/{post-id}/history/
 
+define("PRETTY_PAGE_NAME", "Gallery");
+
 include_once("../../header.php");
 include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."includes/util/html_funcs.php");

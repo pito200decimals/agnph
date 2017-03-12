@@ -2,6 +2,8 @@
 // Page for uploading a post. Handles both upload form and the upload itself
 // (which redirects to the post page after success).
 
+define("PRETTY_PAGE_NAME", "Gallery");
+
 include_once("../header.php");
 include_once(SITE_ROOT."includes/util/file.php");
 include_once(SITE_ROOT."gallery/includes/functions.php");
