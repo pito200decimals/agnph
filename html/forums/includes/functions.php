@@ -6,12 +6,18 @@ include_once(SITE_ROOT."includes/util/table_data.php");
 
 function CanGuestViewBoard($board) {
     if ($board['PrivateBoard'] == 1) return false;
+    if (isset($board['parentBoard'])) {
+        if (!CanGuestViewBoard($board['parentBoard'])) return false;
+    }
     return true;
 }
 function CanUserViewBoard($user, $board) {
     if (!IsUserActivated($user)) return false;
     if ($user['ForumsPermissions'] == 'A') return true;
     if ($board['PrivateBoard'] == 1) return false;
+    if (isset($board['parentBoard'])) {
+        if (!CanUserViewBoard($user, $board['parentBoard'])) return false;
+    }
     return true;
 }
 function CanUserCreateThread($user, $board) {

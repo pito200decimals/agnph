@@ -81,8 +81,15 @@ if (isset($user)) {
     // Set up permissions.
     $vars['canReply'] = CanUserPostToThread($user, $thread);
 }
-GetBoard($thread['ParentBoardId'], $board);
 // For board, show the board containing this thread (no link for this thread in the breadcrumb bar).
+GetBoard($thread['ParentBoardId'], $board);
+// Check board-level permissions for thread-level viewing permissions.
+if (isset($board) && (CanGuestViewBoard($board) || (isset($user) && CanUserViewBoard($user, $board)))) {
+    // User/Guest has permissions to view child thread.
+} else {
+    RenderErrorPage("Thread not found");  // Insufficient permissions.
+    return;
+}
 $vars['board'] = $board;
 $vars['iterator'] = $iterator;
 
