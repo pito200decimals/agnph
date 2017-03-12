@@ -19,7 +19,15 @@ function Login($username, $password) {
 
 function LoginNormal($username, $password) {
     $escapedName = sql_escape($username);
-    if (!sql_query_into($result, "SELECT UserId,UserName,Email,Password FROM ".USER_TABLE." WHERE (UPPER(UserName)=UPPER('$escapedName') OR UPPER(Email)=UPPER('$escapedName')) AND Usermode<>0 AND RegisterIP<>'' LIMIT 1;", 1)) {
+    if (!sql_query_into($result,
+        "SELECT UserId,UserName,Email,Password FROM ".USER_TABLE."
+        WHERE
+        (UPPER(UserName)=UPPER('$escapedName') OR
+         (UPPER(Email)=UPPER('$escapedName') AND
+          NOT(UserName LIKE '".IMPORTED_ACCOUNT_USERNAME_PREFIX."%'))) AND
+        Usermode<>0 AND
+        RegisterIP<>''
+        LIMIT 1;", 1)) {
         return false;
     }
     $usr = $result->fetch_assoc();
