@@ -106,6 +106,17 @@ do_or_die(sql_query(
         PRIMARY KEY(Name)
     ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 
+do_or_die(sql_query(
+    "CREATE TABLE ".USER_VISIT_TABLE." (
+        GuestId VARCHAR(30) NOT NULL,".  // UserId or PHP Session id.
+       "VisitTime INT(11) NOT NULL,
+        VisitIP VARCHAR(45) NOT NULL,
+        PageUrl VARCHAR(40) NOT NULL,
+        PhpPage VARCHAR(40) NOT NULL,
+        PageName VARCHAR(40) NOT NULL,
+        PRIMARY KEY(GuestId)
+    ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
+
 ///////////////////
 // Forums tables //
 ///////////////////

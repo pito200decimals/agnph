@@ -19,6 +19,7 @@ define("SITE_TAG_ALIAS_TABLE", SQL_TABLE_PREFIX."tag_aliases");
 define("SITE_LOGGING_TABLE", SQL_TABLE_PREFIX."action_log");
 define("SITE_SETTINGS_TABLE", SQL_TABLE_PREFIX."site_settings");
 define("SECURITY_EMAIL_TABLE", SQL_TABLE_PREFIX."account_recovery");
+define("USER_VISIT_TABLE", SQL_TABLE_PREFIX."user_visit");
 
 // User content data tables.
 define("USER_TABLE", SQL_TABLE_PREFIX."user");

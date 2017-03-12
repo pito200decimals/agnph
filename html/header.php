@@ -34,6 +34,7 @@ include_once(SITE_ROOT."includes/util/logging.php");
 include_once(SITE_ROOT."includes/util/user.php");
 include_once(SITE_ROOT."includes/util/logging.php");
 include_once(SITE_ROOT."includes/util/browser.php");
+include_once(SITE_ROOT."includes/util/user_activity.php");
 // Authenticate logged-in user.
 include_once(SITE_ROOT."includes/auth/auth.php");
 
@@ -53,6 +54,7 @@ if (isset($user)) {
         sql_query("UPDATE ".USER_TABLE." SET LastVisitTime=$now WHERE UserId=".$user['UserId'].";");
     }
 }
+MarkUserVisit();
 
 $vars['debug'] = DEBUG;
 $vars['version'] = VERSION;
