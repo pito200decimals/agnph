@@ -83,8 +83,14 @@ function GetUserActivityStats() {
 }
 
 function GetNumGuests() {
+    include(SITE_ROOT."includes/util/blacklisted_visit_urls.php");
+    $escaped_url_list = implode(",", array_map(function($s) { $s = sql_escape($s); return "'$s'"; }, $BLACKLISTED_VISIT_URLS));
     $time_limit = time() - CONSIDERED_ONLINE_DURATION;
-    if (sql_query_into($result, "SELECT COUNT(*) FROM ".USER_VISIT_TABLE." WHERE LENGTH(GuestId) > 20 AND VisitTime>$time_limit;", 1)) {
+    if (sql_query_into($result,
+        "SELECT COUNT(*) FROM ".USER_VISIT_TABLE." WHERE
+        LENGTH(GuestId) > 20 AND
+        VisitTime>$time_limit AND
+        NOT(PageUrl IN ($escaped_url_list));", 1)) {
         return $result->fetch_assoc()['COUNT(*)'];
     }
     return 0;
@@ -106,6 +112,21 @@ function GetNewestMember() {
         return $result->fetch_assoc();
     }
     return null;
+}
+
+function GetCurrentPageviewStats($duration=null) {
+    if ($duration != null) {
+        $time_limit = time() - $duration;
+    } else {
+        $time_limit = time() - CONSIDERED_ONLINE_DURATION;
+    }
+    $stats = array();
+    if (sql_query_into($result, "SELECT PageUrl, COUNT(*) AS C FROM ".USER_VISIT_TABLE." WHERE VisitTime>$time_limit GROUP BY PageUrl ORDER BY C DESC;", 1)) {
+        while ($row = $result->fetch_assoc()) {
+            $stats[$row['PageUrl']] = $row['C'];
+        }
+    }
+    return $stats;
 }
 
 ?>

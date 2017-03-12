@@ -148,6 +148,7 @@ RewriteRule ^about/account/?$ /about/index.php?q=account
 
 #Rewrites for admin pages
 RewriteRule ^admin/?$ /admin/site/site.php
+RewriteRule ^admin/stats/?$ /admin/site/stats.php [QSA]
 RewriteRule ^admin/log/?$ /admin/site/log.php?filter=site [QSA]
 RewriteRule ^admin/forums/?$ /admin/forums/forums.php
 RewriteRule ^admin/forums/log/?$ /admin/site/log.php?filter=forums [QSA]

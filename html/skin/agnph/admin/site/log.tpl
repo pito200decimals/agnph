@@ -2,6 +2,7 @@
 
 {% block sub_section_navigation %}
     <li id=""><a href="/admin/">Settings</a></li>
+    <li id=""><a href="/admin/stats/">Stats</a></li>
     <li class="selected-admin-tab"><a href="/admin/log/">Log</a></li>
 {% endblock %}
 
