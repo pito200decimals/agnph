@@ -13,12 +13,14 @@
 {% block styles %}
     {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('/irc-style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/user-activity-style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('/comments-style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('/index-style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('/fics/index-style.css') }}" />
 {% endblock %}
 
 {% use 'includes/irc-block.tpl' %}
+{% use 'includes/user-activity-block.tpl' %}
 
 {% macro storyitem(story) %}
     {% import 'fics/stars.tpl' as stars %}
@@ -131,6 +133,9 @@
                         {{ block('irc_block') }}
                     </div>
                 {% endif %}
+                <div class="desktop-only">
+                    {{ block('user_activity_block') }}
+                </div>
             </div>
         </div>
     </div>

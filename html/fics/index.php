@@ -55,6 +55,7 @@ if (is_numeric($num_recent)) {
         $vars['recent_stories'] = $rand;
     }
 }
+$vars['user_activity'] = GetUserActivityStats();
 
 RenderPage("fics/index.tpl");
 return;

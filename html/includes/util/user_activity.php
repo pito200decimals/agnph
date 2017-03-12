@@ -74,6 +74,14 @@ function IsIdUser($id) {
     return mb_strlen("$id") <= 20;
 }
 
+function GetUserActivityStats() {
+    $stats = array();
+    $stats['users_online'] = sizeof(GetBrowsingUsers());
+    $stats['guests_online'] = GetNumGuests();
+    $stats['newest_member'] = GetNewestMember();
+    return $stats;
+}
+
 function GetNumGuests() {
     $time_limit = time() - CONSIDERED_ONLINE_DURATION;
     if (sql_query_into($result, "SELECT COUNT(*) FROM ".USER_VISIT_TABLE." WHERE LENGTH(GuestId) > 20 AND VisitTime>$time_limit;", 1)) {
@@ -91,6 +99,13 @@ function GetBrowsingUsers() {
         }
     }
     return $users;
+}
+
+function GetNewestMember() {
+    if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE Usermode=1 ORDER BY JoinTime DESC LIMIT 1;", 1)) {
+        return $result->fetch_assoc();
+    }
+    return null;
 }
 
 ?>
