@@ -115,7 +115,8 @@ do_or_die(sql_query(
         PhpPage VARCHAR(40) NOT NULL,
         PageName VARCHAR(40) NOT NULL,
         UserAgent VARCHAR(200) NOT NULL,
-        UNIQUE(GuestId) PRIMARY KEY(VisitIP)
+        UNIQUE(GuestId),
+        PRIMARY KEY(VisitIP)
     ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 
 ///////////////////

@@ -43,12 +43,23 @@ if (HIDE_IMPORTED_ACCOUNTS_FROM_USER_LIST) {
 $search_clause = "WHERE $search_clause";
 
 $accounts = array();
-CollectItems(USER_TABLE, "$search_clause ORDER BY ".GetQueryOrder(), $accounts, USERS_LIST_ITEMS_PER_PAGE, $iterator, "No users found.");
+//CollectItems(USER_TABLE, "$search_clause ORDER BY ".GetQueryOrder(), $accounts, USERS_LIST_ITEMS_PER_PAGE, $iterator, "No users found.");
+$sql_order = "$search_clause ORDER BY ".GetQueryOrder();
+CollectItemsComplex(USER_TABLE,
+    "SELECT * FROM ".USER_TABLE." T
+    LEFT JOIN ".USER_VISIT_TABLE." V ON CAST(T.UserId AS CHAR)=V.GuestId
+    $sql_order",
+    "SELECT count(*) as ListSize FROM ".USER_TABLE." T
+    LEFT JOIN ".USER_VISIT_TABLE." V ON CAST(T.UserId AS CHAR)=V.GuestId
+    $sql_order",
+    $accounts, USERS_LIST_ITEMS_PER_PAGE, $iterator, "No users found.");
 
 foreach ($accounts as &$account) {
+    $now = time();
     $account['dateJoined'] = FormatDate($account['JoinTime'], USERLIST_DATE_FORMAT);
-    if ($account['LastVisitTime'] + CONSIDERED_ONLINE_DURATION > $now && !$account['HideOnlineStatus']) {
+    if ($account['LastVisitTime'] > $now - CONSIDERED_ONLINE_DURATION && !$account['HideOnlineStatus']) {
         $account['online'] = true;
+        $account['viewingPage'] = $account['PageName'];
     }
     $account['administrator'] = (strlen($account['Permissions']) > 0);
     $account['inactive'] = startsWith($account['UserName'], IMPORTED_ACCOUNT_USERNAME_PREFIX);
@@ -77,7 +88,7 @@ function OnlineStatusOrder($order) {
     // Avoids situations where users marked as "don't show online" show up above online users.
     $now = time();
     $cutoff_time = $now - CONSIDERED_ONLINE_DURATION;
-    return "(CASE WHEN LastVisitTime >= $cutoff_time AND HideOnlineStatus=0 THEN 1 ELSE 0 END) $order, LastVisitTime $order";
+    return "(CASE WHEN LastVisitTime >= $cutoff_time AND HideOnlineStatus=0 THEN 1 ELSE 0 END) $order, VisitTime $order, LastVisitTime $order";
 }
 
 function GetQueryOrder() {

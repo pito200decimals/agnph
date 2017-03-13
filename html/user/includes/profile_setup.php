@@ -12,8 +12,17 @@ if (!isset($_GET['uid']) || !is_numeric($_GET['uid'])) {
 $profile_id = (int)$_GET['uid'];
 if (!LoadAllUserPreferences($profile_id, $profile_user, true)) RenderErrorPage("Error loading profile");
 $profile_user['avatarURL'] = GetAvatarURL($profile_user);
-if ($profile_user['LastVisitTime'] + CONSIDERED_ONLINE_DURATION > time() && !$profile_user['HideOnlineStatus']) {
-    $profile_user['online'] = true;
+if ($profile_user['HideOnlineStatus']) {
+    // Always show as offline.
+    $profile_user['online'] = false;
+} else {
+    // Check more accurate visit table.
+    if (sql_query_into($result, "SELECT VisitTime FROM ".USER_VISIT_TABLE." WHERE GuestId='$profile_id';", 1)) {
+        $profile_user['LastVisitTime'] = $result->fetch_assoc()['VisitTime'];
+    }
+    if ($profile_user['LastVisitTime'] + CONSIDERED_ONLINE_DURATION > time()) {
+        $profile_user['online'] = true;
+    }
 }
 switch ($profile_user['Gender']) {
     case 'U':

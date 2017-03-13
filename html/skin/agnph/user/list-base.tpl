@@ -41,6 +41,7 @@
                 <td><strong><a href="{{ nameSortUrl }}">Name</a></strong>{% if sortParam == "name" %}{{ block('sortArrow') }}{% endif %}</td>
                 <td><strong><a href="{{ positionSortUrl }}">Position</a></strong>{% if sortParam == "position" %}{{ block('sortArrow') }}{% endif %}</td>
                 <td><span class="desktop-only"><strong><a href="{{ registerSortUrl }}">Date Registered</a></strong>{% if sortParam == "register" %}{{ block('sortArrow') }}{% endif %}</span></td>
+                <td><span class="desktop-only"><strong>Viewing Page</strong></span></td>
             </tr>
         </thead>
         <tbody>
@@ -75,6 +76,7 @@
                             {% endif %}
                         </td>
                         <td><span class="desktop-only">{{ account.dateJoined }}</span></td>
+                        <td><span class="desktop-only">{{ account.viewingPage }}</span></td>
                     </tr>
                 {% endfor %}
             {% else %}
