@@ -84,13 +84,13 @@ function GetUserActivityStats() {
 
 function GetNumGuests() {
     include(SITE_ROOT."includes/util/blacklisted_visit_urls.php");
-    $escaped_url_list = implode(",", array_map(function($s) { $s = sql_escape($s); return "'$s'"; }, $BLACKLISTED_VISIT_URLS));
+    $escaped_url_list = implode(" AND ", array_map(function($s) { return "NOT(PageUrl REGEXP '$s')"; }, $BLACKLISTED_VISIT_URL_REGEXES));
     $time_limit = time() - CONSIDERED_ONLINE_DURATION;
     if (sql_query_into($result,
         "SELECT COUNT(*) FROM ".USER_VISIT_TABLE." WHERE
         LENGTH(GuestId) > 20 AND
         VisitTime>$time_limit AND
-        NOT(PageUrl IN ($escaped_url_list));", 1)) {
+        $escaped_url_list;", 1)) {
         return $result->fetch_assoc()['COUNT(*)'];
     }
     return 0;
@@ -121,9 +121,14 @@ function GetCurrentPageviewStats($duration=null) {
         $time_limit = time() - CONSIDERED_ONLINE_DURATION;
     }
     $stats = array();
-    if (sql_query_into($result, "SELECT PageUrl, COUNT(*) AS C FROM ".USER_VISIT_TABLE." WHERE VisitTime>$time_limit GROUP BY PageUrl ORDER BY C DESC;", 1)) {
+    include(SITE_ROOT."includes/util/blacklisted_visit_urls.php");
+    $escaped_url_list = implode(" AND ", array_map(function($s) { return "NOT(PageUrl REGEXP '$s')"; }, $BLACKLISTED_VISIT_URL_REGEXES));
+    if (sql_query_into($result, "SELECT PageUrl, COUNT(*) AS C, IF($escaped_url_list, 0, 1) AS B FROM ".USER_VISIT_TABLE." WHERE VisitTime>$time_limit GROUP BY PageUrl ORDER BY C DESC, PageUrl ASC;", 1)) {
         while ($row = $result->fetch_assoc()) {
-            $stats[$row['PageUrl']] = $row['C'];
+            $stats[$row['PageUrl']] = array(
+                "Count" => $row['C'],
+                "Blacklisted" => $row['B']
+            );
         }
     }
     return $stats;

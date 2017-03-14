@@ -6,6 +6,15 @@
     <li><a href="/admin/log/">Log</a></li>
 {% endblock %}
 
+{% block styles %}
+    {{ parent() }}
+    <style>
+        .strike {
+            text-decoration: line-through;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
     <h3>Site Visit Stats</h3>
     {{ block('banner') }}
@@ -26,10 +35,18 @@
             {% for stat in stats %}
             <tr>
                 <td>
-                    {{ stat.PageUrl }}
+                    {% if not stat.Blacklisted %}
+                        <a href="{{ stat.PageUrl }}">{{ stat.PageUrl }}</a>
+                    {% else %}
+                        <span class="strike">{{ stat.PageUrl }}</span>
+                    {% endif %}
                 </td>
                 <td>
-                    {{ stat.Count }}
+                    {% if not stat.Blacklisted %}
+                        <a href="{{ stat.PageUrl }}">{{ stat.Count }}</a>
+                    {% else %}
+                        <span class="strike">{{ stat.Count }}</span>
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}

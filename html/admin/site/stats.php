@@ -24,10 +24,11 @@ if (isset($_GET['duration'])) {
 }
 $stats = GetCurrentPageviewStats($duration);
 $stat_list = array();
-foreach ($stats as $page => $count) {
+foreach ($stats as $page => $data) {
     $stat_list[] = array(
         'PageUrl' => $page,
-        'Count' => $count,
+        'Count' => $data['Count'],
+        'Blacklisted' => $data['Blacklisted'],
     );
 }
 $vars['stats'] = $stat_list;

@@ -3,6 +3,6 @@
 //
 // Add URLs here that are suspected to be hit by bots.
 
-$BLACKLISTED_VISIT_URLS = array(
+$BLACKLISTED_VISIT_URL_REGEXES = array(
 );
 ?>
