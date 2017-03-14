@@ -12,7 +12,13 @@ if (!isset($user)) {
     return;
 }
 ComputePageAccess($user);
-if (!$vars['canAdminSite']) {
+// Note: All admins can view direct links to this page.
+if (!(
+    $vars['canAdminSite'] ||
+    $vars['canAdminForums'] ||
+    $vars['canAdminGallery'] ||
+    $vars['canAdminFics'] ||
+    $vars['canAdminOekaki'])) {
     DoRedirect();
 }
 $vars['is_maintenance_mode'] = IsMaintenanceMode();
