@@ -8,6 +8,7 @@
 
 {% block styles %}
     {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('/list-style.css') }}" />
     <style>
         .strike {
             text-decoration: line-through;
@@ -20,7 +21,7 @@
     {{ block('banner') }}
     <a href="/admin/stats/">Current Stats</a>
     <a href="/admin/stats/?duration=day">Day Stats</a>
-    <table>
+    <table class="list-table">
         <thead>
             <tr>
                 <td>
