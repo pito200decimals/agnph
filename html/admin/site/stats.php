@@ -29,15 +29,7 @@ if (isset($_GET['duration'])) {
     }
 }
 $stats = GetCurrentPageviewStats($duration);
-$stat_list = array();
-foreach ($stats as $page => $data) {
-    $stat_list[] = array(
-        'PageUrl' => $page,
-        'Count' => $data['Count'],
-        'Blacklisted' => $data['Blacklisted'],
-    );
-}
-$vars['stats'] = $stat_list;
+$vars['stats'] = $stats;
 
 $vars['admin_section'] = "site";
 RenderPage("admin/site/stats.tpl");

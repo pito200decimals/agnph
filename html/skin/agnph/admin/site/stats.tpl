@@ -29,6 +29,9 @@
                 <td>
                     Visit Count
                 </td>
+                <td>
+                    Blacklist Reason
+                </td>
             </tr>
         </thead>
         <tbody>
@@ -46,6 +49,11 @@
                         <a href="{{ stat.PageUrl }}">{{ stat.Count }}</a>
                     {% else %}
                         <span class="strike">{{ stat.Count }}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if stat.Blacklisted %}
+                        {{ stat.Reason }}
                     {% endif %}
                 </td>
             </tr>

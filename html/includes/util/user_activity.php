@@ -82,15 +82,25 @@ function GetUserActivityStats() {
     return $stats;
 }
 
-function GetNumGuests() {
+function GetBlacklistUrlSql() {
     include(SITE_ROOT."includes/util/blacklisted_visit_urls.php");
-    $escaped_url_list = implode(" AND ", array_map(function($s) { return "NOT(PageUrl REGEXP '$s')"; }, $BLACKLISTED_VISIT_URL_REGEXES));
+    return "(".implode(" AND ", array_map(function($s) { return "NOT(PageUrl REGEXP '$s')"; }, $BLACKLISTED_VISIT_URL_REGEXES)).")";
+}
+function GetBlacklistUASql() {
+    include(SITE_ROOT."includes/util/blacklisted_visit_urls.php");
+    return "(".implode(" AND ", array_map(function($s) { $s = sql_escape($s); return "NOT(UserAgent='$s')"; }, $BLACKLISTED_USER_AGENTS)).")";
+}
+
+function GetNumGuests() {
     $time_limit = time() - CONSIDERED_ONLINE_DURATION;
+    $blacklisted_url_condition = GetBlacklistUrlSql();
+    $blacklisted_user_agent_condition = GetBlacklistUASql();
     if (sql_query_into($result,
         "SELECT COUNT(*) FROM ".USER_VISIT_TABLE." WHERE
         LENGTH(GuestId) > 20 AND
         VisitTime>$time_limit AND
-        $escaped_url_list;", 1)) {
+        $blacklisted_url_condition AND
+        $blacklisted_user_agent_condition;", 1)) {
         return $result->fetch_assoc()['COUNT(*)'];
     }
     return 0;
@@ -120,14 +130,24 @@ function GetCurrentPageviewStats($duration=null) {
     } else {
         $time_limit = time() - CONSIDERED_ONLINE_DURATION;
     }
+    $blacklisted_url_condition = GetBlacklistUrlSql();
+    $blacklisted_user_agent_condition = GetBlacklistUASql();
     $stats = array();
-    include(SITE_ROOT."includes/util/blacklisted_visit_urls.php");
-    $escaped_url_list = implode(" AND ", array_map(function($s) { return "NOT(PageUrl REGEXP '$s')"; }, $BLACKLISTED_VISIT_URL_REGEXES));
-    if (sql_query_into($result, "SELECT PageUrl, COUNT(*) AS C, IF($escaped_url_list, 0, 1) AS B FROM ".USER_VISIT_TABLE." WHERE VisitTime>$time_limit GROUP BY PageUrl ORDER BY C DESC, PageUrl ASC;", 1)) {
+    if (sql_query_into($result,
+        "SELECT
+        PageUrl,
+        COUNT(*) AS C,
+        IF(NOT($blacklisted_user_agent_condition), 'UA', IF(NOT($blacklisted_url_condition), 'URL', '')) AS BReason
+        FROM ".USER_VISIT_TABLE." WHERE
+        VisitTime>$time_limit
+        GROUP BY PageUrl, BReason
+        ORDER BY C DESC, PageUrl ASC;", 1)) {
         while ($row = $result->fetch_assoc()) {
-            $stats[$row['PageUrl']] = array(
+            $stats[] = array(
+                "PageUrl" => $row['PageUrl'],
                 "Count" => $row['C'],
-                "Blacklisted" => $row['B']
+                "Blacklisted" => ($row['BReason']!=""),
+                "Reason" => $row['BReason'],
             );
         }
     }
