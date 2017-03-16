@@ -78,6 +78,8 @@ function GetUserActivityStats() {
     $stats = array();
     $stats['users_online'] = sizeof(GetBrowsingUsers());
     $stats['guests_online'] = GetNumGuests();
+    $day = 24*60*60;
+    $stats['unique_visits_today'] = sizeof(GetBrowsingUsers($day)) + GetNumGuests($day);
     $stats['newest_member'] = GetNewestMember();
     return $stats;
 }
@@ -91,8 +93,11 @@ function GetBlacklistUASql() {
     return "(".implode(" AND ", array_map(function($s) { $s = sql_escape($s); return "NOT(UserAgent='$s')"; }, $BLACKLISTED_USER_AGENTS)).")";
 }
 
-function GetNumGuests() {
-    $time_limit = time() - CONSIDERED_ONLINE_DURATION;
+function GetNumGuests($duration=null) {
+    if ($duration == null) {
+        $duration = CONSIDERED_ONLINE_DURATION;
+    }
+    $time_limit = time() - $duration;
     $blacklisted_url_condition = GetBlacklistUrlSql();
     $blacklisted_user_agent_condition = GetBlacklistUASql();
     if (sql_query_into($result,
@@ -106,8 +111,11 @@ function GetNumGuests() {
     return 0;
 }
 
-function GetBrowsingUsers() {
-    $time_limit = time() - CONSIDERED_ONLINE_DURATION;
+function GetBrowsingUsers($duration=null) {
+    if ($duration == null) {
+        $duration = CONSIDERED_ONLINE_DURATION;
+    }
+    $time_limit = time() - $duration;
     $users = array();
     if (sql_query_into($result, "SELECT * FROM ".USER_VISIT_TABLE." INNER JOIN ".USER_TABLE." ON GuestId=cast(UserId as CHAR) WHERE VisitTime>$time_limit AND HideOnlineStatus=0;", 1)) {
         while ($row = $result->fetch_assoc()) {

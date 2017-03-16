@@ -113,6 +113,8 @@ function FetchUserHeaderVars() {
     // User skin preferences.
     if (isset($user)) {
         $skin_setting = $user['Skin'];
+    } else if (isset($_COOKIE['Skin'])) {
+        $skin_setting = $_COOKIE['Skin'];
     } else if (isset($_SESSION['Skin'])) {
         $skin_setting = $_SESSION['Skin'];
     } else {
