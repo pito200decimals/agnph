@@ -57,9 +57,12 @@ CollectItemsComplex(USER_TABLE,
 foreach ($accounts as &$account) {
     $now = time();
     $account['dateJoined'] = FormatDate($account['JoinTime'], USERLIST_DATE_FORMAT);
-    if ($account['LastVisitTime'] > $now - CONSIDERED_ONLINE_DURATION && !$account['HideOnlineStatus']) {
-        $account['online'] = true;
-        $account['viewingPage'] = $account['PageName'];
+    if (!$account['HideOnlineStatus']) {
+        if ($account['VisitTime'] > $now - CONSIDERED_ONLINE_DURATION ||
+            $account['LastVisitTime'] > $now - CONSIDERED_ONLINE_DURATION) {
+            $account['online'] = true;
+            $account['viewingPage'] = $account['PageName'];
+        }
     }
     $account['administrator'] = (strlen($account['Permissions']) > 0);
     $account['inactive'] = startsWith($account['UserName'], IMPORTED_ACCOUNT_USERNAME_PREFIX);
@@ -88,7 +91,7 @@ function OnlineStatusOrder($order) {
     // Avoids situations where users marked as "don't show online" show up above online users.
     $now = time();
     $cutoff_time = $now - CONSIDERED_ONLINE_DURATION;
-    return "(CASE WHEN LastVisitTime >= $cutoff_time AND HideOnlineStatus=0 THEN 1 ELSE 0 END) $order, VisitTime $order, LastVisitTime $order";
+    return "(CASE WHEN (VisitTime > $cutoff_time OR LastVisitTime >= $cutoff_time) AND HideOnlineStatus=0 THEN 1 ELSE 0 END) $order, VisitTime $order, LastVisitTime $order";
 }
 
 function GetQueryOrder() {
