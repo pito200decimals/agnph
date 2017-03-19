@@ -30,6 +30,7 @@ if (isset($_GET['duration'])) {
     }
 }
 $column = "PageUrl";
+$vars['column_type'] = "Page URL";
 if (isset($_GET['type'])) {
     if ($_GET['type'] == "page") {
         $column = "PageUrl";
