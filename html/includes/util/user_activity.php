@@ -132,7 +132,7 @@ function GetNewestMember() {
     return null;
 }
 
-function GetCurrentPageviewStats($duration=null) {
+function GetCurrentPageviewStats($column="PageUrl", $duration=null) {
     if ($duration != null) {
         $time_limit = time() - $duration;
     } else {
@@ -143,16 +143,17 @@ function GetCurrentPageviewStats($duration=null) {
     $stats = array();
     if (sql_query_into($result,
         "SELECT
-        PageUrl,
+        $column,
         COUNT(*) AS C,
         IF(NOT($blacklisted_user_agent_condition), 'UA', IF(NOT($blacklisted_url_condition), 'URL', '')) AS BReason
         FROM ".USER_VISIT_TABLE." WHERE
         VisitTime>$time_limit
-        GROUP BY PageUrl, BReason
-        ORDER BY C DESC, PageUrl ASC;", 1)) {
+        GROUP BY $column, BReason
+        ORDER BY C DESC, $column ASC;", 1)) {
         while ($row = $result->fetch_assoc()) {
             $stats[] = array(
-                "PageUrl" => $row['PageUrl'],
+                "$column" => $row[$column],
+                "Value" => $row[$column],
                 "Count" => $row['C'],
                 "Blacklisted" => ($row['BReason']!=""),
                 "Reason" => $row['BReason'],

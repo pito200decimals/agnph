@@ -22,13 +22,27 @@ if (!(
     DoRedirect();
 }
 $vars['is_maintenance_mode'] = IsMaintenanceMode();
+
 $duration = CONSIDERED_ONLINE_DURATION;
 if (isset($_GET['duration'])) {
     if ($_GET['duration'] == 'day') {
         $duration = 24 * 60 * 60;
     }
 }
-$stats = GetCurrentPageviewStats($duration);
+$column = "PageUrl";
+if (isset($_GET['type'])) {
+    if ($_GET['type'] == "page") {
+        $column = "PageUrl";
+        $vars['column_type'] = "Page URL";
+    } elseif ($_GET['type'] == "useragent") {
+        $column = "UserAgent";
+        $vars['column_type'] = "User Agent";
+    } else {
+        RenderErrorPage("Unable to show stats");
+        return;
+    }
+}
+$stats = GetCurrentPageviewStats($column, $duration);
 $vars['stats'] = $stats;
 
 $vars['admin_section'] = "site";
