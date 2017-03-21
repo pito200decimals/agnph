@@ -173,25 +173,35 @@ function GetClause($search_term) {
     if (preg_match("/^summary:(.*)$/", $lower_term, $match)) {
         return ClauseForSummary($match[1]);
     }
-    
+
     // Strip "", if it exists. No multi-byte needed.
     // Allows for searching for terms that are also filters.
-    $search_term = str_replace("\"", "", $search_term);
+    $lower_term = str_replace("\"", "", $lower_term);
 
-    $tag = ClauseForTag($search_term);
-    $title = ClauseForTitle($search_term);
-    $author = ClauseForAuthor($search_term);
-    $summary = ClauseForSummary($search_term);
-    $ret = "";
-    if ($tag != null) $ret .= " OR ($tag)";
-    if ($title != null) $ret .= " OR ($title)";
-    if ($author != null) $ret .= " OR ($author)";
-    if ($summary != null) $ret .= " OR ($summary)";
-    if (mb_strlen($ret) > 0) {
-        // Starts with " OR ", remove this prefix.
-        $ret = mb_substr($ret, 4);
+    $tag = ClauseForTag($lower_term);
+    $title = ClauseForTitle($lower_term);
+    $author = ClauseForAuthor($lower_term);
+    $summary = ClauseForSummary($lower_term);
+
+    $clauses = array();
+    if ($tag != null) $clauses[] = "($tag)";
+    if ($title != null) $clauses[] = "($title)";
+    if ($author != null) $clauses[] = "($author)";
+    if ($summary != null) $clauses[] = "($summary)";
+
+    // Add any extraneous terms that people may search for.
+    if ($lower_term == "g") $clauses[] =  "(Rating='G')";
+    if ($lower_term == "pg") $clauses[] =  "(Rating='P')";
+    if ($lower_term == "pg-13") $clauses[] =  "(Rating='T')";
+    if ($lower_term == "r") $clauses[] =  "(Rating='R')";
+    if ($lower_term == "xxx") $clauses[] =  "(Rating='X')";
+
+    if (sizeof($clauses) == 0) {
+        return "FALSE";
+    } else {
+        $clauses = implode(" OR ", $clauses);
+        return "($clauses)";
     }
-    return $ret;
 }
 
 function ClauseForTag($tag_name) {

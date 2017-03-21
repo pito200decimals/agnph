@@ -79,6 +79,7 @@ function GetUserActivityStats() {
     $stats['users_online'] = sizeof(GetBrowsingUsers());
     $stats['guests_online'] = GetNumGuests();
     $day = 24*60*60;
+    $stats['users_today'] = sizeof(GetBrowsingUsers($day));
     $stats['unique_visits_today'] = sizeof(GetBrowsingUsers($day)) + GetNumGuests($day);
     $stats['newest_member'] = GetNewestMember();
     return $stats;
