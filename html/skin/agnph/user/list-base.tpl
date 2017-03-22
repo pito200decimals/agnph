@@ -29,7 +29,7 @@
             {% if orderParam %}<input type="hidden" name="order" value="{{ orderParam }}" />{% endif %}
             <label>Search by Name:</label>
             <div class="search">
-                <input class="search" name="search" value="{{ searchTerms }}" type="text" required placeholder="Search" onfocus="javascript:$(this).attr('placeholder', '');" onblur="javascript:$(this).attr('placeholder', 'Search');" />
+                <input class="search" name="search" value="{{ search }}" type="text" required placeholder="Search" onfocus="javascript:$(this).attr('placeholder', '');" onblur="javascript:$(this).attr('placeholder', 'Search');" />
                 <input type="submit" class="search-button" value="" />
             </div>
         </form>
