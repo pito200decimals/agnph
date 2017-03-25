@@ -38,7 +38,7 @@ if (isset($_GET['search'])) {
     $search_clause = "Usermode=1";
 }
 if (HIDE_IMPORTED_ACCOUNTS_FROM_USER_LIST) {
-    $search_clause .= " AND RegisterIP<>''";
+    $search_clause .= " AND ".ACCOUNT_NOT_IMPORTED_SQL_CONDITION;
 }
 $search_clause = "WHERE $search_clause";
 

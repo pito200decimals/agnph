@@ -46,7 +46,7 @@ if ($action == "send") {
         }
 
         // Ensure recipient exists (Don't send to accounts that have been imported.
-        if (!sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId=$ruid AND Usermode<>0 AND RegisterIP<>'';", 1)) {
+        if (!sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId=$ruid AND Usermode<>0 AND ".ACCOUNT_NOT_IMPORTED_SQL_CONDITION.";", 1)) {
             RenderErrorPage("User does not exist");
         }
 
@@ -73,7 +73,11 @@ if ($action == "send") {
             $ruid = -1;
         } else {
             $to_name = sql_escape($_POST['to']);
-            sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE DisplayName LIKE '$to_name';", 1) or RenderErrorPage("Unable to find user: ".$_POST['to']);
+            sql_query_into($result,
+                "SELECT *, (CASE WHEN ".ACCOUNT_NOT_IMPORTED_SQL_CONDITION." THEN 0 ELSE 1) AS IsImported
+                FROM ".USER_TABLE." WHERE
+                DisplayName LIKE '$to_name'
+                ORDER BY IsImported ASC;", 1) or RenderErrorPage("Unable to find user: ".$_POST['to']);
             $ruid = (int)$_POST['ruid'];
             $to_uid = $_POST['ruid'];
             if ($ruid != $to_uid) {
@@ -91,7 +95,7 @@ if ($action == "send") {
         $msgs = array();
         if ($ruid == -1) {
             // Send to all users.
-            if (sql_query_into($result, "SELECT UserId FROM ".USER_TABLE." WHERE Usermode=1 AND RegisterIP<>'';", 1)) {
+            if (sql_query_into($result, "SELECT UserId FROM ".USER_TABLE." WHERE Usermode=1 AND ".ACCOUNT_NOT_IMPORTED_SQL_CONDITION.";", 1)) {
                 while ($row = $result->fetch_assoc()) {
                     $ruid = $row['UserId'];
                     $msgs[] = "($uid, $ruid, -1, $now, '$escaped_title', '$escaped_message', 1)";

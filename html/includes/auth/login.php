@@ -24,9 +24,8 @@ function LoginNormal($username, $password) {
         WHERE
         (UPPER(UserName)=UPPER('$escapedName') OR
          (UPPER(Email)=UPPER('$escapedName') AND
-          NOT(UserName LIKE '".IMPORTED_ACCOUNT_USERNAME_PREFIX."%'))) AND
-        Usermode<>0 AND
-        RegisterIP<>''
+          ".ACCOUNT_NOT_IMPORTED_SQL_CONDITION.")) AND
+        Usermode<>0
         LIMIT 1;", 1)) {
         return false;
     }
@@ -60,7 +59,7 @@ function LoginImported($username, $password) {
     if (!sql_query_into($result,
         "SELECT UserId,UserName,Email,ImportForumsPassword,ImportGalleryPassword,ImportFicsPassword,ImportOekakiPassword
         FROM ".USER_TABLE."
-        WHERE (UPPER(UserName)=UPPER('$escapedName') OR UPPER(Email)=UPPER('$escapedEmail')) AND Usermode<>0 AND RegisterIP='';", 1)) {
+        WHERE (UPPER(UserName)=UPPER('$escapedName') OR UPPER(Email)=UPPER('$escapedEmail')) AND Usermode<>0 AND ".ACCOUNT_IMPORTED_SQL_CONDITION.";", 1)) {
         return false;
     }
     $fn_field_map = array(

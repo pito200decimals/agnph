@@ -66,7 +66,7 @@ function ProcessPost($hash_fn, $section, $field) {
         $escaped_username = sql_escape(IMPORTED_ACCOUNT_USERNAME_PREFIX.$username);
         $password = $_POST["$section-password"];
         $hashed_password = $hash_fn($username, $password);
-        if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UPPER(Username)=UPPER('$escaped_username') AND RegisterIP='';", 1)) {
+        if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UPPER(Username)=UPPER('$escaped_username') AND ".ACCOUNT_IMPORTED_SQL_CONDITION.";", 1)) {
             while ($old_user = $result->fetch_assoc()) {
                 if ($hashed_password == $old_user[$field]) {
                     $uid_to_migrate = $old_user['UserId'];
@@ -96,7 +96,7 @@ function ProcessPost($hash_fn, $section, $field) {
 function GetSimilarAccounts($email, $ignore_uid = -1) {
     $ret_array = array();
     $escaped_email = sql_escape($email);
-    if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId<>$ignore_uid AND Email='$escaped_email' AND RegisterIP='';", 1)) {
+    if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId<>$ignore_uid AND Email='$escaped_email' AND ".ACCOUNT_IMPORTED_SQL_CONDITION.";", 1)) {
         while ($row = $result->fetch_assoc()) {
             if (startsWith($row['UserName'], IMPORTED_ACCOUNT_USERNAME_PREFIX)) {
                 $username = substr($row['UserName'], strlen(IMPORTED_ACCOUNT_USERNAME_PREFIX));

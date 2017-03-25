@@ -14,7 +14,7 @@ if (!isset($_GET['query'])){
 }
 
 $escaped_prefix = sql_escape($_GET['query']);
-$where = "UPPER(DisplayName) LIKE UPPER('%$escaped_prefix%') AND Usermode=1 AND RegisterIP<>''";
+$where = "UPPER(DisplayName) LIKE UPPER('%$escaped_prefix%') AND Usermode=1 AND ".ACCOUNT_NOT_IMPORTED_SQL_CONDITION."";
 if (!sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE $where ORDER BY DisplayName LIMIT 5;", 0)) {
     AJAXErr();
 }

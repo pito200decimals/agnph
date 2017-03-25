@@ -64,7 +64,7 @@ if (isset($_POST['display-name']) &&
         // Search for display name, and current user (so that at least one result is returned).
         if ($valid_name) {
             // Search for name or self.
-            if (!sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE (UPPER(DisplayName)=UPPER('$escaped_display_name') AND RegisterIP<>'') OR UserId='$uid';", 1)) {
+            if (!sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE (UPPER(DisplayName)=UPPER('$escaped_display_name') AND ".ACCOUNT_NOT_IMPORTED_SQL_CONDITION.") OR UserId='$uid';", 1)) {
                 PostErrorMessage("Failed to change name");
                 $valid_name = false;
             } else {

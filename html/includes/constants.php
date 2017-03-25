@@ -130,6 +130,8 @@ define("MIN_PASSWORD_LENGTH", 4);  // Also present in register.tpl
 define("AVATAR_UPLOAD_EXTENSION", "png");
 define("MAX_AVATAR_UPLOAD_DIMENSIONS", 200);
 define("IMPORTED_ACCOUNT_USERNAME_PREFIX", "imported-");  // Normal usernames can't have hyphens.
+define("ACCOUNT_IMPORTED_SQL_CONDITION", "(UserName LIKE '".IMPORTED_ACCOUNT_USERNAME_PREFIX."%')");
+define("ACCOUNT_NOT_IMPORTED_SQL_CONDITION", "(NOT(".ACCOUNT_IMPORTED_SQL_CONDITION."))");
 define("MIN_COMMENT_STRING_SIZE", 10);  // TODO: Enforce everywhere.
 define("SITE_NEWS_SOURCE_BOARD_NAME_KEY", "SiteNewsBoardName");
 define("FORUMS_NEWS_SOURCE_BOARD_NAME_KEY", "ForumsNewsBoardName");

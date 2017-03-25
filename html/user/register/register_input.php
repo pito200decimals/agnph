@@ -80,7 +80,7 @@ if (isset($_POST['username']) &&
         "SELECT * FROM ".USER_TABLE." WHERE
         UPPER(UserName)=UPPER('$escaped_username') OR (
             UPPER(DisplayName)=UPPER('$escaped_username') AND
-            RegisterIP<>'')
+            ".ACCOUNT_NOT_IMPORTED_SQL_CONDITION.")
         LIMIT 1;", 1)) {
         // Exists a duplicate username.
         ShowErrorBanner("Username already taken.");
@@ -88,7 +88,7 @@ if (isset($_POST['username']) &&
     }
     $escaped_email = sql_escape($email);
     // Fail if Email taken with an activated account. Also helps in preventing spam.
-    if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UPPER(Email)=UPPER('$escaped_email') AND RegisterIP<>'' LIMIT 1;", 1)) {
+    if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UPPER(Email)=UPPER('$escaped_email') AND ".ACCOUNT_NOT_IMPORTED_SQL_CONDITION." LIMIT 1;", 1)) {
         // Exists a duplicate email on a non-imported account.
         ShowErrorBanner("Email address already in use.");
         $success = false;
