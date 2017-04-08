@@ -138,7 +138,6 @@ function HandlePost() {
                             UpdateBoardStats($post['ParentId']);
                         }
                         sql_query("DELETE FROM ".FORUMS_UNREAD_POST_TABLE." WHERE PostId=$id;");
-                        exit();
                         if (sizeof($posts) == 1) {
                             // Deleting only post on page.
                             if (isset($_GET['page']) && $_GET['page'] > 0) {
