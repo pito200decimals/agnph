@@ -1,0 +1,17 @@
+#gallery-search {
+    float: right;
+    display: inline-block;
+}
+#gallery-search input[type='text'].search {
+    margin-right: 0px;
+}
+#search-help-link {
+    font-size: 60%;
+    vertical-align: super;
+    padding: 0px;
+    margin-right: 10px;
+}
+
+@media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
+}
+

@@ -1,0 +1,42 @@
+/* TODO: Custom table style? */
+.list-table {
+    width: 100%;
+    border-style: none;
+    overflow: hidden;
+    -webkit-border-horizontal-spacing: 0px;
+    -webkit-border-vertical-spacing: 0px;
+    border-collapse: collapse;
+}
+.list-table thead td {
+    padding: 5px;
+    padding-left: 10px;
+    background-color: rgb(146,178,162);
+}
+.list-table tbody td {
+    padding: 5px;
+    padding-left: 10px;
+}
+.list-table tbody tr:nth-child(odd) td {
+    background-color: rgb(221,237,229);
+}
+.list-table tbody tr:nth-child(even) td {
+    background-color: rgb(206,222,214);
+}
+.list-table thead tr td:first-child {
+    border-radius: 15px 0 0 0;
+}
+.list-table thead tr td:last-child {
+    border-radius: 0 15px 0 0;
+}
+.list-table tbody {
+    border-radius: 0 0 15px 15px;
+}
+.list-table tbody tr:last-child {
+    border-radius: 0 0 15px 15px;
+}
+.list-table tbody tr:last-child td:first-child {
+    border-radius: 0 0 0 15px;
+}
+.list-table tbody tr:last-child td:last-child {
+    border-radius: 0 0 15px 0;
+}

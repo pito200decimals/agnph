@@ -1,0 +1,179 @@
+/* Global site skin colors */
+
+/* TODO: Site-wide a, body, etc */
+
+/* Reference:
+223,223,223 => 206,222,214
+239,239,239 => 221,237,229
+darker      => 146,178,162
+*/
+
+/* Lists */
+.list-table thead td {
+    background-color: rgb(146,178,162);
+}
+.list-table tbody tr:nth-child(odd) td {
+    background-color: rgb(221,237,229);
+}
+.list-table tbody tr:nth-child(even) td {
+    background-color: rgb(206,222,214);
+}
+/* Comments */
+.comment {
+    border-color: black;
+    background-color: white;
+}
+.commentheader {
+    background-color: rgb(221,237,229);
+}
+blockquote {
+    background-color: rgb(221,237,229);
+    border-color: rgb(127,127,127);
+}
+blockquote blockquote {
+    background-color: rgb(206,222,214); /* Darker */
+}
+blockquote blockquote blockquote {
+    background-color: rgb(146,178,162); /* Even darker */
+}
+.spoiler {
+    color: black;
+    background-color: black;
+}
+.spoiler:hover {
+    border-color: black;
+}
+/* Forums */  /* TODO */
+.board-group {
+    background-color: rgb(206,222,214);
+}
+.board-row td {
+    background-color: rgb(221,237,229);
+}
+.board-group-title {
+}
+.forums-help-block {
+    background-color: rgb(221,237,229);
+}
+.new-post-label {
+    background-color: rgb(255,191,0);
+}
+
+/* Gallery */
+.floatactionpanel {
+    border-color: rgb(0,0,0);
+    background-color: rgb(146,178,162);
+}
+.post-tile {
+    color: rgb(0,0,127);
+}
+.post-label {
+    background-color: rgb(206,222,214);
+}
+.posteditbox {
+    background-color: rgb(206,222,214);
+}
+.comment-section {
+    background-color: white;
+}
+
+/* Fics */
+.notesbox {
+    background-color: rgb(221,237,229);
+    border: 1px solid rgb(207,207,207);
+}
+.comments ul.tabs li{
+    background-color: rgb(206,222,214);
+    border-color: rgb(207,207,207);
+}
+.comments ul.tabs li.current{
+    background-color: rgb(221,237,229);
+    border-color: rgb(207,207,207);
+    border-bottom-color: rgba(0,0,0,0);
+}
+.comments .tab-content{
+    background-color: rgb(221,237,229);
+    border-color: rgb(207,207,207);
+}
+.storyblock {
+    padding: 1px 1px 1px 5px;
+    background-color: rgb(207,207,207);
+    box-shadow: none;
+}
+.storyblockcontainer {
+    background-color: white;
+}
+.storyblockheader {
+    background-color: white;
+    border-bottom: 1px solid black;
+    border-image: linear-gradient(to right, rgba(207,207,207,0) 0%, rgba(207,207,207,1) 25%, rgba(207,207,207,1) 75%, rgba(207,207,207,0) 100%);
+    border-image-slice: 1;
+}
+.storyblockinfo {
+    background-color: white;
+}
+.storyblockfooter {
+    background-color: white;
+    border-top: 1px solid black;
+    border-image: linear-gradient(to right, rgba(207,207,207,0) 0%, rgba(207,207,207,1) 25%, rgba(207,207,207,1) 75%, rgba(207,207,207,0) 100%);
+    border-image-slice: 1;
+}
+.chapter-row:hover {
+    background-color: rgb(206,222,214);
+}
+
+/* Oekaki */
+.oekaki-post-header {
+    background-color: rgb(206,222,214);
+}
+
+/* User profile */
+
+
+/* Shared site-wide settings */
+/* Search box */
+div.search {
+    background-color: rgba(255,255,255,0);
+	border-color: rgba(0,0,0,0.8);
+}
+input[type='text'].search {
+    background-color: rgb(255,255,255);
+	border: 1px solid rgba(0,0,0,0.8);
+}
+input[type='submit'].search-button {
+    background-color: rgb(191,191,207);
+	border: 1px solid rgba(0,0,0,0.8);
+}
+#search-help-link {
+    font-size: 80%;
+    color: white;
+}
+/* Banners */
+.banner-notification {
+    color: rgb(0,0,0);
+    box-shadow: 2px 2px 5px #07162D;
+}
+.banner-notification input {
+    background-color: rgba(0,0,0,0);
+}
+.green-banner {
+    background-color: rgb(85,153,85);
+}
+.red-banner {
+    background-color: rgb(153,85,85);
+}
+.blue-banner {
+    background-color: rgb(85,85,153);
+}
+/* Iterator styles */
+.iterator a {
+    border-color: rgb(126,168,147);
+    background-color: rgb(204,237,221);
+    /* Note: Don't set color to skin anchor color, too hard to see.*/
+}
+.iterator a:hover {
+    background-color: rgb(127,191,255);
+}
+.iterator .currentpage {
+    color: rgb(0,0,127);
+}

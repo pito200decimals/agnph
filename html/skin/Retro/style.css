@@ -1,0 +1,372 @@
+body {
+    background-color: rgb(139,139,126);
+    text-align: center;
+    padding: 0px;
+    margin: 0px;
+    font: 12px Arial;
+    font-family: Verdana, Helvetica, Arial, sans-serif;
+    color: #666;
+}
+a {
+    color: rgb(92,128,110);
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+#site-body-width-container {
+    display: inline-block;
+    text-align: left;
+    margin: 0px;
+    padding: 0px;
+    width: 80%;
+    max-width: 80%;
+    min-width: 1008px;
+}
+#site-header {
+    background-color: white;
+    border-radius: 18px 18px 0px 0px;
+    overflow: hidden;
+}
+#site-logo-container img {
+    display: block;
+}
+#site-navigation-container {
+    position: relative;
+}
+#site-navigation-container ul.site-navigation {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    text-align: right;
+    list-style: none;
+    font-size: 2em;
+    margin: 0px;
+    padding: 0px;
+    padding-right: 1em;
+    text-align: center;
+}
+#site-navigation-container .site-navigation li {
+    display: inline-block;
+}
+#site-navigation-container .site-navigation li a {
+    color: black;
+    font-family: Verdana, Helvetica, Arial, sans-serif;
+    text-decoration: none;
+}
+#page-title-bar {
+    background-color: #60666A;
+    padding: 1em;
+}
+#search-help-link {
+    color: white;
+}
+#main-body {
+    background-color: white;
+    border-radius: 0px 0px 18px 18px;
+    min-height: 800px;
+    position: relative;
+}
+#page-title-bar #page-title {
+    font-size: 1.5em;
+    color: white;
+}
+#left-content-panel {
+    float: left;
+    width: 160px;
+    position: relative;
+}
+#section-nav-tray-container {
+    overflow: hidden;  /* For clear limiting */
+}
+.animated-tray {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+    /* adds animation for all transitions */
+    -webkit-transition: .25s ease-in-out;
+    -moz-transition: .25s ease-in-out;
+    -o-transition: .25s ease-in-out;
+    transition: .25s ease-in-out;
+    -webkit-text-size-adjust: none;
+}
+#section-nav-checkbox {
+    display: none;
+}
+#section-nav-label {
+    display: none;
+    vertical-align: center;
+}
+#section-nav-tray-overlay {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0,0,0);
+    z-index: 999;  /* Always float above others */
+
+    visibility: hidden;
+    opacity: 0;
+}
+ul.section-nav {  /* Note: Sometimes composed */
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+    font-weight: bold;
+}
+.section-nav li {
+    margin: 0px;
+    padding: 0px;
+}
+.section-nav li a, .section-nav li input {
+    /* For input styling */
+    color: rgb(92,128,110);
+    font-weight: bold;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    box-sizing: border-box;  /* Input same width as anchor */
+    
+    display: block;
+    padding: 5px 0 5px 10px;
+    border-bottom: 1px solid #CCC;
+}
+.section-nav li a:hover, .section-nav li input:hover {
+    padding: 5px 0 5px 20px;
+    text-decoration: none;
+}
+/* Select dividers that follow a non-divider item, and aren't last in the list */
+.section-nav :not(.divider)+.divider:not(:last-child) {
+    padding: 10px;
+    border-bottom: 1px solid #CCC;
+}
+    display: none;
+.section-nav li.divider+.divider {
+}
+label[for] {
+    /* Make text unselectable */
+    -webkit-user-select: none; /* Chrome/Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+ */
+    /* Rules below not implemented in browsers yet */
+    -o-user-select: none;
+    user-select: none;
+}
+#left-content {
+    padding: 15px;
+    padding-right: 0px;
+    overflow: hidden;  /* For clear limiting */
+}
+#center-right-content-panel {
+    margin-left: 160px;
+    overflow: hidden;  /* For clear limiting */
+}
+#right-content-panel {
+    float: right;
+    width: 30%;
+    /* By default, hide right panel. */
+    display: none;
+}
+#right-content {
+    padding: 15px;
+    padding-left: 0px;
+}
+#center-content-panel {
+    /* By default, size to cover right panel. */
+    width: 100%;
+    margin-right: 0%;
+    /* To enable right panel, do:
+    width: 70%;
+    margin-right: 30%;
+    */
+}
+#content {
+    padding: 15px;
+}
+#main-content-footer {
+    width: 100%;
+    float: left;
+}
+#main-footer-container {
+    padding: 0px 15px 30px 15px;
+}
+#theme-switcher {
+    float: left;
+    font-size: 80%;
+}
+#theme-switcher-form {
+    display: inline-block;
+}
+.font-size-switcher-container {
+    float: right;
+    font-size: 80%;
+}
+.base-error-msg {
+    text-align: center;
+    font-size: 150%;
+    background-color: rgb(223,223,223);
+    border-radius: 18px;
+    padding: 20px;
+    vertical-align: center;
+}
+#footer {
+    color: rgb(0,0,0);
+    text-align: center;
+    margin: 0px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    padding: 0px;
+}
+#footer a {
+    color: rgb(0,63,0);
+    color: rgb(46,64,55);
+    text-decoration: none;
+}
+#footer a:hover {
+    text-decoration: underline;
+}
+
+
+/* Other site-wide related CSS */
+.form-box {
+    margin: 10px auto;
+    padding: 15px;
+    border-radius: 15px;
+}
+.list-search-bar {
+    margin-bottom: 10px;
+}
+.unread-messages {
+    font-weight: bold;
+    color: rgb(255,95,0);
+}
+span.radio-button-group {
+    display: inline-block;
+    margin-right: 20px;
+}
+/* Desktop small */
+@media only handheld, screen and (max-device-width: 1024px), screen and (max-width: 1024px) {
+    #site-body-width-container {
+        width: 100%;
+        max-width: 100%;
+        min-width: 100%;
+    }
+}
+/* Mobile */
+@media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
+    body {
+        padding-left: 50px;
+    }
+    #site-body-width-container {
+        width: 100%;
+        max-width: 100%;
+        min-width: 100%;
+    }
+    #site-header {
+        border-radius: 0px;
+    }
+    #site-logo-container img {
+        max-height: 50px;
+    }
+    #page-title-logo {
+        max-height: 24px;
+        float: left;
+    }
+    #main-body {
+        border-radius: 0px;
+    }
+    /* Associated CSS with left-menu tray */
+    #section-nav-label {
+        display: block;
+        cursor: pointer;
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        width: 50px;
+        height: 100%;
+        border-right: 1px solid #60666A;
+        background-color: #60666A;
+        background: linear-gradient(to right, white -100%, #60666A 100%);
+        background: linear-gradient(to right, #60666A 0%, white 200%);
+        text-align: center;
+        z-index: 999;  /* Always float above others */
+    }
+    #section-nav-label img {
+        position: absolute;
+        right: 6px;
+        max-width: 35px;
+        margin-top: 10px;
+    }
+    #section-nav-tray {
+        position: fixed;
+        top: 0px;
+        left: -175px;
+        width: 175px;
+        height: 100%;
+        background-color: white;
+        overflow-y: auto;
+        z-index: 999;  /* Always float above others */
+    }
+    #section-nav-checkbox:checked ~ #section-nav-label img {
+       transform: rotate(90deg);
+       -webkit-transform: rotate(90deg);
+       -ms-transform: rotate(90deg);
+    }
+    #section-nav-checkbox:checked ~ #section-nav-tray {
+        left: 0px;
+    }
+    #section-nav-checkbox:checked ~ #section-nav-label {
+        left: 175px;
+        width: 225px;
+        left: 0px;
+        background: linear-gradient(to right, #60666A 75%, white 125%);
+    }
+    #section-nav-checkbox:checked ~ #section-nav-tray-overlay {
+        visibility: visible;
+        opacity: 0.75;
+    }
+    ul.section-nav {  /* Note: Sometimes composed */
+    }
+    .section-nav li a, .section-nav li input {
+        padding: 10px 0 10px 10px;
+        font-size: 120%;
+    }
+    .section-nav li a:hover, .section-nav li input:hover {
+        padding: 10px 0 10px 20px;
+    }
+    /* Content CSS */
+    #center-right-content-panel {
+        display: table;
+    }
+    #right-content-panel {
+        display: table-footer-group;
+        width: 100%;
+        margin-right: 0%;
+    }
+    #right-content {
+        padding: 15px;
+        padding-left: 15px;
+        padding-top: 0px;
+    }
+    #center-content-panel {
+        display: table-header-group;
+        width: 100%;
+        margin-right: 0%;
+    }
+}
+
+@media only handheld, screen and (max-device-height: 400px), screen and (max-height: 400px) {
+    ul.section-nav {  /* Note: Sometimes composed */
+    }
+    .section-nav li a, .section-nav li input {
+        padding: 5px 0 5px 10px;
+    }
+    .section-nav li a:hover, .section-nav li input:hover {
+        padding: 5px 0 5px 15px;
+    }
+}

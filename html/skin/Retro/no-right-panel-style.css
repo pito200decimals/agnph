@@ -1,0 +1,7 @@
+#center-content-panel {
+    width: 100%;
+    margin-right: 0px;
+}
+#right-content-panel {
+    display: none;
+}

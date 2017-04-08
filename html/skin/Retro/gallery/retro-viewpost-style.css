@@ -1,0 +1,221 @@
+/* TODO: Fix colors, remove unused tuples */
+
+/* Panel layout */
+.sidepanel-list {
+    list-style: none;
+    padding: 0px;
+    display: block;
+}
+.sidepanel-list li {
+    display: block;
+    float: none;
+}
+.sidepanel-list h3 {
+    margin-bottom: 0px;
+}
+.side-search-pool {
+}
+.top-search-pool {
+    display: none;
+}
+
+/* Post parent/child/pool links */
+.parentbox, .poolbox {
+    margin: 5px;
+    border-radius: 5px;
+    padding: 5px;
+    box-shadow: 2px 2px 5px #07162D;
+}
+.parentbox p, .poolbox p {
+    margin: 0px 5px;
+}
+.poolbox a {
+    margin: 5px;
+}
+
+/* Post styling */
+.preview-img {
+    max-width: 100%;
+}
+.post-description {
+    margin: 5px;
+    border-radius: 5px;
+    padding: 5px;
+    box-shadow: 2px 2px 5px #07162D;
+}
+.post-description h4 {
+    margin-top: 0px;
+    margin-bottom: 5px;
+}
+
+/* Stats */
+.statlist {
+    margin: 0px;
+    padding: 0px;
+}
+.statlist li {
+    margin-left: 0px;
+    display: block;
+    overflow: hidden;
+    max-width: 275px;
+    padding: 0px;
+}
+.source-line {
+    text-overflow: ellipsis;
+}
+
+/* Actions */
+.actionlist {
+    margin: 0px;
+    padding: 0px;
+}
+.actionlist li {
+    margin-left: 0px;
+    display: block;
+    overflow: hidden;
+    max-width: 275px;
+    padding: 0px;
+}
+
+/* Navigation */
+.navlist {
+    margin: 0px;
+    padding: 0px;
+}
+.navlist li {
+    margin-left: 0px;
+    display: block;
+    overflow: hidden;
+    max-width: 275px;
+    padding: 0px;
+}
+
+/* Reverse image search */
+.reverse-image-search-list {
+    margin: 0px;
+    padding: 0px;
+}
+.reverse-image-search-list li {
+    margin-left: 0px;
+    display: block;
+    overflow: hidden;
+    max-width: 275px;
+    padding: 0px;
+    font-size: 80%;
+}
+
+#pooleditbox {
+    display: none;
+    margin: 5px;
+    margin-left: 20px;
+}
+#pool-edit-field {
+    outline: none;
+	border: 1px solid rgba(0,0,0,0.8);
+    border-radius: 10px 10px 10px 10px;
+    padding: 5px;
+}
+#poolautocomplete span {
+    font-weight: bold;
+}
+#poolactionworking {
+}
+.flageditbox {
+    display: none;
+}
+
+/* Edit form */
+.posteditbox {
+    margin: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: rgb(170,200,255);
+    float: left;
+    display: none;
+}
+.posteditbox td {
+    vertical-align: top;
+}
+.posteditbox input {
+    -webkit-box-sizing: border-box; /* <=iOS4, <= Android  2.3 */
+       -moz-box-sizing: border-box; /* FF1+ */
+            box-sizing: border-box; /* Chrome, IE8, Opera, Safari 5.1*/
+}
+.posteditbox textarea {
+    height: 75px;
+    -webkit-box-sizing: border-box; /* <=iOS4, <= Android  2.3 */
+       -moz-box-sizing: border-box; /* FF1+ */
+            box-sizing: border-box; /* Chrome, IE8, Opera, Safari 5.1*/
+}
+#parent {
+    max-width: 100px;
+}
+.textbox {
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Comments */
+#commentform {
+    display: none;
+}
+.comment-section {
+    background-color: white;
+    padding: 10px;
+}
+.comment-section-input {
+    text-align: center;
+}
+
+#left-content-panel {
+    width: 200px;
+}
+#center-right-content-panel {
+    margin-left: 200px;
+    overflow: hidden;  /* For clear limiting */
+}
+
+@media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {
+    .post-layout-container {
+        display: table;
+        table-layout:fixed;
+        overflow: hidden;
+    }
+    .sidepanel {
+        display: block;
+    }
+    .mainpanel {
+        display: table-header-group;
+    }
+    .parentbox p {
+        display: inline;
+    }
+    .preview-img {
+        width: 100%;
+    }
+    /* Float the sidepanel sections */
+    .sidepanel-list > li {
+        float: left;
+        margin: 5px;
+    }
+    .sidepanel-list > li:first-child {
+        float: none;
+    }
+    /* Re-flow tags */
+    .tagcategory > .taglist > .tag {
+        display: inline-block;
+    }
+    .tagcategory > .taglist {
+        display: block;
+    }
+    .taglist {
+        display: inline-block;
+    }
+    /* Move search box to top */
+    .side-search-pool {
+        display: none;
+    }
+    .top-search-pool {
+        display: block;
+    }
+}

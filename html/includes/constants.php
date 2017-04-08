@@ -73,7 +73,7 @@ define("MAX_BAN_REASON_LENGTH", 256);
 define("MAX_USER_TITLE_LENGTH", 64);
 define("MAX_USER_LOCATION_LENGTH", 64);
 define("MAX_USER_SPECIES_LENGTH", 32);
-define("DEFAULT_SKIN", "Aqua Blue");
+define("DEFAULT_SKIN", "Retro");
 define("DEFAULT_SKIN_SETTING", "default");
 // Forums related.
 define("MAX_FORUMS_BOARD_TITLE_LENGTH", 64);
@@ -231,9 +231,9 @@ define("DEFAULT_SHORT_BAN_DURATION", 7 * 24 * 60 * 60);  // 7 days, modifiable s
 define("DISPLAY_NAME_CHANGE_TIME_LIMIT", 24*60*60);  // Once a day.
 define("DISPLAY_NAME_CHANGE_TIME_LIMIT_STR", "24 hours");
 define("SECURITY_EMAIL_TABLE_SQL_CHECK_DELETE_INTERVAL", "'0:15' HOUR_MINUTE");  // Check every 15 minutes.
-define("REGISTER_ACCOUNT_TIMESTAMP_DURATION", 24*60*60);  // Set to expire after 24 hours.
+define("REGISTER_ACCOUNT_TIMESTAMP_DURATION", 3*24*60*60);  // Set to expire after 72 hours.
 define("REGISTER_ACCOUNT_HUMAN_READABLE_STRING", "72 hours");
-define("REGISTER_ACCOUNT_SQL_EVENT_DURATION", "72 HOUR");  // Delete user entry after 24 hours.
+define("REGISTER_ACCOUNT_SQL_EVENT_DURATION", "72 HOUR");  // Delete user entry after 72 hours.
 define("DEFAULT_EMAIL_EXPIRE_TIMESTAMP_DURATION", 60*60);  // Set to expire after 1 hour.
 define("DEFAULT_EMAIL_EXPIRE_HUMAN_READABLE_STRING", "1 hour");
 define("ALLOW_GALLERY_EDITS_AFTER_REGISTRATION_DEADLINE", 7 * 24 * 60 * 60);  // 7 days.

@@ -1,0 +1,35 @@
+h3 {
+    font-size: 150%;
+}
+.block {
+    margin-top: 10px;
+    margin-bottom: 30px;
+    width: 100%;
+    overflow-x: hidden;
+}
+.block .header {
+    font-weight: bold;
+    font-size: 120%;
+    padding: 5px;
+    border-bottom: 1px solid rgb(96,102,106);
+}
+.block .header .tagline {
+    padding: 5px;
+    font-size: 70%;
+    font-weight: normal;
+    float: right;
+}
+.block .content {
+    padding: 10px;
+}
+#center-content-panel .block .content {
+    padding-left: 50px;
+    padding-right: 50px;
+}
+#right-content-panel {
+    display: inherit;
+}
+#center-content-panel {
+    width: 70%;
+    margin-right: 30%;
+}

@@ -1,0 +1,13 @@
+.forums-breadcrumb-bar {
+    list-style: none;
+    padding: 0px;
+    font-size: 80%;
+}
+.forums-breadcrumb-bar li {
+    display: inline-block;
+    font-weight: bold;
+    margin: 5px;
+}
+.forums-breadcrumb-bar li a {
+    font-size: 120%;
+}
