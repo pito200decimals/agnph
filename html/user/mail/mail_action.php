@@ -74,7 +74,7 @@ if ($action == "send") {
         } else {
             $to_name = sql_escape($_POST['to']);
             sql_query_into($result,
-                "SELECT *, (CASE WHEN ".ACCOUNT_NOT_IMPORTED_SQL_CONDITION." THEN 0 ELSE 1) AS IsImported
+                "SELECT *, (CASE WHEN ".ACCOUNT_NOT_IMPORTED_SQL_CONDITION." THEN 0 ELSE 1 END) AS IsImported
                 FROM ".USER_TABLE." WHERE
                 DisplayName LIKE '$to_name'
                 ORDER BY IsImported ASC;", 1) or RenderErrorPage("Unable to find user: ".$_POST['to']);
