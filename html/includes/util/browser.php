@@ -192,7 +192,17 @@ function IsRealUser() {
         $_SESSION['user_is_not_bot'] = false;
         return false;
     }
-    if (strpos($useragent, "bot") !== FALSE) {
+    if (strpos($useragent, "bot") !== FALSE || strpos($useragent, "spider") !== FALSE) {
+        // Found a bot string.
+        $_SESSION['user_is_not_bot'] = false;
+        return false;
+    }
+    // Check for banned useragents.
+    include(SITE_ROOT."includes/util/blacklisted_visit_urls.php");
+    $pattern = "/(".implode("|", array_map(function($s) { return str_replace("/", "\\/", $s); }, $BLACKLISTED_USER_AGENT_REGEXES)).")/";
+    $matches = array();
+    $numMatches = preg_match($pattern, $useragent, $matches);
+    if($numMatches > 0) {
         // Found a bot string.
         $_SESSION['user_is_not_bot'] = false;
         return false;

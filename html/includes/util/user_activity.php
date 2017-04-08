@@ -91,7 +91,7 @@ function GetBlacklistUrlSql() {
 }
 function GetBlacklistUASql() {
     include(SITE_ROOT."includes/util/blacklisted_visit_urls.php");
-    return "(".implode(" AND ", array_map(function($s) { $s = sql_escape($s); return "NOT(UserAgent='$s')"; }, $BLACKLISTED_USER_AGENTS)).")";
+    return "(".implode(" AND ", array_map(function($s) { $s = sql_escape($s); return "NOT(UserAgent REGEXP '$s')"; }, $BLACKLISTED_USER_AGENT_REGEXES)).")";
 }
 
 function GetNumGuests($duration=null) {

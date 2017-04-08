@@ -77,6 +77,11 @@
                 } else {
                     $("#email-match-error").hide();
                 }
+                if (email.includes("@outlook.com") || email.includes("@hotmail.com")) {
+                    $("#email-domain-error").show();
+                } else {
+                    $("#email-domain-error").hide();
+                }
                 if (password.length == 0) {
                     err = true;
                     $("#pass-length-error").hide();
@@ -126,6 +131,7 @@
                 </li>
                 <li>
                     <label>Email:</label><input id="email" name="email" type="text" value="{{ email }}" />
+                    <p id="email-domain-error" class="form-error">We recommend <strong>against</strong> using an email account from @hotmail.com or @outlook.com since Microsoft will likely block your registration email (we're trying to fix this).</p>
                 </li>
                 <li>
                     <label>Repeat Email:</label><input id="email-confirm" name="email-confirm" type="text" value="{{ email }}" /><span id="email-match-error" class="form-error">Emails must match</span>

@@ -23,11 +23,13 @@ RewriteCond %{THE_REQUEST} /.+?\.tpl[\s?] [NC]
 RewriteRule ^ - [F]
 # Redirect subdomains.
 RewriteCond %{HTTP_HOST} ^forums.agn.ph.*$ [NC]
-RewriteRule ^ http://agn.ph/forums/ [R=301,L]
+RewriteRule ^ http://agn.ph/forums/ [R=302,L]
 RewriteCond %{HTTP_HOST} ^gallery.agn.ph.*$ [NC]
-RewriteRule ^ http://agn.ph/gallery/post/ [R=301,L]
+RewriteRule ^ http://agn.ph/gallery/post/ [R=302,L]
 RewriteCond %{HTTP_HOST} ^fics.agn.ph.*$ [NC]
-RewriteRule ^ http://agn.ph/fics/ [R=301,L]
+RewriteRule ^ http://agn.ph/fics/ [R=302,L]
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ http://%1/$1 [R=302,L]
 
 # Rewrites for Sitewide pages
 RewriteRule ^login/?$ /login.php
