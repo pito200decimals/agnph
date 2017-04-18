@@ -14,9 +14,14 @@ if (isset($_GET['code'])) {
             $url = $event['Redirect'];
             $_SESSION['auth_row'] = $event;
             Redirect("$url");
+        } else {
+            sql_query("DELETE FROM ".SECURITY_EMAIL_TABLE." WHERE Code='$escaped_code';");  // 1-time use code.
+            RenderErrorPage("Link has expired. Please request your change again.");
         }
+    } else {
+        InvalidURL();
     }
+} else {
+    InvalidURL();
 }
-// 404.
-InvalidURL();
 ?>
