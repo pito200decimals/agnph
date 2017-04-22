@@ -3,6 +3,7 @@
 {% block styles %}
     {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('/user/preferences-style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/tag-complete-style.css') }}" />
 {% endblock %}
 
 {% block scripts %}
@@ -36,6 +37,81 @@
             });
         });
     </script>
+    <script src="{{ asset('/scripts/jquery.autocomplete.min.js') }}"></script>
+    <script src="{{ asset('/scripts/tag-complete.js') }}"></script>
+    <script type="text/javascript">
+        var AddGalleryTag;
+        var OnEditSubmitGallery;
+        (function() {
+            var tag_search_url = '/gallery/tagsearch/';
+            function GetPreclass(pre) {
+                var preclass = null;
+                if (pre.toLowerCase() == 'artist') {
+                    preclass = 'atypetag';
+                }
+                if (pre.toLowerCase() == 'copyright') {
+                    preclass = 'btypetag';
+                }
+                if (pre.toLowerCase() == 'character') {
+                    preclass = 'ctypetag';
+                }
+                if (pre.toLowerCase() == 'species') {
+                    preclass = 'dtypetag';
+                }
+                if (pre.toLowerCase() == 'general') {
+                    preclass = 'mtypetag';
+                }
+                return preclass;
+            }
+            var fns = SetUpTagCompleter(tag_search_url, GetPreclass, ".g");
+            AddGalleryTag = fns.AddTag;
+            OnEditSubmitGallery = fns.OnEditSubmit;
+        })();
+        var AddFicsTag;
+        var OnEditSubmitFics;
+        (function() {
+            var tag_search_url = '/fics/tagsearch/';
+            function GetPreclass(pre) {
+                var preclass = null;
+                if (pre.toLowerCase() == 'category') {
+                    preclass = 'atypetag';
+                }
+                if (pre.toLowerCase() == 'series') {
+                    preclass = 'btypetag';
+                }
+                if (pre.toLowerCase() == 'character') {
+                    preclass = 'ctypetag';
+                }
+                if (pre.toLowerCase() == 'species') {
+                    preclass = 'dtypetag';
+                }
+                if (pre.toLowerCase() == 'general') {
+                    preclass = 'mtypetag';
+                }
+                if (pre.toLowerCase() == 'warning') {
+                    preclass = 'ztypetag';
+                }
+                return preclass;
+            }
+            var fns = SetUpTagCompleter(tag_search_url, GetPreclass, ".f");
+            AddFicsTag = fns.AddTag;
+            OnEditSubmitFics = fns.OnEditSubmit;
+        })();
+        
+        $(document).ready(function() {
+            {% for tag in gallery_blacklist_tags %}
+                AddGalleryTag('{{ tag.Name }}', '{{ tag.Type|lower }}');
+            {% endfor %}
+            {% for tag in fics_blacklist_tags %}
+                AddFicsTag('{{ tag.Name }}', '{{ tag.Type|lower }}');
+            {% endfor %}
+        });
+        
+        function OnEditSubmit() {
+            OnEditSubmitGallery();
+            OnEditSubmitFics();
+        }
+    </script>
 {% endblock %}
 
 {% block sidebar %}
@@ -56,7 +132,7 @@
             <li>L - Add to Pool</li>
         </ul>
     </div>
-    <form action="" method="POST" enctype="multipart/form-data" accept-charset="UTF=8">
+    <form action="" method="POST" enctype="multipart/form-data" accept-charset="UTF=8" onsubmit="OnEditSubmit()">
         <div class="infoblock">
             <input type="checkbox" id="basic-info-toggle" class="settings-toggle" checked />
             <label for="basic-info-toggle" class="info-section-header"><h3><span class="toggle-label"></span>Basic Info</h3></label>
@@ -188,7 +264,12 @@
                 </li>
                 <li>
                     <label for="gallery-tag-blacklist-input" class="basic-info-label">Tag Blacklist:</label>
-                    <textarea id="gallery-tag-blacklist-input" name="gallery-tag-blacklist">{{ profile.user.GalleryTagBlacklist }}</textarea>
+                    {% if not user.PlainGalleryTagging %}
+                        <ul class="g autocomplete-tag-list"></ul><textarea class="g autocomplete-tags" name="gallery-tag-blacklist" hidden>{{ profile.user.GalleryTagBlacklist }}</textarea><br />
+                        <input type="text" class="g textbox autocomplete-tag-input" />
+                    {% else %}
+                        <textarea id="gallery-tag-blacklist-input" name="gallery-tag-blacklist">{{ profile.user.GalleryTagBlacklist }}</textarea>
+                    {% endif %}
                 </li>
                 <li>
                     <label for="gallery-enable-keyboard-input" class="basic-info-label" id="keyboard-label">Enable keyboard shortcuts:</label>
@@ -214,7 +295,12 @@
                 </li>
                 <li>
                     <label for="fics-tag-blacklist-input" class="basic-info-label">Tag Blacklist:</label>
-                    <textarea id="fics-tag-blacklist-input" name="fics-tag-blacklist">{{ profile.user.FicsTagBlacklist }}</textarea>
+                    {% if not user.PlainFicsTagging %}
+                        <ul class="f autocomplete-tag-list"></ul><textarea class="f autocomplete-tags" name="fics-tag-blacklist" hidden>{{ profile.user.FicsTagBlacklist }}</textarea><br />
+                        <input type="text" class="f textbox autocomplete-tag-input" />
+                    {% else %}
+                        <textarea id="fics-tag-blacklist-input" name="fics-tag-blacklist">{{ profile.user.FicsTagBlacklist }}</textarea>
+                    {% endif %}
                 </li>
                 <li>
                     <label for="fics-plain-tagging-input" class="basic-info-label">Disable tagging UI:</label>

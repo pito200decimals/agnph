@@ -88,32 +88,39 @@
             }
         </script>
     {% endif %}
-    <script>
-        var tag_search_url = '/fics/tagsearch/';
-        function GetPreclass(pre) {
-            var preclass = null;
-            if (pre.toLowerCase() == 'category') {
-                preclass = 'atypetag';
-            }
-            if (pre.toLowerCase() == 'series') {
-                preclass = 'btypetag';
-            }
-            if (pre.toLowerCase() == 'character') {
-                preclass = 'ctypetag';
-            }
-            if (pre.toLowerCase() == 'species') {
-                preclass = 'dtypetag';
-            }
-            if (pre.toLowerCase() == 'general') {
-                preclass = 'mtypetag';
-            }
-            if (pre.toLowerCase() == 'warning') {
-                preclass = 'ztypetag';
-            }
-            return preclass;
-        }
-    </script>
     <script src="{{ asset('/scripts/tag-complete.js') }}"></script>
+    <script>
+        var AddTag;
+        var OnEditSubmit;
+        (function() {
+            var tag_search_url = '/fics/tagsearch/';
+            function GetPreclass(pre) {
+                var preclass = null;
+                if (pre.toLowerCase() == 'category') {
+                    preclass = 'atypetag';
+                }
+                if (pre.toLowerCase() == 'series') {
+                    preclass = 'btypetag';
+                }
+                if (pre.toLowerCase() == 'character') {
+                    preclass = 'ctypetag';
+                }
+                if (pre.toLowerCase() == 'species') {
+                    preclass = 'dtypetag';
+                }
+                if (pre.toLowerCase() == 'general') {
+                    preclass = 'mtypetag';
+                }
+                if (pre.toLowerCase() == 'warning') {
+                    preclass = 'ztypetag';
+                }
+                return preclass;
+            }
+            var fns = SetUpTagCompleter(tag_search_url, GetPreclass, ".f");
+            AddTag = fns.AddTag;
+            OnEditSubmit = fns.OnEditSubmit;
+        })();
+    </script>
     <script type="text/javascript">
         tinymce.init({
             selector: "textarea#summary",
@@ -301,8 +308,8 @@
                         {% endfor %}
                     });
                 </script>
-                <ul class="f autocomplete-tag-list"></ul><textarea class="autocomplete-tags" name="tags" hidden>{{ post.tagstring }}</textarea><br />
-                <input type="text" class="textbox autocomplete-tag-input" /><br />
+                <ul class="f autocomplete-tag-list"></ul><textarea class="f autocomplete-tags" name="tags" hidden>{{ post.tagstring }}</textarea><br />
+                <input type="text" class="f textbox autocomplete-tag-input" /><br />
             {% else %}
                 <textarea id="tags" class="tagbox" name="tags">{{ formstory.tagstring }}</textarea>
             {% endif %}

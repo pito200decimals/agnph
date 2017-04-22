@@ -422,6 +422,28 @@ if ($profile_user['Skin'] == DEFAULT_SKIN_SETTING) {
     $profile_user['skin'] = $profile_user['Skin'];
 }
 
+// Set up tagging info for blacklists.
+// Gallery.
+$tags = explode(" ", $profile_user['GalleryTagBlacklist']);
+$tag_matches = implode(" OR ", array_map(function($name) { return "(Name='$name')"; }, $tags));
+if (sql_query_into($result, "SELECT * FROM ".GALLERY_TAG_TABLE." WHERE $tag_matches ORDER BY Type DESC, Name DESC;", 1)) {
+    $tags = array();
+    while ($row = $result->fetch_assoc()) {
+        $tags[] = $row;
+    }
+    $vars['gallery_blacklist_tags'] = $tags;
+}
+// Fics.
+$tags = explode(" ", $profile_user['FicsTagBlacklist']);
+$tag_matches = implode(" OR ", array_map(function($name) { return "(Name='$name')"; }, $tags));
+if (sql_query_into($result, "SELECT * FROM ".FICS_TAG_TABLE." WHERE $tag_matches ORDER BY Type DESC, Name DESC;", 1)) {
+    $tags = array();
+    while ($row = $result->fetch_assoc()) {
+        $tags[] = $row;
+    }
+    $vars['fics_blacklist_tags'] = $tags;
+}
+ 
 // Init private visible statistics.
 if (isset($user)) {
     $vars['canEditBio'] = CanUserEditBio($user, $profile_user);
