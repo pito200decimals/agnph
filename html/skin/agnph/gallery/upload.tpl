@@ -8,27 +8,34 @@
 
 {% block scripts %}
     {{ parent() }}
+    <script src="{{ asset('/scripts/jquery.autocomplete.min.js') }}"></script>
+    <script src="{{ asset('/scripts/tag-complete.js') }}"></script>
     <script type="text/javascript">
-        var tag_search_url = '/gallery/tagsearch/';
-        function GetPreclass(pre) {
-            var preclass = null;
-            if (pre.toLowerCase() == 'artist') {
-                preclass = 'atypetag';
+        var OnEditSubmit;
+        (function() {
+            var tag_search_url = '/gallery/tagsearch/';
+            function GetPreclass(pre) {
+                var preclass = null;
+                if (pre.toLowerCase() == 'artist') {
+                    preclass = 'atypetag';
+                }
+                if (pre.toLowerCase() == 'copyright') {
+                    preclass = 'btypetag';
+                }
+                if (pre.toLowerCase() == 'character') {
+                    preclass = 'ctypetag';
+                }
+                if (pre.toLowerCase() == 'species') {
+                    preclass = 'dtypetag';
+                }
+                if (pre.toLowerCase() == 'general') {
+                    preclass = 'mtypetag';
+                }
+                return preclass;
             }
-            if (pre.toLowerCase() == 'copyright') {
-                preclass = 'btypetag';
-            }
-            if (pre.toLowerCase() == 'character') {
-                preclass = 'ctypetag';
-            }
-            if (pre.toLowerCase() == 'species') {
-                preclass = 'dtypetag';
-            }
-            if (pre.toLowerCase() == 'general') {
-                preclass = 'mtypetag';
-            }
-            return preclass;
-        }
+            var fns = SetUpTagCompleter(tag_search_url, GetPreclass, ".g");
+            OnEditSubmit = fns.OnEditSubmit;
+        })();
         $(document).ready(function() {
             function ResetImage() {
                 var file = $("#imgbrowse")[0];
@@ -56,8 +63,6 @@
             });
         });
     </script>
-    <script src="{{ asset('/scripts/jquery.autocomplete.min.js') }}"></script>
-    <script src="{{ asset('/scripts/tag-complete.js') }}"></script>
 
     {# script for fancy tagger UI #}
     {% if not user.PlainGalleryTagging %}
@@ -89,11 +94,11 @@
                 {% if not user.PlainGalleryTagging %}
                     <tr>
                         <td><label class="formlabel">Tags</label></td>
-                        <td><ul class="g autocomplete-tag-list"></ul><textarea class="autocomplete-tags" name="tags" hidden>{{ post.tagstring }}</textarea></td>
+                        <td><ul class="g autocomplete-tag-list"></ul><textarea class="g autocomplete-tags" name="tags" hidden>{{ post.tagstring }}</textarea></td>
                     </tr>
                     <tr>
                         <td><label class="formlabel">&nbsp;</label></td>
-                        <td><input type="text" class="textbox autocomplete-tag-input" /></td>
+                        <td><input type="text" class="g textbox autocomplete-tag-input" /></td>
                     </tr>
                 {% else %}
                     <tr>
