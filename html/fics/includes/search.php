@@ -84,7 +84,7 @@ function GetFicsBlacklistClauses($terms) {
     $blacklist_terms = array_filter($blacklist_terms, function($term) use ($terms) {
         return !in_array($term, $terms);
     });
-    $blacklist_terms = array_map(function($term) { return "-$term"; }, $blacklist_terms);
+    $blacklist_terms = array_map(function($term) { return "-tag:$term"; }, $blacklist_terms);
     return $blacklist_terms;
 }
 
