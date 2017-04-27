@@ -76,6 +76,9 @@ blockquote blockquote blockquote {
 .comment-section {
     background-color: white;
 }
+.post-description {
+    background-color: rgb(206,222,214);
+}
 
 /* Fics */
 .notesbox {
