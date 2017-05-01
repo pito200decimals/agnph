@@ -59,16 +59,18 @@
 
     {# Script for adding tags in fancy-tagger UI #}
     {% if post.Status!="D" %}
-        {% if not user.PlainGalleryTagging %}
-            <script>
-                $(document).ready(function() {
-                    {% for category in post.tagCategories %}
-                        {% for tag in category.tags %}
-                            AddTag('{{ tag.Name }}', '{{ tag.Type|lower }}');
+        {% if post.canEdit %}
+            {% if not user.PlainGalleryTagging %}
+                <script>
+                    $(document).ready(function() {
+                        {% for category in post.tagCategories %}
+                            {% for tag in category.tags %}
+                                AddTag('{{ tag.Name }}', '{{ tag.Type|lower }}');
+                            {% endfor %}
                         {% endfor %}
-                    {% endfor %}
-                });
-            </script>
+                    });
+                </script>
+            {% endif %}
         {% endif %}
     {% endif %}
 {% endblock %}
