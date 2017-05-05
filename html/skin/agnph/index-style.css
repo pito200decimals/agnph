@@ -26,7 +26,7 @@
     margin-top: 10px;
 }
 .block {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     width: 100%;
     overflow-x: hidden;
 }
@@ -43,6 +43,10 @@
 }
 .block .content {
     padding: 10px;
+}
+.block .footer {
+    padding: 5px;
+    padding-left: 25px;
 }
 
 @media only handheld, screen and (max-device-width: 820px), screen and (max-width: 820px) {

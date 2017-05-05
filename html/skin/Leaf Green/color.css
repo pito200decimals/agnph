@@ -92,6 +92,9 @@ a {
 .block .content {
     background-color: rgb(191,223,191);
 }
+.block .footer {
+    background-color: rgb(159,211,127);
+}
 /* Lists */
 .list-table thead td {
     background-color: rgb(130,185,100);

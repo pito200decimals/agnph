@@ -127,6 +127,9 @@
             <div class="content">
                 {% autoescape false %}{{ post.Text }}{% endautoescape %}
             </div>
+            <div class="footer">
+                <a href="/forums/thread/{{ post.PostId }}/">Comments ({{ post.Replies }})</a>
+            </div>
         </div>
     {% endfor %}
 {% endblock %}

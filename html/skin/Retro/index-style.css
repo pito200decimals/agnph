@@ -21,10 +21,19 @@ h3 {
 }
 .block .content {
     padding: 10px;
+    padding-bottom: 0px;
+}
+.block .footer {
 }
 #center-content-panel .block .content {
     padding-left: 50px;
     padding-right: 50px;
+}
+#center-content-panel .block .footer {
+    text-align: right;
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-bottom: 10px;
 }
 #right-content-panel {
     display: inherit;
