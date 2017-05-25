@@ -4,6 +4,7 @@
 include_once(SITE_ROOT."gallery/includes/functions.php");
 include_once(SITE_ROOT."gallery/includes/image.php");
 include_once(SITE_ROOT."includes/util/file.php");
+include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."includes/tagging/tag_functions.php");
 
 function InvalidActionBanner() {
@@ -74,10 +75,6 @@ function HandleFlagAction($post) {
         InsufficientPermissionBanner();
         return;
     }
-    if (!isset($_POST['reason'])) {
-        InvalidActionBanner();
-        return;
-    }
     // Possible status are:
     // - A: Approved
     // - P: Pending
@@ -90,9 +87,29 @@ function HandleFlagAction($post) {
         InvalidActionBanner();
         return;
     }
+
+    // Get reason text.
+    if (!isset($_POST['reason-select'])) {
+        InvalidActionBanner();
+        return;
+    }
+    $reason = $_POST['reason-select'];
+    if (contains($reason, "#")) {
+        // Require post number.
+        if (!isset($_POST['extra-reason-text'])) {
+            InvalidActionBanner();
+            return;
+        }
+        $post_number = $_POST['extra-reason-text'];
+        if (!is_numeric($post_number)) {
+            InvalidActionBanner();
+            return;
+        }
+        $post_number = (int)$post_number;
+        $reason = $reason.$post_number;
+    }
     $uid = $user['UserId'];
     $pid = $post['PostId'];
-    $reason = $_POST['reason'];
     $reason = SanitizeHTMLTags($reason, NO_HTML_TAGS);  // Strip all tags.
     $reason = mb_substr($reason, 0, MAX_GALLERY_POST_FLAG_REASON_LENGTH);  // Trim to max length.
     $escaped_reason = sql_escape(GetSanitizedTextTruncated($reason, NO_HTML_TAGS, MAX_GALLERY_POST_FLAG_REASON_LENGTH));

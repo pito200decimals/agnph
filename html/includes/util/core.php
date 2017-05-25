@@ -147,6 +147,33 @@ function SetSiteSetting($key, $value) {
     GetSiteSetting($key, $value, true);  // Refresh cache.
 }
 
+function GetSiteSettingArray($key) {
+    $key_prefix = $key."__";
+    $escaped_key_prefix = sql_escape($key_prefix);
+    $retval = array();
+    if (sql_query_into($result, "SELECT * FROM ".SITE_SETTINGS_TABLE." WHERE Name LIKE '$escaped_key_prefix%';", 1)) {
+        while ($row = $result->fetch_assoc()) {
+            $k = substr($row['Name'], strlen($key_prefix));
+            $retval[$k] = $row['Value'];
+        }
+    }
+    return $retval;
+}
+
+function SetSiteSettingArray($key, $value_array) {
+    $key_prefix = $key."__";
+    $escaped_key_prefix = sql_escape($key_prefix);
+    sql_query("DELETE FROM ".SITE_SETTINGS_TABLE." WHERE Name LIKE '$escaped_key_prefix%';");
+    $key_values = array();
+    foreach ($value_array as $k => $v) {
+        $db_key = $key_prefix.$k;
+        $escaped_db_key = sql_escape($db_key);
+        $escaped_db_value = sql_escape($v);
+        $key_values[] = "('$escaped_db_key', '$escaped_db_value')";
+    }
+    sql_query("INSERT INTO ".SITE_SETTINGS_TABLE." (Name, Value) VALUES ".implode(",", $key_values)." ON DUPLICATE KEY UPDATE Value=VALUES(Value);");
+}
+
 function DefaultUser() {
     $user = array(
         'DisplayName' => "Guest",

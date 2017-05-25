@@ -20,6 +20,29 @@
 
 {% block scripts %}
     {{ parent() }}
+    <script src="{{ asset('/scripts/jquery.sortable.js') }}"></script>
+    <script>
+        function AddReason(reason) {
+            if (reason == undefined || reason == null) {
+                reason = $("#add-reason-text").val();
+            }
+            if (reason.length == 0) return;
+            $("#add-reason-text").val("");
+            $("#flag-reason-list").append($('<li>'+reason+'<input type="hidden" name="flag_reason[]" value="'+reason+'" /><input style="margin-left: 10px;" type="button" value="Delete" onclick="DeleteReason(this)" /></li>'));
+            $(".sortable").sortable('destroy').sortable();
+        }
+        function DeleteReason(e) {
+            $(e).parent().remove();
+            $(".sortable").sortable('destroy').sortable();
+        }
+        $(document).ready(function() {
+            {% for reason in flag_reasons %}
+                AddReason("{{ reason }}");
+            {% endfor %}
+
+            $(".sortable").css("cursor", "move");
+        });
+    </script>
 {% endblock %}
 
 {% block content %}
@@ -28,6 +51,12 @@
     <form action="" method="POST" accept-encoding="UTF-8">
         <table>
             <tr><td><label>Board for News Posts:</label></td><td><input name="news-posts-board" type="text" value="{{ news_posts_board }}" /></td></tr>
+            <tr><td colspan="2">
+                <strong>Flag Reasons:</strong>
+                <ul id="flag-reason-list" class="sortable"></ul>
+                <input type="search" id="add-reason-text" />
+                <input type="button" onclick="AddReason()" value="Add Flag Reason" />
+            </td></tr>
         </table>
         <input type="submit" name="submit" value="Save Changes" />
     </form>

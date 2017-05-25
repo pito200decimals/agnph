@@ -140,6 +140,8 @@ if (isset($user)) {
 if ($post['Status'] != 'D') $post['NumViews']++;
 $vars['post'] = &$post;
 
+$vars['flag_reasons'] = GetPossibleFlagReasons();
+
 // Return API results if specified.
 if (isset($_GET['api'])) {
     $api_type = $_GET['api'];

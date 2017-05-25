@@ -90,13 +90,23 @@ function RemoveFromPool(poolid) {
     });
 }
 
+function RefreshFlagReasonExtraTextBox() {
+    var reason = $("#flag-reason-select").find(":selected").text();
+    if (reason.includes("#")) {
+        $("#extra-reason-text").show().prop("required", true);
+    } else {
+        $("#extra-reason-text").hide().prop("required", false);
+    }
+}
 
 
 // Flagging.
 $(document).ready(function() {
     $("#flagaction").click(function() {
+        RefreshFlagReasonExtraTextBox();
         $(".flageditbox").toggle();
-        $("#flag-edit-text").focus();
+        $("#flag-reason-select").focus();
         return false;
     }).text("Flag for Deletion");
+    $("#flag-reason-select").change(RefreshFlagReasonExtraTextBox);
 });

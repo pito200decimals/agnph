@@ -186,9 +186,14 @@
                             <a id="flagaction" href="#">{# No text for no javascript #}</a>
                             <div class="flageditbox">
                                 <form method="POST" accept-charset="UTF-8">
-                                    <label>Reason:</label><br />
+                                    <label for="flag-reason-select">Reason:</label><br />
                                     <input name="post" type="hidden" value="{{ post.PostId }}" />
-                                    <input id="flag-edit-text" name="reason" type="text" />
+                                    <select id="flag-reason-select" name="reason-select">
+                                        {% for reason in flag_reasons %}
+                                            <option value="{{ reason }}">{{ reason }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <input id="extra-reason-text" name="extra-reason-text" type="search" placeholder="Post #" />
                                     <input name="action" type="hidden" value="flag" />
                                     <input type="submit" value="Flag" />
                                 </form>

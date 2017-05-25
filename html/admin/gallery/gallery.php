@@ -2,6 +2,7 @@
 // Main control panel for admin operations.
 
 include_once("../../header.php");
+include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."includes/util/html_funcs.php");
 include_once(SITE_ROOT."includes/util/user.php");
 include_once(SITE_ROOT."admin/includes/functions.php");
@@ -22,6 +23,7 @@ if (isset($_POST['submit'])) {
 }
 
 $vars['news_posts_board'] = GetSiteSetting(GALLERY_NEWS_SOURCE_BOARD_NAME_KEY, null);
+$vars['flag_reasons'] = GetSiteSettingArray('gallery_flag_reasons');
 
 $vars['admin_section'] = "gallery";
 RenderPage("admin/gallery/gallery.tpl");
@@ -37,6 +39,23 @@ function HandlePost() {
                 SetSiteSetting(GALLERY_NEWS_SOURCE_BOARD_NAME_KEY, $board_name);
             } else {
                 PostSessionBanner("Board not found", "red");
+            }
+        }
+    }
+
+    // Update flag reasons
+    if (isset($_POST['flag_reason'])) {
+        $reasons = $_POST['flag_reason'];
+        if (sizeof($reasons) > 0) {
+            $validated = true;
+            foreach ($reasons as &$reason) {
+                if (contains($reason, "#") && !endsWith($reason, "#")) {
+                    PostSessionBanner("Invalid flag reason: $reason", "red");
+                    $validated = false;
+                }
+            }
+            if ($validated) {
+                SetSiteSettingArray('gallery_flag_reasons', $reasons);
             }
         }
     }

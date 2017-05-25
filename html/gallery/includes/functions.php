@@ -483,4 +483,8 @@ function ToTagNameString($allTags) {
     return implode(" ", $tagNames);
 }
 
+function GetPossibleFlagReasons() {
+    return GetSiteSettingArray("gallery_flag_reasons");
+}
+
 ?>
