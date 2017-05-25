@@ -186,7 +186,7 @@
                             </div>
                         </div>
                         <div id="center-content-panel">
-                            <div id="content">
+                            <div id="main-content">
                                 {% if error_msg %}
                                     <div class="base-error-msg">
                                         <p>
