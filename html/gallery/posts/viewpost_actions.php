@@ -78,7 +78,15 @@ function HandleFlagAction($post) {
         InvalidActionBanner();
         return;
     }
-    if ($post['Status'] != 'A') {
+    // Possible status are:
+    // - A: Approved
+    // - P: Pending
+    // - F: Flagged
+    // - D: Deleted.
+    // - Maybe more?
+    if ($post['Status'] == 'A' || $post['Status'] == 'P') {
+        // Allow action if approved or pending.
+    } else {
         InvalidActionBanner();
         return;
     }
