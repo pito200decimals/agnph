@@ -47,7 +47,8 @@ if ($_POST['action'] == "add") {
 } else if ($_POST['action'] == "remove") {
     sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE PostId='$escaped_post_id';", 1) or AJAXErr();
     $post = $result->fetch_assoc();
-    if ($post['ParentPoolId'] != $_GET['pool']) AJAXErr();
+    $pool_id = $post['ParentPoolId'];
+    if ($pool_id != $_GET['pool']) AJAXErr();
     sql_query("UPDATE ".GALLERY_POST_TABLE." SET ParentPoolId='-1' WHERE PostId='$escaped_post_id';") or AJAXErr();
     // Now try to update ordering, don't error on error.
     $removed_item_order = $post['PoolItemOrder'];
