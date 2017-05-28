@@ -12,6 +12,7 @@ include_once(SITE_ROOT."gallery/includes/searchclause.php");
 // order:comments (Most to least comments)
 
 function CreatePostSearchSQL($search_string, $posts_per_page, $page, &$can_sort_pool, &$pool_sort_id, $return_where_only=false) {
+    global $user;
     $offset = ($page - 1) * $posts_per_page;
     $page_size = $posts_per_page;
     $sortOrder = "T.PostId DESC";  // Will effectively be the same as DateUploaded DESC.
@@ -81,6 +82,9 @@ function CreatePostSearchSQL($search_string, $posts_per_page, $page, &$can_sort_
             $sortOrder = "T.NumComments DESC, ".$sortOrder;
             $can_sort_pool = false;
         }
+    }
+    if (!isset($user) || !CanUserChangePoolOrdering($user)) {
+        $can_sort_pool = false;
     }
     if ($can_sort_pool) {
         // Possible to sort order within a pool. Will be messed up for pools of size > 250.

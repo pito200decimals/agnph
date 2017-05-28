@@ -318,6 +318,16 @@ if (isset($_POST['display-name']) &&
         $escaped_blacklist = sql_escape($_POST['gallery-tag-blacklist']);
         $gallery_table_sets[] = "GalleryTagBlacklist='$escaped_blacklist'";
     }
+    // Ignore blacklist in pools.
+    if (isset($_POST['gallery-ignore-blacklist-for-pools'])) {
+        if (!$profile_user['IgnoreGalleryBlacklistForPools']) {
+            $gallery_table_sets[] = "IgnoreGalleryBlacklistForPools=TRUE";
+        }
+    } else {
+        if ($profile_user['IgnoreGalleryBlacklistForPools']) {
+            $gallery_table_sets[] = "IgnoreGalleryBlacklistForPools=FALSE";
+        }
+    }
     // Gallery enable keyboard navigation
     if (isset($_POST['gallery-enable-keyboard'])) {
         if (!$profile_user['NavigateGalleryPoolsWithKeyboard']) {

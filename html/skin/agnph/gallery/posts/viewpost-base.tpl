@@ -246,6 +246,9 @@
                             </div>
                         </li>
                     {% endif %}
+                    {% if post.canFavorite or post.canSetAvatar %}
+                        <li>&nbsp;</li>
+                    {% endif %}
                     {% if post.canFavorite %}
                         <li>
                             {% if isFavorited %}

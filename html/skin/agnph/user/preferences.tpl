@@ -272,6 +272,10 @@
                     {% endif %}
                 </li>
                 <li>
+                    <label for="gallery-ignore-blacklist-for-pools-input" class="basic-info-label">Ignore Blacklist in Pools:</label>
+                    <input type="checkbox" id="gallery-ignore-blacklist-for-pools-input" name="gallery-ignore-blacklist-for-pools" value="1" {% if profile.user.IgnoreGalleryBlacklistForPools %}checked {% endif %}/>
+                </li>
+                <li>
                     <label for="gallery-enable-keyboard-input" class="basic-info-label" id="keyboard-label">Enable keyboard shortcuts:</label>
                     <input type="checkbox" id="gallery-enable-keyboard-input" name="gallery-enable-keyboard" value="1" {% if profile.user.NavigateGalleryPoolsWithKeyboard %}checked {% endif %}/>
                 </li>

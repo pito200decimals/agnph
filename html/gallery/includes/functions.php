@@ -62,6 +62,8 @@ function CanUserAddOrRemoveFromPools($user) {
 }
 function CanUserChangePoolOrdering($user) {
     if (!IsUserActivated($user)) return false;
+    // Don't allow reordering if posts can be missing from pool view.
+    if (!$user['IgnoreGalleryBlacklistForPools']) return false;
     if ($user['GalleryPermissions'] == 'A') return true;
     if ($user['GalleryPermissions'] == 'C') return true;
     // Restrict user based on permissions and time since registration.

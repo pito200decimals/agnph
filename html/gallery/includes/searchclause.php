@@ -90,7 +90,7 @@ function CreateSQLClausesFromTerms($terms) {
             }
         }
     }
-    $not_terms = array_merge($not_terms, GetGalleryBlacklistClauses($and_terms, $or_terms, $not_terms));
+    $not_terms = array_merge($not_terms,  GetGalleryBlacklistClauses($and_terms, $or_terms, $not_terms, $filter_clauses));
     $sql = array();
     if (sizeof($and_terms) > 0) {
         $sql[] = "(".CreateANDSQLClauseFromTerms($and_terms).")";
@@ -288,9 +288,17 @@ function CreateSQLClauseFromFilter($filter) {
     }
 }
 
-function GetGalleryBlacklistClauses($and_terms, $or_terms, $not_terms) {
+function HasPoolFilter($filter_clauses) {
+    foreach ($filter_clauses as $clause) {
+        if (contains($clause, "pool:")) return true;
+    }
+    return false;
+}
+
+function GetGalleryBlacklistClauses($and_terms, $or_terms, $not_terms, $filter_clauses) {
     global $user;
     if (!isset($user)) return array();
+    if ($user['IgnoreGalleryBlacklistForPools'] && HasPoolFilter($filter_clauses)) return array();
     $terms = array_merge($and_terms, $or_terms, $not_terms);
     $blacklist_terms = explode(" ", $user['GalleryTagBlacklist']);
     $blacklist_terms = array_filter($blacklist_terms, "mb_strlen");

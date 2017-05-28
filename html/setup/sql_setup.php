@@ -263,6 +263,7 @@ do_or_die(sql_query(
        "NavigateGalleryPoolsWithKeyboard TINYINT(1) DEFAULT 0,
         PrivateGalleryFavorites TINYINT(1) DEFAULT 0,
         PlainGalleryTagging TINYINT(1) DEFAULT 0,
+        IgnoreGalleryBlacklistForPools TINYINT(1) DEFAULT 1,
         PRIMARY KEY(UserId)
     ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 // User favorites for gallery section.
