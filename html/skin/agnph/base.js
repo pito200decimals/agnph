@@ -43,6 +43,7 @@ $(document).ready(function() {
             OnLoad();
         }
     });
+    $(".jsonly").show();
 });
 
 function getCookie(cname) {
