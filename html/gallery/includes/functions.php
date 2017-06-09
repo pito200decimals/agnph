@@ -156,6 +156,11 @@ function CanUserSearchDeletedPosts($user) {
     if ($user['GalleryPermissions'] == 'A') return true;
     return false;
 }
+function CanUserMassDeletePosts($user) {
+    if (!IsUserActivated($user)) return false;
+    if ($user['GalleryPermissions'] == 'A') return true;
+    return false;
+}
 
 // General path functions.
 function GetSiteImagePath($md5, $ext) { return "/".GetImagePath($md5, $ext); }

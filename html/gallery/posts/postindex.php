@@ -85,6 +85,10 @@ if (sizeof($similar_tags) > 0) {
 // Set up permissions.
 if (isset($user)) {
     $vars['canMassTagEdit'] = CanUserMassTagEdit($user) && mb_strlen($searchterms) > 0;
+    $vars['canMassDeletePosts'] = CanUserMassDeletePosts($user) && mb_strlen($searchterms) > 0;
+    if ($vars['canMassDeletePosts']) {
+        $vars['flag_reasons'] = GetPossibleFlagReasons();
+    }
 }
 
 $vars['posts'] = $posts;
@@ -155,65 +159,127 @@ function CreateGalleryIterator($searchterms, $page, $posts_per_page, &$total_num
 function HandlePost($searchterms) {
     // TODO: Handle timeouts.
     global $user;
-    if (isset($user) && isset($_POST['submit'])) {
-        if (!CanPerformSitePost()) MaintenanceError();
-        if (!CanUserMassTagEdit($user)) {
-            RenderPostError("Insufficient permissions");
-        }
-        $where_clause = CreatePostSearchSQL(mb_strtolower($searchterms, "UTF-8"), 0, 0, $can_sort_pool, $pool_id, true /* where_only */);
-        sql_query_into($result, "SELECT COUNT(*) AS C FROM ".GALLERY_POST_TABLE." T WHERE $where_clause;", 1) or RenderPostError("Error modifying posts");
-        $num_posts = $result->fetch_assoc()['C'];
-        if ($num_posts > GALLERY_MAX_MASS_TAG_EDIT_COUNT) {
-            RenderPostError("Cannot modify $num_posts posts (max limit ".GALLERY_MAX_MASS_TAG_EDIT_COUNT.")");
-        }
-        if ($num_posts == 0) {
-            RenderPostError("No posts to modify");
-        }
+    if (isset($user) && isset($_POST['submit']) && isset($_POST['mass-edit-action'])) {
+        $action = $_POST['mass-edit-action'];
+        if ($action == "tagedit") {
+            if (!CanPerformSitePost()) MaintenanceError();
+            if (!CanUserMassTagEdit($user)) {
+                RenderPostError("Insufficient permissions");
+            }
+            $where_clause = CreatePostSearchSQL(mb_strtolower($searchterms, "UTF-8"), 0, 0, $can_sort_pool, $pool_id, true /* where_only */);
+            sql_query_into($result, "SELECT COUNT(*) AS C FROM ".GALLERY_POST_TABLE." T WHERE $where_clause;", 1) or RenderPostError("Error modifying posts");
+            $num_posts = $result->fetch_assoc()['C'];
+            if ($num_posts > GALLERY_MAX_MASS_TAG_EDIT_COUNT) {
+                RenderPostError("Cannot modify $num_posts posts (max limit ".GALLERY_MAX_MASS_TAG_EDIT_COUNT.")");
+            }
+            if ($num_posts == 0) {
+                RenderPostError("No posts to modify");
+            }
 
-        // Get next batch id.
-        sql_query_into($result, "SELECT MAX(BatchId) AS M FROM ".GALLERY_POST_TAG_HISTORY_TABLE.";", 1) or RenderPostError("Error modifying posts");
-        $next_batch_id = $result->fetch_assoc()['M'] + 1;
+            // Get next batch id.
+            sql_query_into($result, "SELECT MAX(BatchId) AS M FROM ".GALLERY_POST_TAG_HISTORY_TABLE.";", 1) or RenderPostError("Error modifying posts");
+            $next_batch_id = $result->fetch_assoc()['M'] + 1;
 
-        // Get posts to modify.
-        $post_ids = array();
-        sql_query_into($result, "SELECT PostId FROM ".GALLERY_POST_TABLE." T WHERE $where_clause;", 1) or RenderPostError("Error modifying posts");
-        while ($row = $result->fetch_assoc()) {
-            $post_ids[] = $row['PostId'];
-        }
+            // Get posts to modify.
+            $post_ids = array();
+            sql_query_into($result, "SELECT PostId FROM ".GALLERY_POST_TABLE." T WHERE $where_clause;", 1) or RenderPostError("Error modifying posts");
+            while ($row = $result->fetch_assoc()) {
+                $post_ids[] = $row['PostId'];
+            }
 
-        // Get tags to add/remove.
-        $tags_to_add = $_POST['tags-to-add'];
-        $tags_to_add = explode(" ", $tags_to_add);
-        $tags_to_add = array_map("trim", $tags_to_add);
-        $tags_to_add = array_filter($tags_to_add, "mb_strlen");
-        $tags_to_remove = $_POST['tags-to-remove'];
-        $tags_to_remove = explode(" ", $tags_to_remove);
-        $tags_to_remove = array_map("trim", $tags_to_remove);
-        $tags_to_remove = array_filter($tags_to_remove, "mb_strlen");
-        $can_create_tags = CanUserCreateGalleryTags($user);
-        // For add tags, do alias, implication, and remove aliased tags.
-        $tags_to_add = GetTagsByNameWithAliasAndImplied(GALLERY_TAG_TABLE, GALLERY_TAG_ALIAS_TABLE, GALLERY_TAG_IMPLICATION_TABLE, $tags_to_add, $can_create_tags, $user['UserId']);
-        // For remove tags, do alias, no implications, and keep aliased tags. Also, don't create tags being removed.
-        $tags_to_remove = GetTagsByNameWithAliasAndImplied(GALLERY_TAG_TABLE, GALLERY_TAG_ALIAS_TABLE, GALLERY_TAG_IMPLICATION_TABLE, $tags_to_remove, false, $user['UserId'], true, false, false);
-        // Convert to names, but don't add any tags we're also removing.
-        $tag_ids_to_remove = array_map(function($tag) { return $tag['TagId']; }, $tags_to_remove);
-        $tags_to_add = array_filter($tags_to_add, function($tag) use ($tag_ids_to_remove) {
-            return !in_array($tag['TagId'], $tag_ids_to_remove);
-        });
-        $tag_ids_to_add = array_map(function($tag) { return $tag['TagId']; }, $tags_to_add);
-
-        foreach ($post_ids as $pid) {
-            $existing_tags = GetTags($pid);
-            $existing_tags = array_filter($existing_tags, function($tag) use ($tag_ids_to_remove,$tag_ids_to_add) {
-                return !in_array($tag['TagId'], $tag_ids_to_remove) && !in_array($tag['TagId'], $tag_ids_to_add);
+            // Get tags to add/remove.
+            $tags_to_add = $_POST['tags-to-add'];
+            $tags_to_add = explode(" ", $tags_to_add);
+            $tags_to_add = array_map("trim", $tags_to_add);
+            $tags_to_add = array_filter($tags_to_add, "mb_strlen");
+            $tags_to_remove = $_POST['tags-to-remove'];
+            $tags_to_remove = explode(" ", $tags_to_remove);
+            $tags_to_remove = array_map("trim", $tags_to_remove);
+            $tags_to_remove = array_filter($tags_to_remove, "mb_strlen");
+            $can_create_tags = CanUserCreateGalleryTags($user);
+            // For add tags, do alias, implication, and remove aliased tags.
+            $tags_to_add = GetTagsByNameWithAliasAndImplied(GALLERY_TAG_TABLE, GALLERY_TAG_ALIAS_TABLE, GALLERY_TAG_IMPLICATION_TABLE, $tags_to_add, $can_create_tags, $user['UserId']);
+            // For remove tags, do alias, no implications, and keep aliased tags. Also, don't create tags being removed.
+            $tags_to_remove = GetTagsByNameWithAliasAndImplied(GALLERY_TAG_TABLE, GALLERY_TAG_ALIAS_TABLE, GALLERY_TAG_IMPLICATION_TABLE, $tags_to_remove, false, $user['UserId'], true, false, false);
+            // Convert to names, but don't add any tags we're also removing.
+            $tag_ids_to_remove = array_map(function($tag) { return $tag['TagId']; }, $tags_to_remove);
+            $tags_to_add = array_filter($tags_to_add, function($tag) use ($tag_ids_to_remove) {
+                return !in_array($tag['TagId'], $tag_ids_to_remove);
             });
-            $existing_tags = array_merge($existing_tags, $tags_to_add);
-            $tag_str = ToTagNameString($existing_tags);
-            UpdatePost($tag_str, $pid, $user, false, $next_batch_id);
-        }
+            $tag_ids_to_add = array_map(function($tag) { return $tag['TagId']; }, $tags_to_add);
 
-        PostSessionBanner("Posts modified", "green");
-        Redirect($_SERVER['REQUEST_URI']);
+            foreach ($post_ids as $pid) {
+                $existing_tags = GetTags($pid);
+                $existing_tags = array_filter($existing_tags, function($tag) use ($tag_ids_to_remove,$tag_ids_to_add) {
+                    return !in_array($tag['TagId'], $tag_ids_to_remove) && !in_array($tag['TagId'], $tag_ids_to_add);
+                });
+                $existing_tags = array_merge($existing_tags, $tags_to_add);
+                $tag_str = ToTagNameString($existing_tags);
+                UpdatePost($tag_str, $pid, $user, false, $next_batch_id);
+            }
+
+            PostSessionBanner("Posts modified", "green");
+            Redirect($_SERVER['REQUEST_URI']);
+        } else if ($action == "delete") {
+            if (!CanPerformSitePost()) MaintenanceError();
+            if (!CanUserMassDeletePosts($user)) {
+                RenderPostError("Insufficient permissions");
+            }
+            if (isset($_POST['tags-to-add']) && isset($_POST['tags-to-remove']) &&
+                (mb_strlen($_POST['tags-to-add']) > 0 || mb_strlen($_POST['tags-to-remove']) > 0)) {
+                // Accidental delete submit?
+                RenderPostError("Did not delete posts (don't add tags to edit)");
+            }
+            $where_clause = CreatePostSearchSQL(mb_strtolower($searchterms, "UTF-8"), 0, 0, $can_sort_pool, $pool_id, true /* where_only */);
+            sql_query_into($result, "SELECT COUNT(*) AS C FROM ".GALLERY_POST_TABLE." T WHERE $where_clause;", 1) or RenderPostError("Error modifying posts");
+            $num_posts = $result->fetch_assoc()['C'];
+            if ($num_posts > GALLERY_MAX_MASS_TAG_EDIT_COUNT) {
+                RenderPostError("Cannot delete $num_posts posts (max limit ".GALLERY_MAX_MASS_TAG_EDIT_COUNT.")");
+            }
+            if ($num_posts == 0) {
+                RenderPostError("No posts to delete");
+            }
+
+            if (!isset($_POST['reason-select'])) {
+                RenderPostError("Missing deletion reason");
+            }
+            $reason = $_POST['reason-select'];
+            if (contains($reason, "#")) {
+                RenderPostError("Invalid deletion reason");
+            }
+            $reason = SanitizeHTMLTags($reason, NO_HTML_TAGS);  // Strip all tags.
+            $reason = mb_substr($reason, 0, MAX_GALLERY_POST_FLAG_REASON_LENGTH);  // Trim to max length.
+            $escaped_reason = sql_escape(GetSanitizedTextTruncated($reason, NO_HTML_TAGS, MAX_GALLERY_POST_FLAG_REASON_LENGTH));
+
+            // Get posts to modify.
+            $post_ids = array();
+            sql_query_into($result, "SELECT PostId FROM ".GALLERY_POST_TABLE." T WHERE $where_clause;", 1) or RenderPostError("Error modifying posts");
+            while ($row = $result->fetch_assoc()) {
+                $post_ids[] = $row['PostId'];
+            }
+
+            $username = $user['DisplayName'];
+            foreach ($post_ids as $pid) {
+                if (!sql_query("UPDATE ".GALLERY_POST_TABLE." SET Status='D', FlagReason='$escaped_reason', FlaggerUserId='$uid', ParentPoolId=-1, NumFavorites=0 WHERE PostId=$pid;")) {
+                    ErrorBanner();
+                    return;
+                }
+                LogAction("<strong><a href='/user/$uid/'>$username</a></strong> mass-deleted <strong><a href='/gallery/post/show/$pid/'>post #$pid</a></strong>", "G");
+                // Remove from user favorites. Don't check for errors since we can't do anything.
+                // TODO: Move favorites to parent post?
+                sql_query("DELETE FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE PostId=$pid;");
+                UpdatePostStatistics($pid);
+                // Update all tag counts for tags on this post.
+                UpdateAllTagCounts(GALLERY_TAG_TABLE, GALLERY_POST_TAG_TABLE, GALLERY_POST_TABLE, "PostId", "I.Status<>'D'", "EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." PT WHERE PT.TagId=T.TagId AND PT.PostId=$pid)");
+            }
+
+            PostSessionBanner("Posts deleted", "green");
+            Redirect($_SERVER['REQUEST_URI']);
+        } else if ($action == "undelete") {
+            // TODO: Support mass un-deletions.
+        } else {
+            RenderPostError("Invalid mass edit action");
+        }
     }
 }
 

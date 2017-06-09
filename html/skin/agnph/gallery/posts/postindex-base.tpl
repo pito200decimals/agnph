@@ -4,7 +4,7 @@
     {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/postindex-style.css') }}" />
     <link id="mobile-css" rel="stylesheet" type="text/css" href="{{ asset('/gallery/postindex-mobile.css') }}" {% if ignore_mobile %}disabled {% endif %}/>
-    {% if canMassTagEdit %}
+    {% if canMassTagEdit or canMassDeletePosts %}
         <style>
             #mass-tag-edit-toggle {
                 cursor: pointer;
@@ -84,11 +84,19 @@
             }
         </script>
     {% endif %}
-    {% if canMassTagEdit %}
+    {% if canMassTagEdit or canMassDeletePosts %}
         <script>
             $(document).ready(function() {
                 $("#mass-tag-edit-toggle").click(function() {
+                    $("#mass-edit-action").val("tagedit");
                     $("#mass-tag-edit").toggle();
+                });
+                $("#delete-all-button").click(function() {
+                    if (confirm("Are you absolutely sure you want to delete all posts in this search?")) {
+                        $("#mass-edit-action").val("delete");
+                        $("#mass-tag-edit").hide();
+                        $("#mass-edit-submit-button").click();
+                    }
                 });
             });
         </script>
@@ -197,30 +205,51 @@
     {% endif %}
     {{ block('sidepanel') }}
     {{ block('mainpanel') }}
-    {% if canMassTagEdit %}
+    {% if canMassTagEdit or canMassDeletePosts %}
         <div class="footer-panel desktop-only">
             <div id="mass-tag-edit-toggle">
-                <a>Mass tag edit</a>
+                <a>Mass Edit</a>
             </div>
             <div id="mass-tag-edit">
                 <hr />
                 <form method="POST" accept-charset="UTF-8">
+                    <input id="mass-edit-action" type="hidden" name="mass-edit-action" value="tagedit" />
                     <p>
                         This will apply these tag modifications to all posts in the current search.
                     </p>
                     <table>
-                        <tr>
-                            <td><label>Tags to add:</label></td>
-                            <td><textarea name="tags-to-add"></textarea></td>
-                        </tr>
-                        <tr>
-                            <td><label>Tags to remove:</label></td>
-                            <td><textarea name="tags-to-remove"></textarea></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td><input type="submit" name="submit" value="Apply Changes" /></td>
-                        </tr>
+                        {% if canMassTagEdit %}
+                            <tr>
+                                <td><label>Tags to add:</label></td>
+                                <td><textarea name="tags-to-add"></textarea></td>
+                            </tr>
+                            <tr>
+                                <td><label>Tags to remove:</label></td>
+                                <td><textarea name="tags-to-remove"></textarea></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td><input id="mass-edit-submit-button" type="submit" name="submit" value="Apply Tag Changes" /></td>
+                            </tr>
+                        {% endif %}
+                        {% if canMassTagEdit and canMassDeletePosts %}
+                            <tr>
+                                <td colspan="2">&nbsp;</td>
+                            </tr>
+                        {% endif %}
+                        {% if canMassDeletePosts %}
+                            <tr>
+                                <td>Delete All Posts</td>
+                                <td>
+                                    <select id="flag-reason-select" name="reason-select">
+                                        {% for reason in flag_reasons %}
+                                            <option value="{{ reason }}">{{ reason }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <input id="delete-all-button" type="button" value="Delete All Posts" />
+                                </td>
+                            </tr>
+                        {% endif %}
                     </table>
                 </form>
             </div>
