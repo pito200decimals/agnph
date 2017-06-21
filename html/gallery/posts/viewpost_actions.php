@@ -94,6 +94,7 @@ function HandleFlagAction($post) {
         return;
     }
     $reason = $_POST['reason-select'];
+    $parent_post = -1;
     if (contains($reason, "#")) {
         // Require post number.
         if (!isset($_POST['extra-reason-text'])) {
@@ -107,13 +108,14 @@ function HandleFlagAction($post) {
         }
         $post_number = (int)$post_number;
         $reason = $reason.$post_number;
+        $parent_post = $post_number;
     }
     $uid = $user['UserId'];
     $pid = $post['PostId'];
     $reason = SanitizeHTMLTags($reason, NO_HTML_TAGS);  // Strip all tags.
     $reason = mb_substr($reason, 0, MAX_GALLERY_POST_FLAG_REASON_LENGTH);  // Trim to max length.
     $escaped_reason = sql_escape(GetSanitizedTextTruncated($reason, NO_HTML_TAGS, MAX_GALLERY_POST_FLAG_REASON_LENGTH));
-    if (!sql_query("UPDATE ".GALLERY_POST_TABLE." SET Status='F', FlagReason='$escaped_reason', FlaggerUserId='$uid' WHERE PostId=$pid;")) {
+    if (!sql_query("UPDATE ".GALLERY_POST_TABLE." SET Status='F', FlagReason='$escaped_reason', FlaggerUserId='$uid', ParentPostId=$parent_post WHERE PostId=$pid;")) {
         ErrorBanner();
         return;
     }
@@ -152,15 +154,24 @@ function HandleDeleteAction($post) {
     }
     $uid = $user['UserId'];  // Set flagger id as user who deleted (self).
     $pid = $post['PostId'];
-    if (!sql_query("UPDATE ".GALLERY_POST_TABLE." SET Status='D', FlaggerUserId='$uid', ParentPoolId=-1, NumFavorites=0 WHERE PostId=$pid;")) {
+    $ppid = $post['ParentPostId'];
+    if (!sql_query("UPDATE ".GALLERY_POST_TABLE." SET Status='D', FlaggerUserId='$uid', ParentPostId=-1, ParentPoolId=-1, NumFavorites=0 WHERE PostId=$pid;")) {
         ErrorBanner();
         return;
     }
     $username = $user['DisplayName'];
     LogAction("<strong><a href='/user/$uid/'>$username</a></strong> deleted <strong><a href='/gallery/post/show/$pid/'>post #$pid</a></strong>", "G");
-    // Remove from user favorites. Don't check for errors since we can't do anything.
-    // TODO: Move favorites to parent post?
+    // Transfer all user favorites to either parent post or named post.
+    if ($ppid != -1) {
+        // Try to transfer favorites.
+        sql_query("UPDATE ".GALLERY_USER_FAVORITES_TABLE." T SET PostId=$ppid WHERE PostId=$pid AND NOT EXISTS(SELECT 1 FROM ".GALLERY_USER_FAVORITES_TABLE." S WHERE S.UserId=T.UserId AND S.PostId=$ppid);");
+    }
+    // Delete any remaining favorites.
     sql_query("DELETE FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE PostId=$pid;");
+
+    // Remove this as a parent from any other posts and transfer to parent.
+    sql_query("UPDATE ".GALLERY_POST_TABLE." SET ParentPostId=$ppid WHERE ParentPostId=$pid;");
+
     UpdatePostStatistics($pid);
     // Update all tag counts for tags on this post.
     UpdateAllTagCounts(GALLERY_TAG_TABLE, GALLERY_POST_TAG_TABLE, GALLERY_POST_TABLE, "PostId", "I.Status<>'D'", "EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." PT WHERE PT.TagId=T.TagId AND PT.PostId=$pid)");
