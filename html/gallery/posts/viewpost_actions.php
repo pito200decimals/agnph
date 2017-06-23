@@ -163,8 +163,8 @@ function HandleDeleteAction($post) {
     LogAction("<strong><a href='/user/$uid/'>$username</a></strong> deleted <strong><a href='/gallery/post/show/$pid/'>post #$pid</a></strong>", "G");
     // Transfer all user favorites to either parent post or named post.
     if ($ppid != -1) {
-        // Try to transfer favorites.
-        sql_query("UPDATE ".GALLERY_USER_FAVORITES_TABLE." T SET PostId=$ppid WHERE PostId=$pid AND NOT EXISTS(SELECT 1 FROM ".GALLERY_USER_FAVORITES_TABLE." S WHERE S.UserId=T.UserId AND S.PostId=$ppid);");
+        // Try to transfer favorites. Don't worry about duplicates on UserId/PostId primary keys.
+        sql_query("UPDATE ".GALLERY_USER_FAVORITES_TABLE." SET PostId=$ppid WHERE PostId=$pid;");
     }
     // Delete any remaining favorites.
     sql_query("DELETE FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE PostId=$pid;");
