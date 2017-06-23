@@ -164,7 +164,12 @@ function HandleDeleteAction($post) {
     // Transfer all user favorites to either parent post or named post.
     if ($ppid != -1) {
         // Try to transfer favorites. Don't worry about duplicates on UserId/PostId primary keys.
-        sql_query("UPDATE ".GALLERY_USER_FAVORITES_TABLE." SET PostId=$ppid WHERE PostId=$pid;");
+        if (sql_query_into($result, "SELECT * FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE PostId=$pid;", 1)) {
+            while ($row = $result->fetch_assoc()) {
+                $fuid = $row['UserId'];
+                sql_query("INSERT INTO ".GALLERY_USER_FAVORITES_TABLE." (UserId, PostId) VALUES ($fuid, $ppid)");
+            }
+        }
     }
     // Delete any remaining favorites.
     sql_query("DELETE FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE PostId=$pid;");
@@ -173,6 +178,7 @@ function HandleDeleteAction($post) {
     sql_query("UPDATE ".GALLERY_POST_TABLE." SET ParentPostId=$ppid WHERE ParentPostId=$pid;");
 
     UpdatePostStatistics($pid);
+    UpdatePostStatistics($ppid);
     // Update all tag counts for tags on this post.
     UpdateAllTagCounts(GALLERY_TAG_TABLE, GALLERY_POST_TAG_TABLE, GALLERY_POST_TABLE, "PostId", "I.Status<>'D'", "EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." PT WHERE PT.TagId=T.TagId AND PT.PostId=$pid)");
     PostSessionBanner("Post deleted", "green");
