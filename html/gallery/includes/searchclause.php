@@ -16,10 +16,14 @@
 // file:{jpg, webm, etc}
 // source:
 // missing_artist
+// width: (math comparators supported)
+// height: (math comparators supported)
+// comments: (math comparators supported)
+// score: (math comparators supported)
+// views: (math comparators supported)
 //
 // === Not implemented yet ===
-// comments:
-// width/height/aspect-ratio:
+// aspect-ratio:
 
 function CreateSQLClauses($search) {
     global $user;
@@ -79,7 +83,7 @@ function CreateSQLClausesFromTerms($terms) {
                 $and_terms[] = $term;
             } else if (startsWith($term, "~")) {  // OR.
                 $or_terms[] = mb_substr($term, 1);
-            } else if (mb_strpos($term, ":") !== FALSE) {
+            } else if (IsFilter($term)) {
                 // Check for filter after OR but before NOT checks.
                 // ~ doesn't apply to filters, but - does (- is checked separately).
                 $filter_clauses[] = $term;
@@ -189,9 +193,37 @@ function GetSpecialSQLClauseForTerm($term) {
         return "NOT(EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." PT INNER JOIN ".GALLERY_TAG_TABLE." TG ON PT.TagId=TG.TagId WHERE T.PostId=PT.PostId AND TG.Type='A'))";
     } else if (mb_strtolower($term, "UTF-8") == "missing_species") {
         return "NOT(EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." PT INNER JOIN ".GALLERY_TAG_TABLE." TG ON PT.TagId=TG.TagId WHERE T.PostId=PT.PostId AND TG.Type='D'))";
+    } else if (startsWith($term, "width:")) {
+        return ParseAndGetFieldComparator(substr($term, 6), "T.Width");
+    } else if (startsWith($term, "height:")) {
+        return ParseAndGetFieldComparator(substr($term, 7), "T.Height");
+    } else if (startsWith($term, "comments:")) {
+        return ParseAndGetFieldComparator(substr($term, 9), "T.NumComments");
+    } else if (startsWith($term, "score:")) {
+        return ParseAndGetFieldComparator(substr($term, 6), "T.NumFavorites");
+    } else if (startsWith($term, "views:")) {
+        return ParseAndGetFieldComparator(substr($term, 6), "T.NumViews");
     } else {
         return null;
     }
+}
+
+function IsFilter($filter) {
+    if (startsWith($filter, "width:")) {
+        return false;
+    } else if (startsWith($filter, "height:")) {
+        return false;
+    } else if (startsWith($filter, "comments:")) {
+        return false;
+    } else if (startsWith($filter, "score:")) {
+        return false;
+    } else if (startsWith($filter, "views:")) {
+        return false;
+     } else if (mb_strpos($filter, ":") !== FALSE) {
+        return true;
+     } else {
+        return false;
+     }
 }
 
 function CreateSQLClauseFromFilter($filter) {
@@ -285,6 +317,29 @@ function CreateSQLClauseFromFilter($filter) {
             // Make query fail.
             return "FALSE";
         }
+    }
+}
+
+function GetFieldComparator($filter, $post_field, $op) {
+    if (is_numeric($filter)) {
+        $escaped_filter = sql_escape((int)$filter);
+        return "$post_field $op $escaped_filter";
+    } else {
+        return "FALSE";
+    }
+}
+
+function ParseAndGetFieldComparator($filter, $post_field) {
+    if (startsWith($filter, ">=")) {
+        return GetFieldComparator(substr($filter, 2), $post_field, ">=");
+    } else if (startsWith($filter, ">")) {
+        return GetFieldComparator(substr($filter, 1), $post_field, ">");
+    } else if (startsWith($filter, "<=")) {
+        return GetFieldComparator(substr($filter, 2), $post_field, "<=");
+    } else if (startsWith($filter, "<")) {
+        return GetFieldComparator(substr($filter, 1), $post_field, "<");
+    } else {
+        return GetFieldComparator($filter, $post_field, "=");
     }
 }
 
