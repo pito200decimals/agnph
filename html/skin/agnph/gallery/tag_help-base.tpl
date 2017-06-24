@@ -103,6 +103,32 @@
                 </li>
                 <li>
                     <p>
+                        <strong>width:/height:</strong> - Searches for posts that match the given image sizes.
+                    </p>
+                    <div class="example">
+                        <p>
+                            <strong>Example:</strong> "width:1280" - Searches only for images with width 1280px.
+                        </p>
+                        <p>
+                            <strong>Example:</strong> "height:>1000" - Searches only images with height > 1000px.
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <p>
+                        <strong>score:/views:</strong> - Searches for posts with the given score/view counts.
+                    </p>
+                    <div class="example">
+                        <p>
+                            <strong>Example:</strong> "score:10" - Searches only for posts with score exactly 10.
+                        </p>
+                        <p>
+                            <strong>Example:</strong> "views:>1000" - Searches only posts with more than 1000 views.
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <p>
                         <strong>missing_artist</strong> - Searches for posts that do not have an artist tag.
                     </p>
                 </li>
