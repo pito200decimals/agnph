@@ -108,6 +108,9 @@ if (isset($_POST['username']) &&
 } else {
     $vars['bday'] = "mm/dd/yyyy";
 }
+$year = date("Y");
+$vars['max_bday'] = ($year - 5)."-01-01";
+$vars['min_bday'] = "1900-01-01";
 
 $vars['registerDisclaimerMessage'] = GetSiteSetting(REGISTER_DISCLAIMER_KEY, "");
 

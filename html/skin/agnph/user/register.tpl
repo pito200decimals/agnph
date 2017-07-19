@@ -143,7 +143,7 @@
                     <label>Repeat Password:</label><input id="password-confirm" name="password-confirm" type="password" value="" /><span id="pass-error" class="form-error">Passwords must match</span>
                 </li>
                 <li>
-                    <label>Birthday:</label><input id="bday" name="bday" type="date" value="{{ bday }}" /><span id="bday-error"></span>
+                    <label>Birthday:</label><input id="bday" name="bday" type="date" value="{{ bday }}" min="{{ min_bday }}" max="{{ max_bday }}" /><span id="bday-error"></span>
                 </li>
                 <li>
                     <img class="captcha-offset" id="captcha-img" src="/register/captcha/" alt="Captcha text" /><br />
