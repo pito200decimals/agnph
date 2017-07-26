@@ -77,7 +77,7 @@ if (isset($_GET['sort'])) $vars['sortParam'] = $_GET['sort'];
 if (isset($_GET['order'])) $vars['orderParam'] = $_GET['order'];
 $vars['iterator'] = $iterator;
 // Get column sort URL's. Resets page offset.
-$vars['statusSortUrl'] = GetURLForSortOrder("status", "asc");
+$vars['statusSortUrl'] = GetURLForSortOrder("status", "desc");
 $vars['nameSortUrl'] = GetURLForSortOrder("name", "desc");
 $vars['positionSortUrl'] = GetURLForSortOrder("position", "desc");
 $vars['registerSortUrl'] = GetURLForSortOrder("register", "desc");
