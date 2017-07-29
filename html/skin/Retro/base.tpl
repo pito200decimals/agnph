@@ -57,7 +57,7 @@
                             {% if user.showAdminTab %}
                                 <li><a href="/admin/">Admin Panel</a></li>
                             {% endif %}
-                            <li><a href="/user/{{ user.UserId }}/">My Account{% if unread_message_count > 0 %} <span class="unread-messages">({{ unread_message_count }})</span>{% endif %}</a></li>
+                            <li><a href="/user/{{ user.UserId }}/">My Account{% if not hide_account_unread_count and unread_message_count > 0 %} <span class="unread-messages">({{ unread_message_count }})</span>{% endif %}</a></li>
                             {{ block('extra_account_menu_options_logged_in') }}
                         {% else %}
                             <li><a href="/register/">Register</a></li>

@@ -15,6 +15,8 @@
     <li><a href="/user/{{ profile.user.UserId }}/oekaki/">Oekaki</a></li>
 {% endblock %}
 
+{% set hide_account_unread_count = true %}
+
 {% block extra_account_menu_options_logged_in %}
     {% if profile.user.UserId == user.UserId %}
         <li><a href="/user/{{ user.UserId }}/mail/">Messages{% if unread_message_count > 0 %} <span class="unread-messages">({{ unread_message_count }})</span>{% endif %}</a></li>
