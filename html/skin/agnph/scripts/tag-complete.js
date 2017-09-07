@@ -66,6 +66,7 @@ function SetUpTagCompleter(tag_search_url, GetPreclass, selector) {
     // Exported.
     function AddTag(tag, type) {
         if (tag.length == 0) return;
+        tag = tag.replace(" ", "_");
         $(selector+'.autocomplete-tag-input').val("");
         var pre = prefix(tag);
         var suf = suffix(tag);

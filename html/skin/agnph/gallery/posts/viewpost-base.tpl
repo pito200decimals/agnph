@@ -360,7 +360,7 @@
                 </tr>
                 <tr>
                     <td><label>&nbsp;</label></td>
-                    <td><input type="text" class="g textbox autocomplete-tag-input" /></td>
+                    <td><input type="text" class="g textbox autocomplete-tag-input" placeholder="Enter Tag" /></td>
                 </tr>
             {% else %}
                 <tr>

@@ -21,7 +21,7 @@ $(document).ready(function() {
     });
     
     // Set up removing placeholder text in search boxes.
-    $("div.search input[type='text'].search").focus(function() {
+    $("[type='text'][placeholder]").focus(function() {
         var placeholder = $(this).attr("placeholder");
         $(this).attr("placeholder", "");
         $(this).off("blur").blur(function() {

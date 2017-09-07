@@ -309,7 +309,7 @@
                     });
                 </script>
                 <ul class="f autocomplete-tag-list"></ul><textarea class="f autocomplete-tags" name="tags" hidden>{{ post.tagstring }}</textarea><br />
-                <input type="text" class="f textbox autocomplete-tag-input" /><br />
+                <input type="text" class="f textbox autocomplete-tag-input" placeholder="Enter Tag"/><br />
             {% else %}
                 <textarea id="tags" class="tagbox" name="tags">{{ formstory.tagstring }}</textarea>
             {% endif %}
