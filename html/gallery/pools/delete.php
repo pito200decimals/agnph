@@ -15,8 +15,8 @@ $escaped_pool_id = $pool_id;
 // Ensure pool exists.
 sql_query_into($result, "SELECT * FROM ".GALLERY_POOLS_TABLE." WHERE PoolId='$escaped_pool_id';", 1) or RenderErrorPage("An error occurred, please try again later.");
 $pool = $result->fetch_assoc();
-sql_query("UPDATE ".GALLERY_POST_TABLE." SET ParentPoolId=-1 WHERE ParentPoolId='$escaped_pool_id':") or RenderErrorPage("An error occurred, please try again later.");
-sql_query("DELETE FROM ".GALLERY_POOLS_TABLE." WHERE PoolId='$escaped_pool_id';") or RenderErrorPage("An error occurred, please try again later.");
+sql_query("UPDATE ".GALLERY_POST_TABLE." SET ParentPoolId=-1 WHERE ParentPoolId='$escaped_pool_id':");
+sql_query("DELETE FROM ".GALLERY_POOLS_TABLE." WHERE PoolId='$escaped_pool_id';");
 $uid = $user['UserId'];
 $username = $user['DisplayName'];
 $poolName = $pool['Name'];
