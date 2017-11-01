@@ -73,7 +73,7 @@
             {% if user.showAdminTab %}
                 <li class="mobile-only"><a href="/admin/">Admin Panel</a></li>
             {% endif %}
-            <li class="mobile-only"><a href="/user/{{ user.UserId }}/">My Account{% if unread_message_count > 0 %} <span class="unread-messages">({{ unread_message_count }})</span>{% endif %}</a></li>
+            <li class="mobile-only"><a href="/user/{{ user.UserId }}/">My Account{% if not hide_account_unread_count and unread_message_count > 0 %} <span class="unread-messages">({{ unread_message_count }})</span>{% endif %}</a></li>
             <li class="mobile-only">
                 <ul class="section-nav">
                     {{ block('extra_account_menu_options_logged_in') }}

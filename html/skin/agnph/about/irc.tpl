@@ -6,12 +6,16 @@
 {% endblock %}
 
 {% block content %}
-    <h3>AGNPH Help Pages (IRC)</h3>
+    <h3>AGNPH Help Pages (IRC/Discord)</h3>
     <div class="block">
-        <div class="header">I want to get on IRC right now!</div>
+        <div class="header">I want to chat now!</div>
         <div class="content">
-            Use our Browser IRC Client! Its fun and its easy.<br />
-            Just <a href="http://irc.agn.ph/?initial_chans=#agnph{% if user %}&initial_nick={{user.DisplayName|replace({" ":"_"})}}{% endif %}"><strong>Click Here</strong></a>.
+            <p>
+                Use our Browser IRC Client! Its fun and its easy, just <a href="http://irc.agn.ph/?initial_chans=#agnph{% if user %}&initial_nick={{user.DisplayName|replace({" ":"_"})}}{% endif %}"><strong>Click Here</strong></a>.
+            </p>
+            <p>
+                We also have a <a href="https://discordapp.com/">Discord</a> server, if you want to stop by and chat! <a href="https://discord.gg/uHbHMv7 "><strong>Click here</strong></a> to join.
+            </p>
         </div>
     </div>
     <div class="block">
