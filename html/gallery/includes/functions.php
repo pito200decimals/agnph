@@ -51,14 +51,25 @@ function CanUserUploadNonPending($user) {
     if ($user['GalleryPermissions'] == 'C') return true;
     return false;
 }
-function CanUserAddOrRemoveFromPools($user) {
+function CanUserAddToPools($user) {
     if (!IsUserActivated($user)) return false;
     if ($user['GalleryPermissions'] == 'A') return true;
     if ($user['GalleryPermissions'] == 'C') return true;
     // Restrict user based on permissions and time since registration.
     if ($user['GalleryPermissions'] == 'R') return false;
     if (GalleryEditRegistrationPeriodNotOver($user)) return false;
+    // Normal users can add to pools.
     return true;
+}
+function CanUserRemoveFromPools($user) {
+    if (!IsUserActivated($user)) return false;
+    if ($user['GalleryPermissions'] == 'A') return true;
+    if ($user['GalleryPermissions'] == 'C') return true;
+    // Restrict user based on permissions and time since registration.
+    if ($user['GalleryPermissions'] == 'R') return false;
+    if (GalleryEditRegistrationPeriodNotOver($user)) return false;
+    // Normal users can't remove from pools.
+    return false;
 }
 function CanUserChangePoolOrdering($user) {
     if (!IsUserActivated($user)) return false;

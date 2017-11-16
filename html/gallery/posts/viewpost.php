@@ -270,7 +270,13 @@ function AddUserPermissions(&$post, $user) {
         $post['canGenerateThumbnail'] = true;
         $post['hasAction'] = true;
     }
-    if (CanUserAddOrRemoveFromPools($user)) {
+    if ($post['ParentPoolId'] == -1 && CanUserAddToPools($user)) {
+        if ($post['Status'] != "D") {
+            $post['canModifyPool'] = true;
+            $post['hasAction'] = true;
+        }
+    }
+    if ($post['ParentPoolId'] != -1 && CanUserRemoveFromPools($user)) {
         if ($post['Status'] != "D") {
             $post['canModifyPool'] = true;
             $post['hasAction'] = true;

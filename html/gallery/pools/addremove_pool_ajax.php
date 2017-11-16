@@ -5,7 +5,7 @@ define("SITE_ROOT", "../../");
 include_once(SITE_ROOT."ajax_header.php");
 include_once(SITE_ROOT."gallery/includes/functions.php");
 
-if (!isset($user) || !CanUserAddOrRemoveFromPools($user)) {
+if (!isset($user)) {
     AJAXErr();
 }
 if (!isset($_GET['post']) || !is_numeric($_GET['post']) || $_GET['post'] <= 0) {
@@ -24,6 +24,9 @@ if (!CanPerformSitePost()) {
 $escaped_post_id = sql_escape($_GET['post']);
 $escaped_pool_id = sql_escape($_GET['pool']);
 if ($_POST['action'] == "add") {
+    if (!CanUserAddToPools($user)) {
+        AJAXErr();
+    }
     sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE PostId='$escaped_post_id';", 1) or AJAXErr();
     $post = $result->fetch_assoc();
     if ($post['ParentPoolId'] != -1) AJAXErr();
@@ -45,6 +48,9 @@ if ($_POST['action'] == "add") {
     $underscored_name = str_replace(" ", "_", $pool_name);
     LogAction("<strong><a href='/user/$uid/'>$username</a></strong> added <strong><a href='/gallery/post/show/$pid/'>post #$pid</a></strong> to pool <strong><a href='/gallery/post/?search=pool%3A$underscored_name'>$pool_name</a></strong>", "G");
 } else if ($_POST['action'] == "remove") {
+    if (!CanUserRemoveFromPools($user)) {
+        AJAXErr();
+    }
     sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE PostId='$escaped_post_id';", 1) or AJAXErr();
     $post = $result->fetch_assoc();
     $pool_id = $post['ParentPoolId'];
