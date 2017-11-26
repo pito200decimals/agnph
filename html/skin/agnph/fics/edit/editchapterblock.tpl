@@ -29,10 +29,10 @@
     }
     tinymce.init({
         selector: "textarea#chapnotes",
-        plugins: [ "paste", "link", "autoresize", "hr", "code", "contextmenu", "emoticons", "image", "textcolor" ],
+        plugins: [ "paste", "link", "autoresize", "hr", "code", "emoticons", "image", "textcolor" ],
         target_list: [ {title: 'New page', value: '_blank'} ],
         toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor | link | code",
-        contextmenu: "image link | hr",
+        contextmenu: false,
         autoresize_max_height: 300,
         resize: true,
         browser_spellcheck: true,
@@ -41,10 +41,10 @@
     });
     tinymce.init({
         selector: "textarea#chaptext",
-        plugins: [ "paste", "link", "autoresize", "hr", "wordcount", "code", "contextmenu", "emoticons", "fullscreen", "preview", "image", "searchreplace", "textcolor" ],
+        plugins: [ "paste", "link", "autoresize", "hr", "wordcount", "code", "emoticons", "fullscreen", "preview", "image", "searchreplace", "textcolor" ],
         target_list: [ {title: 'New page', value: '_blank'} ],
         toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor | link | code fullscreen preview",
-        contextmenu: "image link | hr",
+        contextmenu: false,
         autoresize_max_height: 500,
         resize: true,
         browser_spellcheck: true,
@@ -61,10 +61,10 @@
     });
     tinymce.init({
         selector: "textarea#chapendnotes",
-        plugins: [ "paste", "link", "autoresize", "hr", "code", "contextmenu", "emoticons", "image", "textcolor" ],
+        plugins: [ "paste", "link", "autoresize", "hr", "code", "emoticons", "image", "textcolor" ],
         target_list: [ {title: 'New page', value: '_blank'} ],
         toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor | link | code",
-        contextmenu: "image link | hr",
+        contextmenu: false,
         autoresize_max_height: 300,
         resize: true,
         browser_spellcheck: true,
