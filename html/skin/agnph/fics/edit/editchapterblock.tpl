@@ -2,17 +2,20 @@
     function CheckWallOfText(content) {
       var hasLargeParagraph = false;
       var hasBadDialogue = false;
-      content = content.replace(/<br\s*\/?>/g, '</p><p>');
+      content = content.replace(/<\/?div\s*>/g, "");
+      content = content.replace(/<br\s*\/?>(\s|&nbsp;)<br\s*\/?>/g, "</p><p>");
+      if (!content.startsWith("<p")) {
+        content = "<p>" + content + "</p>";
+      }
       $("<div>" + content + "</div>").find('p').each(function(i, p) {
         var text = $(p).text();
         if (text.length > 1200) {
-          console.log(text);
           hasLargeParagraph = true;
         }
         var n_q = (text.match(/"/g) || []).length;
         var n_ldq = (text.match(/“/g) || []).length;
         var n_rdq = (text.match(/”/g) || []).length;
-        if (n_q >= 6 || (n_ldq >= 3 && n_rdq >= 3)) {
+        if (n_q >= 6 || n_ldq + n_rdq >= 6) {
           hasBadDialogue = true;
         }
       });
@@ -96,7 +99,7 @@
         </textarea>
         <div id="length-warning" class="wall-of-text-warning">
           <p>
-            <strong>Warning:</strong> You seem to have a large wall-of-text. You should format your story properly with line/paragraph breaks before saving.
+            <strong>Warning:</strong> You seem to have a large wall-of-text. You should format your story properly with paragraphs or double-line-breaks before saving.
           </p>
         </div>
         <div id="dialogue-warning" class="wall-of-text-warning">
