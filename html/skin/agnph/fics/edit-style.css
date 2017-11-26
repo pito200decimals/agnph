@@ -76,3 +76,13 @@ form hr {
     cursor: pointer;
 }
 
+.wall-of-text-warning {
+    border: 1px solid black;
+    margin: 10px;
+    padding: 10px;
+    display: none;
+    font-size: 120%;
+}
+.wall-of-text-warning strong {
+    color: red;
+}

@@ -130,6 +130,7 @@
             contextmenu: "image link | hr",
             autoresize_max_height: 300,
             resize: true,
+            browser_spellcheck: true,
             menubar: false,
             relative_urls: false
         });
@@ -141,6 +142,7 @@
             contextmenu: "image link | hr",
             autoresize_max_height: 300,
             resize: true,
+            browser_spellcheck: true,
             menubar: false,
             relative_urls: false
         });
