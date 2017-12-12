@@ -23,6 +23,7 @@ CollectItems(GALLERY_POOLS_TABLE, "$whereClause ORDER BY ".GetQueryOrder(), $poo
 if (sizeof($pools) > 0) {
     // Compute pool search names.
     foreach ($pools as &$pool) {
+        $pool['Name'] = SanitizedToRawPoolName($pool['Name']);  // Get raw string, as this is rendered escaped correctly.
         $pool['searchString'] = "pool:".str_replace(" ", "_", $pool['Name']);
     }
     // Compute counts.

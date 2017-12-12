@@ -2,6 +2,7 @@
 // General functions related to searching for posts.
 
 include_once(SITE_ROOT."includes/util/core.php");
+include_once(SITE_ROOT."gallery/includes/functions.php");
 include_once(SITE_ROOT."gallery/includes/searchclause.php");
 
 // Search orderings implemented:
@@ -23,6 +24,7 @@ function CreatePostSearchSQL($search_string, $posts_per_page, $page, &$can_sort_
     if (preg_match("/^.*pool:([^ ]*)($| .*)/", $search_string, $matches)) {
         $pool_name = $matches[1];
         $pool_name = str_replace("_", " ", $pool_name);  // Un-escape out the underscores.
+        $pool_name = RawToSanitizedPoolName($pool_name);  // Get db name.
         $escaped_pool_name = sql_escape($pool_name);
         if (sql_query_into($result, "SELECT * FROM ".GALLERY_POOLS_TABLE." WHERE UPPER(Name)=UPPER('$escaped_pool_name');", 1)) {
             $pool_id = $result->fetch_assoc()['PoolId'];
