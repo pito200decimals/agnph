@@ -28,6 +28,17 @@ $(document).ready(function() {
         onSelect: function(suggestion) {
             AddToPool(suggestion.data.id);
         },
+        formatResult: function(suggestion, currentResult) {
+            var full = suggestion.value;
+            var full_lower = full.toLowerCase();
+            if (full_lower.startsWith(currentResult.toLowerCase())) {
+                var prefix = full.substr(0, currentResult.length);
+                var suffix = full.substr(currentResult.length);
+                return "<strong>" + prefix + "</strong>" + suffix;
+            } else {
+                return full;
+            }
+        },
         showNoSuggestionNotice: true,
         tabDisabled: true,
         triggerSelectOnValidInput: false

@@ -183,6 +183,22 @@ function GetSystemThumbPath($md5, $ext) { return SITE_ROOT.GetThumbPath($md5, $e
 function GetSitePreviewPath($md5, $ext) { return "/".GetPreviewPath($md5, $ext); }
 function GetSystemPreviewPath($md5, $ext) { return SITE_ROOT.GetPreviewPath($md5, $ext); }
 
+function RawToSanitizedPoolName($raw, $accept_only_valid_lengths = false) {
+    // Strip out _ so that this can be searched for.
+    $result = str_replace("_", " ", $raw);
+    // And strip out duplicate spaces.
+    $result = mb_ereg_replace("\s+", " ", $result);
+    $result = mb_substr($result, 0, MAX_GALLERY_POOL_NAME_LENGTH);
+    if ($accept_only_valid_lengths && mb_strlen($result) < MIN_GALLERY_POOL_NAME_LENGTH) {
+        return FALSE;
+    }
+    $result = GetSanitizedTextTruncated($result, NO_HTML_TAGS, MAX_GALLERY_POOL_NAME_LENGTH);
+    return $result;
+}
+function SanitizedToRawPoolName($sanitized) {
+    return htmlspecialchars_decode($sanitized);
+}
+
 // Gets a parent post id for a given post. If the parent doesn't exist, returns -1.
 // Replaces "none" with -1. Replaces self-parenting with -1.
 function GetValidParentPostId($parent_post_id, $post_id) {

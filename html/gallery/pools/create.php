@@ -11,16 +11,12 @@ if (!isset($_POST['search'])) InvalidURL();
 if (!CanPerformSitePost()) MaintenanceError();
 
 $name = $_POST['search'];
-// Strip out _ so that this can be searched for.
-$name = str_replace("_", " ", $name);
-// And strip out duplicate spaces.
-$name = mb_ereg_replace("\s+", " ", $name);
-$name = mb_substr($name, 0, MAX_GALLERY_POOL_NAME_LENGTH);
-if (mb_strlen($name) < MIN_GALLERY_POOL_NAME_LENGTH) {
+$name = RawToSanitizedPoolName($name, /*accept_only_valid_lengths=*/true);
+if ($name === FALSE) {
     PostSessionBanner("Invalid pool name", "red");
     Redirect($_SERVER['HTTP_REFERER']);
 }
-$escaped_name = sql_escape(GetSanitizedTextTruncated($name, NO_HTML_TAGS, MAX_GALLERY_POOL_NAME_LENGTH));
+$escaped_name = sql_escape($name);
 // If there's a duplicate name, go to that page.
 sql_query_into($result, "SELECT * FROM ".GALLERY_POOLS_TABLE." WHERE UPPER(Name)=UPPER('$escaped_name');", 0) or RenderErrorPage("An error occurred, please try again later.");
 if ($result->num_rows > 0) {
