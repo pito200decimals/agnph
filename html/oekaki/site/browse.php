@@ -134,9 +134,6 @@ $vars['iterator'] = $iterator;
 $vars['url'] = $_SERVER['REQUEST_URI'];
 $vars['search'] = $search;
 
-// Post news banner.
-PostBanner("News: The Oekaki now supports saving drawing animations! Just check the box when you create a new canvas.", "green", /*dismissable=*/false);
-
 RenderPage("oekaki/browse.tpl", false /* tidy */);
 return;
 
