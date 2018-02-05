@@ -89,9 +89,9 @@ function CreatePostSearchSQL($search_string, $posts_per_page, $page, &$can_sort_
         $can_sort_pool = false;
     }
     if ($can_sort_pool) {
-        // Possible to sort order within a pool. Will be messed up for pools of size > 250.
+        // Possible to sort order within a pool. Will be messed up for pools of size > 500.
         $offset = 0;
-        $page_size = 250;  // Max sort space for a pool.
+        $page_size = 500;  // Max sort space for a pool.
     }
     if ($return_where_only) {
         return CreateSQLClauses($search_string);
