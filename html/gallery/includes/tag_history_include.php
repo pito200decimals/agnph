@@ -1,6 +1,10 @@
 <?php
 // PHP code that renders a list of tag edits.
 
+// Assumes there are input vars:
+// $tag_history_items: sql results.
+// $ids: List of ids to keep.
+
 // Create item elements.
 $all_tag_ids = array();
 array_map(function($item) use (&$all_tag_ids) {
@@ -15,11 +19,16 @@ if (sizeof($all_tag_ids) > 0) {
     $tags = GetTagsById(GALLERY_TAG_TABLE, $all_tag_ids);
     if ($tags == null) RenderErrorPage("Post not found");
 }
-$rating = "";
-$parent = "none";
-$source = "";
+$ratingMap = array();
+$parentMap = array();
+$sourceMap = array();
 $tag_history_items = array_reverse($tag_history_items);  // Need to process in reverse order.
+$chronological_results = array();
 foreach ($tag_history_items as &$item) {
+    $pid = $item['PostId'];
+    if (!isset($ratingMap[$pid])) $ratingMap[$pid] = "";
+    if (!isset($parentMap[$pid])) $parentMap[$pid] = "none";
+    if (!isset($sourceMap[$pid])) $sourceMap[$pid] = "";
     $tag_changes = "";
     $adds = array_map(function($tag_id) use ($tags) {
         $typeclass = mb_strtolower($tags[$tag_id]['Type'], "UTF-8")."typetag";
@@ -37,21 +46,21 @@ foreach ($tag_history_items as &$item) {
         foreach ($props as $prop) {
             if (startsWith($prop, "rating:")) {
                 $r = mb_substr($prop, 7);
-                if ($r != $rating) {
+                if ($r != $ratingMap[$pid]) {
                     $edits[] = "<span class='ptypetag'>$prop</span>";
-                    $rating = $r;
+                    $ratingMap[$pid] = $r;
                 }
             } else if (startsWith($prop, "parent:")) {
                 $p = mb_substr($prop, 7);
-                if ($p != $parent) {
+                if ($p != $parentMap[$pid]) {
                     $edits[] = "<span class='ptypetag'>$prop</span>";
-                    $parent = $p;
+                    $parentMap[$pid] = $p;
                 }
             } else if (startsWith($prop, "source:")) {
                 $s = mb_substr($prop, 7);
-                if ($s != $source) {
+                if ($s != $sourceMap[$pid]) {
                     $edits[] = "<span class='ptypetag source-history-item'>$prop</span>";
-                    $source = $s;
+                    $sourceMap[$pid] = $s;
                 }
             }
         }
@@ -60,10 +69,13 @@ foreach ($tag_history_items as &$item) {
     $edits = array_map(function($html) {
         return "<span class='tag-edit'>$html</span>";
     }, $edits);
-    $tag_changes = implode(" ", $edits);
-    $item['tagChanges'] = $tag_changes;
-    $item['date'] = FormatDate($item['Timestamp'], GALLERY_DATE_LONG_FORMAT);
-    LoadSingleTableEntry(array(USER_TABLE), "UserId", $item['UserId'], $item['user']);
+    if (!isset($ids) || in_array($item['Id'], $ids)) {
+        $tag_changes = implode(" ", $edits);
+        $item['tagChanges'] = $tag_changes;
+        $item['date'] = FormatDate($item['Timestamp'], GALLERY_DATE_LONG_FORMAT);
+        LoadSingleTableEntry(array(USER_TABLE), "UserId", $item['UserId'], $item['user']);
+        $chronological_results[] = $item;
+    }
 }
-$tag_history_items = array_reverse($tag_history_items);  // Undo reverse order.
+$tag_history_items = array_reverse($chronological_results);  // Undo reverse order.
 ?>
