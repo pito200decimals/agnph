@@ -36,27 +36,24 @@ if (sizeof($search_terms) > 0) {
 
 CollectItems(GALLERY_POST_TAG_HISTORY_TABLE, "WHERE ($sql_clause) ORDER BY Timestamp DESC, Id DESC", $tag_history_items, GALLERY_LIST_ITEMS_PER_PAGE, $iterator, "Edit history not found");
 
-if (sizeof($search_terms) > 0) {
-    // Convert search clause into entire edit history for all associated posts.
-    // Only need to special-case if a search term is given.
-    $ids = array();  // Ids to keep in final result.
-    $pids = array();
-    foreach ($tag_history_items as $row) {
-        $ids[] = $row['Id'];
-        $pids[] = $row['PostId'];
-    }
-    $pids = array_unique($pids);
-    sort($pids);
-    if (sizeof($pids) > 0) {
-        $sql_clause = "T.PostId IN (".implode(",", $pids).")";
-    } else {
-        $sql_clause = "FALSE";
-    }
-    $tag_history_items = array();
-    if (sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TAG_HISTORY_TABLE." T WHERE ($sql_clause) ORDER BY Timestamp DESC, Id DESC;", 1)) {
-        while ($row = $result->fetch_assoc()) {
-            $tag_history_items[] = $row;
-        }
+// Fetch full history of any posts that will be shown.
+$ids = array();  // Ids to keep in final result.
+$pids = array();
+foreach ($tag_history_items as $row) {
+    $ids[] = $row['Id'];
+    $pids[] = $row['PostId'];
+}
+$pids = array_unique($pids);
+sort($pids);
+if (sizeof($pids) > 0) {
+    $sql_clause = "T.PostId IN (".implode(",", $pids).")";
+} else {
+    $sql_clause = "FALSE";
+}
+$tag_history_items = array();
+if (sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TAG_HISTORY_TABLE." T WHERE ($sql_clause) ORDER BY Timestamp DESC, Id DESC;", 1)) {
+    while ($row = $result->fetch_assoc()) {
+        $tag_history_items[] = $row;
     }
 }
 
