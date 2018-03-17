@@ -55,9 +55,13 @@ if (isset($user)) {
     }
 }
 MarkUserVisit();
+if (IsBlacklistedURLVisitor() || IsBlacklistedBot()) {
+  AJAXErr();
+}
 
 $vars['debug'] = DEBUG;
 $vars['version'] = VERSION;
+$vars['copyright_year'] = date("Y");
 
 // Template engine includes.
 include_once(__DIR__."/../lib/Twig/Autoloader.php");
