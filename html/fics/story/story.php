@@ -38,8 +38,9 @@ foreach ($storyReviews as &$review) {
     }
     $review['chapterTitle'] = $title;
 }
-$comments = array_filter($storyReviews, function($review) {
-    return $review['IsComment'] && $review['ChapterId'] == -1;
+$includeAllCommentsOnStory = TRUE;  // TODO: Get from user settings.
+$comments = array_filter($storyReviews, function($review) use ($includeAllCommentsOnStory) {
+    return $review['IsComment'] && ($includeAllCommentsOnStory || $review['ChapterId'] == -1);
 });
 $reviews = array_filter($storyReviews, function($review) {
     // Get reviews for story as well as all chapters.
@@ -59,13 +60,13 @@ ConstructCommentBlockIterator($reviews, $vars['reviewIterator'], isset($_GET['re
     }, FICS_COMMENTS_PER_PAGE);
 
 // Format comments for template.
-$comments = array_map(function($comment) {
+$comments = array_map(function($comment) use ($includeAllCommentsOnStory) {
         global $user;
         return array(
             'id' => $comment['id'],
             'user' => $comment['commenter'],
             'date' => $comment['date'],
-            'title' => "",
+            'title' => ($includeAllCommentsOnStory ? $comment['chapterTitle'] : ""),
             'text' => $comment['ReviewText'],
             'actions' => $comment['actions']);
     }, $comments);
