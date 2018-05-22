@@ -73,6 +73,7 @@ $vars['POST'] = $_POST;
 FetchUserHeaderVars();
 SetHeaderHighlight();
 GetUnreadPMCount();
+GetNotificationCount();
 
 if (isset($user)) {
     // Do nothing if logged in.
@@ -181,6 +182,14 @@ function GetUnreadPMCount() {
         if (sql_query_into($result, "SELECT COUNT(*) AS C FROM ".USER_MAILBOX_TABLE." WHERE RecipientUserId=$uid AND Status='U';", 1)) {
             $vars['unread_message_count'] = $result->fetch_assoc()['C'];
         }
+    }
+}
+
+function GetNotificationCount() {
+    global $user, $vars;
+    if (isset($user)) {
+        $uid = $user['UserId'];
+        $vars['unread_notification_count'] = 0;
     }
 }
 

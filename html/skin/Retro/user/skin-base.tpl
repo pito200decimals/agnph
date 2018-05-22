@@ -19,7 +19,7 @@
 
 {% block extra_account_menu_options_logged_in %}
     {% if profile.user.UserId == user.UserId %}
-        <li><a href="/user/{{ user.UserId }}/mail/">Messages{% if unread_message_count > 0 %} <span class="unread-messages">({{ unread_message_count }})</span>{% endif %}</a></li>
+        <li><a href="/user/{{ user.UserId }}/mail/">Messages{% if unread_message_count + unread_notification_count > 0 %} <span class="unread-messages">({{ unread_message_count + unread_notification_count }})</span>{% endif %}</a></li>
         <li><a href="/user/{{ user.UserId }}/preferences/">Settings</a></li>
         <li class="divider"></li>
         <li>

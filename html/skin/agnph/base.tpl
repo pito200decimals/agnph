@@ -75,9 +75,9 @@
 </noscript>
                         <li>
                             <a class="desktop-only" href="/user/{{ user.UserId }}/mail/">
-                                {% if unread_message_count > 0 %}
-                                    {% if unread_message_count <= 9 %}
-                                        <img src="/images/message-unread-{{ unread_message_count }}.png" />
+                                {% if unread_message_count + unread_notification_count > 0 %}
+                                    {% if unread_message_count + unread_notification_count <= 9 %}
+                                        <img src="/images/message-unread-{{ unread_message_count + unread_notification_count }}.png" />
                                     {% else %}
                                         <img src="/images/message-unread-9+.png" />
                                     {% endif %}
@@ -91,7 +91,7 @@
                             <ul id="account-menu" class="nav-menu-tray">
                                 <li><a href="/user/{{ user.UserId }}/">Profile</a></li>
                                 <li>
-                                    <div class="mobile-only"><a href="/user/{{ user.UserId }}/mail/">Messages{% if unread_message_count > 0 %} <span class="unread-messages">({{ unread_message_count }})</span>{% endif %}</a></div>
+                                    <div class="mobile-only"><a href="/user/{{ user.UserId }}/mail/">Messages{% if unread_message_count + unread_notification_count > 0 %} <span class="unread-messages">({{ unread_message_count + unread_notification_count }})</span>{% endif %}</a></div>
                                 </li>
                                 <li><a href="/user/{{ user.UserId }}/preferences/">Settings</a></li>
                                 <li>
