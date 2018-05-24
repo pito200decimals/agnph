@@ -236,7 +236,7 @@
                 </div>
             </div>
             <div id="footer">
-                <div><span>© 1996-{{ copyright_year }} AGNPH</span> | <span>v{{ version }}</span> | <span><a href="/about/rules/">Rules</a></span> | <span><a href="/about/staff/">Contact Us</a></span></div>
+                <div><span>© 1996-{{ copyright_year }} AGNPH</span> | <span>v{{ version }}</span> | <span><a href="/about/rules/">Rules</a></span> | <span><a href="/about/privacy/">Privacy Policy</a></span> | <span><a href="/about/staff/">Contact Us</a></span></div>
                 <div></div>
                 <div><span><small>All fanworks within are based on Pokémon. Pokémon © Nintendo/Creatures, Inc./GAME FREAK/The Pokémon Company. All work contained within this website are user-submitted, fan-made contributions. No copyright infringement is intended.</small></span></div>
             </div>

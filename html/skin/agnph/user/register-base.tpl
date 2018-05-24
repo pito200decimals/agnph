@@ -12,7 +12,7 @@
         #register-form li {
             margin: 5px;
         }
-        #register-form label {
+        #register-form li label {
             display: inline-block;
             width: 200px;
         }
@@ -48,6 +48,9 @@
                 var password_confirm = $("#password-confirm").val();
                 var bday = $("#bday").val();
                 var captcha = $("#captcha").val();
+                var age_check = $("#age-check").is(":checked");
+                var rules_check = $("#rules-check").is(":checked");
+                var terms_check = $("#terms-check").is(":checked");
                 if (name.length == 0) {
                     err = true;
                     $("#name-error").hide();
@@ -107,6 +110,15 @@
                 if (captcha.length == 0) {
                     err = true;
                 }
+                if (!age_check) {
+                    err = true;
+                }
+                if (!rules_check) {
+                    err = true;
+                }
+                if (!terms_check) {
+                    err = true;
+                }
                 if (err) {
                     $("#button").prop("disabled", true);
                 } else {
@@ -115,6 +127,7 @@
             }
             $("input").keyup(check);
             $("input").focusout(check);
+            $("input").change(check);
             check();
         });
     </script>
@@ -151,6 +164,15 @@
                     <label>Enter Captcha:</label><input id="captcha" name="captcha" type="text" value="" />
                 </li>
             </ul>
+            <div>
+                <input type="checkbox" name="rules-check" id="rules-check"><label for="rules-check">I have read the <a href="/about/rules/">Site Rules</a></label>
+            </div>
+            <div>
+                <input type="checkbox" name="terms-check" id="terms-check"><label for="terms-check">I agree to the <a href="/about/privacy/">Site Privacy Policy</a></label>
+            </div>
+            <div>
+                <input type="checkbox" name="age-check" id="age-check"><label for="age-check">I am 18 years or older</label>
+            </div>
             <div id="register-disclaimer">
                 {% autoescape false %}
                     {{ registerDisclaimerMessage }}

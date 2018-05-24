@@ -41,6 +41,10 @@ if (isset($_GET['q'])) {
             $vars['_title'] = "AGNPH - Account Help";
             RenderPage("about/account.tpl");
             return;
+        case "privacy":
+            $vars['_title'] = "AGNPH - Privacy Policy";
+            RenderPage("about/privacy.tpl");
+            return;
         default:
             break;
     }

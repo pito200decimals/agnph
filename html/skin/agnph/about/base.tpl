@@ -15,6 +15,7 @@
         <li><a href="/about/minecraft/">Minecraft</a></li>
         <li><a href="/about/oekaki/">Oekaki</a></li>
         <li><a href="/about/account/">Account Help</a></li>
+        <li><a href="/about/privacy/">Privacy Policy</a></li>
     </ul>
 {% endblock %}
 
