@@ -127,11 +127,17 @@
                 <input type="hidden" name="notification-id" value="" />
                 <input type="hidden" name="hash" value="#notifications" />
             </form>
-            <ul class="comment-list">
-                {% for notification in notifications %}
-                    {{ block('notification') }}
-                {% endfor %}
-            </ul>
+            {% if notifications|length > 0 %}
+                <ul class="comment-list">
+                    {% for notification in notifications %}
+                        {{ block('notification') }}
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div>
+                    No notifications found.
+                </div>
+            {% endif %}
             <div class="Clear">&nbsp;</div>
             <div class="iterator">
                 {% autoescape false %}{{ notification_iterator }}{% endautoescape %}

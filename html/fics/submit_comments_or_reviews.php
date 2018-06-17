@@ -5,6 +5,7 @@
 
 include_once(SITE_ROOT."includes/util/sql.php");
 include_once(SITE_ROOT."includes/util/html_funcs.php");
+include_once(SITE_ROOT."includes/util/notification.php");
 
 if (!isset($user)) return;
 if (!CanPerformSitePost()) MaintenanceError();
@@ -77,6 +78,14 @@ if ($action == "comment" || $action == "review") {
         (StoryId, ChapterId, ReviewerUserId, ReviewDate, ReviewText, ReviewScore, IsReview, IsComment)
         VALUES
         ($sid, $cid, $reviewerUserId, $now, '$escaped_text', '$escaped_score', $isReview, $isComment);");
+    // Get shared info for notifications.
+    $poster_display_name = $user['DisplayName'];
+    $story_title = $story['Title'];
+    $story_url = SITE_DOMAIN."/fics/story/".$story['StoryId']."/";
+    if (isset($chapter)) {
+        $story_url = $story_url.($story['ChapterItemOrder'] + 1)."/";
+    }
+    $story_url = $story_url."#reviews";
     if ($success) {
         if ($action == "review") {
             // Update stats.
@@ -96,8 +105,18 @@ if ($action == "comment" || $action == "review") {
             }
             $story['stars'] = GetStars($story['TotalStars'], $story['TotalRatings']);
             PostSessionBanner("Review posted", "green");
+            AddNotification(
+                /*user_id=*/$story['AuthorUserId'],
+                /*title=*/"New Story Review",
+                /*contents=*/"$poster_display_name posted a new review on your story <a href='$story_url'>$story_title</a>.",
+                /*sender_id=*/$user['UserId']);
         } else {
             PostSessionBanner("Comment posted", "green");
+            AddNotification(
+                /*user_id=*/$story['AuthorUserId'],
+                /*title=*/"New Story Comment",
+                /*contents=*/"$poster_display_name posted a new comment on your story <a href='$story_url'>$story_title</a>.",
+                /*sender_id=*/$user['UserId']);
         }
         // Go back to requesting page.
         Redirect($_SERVER['HTTP_REFERER']);
@@ -114,6 +133,11 @@ if ($action == "comment" || $action == "review") {
     $success = sql_query("UPDATE ".FICS_REVIEW_TABLE." SET AuthorResponseText='$escaped_text' WHERE ReviewId='$escaped_review_id';");
     if ($success){
         PostSessionBanner("Response posted", "green");
+        AddNotification(
+            /*user_id=*/$review['ReviewerUserId'],
+            /*title=*/"New Author Response",
+            /*contents=*/"$poster_display_name posted a response to your review of story <a href='$story_url'>$story_title</a>.",
+            /*sender_id=*/$user['UserId']);
         // Go back to requesting page.
         Redirect($_SERVER['HTTP_REFERER']);
     } else {
