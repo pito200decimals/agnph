@@ -3,6 +3,7 @@
 
 include_once(SITE_ROOT."fics/includes/functions.php");
 include_once(SITE_ROOT."includes/util/file.php");
+include_once(SITE_ROOT."includes/util/notification.php");
 
 if (!isset($user)) {
     return;
@@ -144,6 +145,21 @@ if ($action == "edit") {
     $chaptertitle = htmlspecialchars($chaptertitle);
     $storyTitle = htmlspecialchars($story['Title']);
     LogVerboseAction("<strong><a href='/user/$uid/'>$username</a></strong> added chapter <strong>$chaptertitle</strong> ($cid) to story <strong><a href='/fics/story/$sid/'>$storyTitle</a></strong>", "F");
+
+    // Send notification to all people who favorited this story.
+    if (sql_query_into($result, "SELECT * FROM ".FICS_USER_FAVORITES_TABLE." WHERE StoryId=$sid;", 1)) {
+        $author = $user['DisplayName'];
+        $story_url = SITE_DOMAIN."/fics/story/$sid/";
+        $chapter_url = SITE_DOMAIN."/fics/story/$sid/$cid/";
+        while ($row = $result->fetch_assoc()) {
+            $rid = $row['UserId'];
+            AddNotification(
+                /*user_id=*/$rid,
+                /*title=*/"New Chapter posted for $storyTitle",
+                /*contents=*/"$author posted a new chapter for <a href='$story_url'>$storyTitle</a> - <a href='$chapter_url'>$chaptertitle</a>.",
+                /*sender_id=*/$user['UserId']);
+        }
+    }
     return;
 } else {
     return;
