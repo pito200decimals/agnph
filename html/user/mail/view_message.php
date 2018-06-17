@@ -45,9 +45,7 @@ foreach ($messages as &$msg_ref) {
 $vars['messages'] = $messages;
 $message = current($messages);  // Any message will do.
 $vars['message'] = $message;
-if ($message['MessageType']) {
-    $vars['canSendPM'] = false;
-} else {
+if ($message['MessageType'] == 0 && $message['SenderUserId'] > 0) {
     $vars['canSendPM'] = CanUserSendPMsForUser($user, $profile_user);
 }
 $vars['rid'] = $selected_msg['Id'];

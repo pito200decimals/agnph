@@ -24,8 +24,10 @@
 .comment-content {
     display: block;
     margin: 0px;
-    margin-left: 100px;
     text-align: left;
+}
+.comment-side-panel+.comment-content {
+    margin-left: 100px;
 }
 
 .commentheader {

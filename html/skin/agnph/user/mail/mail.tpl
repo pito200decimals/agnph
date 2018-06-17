@@ -4,6 +4,7 @@
     {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('/list-style.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('/user/mail-style.css') }}" />
+    <link rel="stylesheet" type="text/css" href="/skin/agnph/comments-style.css" />
 {% endblock %}
 
 {% block scripts %}
@@ -38,6 +39,15 @@
                 }
             }
         }
+        function MarkAllRead() {
+            $('#mark-read-form').submit();
+            return false;
+        }
+        function DeleteNotification(id) {
+            $('[name="notification-id"]').val(id);
+            $('#delete-notification').submit();
+            return false;
+        }
     </script>
 {% endblock %}
 
@@ -63,8 +73,9 @@
             <div class="action-bar">
                 <form id="mark-read-form" method="POST" accept-encoding="UTF-8">
                     <input type="hidden" name="action" value="mark-all-read" />
+                    <input type="hidden" name="hash" value="#messages" />
                 </form>
-                <a href="" onclick="document.getElementById('mark-read-form').submit();return false;">Mark All as Read</a>
+                <a href="" onclick="return MarkAllRead()">Mark All as Read</a>
             </div>
             <table class="list-table">
                 <thead>
@@ -111,30 +122,55 @@
         {# Pane for notifications #}
         <div id="tab-notifications" class="tab-content">
             {# Display notifications list. #}
-            <table class="list-table">
-                <thead>
-                    <tr>
-                        <td><div><strong>Subject</strong></div></td>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% if notifications|length > 0 %}
-                        {% for notification in notifications %}
-                            <tr class="{% if notification.Status == 'U' %}unread{% endif %}">
-                                <td><div><a href="/user/{{ profile.user.UserId }}/mail/message/{{ notification.Id }}/">{{ notification.Title }}</a></div></td>
-                            </tr>
-                        {% endfor %}
-                    {% else %}
-                        <tr>
-                            <td colspan="2">No notifications found</td>
-                        </tr>
-                    {% endif %}
-                </tbody>
-            </table>
+            <form id="delete-notification" method="POST" accept-encoding="UTF-8">
+                <input type="hidden" name="action" value="delete-notification" />
+                <input type="hidden" name="notification-id" value="" />
+                <input type="hidden" name="hash" value="#notifications" />
+            </form>
+            <ul class="comment-list">
+                {% for notification in notifications %}
+                    {{ block('notification') }}
+                {% endfor %}
+            </ul>
             <div class="Clear">&nbsp;</div>
             <div class="iterator">
                 {% autoescape false %}{{ notification_iterator }}{% endautoescape %}
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block notification %}
+    <li class="comment">
+        {% if notification.SenderUserId > 0 %}
+            <div class="comment-side-panel">
+                <div>
+                    <a href="/user/{{ notification.user.UserId }}/">
+                        <img class="comment-avatarimg" src="{{ notification.user.avatarURL }}" />
+                    </a>
+                    <div class="Clear">&nbsp;</div>
+                </div>
+                {% if notification.user.Title|length > 0 %}
+                    <span class="comment-side-panel-label">{{ notification.user.Title }}</span>
+                {% endif %}
+            </div>
+        {% endif %}
+        <div class="comment-content">
+            <div class="commentheader">
+                <div class="edit-comment-form"><a href="" onclick="return DeleteNotification({{ notification.Id }})">Delete</a></div>
+                <strong>{{ notification.title }}</strong><br />
+                <span>Date: {{ notification.date }}</span>
+            </div>
+            <div class="commenttext">
+                {% autoescape false %}
+                    {{ notification.text }}
+                {% endautoescape %}
+            </div>
+        </div>
+        <div class="Clear">&nbsp;</div>
+        {% if notification.anchor %}
+            <div><small class="direct-link"><a href="#{{ notification.anchor }}">Link to post</a></small></div>
+            <div class="Clear">&nbsp;</div>
+        {% endif %}
+    </li>
 {% endblock %}

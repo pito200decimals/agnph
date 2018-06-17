@@ -43,8 +43,6 @@
         {% else %}
             <h3>Message to {{ message.toFromUser.DisplayName }}</h3>
         {% endif %}
-    {% else %}
-        <h3>Admin Notification</h3>
     {% endif %}
     {% if canSendPM %}
         <form action="/user/{{ profile.user.UserId }}/mail/send/" method="POST" accept-charset="UTF-8">

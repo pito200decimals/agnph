@@ -17,9 +17,7 @@ function GetMessages($profile_user, $message_type=0) {
 }
 
 function GetAdminUserMetadata() {
-    return array(
-        "DisplayName" => "Admin",
-        "avatarURL" => DEFAULT_AVATAR_PATH);
+    return array("DisplayName" => "Notification");
 }
 
 function AddMessageBodyAndMetadata($profile_user, &$messages) {

@@ -26,11 +26,24 @@ if (!CanUserViewPMs($user, $profile_user)) {
 $uid = $profile_user['UserId'];
 if (isset($_POST['action'])) {
     if (!CanPerformSitePost()) MaintenanceError();
+    $hash = "";
+    if (isset($_POST['hash'])) {
+        $hash = $_POST['hash'];
+    }
     switch ($_POST['action']) {
         case "mark-all-read":
             sql_query("UPDATE ".USER_MAILBOX_TABLE." SET Status='R' WHERE RecipientUserId=$uid AND Status='U' AND MessageType=0;");
             // Go back to requesting page.
-            Redirect($_SERVER['HTTP_REFERER']);
+            Redirect($_SERVER['HTTP_REFERER'].$hash);
+            return;
+        case "delete-notification":
+            if (isset($_POST['notification-id']) && is_numeric($_POST['notification-id'])) {
+                $id = sql_escape((int) $_POST['notification-id']);
+                sql_query("UPDATE ".USER_MAILBOX_TABLE." SET Status='D' WHERE RecipientUserId=$uid AND Id=$id AND MessageType=1;");
+            }
+            // Go back to requesting page.
+            Redirect($_SERVER['HTTP_REFERER'].$hash);
+            return;
         default:
             break;
     }
@@ -74,7 +87,7 @@ if (sizeof($notifications) > INBOX_ITEMS_PER_PAGE) {
     $iterator = ConstructMailboxIterator($notifications, $offset, INBOX_ITEMS_PER_PAGE, $url_fn);
     $vars['notification_iterator'] = $iterator;
 }
-if (!AddMessageMetadata($profile_user, $notifications)) RenderErrorPage("Error while fetching notifications");
+AddMessageBodyAndMetadata($profile_user, $notifications);
 $vars['notifications'] = $notifications;
 
 // This is how to output the template.
