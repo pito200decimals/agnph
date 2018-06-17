@@ -12,14 +12,32 @@
         $(document).ready(function() {
             $('ul.tabs li').click(function() {
                 var tab_id = $(this).attr('data-tab');
-
-                $('ul.tabs li').removeClass('current');
-                $('.tab-content').removeClass('current');
-
-                $(this).addClass('current');
-                $("#"+tab_id).addClass('current');
+                var hash = tab_id.substring(4);
+                location.hash = '#' + hash;
             });
+            onHashChange();
         });
+        $(window).on('hashchange', onHashChange);
+        function onHashChange() {
+            var tab_id = 'tab-messages';
+            if (location.hash.length > 0) {
+                tab_id = "tab-" + location.hash.substring(1);
+            }
+            var tab = $('[data-tab="' + tab_id + '"]');
+            if (tab.length == 0) {
+                tab = $('[data-tab="tab-messages"]');
+            }
+            if (tab.length > 0) {
+                var tab_id = tab.attr('data-tab');
+                var content = $('#' + tab_id);
+                if (content.length > 0) {
+                    $('ul.tabs li').removeClass('current');
+                    $('.tab-content').removeClass('current');
+                    tab.addClass('current');
+                    content.addClass('current');
+                }
+            }
+        }
     </script>
 {% endblock %}
 
@@ -36,7 +54,7 @@
         <a id="reviews"></a>
         <ul class="tabs">
             <li class="tab-link current" data-tab="tab-messages">Private Messages{% if unread_message_count > 0 %} <span class="unread-messages">({{ unread_message_count }})</span>{% endif %}</li>
-            {#<li class="tab-link" data-tab="tab-notifications">Notifications{% if unread_notification_count > 0 %} <span class="unread-messages">({{ unread_notification_count }})</span>{% endif %}</li>#}
+            <li class="tab-link" data-tab="tab-notifications">Notifications{% if unread_notification_count > 0 %} <span class="unread-messages">({{ unread_notification_count }})</span>{% endif %}</li>
         </ul>
 
         {# Pane for private messages #}
@@ -86,12 +104,37 @@
             </table>
             <div class="Clear">&nbsp;</div>
             <div class="iterator">
-                {% autoescape false %}{{ iterator }}{% endautoescape %}
+                {% autoescape false %}{{ mail_iterator }}{% endautoescape %}
             </div>
         </div>
 
         {# Pane for notifications #}
         <div id="tab-notifications" class="tab-content">
+            {# Display notifications list. #}
+            <table class="list-table">
+                <thead>
+                    <tr>
+                        <td><div><strong>Subject</strong></div></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if notifications|length > 0 %}
+                        {% for notification in notifications %}
+                            <tr class="{% if notification.Status == 'U' %}unread{% endif %}">
+                                <td><div><a href="/user/{{ profile.user.UserId }}/mail/message/{{ notification.Id }}/">{{ notification.Title }}</a></div></td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="2">No notifications found</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+            <div class="Clear">&nbsp;</div>
+            <div class="iterator">
+                {% autoescape false %}{{ notification_iterator }}{% endautoescape %}
+            </div>
         </div>
     </div>
 {% endblock %}

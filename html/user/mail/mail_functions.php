@@ -4,10 +4,10 @@
 include_once(SITE_ROOT."includes/util/core.php");
 
 // Gets messages to or from a given user, in reverse-chronological order. Returns null on failure.
-function GetMessages($profile_user) {
+function GetMessages($profile_user, $message_type=0) {
     $uid = $profile_user['UserId'];
     $messages = array();
-    $sql = "SELECT Id, SenderUserId, RecipientUserId, ParentMessageId, Timestamp, Status, Title, MessageType FROM ".USER_MAILBOX_TABLE." WHERE ((SenderUserId=$uid AND MessageType<>1) OR RecipientUserId=$uid) AND Status<>'D' ORDER BY Timestamp DESC, Id DESC;";
+    $sql = "SELECT Id, SenderUserId, RecipientUserId, ParentMessageId, Timestamp, Status, Title, MessageType FROM ".USER_MAILBOX_TABLE." WHERE (SenderUserId=$uid OR RecipientUserId=$uid) AND MessageType=$message_type AND Status<>'D' ORDER BY Timestamp DESC, Id DESC;";
     if (sql_query_into($result, $sql, 0)) {
         while ($row = $result->fetch_assoc()) {
             $messages[] = $row;

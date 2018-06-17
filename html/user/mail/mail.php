@@ -28,14 +28,14 @@ if (isset($_POST['action'])) {
     if (!CanPerformSitePost()) MaintenanceError();
     switch ($_POST['action']) {
         case "mark-all-read":
-            sql_query("UPDATE ".USER_MAILBOX_TABLE." SET Status='R' WHERE RecipientUserId=$uid AND Status='U';");
+            sql_query("UPDATE ".USER_MAILBOX_TABLE." SET Status='R' WHERE RecipientUserId=$uid AND Status='U' AND MessageType=0;");
             // Go back to requesting page.
             Redirect($_SERVER['HTTP_REFERER']);
         default:
             break;
     }
 }
-$messages = GetMessages($profile_user);
+$messages = GetMessages($profile_user, /*message_type=*/0);
 if ($user['GroupMailboxThreads']) {
     // Bundle together messages of the same conversation.
     BundleMessageThreads($profile_user, $messages);
@@ -56,10 +56,26 @@ if (sizeof($messages) > INBOX_ITEMS_PER_PAGE) {
             return $url;
         };
     $iterator = ConstructMailboxIterator($messages, $offset, INBOX_ITEMS_PER_PAGE, $url_fn);
-    $vars['iterator'] = $iterator;
+    $vars['mail_iterator'] = $iterator;
 }
 if (!AddMessageMetadata($profile_user, $messages)) RenderErrorPage("Error while fetching private messages");
 $vars['messages'] = $messages;
+
+$notifications = GetMessages($profile_user, /*message_type=*/1);
+if (isset($_GET['unread'])) {
+    $notifications = FilterOnlyUnreadMessages($notifications);
+}
+if (sizeof($notifications) > INBOX_ITEMS_PER_PAGE) {
+    $url_fn = function ($index) use ($uid) {
+            $offset = ($index - 1) * INBOX_ITEMS_PER_PAGE;
+            $url = "/user/$uid/mail/?offset=$offset#notifications";
+            return $url;
+        };
+    $iterator = ConstructMailboxIterator($notifications, $offset, INBOX_ITEMS_PER_PAGE, $url_fn);
+    $vars['notification_iterator'] = $iterator;
+}
+if (!AddMessageMetadata($profile_user, $notifications)) RenderErrorPage("Error while fetching notifications");
+$vars['notifications'] = $notifications;
 
 // This is how to output the template.
 RenderPage("user/mail/mail.tpl");
