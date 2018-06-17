@@ -2,6 +2,7 @@
 // Page for processing POSTS for modifying fics user favorites (and author following).
 
 include_once("../header.php");
+include_once(SITE_ROOT."includes/util/notification.php");
 
 if (!isset($user) || !isset($_POST) || !isset($_POST['action'])) {
     RenderErrorPage("Invalid action");
@@ -27,6 +28,14 @@ if ($action == "add-favorite") {
                 // Failed to query, or did not find existing favorite.
                 if (sql_query("INSERT INTO ".FICS_USER_FAVORITES_TABLE." (StoryId, UserId, Timestamp) VALUES ($sid, $uid, $now);")) {
                     PostSessionBanner("Story added to favorites", "green");
+                    $user_name = $user['DisplayName'];
+                    $story_title = $story['Title'];
+                    $story_url = SITE_DOMAIN."/fics/story/$sid/";
+                    AddNotification(
+                        /*user_id=*/$story['AuthorUserId'],
+                        /*title=*/"User Favorite",
+                        /*contents=*/"$user_name add <a href='$story_url'>$story_title</a> to their favorites.",
+                        /*sender_id=*/$user['UserId']);
                     // Go back to requesting page.
                     Redirect($_SERVER['HTTP_REFERER']);
                 }
