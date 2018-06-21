@@ -28,6 +28,21 @@
 .autocomplete-tag-list .close:hover {
     background-image: url('/images/remove-tag-hover.png');
 }
+.textbox.autocomplete-tag-input {
+    width: calc(100% - 25px);
+}
+.autocomplete-tag-input+span {
+    cursor: pointer;
+    background-image: url('/images/add-tag.png');
+    width: 16px;
+    height: 16px;
+    background-size: 16px 16px;
+    display: inline-block;
+    margin-left: 3px;
+}
+.autocomplete-tag-input+span:hover {
+    background-image: url('/images/add-tag-hover.png');
+}
 
 /*Gallery*/
 /*artist*/

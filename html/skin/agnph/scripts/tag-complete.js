@@ -19,12 +19,17 @@ function SetUpTagCompleter(tag_search_url, GetPreclass, selector) {
                 tabDisabled: true,
                 triggerSelectOnValidInput: false
             }).keydown(function(event) {
-                if (event.keyCode == 13 && $(selector+'.autocomplete-tag-input').val().trim().length == 0) return;
-                if (event.keyCode == 13 || event.keyCode == 32) {
+                if (event.originalEvent.code == 'Enter' && $(selector+'.autocomplete-tag-input').val().trim().length == 0) return; 
+                if (event.originalEvent.code == 'Enter' || event.originalEvent.code == 'Space' || event.originalEvent.code == 'Comma') {
                     AddTag($(selector+'.autocomplete-tag-input').val().trim().toLowerCase(), null);
                     event.preventDefault();
                     return false;
                 }
+            });
+            $(selector+'.autocomplete-tag-input+span').click(function(e) {
+                AddTag($(selector+'.autocomplete-tag-input').val().trim().toLowerCase(), null);
+                event.preventDefault();
+                return false;
             });
             $(selector+'.autocomplete-tag-list li .close').click(function() {
                 RemoveTag($(this).parent());

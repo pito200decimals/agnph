@@ -10,7 +10,7 @@ function toggleEdit() {
 $(document).ready(function() {
     if ($("#tags").length > 0) {
         $("#tags").keydown(function(e) {
-            if (e.keyCode == 13) {
+            if (e.originalEvent.code == 'Enter') {
                 $(this.form).submit();
                 return false;
             }
