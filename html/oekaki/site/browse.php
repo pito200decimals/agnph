@@ -10,6 +10,7 @@ include_once(SITE_ROOT."oekaki/site/includes/functions.php");
 include_once(SITE_ROOT."includes/util/user.php");
 include_once(SITE_ROOT."includes/util/listview.php");
 include_once(SITE_ROOT."includes/util/date.php");
+include_once(SITE_ROOT."includes/util/notification.php");
 
 // Handle comment posting.
 if (isset($_POST['action'])) {
@@ -155,6 +156,14 @@ function HandleCommentPost() {
     $timestamp = time();
     if (!sql_query("INSERT INTO ".OEKAKI_POST_TABLE." (UserId, ParentPostId, Timestamp, Text) VALUES ($uid, $post_id, $timestamp, '$escaped_text');")) return PostSessionBanner("Error processing comment", "red");
     PostSessionBanner("Comment posted", "green");
+    $username = $user['DisplayName'];
+    $post_url = SITE_DOMAIN."/oekaki/?search=id%3A$post_id";
+    $post_title = $post['Title'];
+    AddNotification(
+        /*user_id=*/$post['UserId'],
+        /*title=*/"Comment on your Oekaki Artwork",
+        /*contents=*/"$username posted a comment on your Oekaki post <a href='$post_url'>$post_title</a>.",
+        /*sender_id=*/$user['UserId']);
 }
 
 function HandleDeletePost() {
