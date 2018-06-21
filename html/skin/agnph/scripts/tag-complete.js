@@ -29,6 +29,7 @@ function SetUpTagCompleter(tag_search_url, GetPreclass, selector) {
             $(selector+'.autocomplete-tag-input+span').click(function(e) {
                 AddTag($(selector+'.autocomplete-tag-input').val().trim().toLowerCase(), null);
                 event.preventDefault();
+                $(selector+'.autocomplete-tag-input').autocomplete().hide();
                 return false;
             });
             $(selector+'.autocomplete-tag-list li .close').click(function() {
