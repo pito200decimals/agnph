@@ -149,6 +149,8 @@ if ($action == "edit") {
     // Send notification to all people who favorited this story.
     if (sql_query_into($result, "SELECT * FROM ".FICS_USER_FAVORITES_TABLE." WHERE StoryId=$sid;", 1)) {
         $author = $user['DisplayName'];
+        $author_uid = $user['UserId'];
+        $author_url = SITE_DOMAIN."/user/$author_uid/fics/";
         $story_url = SITE_DOMAIN."/fics/story/$sid/";
         $chapter_url = SITE_DOMAIN."/fics/story/$sid/$cid/";
         while ($row = $result->fetch_assoc()) {
@@ -156,8 +158,8 @@ if ($action == "edit") {
             AddNotification(
                 /*user_id=*/$rid,
                 /*title=*/"New Chapter posted for $storyTitle",
-                /*contents=*/"$author posted a new chapter for <a href='$story_url'>$storyTitle</a> - <a href='$chapter_url'>$chaptertitle</a>.",
-                /*sender_id=*/$user['UserId']);
+                /*contents=*/"<a href='$author_url'>$author</a> posted a new chapter for <a href='$story_url'>$storyTitle</a> - <a href='$chapter_url'>$chaptertitle</a>.",
+                /*sender_id=*/$author_uid);
         }
     }
     return;

@@ -80,6 +80,8 @@ if ($action == "comment" || $action == "review") {
         ($sid, $cid, $reviewerUserId, $now, '$escaped_text', '$escaped_score', $isReview, $isComment);");
     // Get shared info for notifications.
     $poster_display_name = $user['DisplayName'];
+    $poster_uid = $user['UserId'];
+    $poser_url = SITE_DOMAIN."/user/$poster_uid/";
     $story_title = $story['Title'];
     $story_url = SITE_DOMAIN."/fics/story/".$story['StoryId']."/";
     if (isset($chapter)) {
@@ -108,15 +110,15 @@ if ($action == "comment" || $action == "review") {
             AddNotification(
                 /*user_id=*/$story['AuthorUserId'],
                 /*title=*/"New Story Review",
-                /*contents=*/"$poster_display_name posted a new review on your story <a href='$story_url'>$story_title</a>.",
-                /*sender_id=*/$user['UserId']);
+                /*contents=*/"<a href='$poser_url'>$poster_display_name</a> posted a new review on your story <a href='$story_url'>$story_title</a>.",
+                /*sender_id=*/$poster_uid);
         } else {
             PostSessionBanner("Comment posted", "green");
             AddNotification(
                 /*user_id=*/$story['AuthorUserId'],
                 /*title=*/"New Story Comment",
-                /*contents=*/"$poster_display_name posted a new comment on your story <a href='$story_url'>$story_title</a>.",
-                /*sender_id=*/$user['UserId']);
+                /*contents=*/"<a href='$poser_url'>$poster_display_name</a> posted a new comment on your story <a href='$story_url'>$story_title</a>.",
+                /*sender_id=*/$poster_uid);
         }
         // Go back to requesting page.
         Redirect($_SERVER['HTTP_REFERER']);

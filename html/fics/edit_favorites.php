@@ -29,13 +29,15 @@ if ($action == "add-favorite") {
                 if (sql_query("INSERT INTO ".FICS_USER_FAVORITES_TABLE." (StoryId, UserId, Timestamp) VALUES ($sid, $uid, $now);")) {
                     PostSessionBanner("Story added to favorites", "green");
                     $user_name = $user['DisplayName'];
+                    $uid = $user['UserId'];
+                    $user_url = SITE_DOMAIN."/user/$uid/";
                     $story_title = $story['Title'];
                     $story_url = SITE_DOMAIN."/fics/story/$sid/";
                     AddNotification(
                         /*user_id=*/$story['AuthorUserId'],
                         /*title=*/"User Favorite",
-                        /*contents=*/"$user_name add <a href='$story_url'>$story_title</a> to their favorites.",
-                        /*sender_id=*/$user['UserId']);
+                        /*contents=*/"<a href='$user_url'>$user_name</a> added <a href='$story_url'>$story_title</a> to their favorites.",
+                        /*sender_id=*/$uid);
                     // Go back to requesting page.
                     Redirect($_SERVER['HTTP_REFERER']);
                 }
