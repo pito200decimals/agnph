@@ -11,7 +11,7 @@
         <div class="header">I want to chat now!</div>
         <div class="content">
             <p>
-                Use our Browser IRC Client! Its fun and its easy, just <a href="http://irc.agn.ph/?initial_chans=#agnph{% if user %}&initial_nick={{user.DisplayName|replace({" ":"_"})}}{% endif %}"><strong>Click Here</strong></a>.
+                Use our Browser IRC Client! Its fun and its easy, just <a href="http://irc.agn.ph/?initial_chans=#agnph&initial_nick={% if user %}{{user.DisplayName|replace({" ":"_"})}}{% endif %}"><strong>Click Here</strong></a>.
             </p>
             <p>
                 We also have a <a href="https://discordapp.com/">Discord</a> server, if you want to stop by and chat! <a href="https://discord.gg/uHbHMv7 "><strong>Click here</strong></a> to join.
