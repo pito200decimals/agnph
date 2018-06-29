@@ -5,9 +5,7 @@
     {% if not user or user.AutoDetectTimezone %}
         <script src="{{ asset('timezone.js') }}"></script>
     {% endif %}
-    {% if user %}
-        <script src="{{ asset('/scripts/irc.js') }}"></script>
-    {% endif %}
+    <script src="{{ asset('/scripts/irc.js') }}"></script>
 {% endblock %}
 
 {% block styles %}

@@ -82,7 +82,6 @@ if (isset($_POST['active-users']) && isset($_POST['msgs']) && isset($_POST['secr
 }
 
 // Fetch irc log.
-if (!isset($user)) AJAXErr();  // Don't allow view when not logged in.
 if (!file_exists(SITE_ROOT.IRC_LOG_FILE)) exit();
 $fp = fopen(SITE_ROOT.IRC_LOG_FILE, "r");
 if (flock($fp, LOCK_SH)) {
