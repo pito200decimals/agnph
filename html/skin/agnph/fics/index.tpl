@@ -131,11 +131,9 @@
                         <div class="content">{% autoescape false %}{{ events }}{% endautoescape %}</div>
                     </div>
                 {% endif %}
-                {% if user %}
-                    <div class="desktop-only">
-                        {{ block('irc_block') }}
-                    </div>
-                {% endif %}
+                <div class="desktop-only">
+                    {{ block('irc_block') }}
+                </div>
                 <div class="desktop-only">
                     {{ block('user_activity_block') }}
                 </div>
