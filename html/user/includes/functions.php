@@ -166,4 +166,16 @@ function TrimLastAdminActionLinkBreak(&$admin_links) {
         unset($admin_links[sizeof($admin_links) - 1]);
     }
 }
+function IsValidUsername($name) {
+    if (strlen($name) >= 5 && strtolower(substr($name, 0, 5)) == "agnph") {
+        return false;
+    }
+    return true;
+}
+function IsValidDisplayName($name) {
+    if (strlen($name) >= 5 && strtolower(substr($name, 0, 5)) == "agnph") {
+        return false;
+    }
+    return true;
+}
 ?>

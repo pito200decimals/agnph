@@ -39,6 +39,9 @@ if (isset($_POST['username']) &&
     } else if (!mb_ereg("^[a-z][a-z0-9_]+$", $username)) {  // Must start with A-Z.
         ShowErrorBanner("Username must start with a letter");
         $success = false;
+    } else if (!IsValidUsername($username)) {
+        ShowErrorBanner("Invalid username");
+        $success = false;
     }
     // Check email.
     $email = $_POST['email'];

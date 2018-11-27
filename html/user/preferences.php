@@ -59,6 +59,10 @@ if (isset($_POST['display-name']) &&
             PostErrorMessage("Name must start with a letter");
             $valid_name = false;
         }
+        if ($valid_name && !IsValidDisplayName($display_name)) {
+            PostErrorMessage("Invalid name");
+            $valid_name = false;
+        }
         $escaped_display_name = sql_escape(GetSanitizedTextTruncated($display_name, NO_HTML_TAGS, MAX_DISPLAY_NAME_LENGTH));
         // Check for duplicates.
         // Search for display name, and current user (so that at least one result is returned).
