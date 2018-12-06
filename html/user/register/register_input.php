@@ -10,6 +10,7 @@ include_once(SITE_ROOT."includes/util/html_funcs.php");
 include_once(SITE_ROOT."includes/util/date.php");
 include_once(SITE_ROOT."includes/auth/email_auth.php");
 include_once(SITE_ROOT."user/register/send_register_email_functions.php");
+include_once(SITE_ROOT."user/includes/functions.php");
 
 if (IsMaintenanceMode()) PostBanner("Site is in read-only mode, account registration has been disabled", "red", false);
 
