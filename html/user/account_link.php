@@ -95,6 +95,8 @@ function ProcessPost($hash_fn, $section, $field) {
 
 function GetSimilarAccounts($email, $ignore_uid = -1) {
     $ret_array = array();
+    // Don't allow users to see all accounts that have empty email addresses.
+    if ($email == "") return $ret_array;
     $escaped_email = sql_escape($email);
     if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId<>$ignore_uid AND Email='$escaped_email' AND ".ACCOUNT_IMPORTED_SQL_CONDITION.";", 1)) {
         while ($row = $result->fetch_assoc()) {
