@@ -163,16 +163,40 @@ function FetchUserHeaderVars() {
         "cache" => SITE_ROOT."skin_template_cache",
     ));
     $asset_fn = new Twig_SimpleFunction('asset', function($path) use ($skin_dirs) {
-        foreach ($skin_dirs as $base) {
-            $full_path = $base.$path;
-            if (endsWith($base, '/') && startsWith($path, '/')) {
-                $full_path = substr($base, 0, strlen($base) - 1).$path;
-            }
-            if (file_exists(__DIR__.$full_path)) return $full_path;
-        }
-        return $path;
+        return GetAssetPath($path, $skin_dirs);
     });
     $twig->addFunction($asset_fn);
+    $inline_css_asset_fn = new Twig_SimpleFunction('inline_css_asset', function($path) use ($skin_dirs) {
+        return GetAssetContentsInTags($path, $skin_dirs, "<style>", "</style>");
+    });
+    $twig->addFunction($inline_css_asset_fn);
+    $inline_js_asset_fn = new Twig_SimpleFunction('inline_js_asset', function($path) use ($skin_dirs) {
+        return GetAssetContentsInTags($path, $skin_dirs, "<script type='text/javascript'>", "</script>");
+    });
+    $twig->addFunction($inline_js_asset_fn);
+}
+
+function GetAssetPath($path, $skin_dirs) {
+    foreach ($skin_dirs as $base) {
+        $full_path = $base.$path;
+        if (endsWith($base, '/') && startsWith($path, '/')) {
+            $full_path = substr($base, 0, strlen($base) - 1).$path;
+        }
+        if (file_exists(__DIR__.$full_path)) return $full_path;
+    }
+    return $path;
+}
+
+function GetAssetContentsInTags($path, $skin_dirs, $open_tag, $close_tag) {
+    $filepath = __DIR__.GetAssetPath($path, $skin_dirs);
+    if (!file_exists($filepath)) {
+        return "";  // Skip inline style.
+    }
+    $contents = file_get_contents($filepath);
+    if ($contents === FALSE) {
+        return "";
+    }
+    return $open_tag.$contents.$close_tag;
 }
 
 function GetUnreadPMCount() {
