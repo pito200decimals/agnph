@@ -11,32 +11,32 @@ $(document).ready(function() {
         var currentIndex = gallery.getCurrentIndex();
         switch (e.which) {
             case 33:
-                // Page up.
+                /* Page up. */
                 if (gallery) {
                     gallery.goTo(Math.max(0, currentIndex - jumpDistance));
                 }
                 break;
             case 34:
-                // Page down.
+                /* Page down. */
                 if (gallery) {
                     gallery.goTo(Math.min(gallery.options.getNumItemsFn() - 1, currentIndex + jumpDistance));
                 }
                 break;
             case 36:
-                // Home key.
+                /* Home key. */
                 if (gallery) {
                     gallery.goTo(0);
                 }
                 break;
             case 35:
-                // End key.
+                /* End key. */
                 if (gallery) {
                     gallery.goTo(gallery.items.length - 1);
                 }
                 break;
         }
     });
-    // Check for auto-start slideshow.
+    /* Check for auto-start slideshow. */
     if (window.location.hash) {
         var regexp = /^#pid=p(\d+)$/
         var match = regexp.exec(window.location.hash);
@@ -47,7 +47,7 @@ $(document).ready(function() {
             var page = Math.floor(offset / pagesize);
             offset -= page * pagesize;
             page++;
-            // Start slideshow immediately.
+            /* Start slideshow immediately. */
             galleryOpening = true;
             gallery = false;
             minPageIndex = page;
@@ -136,7 +136,7 @@ function LoadMoreSlides(page, initialOffsetStr, increment) {
             posts = response.posts;
             if (posts.length > 0) {
                 if (!gallery) {
-                    // On first load.
+                    /* On first load. */
                     InitSlideshow(posts, initialOffsetStr, response.data.count);
                 } else {
                     if (increment == -1) {

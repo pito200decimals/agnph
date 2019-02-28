@@ -20,7 +20,7 @@ $(document).ready(function() {
         return false;
     });
     
-    // Set up removing placeholder text in search boxes.
+    /* Set up removing placeholder text in search boxes. */
     $("[type='text'][placeholder]").focus(function() {
         var placeholder = $(this).attr("placeholder");
         $(this).attr("placeholder", "");
@@ -29,7 +29,7 @@ $(document).ready(function() {
         });
     });
     
-    // Maybe async-load all images.
+    /* Maybe async-load all images. */
     $("[data-src]").each(function(i, tag) {
         tag = $(tag);
         var src = tag.attr("data-src");

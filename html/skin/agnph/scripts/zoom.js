@@ -5,7 +5,7 @@ function SetUpFontSizes(cookie_name, switcher_container_selector, positive_selec
         if (selector_container.length == 0 || selector.length == 0) return;
 
         function setZoom(zoom) {
-            // Update selectors.
+            /* Update selectors. */
             var found = false;
             var options = selector.children().each(function() {
                 if (zoom.trim() == $(this).text().trim()) {
@@ -26,14 +26,14 @@ function SetUpFontSizes(cookie_name, switcher_container_selector, positive_selec
             sizable_elements.css("font-size", zoom);
         }
 
-        // Set zoom level of page to cookie value, initially. If empty, uses default in setZoom.
+        /* Set zoom level of page to cookie value, initially. If empty, uses default in setZoom. */
         setZoom(getCookie(cookie_name));
         selector.change(function() {
             setZoom($(this).val());
         });
-        selector_container.show();  // Only show if js is enabled.
+        selector_container.show();  /* Only show if js is enabled. */
     });
 }
 
-// By default, set up basic zoom controls.
+/* By default, set up basic zoom controls. */
 SetUpFontSizes("zoom", ".site-font-size-switcher", ".font-scalable", ".not-font-scalable");

@@ -69,7 +69,7 @@ function SetUpTagCompleter(tag_search_url, GetPreclass, selector) {
     function hasTag(tag) {
         return getExistingTag(tag) != null;
     }
-    // Exported.
+    /* Exported. */
     function AddTag(tag, type) {
         if (tag.length == 0) return;
         tag = tag.replace(" ", "_");
@@ -115,7 +115,7 @@ function SetUpTagCompleter(tag_search_url, GetPreclass, selector) {
             }
         });
     }
-    // Exported.
+    /* Exported. */
     function OnEditSubmit() {
         if ($(selector+'.autocomplete-tag-list').length > 0) {
             var tags = $(selector+'.autocomplete-tag-list li').map(function(i, opt) {

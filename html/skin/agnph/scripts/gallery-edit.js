@@ -20,7 +20,7 @@ $(document).ready(function() {
 
 
 
-// Pools.
+/* Pools. */
 var in_flight = null;
 $(document).ready(function() {
     $("#pool-edit-field").autocomplete({
@@ -111,7 +111,7 @@ function RefreshFlagReasonExtraTextBox() {
 }
 
 
-// Flagging.
+/* Flagging. */
 $(document).ready(function() {
     $("#flagaction").click(function() {
         RefreshFlagReasonExtraTextBox();
