@@ -11,7 +11,7 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/admin/tags/style.css') }}" />
+    {{ inline_css_asset('/admin/tags/style.css')|raw }}
 {% endblock %}
 
 {% block content %}

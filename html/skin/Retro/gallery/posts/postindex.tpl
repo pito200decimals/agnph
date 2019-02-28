@@ -2,7 +2,7 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/retro-postindex-style.css') }}" />
+    {{ inline_css_asset('/gallery/retro-postindex-style.css')|raw }}
 {% endblock %}
 
 {% block extra_section_nav_items %}

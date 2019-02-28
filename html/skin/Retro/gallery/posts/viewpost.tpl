@@ -4,7 +4,7 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/retro-viewpost-style.css') }}" />
+    {{ inline_css_asset('/gallery/retro-viewpost-style.css')|raw }}
 {% endblock %}
 
 {% use 'includes/comment-block.tpl' %}

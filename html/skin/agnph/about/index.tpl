@@ -9,7 +9,7 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/about/style.css') }}" />
+    {{ inline_css_asset('/about/style.css')|raw }}
     <style>
         .content p:first-child {
             margin-top: 0px;

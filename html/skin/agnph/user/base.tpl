@@ -1,7 +1,7 @@
 {% extends 'base.tpl' %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/user/style.css') }}" />
+    {{ inline_css_asset('/user/style.css')|raw }}
 {% endblock %}
 
 {% block section_navigation %}

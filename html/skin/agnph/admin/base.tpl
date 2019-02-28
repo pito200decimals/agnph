@@ -15,7 +15,7 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/admin/color.css') }}" />
+    {{ inline_css_asset('/admin/color.css')|raw }}
 {% endblock %}
 
 {% block content %}

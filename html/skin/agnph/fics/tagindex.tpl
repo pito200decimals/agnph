@@ -2,7 +2,7 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/list-style.css') }}" />
+    {{ inline_css_asset('/list-style.css')|raw }}
     <style>
         .tag a,.tag a:hover {
             text-decoration: none;

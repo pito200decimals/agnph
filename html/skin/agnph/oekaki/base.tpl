@@ -6,7 +6,7 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/oekaki/style.css') }}" />
+    {{ inline_css_asset('/oekaki/style.css')|raw }}
 {% endblock %}
 
 {% block section_navigation %}

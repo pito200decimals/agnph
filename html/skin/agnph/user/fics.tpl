@@ -2,7 +2,7 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/fics/style.css') }}" />
+    {{ inline_css_asset('/fics/style.css')|raw }}
     <style>
         .story-list {
             padding: 0px;

@@ -2,9 +2,9 @@
 
 {% block styles %}
     {# Don't inherit styles! #}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/user/retro-style.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('/no-left-panel-mobile-style.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('/no-right-panel-style.css') }}" />
+    {{ inline_css_asset('/user/retro-style.css')|raw }}
+    {{ inline_css_asset('/no-left-panel-mobile-style.css')|raw }}
+    {{ inline_css_asset('/no-right-panel-style.css')|raw }}
 {% endblock %}
 
 {% block section_navigation %}

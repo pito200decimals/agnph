@@ -2,8 +2,8 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/fics/edit-style.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('/tag-complete-style.css') }}" />
+    {{ inline_css_asset('/fics/edit-style.css')|raw }}
+    {{ inline_css_asset('/tag-complete-style.css')|raw }}
 {% endblock %}
 
 {% use 'fics/storyblock.tpl' %}

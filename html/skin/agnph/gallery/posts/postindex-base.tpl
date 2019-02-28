@@ -2,7 +2,7 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/postindex-style.css') }}" />
+    {{ inline_css_asset('/gallery/postindex-style.css')|raw }}
     <link id="mobile-css" rel="stylesheet" type="text/css" href="{{ asset('/gallery/postindex-mobile.css') }}" {% if ignore_mobile %}disabled {% endif %}/>
     {% if canMassTagEdit or canMassDeletePosts %}
         <style>
@@ -123,8 +123,8 @@
             });
         {% endif %}
     </script>
-    <link rel="stylesheet" type="text/css" href="{{ asset('/scripts/slideshow/photoswipe.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('/scripts/slideshow/default-skin.css') }}" />
+    {{ inline_css_asset('/scripts/slideshow/photoswipe.css')|raw }}
+    {{ inline_css_asset('/scripts/slideshow/default-skin.css')|raw }}
     <script src="{{ asset('/scripts/slideshow/photoswipe.min.js') }}"></script>
     <script src="{{ asset('/scripts/slideshow/photoswipe-ui-default.min.js') }}"></script>
     <script>

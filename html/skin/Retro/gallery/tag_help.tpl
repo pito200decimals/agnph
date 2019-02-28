@@ -2,5 +2,5 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/no-right-panel-style.css') }}" />
+    {{ inline_css_asset('/no-right-panel-style.css')|raw }}
 {% endblock %}

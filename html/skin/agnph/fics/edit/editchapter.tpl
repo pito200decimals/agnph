@@ -2,7 +2,7 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/fics/edit-style.css') }}" />
+    {{ inline_css_asset('/fics/edit-style.css')|raw }}
 {% endblock %}
 
 {% use 'fics/storyblock.tpl' %}

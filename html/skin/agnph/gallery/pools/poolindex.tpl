@@ -2,8 +2,8 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/list-style.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/poolindex-style.css') }}" />
+    {{ inline_css_asset('/list-style.css')|raw }}
+    {{ inline_css_asset('/gallery/poolindex-style.css')|raw }}
 {% endblock %}
 
 {% block scripts %}

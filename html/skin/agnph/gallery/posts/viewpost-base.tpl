@@ -2,9 +2,9 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/viewpost-style.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('/comments-style.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('/tag-complete-style.css') }}" />
+    {{ inline_css_asset('/gallery/viewpost-style.css')|raw }}
+    {{ inline_css_asset('/comments-style.css')|raw }}
+    {{ inline_css_asset('/tag-complete-style.css')|raw }}
 {% endblock %}
 
 {% block scripts %}

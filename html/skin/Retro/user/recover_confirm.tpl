@@ -2,5 +2,5 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/no-left-panel-mobile-style.css') }}" />
+    {{ inline_css_asset('/no-left-panel-mobile-style.css')|raw }}
 {% endblock %}

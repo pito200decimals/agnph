@@ -10,7 +10,7 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/style.css') }}" />
+    {{ inline_css_asset('/gallery/style.css')|raw }}
     <style>
         #tag-container label {
             display: inline-block;

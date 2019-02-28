@@ -2,8 +2,8 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/style.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/postindex-style.css') }}" />
+    {{ inline_css_asset('/gallery/style.css')|raw }}
+    {{ inline_css_asset('/gallery/postindex-style.css')|raw }}
     <style>
         a.thumb-link:hover {
             text-decoration: none;

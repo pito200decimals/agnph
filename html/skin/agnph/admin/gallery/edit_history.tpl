@@ -10,8 +10,8 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/list-style.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/style.css') }}" />
+    {{ inline_css_asset('/list-style.css')|raw }}
+    {{ inline_css_asset('/gallery/style.css')|raw }}
     <style>
         .tag-edit {
             margin: 5px;

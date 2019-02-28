@@ -2,8 +2,8 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/gallery/upload-style.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('/tag-complete-style.css') }}" />
+    {{ inline_css_asset('/gallery/upload-style.css')|raw }}
+    {{ inline_css_asset('/tag-complete-style.css')|raw }}
 {% endblock %}
 
 {% block scripts %}

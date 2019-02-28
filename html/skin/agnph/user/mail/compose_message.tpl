@@ -2,7 +2,7 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/user/mail-style.css') }}" />
+    {{ inline_css_asset('/user/mail-style.css')|raw }}
 {% endblock %}
 
 {% block scripts %}

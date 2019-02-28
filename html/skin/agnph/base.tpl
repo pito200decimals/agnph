@@ -38,12 +38,12 @@
         {% include 'meta.tpl' %}
         <link rel="icon" type="image/png" href="/images/favicon.png" />
         <title>{% if _title %}{{ _title }}{% else %}{% block title %}AGNPH{% endblock %}{% endif %}</title>
-        <link rel="stylesheet" type="text/css" href="{{ asset('/shared.css') }}" />
-        <link rel="stylesheet" type="text/css" href="{{ asset('/style.css') }}" />
+        {{ inline_css_asset('/shared.css')|raw }}
+        {{ inline_css_asset('/style.css')|raw }}
         {% block styles %}
             {# Custom page styles go here #}
         {% endblock %}
-        <link rel="stylesheet" type="text/css" href="{{ asset('/color.css') }}" />
+        {{ inline_css_asset('/color.css')|raw }}
         {% if debug %}
             {# Dot all borders to help style debugging #}
             {# TODO: Remove #}

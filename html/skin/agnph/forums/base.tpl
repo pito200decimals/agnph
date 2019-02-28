@@ -2,8 +2,8 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/forums/style.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('/comments-style.css') }}" />
+    {{ inline_css_asset('/forums/style.css')|raw }}
+    {{ inline_css_asset('/comments-style.css')|raw }}
 {% endblock %}
 
 {# In base template, use section navigation for breadcrumbs #}

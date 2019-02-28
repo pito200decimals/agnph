@@ -2,7 +2,7 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/about/style.css') }}" />
+    {{ inline_css_asset('/about/style.css')|raw }}
     <style>
         .block .content a {
             font-weight: bold;

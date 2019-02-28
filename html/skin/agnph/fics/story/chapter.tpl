@@ -2,9 +2,9 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/fics/story/story-style.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('/fics/story/chapter-style.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('/comments-style.css') }}" />
+    {{ inline_css_asset('/fics/story/story-style.css')|raw }}
+    {{ inline_css_asset('/fics/story/chapter-style.css')|raw }}
+    {{ inline_css_asset('/comments-style.css')|raw }}
 {% endblock %}
 
 {% use 'fics/reviewblock.tpl' %}

@@ -10,13 +10,13 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/irc-style.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('/user-activity-style.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('/comments-style.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('/index-style.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('/no-left-panel-mobile-style.css') }}" />
+    {{ inline_css_asset('/irc-style.css')|raw }}
+    {{ inline_css_asset('/user-activity-style.css')|raw }}
+    {{ inline_css_asset('/comments-style.css')|raw }}
+    {{ inline_css_asset('/index-style.css')|raw }}
+    {{ inline_css_asset('/no-left-panel-mobile-style.css')|raw }}
     {% if not site_nav_in_tray %}
-        <link rel="stylesheet" type="text/css" href="{{ asset('/no-left-menu-style.css') }}" />
+        {{ inline_css_asset('/no-left-menu-style.css')|raw }}
     {% endif %}
 {% endblock %}
                                         

@@ -2,8 +2,8 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/index-style.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('/tag-help-style.css') }}" />
+    {{ inline_css_asset('/index-style.css')|raw }}
+    {{ inline_css_asset('/tag-help-style.css')|raw }}
 {% endblock %}
 
 {% block content %}

@@ -2,8 +2,8 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/list-style.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('/user/userlist-style.css') }}" />
+    {{ inline_css_asset('/list-style.css')|raw }}
+    {{ inline_css_asset('/user/userlist-style.css')|raw }}
 {% endblock %}
 
 {% block scripts %}

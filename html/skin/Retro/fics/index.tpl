@@ -12,11 +12,11 @@
 
 {% block styles %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/irc-style.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('/user-activity-style.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('/comments-style.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('/index-style.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('/fics/index-style.css') }}" />
+    {{ inline_css_asset('/irc-style.css')|raw }}
+    {{ inline_css_asset('/user-activity-style.css')|raw }}
+    {{ inline_css_asset('/comments-style.css')|raw }}
+    {{ inline_css_asset('/index-style.css')|raw }}
+    {{ inline_css_asset('/fics/index-style.css')|raw }}
 {% endblock %}
 
 {% use 'includes/irc-block.tpl' %}
