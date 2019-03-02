@@ -124,7 +124,7 @@
         {% endif %}
     </script>
     {{ inline_css_asset('/scripts/slideshow/photoswipe.css')|raw }}
-    {{ inline_css_asset('/scripts/slideshow/default-skin.css')|raw }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('/scripts/slideshow/default-skin.css') }}" />
     <script src="{{ asset('/scripts/slideshow/photoswipe.min.js') }}"></script>
     <script src="{{ asset('/scripts/slideshow/photoswipe-ui-default.min.js') }}"></script>
     <script>
