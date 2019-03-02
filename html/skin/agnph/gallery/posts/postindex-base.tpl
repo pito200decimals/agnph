@@ -125,8 +125,8 @@
     </script>
     {{ inline_css_asset('/scripts/slideshow/photoswipe.css')|raw }}
     <link rel="stylesheet" type="text/css" href="{{ asset('/scripts/slideshow/default-skin.css') }}" />
-    <script src="{{ asset('/scripts/slideshow/photoswipe.min.js') }}"></script>
-    <script src="{{ asset('/scripts/slideshow/photoswipe-ui-default.min.js') }}"></script>
+    <script src="{{ asset('/scripts/slideshow/photoswipe.js') }}"></script>
+    <script src="{{ asset('/scripts/slideshow/photoswipe-ui-default.js') }}"></script>
     <script>
         var searchString = "{% autoescape false %}{{ search|e('js') }}{% endautoescape %}";
         var startPage = {{ page }};
