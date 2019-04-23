@@ -42,22 +42,16 @@
             </p>
             <p>
                 <strong>Mozilla Firefox</strong><br />
-                Wacom tablet drivers should include firefox plugin support when you install them. You will be prompted to allow the plugin when first visiting the oekaki.<br />
+                To enable pen support, type "about:config" into the address bar and search and enable the following flags:
                 <ul>
-                    <li>
-                        <a href="http://www.wacomeng.com/web/fbWTPInstall.zip">Wacom Plugin</a>
-                    </li>
+                    <li>dom.w3c_pointer_events.enabled</li>
+                    <li>dom.w3c_pointer_events.dispatch_by_pointer_messages</li>
                 </ul>
-                <small><strong>Note:</strong> Native plugin support may be removed from Firefox later in 2016.</small>
+                Once those are enabled, pen/tablet devices should work properly with pressure detection.
             </p>
             <p>
                 <strong>Google Chrome</strong><br />
-                Pen pressure in Chrome is supported via chrome extension and a native plugin (for some tablet brands).
-                <ol>
-                    <li>Install <a target="_blank" href="https://chrome.google.com/webstore/detail/stylus-pressure/pgdjcdcofllhdgocpjbpfkpmgekhocfh">this Stylus Pressure extension</a> from the Chrome store.</li>
-                    <li>Visit the oekaki. Click the red stylus icon in the toolbar and download the native plugin installer. Alternatively, you can download the native plugin <a href="/oekaki/StylusPressurePlugin.msi">here</a> as well.</li>
-                    <li>Install the native plugin, then refresh the oekaki page. The icon should no longer be red.</li>
-                </ol>
+                Pen pressure in natively supported in Chrome.
             </p>
             <p>
                 <strong>Internet Explorer/Edge</strong><br />
