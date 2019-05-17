@@ -13,7 +13,7 @@ if (USE_DEBUG_PHP_SETTINGS) {
     // Non-debug settings
     ini_set("display_errors", "Off");
     ini_set("display_startup_errors", "Off");
-    ini_set("error_reporting", 0);
+    ini_set("error_reporting", E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
     set_time_limit(120);
     ini_set('memory_limit', '100M');
 }

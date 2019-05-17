@@ -209,6 +209,7 @@ function IsRealUser() {
 }
 
 function IsBlacklistedURLVisitor() {
+    $useragent = strtolower($_SERVER['HTTP_USER_AGENT']);
     include(SITE_ROOT."includes/util/blacklisted_visit_urls.php");
     $pattern = "/(".implode("|", array_map(function($s) { return str_replace("/", "\\/", $s); }, $BLACKLISTED_USER_AGENT_REGEXES)).")/";
     $matches = array();
