@@ -8,6 +8,8 @@ include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."includes/util/html_funcs.php");
 include_once(SITE_ROOT."gallery/includes/functions.php");
 
+ini_set('memory_limit', '600M');
+
 // Skip if in maintenance mode.
 if (!CanPerformSitePost()) AJAXErr();
 

@@ -15,6 +15,8 @@ include_once(SITE_ROOT."oekaki/site/includes/functions.php");
 
 include(SITE_ROOT."user/includes/profile_setup.php");
 
+ini_set('memory_limit', '600M');
+
 $profile_user = &$vars['profile']['user'];
 $profile_uid = $profile_user['UserId'];
 $profile_user['admin'] = GetAdminBadge($profile_user);
@@ -51,6 +53,7 @@ if (isset($user) && $profile_user['UserId'] == $user['UserId']) {
                 );
             $slots[] = $slot;
         }
+        unset($metadata);
     }
 }
 $vars['slots'] = $slots;

@@ -9,6 +9,8 @@ include_once(SITE_ROOT."includes/constants.php");
 include_once(SITE_ROOT."oekaki/site/includes/functions.php");
 include_once(SITE_ROOT."gallery/includes/image.php");  // For image resize functions.
 
+ini_set('memory_limit', '600M');
+
 if (!isset($user)) {
     AJAXErr();
 }
@@ -64,6 +66,7 @@ function ListSlots() {
                 );
         }
         array_push($result, $slot);
+        unset($metadata);
     }
     echo json_encode($result);
     exit();

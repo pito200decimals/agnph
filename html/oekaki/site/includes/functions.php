@@ -119,7 +119,8 @@ function SanitizeMetadata($metadata) {
 
 function GetValidMetadataOrNull($slot_index) {
     global $user;
-    $user_dir_path = SITE_ROOT."user/data/oekaki/".$user['UserId']."/";
+    $uid = $user['UserId'];
+    $user_dir_path = SITE_ROOT."user/data/oekaki/$uid/";
     $path = $user_dir_path."slot$slot_index/";
     $meta_path = $path.OEKAKI_METADATA_FILE_NAME;
     $empty = true;
