@@ -81,9 +81,9 @@
                     <div class="staff-group-img">
                         <img class="profile-img" src="/images/staff/hatch.png" />
                     </div>
-                    <a class="profile-name" href="/user/1/">HatchlingByHeart</a> <strong>(Minecraft)</strong>
+                    <a class="profile-name" href="/user/1/">HatchlingByHeart</a>
                     <p class="profile-bio">
-                        Chubby dragon. In charge of site tech and Minecraft.
+                        Chubby Dragonite. Server consultant.
                     </p>
                     <p class="contact">
                         <span>Contact via:</span> Discord/IRC, Site PM
