@@ -58,9 +58,9 @@ EOT;
     $success = mail($to, $subject, $message, $headers);
     $resend_link = " <a href='/admin/register/resend/?uid=$uid' title='Only works if within ".REGISTER_ACCOUNT_HUMAN_READABLE_STRING." of original registration'>Resend email</a>";
     if ($success) {
-        LogAction("<strong><a href='/user/$uid/'>$username</a></strong> registration email sent.$resend_link", "");
+        LogAction("<strong><a href='/user/$uid/'>$username</a></strong> registration email sent ($code).$resend_link", "");
     } else {
-        LogAction("<strong><a href='/user/$uid/'>$username</a></strong> registration email <strong>NOT</strong> sent.$resend_link", "");
+        LogAction("<strong><a href='/user/$uid/'>$username</a></strong> registration email <strong>NOT</strong> sent ($code).$resend_link", "");
     }
     return $success;
 }

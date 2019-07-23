@@ -27,6 +27,11 @@ function CreateCodeEntry($email, $type, $data, $redirect, $expire_time = DEFAULT
     return $code;
 }
 
+function DeleteCodeEntry($code) {
+    $escaped_code = sql_escape($code);
+    sql_query("DELETE FROM ".SECURITY_EMAIL_TABLE." WHERE Code='$escaped_code';");
+}
+
 function GetAuthURL($code) {
     $arg = urlencode($code);
     return SITE_DOMAIN."/auth/?code=$arg";

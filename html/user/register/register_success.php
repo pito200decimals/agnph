@@ -11,12 +11,14 @@ include_once(SITE_ROOT."includes/auth/email_auth.php");
 
 if (isset($_SESSION['auth_row'])) {
     $data = $_SESSION['auth_row'];
+    $code = $data['Code'];
     unset($_SESSION['auth_row']);
     unset($_SESSION['register_email']);
     $uid = $data['Data'];
     sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId=$uid AND Usermode=0;", 1) or RenderErrorPage("Error validating email, registration link could have expired");
     $registered_user = $result->fetch_assoc();
     PrepareAllUserTables($registered_user) or RenderErrorPage("Failed to complete registration. Please contact an AGNPH administrator for help");
+    DeleteCodeEntry($code);
     ForceLogin($uid);
     Redirect("/");
 } else {

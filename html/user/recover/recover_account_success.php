@@ -9,6 +9,7 @@ include_once(SITE_ROOT."includes/auth/email_auth.php");
 
 if (isset($_SESSION['auth_row'])) {
     $data = $_SESSION['auth_row'];
+    $code = $data['Code'];
     unset($_SESSION['auth_row']);
     unset($_SESSION['recovery_email']);
     $params = explode(",", $data['Data']);
@@ -28,6 +29,7 @@ if (isset($_SESSION['auth_row'])) {
         $detailed_desc = "password";
     }
     ChangeEmailPassword($uid, $email, $password_md5) or RenderErrorPage("Failed to change $detailed_desc, please try again later");
+    DeleteCodeEntry($code);
     $uid = $usr['UserId'];
     $username = $usr['DisplayName'];
     $user = array("UserId" => $uid);
