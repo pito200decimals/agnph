@@ -144,7 +144,7 @@ function GetTagIds($terms) {
 }
 function SQLForHasOneOfTagIds($tag_ids) {
     $joined = implode(",", $tag_ids);
-    return "EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." WHERE T.PostId=PostId AND TagId IN ($joined) LIMIT 1)";
+    return "PostId IN (SELECT PostId FROM ".GALLERY_POST_TAG_TABLE." WHERE TagId IN ($joined))";
 }
 
 function CreateANDSQLClauseFromTerms($and_terms) {
