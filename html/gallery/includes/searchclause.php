@@ -247,13 +247,13 @@ function CreateSQLClauseFromFilter($filter) {
         } else if (startsWith($filter, "user:")) {
             $name = mb_substr($filter, 5);
             $escaped_name = sql_escape($name);
-            return "EXISTS(SELECT 1 FROM ".USER_TABLE." U WHERE UPPER(U.DisplayName)=UPPER('$escaped_name') AND T.UploaderId=U.UserId)";
+            return "UploaderId IN (SELECT UserId FROM ".USER_TABLE." WHERE UPPER(DisplayName)=UPPER('$escaped_name'))";
         } else if (preg_match("/^fav(e|orite[ds]?)?:(.*)$/", $filter, $match)) {
             $name = mb_strtolower($match[2]);
             // Get user id, so that we can always show self faves even if settings prevent public view.
             if (isset($user)) {
                 $uid = $user['UserId'];
-                if ($name == "me") return "EXISTS(SELECT 1 FROM ".GALLERY_USER_FAVORITES_TABLE." F WHERE UserId=$uid AND F.PostId=T.PostId)";
+                if ($name == "me") return "PostId IN (SELECT PostId FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE UserId=$uid)";
             } else {
                 $uid = -1;
             }
@@ -269,7 +269,7 @@ function CreateSQLClauseFromFilter($filter) {
                 }
             }
             $joined_uids = implode(",", $uids);
-            return "EXISTS(SELECT 1 FROM ".GALLERY_USER_FAVORITES_TABLE." F WHERE F.PostId=T.PostId AND F.UserId IN ($joined_uids))";
+            return "PostId IN (SELECT PostId FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE UserId IN ($joined_uids))";
         } else if (startsWith($filter, "parent:")) {
             $parent = mb_substr($filter, 7);
             if (mb_strtolower($parent, "UTF-8") == "none" || !is_numeric($parent) || $parent <= 0) return "FALSE";  // Don't let searching for all non-child posts.
