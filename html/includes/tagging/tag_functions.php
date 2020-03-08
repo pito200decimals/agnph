@@ -91,9 +91,9 @@ function GetTagsByName($tag_table_name, $tag_names, $create_new = false, $user_i
         return $ret + $new_tags;  // + operator okay because indexed by tag id.
     } else {
         if (sizeof($tag_names) == 0) return array();
-        $joined = implode(",", array_map(function($name) { return "'".sql_escape(mb_strtoupper($name, "UTF-8"))."'"; }, $tag_names));
+        $joined = implode(",", array_map(function($name) { return "'".sql_escape($name)."'"; }, $tag_names));
         $ret = array();
-        if (!sql_query_into($result, "SELECT * FROM $tag_table_name WHERE UPPER(Name) IN ($joined);", 0)) return array();  // Return empty on error, or none found.
+        if (!sql_query_into($result, "SELECT * FROM $tag_table_name WHERE Name IN ($joined);", 0)) return array();  // Return empty on error, or none found.
         while ($row = $result->fetch_assoc()) {
             $row['displayName'] = TagNameToDisplayName($row['Name']);
             $row['quotedName'] = contains($row['Name'], ":") ? "\"".$row['Name']."\"" : $row['Name'];
