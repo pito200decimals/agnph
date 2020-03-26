@@ -172,6 +172,9 @@ blockquote blockquote blockquote {
 .post-label {
     background-color: rgb(63,63,63);
 }
+.mass-edit-selected .post-label {
+    background-color: rgb(255,191,0);
+}
 .posteditbox {
     background-color: rgb(63,63,63);
 }

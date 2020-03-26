@@ -203,6 +203,10 @@ function GetSpecialSQLClauseForTerm($term) {
         return ParseAndGetFieldComparator(substr($term, 6), "T.NumFavorites");
     } else if (startsWith($term, "views:")) {
         return ParseAndGetFieldComparator(substr($term, 6), "T.NumViews");
+    } else if (startsWith($term, "id:")) {
+        $id = mb_substr($term, 3);
+        $escaped_id = sql_escape($id);
+        return "T.PostId='$escaped_id'";
     } else {
         return null;
     }
@@ -219,6 +223,8 @@ function IsFilter($filter) {
         return false;
     } else if (startsWith($filter, "views:")) {
         return false;
+    } else if (startsWith($filter, "id:")) {  // Special case since we want to be able to ~ them together.
+        return false;
      } else if (mb_strpos($filter, ":") !== FALSE) {
         return true;
      } else {
@@ -232,11 +238,7 @@ function CreateSQLClauseFromFilter($filter) {
         return "NOT(".CreateSQLClauseFromFilter(mb_substr($filter, 1)).")";
     } else {
         $match = array();  // For regex matching.
-        if (startsWith($filter, "id:")) {
-            $id = mb_substr($filter, 3);
-            $escaped_id = sql_escape($id);
-            return "T.PostId='$escaped_id'";
-        } else if (startsWith($filter, "md5:")) {
+        if (startsWith($filter, "md5:")) {
             $md5 = mb_substr($filter, 4);
             $escaped_md5 = sql_escape($md5);
             return "T.Md5='$escaped_md5'";

@@ -150,7 +150,7 @@
                             <input class="postid" type="hidden" value="{{ post.PostId }}" />
                             <input class="postorder" type="hidden" value="{{ post.PoolItemOrder }}" />
                         {% endif %}
-                        <a class="postlink" href="/gallery/post/show/{{ post.PostId }}/">
+                        <a class="postlink" data-postid="{{ post.PostId }}" href="/gallery/post/show/{{ post.PostId }}/">
                             <div class="post-tile">
                                 {# TODO: Deleted thumbnail instead of preview? #}
                                 <img class="post-preview-img {{ post.outlineClass }}" src="{{ post.thumbnail }}" />
@@ -201,7 +201,7 @@
                 <form method="POST" accept-charset="UTF-8">
                     <input id="mass-edit-action" type="hidden" name="mass-edit-action" value="tagedit" />
                     <p>
-                        This will apply these tag modifications to all posts in the current search.
+                        This will apply these tag modifications to all posts in the current search. Click individual posts to include only them in the search.
                     </p>
                     <table>
                         {% if canMassTagEdit %}
