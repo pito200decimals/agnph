@@ -58,6 +58,7 @@ sql_query("DROP TABLE ".OEKAKI_POST_TABLE.";");
 sql_query("DELETE FROM mysql.event");
 
 // Main user data table. General information that is shared between sections.
+// TODO: Support strict mode in MySQL 5.7
 do_or_die(sql_query(
     "CREATE TABLE ".USER_TABLE." (
         UserId INT(11) UNSIGNED AUTO_INCREMENT,".  // User's ID.
@@ -379,6 +380,7 @@ do_or_die(sql_query(
         Adult TINYINT(1) DEFAULT 0 NOT NULL,
         Duration INT(11) NOT NULL,
         HasAnimation TINYINT(1) DEFAULT 0 NOT NULL,
+        Version INT(11) DEFAULT 1 NOT NULL,
         Status CHAR(1) DEFAULT 'A' NOT NULL,".  // A - Approved, M - ???, D - Deleted.
        "PRIMARY KEY(PostId)
     ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
