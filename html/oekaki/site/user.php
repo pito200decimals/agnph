@@ -47,7 +47,7 @@ if (isset($user) && $profile_user['UserId'] == $user['UserId']) {
             $formatted_duration = FormatVeryShortDuration($metadata['elapsedSeconds']);
             $slot = array(
                 "thumb" => "/oekaki/thumb/$i.png",
-                "href" => "/oekaki/draw/#".($i + 1),
+                "href" => "/oekaki/old/draw/#".($i + 1),
                 "duration" => $formatted_duration,
                 "name" => $metadata['name'],
                 );

@@ -86,7 +86,15 @@
                         </noscript>
                         <img class="oekaki-post-image jsonly" data-src="/oekaki/image/{{ post.PostId }}.{{ post.Extension }}" hidden />
                     </a>
-                    {% if post.HasAnimation %}<p><a href="/oekaki/animation/{{ post.PostId }}/">(Show Animation)</a><p>{% endif %}
+                    {% if post.HasAnimation %}
+                        <p>
+                            {% if post.Version == 1 %}
+                                <a href="/oekaki/animation/{{ post.PostId }}/">(Show Animation)</a>
+                            {% elseif post.Version == 2 %}
+                                <a href="/oekaki/draw/#{{ post.PostId }}">(Show Animation)</a>
+                            {% endif %}
+                        <p>
+                    {% endif %}
                 {% elseif post.Status == 'M' %}
                     <img class="oekaki-post-image" src="/images/deleted-preview.png" />
                 {% elseif post.Status == 'D' %}

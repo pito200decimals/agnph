@@ -21,7 +21,7 @@
                 how to make the software better.
             </p>
             <p>
-                <a href="/oekaki/draw/">Click here</a> to get started drawing!
+                <a href="/oekaki/old/draw/">Click here</a> to get started drawing!
             </p>
         </div>
     </div>
@@ -38,7 +38,7 @@
         <div class="header">Pen Pressure Support</div>
         <div class="content">
             <p>
-                The oekaki supports pen pressure on some tablet devices. Refer to the following list depending on your browser.
+                The oekaki supports pen pressure on some tablet devices. Refer to the following list depending on your browser (Google Chrome is recommended).
             </p>
             <p>
                 <strong>Mozilla Firefox</strong><br />
@@ -54,8 +54,12 @@
                 Pen pressure in natively supported in Chrome.
             </p>
             <p>
-                <strong>Internet Explorer/Edge</strong><br />
-                Pen pressure support is built in to Windows and the latest Internet Explorer/Edge browser. This should support many major tablet brands.
+                <strong>Microsoft Edge</strong><br />
+                Pen pressure support is built in to Windows and the latest Edge browser. This should support many major tablet brands.
+            </p>
+            <p>
+                If you still have trouble, you can try the steps on <a href="https://support.syncsketch.com/article/32-pen-pressure-sensitivity-does-not-seem-to-work" target="_blank">this page</a>.
+                You can also test if your browser can detect your hardware on <a href="https://patrickhlauke.github.io/touch/tracker/multi-touch-tracker-pointer-hud-pep.html" target="_blank">this test page</a>.
             </p>
         </div>
     </div>

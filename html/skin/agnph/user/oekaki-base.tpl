@@ -74,7 +74,7 @@
     {% endif %}
     {% if slots|length > 0 %}
         <div class="infoblock">
-            <h3>Drawings in Progress (Private)</h3>
+            <h3>Old Oekaki Drawings in Progress (Private)</h3>
             {% for slot in slots %}
                 <a class="thumb-link" target="_blank" href="{{ slot.href }}">
                     <div class="oekaki-slot-container">
