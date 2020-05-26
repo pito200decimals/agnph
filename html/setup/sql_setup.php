@@ -83,7 +83,7 @@ do_or_die(sql_query(
         Gender CHAR(1) DEFAULT 'U',".  // U=Unspecified, M=Male, F=Female, O=Other
        "GroupMailboxThreads TINYINT(1) DEFAULT 1,
         AvatarPostId INT(11) DEFAULT -1,".  // Format: Post ID in gallery.
-       "AvatarFname VARCHAR(16) DEFAULT '',".  // Format: "user$uid.$ext"
+       "AvatarFname VARCHAR(32) DEFAULT '',".  // Format: "user$uid.$timestamp.$ext"
        "Skin VARCHAR(".MAX_SKIN_STRING_LENGTH.") DEFAULT '".DEFAULT_SKIN_SETTING."' NOT NULL,".
         // Code-assigned values.
        "JoinTime INT(11) NOT NULL,

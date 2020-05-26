@@ -566,7 +566,7 @@ function ProcessAvatarUpload(&$user_table_sets) {
             return;
         }
         $uid = $profile_user['UserId'];
-        $fname = "user$uid.".AVATAR_UPLOAD_EXTENSION;
+        $fname = "user$uid.".time().".".AVATAR_UPLOAD_EXTENSION;
         $dst_path = SITE_ROOT."images/uploads/avatars/$fname";
         // Check file properties.
         $meta = getimagesize($tmp_path);
