@@ -585,6 +585,12 @@ function ProcessAvatarUpload(&$user_table_sets) {
         }
         $image->save($dst_path);
         unlink($tmp_path);
+        // Delete old file, if it existed.
+        $old_fname = $profile_user['AvatarFname'];
+        if (strlen($old_fname)) {
+            $old_path = SITE_ROOT."images/uploads/avatars/$old_fname";
+            unlink($old_path);
+        }
 
         $user_table_sets[] = "AvatarPostId=-1";
         $escaped_fname = sql_escape($fname);
