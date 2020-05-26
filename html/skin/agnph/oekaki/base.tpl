@@ -14,7 +14,7 @@
         <li><a href="/oekaki/">Index</a></li>
         {#<li><a href="/oekaki/">Browse</a></li>#}
         {% if user %}
-            <li><a href="/oekaki/old/draw/">Draw</a></li>
+            <li><a href="/oekaki/draw/">Draw</a></li>
             <li><a href="/user/{{ user.UserId }}/oekaki/">My Oekaki</a></li>
         {% endif %}
         <li id="oekaki-search">

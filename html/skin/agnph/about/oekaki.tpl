@@ -21,7 +21,7 @@
                 how to make the software better.
             </p>
             <p>
-                <a href="/oekaki/old/draw/">Click here</a> to get started drawing!
+                <a href="/oekaki/draw/">Click here</a> to get started drawing!
             </p>
         </div>
     </div>

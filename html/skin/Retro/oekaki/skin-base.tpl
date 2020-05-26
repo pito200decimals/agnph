@@ -27,5 +27,5 @@
 {% endblock %}
 
 {% block extra_account_menu_options_logged_in %}
-    <li><a href="/oekaki/old/draw/">Draw</a></li>
+    <li><a href="/oekaki/draw/">Draw</a></li>
 {% endblock %}
