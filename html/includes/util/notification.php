@@ -8,6 +8,7 @@ include_once(SITE_ROOT."includes/util/user.php");
 include_once(SITE_ROOT."includes/constants.php");
 
 function AddNotification($user_id, $title, $contents, $sender_id=-1) {
+  if ($user_id == $sender_id) return;  // Don't send a notification to yourself.
   global $user;
   $now = time();
   $title = sql_escape(SanitizeHTMLTags($title, DEFAULT_ALLOWED_TAGS));
