@@ -115,11 +115,10 @@ if (isset($_GET['api'])) {
     }
 }
 
-$promotion_banner_enabled = false;
+// For now, show a banner to highlight the launch of the new oekaki.
+$promotion_banner_enabled = true;
 if ($promotion_banner_enabled) {
-    if (($searchterms == "" && $page == 1) || $has_feature) {
-        PostBanner("Check out the current Fics/Oekaki theme <a href='http://agn.ph/forums/thread/2133/'>here</a>. Prizes for the best entries!", "green", true, true);
-    }
+    PostBanner("Check out the new Oekaki! <a href='http://agn.ph/oekaki/draw/'>Draw Now</a>", "green", true, true);
 }
 
 RenderPage("gallery/posts/postindex.tpl");
