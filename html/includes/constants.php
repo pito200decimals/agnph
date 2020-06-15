@@ -226,6 +226,7 @@ define("REGISTER_DISCLAIMER_KEY", "RegisterDisclaimer");
 define("LOGIN_MESSAGE_KEY", "LoginMessage");
 define("SHORT_BAN_DURATION_KEY", "UserShortBanDuration");
 define("MAINTENANCE_MODE_KEY", "MaintenanceMode");
+define("OEKAKI_LIVESTREAM_IDS_KEY", "LivestreamUserIds");
 // Site security-related values.
 define("DEFAULT_SHORT_BAN_DURATION", 7 * 24 * 60 * 60);  // 7 days, modifiable site setting.
 define("DISPLAY_NAME_CHANGE_TIME_LIMIT", 24*60*60);  // Once a day.
