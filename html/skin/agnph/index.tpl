@@ -72,6 +72,16 @@
                         <div class="content">{% autoescape false %}{{ events }}{% endautoescape %}</div>
                     </div>
                 {% endif %}
+                {% if livestreams|length > 0 %}
+                    <div class="block">
+                        <div class="header">🔴 Live Oekaki</div>
+                        <div class="content">
+                            {% for stream in livestreams %}
+                                <img class="avatar-icon" src="{{ user.avatarURL }}"><a href="/oekaki/draw/#live{{ stream.UserId }}" target="_blank"><strong>{{ stream.DisplayName }}</strong></a> - {{ stream.Duration }}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

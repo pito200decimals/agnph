@@ -19,7 +19,7 @@
         {{ inline_css_asset('/no-left-menu-style.css')|raw }}
     {% endif %}
 {% endblock %}
-                                        
+
 {% use 'includes/irc-block.tpl' %}
 {% use 'includes/user-activity-block.tpl' %}
 
@@ -28,6 +28,16 @@
         <div class="block">
             <div class="header">Events</div>
             <div class="content">{% autoescape false %}{{ events }}{% endautoescape %}</div>
+        </div>
+    {% endif %}
+    {% if livestreams|length > 0 %}
+        <div class="block">
+            <div class="header">🔴 Live Oekaki</div>
+            <div class="content">
+                {% for stream in livestreams %}
+                    <img class="avatar-icon" src="{{ user.avatarURL }}"><a href="/oekaki/draw/#live{{ stream.UserId }}" target="_blank"><strong>{{ stream.DisplayName }}</strong></a> - {{ stream.Duration }}
+                {% endfor %}
+            </div>
         </div>
     {% endif %}
     {{ parent() }}

@@ -42,3 +42,7 @@ h3 {
     width: 70%;
     margin-right: 30%;
 }
+.avatar-icon {
+    max-height: 20px;
+    max-width: 20px;
+}

@@ -7,6 +7,7 @@ define("PRETTY_PAGE_NAME", "Homepage");
 include_once("header.php");
 include_once(SITE_ROOT."includes/news/news.php");
 include_once(SITE_ROOT."includes/util/user_activity.php");
+include_once(SITE_ROOT."oekaki/site/includes/functions.php");
 
 // Get welcome message.
 $vars['welcome_message'] = SanitizeHTMLTags(GetSiteSetting(SITE_WELCOME_MESSAGE_KEY, ""), DEFAULT_ALLOWED_TAGS);
@@ -24,6 +25,7 @@ $all_news = array_reverse($all_news);
 $num_max_news = GetSiteSetting(MAX_SITE_NEWS_POSTS_KEY, DEFAULT_MAX_SITE_NEWS_POSTS);
 $vars['news'] = array_slice($all_news, 0, $num_max_news);
 $vars['user_activity'] = GetUserActivityStats();
+$vars['livestreams'] = GetActiveLivestreams();
 
 RenderPage("index.tpl");
 return;

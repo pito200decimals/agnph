@@ -132,7 +132,7 @@ function GetValidMetadataOrNull($slot_index) {
 }
 
 function GetActiveLivestreams() {
-    if (!sql_query_into($result, "SELECT T.UserId, DisplayName, Timestamp FROM ".OEKAKI_LIVESTREAM_TABLE." T INNER JOIN ".USER_TABLE." U ON T.UserId=U.UserId WHERE 1;")) return array();
+    if (!sql_query_into($result, "SELECT T.UserId, DisplayName, Timestamp, AvatarPostId, AvatarFname FROM ".OEKAKI_LIVESTREAM_TABLE." T INNER JOIN ".USER_TABLE." U ON T.UserId=U.UserId WHERE 1;")) return array();
     $streams = array();
     $now = time();
     while ($row = $result->fetch_assoc()) {
@@ -141,6 +141,7 @@ function GetActiveLivestreams() {
             "DisplayName" => $row['DisplayName'],
             "Timestamp" => $row['Timestamp'],
             "Duration" => FormatDuration($now - $row['Timestamp']),
+            "avatarURL" => GetAvatarURL($row),
         );
     }
     return $streams;
