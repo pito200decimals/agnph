@@ -384,6 +384,12 @@ do_or_die(sql_query(
         Status CHAR(1) DEFAULT 'A' NOT NULL,".  // A - Approved, M - ???, D - Deleted.
        "PRIMARY KEY(PostId)
     ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
+do_or_die(sql_query(
+    "CREATE TABLE ".OEKAKI_LIVESTREAM_TABLE." (
+        UserId INT(11) NOT NULL,
+        Timestamp INT(11) NOT NULL,
+        PRIMARY KEY(UserId)
+    ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 // Table for oekaki user preferences.
 do_or_die(sql_query(
    "CREATE TABLE ".OEKAKI_USER_PREF_TABLE." (

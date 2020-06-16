@@ -58,6 +58,7 @@ define("FICS_TAG_IMPLICATION_TABLE", SQL_TABLE_PREFIX."fics_tag_implications");
 
 // Oekaki tables.
 define("OEKAKI_POST_TABLE", SQL_TABLE_PREFIX."oekaki_posts");
+define("OEKAKI_LIVESTREAM_TABLE", SQL_TABLE_PREFIX."oekaki_livestream");
 
 ////////////////////////////////////////////////////////////////////
 // Settings Defaults and Limits (Embedded in SQL table defaults). //

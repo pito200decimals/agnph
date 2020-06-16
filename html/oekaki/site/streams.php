@@ -17,11 +17,30 @@ if ($content == NULL) {
     echo "null";
     AJAXErr();
 }
-if (!isset($content['uids'])) AJAXErr();
-if (!is_array($content['uids'])) AJAXErr();
-$ids = join(",", $content['uids']);
-$ids = sql_escape($ids);
-sql_query("REPLACE INTO ".SITE_SETTINGS_TABLE." (Name, Value) VALUES ('".OEKAKI_LIVESTREAM_IDS_KEY."', '$ids')");
+if (!isset($content['sessions'])) AJAXErr();
+$sessions = $content['sessions'];
+if (!is_array($sessions)) AJAXErr();
+$ids = array();
+$new_rows = array();
+foreach ($sessions as $s) {
+    if (!is_array($s)) AJAXErr();
+    if (!isset($s['uid'])) AJAXErr();
+    if (!is_int($s['uid'])) AJAXErr();
+    if (!isset($s['timestamp'])) AJAXErr();
+    if (!is_int($s['timestamp'])) AJAXErr();
+    $uid = $s['uid'];
+    $timestamp = $s['timestamp'];
+    $ids[] = $uid;
+    $new_rows[] = "($uid, $timestamp)";
+}
+$id_list = join(",", $ids);
+$new_values_list = join(",", $new_rows);
+if (count($ids) == 0) {
+    sql_query("DELETE FROM ".OEKAKI_LIVESTREAM_TABLE." WHERE 1;");
+} else {
+    sql_query("DELETE FROM ".OEKAKI_LIVESTREAM_TABLE." WHERE NOT(UserId IN ($id_list));");
+}
+sql_query("REPLACE INTO ".OEKAKI_LIVESTREAM_TABLE." (UserId, Timestamp) VALUES $new_values_list;");
 exit();
 
 ?>

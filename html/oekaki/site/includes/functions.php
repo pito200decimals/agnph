@@ -130,4 +130,19 @@ function GetValidMetadataOrNull($slot_index) {
     }
     return NULL;
 }
+
+function GetActiveLivestreams() {
+    if (!sql_query_into($result, "SELECT T.UserId, DisplayName, Timestamp FROM ".OEKAKI_LIVESTREAM_TABLE." T INNER JOIN ".USER_TABLE." U ON T.UserId=U.UserId WHERE 1;")) return array();
+    $streams = array();
+    $now = time();
+    while ($row = $result->fetch_assoc()) {
+        $streams[] = array(
+            "UserId" => $row['UserId'],
+            "DisplayName" => $row['DisplayName'],
+            "Timestamp" => $row['Timestamp'],
+            "Duration" => FormatDuration($now - $row['Timestamp']),
+        );
+    }
+    return $streams;
+}
 ?>
