@@ -14,7 +14,7 @@
     <li><a href="/fics/browse/">Stories</a></li>
     <li><a href="/fics/authors/">Authors</a></li>
     <li><a href="/fics/tags/">Tags</a></li>
-    <li class="desktop-only"><a href="/fics/rss.xml">RSS</a></li>
+    <li><a href="/fics/rss.xml">RSS</a></li>
 {% endblock %}
 
 {% block page_title_bar %}
