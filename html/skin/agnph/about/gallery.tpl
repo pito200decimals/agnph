@@ -20,9 +20,8 @@
                 to any site, we recommend putting a 'Do Not Distribute' label on each of your works.
             </p>
             <p>
-                If you wish to be added to the DNP list, send a private message to <a href="/user/2/"><strong>Flygon</strong></a>. This can be via AGNPH, or you can use another site such as
-                <a href="http://www.furaffinity.net/user/flygon">Fur Affinity</a> or <a href="https://inkbunny.net/flygon">InkBunny</a>. Please do not use email.
-                If you do not receive a reply from Flygon within three working days, you can resend the request to any of the <a href="/about/staff/">gallery admins</a>.
+                If you wish to be added to the DNP list, send a private message to <a href="/user/10855/"><strong>Keiro</strong></a>.
+                If you do not receive a reply within three working days, you can resend the request to any of the <a href="/about/staff/">gallery admins</a>.
                 You will also be asked to provide proof of your identity as the artist. Usually, this will be for you to send a confirmatory Private Message from your artist
                 account on a website where your art is posted.
             </p>
@@ -50,7 +49,7 @@
                 In either case, the <strong>Artist</strong> has final say if the post should be taken down or restored.
             </p>
             <p>
-                Contact <a href="/user/2/"><strong>Flygon</strong></a> or a Gallery Admin to request a takedown. 
+                Contact <a href="/user/10855/"><strong>Keiro</strong></a> or a Gallery Admin to request a takedown.
             </p>
         </div>
     </div>
