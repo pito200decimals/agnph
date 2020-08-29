@@ -333,7 +333,8 @@ input[type='submit'].search-button {
     background-color: rgb(47,47,47);
 }
 .tag a:hover {
-    color: rgb(15,15,15)
+    /* CUSTOM */
+    color: rgb(127,127,127);
 }
 .tag small {
     /* CUSTOM */
@@ -341,6 +342,11 @@ input[type='submit'].search-button {
 }
 .none-tag {
     color: rgb(221,63,31);
+}
+/*general*/
+.mtypetag {
+    /* CUSTOM */
+    color: rgb(31,95,127);
 }
 
 /* Any other temporary styles */
