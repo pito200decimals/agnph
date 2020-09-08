@@ -220,7 +220,7 @@ function GetValidParentPostId($parent_post_id, $post_id) {
 // Updates a post with the new tags/properties (and updates history log).
 function UpdatePost($tag_string, $post_id, $user, $update_tag_types=true, $batch_id=0) {
     global $GALLERY_TAG_TYPES;
-    $tag_ids = GetPostTags($post_id);  // Get tags before post was edited.
+    $old_tag_ids = GetPostTags($post_id);  // Get tags before post was edited.
     $tag_string = CleanTagString($tag_string);
     $tokens = GetTagStringTokens($tag_string);
     $descriptors = GetTagDescriptors($tokens, $post_id, "GalleryTagDescriptorFilterFn");
@@ -228,8 +228,11 @@ function UpdatePost($tag_string, $post_id, $user, $update_tag_types=true, $batch
     if ($update_tag_types) {
         UpdateTagTypes(GALLERY_TAG_TABLE, $GALLERY_TAG_TYPES, $descriptors, $user);  // Do after creating tags above when setting post tags.
     }
-    $tag_ids = array_unique(array_merge($tag_ids, GetPostTags($post_id)));  // Get tags after post was edited.
-    UpdateTagItemCounts(GALLERY_TAG_TABLE, GALLERY_POST_TAG_TABLE, GALLERY_POST_TABLE, "PostId", "I.Status<>'D'", $tag_ids);  // Update tag counts on touched tags.
+    $tag_ids = GetPostTags($post_id);  // Get tags after post was edited.
+    $tags_added = array_diff($tag_ids, $old_tag_ids);
+    $tags_removed = array_diff($old_tag_ids, $tag_ids);
+    $tags_added_or_removed = array_unique(array_merge($tags_added, $tags_removed));
+    UpdateTagItemCounts(GALLERY_TAG_TABLE, GALLERY_POST_TAG_TABLE, GALLERY_POST_TABLE, "PostId", "I.Status<>'D'", $tags_added_or_removed);  // Update tag counts on added/removed.
 }
 
 function GetPostTags($pid) {
