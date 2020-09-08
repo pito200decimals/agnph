@@ -289,4 +289,31 @@ function PostSessionBanner($msg, $color, $dismissable = true, $noescape = false)
         "noescape" => $noescape);
 }
 
+function GetTimeMs() {
+    return round(microtime(/*get_as_float=*/TRUE) / 1000, 3);
+}
+
+function PostDebugTiming($description, $time_ms) {
+    global $user;
+    global $vars;
+    if (!contains($user['Permissions'], 'A')) {
+        return;
+    }
+    $vars['debug_timing'][] = array(
+        "description" => $description,
+        "time_ms" => $time_ms,
+    );
+}
+
+function PostSessionDebugTiming($description, $time_ms) {
+    global $user;
+    if (!contains($user['Permissions'], 'A')) {
+        return;
+    }
+    $_SESSION['debug_timing'][] = array(
+        "description" => $description,
+        "time_ms" => $time_ms,
+    );
+}
+
 ?>

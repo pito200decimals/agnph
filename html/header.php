@@ -93,6 +93,15 @@ if (!isset($_SESSION['banner_notifications'])) {
 } else {
     $vars['banner_notifications'] = array();
 }
+// Do the same for debug timings.
+if (!isset($_SESSION['debug_timing'])) {
+    $_SESSION['debug_timing'] = array();
+} else if (sizeof($_SESSION['debug_timing']) > 0) {
+    $vars['debug_timing'] = $_SESSION['debug_timing'];
+    unset($_SESSION['debug_timing']);
+} else {
+    $vars['debug_timing'] = array();
+}
 
 if (isset($user)) {
     $vars['user'] = $user;
