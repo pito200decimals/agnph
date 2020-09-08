@@ -290,7 +290,7 @@ function PostSessionBanner($msg, $color, $dismissable = true, $noescape = false)
 }
 
 function GetTimeMs() {
-    return round(microtime(/*get_as_float=*/TRUE) / 1000, 3);
+    return round(microtime(/*get_as_float=*/TRUE) * 1000, 3);
 }
 
 function PostDebugTiming($description, $time_ms) {
