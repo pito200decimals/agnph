@@ -21,15 +21,16 @@ function CreatePostSearchSQL($search_string, $posts_per_page, $page, &$can_sort_
     $matches = array();
     // If pool name is specified, replace with id here.
     // Safe to use preg_match here, as user input is only understood if formatted properly.
-    if (preg_match("/^.*pool:([^ ]*)($| .*)/", $search_string, $matches)) {
-        $pool_name = $matches[1];
+    if (preg_match("/^(.*)pool:([^ ]*)($| .*)/", $search_string, $matches)) {
+        $raw_pool_name = $matches[2];
+        $pool_name = $raw_pool_name;
         $pool_name = str_replace("_", " ", $pool_name);  // Un-escape out the underscores.
         $pool_name = RawToSanitizedPoolName($pool_name);  // Get db name.
         $escaped_pool_name = sql_escape($pool_name);
         if (sql_query_into($result, "SELECT * FROM ".GALLERY_POOLS_TABLE." WHERE UPPER(Name)=UPPER('$escaped_pool_name');", 1)) {
             $pool_id = $result->fetch_assoc()['PoolId'];
             $replacement = "pool:$pool_id";
-            $search_string = mb_ereg_replace("^(.*)(pool:[^ ]*)($| .*)", "\\1$replacement\\3", $search_string);
+            $search_string = mb_ereg_replace("^(.*)(pool:".preg_quote($raw_pool_name).")($| .*)", "\\1$replacement\\3", $search_string);
             $sortOrder = "T.PoolItemOrder ASC, ".$sortOrder;
             $can_sort_pool = true;
             $pool_sort_id = $pool_id;
@@ -40,6 +41,10 @@ function CreatePostSearchSQL($search_string, $posts_per_page, $page, &$can_sort_
         } else {
             return "FALSE";  // No pool found, so no results.
         }
+        if (mb_strlen($matches[1]) > 0 || mb_strlen($matches[3]) > 0) {
+            // If there were other search terms, don't allow sorting.
+            $can_sort_pool = false;
+        }
     }
     // If order specified, use new order.
     $lower_search_string = mb_strtolower($search_string, "UTF-8");
@@ -48,27 +53,22 @@ function CreatePostSearchSQL($search_string, $posts_per_page, $page, &$can_sort_
         if (contains($lower_search_string, "order:date") !== FALSE) {
             $search_string = mb_eregi_replace("order:date", "", $search_string);
             $sortOrder = "T.DateUploaded DESC, ".$sortOrder;
-            $can_sort_pool = false;
         }
         if (contains($lower_search_string, "order:age") !== FALSE) {
             $search_string = mb_eregi_replace("order:age", "", $search_string);
             $sortOrder = "T.DateUploaded ASC, ".$sortOrder;
-            $can_sort_pool = false;
         }
         if (contains($lower_search_string, "order:views") !== FALSE) {
             $search_string = mb_eregi_replace("order:views", "", $search_string);
             $sortOrder = "T.NumViews DESC, ".$sortOrder;
-            $can_sort_pool = false;
         }
         if (contains($lower_search_string, "order:fav") !== FALSE) {
             $search_string = mb_eregi_replace("order:fav(es?|ou?rites?)?", "", $search_string);
             $sortOrder = "T.NumFavorites DESC, ".$sortOrder;
-            $can_sort_pool = false;
         }
         if (contains($lower_search_string, "order:score") !== FALSE) {
             $search_string = mb_eregi_replace("order:score", "", $search_string);
             $sortOrder = "T.NumFavorites DESC, ".$sortOrder;
-            $can_sort_pool = false;
         }
         if (contains($lower_search_string, "order:popular") !== FALSE) {
             $grace_period = 1*24*60*60;
@@ -76,13 +76,11 @@ function CreatePostSearchSQL($search_string, $posts_per_page, $page, &$can_sort_
             // Don't remove "order:popular" from query string; used when filtering out swf/webm posts.
             // $search_string = mb_eregi_replace("order:popular", "", $search_string);
             $sortOrder = "LOG(GREATEST(T.NumViews - 10, 1) + 100 * T.NumFavorites) * 1.0 / POWER(LOG(GREATEST($now - T.DateUploaded, $grace_period)), 2) DESC, ".$sortOrder;
-            $can_sort_pool = false;
         }
         // Since comments can bucket by count, prioritize this over order:popular.
         if (contains($lower_search_string, "order:comments") !== FALSE) {
             $search_string = mb_eregi_replace("order:comments", "", $search_string);
             $sortOrder = "T.NumComments DESC, ".$sortOrder;
-            $can_sort_pool = false;
         }
     }
     if (!isset($user) || !CanUserChangePoolOrdering($user)) {
