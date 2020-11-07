@@ -43,6 +43,7 @@
 /* Post styling */
 .preview-img {
     max-width: 100%;
+    max-height: 80vh;
 }
 .post-description {
     margin: 5px;

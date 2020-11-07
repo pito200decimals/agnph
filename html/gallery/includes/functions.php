@@ -520,6 +520,15 @@ function ToTagNameString($allTags) {
     return implode(" ", $tagNames);
 }
 
+function HasAnimatedTag($allTags) {
+    foreach ($allTags as $tag) {
+        if (mb_strtolower($tag['Name']) == 'animated') {
+            return true;
+        }
+    }
+    return false;
+}
+
 function GetPossibleFlagReasons() {
     return GetSiteSettingArray("gallery_flag_reasons");
 }

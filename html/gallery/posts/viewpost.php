@@ -108,6 +108,10 @@ $tagCategories = ToTagCategorized($tags);
 $post['tagstring'] = $tagNameStr;
 $post['tagCategories'] = $tagCategories;
 $post['artists'] = GetArtistTags($tags);
+$post['animated'] = HasAnimatedTag($tags);
+if ($post['animated']) {
+    $post['previewUrl'] = $post['downloadUrl'];
+}
 $vars['_title'] = "AGNPH - Gallery - ".$post['PostId']." - $tagNameStr";
 
 // Get other properties like uploader, rating HTML, etc.
