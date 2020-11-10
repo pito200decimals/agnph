@@ -61,7 +61,9 @@
                             <div class="post-tile">
                                 <img class="post-preview-img" src="{{ post.thumbnail }}" />
                                 <div class="post-label">
-                                    {{ post.Title }}
+                                    {% autoescape false %}
+                                        {{ post.Title }}
+                                    {% endautoescape %}
                                 </div>
                             </div>
                         </a>
