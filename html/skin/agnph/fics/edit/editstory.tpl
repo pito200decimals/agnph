@@ -11,7 +11,7 @@
 
 {% block scripts %}
     {{ parent() }}
-    <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
+    <script src="{{ asset('/scripts/tinymce.min.js') }}"></script>
     {% if not create and chapters %}
         <script src="{{ asset('/scripts/jquery.sortable.js') }}"></script>
         <script>

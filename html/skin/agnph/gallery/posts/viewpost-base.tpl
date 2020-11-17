@@ -13,7 +13,7 @@
         var pi = {{ post.PostId }};
         var ppi = {{post.ParentPoolId }};
     </script>
-    <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
+    <script src="{{ asset('/scripts/tinymce.min.js') }}"></script>
     <script src="{{ asset('/scripts/tinymce-spoiler-plugin.js') }}"></script>
     <script>
         var COMMENTS_STYLE_CSS = "{{ asset('/comments-style.css') }}";
