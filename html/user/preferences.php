@@ -263,7 +263,7 @@ if (isset($_POST['display-name']) &&
                     $vars['error'] = "Error sending confirmation email, please try again later";
                 }
             } else {
-                PostErrorMessage("Failed to change email/password");
+                PostErrorMessage("Failed to change email/password. If you've already requested a email/password change, please click the link in the email sent to ".$profile_user['Email']." (may need to check your spam folder)");
             }
         }
     } else {
