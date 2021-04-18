@@ -133,6 +133,7 @@ RewriteRule ^oekaki/slots/(\d+)/?$ /oekaki/site/slots.php?metadata=$1
 RewriteRule ^oekaki/slots/(\d+)/save/?$ /oekaki/site/slots.php?save=$1
 RewriteRule ^oekaki/thumb/(\d+).png?$ /oekaki/site/getThumb.php?slot=$1
 RewriteRule ^oekaki/streams/?$ /oekaki/site/streams.php
+RewriteRule ^oekaki/getstreams/?$ /oekaki/site/getStreams.php
 
 #Rewrites for user pages.
 RewriteRule ^user/list/?$ /user/list.php?sort=status&order=desc [QSA]

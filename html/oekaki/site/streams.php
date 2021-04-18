@@ -1,5 +1,5 @@
 <?php
-// AJAX-submits an image post.
+// AJAX-updates the list of current livestreams.
 // URL: /oekaki/streams/ => streams.php
 
 define("SITE_ROOT", "../../");
