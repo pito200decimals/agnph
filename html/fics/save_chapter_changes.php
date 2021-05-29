@@ -114,7 +114,7 @@ if ($action == "edit") {
     $username = $user['DisplayName'];
     $chaptertitle = htmlspecialchars($chaptertitle);
     $storyTitle = htmlspecialchars($story['Title']);
-    LogVerboseAction("<strong><a href='/user/$uid/'>$username</a></strong> edited chapter <strong>$chaptertitle</strong> ($cid) in story <strong><a href='/fics/story/$sid/'>$storyTitle</a></strong>", "F");
+    LogVerboseAction("<strong><a href='/user/$uid/'>$username</a></strong> edited chapter <strong>$chaptertitle</strong> ($cid, index $chapternum) in story <strong><a href='/fics/story/$sid/'>$storyTitle</a></strong>", "F");
     return;
 } else if ($action == "create") {
     // Create new chapter.
@@ -144,7 +144,7 @@ if ($action == "edit") {
     $username = $user['DisplayName'];
     $chaptertitle = htmlspecialchars($chaptertitle);
     $storyTitle = htmlspecialchars($story['Title']);
-    LogVerboseAction("<strong><a href='/user/$uid/'>$username</a></strong> added chapter <strong>$chaptertitle</strong> ($cid) to story <strong><a href='/fics/story/$sid/'>$storyTitle</a></strong>", "F");
+    LogVerboseAction("<strong><a href='/user/$uid/'>$username</a></strong> added chapter <strong>$chaptertitle</strong> ($cid, index $chapternum) to story <strong><a href='/fics/story/$sid/'>$storyTitle</a></strong>", "F");
 
     // Send notification to all people who favorited this story.
     if (sql_query_into($result, "SELECT * FROM ".FICS_USER_FAVORITES_TABLE." WHERE StoryId=$sid;", 1)) {
@@ -152,7 +152,7 @@ if ($action == "edit") {
         $author_uid = $user['UserId'];
         $author_url = SITE_DOMAIN."/user/$author_uid/fics/";
         $story_url = SITE_DOMAIN."/fics/story/$sid/";
-        $chapter_url = SITE_DOMAIN."/fics/story/$sid/$cid/";
+        $chapter_url = SITE_DOMAIN."/fics/story/$sid/$chapternum/";
         while ($row = $result->fetch_assoc()) {
             $rid = $row['UserId'];
             AddNotification(
