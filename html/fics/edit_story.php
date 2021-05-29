@@ -52,7 +52,6 @@ if ($action == "edit") {
         return;
     }
     if (!CanUserEditStory($story, $user)) RenderErrorPage("Not authorized to edit story");
-    FillStoryInfo($story);
     $chapters = GetChaptersInfo($sid) or RenderErrorPage("Story not found");
     $story['tagstring'] = implode(" ", array_map(function($tag) { return $tag['Name']; }, $story['tags']));
     $vars['story'] = $story;  // For story block.
