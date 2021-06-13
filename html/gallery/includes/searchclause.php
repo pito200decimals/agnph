@@ -262,12 +262,24 @@ function CreateSQLClauseFromFilter($filter) {
             $escaped_name = sql_escape($name);
             $uids = array();
             // Get any users with name matching search, and either their settings allow visibility, or it's the self user.
+            // First search for exact matches.
             if (sql_query_into($result,
                 "SELECT UserId FROM ".USER_TABLE." U WHERE
-                LOWER(DisplayName) LIKE '%$escaped_name%' AND
+                LOWER(DisplayName) = '$escaped_name' AND
                 (UserId=$uid OR EXISTS(SELECT 1 FROM ".GALLERY_USER_PREF_TABLE." P WHERE P.UserId=U.UserId AND P.PrivateGalleryFavorites=0));", 1)) {
                 while ($row = $result->fetch_assoc()) {
                     $uids[] = $row['UserId'];
+                }
+            }
+            if (empty($uids)) {
+                // If no exact matches, search for inexact matches.
+                if (sql_query_into($result,
+                    "SELECT UserId FROM ".USER_TABLE." U WHERE
+                    LOWER(DisplayName) LIKE '%$escaped_name%' AND
+                    (UserId=$uid OR EXISTS(SELECT 1 FROM ".GALLERY_USER_PREF_TABLE." P WHERE P.UserId=U.UserId AND P.PrivateGalleryFavorites=0));", 1)) {
+                    while ($row = $result->fetch_assoc()) {
+                        $uids[] = $row['UserId'];
+                    }
                 }
             }
             $joined_uids = implode(",", $uids);
