@@ -135,7 +135,14 @@ function HandlePostSuccess($username, $email, $password, $bday) {
     $escaped_password = sql_escape($hashed_password);  // Okay to not sanitize this.
     $escaped_bday = sql_escape($bday);  // Not necessary, but just in case...
     $register_time = time();
-    $escaped_ip = sql_escape($_SERVER['REMOTE_ADDR']);
+    if (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
+        $ip = $_SERVER['HTTP_CF_CONNECTING_IP'];
+    } else if (isset($_SERVER['REMOTE_ADDR'])) {
+        $ip = $_SERVER['REMOTE_ADDR'];
+    } else {
+        $ip = "unknown";
+    }
+    $escaped_ip = sql_escape($ip);
     $success = sql_query("INSERT INTO ".USER_TABLE."
         (UserName, DisplayName, Email, Password, DOB, JoinTime, RegisterIP)
         VALUES
