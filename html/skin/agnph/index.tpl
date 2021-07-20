@@ -77,7 +77,7 @@
                         <div class="header">🔴 Live Oekaki</div>
                         <div class="content">
                             {% for stream in livestreams %}
-                                <img class="avatar-icon" src="{{ stream.avatarURL }}"><a href="/oekaki/draw/#live{{ stream.UserId }}" target="_blank"><strong>{{ stream.DisplayName }}</strong></a> - {{ stream.Duration }}
+                                <img class="avatar-icon" src="{{ stream.avatarURL }}"><a href="/oekaki/draw/#live{{ stream.UserId }}" target="_blank"><strong>{{ stream.DisplayName }}</strong></a>&mdash; {{ " " }} {{ stream.Duration }}
                             {% endfor %}
                         </div>
                     </div>
