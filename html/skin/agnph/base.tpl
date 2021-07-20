@@ -3,7 +3,7 @@
     {# Notification banners #}
     {% block banner %}
         {% for notification in banner_notifications %}
-            <div class="banner-notification{% for class in notification.classes %} {{ class }}{% endfor %}">
+            <div class="banner-notification{% for class in notification.classes %}{{ " " }}{{ class }}{% endfor %}">
                 <p>
                     {% if notification.strong %}<strong>{% endif %}
                         {% if notification.noescape %}

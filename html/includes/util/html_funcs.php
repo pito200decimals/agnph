@@ -8,7 +8,7 @@ include_once(SITE_ROOT."includes/util/tidy_html.php");
 // allowed_html_config is of the form "element1[attr1|attr2],element2", e.g. a[href],p
 function SanitizeHTMLTags($html, $allowed_html_config) {
     $html = ParseBBCode($html);
-    $html = str_replace("> <", ">&nbsp;<", $html);  // Prevent user-created spaces from disappearing. HTMLPurifier will convert back to space.
+    $html = str_replace("> <", ">&nbsp;<", $html);  // Prevent user-created spaces from disappearing.
     $html = str_replace("<ul><br /><li>", "<ul><li>", $html);
     include_once(SITE_ROOT."../lib/HTMLPurifier/HTMLPurifier.auto.php");
     $config = HTMLPurifier_Config::createDefault();
@@ -26,12 +26,12 @@ function SanitizeHTMLTags($html, $allowed_html_config) {
         "<div>\xc2\xa0</div>",
         );
     foreach ($trim_values as $trim) {
-        $len = strlen($trim);
+        $len = mb_strlen($trim);
         while (startsWith($html, $trim)) {
-            $html = substr($html, $len);
+            $html = mb_substr($html, $len);
         }
         while (endsWith($html, $trim)) {
-            $html = substr($html, 0, strlen($html) - $len);
+            $html = mb_substr($html, 0, mb_strlen($html) - $len);
         }
     }
     $html = $purifier->purify($html);
@@ -156,14 +156,13 @@ function ConstructDefaultPageIterator($currpage, $maxpage, $iterator_size, $url_
 // Renders the page to the given template.
 function RenderPage($template, $tidy = false) {
     global $twig, $vars;
-    $text = mb_ereg_replace("\s+", " ", $twig->render($template, $vars));
+    $text = $twig->render($template, $vars);
     if (DEBUG) {
         echo "\n\n\n\n\n";
         echo "----------------------------------------------------------------------------------------------\n";
     }
     if ($tidy) {
-        $text = mb_ereg_replace(">\s+", ">", $text);
-        $text = mb_ereg_replace("\s+<", "<", $text);
+        $text = mb_ereg_replace("\s+", " ", $text);
         $text = TidyHTML($text);
     }
     echo ($text);
