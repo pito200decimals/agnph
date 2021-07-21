@@ -153,7 +153,7 @@
                         <a class="postlink" data-postid="{{ post.PostId }}" href="/gallery/post/show/{{ post.PostId }}/">
                             <div class="post-tile">
                                 {# TODO: Deleted thumbnail instead of preview? #}
-                                <img class="post-preview-img {{ post.outlineClass }}" src="{{ post.thumbnail }}" />
+                                <img class="post-preview-img{{ " " }}{{ post.outlineClass }}" src="{{ post.thumbnail }}" />
                                 <div class="post-label">
                                     {% autoescape false %}
                                     {{ post.favHtml }}{{ post.commentsHtml }}{{ post.ratingHtml }}
