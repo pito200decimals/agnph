@@ -165,15 +165,15 @@
             {% if profile.user.numOekakiDrawn > 0 %}    <li><span class="basic-info-label">Oekaki Drawn:</span><span>{{ profile.user.numOekakiDrawn }}</span></li>{% endif %}
             {% if profile.user.lastVisitDate %}         <li><span class="basic-info-label">Last Active:</span><span>{{ profile.user.lastVisitDate }}</span></li>{% endif %}
                                                         <li><span class="basic-info-label">Date Registered:</span>{{ profile.user.registerDate }}<span></span></li>
-            {% if canSeeAdminInfo %}
         </ul>
+        {% if canSeeAdminInfo %}
         <h3>Admin Info</h3>
         <ul class="basic-info">
                                                         <li><span class="basic-info-label">IP Addresses:</span><span><ul>{% for ip in profile.user.ips %}<li>{{ ip }}</li>{% endfor %}</ul></span></li>
                                                         {% if profile.user.isBanned %}
                                                             <li><span class="basic-info-label">Ban duration:</span><span>{{ profile.user.banDuration }}</span></li>
                                                         {% endif %}
-            {% endif %}
         </ul>
+        {% endif %}
     </div>
 {% endblock %}

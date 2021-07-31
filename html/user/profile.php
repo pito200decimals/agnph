@@ -56,8 +56,8 @@ if (isset($user)) {
     } else {
         $ips = explode(",", $profile_user['KnownIPs']);
     }
-    if (mb_strlen($profile_user['RegisterIP']) > 0 && mb_strpos($profile_user['KnownIPs'], $profile_user['RegisterIP']) === FALSE) {
-        $ips[] = $profile_user['RegisterIP'];
+    if (mb_strlen($profile_user['RegisterIP']) > 0) {
+        $ips[] = $profile_user['RegisterIP']." (account registration)";
     }
     $profile_user['ips'] = $ips;
     // Set up global admin links.
