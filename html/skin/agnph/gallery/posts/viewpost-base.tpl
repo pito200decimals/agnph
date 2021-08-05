@@ -160,7 +160,7 @@
                 <li>Posted: {% autoescape false %}{{ post.postedHtml }}{% endautoescape %}</li>
                 <li>Rating: {% autoescape false %}{{ post.ratingHtml }}{% endautoescape %}</li>
                 <li>Favorites: {{ post.NumFavorites }}</li>
-                <li>Size: {{ post.Width }} x {{ post.Height }}{% if post.FileSize != "" %} ({{ post.FileSize }}){% endif %}</li>
+                <li>Size:{{ " " }}{{ post.Width }} x{{ " " }}{{ post.Height }}{% if post.FileSize != "" %} ({{ post.FileSize }}){% endif %}</li>
                 <li>Views: {{ post.NumViews }}</li>
                 <li><a href="/gallery/post/show/{{ post.PostId }}/history/">Tag History</a></li>
             </ul>
@@ -340,9 +340,9 @@
             <tr>
                 <td><label>Rating</label></td>
                 <td>
-                    <span class="radio-button-group"><input id="rating-e-box" name="rating" type="radio"{% if post.Rating=='e' %} checked{% endif %} value="e" /><label for="rating-e-box">Explicit</label></span>
-                    <span class="radio-button-group"><input id="rating-q-box" name="rating" type="radio"{% if post.Rating=='q' %} checked{% endif %} value="q" /><label for="rating-q-box">Questionable</label></span>
-                    <span class="radio-button-group"><input id="rating-s-box" name="rating" type="radio"{% if post.Rating=='s' %} checked{% endif %} value="s" /><label for="rating-s-box">Safe</label></span>
+                    <span class="radio-button-group"><input id="rating-e-box" name="rating" type="radio"{% if post.Rating=='e' %}{{ " " }}checked{% endif %}{{ " " }}value="e" /><label for="rating-e-box">Explicit</label></span>
+                    <span class="radio-button-group"><input id="rating-q-box" name="rating" type="radio"{% if post.Rating=='q' %}{{ " " }}checked{% endif %}{{ " " }}value="q" /><label for="rating-q-box">Questionable</label></span>
+                    <span class="radio-button-group"><input id="rating-s-box" name="rating" type="radio"{% if post.Rating=='s' %}{{ " " }}checked{% endif %}{{ " " }}value="s" /><label for="rating-s-box">Safe</label></span>
                 </td>
             </tr>
             <tr>

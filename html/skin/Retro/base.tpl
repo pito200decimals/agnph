@@ -23,7 +23,7 @@
         {% endfor %}
     {% endblock %}
     {% block desktop_site_navigation %}
-        <ul class="site-navigation{% if site_nav_in_tray%} desktop-only{% endif %}">
+        <ul class="site-navigation{% if site_nav_in_tray%}{{ " " }}desktop-only{% endif %}">
             <li><a href="/">agn.ph</a></li>&nbsp;&nbsp;
             <li><a href="/fics/">/fics</a></li>
             - <li><a href="/gallery/post/">/gallery</a></li>
@@ -131,7 +131,7 @@
     </head>
     <body>
         <div id="site-body-width-container">
-            <div id="site-header"{% if mobile_condensed_header %} class="desktop-only"{% endif %}>
+            <div id="site-header"{% if mobile_condensed_header %}{{ " " }}class="desktop-only"{% endif %}>
                 <div id="site-logo-container">
                     {% if user %}
                         <img src="/skin/Retro/logo.png" />
@@ -213,7 +213,7 @@
                                     <form id="theme-switcher-form" action="/change-skin/" method="POST" accept-encoding="UTF-8">
                                         <select name="skin" onchange="document.getElementById('theme-switcher-form').submit();">
                                             {% for s in availableSkins %}
-                                                <option{% if s == skin %} selected{% endif %}>{{ s }}</option>
+                                                <option{% if s == skin %}{{ " " }}selected{% endif %}>{{ s }}</option>
                                             {% endfor %}
                                         </select>
                                     </form>

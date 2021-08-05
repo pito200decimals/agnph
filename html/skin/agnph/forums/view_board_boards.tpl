@@ -42,7 +42,7 @@
                             <ul>
                                 <li>Last Post by <a href="/user/{{ board.lastPost.user.UserId }}/">{{ board.lastPost.user.DisplayName }}</a></li>
                                 <li>in <a href="{{ board.lastPost.url }}">{{ board.lastPost.Title }}</a></li>
-                                <li>on {{ board.lastPost.date }}</li>
+                                <li>on{{ " " }}{{ board.lastPost.date }}</li>
                             </ul>
                         {% endif %}
                     </td>

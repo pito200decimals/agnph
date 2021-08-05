@@ -50,7 +50,7 @@
                 </div>
             </div>
             <div class="storyblockinfo">
-                <div class="summary{% if restrictSummaryHeight %} summary-box{% endif %}">
+                <div class="summary{% if restrictSummaryHeight %}{{ " " }}summary-box{% endif %}">
                     <p class="metalabel">Summary:</p><p class="metavalue">{% autoescape false %}{{ story.Summary }}{% endautoescape %}</p>
                 </div>
                 <ul class="meta-list">

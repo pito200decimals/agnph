@@ -101,11 +101,11 @@
                     </div>
                 {% endif %}
                 {% for post in news %}
-                    <div class="block{% if not post.mobile %} desktop-only{% endif %}">
+                    <div class="block{% if not post.mobile %}{{ " " }}desktop-only{% endif %}">
                         <div class="header">
                             <a href="/forums/thread/{{ post.PostId }}/">{{ post.Title }}</a>
                             <div class="tagline">
-                                Posted {{ post.date }} by <a href="/user/{{ post.user.UserId }}/">{{ post.user.DisplayName }}</a>
+                                Posted{{ " " }}{{ post.date }} by <a href="/user/{{ post.user.UserId }}/">{{ post.user.DisplayName }}</a>
                             </div>
                             <div class="Clear">&nbsp;</div>
                         </div>

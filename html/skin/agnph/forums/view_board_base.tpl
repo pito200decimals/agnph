@@ -122,7 +122,7 @@
                             <input type="hidden" name="action" value="move-board" />
                             <select name="parent-board" onchange="document.getElementById('move-board-form').submit();return false;">
                                 {% for boardOption in allBoards %}
-                                    <option value="{{ boardOption.BoardId }}"{% if boardOption.BoardId == board.ParentId %} selected{% endif %}>{% if boardOption.depth > 0 %}{% for depth in 1..boardOption.depth %}&nbsp;&nbsp;{% endfor %}{% endif %}{{ boardOption.Name }}</option>
+                                    <option value="{{ boardOption.BoardId }}"{% if boardOption.BoardId == board.ParentId %}{{ " " }}selected{% endif %}>{% if boardOption.depth > 0 %}{% for depth in 1..boardOption.depth %}&nbsp;&nbsp;{% endfor %}{% endif %}{{ boardOption.Name }}</option>
                                 {% endfor %}
                             </select>
                         </form>

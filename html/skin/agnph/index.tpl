@@ -48,7 +48,7 @@
                             <div class="header">
                                 {{ post.section }} - <a href="/forums/thread/{{ post.PostId }}/">{{ post.Title }}</a>
                                 <div class="tagline">
-                                    Posted {{ post.date }} by <a href="/user/{{ post.user.UserId }}/">{{ post.user.DisplayName }}</a>
+                                    Posted{{ " " }}{{ post.date }} by <a href="/user/{{ post.user.UserId }}/">{{ post.user.DisplayName }}</a>
                                 </div>
                                 <div class="Clear">&nbsp;</div>
                             </div>

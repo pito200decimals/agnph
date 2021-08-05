@@ -21,13 +21,13 @@
         <div class="comment-content">
             <div class="commentheader">
                 {% for action in comment.actions|reverse %}
-                    <form {% if action.url %}action="{{ action.url }}" {% endif %}class="edit-comment-form" method="{% if action.method %}{{ action.method }}{% else %}POST{% endif %}" accept-charset="UTF-8">
+                    <form{% if action.url %}{{ " " }}action="{{ action.url }}"{% endif %}{{ " " }}class="edit-comment-form" method="{% if action.method %}{{ action.method }}{% else %}POST{% endif %}" accept-charset="UTF-8">
                         <input type="hidden" name="action" value="{{ action.action }}" />
                         {% if action.id %}<input type="hidden" name="id" value="{{ action.id }}" />{% else %}<input type="hidden" name="id" value="{{ comment.id }}" />{% endif %}
                         {% for kv in action.kv %}
                             <input type="hidden" name="{{ kv.key }}" value="{{ kv.value }}" />
                         {% endfor %}
-                        <input type="submit" value="{{ action.label }}" {% if action.confirmMsg %}onclick="return confirm('{{ action.confirmMsg }}');" {% endif %}/>
+                        <input type="submit" value="{{ action.label }}"{% if action.confirmMsg %}{{ " " }}onclick="return confirm('{{ action.confirmMsg }}');"{% endif %}/>
                     </form>
                 {% endfor %}
                 <a href="/user/{{ comment.user.UserId }}/">{{ comment.user.DisplayName }}</a><br />

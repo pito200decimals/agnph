@@ -144,17 +144,17 @@
                 <li>
                     <label for="gender-input" class="basic-info-label">Gender:</label>           
                     <select id="gender-input" name="gender">
-                        <option value=""{% if profile.user.Gender == 'U' %} selected{% endif %}>- - -</option>
-                        <option value="male"{% if profile.user.Gender == 'M' %} selected{% endif %}>Male</option>
-                        <option value="female"{% if profile.user.Gender == 'F' %} selected{% endif %}>Female</option>
-                        <option value="other"{% if profile.user.Gender == 'O' %} selected{% endif %}>Other</option>
+                        <option value=""{% if profile.user.Gender == 'U' %}{{ " " }}selected{% endif %}>- - -</option>
+                        <option value="male"{% if profile.user.Gender == 'M' %}{{ " " }}selected{% endif %}>Male</option>
+                        <option value="female"{% if profile.user.Gender == 'F' %}{{ " " }}selected{% endif %}>Female</option>
+                        <option value="other"{% if profile.user.Gender == 'O' %}{{ " " }}selected{% endif %}>Other</option>
                     </select>
                 </li>
                 <li>
                     <label for="dob-input" class="basic-info-label">Birthday:</label>
                     <input type="date" id="dob-input" name="dob" value="{{ profile.user.DOB }}" />
                     <label for="show-dob-input" class="basic-info-label">
-                        <input type="checkbox" id="show-dob-input" name="show-dob" value="show"{% if profile.user.ShowDOB %} checked{% endif %} />
+                        <input type="checkbox" id="show-dob-input" name="show-dob" value="show"{% if profile.user.ShowDOB %}{{ " " }}checked{% endif %} />
                         Show Birthday
                     </label>
                 </li>
@@ -174,11 +174,11 @@
                     <label for="timezone-input" class="basic-info-label">Timezone:</label>
                     <input type="text" id="timezone-input" name="timezone" value="{{ profile.user.timezoneOffset }}" />
                     <label for="auto-detect-timezone-input" class="basic-info-label">
-                        <input type="checkbox" id="auto-detect-timezone-input" name="auto-detect-timezone" value="yes" {% if user.AutoDetectTimezone %}checked {% endif %}/>
+                        <input type="checkbox" id="auto-detect-timezone-input" name="auto-detect-timezone" value="yes"{% if user.AutoDetectTimezone %}{{ " " }}checked{% endif %}/>
                         Auto-Detect Timezone
                     </label>
                     <label for="show-local-time-input" class="basic-info-label">
-                        <input type="checkbox" id="show-local-time-input" name="show-local-time" value="yes" {% if user.ShowLocalTime %}checked {% endif %}/>
+                        <input type="checkbox" id="show-local-time-input" name="show-local-time" value="yes"{% if user.ShowLocalTime %}{{ " " }}checked{% endif %}/>
                         Show local time
                     </label>
                 </li>
@@ -198,17 +198,17 @@
             <ul class="basic-info">
                 <li>
                     <label for="group-pm-input" class="basic-info-label">Group PM's:</label>
-                    <input type="checkbox" id="group-pm-input" name="group-pm" value="group"{% if profile.user.GroupMailboxThreads %} checked{% endif %} />
+                    <input type="checkbox" id="group-pm-input" name="group-pm" value="group"{% if profile.user.GroupMailboxThreads %}{{ " " }}checked{% endif %} />
                 </li>
                 <li>
                     <label for="hide-online-input" class="basic-info-label">Hide online status:</label>
-                    <input type="checkbox" id="hide-online-input" name="hide-online" value="hide"{% if profile.user.HideOnlineStatus %} checked{% endif %} />
+                    <input type="checkbox" id="hide-online-input" name="hide-online" value="hide"{% if profile.user.HideOnlineStatus %}{{ " " }}checked{% endif %} />
                 </li>
                 <li>
                     <label for="skin-input" class="basic-info-label">Site skin:</label>
                     <select id="skin-input" name="skin">
                         {% for skinName in availableSkins %}
-                            <option value="{{ skinName }}"{% if profile.user.skin == skinName %} selected{% endif %}>{{ skinName }}</option>
+                            <option value="{{ skinName }}"{% if profile.user.skin == skinName %}{{ " " }}selected{% endif %}>{{ skinName }}</option>
                         {% endfor %}
                     </select>
                 </li>
@@ -273,19 +273,19 @@
                 </li>
                 <li>
                     <label for="gallery-ignore-blacklist-for-pools-input" class="basic-info-label">Ignore Blacklist in Pools:</label>
-                    <input type="checkbox" id="gallery-ignore-blacklist-for-pools-input" name="gallery-ignore-blacklist-for-pools" value="1" {% if profile.user.IgnoreGalleryBlacklistForPools %}checked {% endif %}/>
+                    <input type="checkbox" id="gallery-ignore-blacklist-for-pools-input" name="gallery-ignore-blacklist-for-pools" value="1"{% if profile.user.IgnoreGalleryBlacklistForPools %}{{ " " }}checked{% endif %}/>
                 </li>
                 <li>
                     <label for="gallery-enable-keyboard-input" class="basic-info-label" id="keyboard-label">Enable keyboard shortcuts:</label>
-                    <input type="checkbox" id="gallery-enable-keyboard-input" name="gallery-enable-keyboard" value="1" {% if profile.user.NavigateGalleryPoolsWithKeyboard %}checked {% endif %}/>
+                    <input type="checkbox" id="gallery-enable-keyboard-input" name="gallery-enable-keyboard" value="1"{% if profile.user.NavigateGalleryPoolsWithKeyboard %}{{ " " }}checked{% endif %}/>
                 </li>
                 <li>
                     <label for="gallery-plain-tagging-input" class="basic-info-label">Disable tagging UI:</label>
-                    <input type="checkbox" id="gallery-plain-tagging-input" name="gallery-plain-tagging" value="1" {% if profile.user.PlainGalleryTagging %}checked {% endif %}/>
+                    <input type="checkbox" id="gallery-plain-tagging-input" name="gallery-plain-tagging" value="1"{% if profile.user.PlainGalleryTagging %}{{ " " }}checked{% endif %}/>
                 </li>
                 <li>
                     <label for="gallery-hide-favorites-input" class="basic-info-label">Private Favorites:</label>
-                    <input type="checkbox" id="gallery-hide-favorites-input" name="gallery-hide-favorites" value="1" {% if profile.user.PrivateGalleryFavorites %}checked {% endif %}/>
+                    <input type="checkbox" id="gallery-hide-favorites-input" name="gallery-hide-favorites" value="1"{% if profile.user.PrivateGalleryFavorites %}{{ " " }}checked{% endif %}/>
                 </li>
             </ul>
         </div>
@@ -308,11 +308,11 @@
                 </li>
                 <li>
                     <label for="fics-plain-tagging-input" class="basic-info-label">Disable tagging UI:</label>
-                    <input type="checkbox" id="fics-plain-tagging-input" name="fics-plain-tagging" value="1" {% if profile.user.PlainFicsTagging %}checked {% endif %}/>
+                    <input type="checkbox" id="fics-plain-tagging-input" name="fics-plain-tagging" value="1"{% if profile.user.PlainFicsTagging %}{{ " " }}checked{% endif %}/>
                 </li>
                 <li>
                     <label for="fics-hide-favorites-input" class="basic-info-label">Private Favorites:</label>
-                    <input type="checkbox" id="fics-hide-favorites-input" name="fics-hide-favorites" value="1" {% if profile.user.PrivateFicsFavorites %}checked {% endif %}/>
+                    <input type="checkbox" id="fics-hide-favorites-input" name="fics-hide-favorites" value="1"{% if profile.user.PrivateFicsFavorites %}{{ " " }}checked{% endif %}/>
                 </li>
             </ul>
         </div>

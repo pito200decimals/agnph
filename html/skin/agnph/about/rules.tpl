@@ -184,9 +184,9 @@
                     a warning tag for it, the story should be labelled as such.</li>
                 <li>Titles or summaries such as "Please read", "Untitled", etc. are not acceptable
                     titles or summaries.</li>
-                <li>All stories and chapters must be at least {{ fics_min_word_count }} words long.
+                <li>All stories and chapters must be at least{{ " " }}{{ fics_min_word_count  words long.
                     Adding filler not related to the story to achieve this limit is prohibited. If
-                    you have chapters shorter than {{ fics_min_word_count }} words, consider
+                    you have chapters shorter than{{ " " }}{{ fics_min_word_count }} words, consider
                     consolidating multiple chapters into one.</li>
                 <li>A number of authors have requested that fans refrain from writing fan-fiction
                     based on their work. Therefore, submittions will not be accepted based on the

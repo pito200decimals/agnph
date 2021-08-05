@@ -96,13 +96,13 @@
         <div class="comment-content">
             <div class="commentheader">
                 {% for action in review.actions|reverse %}
-                    <form {% if action.url %}action="{{ action.url }}" {% endif %}class="edit-comment-form" method="{% if action.method %}{{ action.method }}{% else %}POST{% endif %}" accept-charset="UTF-8">
+                    <form{% if action.url %}{{ " " }}action="{{ action.url }}"{% endif %}{{ " " }}class="edit-comment-form" method="{% if action.method %}{{ action.method }}{% else %}POST{% endif %}" accept-charset="UTF-8">
                         <input type="hidden" name="action" value="{{ action.action }}" />
                         {% if action.id %}<input type="hidden" name="id" value="{{ action.id }}" />{% else %}<input type="hidden" name="id" value="{{ review.id }}" />{% endif %}
                         {% for kv in action.kv %}
                             <input type="hidden" name="{{ kv.key }}" value="{{ kv.value }}" />
                         {% endfor %}
-                        <input type="submit" value="{{ action.label }}" {% if action.confirmMsg %}onclick="return confirm('{{ action.confirmMsg }}');" {% endif %}/>
+                        <input type="submit" value="{{ action.label }}"{% if action.confirmMsg %}{{ " " }}onclick="return confirm('{{ action.confirmMsg }}');"{% endif %}/>
                     </form>
                 {% endfor %}
                 <strong>Reviewer:</strong> <a href="/user/{{ review.commenter.UserId }}/">{{ review.commenter.DisplayName }}</a>
@@ -133,8 +133,8 @@
         {# Top-level tabs #}
         <a id="reviews"></a>
         <ul class="tabs">
-            <li class="tab-link{% if defaultcomments %} current{% endif %}" data-tab="tab-comments">Comments ({{ comments|length }})</li>
-            <li class="tab-link{% if defaultreviews %} current{% endif %}" data-tab="tab-reviews">Reviews ({{ reviews|length }})</li>
+            <li class="tab-link{% if defaultcomments %}{{ " " }}current{% endif %}" data-tab="tab-comments">Comments ({{ comments|length }})</li>
+            <li class="tab-link{% if defaultreviews %}{{ " " }}current{% endif %}" data-tab="tab-reviews">Reviews ({{ reviews|length }})</li>
         </ul>
 
         {# Pane for comments #}
@@ -163,7 +163,7 @@
         </div>
 
         {# Pane for reviews #}
-        <div id="tab-reviews" class="tab-content{% if defaultreviews %} current{% endif %}">
+        <div id="tab-reviews" class="tab-content{% if defaultreviews %}{{ " " }}current{% endif %}">
             {% if reviews|length > 0 %}
                 <ul class="comment-list">
                     {% for review in reviews %}

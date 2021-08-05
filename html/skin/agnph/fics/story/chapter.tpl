@@ -78,7 +78,7 @@
         {% if story.StoryNotes|length > 0 or chapter.ChapterNotes|length > 0 %}
             <hr />
         {% endif %}
-        <h3>{{ chapter.Title }}{% if chapter.author.DisplayName != story.author.DisplayName %} by <a href="/user/{{ chapter.author.UserId }}/fics/">{{ chapter.author.DisplayName }}</a>{% endif %}</h3>
+        <h3>{{ chapter.Title }}{% if chapter.author.DisplayName != story.author.DisplayName %}{{ " " }}by <a href="/user/{{ chapter.author.UserId }}/fics/">{{ chapter.author.DisplayName }}</a>{% endif %}</h3>
         <div class="chaptercontent">
             {% autoescape false %}{{ chapter.text }}{% endautoescape %}
         </div>

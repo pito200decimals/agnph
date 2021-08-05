@@ -37,7 +37,7 @@
                     <table>
                         <tbody>
                             <tr><td class="label"><label>Username/Email:</label></td><td><input type="text" name="username" value="{{ username }}" required /></td></tr>
-                            <tr><td class="label"><label>Password:</label></td><td><input type="password" name="password" value="" required {% if username %}autofocus {% endif %}/></td></tr>
+                            <tr><td class="label"><label>Password:</label></td><td><input type="password" name="password" value="" required{% if username %}{{ " " }}autofocus{% endif %}/></td></tr>
                             <tr><td></td><td><input type="submit" value="Login" /></td></tr>
                             <tr><td></td><td><a id="forgot-password" href="/recover/">Forgot your password?</a></td></tr>
                         </tbody>

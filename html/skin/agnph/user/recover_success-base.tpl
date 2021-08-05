@@ -19,6 +19,6 @@
 
 {% block content %}
     <div id="recover-form" class="form-box">
-        Your account {{ details }} has been changed. Click <a href="/">here</a> to continue.
+        Your account{{ " " }}{{ details }} has been changed. Click <a href="/">here</a> to continue.
     </div>
 {% endblock %}

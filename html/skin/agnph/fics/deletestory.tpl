@@ -18,7 +18,7 @@
 {% block content %}
     {{ block('storyblock') }}
     <div class="delete">
-        Are you sure you want to {{ actionName }}?
+        Are you sure you want to{{ " " }}{{ actionName }}?
         <form method="POST">
             {% if chapterHash and chapterIndex %}
                 <input type="hidden" name="id" value="{{ chapterHash }}" />

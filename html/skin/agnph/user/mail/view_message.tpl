@@ -37,11 +37,11 @@
 {% block usercontent %}
     {% if message.MessageType == 0 %}
         {% if user.GroupMailboxThreads %}
-            <h3>Conversation with {{ message.toFromUser.DisplayName }}</h3>
+            <h3>Conversation with{{ " " }}{{ message.toFromUser.DisplayName }}</h3>
         {% elseif message.inbox %}
-            <h3>Message from {{ message.toFromUser.DisplayName }}</h3>
+            <h3>Message from{{ " " }}{{ message.toFromUser.DisplayName }}</h3>
         {% else %}
-            <h3>Message to {{ message.toFromUser.DisplayName }}</h3>
+            <h3>Message to{{ " " }}{{ message.toFromUser.DisplayName }}</h3>
         {% endif %}
     {% endif %}
     {% if canSendPM %}

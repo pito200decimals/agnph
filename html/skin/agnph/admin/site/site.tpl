@@ -50,7 +50,7 @@
             <tr><td><label>Registration agreement:</label></td><td></td></tr>
             <tr><td colspan="2"><textarea name="register-message">{{ register_message }}</textarea></td></tr>
             <tr><td><label>Duration of Bans:</label></td><td><input name="short-ban-duration" value="{{ short_ban_duration }}" /></td></tr>
-            <tr><td><label>Maintenance Mode:</label></td><td><input type="checkbox" name="maintenance-mode" value="yes" {% if is_maintenance_mode %}checked {% endif %}/></td></tr>
+            <tr><td><label>Maintenance Mode:</label></td><td><input type="checkbox" name="maintenance-mode" value="yes"{% if is_maintenance_mode %}{{ " " }}checked{% endif %}/></td></tr>
             <tr><td><label>Board for News Posts:</label></td><td><input name="news-posts-board" type="text" value="{{ news_posts_board }}" /></td></tr>
             <tr><td><label>Max news posts:</label></td><td><input name="max-news-posts" type="text" value="{{ max_news_posts }}" /></td></tr>
             <tr><td><label>Login screen notification:</label></td><td></td></tr>

@@ -3,7 +3,7 @@
 {% block styles %}
     {{ parent() }}
     {{ inline_css_asset('/gallery/postindex-style.css')|raw }}
-    <link id="mobile-css" rel="stylesheet" type="text/css" href="{{ asset('/gallery/postindex-mobile.css') }}" {% if ignore_mobile %}disabled {% endif %}/>
+    <link id="mobile-css" rel="stylesheet" type="text/css" href="{{ asset('/gallery/postindex-mobile.css') }}"{% if ignore_mobile %}{{ " " }}disabled{% endif %}/>
     {% if canMassTagEdit or canMassDeletePosts %}
         <style>
             #mass-tag-edit-toggle {
@@ -145,7 +145,7 @@
             {# Display search index. #}
             <ul class="sortable list post-list">
                 {% for post in posts %}
-                    <li class="dragitem{% if post.outlineClass == 'featuredoutline' %} featuredtile{% endif %}">
+                    <li class="dragitem{% if post.outlineClass == 'featuredoutline' %}{{ " " }}featuredtile{% endif %}">
                         {% if cansort %}
                             <input class="postid" type="hidden" value="{{ post.PostId }}" />
                             <input class="postorder" type="hidden" value="{{ post.PoolItemOrder }}" />

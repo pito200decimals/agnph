@@ -9,7 +9,7 @@
   {% for story in stories %}
     <item>
         <title>
-            {{ story.Title }} by {{ story.author.DisplayName }} - {{ story.last_chapter.Title }}
+            {{ story.Title }} by{{ " " }}{{ story.author.DisplayName }} - {{ story.last_chapter.Title }}
         </title>
         <link>
             http://agn.ph/fics/story/{{ story.StoryId }}/{{ story.lastChapterNum }}/
@@ -24,7 +24,7 @@
             {% endif %}
             <div>
                 <p>
-                    Updated {{ story.DateUpdated }}
+                    Updated{{ " " }}{{ story.DateUpdated }}
                 </p>
             </div>
         </description>
