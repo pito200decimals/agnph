@@ -1,5 +1,5 @@
 <?php
-// AJAX-updates the list of current livestreams.
+// AJAX-updates the list of current livestreams (current Oekaki).
 // URL: /oekaki/streams/ => streams.php
 
 define("SITE_ROOT", "../../");

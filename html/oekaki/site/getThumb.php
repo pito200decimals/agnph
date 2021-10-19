@@ -1,5 +1,5 @@
 <?php
-// Script to get thumbnail data (but only if user is logged in).
+// Script to get thumbnail data (but only if user is logged in). Used to display png on the user profile page.
 
 define("SITE_ROOT", "../../");
 include_once(SITE_ROOT."ajax_header.php");

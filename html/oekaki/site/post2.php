@@ -1,5 +1,5 @@
 <?php
-// AJAX-submits an image post.
+// AJAX-submits an image post (current Oekaki).
 // URL: /oekaki/post2/ => post2.php
 
 define("SITE_ROOT", "../../");

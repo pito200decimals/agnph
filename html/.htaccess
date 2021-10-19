@@ -134,6 +134,8 @@ RewriteRule ^oekaki/slots/(\d+)/save/?$ /oekaki/site/slots.php?save=$1
 RewriteRule ^oekaki/thumb/(\d+).png?$ /oekaki/site/getThumb.php?slot=$1
 RewriteRule ^oekaki/streams/?$ /oekaki/site/streams.php
 RewriteRule ^oekaki/getstreams/?$ /oekaki/site/getStreams.php
+RewriteRule ^oekaki/cloud/save/?$ /oekaki/site/cloud_save.php
+RewriteRule ^oekaki/cloud/load/?$ /oekaki/site/cloud_load.php
 
 #Rewrites for user pages.
 RewriteRule ^user/list/?$ /user/list.php?sort=status&order=desc [QSA]

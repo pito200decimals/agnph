@@ -1,5 +1,8 @@
 <?php
-// Creates metadata json ajax response for all slots.
+// Creates metadata json ajax response for all slots (legacy Oekaki).
+// URL: /oekaki/slots/list/ => slots.php?list
+// URL: /oekaki/slots/$N/ => slots.php?metdata=$N
+// URL: /oekaki/slots/$N/save/ => slots.php?save=$N
 
 ini_set("zlib.output_compression", "On");
 
