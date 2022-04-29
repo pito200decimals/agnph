@@ -34,7 +34,7 @@
             </p>
         </div>
     </div>
-    <div class="block">
+    <div class="block desktop-only">
         <div class="header">Pen Pressure Support</div>
         <div class="content">
             <p>
