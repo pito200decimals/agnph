@@ -68,7 +68,8 @@ function GetTagsByName($tag_table_name, $tag_names, $create_new = false, $user_i
     // Internal helper function.
     // Creates the array of tag names. Assumes that none of them exist yet.
     $CreateTagsByName = function($tag_table_name, $tag_names, $user_id) {
-        $tag_names = array_map("SanitizeTagName", $tag_names);
+        // Don't need to re-sanitize names as they should already be sanitized. This causes issues since SanitizeTagName is not idempotent.
+        // $tag_names = array_map("SanitizeTagName", $tag_names);
         if (sizeof($tag_names) == 0) return array();
         $joined = implode(",", array_map(function($name) use ($user_id) {
             $escaped_name = sql_escape($name);
