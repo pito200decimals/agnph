@@ -6,7 +6,7 @@ define("SITE_ROOT", "../../");
 include_once(SITE_ROOT."ajax_header.php");
 include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."includes/util/html_funcs.php");
-include_once(SITE_ROOT."gallery/includes/functions.php");
+include_once(SITE_ROOT."oekaki/site/includes/functions.php");
 
 ini_set('memory_limit', '600M');
 
@@ -14,6 +14,8 @@ ini_set('memory_limit', '600M');
 if (!CanPerformSitePost()) AJAXErr();
 
 if (!isset($user)) AJAXErr();
+
+if (!CanUserCreatePost($user)) AJAXErr();
 
 // Get POST params (json format from angularjs).
 $params = json_decode(file_get_contents('php://input'),true);
