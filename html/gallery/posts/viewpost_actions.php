@@ -19,6 +19,29 @@ function ErrorBanner() {
     PostSessionBanner("Error processing action", "red");
 }
 
+function ShouldStopPostUpdates($pid) {
+    if ($user['GalleryPermissions'] == 'A') return false;
+    if ($user['GalleryPermissions'] == 'C') return false;
+    if (in_array($pid, array(
+        17,     16737,  17820,  26163,  28774,  35133,  59481,  89598,  120766,
+        162078, 186066, 188590, 217691, 253030, 253125, 253453, 254462, 254477,
+        254844, 257160, 257465, 258472, 260852, 264867, 264949, 267100, 267425,
+        267539, 267629, 267903, 268369, 270147, 270741, 271695, 272069, 272171,
+        272499, 273627, 274893, 275558, 276422, 278263, 278874, 280438, 280829,
+        281441, 281949, 282794, 284989, 285433, 285892, 286206, 287172, 288867,
+        288868, 289209, 289609, 289612, 289841, 290139, 290234, 290299, 290305,
+        290418, 290537, 290615, 290689, 290690, 290691, 290692, 290694, 290695,
+        290696, 290697, 290698, 290699, 290700, 290701, 290753, 290754, 290871,
+        290877, 291089, 291213, 291366, 291525, 291713, 291714, 292731, 292751,
+        292984, 293059, 293096, 293210, 294797, 295052, 296620, 298201, 298261,
+        298817, 298945, 299088, 299252, 299608, 299734, 299903, 300149, 301180,
+        301343, 302755,
+    ))) {
+        return true;
+    }
+    return false;
+}
+
 function HandleEditAction($post) {
     global $user;
     if (!CanUserEditGalleryPost($user)) {
@@ -44,6 +67,10 @@ function HandleEditAction($post) {
     $tagstrarray = explode(" ", $tagstr);
     $tagstrarray = array_filter($tagstrarray, function($str) { return mb_strlen($str) > 0; });
     $tagstr = implode(" ", $tagstrarray);
+    if (ShouldStopPostUpdates($pid)) {
+        PostSessionBanner("Post updated", "green");
+        return;
+    }
     UpdatePost($tagstr, $pid, $user);
     if (trim($_POST['description']) != trim($post['Description'])) {
         UpdatePostDescription($pid, $_POST['description'], $user);
