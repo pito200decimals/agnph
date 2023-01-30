@@ -107,7 +107,7 @@
                         Cone connoisseur. Also known as Nymlus.
                     </p>
                     <p class="contact">
-                        <span>Contact via:</span> Site PM
+                        <span>Contact via:</span> <a href="https://www.furaffinity.net/user/anonymless">FurAffinity</a>
                     </p>
                     <div class="Clear">&nbsp;</div>
                 </li>
