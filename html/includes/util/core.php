@@ -290,29 +290,29 @@ function PostSessionBanner($msg, $color, $dismissable = true, $noescape = false)
 }
 
 function GetTimeMs() {
-    return round(microtime(/*get_as_float=*/TRUE) * 1000, 3);
+    return hrtime(/*as_number=*/TRUE) / 1000000.0;
 }
 
 function PostDebugTiming($description, $time_ms) {
     global $user;
     global $vars;
-    if (!contains($user['Permissions'], 'A')) {
+    if (!isset($user) || !contains($user['Permissions'], 'A')) {
         return;
     }
     $vars['debug_timing'][] = array(
         "description" => $description,
-        "time_ms" => $time_ms,
+        "time_ms" => number_format($time_ms, 3),
     );
 }
 
 function PostSessionDebugTiming($description, $time_ms) {
     global $user;
-    if (!contains($user['Permissions'], 'A')) {
+    if (!isset($user) || !contains($user['Permissions'], 'A')) {
         return;
     }
     $_SESSION['debug_timing'][] = array(
         "description" => $description,
-        "time_ms" => $time_ms,
+        "time_ms" => number_format($time_ms, 3),
     );
 }
 

@@ -207,7 +207,8 @@ function HandleDeleteAction($post) {
     UpdatePostStatistics($pid);
     UpdatePostStatistics($ppid);
     // Update all tag counts for tags on this post.
-    UpdateAllTagCounts(GALLERY_TAG_TABLE, GALLERY_POST_TAG_TABLE, GALLERY_POST_TABLE, "PostId", "I.Status<>'D'", "EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." PT WHERE PT.TagId=T.TagId AND PT.PostId=$pid)");
+    $tag_ids = GetPostTags($pid);
+    IncrementTagCounts(GALLERY_TAG_TABLE, $tag_ids, /*increment=*/-1);
     PostSessionBanner("Post deleted", "green");
 }
 function HandleUndeleteAction($post) {
@@ -227,7 +228,8 @@ function HandleUndeleteAction($post) {
         return;
     }
     // Update all tag counts for tags on this post.
-    UpdateAllTagCounts(GALLERY_TAG_TABLE, GALLERY_POST_TAG_TABLE, GALLERY_POST_TABLE, "PostId", "I.Status<>'D'", "EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." PT WHERE PT.TagId=T.TagId AND PT.PostId=$pid)");
+    $tag_ids = GetPostTags($pid);
+    IncrementTagCounts(GALLERY_TAG_TABLE, $tag_ids, /*increment=*/1);
     $username = $user['DisplayName'];
     LogAction("<strong><a href='/user/$uid/'>$username</a></strong> un-deleted <strong><a href='/gallery/post/show/$pid/'>post #$pid</a></strong>", "G");
     PostSessionBanner("Post undeleted", "green");

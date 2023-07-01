@@ -231,8 +231,8 @@ function UpdatePost($tag_string, $post_id, $user, $update_tag_types=true, $batch
     $tag_ids = GetPostTags($post_id);  // Get tags after post was edited.
     $tags_added = array_diff($tag_ids, $old_tag_ids);
     $tags_removed = array_diff($old_tag_ids, $tag_ids);
-    $tags_added_or_removed = array_unique(array_merge($tags_added, $tags_removed));
-    UpdateTagItemCounts(GALLERY_TAG_TABLE, GALLERY_POST_TAG_TABLE, GALLERY_POST_TABLE, "PostId", "I.Status<>'D'", $tags_added_or_removed);  // Update tag counts on added/removed.
+    IncrementTagCounts(GALLERY_TAG_TABLE, $tags_added, /*increment=*/1);
+    IncrementTagCounts(GALLERY_TAG_TABLE, $tags_removed, /*increment=*/-1);
 }
 
 function GetPostTags($pid) {

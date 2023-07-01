@@ -85,22 +85,20 @@ if (isset($user)) {
 }
 
 // Set up for banner notifications. Initialize session banners if not created yet.
+$vars['banner_notifications'] = array();
 if (!isset($_SESSION['banner_notifications'])) {
     $_SESSION['banner_notifications'] = array();
 } else if (sizeof($_SESSION['banner_notifications']) > 0) {
     $vars['banner_notifications'] = $_SESSION['banner_notifications'];
     unset($_SESSION['banner_notifications']);
-} else {
-    $vars['banner_notifications'] = array();
 }
 // Do the same for debug timings.
+$vars['debug_timing'] = array();
 if (!isset($_SESSION['debug_timing'])) {
     $_SESSION['debug_timing'] = array();
 } else if (sizeof($_SESSION['debug_timing']) > 0) {
     $vars['debug_timing'] = $_SESSION['debug_timing'];
     unset($_SESSION['debug_timing']);
-} else {
-    $vars['debug_timing'] = array();
 }
 
 if (isset($user)) {
