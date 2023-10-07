@@ -269,7 +269,7 @@ function HandlePost($searchterms) {
                 sql_query("DELETE FROM ".GALLERY_USER_FAVORITES_TABLE." WHERE PostId=$pid;");
                 UpdatePostStatistics($pid);
                 // Update all tag counts for tags on this post.
-                UpdateAllTagCounts(GALLERY_TAG_TABLE, GALLERY_POST_TAG_TABLE, GALLERY_POST_TABLE, "PostId", "I.Status<>'D'", "EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." PT WHERE PT.TagId=T.TagId AND PT.PostId=$pid)");
+                IncrementTagCountsWhere(GALLERY_TAG_TABLE, "EXISTS(SELECT 1 FROM ".GALLERY_POST_TAG_TABLE." PT WHERE PT.PostId=$pid AND PT.TagId=T.TagId)", -1);
             }
 
             PostSessionBanner("Posts deleted", "green");

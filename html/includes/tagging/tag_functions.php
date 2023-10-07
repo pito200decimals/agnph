@@ -268,9 +268,13 @@ function UpdateAllTagCounts($tag_table_name, $tag_item_table_name, $item_table_n
 
 function IncrementTagCounts($tag_table_name, $tag_ids, $increment_value=1) {
     $joined_ids = implode(",", $tag_ids);
-    sql_query("UPDATE $tag_table_name T 
+    IncrementTagCountsWhere($tag_table_name, "T.TagId IN ($joined_ids)", $increment_value);
+}
+
+function IncrementTagCountsWhere($tag_table_name, $where_clause="FALSE", $increment_value=1) {
+    sql_query("UPDATE $tag_table_name T
     SET T.ItemCount=T.ItemCount + $increment_value
-    WHERE T.TagId IN ($joined_ids);");
+    WHERE ($where_clause);");
 }
 
 ?>
