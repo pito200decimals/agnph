@@ -16,7 +16,7 @@ if (isset($_GET['search'])) {
     $search = $_GET['search'];
     $admin_search = isset($user) && CanUserAdminSearchUsers($user);
     $match = array();
-    if (mb_strtolower($search, "UTF-8") == "status:banned") {
+    if ($admin_search && mb_strtolower($search, "UTF-8") == "status:banned") {
         $search_clause = "Usermode=-1";
     } else if ($admin_search && mb_strtolower($search, "UTF-8") == "status:underage") {
         $now = time();

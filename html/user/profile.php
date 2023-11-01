@@ -16,6 +16,14 @@ include_once(SITE_ROOT."user/includes/functions.php");
 include(SITE_ROOT."user/includes/profile_setup.php");
 
 $profile_user = &$vars['profile']['user'];
+
+$admin_profile_view = isset($user) && CanUserSeeAdminInfo($user);
+if (!$admin_profile_view) {
+    if (IsUserUnactivated($profile_user) || IsUserBanned($profile_user)) {
+        RenderErrorPage("Failed to fetch user profile");
+    }
+}
+
 // Read in bio text file.
 $uid = $profile_user['UserId'];
 $file_path = SITE_ROOT."user/data/bio/$uid.txt";
