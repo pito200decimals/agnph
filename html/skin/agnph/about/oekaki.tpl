@@ -58,7 +58,7 @@
                 Pen pressure support is built in to Windows and the latest Edge browser. This should support many major tablet brands.
             </p>
             <p>
-                If you still have trouble, you can try the steps on <a href="https://support.syncsketch.com/article/32-pen-pressure-sensitivity-does-not-seem-to-work" target="_blank">this page</a>.
+                If you still have trouble, you can try the steps on <a href="https://support.syncsketch.com/hc/en-us/articles/13097330016013-Pen-Pressure-Sensitivity-does-not-seem-to-work" target="_blank">this page</a>.
                 You can also test if your browser can detect your hardware on <a href="https://patrickhlauke.github.io/touch/tracker/multi-touch-tracker-pointer-hud-pep.html" target="_blank">this test page</a>.
             </p>
         </div>
