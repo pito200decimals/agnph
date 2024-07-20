@@ -371,7 +371,7 @@ function GetGalleryBlacklistClauses($and_terms, $or_terms, $not_terms, $filter_c
         if ($user['IgnoreGalleryBlacklistForPools'] && HasPoolFilter($filter_clauses)) return array();
         $blacklist_terms = explode(" ", $user['GalleryTagBlacklist']);
     } else {
-        $blacklist_terms = GALLERY_DEFAULT_BLACKLIST;
+        $blacklist_terms = explode(" ", GetSiteSetting('gallery_defaultblacklist'));
     }
     $blacklist_terms = array_filter($blacklist_terms, "mb_strlen");
     $blacklist_terms = array_slice($blacklist_terms, 0, MAX_GALLERY_BLACKLIST_TAGS);

@@ -29,7 +29,7 @@
     background-image: url('/images/remove-tag-hover.png');
 }
 .textbox.autocomplete-tag-input {
-    width: calc(100% - 25px);
+    width: calc(100% - 27px);
 }
 .autocomplete-tag-input+span {
     cursor: pointer;

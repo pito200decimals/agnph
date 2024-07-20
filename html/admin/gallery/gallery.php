@@ -2,6 +2,7 @@
 // Main control panel for admin operations.
 
 include_once("../../header.php");
+include_once(SITE_ROOT."includes/tagging/tag_functions.php");
 include_once(SITE_ROOT."includes/util/core.php");
 include_once(SITE_ROOT."includes/util/html_funcs.php");
 include_once(SITE_ROOT."includes/util/user.php");
@@ -24,6 +25,8 @@ if (isset($_POST['submit'])) {
 
 $vars['news_posts_board'] = GetSiteSetting(GALLERY_NEWS_SOURCE_BOARD_NAME_KEY, null);
 $vars['flag_reasons'] = GetSiteSettingArray('gallery_flag_reasons');
+$vars['gallery_defaultblacklist'] = GetSiteSetting('gallery_defaultblacklist');
+$vars['gallery_defaultblacklist_tags'] = GetTagsByName(GALLERY_TAG_TABLE, explode(" ", GetSiteSetting('gallery_defaultblacklist')));
 
 $vars['admin_section'] = "gallery";
 RenderPage("admin/gallery/gallery.tpl");
@@ -58,6 +61,13 @@ function HandlePost() {
                 SetSiteSettingArray('gallery_flag_reasons', $reasons);
             }
         }
+    }
+
+    // Update default gallery blacklist
+    if (isset($_POST['gallery_defaultblacklist'])) {
+        $tags = explode(" ", $_POST['gallery_defaultblacklist']);
+        $tags = implode(" ", $tags);
+        SetSiteSetting('gallery_defaultblacklist', $tags);
     }
 }
 

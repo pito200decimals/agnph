@@ -266,7 +266,7 @@
                     <label for="gallery-tag-blacklist-input" class="basic-info-label">Tag Blacklist:</label>
                     {% if not user.PlainGalleryTagging %}
                         <ul class="g autocomplete-tag-list"></ul><textarea class="g autocomplete-tags" name="gallery-tag-blacklist" hidden>{{ profile.user.GalleryTagBlacklist }}</textarea><br />
-                        <input type="text" class="g textbox autocomplete-tag-input" />
+                        <input type="text" class="g textbox autocomplete-tag-input" /><span>&nbsp;</span>
                     {% else %}
                         <textarea id="gallery-tag-blacklist-input" name="gallery-tag-blacklist">{{ profile.user.GalleryTagBlacklist }}</textarea>
                     {% endif %}
