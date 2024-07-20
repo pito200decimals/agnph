@@ -366,10 +366,13 @@ function HasPoolFilter($filter_clauses) {
 
 function GetGalleryBlacklistClauses($and_terms, $or_terms, $not_terms, $filter_clauses) {
     global $user;
-    if (!isset($user)) return array();
-    if ($user['IgnoreGalleryBlacklistForPools'] && HasPoolFilter($filter_clauses)) return array();
     $terms = array_merge($and_terms, $or_terms, $not_terms);
-    $blacklist_terms = explode(" ", $user['GalleryTagBlacklist']);
+    if (isset($user)) {
+        if ($user['IgnoreGalleryBlacklistForPools'] && HasPoolFilter($filter_clauses)) return array();
+        $blacklist_terms = explode(" ", $user['GalleryTagBlacklist']);
+    } else {
+        $blacklist_terms = GALLERY_DEFAULT_BLACKLIST;
+    }
     $blacklist_terms = array_filter($blacklist_terms, "mb_strlen");
     $blacklist_terms = array_slice($blacklist_terms, 0, MAX_GALLERY_BLACKLIST_TAGS);
     $blacklist_terms = array_filter($blacklist_terms, function($term) use ($terms) {
