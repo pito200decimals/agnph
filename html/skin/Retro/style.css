@@ -145,8 +145,8 @@ ul.section-nav {  /* Note: Sometimes composed */
     padding: 10px;
     border-bottom: 1px solid #CCC;
 }
-    display: none;
 .section-nav li.divider+.divider {
+    display: none;
 }
 label[for] {
     /* Make text unselectable */
@@ -342,6 +342,8 @@ span.radio-button-group {
     /* Content CSS */
     #center-right-content-panel {
         display: table;
+        table-layout: fixed;
+        word-wrap: break-word;
     }
     #right-content-panel {
         display: table-footer-group;

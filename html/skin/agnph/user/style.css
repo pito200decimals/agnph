@@ -1,5 +1,7 @@
 .userpage {
     display: table;
+    table-layout: fixed;
+    word-wrap: break-word;
     height: 100%;
     width: 100%;
 }
