@@ -46,24 +46,29 @@ if (isset($_GET['search'])) {
     $search = $_GET['search'];
     $lower_search = mb_strtolower($search);
     $clauses = array();
-    if (startswith($lower_search, "id:")) {
-        $lower_search = substr($lower_search, 3);
-        $escaped_lower_search = sql_escape($lower_search);
-        $clauses[] = "PostId='$escaped_lower_search'";
-    } else if (startswith($lower_search, "user:")) {
-        $lower_search = substr($lower_search, 5);
-        $escaped_lower_search = sql_escape($lower_search);
-        $clauses[] = "EXISTS(SELECT 1 FROM ".USER_TABLE." Q WHERE LOWER(DisplayName) LIKE '%$escaped_lower_search%' AND Q.UserId=T.UserId)";
-    } else if (startswith($lower_search, "title:")) {
-        $lower_search = substr($lower_search, 6);
-        $escaped_lower_search = sql_escape($lower_search);
-        $clauses[] = "LOWER(Text) LIKE '%$escaped_lower_search%'";
-    } else {
-        $escaped_lower_search = sql_escape($lower_search);
-        $clauses[] = "LOWER(Title) LIKE '%$escaped_lower_search%'";
-        $clauses[] = "LOWER(Text) LIKE '%$escaped_lower_search%'";
+    foreach (explode(' ', $lower_search) as $term) {
+        if (startswith($term, "id:")) {
+            $term = substr($term, 3);
+            $escaped_term = sql_escape($term);
+            $clauses[] = "(PostId='$escaped_term')";
+        } else if (startswith($term, "user:")) {
+            $term = substr($term, 5);
+            $escaped_term = sql_escape($term);
+            $c1 = "(EXISTS(SELECT 1 FROM ".USER_TABLE." Q WHERE LOWER(DisplayName) LIKE '%$escaped_term%' AND Q.UserId=T.UserId))";
+            $c2 = "(T.AdditionalUserIds != '' AND EXISTS(SELECT 1 FROM ".USER_TABLE." Q WHERE LOWER(DisplayName) LIKE '%$escaped_term%' AND FIND_IN_SET(Q.UserId, T.AdditionalUserIds)))";
+            $clauses[] = "($c1 OR $c2)";
+        } else if (startswith($term, "title:")) {
+            $term = substr($term, 6);
+            $escaped_term = sql_escape($term);
+            $clauses[] = "(LOWER(Text) LIKE '%$escaped_term%')";
+        } else {
+            $escaped_term = sql_escape($term);
+            $c1 = "(LOWER(Title) LIKE '%$escaped_term%')";
+            $c2 = "(LOWER(Text) LIKE '%$escaped_term%')";
+            $clauses[] = "($c1 OR $c2)";
+        }
     }
-    $post_sql_condition = join(" OR ", $clauses);
+    $post_sql_condition = join(" AND ", $clauses);
 } else {
     $search = "";
 }
@@ -88,13 +93,27 @@ if (sql_query_into($result, $get_comments_sql, 0)) {
     }
 }
 // Update users for all posts so far.
-$user_ids = array_map(function($item) { return $item['UserId']; }, $posts_by_id);
+$user_ids = array();
+foreach ($posts_by_id as &$post) {
+    $user_ids[] = $post['UserId'];
+    foreach (explode(",", $post['AdditionalUserIds']) as $id) {
+        if (empty($id) || !is_numeric($id)) continue;
+        $user_ids[] = $id;
+    }
+}
+$user_ids = array_unique($user_ids);
 if (LoadTableData(array(USER_TABLE), "UserId", $user_ids, $users_by_id)) {
     foreach ($users_by_id as &$usr) {
         $usr['avatarURL'] = GetAvatarURL($usr);
     }
     foreach ($posts_by_id as &$post) {
         $post['user'] = &$users_by_id[$post['UserId']];
+        $additional = array();
+        foreach (explode(",", $post['AdditionalUserIds']) as $id) {
+            if (empty($id) || !is_numeric($id)) continue;
+            $additional[] = &$users_by_id[(int)$id];
+        }
+        $post['additionalUsers'] = $additional;
     }
 }
 

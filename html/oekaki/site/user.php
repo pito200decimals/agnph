@@ -23,13 +23,14 @@ $profile_user['admin'] = GetAdminBadge($profile_user);
 
 // Fetch user statistics.
 // Posts Uploaded by user and not deleted:
-sql_query_into($result, "SELECT count(*) FROM ".OEKAKI_POST_TABLE." WHERE UserId=$profile_uid AND ParentPostId=-1 AND Status='A';", 1) or RenderErrorPage("Failed to fetch user profile");
+$post_match_query = "UserId=$profile_uid OR FIND_IN_SET('$profile_uid', AdditionalUserIds)";
+sql_query_into($result, "SELECT count(*) FROM ".OEKAKI_POST_TABLE." WHERE ($post_match_query) AND ParentPostId=-1 AND Status='A';", 1) or RenderErrorPage("Failed to fetch user profile");
 $profile_user['numOekakiImagePosts'] = $result->fetch_assoc()['count(*)'];
 sql_query_into($result, "SELECT count(*) FROM ".OEKAKI_POST_TABLE." WHERE UserId=$profile_uid AND ParentPostId<>-1 AND Status='A';", 1) or RenderErrorPage("Failed to fetch user profile");
 $profile_user['numComments'] = $result->fetch_assoc()['count(*)'];
 
 // Fetch some links to posts.
-if (sql_query_into($result, "SELECT * FROM ".OEKAKI_POST_TABLE." WHERE UserId=$profile_uid AND ParentPostId=-1 AND Status='A' ORDER BY Timestamp DESC LIMIT ".OEKAKI_PROFILE_SHOW_NUM_POSTS.";", 1)) {
+if (sql_query_into($result, "SELECT * FROM ".OEKAKI_POST_TABLE." WHERE ($post_match_query) AND ParentPostId=-1 AND Status='A' ORDER BY Timestamp DESC LIMIT ".OEKAKI_PROFILE_SHOW_NUM_POSTS.";", 1)) {
     $sample_posts = array();
     while ($row = $result->fetch_assoc()) {
         $row['thumbnail'] = "/oekaki/image/".$row['PostId'].".".$row['Extension'];

@@ -45,6 +45,11 @@ if ($duration < 0) AJAXErr();
 if (strlen($post) <= 0) AJAXErr();
 
 $uid = $user['UserId'];
+if (isset($_POST['additional_user_ids'])) {
+    $additional_ids = sql_escape($_POST['additional_user_ids']);
+} else {
+    $additional_ids = '';
+}
 $timestamp = time();
 $escaped_title = sql_escape($title);
 $escaped_text = sql_escape($post);
@@ -54,9 +59,9 @@ $adult = 0;
 $has_animation = 1;
 
 if (sql_query("INSERT INTO ".OEKAKI_POST_TABLE."
-    (UserId, ParentPostId, Timestamp, Title, Text, Width, Height, Extension, Adult, Duration, HasAnimation, Version)
+    (UserId, AdditionalUserIds, ParentPostId, Timestamp, Title, Text, Width, Height, Extension, Adult, Duration, HasAnimation, Version)
     VALUES
-    ($uid, -1, $timestamp, '$escaped_title', '$escaped_text', $width, $height, '$extension', $adult, $duration, $has_animation, 2)")) {
+    ($uid, '$additional_ids', -1, $timestamp, '$escaped_title', '$escaped_text', $width, $height, '$extension', $adult, $duration, $has_animation, 2)")) {
     $pid = sql_last_id();
     // Save uploaded files.
     $png_file_path = SITE_ROOT."oekaki/site/data/${pid}.".OEKAKI_THUMB_FILE_EXTENSION;

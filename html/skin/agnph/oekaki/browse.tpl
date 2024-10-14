@@ -68,7 +68,7 @@
 {% block oekaki_post %}
     <div class="oekaki-post">
         <div class="oekaki-post-header">
-            <span class="oekaki-post-header-item"><label>Artist:</label>&nbsp;<a href="/user/{{ post.user.UserId }}/oekaki/">{{ post.user.DisplayName }}</a></span>
+            <span class="oekaki-post-header-item"><label>Artist:</label>&nbsp;<a href="/user/{{ post.user.UserId }}/oekaki/">{{ post.user.DisplayName }}</a>{% for additionalUser in post.additionalUsers %}, <a href="/user/{{ additionalUser.UserId }}/oekaki/">{{ additionalUser.DisplayName }}</a>{% endfor %}</span>
                 <span class="oekaki-post-header-item-separator">|</span>
             <span class="oekaki-post-header-item"><label>Title:</label>&nbsp;{% autoescape false %}{{ post.escapedTitle }}{% endautoescape %}</span>
                 <span class="oekaki-post-header-item-separator">|</span>

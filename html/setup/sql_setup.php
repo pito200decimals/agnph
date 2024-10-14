@@ -370,6 +370,7 @@ do_or_die(sql_query(
     "CREATE TABLE ".OEKAKI_POST_TABLE." (
         PostId INT(11) UNSIGNED AUTO_INCREMENT,
         UserId INT(11) NOT NULL,
+        AdditionalUserIds VARCHAR(160) DEFAULT '' NOT NULL,
         ParentPostId INT(11) NOT NULL,
         Timestamp INT(11) NOT NULL,
         Title VARCHAR(".MAX_OEKAKI_POST_TITLE_LENGTH.") NOT NULL,

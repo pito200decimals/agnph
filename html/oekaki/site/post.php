@@ -68,9 +68,9 @@ if (isset($params['replayData'])) {
     $has_animation = 1;
 }
 if (sql_query("INSERT INTO ".OEKAKI_POST_TABLE."
-    (UserId, ParentPostId, Timestamp, Title, Text, Width, Height, Extension, Adult, Duration, HasAnimation)
+    (UserId, AdditionalUserIds, ParentPostId, Timestamp, Title, Text, Width, Height, Extension, Adult, Duration, HasAnimation)
     VALUES
-    ($uid, -1, $timestamp, '$escaped_title', '$escaped_text', $width, $height, '$extension', $adult, $duration, $has_animation)")) {
+    ($uid, '', -1, $timestamp, '$escaped_title', '$escaped_text', $width, $height, '$extension', $adult, $duration, $has_animation)")) {
     $pid = sql_last_id();
     // Save image file.
     $img_path = "oekaki/site/data/$pid.".OEKAKI_THUMB_FILE_EXTENSION;
