@@ -10,6 +10,7 @@ include_once("../includes/config.php");
 include_once("../includes/constants.php");
 include_once("../includes/util/core.php");
 include_once("../includes/util/sql.php");
+include_once("../includes/util/user.php");
 
 header('Content-type: application/json; charset=utf-8');
 
@@ -23,11 +24,10 @@ if (isset($_GET['query'])) {
     }
     $elems = array();
     while ($row = $result->fetch_assoc()) {
-        $elem = array(
+        $elems[] = array(
             "value" => $row['DisplayName'],
             "data" => $row['UserId']
         );
-        $elems[] = $elem;
     }
     $response = array(
         "query" => "Unit",
@@ -42,15 +42,16 @@ if (isset($_GET['query'])) {
     }
     $elems = array();
     while ($row = $result->fetch_assoc()) {
-        $elem = $row['DisplayName'];
-        $elems[] = $elem;
+        $elems[] = array(
+            "name" => $row['DisplayName'],
+            "avatar" => GetAvatarURL($row),
+        );
     }
     if (sizeof($elems) != 1) {
         AJAXErr();
         return;
     }
-    $response = array(
-        "name" => $elems[0]);
+    $response = $elems[0];
     echo json_encode($response);
 } else {
     echo json_encode(array());
