@@ -1,6 +1,7 @@
 {% block irc_block %}
+    {% if user %}
     <div class="block" id="irc-block">
-        <div class="header">IRC</div>
+        <div class="header">IRC/Discord</div>
         <div class="content">
             <div class="irc-active">
                 Active Users: <span id="active-user">Unknown</span>
@@ -11,8 +12,9 @@
                 </div>
             </div>
             <div>
-                <a href="http://irc.agn.ph/?initial_chans=#agnph&initial_nick={% if user %}{{user.DisplayName|replace({" ":"_"})}}{% endif %}">Chat Now</a>
+                <a href="https://discord.gg/uHbHMv7">Chat Now</a>
             </div>
         </div>
     </div>
+    {% endif %}
 {% endblock %}
