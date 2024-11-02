@@ -149,12 +149,17 @@ if (isset($user)) {
             }
         }
         if ($is_banned) {
-            $ban_links[] = array(
-                "formId" => 0,
-                "action" => "unban",
-                "duration" => 0,
-                "text" => "Unban user",
-                "needsBanReason" => false);
+            if (startsWith($profile_user['UserName'], DELETED_ACCOUNT_USERNAME_PREFIX)) {
+                // Don't add an unban link for deleted accounts.
+            } else {
+                $ban_links[] = array(
+                    "formId" => 0,
+                    "action" => "unban",
+                    "duration" => 0,
+                    "text" => "Unban user",
+                    "needsBanReason" => false,
+                    "needsConfirmation" => false);
+            }
         } else {
             // Add underage ban link if user is underage.
             $underage_expire_date = Get18YearsLaterDateStr($profile_user['DOB']);
@@ -165,7 +170,8 @@ if (isset($user)) {
                     "action" => "underageban",
                     "duration" => 0,
                     "text" => "Ban user until $underage_expire_date",
-                    "needsBanReason" => false);
+                    "needsBanReason" => false,
+                    "needsConfirmation" => false);
             }
             $ban_links[] = array(
                 "formId" => 1,
@@ -179,6 +185,13 @@ if (isset($user)) {
                 "duration" => 0,
                 "text" => "Permanently ban user",
                 "needsBanReason" => true);
+            $ban_links[] = array(
+                "formId" => 3,
+                "action" => "delete",
+                "duration" => 0,
+                "text" => "Delete User Account",
+                "needsBanReason" => false,
+                "needsConfirmation" => true);
         }
     }
     $vars['banLinks'] = $ban_links;

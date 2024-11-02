@@ -81,15 +81,24 @@
         {% if banLinks|length > 0 %}
             <br />
             <script>
-                function ban(id) {
+                function promptBanReason(id) {
                     var reason = prompt("Enter ban reason:", "");
                     if (reason.length == 0) {
                         alert("Ban reason required");
                         return false;
                     }
                     document.getElementById(id+'-ban-reason').value = reason;
+                    return submitBan(id);
+                }
+                function promptConfirm(id) {
+                    if (!confirm("Are you sure you want to delete this account?")) {
+                        return false;
+                    }
+                    return submitBan(id);
+                }
+                function submitBan(id) {
                     document.getElementById(id+'-ban-form').submit();
-                    return false;
+                    return true;
                 }
             </script>
         {% endif %}
@@ -100,7 +109,7 @@
                     {% if link.duration %}<input type="hidden" name="duration" value="{{ link.duration }}" />{% endif %}
                     {% if link.needsBanReason %}<input id="{{ link.formId }}-ban-reason" type="hidden" name="reason" value="" />{% endif %}
                 </form>
-                <a href="#" onclick="{% if link.needsBanReason %}ban('{{ link.formId }}'){% else %}document.getElementById('{{ link.formId }}-ban-form').submit(){% endif %}">
+                <a href="#" onclick="{% if link.needsBanReason %}promptBanReason('{{ link.formId }}'){% elseif link.needsConfirmation %}promptConfirm('{{ link.formId }}'){% else %}submitBan('{{ link.formId }}'){% endif %}">
                     {{ link.text }}
                 </a>
             </li>

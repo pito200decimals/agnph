@@ -96,6 +96,21 @@ switch ($action) {
             PostSessionBanner("Failed to lift ban", "red");
         }
         break;
+    case "delete":
+        $escaped_reason = "Deleted";
+        $new_username = DELETED_ACCOUNT_USERNAME_PREFIX.$profile_user['UserName'];
+        $new_email = DELETED_ACCOUNT_EMAIL_PREFIX.$profile_user['Email'];
+        if (sql_query("UPDATE ".USER_TABLE." SET UserName='$new_username', Email='$new_email', Usermode=-1, BanReason='$escaped_reason', BanExpireTime=-1 WHERE UserId=$puid;")) {
+            PostSessionBanner("User account deleted", "green");
+            $uid = $user['UserId'];
+            $username = $user['DisplayName'];
+            $puid = $profile_user['UserId'];
+            $pusername = $profile_user['DisplayName'];
+            LogAction("<strong><a href='/user/$uid/'>$username</a></strong> Deleted user account <strong><a href='/user/$puid/'>$pusername</a></strong>", "");
+        } else {
+            PostSessionBanner("Failed to delete account", "red");
+        }
+        break;
     default:
         // Do nothing.
         break;
