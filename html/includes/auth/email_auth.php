@@ -18,6 +18,8 @@ function CreateCodeEntry($email, $type, $data, $redirect, $expire_time = DEFAULT
     $escaped_type = sql_escape($type);
     $escaped_data = sql_escape($data);
     $escaped_redirect = sql_escape($redirect);
+    // Delete any previous entry that has expired.
+    sql_query("DELETE FROM ".SECURITY_EMAIL_TABLE." WHERE Email='$escaped_email' AND MaxTimestamp < $now;");
     // TODO: Check email string length?
     $success = sql_query("INSERT INTO ".SECURITY_EMAIL_TABLE."
         (Email, Timestamp, MaxTimestamp, Code, Type, Data, Redirect)
