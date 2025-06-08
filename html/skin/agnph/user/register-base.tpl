@@ -29,6 +29,11 @@
             margin: 5px;
             font-size: 75%;
         }
+        @media only handheld, screen and (max-device-width: 500px), screen and (max-width: 500px) {
+            .captcha-offset {
+                margin-left: 0px;
+            }
+        }
     </style>
 {% endblock %}
 
