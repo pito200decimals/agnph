@@ -1,0 +1,31 @@
+services:
+  site:
+    build:
+      context: ./docker-data
+      dockerfile: site.Dockerfile
+    ports:
+      - 8000:80
+    user: 1000:1000
+    volumes:
+      - ./html:/var/www/html
+      - ./docker-data/php/agnph.ini:/usr/local/etc/php/conf.d/agnph.ini
+      - ./docker-data/php/msmtp.rc:/etc/msmtprc
+    depends_on:
+      - db
+    restart: always
+
+  db:
+    image: mariadb:latest
+    restart: always
+    volumes:
+      - ./docker-data/mariadb:/var/lib/mysql:Z
+    environment:
+      MARIADB_USER: agnph
+      MARIADB_PASSWORD: agnph
+      MARIADB_DATABASE: agnph
+      MARIADB_ROOT_PASSWORD: root
+
+  mail:
+    image: sj26/mailcatcher
+    ports:
+      - 8001:1080

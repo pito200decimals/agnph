@@ -23,7 +23,7 @@ if (isset($_POST['submit'])) {
 }
 $vars['site_welcome_message'] = SanitizeHTMLTags(GetSiteSetting(SITE_WELCOME_MESSAGE_KEY, ""), DEFAULT_ALLOWED_TAGS);
 $vars['register_message'] = SanitizeHTMLTags(GetSiteSetting(REGISTER_DISCLAIMER_KEY, ""), DEFAULT_ALLOWED_TAGS);
-$vars['short_ban_duration'] = FormatShortDuration(GetSiteSetting(SHORT_BAN_DURATION_KEY, ""));
+$vars['short_ban_duration'] = FormatShortDuration(GetSiteSetting(SHORT_BAN_DURATION_KEY, DEFAULT_SHORT_BAN_DURATION));
 $vars['news_posts_board'] = GetSiteSetting(SITE_NEWS_SOURCE_BOARD_NAME_KEY, null);
 $vars['max_news_posts'] = GetSiteSetting(MAX_SITE_NEWS_POSTS_KEY, DEFAULT_MAX_SITE_NEWS_POSTS);
 $vars['login_message'] = SanitizeHTMLTags(GetSiteSetting(LOGIN_MESSAGE_KEY, ""), DEFAULT_ALLOWED_TAGS);

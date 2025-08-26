@@ -11,10 +11,10 @@ include_once(SITE_ROOT."includes/util/sql.php");
 include_once(SITE_ROOT."fics/includes/functions.php");
 
 // Set up twig.
-include_once(SITE_ROOT."../lib/Twig/Autoloader.php");
-Twig_Autoloader::register();
-$loader = new Twig_Loader_Filesystem(array(SITE_ROOT."skin/".BASE_SKIN."/"));
-$twig = new Twig_Environment($loader, array(
+include_once(SITE_ROOT."vendor/autoload.php");
+//Twig_Autoloader::register();
+$loader = new \Twig\Loader\FilesystemLoader(array(SITE_ROOT."skin/".BASE_SKIN."/"));
+$twig = new \Twig\Environment($loader, array(
     "cache" => SITE_ROOT."skin_template_cache",
 ));
 

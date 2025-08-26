@@ -1,0 +1,8 @@
+{
+    "require": {
+        "james-heinrich/getid3": "^1.9",
+        "twig/twig": "^3.21",
+        "jbbcode/jbbcode": "^1.4",
+        "ezyang/htmlpurifier": "^4.18"
+    }
+}

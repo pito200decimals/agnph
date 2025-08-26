@@ -101,17 +101,17 @@ if ($sid > 0) {
         }
     }
     // Validate coauthors.
-    if (CanUserSetCoAuthors($story, $user) &&
-        sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId<>".$user['UserId']." AND UserId IN (".implode(",", $coauthor_ids).") LIMIT ".FICS_MAX_NUM_COAUTHORS.";", 0)) {
-        $coauthor_ids = array();
-        while ($row = $result->fetch_assoc()) {
-            $coauthor_ids[] = $row['UserId'];
+        if (CanUserSetCoAuthors($story, $user) &&
+            sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId<>".$user['UserId']." AND UserId IN (".implode(",", $coauthor_ids).") LIMIT ".FICS_MAX_NUM_COAUTHORS.";", 0)) {
+            $coauthor_ids = array();
+            while ($row = $result->fetch_assoc()) {
+                $coauthor_ids[] = $row['UserId'];
+            }
+            $coauthors = implode(",", $coauthor_ids);
+            if ($coauthors != $story['CoAuthors']) {
+                $sets[] = "CoAuthors='$coauthors'";
+            }
         }
-        $coauthors = implode(",", $coauthor_ids);
-        if ($coauthors != $story['CoAuthors']) {
-            $sets[] = "CoAuthors='$coauthors'";
-        }
-    }
     if ($summary != $story['Summary']) {
         $escaped_summary = sql_escape($summary);
         $sets[] = "Summary='$escaped_summary'";
@@ -212,7 +212,7 @@ if ($sid > 0) {
     $success = SetChapterText($cid, $chaptertext);
     if (!$success) {
         // Delete story.
-        sql_query("DELETE FROM ".FICS_CHAPTER_TABLE." WHERE StoryId=$cid;");
+        sql_query("DELETE FROM ".FICS_CHAPTER_TABLE." WHERE ChapterId=$cid;");
         sql_query("DELETE FROM ".FICS_STORY_TABLE." WHERE StoryId=$sid;");
         return;
     }

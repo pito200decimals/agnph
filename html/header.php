@@ -64,8 +64,8 @@ $vars['version'] = VERSION;
 $vars['copyright_year'] = date("Y");
 
 // Template engine includes.
-include_once(__DIR__."/../lib/Twig/Autoloader.php");
-Twig_Autoloader::register();
+include_once("vendor/autoload.php");
+//Twig_Autoloader::register();
 
 $vars['GET'] = $_GET;
 $vars['POST'] = $_POST;
@@ -165,19 +165,19 @@ function FetchUserHeaderVars() {
     $skin_dirs = array_filter(array("/skin/$skin/", "/skin/".BASE_SKIN."/"), function($path) { return file_exists(__DIR__.$path); });
     $tpl_base_dirs = array_map(function($path) { return __DIR__.$path; }, $skin_dirs);
 
-    $loader = new Twig_Loader_Filesystem($tpl_base_dirs);
-    $twig = new Twig_Environment($loader, array(
+    $loader = new \Twig\Loader\FilesystemLoader($tpl_base_dirs);
+    $twig = new \Twig\Environment($loader, array(
         "cache" => SITE_ROOT."skin_template_cache",
     ));
-    $asset_fn = new Twig_SimpleFunction('asset', function($path) use ($skin_dirs) {
+    $asset_fn = new \Twig\TwigFunction('asset', function($path) use ($skin_dirs) {
         return GetAssetPath($path, $skin_dirs);
     });
     $twig->addFunction($asset_fn);
-    $inline_css_asset_fn = new Twig_SimpleFunction('inline_css_asset', function($path) use ($skin_dirs) {
+    $inline_css_asset_fn = new \Twig\TwigFunction('inline_css_asset', function($path) use ($skin_dirs) {
         return GetAssetContentsInTags($path, $skin_dirs, "<style>", "</style>");
     });
     $twig->addFunction($inline_css_asset_fn);
-    $inline_js_asset_fn = new Twig_SimpleFunction('inline_js_asset', function($path) use ($skin_dirs) {
+    $inline_js_asset_fn = new \Twig\TwigFunction('inline_js_asset', function($path) use ($skin_dirs) {
         return GetAssetContentsInTags($path, $skin_dirs, "<script type='text/javascript'>", "</script>");
     });
     $twig->addFunction($inline_js_asset_fn);

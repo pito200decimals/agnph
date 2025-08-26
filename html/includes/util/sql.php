@@ -42,4 +42,7 @@ if (!$sqlconn->set_charset("utf8")) {
     debug("Current character set: ".$sqlconn->character_set_name());
 }
 
+# Use this only to suppress errors
+# mysqli_report(MYSQLI_REPORT_OFF);
+
 ?>

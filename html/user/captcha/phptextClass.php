@@ -55,11 +55,11 @@ class phptextClass
         for ($i = 0; $i < strlen($text); $i++) {
             $x = $imgWidth / (strlen($text) + 2) * (1 + $i + mt_rand(-10, 10) / 50.0);
             $y2 = $y + $imgHeight / 10 * (mt_rand(-100, 100)/100.0);
-            imagettftext($im, $fontSize, 0, $x, $y2, $colors[$i], $font, substr($text, $i, 1));		
+            imagettftext($im, $fontSize, 0, (int)$x, (int)$y2, $colors[$i], $font, substr($text, $i, 1));		
         }
 
-		imagejpeg($im,NULL,90);/* Showing image */
 		header('Content-Type: image/jpeg');/* defining the image type to be shown in browser widow */
+		imagejpeg($im,NULL,90);/* Showing image */
 		imagedestroy($im);/* Destroying image instance */
 		if(isset($_SESSION)){
 			$_SESSION['captcha_code'] = $text;/* set random text in session for captcha validation*/

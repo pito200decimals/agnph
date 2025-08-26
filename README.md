@@ -1,22 +1,74 @@
 # agnph
 
-### Required Libraries
+### Development Environment Setup
 
-You should download and install the following libraries to the same location as this README.md file:
+Simply run
 
-- getID3 (lib/getid3/getid3.php)
-- Twig (lib/Twig/Autoloader.php)
+```bash
+./setup
+```
 
-These libraries are required for the website to function correctly.
+Then setup the config in `html/includes/config.php` with
+
+```php
+$dbhost = "db";
+$dbuser = "root";
+$dbpass = "root";
+$dbname = "agnph";
+```
+
+And `html/includes/constants.php`
+
+```php
+define("SITE_DOMAIN", "http://localhost:8000");
+```
+
+Finally, simply run
+
+```bash
+docker compose up -d
+```
+
+to deploy a local instance of the website. The site can be found at `http://localhost:8000`, and the mailcatcher site is at `http://localhost:8001`
+
+#### Cleaning
+
+Simply run
+
+```bash
+./setup clean
+```
+
+to remove any generated content that was created while using the site
+
+### Manual Setup
+
+Start by downloading the site's libraries with `composer`, to do this with docker:
+
+```bash
+docker run -it -v ./html:/app --user $(id -u):$(id -g) composer install
+```
+
+After, you will need to have to initalize the site's database by running `html/setup/sql_setup.php`. As an example, doing this for the development environment, do:
+
+```bash
+docker compose up -d site db
+docker compose exec -it -w /var/www/html/setup site php sql_setup.php
+```
+
+That's all! The site is now ready for deployment!
 
 ### Database Auth
 
-Enter database authentication information into the file located at html/includes/config.php
+Enter database authentication information into the file located at `html/includes/config.php`
 
 **DO NOT** commit these changes to the GitHub repository.
 
-### Database Setup
+**FOR DEVELOPMENT**, use the settings:
 
-Once both of the above steps (required libraries & entering auth details) are done, you can set up your database with the required structure.
-
-Load the website in a browser, and click on the "DEBUG Setup" menu option.
+```php
+$dbhost = "db";
+$dbuser = "root";
+$dbpass = "root";
+$dbname = "agnph";
+```

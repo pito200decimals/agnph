@@ -1,6 +1,8 @@
 <?php
 
-include_once(SITE_ROOT."includes/util/tidy_html.php");
+require SITE_ROOT.'vendor/autoload.php';
+
+require_once(SITE_ROOT."includes/util/tidy_html.php");
 
 // Includes functions associated with outputing to templates and processing HTML code.
 
@@ -10,7 +12,7 @@ function SanitizeHTMLTags($html, $allowed_html_config) {
     $html = ParseBBCode($html);
     $html = str_replace("> <", ">&nbsp;<", $html);  // Prevent user-created spaces from disappearing.
     $html = str_replace("<ul><br /><li>", "<ul><li>", $html);
-    include_once(SITE_ROOT."../lib/HTMLPurifier/HTMLPurifier.auto.php");
+    //include_once(SITE_ROOT."v/HTMLPurifier/HTMLPurifier.auto.php");
     $config = HTMLPurifier_Config::createDefault();
     $config->set('HTML.Allowed', $allowed_html_config);
     $purifier = new HTMLPurifier($config);
@@ -39,7 +41,7 @@ function SanitizeHTMLTags($html, $allowed_html_config) {
     // TODO: Remove XSS injection attacks (e.g. style background image urls).
 }
 
-include_once(SITE_ROOT."../lib/JBBCode/Parser.php");
+#include_once(SITE_ROOT."../lib/JBBCode/Parser.php");
 
 function ParseBBCode($html) {
     $parser = new JBBCode\Parser();

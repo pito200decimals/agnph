@@ -9,13 +9,15 @@ if (USE_DEBUG_PHP_SETTINGS) {
     ini_set("display_errors", "On");
     ini_set("display_startup_errors", "On");
     ini_set("error_reporting", E_ALL);
+    mysqli_report(MYSQLI_REPORT_ERROR); // Log SQL errors, return false
 } else {
     // Non-debug settings
     ini_set("display_errors", "Off");
     ini_set("display_startup_errors", "Off");
     ini_set("error_reporting", E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
     set_time_limit(120);
-    ini_set('memory_limit', '100M');
+    ini_set('memory_limit', '600M');
+    mysqli_report(MYSQLI_REPORT_OFF); // Suppress SQL errors, return false instead
 }
 
 
