@@ -136,14 +136,14 @@ do_or_die(sql_query(
         PrivateBoard TINYINT(1) DEFAULT 0 NOT NULL,
         Locked TINYINT(1) DEFAULT 0 NOT NULL,
         BoardSortOrder INT(11) DEFAULT 0 NOT NULL,
-        NumPosts INT(11) NOT NULL,
-        NumThreads INT(11) NOT NULL,
-        LastPostId INT(11) NOT NULL,
-        LastPostDate INT(11) NOT NULL,
+        NumPosts INT(11) DEFAULT 0 NOT NULL,
+        NumThreads INT(11) DEFAULT 0 NOT NULL,
+        LastPostId INT(11) DEFAULT 0 NOT NULL,
+        LastPostDate INT(11) DEFAULT 0 NOT NULL,
         PRIMARY KEY(BoardId)
     ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 // Post table. Contains both threads and posts. Threads are equal to the first post in the thread.
-do_or_die(sql_query(
+do_or_die(sql_query( 
     "CREATE TABLE ".FORUMS_POST_TABLE." (
         PostId INT(11) UNSIGNED AUTO_INCREMENT,
         UserId INT(11) NOT NULL,
@@ -153,9 +153,9 @@ do_or_die(sql_query(
         EditDate INT(11) DEFAULT 0 NOT NULL,
         ParentId INT(11) NOT NULL,
         IsThread TINYINT(1) DEFAULT 0 NOT NULL,".  // Properties below only belong to threads.
-       "Replies INT(11) NOT NULL,
-        Views INT(11) NOT NULL,
-        LastPostDate INT(11) NOT NULL,
+       "Replies INT(11) DEFAULT 0 NOT NULL,
+        Views INT(11) DEFAULT 0 NOT NULL,
+        LastPostDate INT(11) DEFAULT 0 NOT NULL,
         Sticky TINYINT(1) DEFAULT 0 NOT NULL,
         Locked TINYINT(1) DEFAULT 0 NOT NULL,
         NewsPost TINYINT(1) DEFAULT 0 NOT NULL,
