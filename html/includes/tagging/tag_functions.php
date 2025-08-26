@@ -114,18 +114,20 @@ function GetAliasedAndImpliedTags($tag_table_name, $alias_table_name, $implicati
         $orig_ids = $tag_ids;
         if ($do_alias) {
             $joined = implode(",", $tag_ids);
-            if (sql_query_into($result, "SELECT * FROM $alias_table_name WHERE TagId IN ($joined);", 1)) {
-                while ($row = $result->fetch_assoc()) {
-                    $tid = $row['TagId'];
-                    $atid = $row['AliasTagId'];
-                    if ($alias_removes_tags) {
-                        if(($index = array_search($tid, $tag_ids)) !== false) {
-                            unset($tag_ids[$index]);
+            try{
+                if (sql_query_into($result, "SELECT * FROM $alias_table_name WHERE TagId IN ($joined);", 1)) {
+                    while ($row = $result->fetch_assoc()) {
+                        $tid = $row['TagId'];
+                        $atid = $row['AliasTagId'];
+                        if ($alias_removes_tags) {
+                            if(($index = array_search($tid, $tag_ids)) !== false) {
+                                unset($tag_ids[$index]);
+                            }
                         }
+                        $tag_ids[] = $atid;
                     }
-                    $tag_ids[] = $atid;
                 }
-            }
+            } catch(Exception $e) {}
             if (!$alias_removes_tags) {
                 // When expanding aliases without removing tags, expand in both directions.
                 if (sql_query_into($result, "SELECT * FROM $alias_table_name WHERE AliasTagId IN ($joined);", 1)) {
@@ -138,13 +140,15 @@ function GetAliasedAndImpliedTags($tag_table_name, $alias_table_name, $implicati
         }
         if ($do_implication) {
             $joined = implode(",", $tag_ids);
-            if (sql_query_into($result, "SELECT * FROM $implication_table_name WHERE TagId IN ($joined);", 1)) {
-                while ($row = $result->fetch_assoc()) {
-                    $tid = $row['TagId'];
-                    $itid = $row['ImpliedTagId'];
-                    $tag_ids[] = $itid;
+            try{
+                if (sql_query_into($result, "SELECT * FROM $implication_table_name WHERE TagId IN ($joined);", 1)) {
+                    while ($row = $result->fetch_assoc()) {
+                        $tid = $row['TagId'];
+                        $itid = $row['ImpliedTagId'];
+                        $tag_ids[] = $itid;
+                    }
                 }
-            }
+            } catch(Exception $e) {}
         }
 
         // Canonical unique and sort.

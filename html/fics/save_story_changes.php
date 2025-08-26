@@ -162,14 +162,18 @@ if ($sid > 0) {
         $author_uid = $user['UserId'];
     }
     // Validate coauthors. Don't check perms, since you can always set coauthors on your new story.
-    if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId<>$author_uid AND UserId IN (".implode(",", $coauthor_ids).") LIMIT ".FICS_MAX_NUM_COAUTHORS.";", 0)) {
-        $coauthor_ids = array();
-        while ($row = $result->fetch_assoc()) {
-            $coauthor_ids[] = $row['UserId'];
+    try{
+        if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId<>$author_uid AND UserId IN (".implode(",", $coauthor_ids).") LIMIT ".FICS_MAX_NUM_COAUTHORS.";", 0)) {
+            $coauthor_ids = array();
+            while ($row = $result->fetch_assoc()) {
+                $coauthor_ids[] = $row['UserId'];
+            }
+            $escaped_coauthors = sql_escape(implode(",", $coauthor_ids));
+        } else {
+            $escaped_coauthors = "";
         }
-        $escaped_coauthors = sql_escape(implode(",", $coauthor_ids));
-    } else {
-        $escaped_coauthors = "";
+    } catch(Exception $e) {
+        $escaped_coauthors = '';
     }
     // Create new story.
     $escaped_title = sql_escape($title);
@@ -233,7 +237,9 @@ function ProcessTagChanges($tag_string, $story_id) {
     UpdateStoryTags($descriptors, $story_id, $user);
     UpdateTagTypes(FICS_TAG_TABLE, $FICS_TAG_TYPES, $descriptors, $user);  // Do after creating tags above when setting post tags.
     $tag_ids = array_unique(array_merge($tag_ids, GetTagsIdsForStory($story_id)));  // Add tag ids after edit.
-    UpdateTagItemCounts(FICS_TAG_TABLE, FICS_STORY_TAG_TABLE, FICS_STORY_TABLE, "StoryId", "I.ApprovalStatus<>'D'", $tag_ids);  // Update tag counts on touched tags.
+    try{
+        UpdateTagItemCounts(FICS_TAG_TABLE, FICS_STORY_TAG_TABLE, FICS_STORY_TABLE, "StoryId", "I.ApprovalStatus<>'D'", $tag_ids);  // Update tag counts on touched tags.
+    }catch(Exception $e) {}
 }
 
 // Updates tags attached to a story.

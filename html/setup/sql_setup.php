@@ -194,12 +194,12 @@ do_or_die(sql_query(
         HasPreview TINYINT(1) DEFAULT 0,
         UploaderId INT(11) NOT NULL,
         DateUploaded INT(11) NOT NULL,
-        Source VARCHAR(256) NOT NULL,
+        Source VARCHAR(256) DEFAULT '' NOT NULL,
         Rating CHAR(1) DEFAULT 'q',
-        Description TEXT(512) NOT NULL,
+        Description TEXT(512) DEFAULT '' NOT NULL,
         ParentPostId INT(11) DEFAULT -1,
         ParentPoolId INT(11) DEFAULT -1,
-        PoolItemOrder INT(11) NOT NULL,
+        PoolItemOrder INT(11) DEFAULT 0 NOT NULL,
         Score INT(11) DEFAULT 0,
         NumFavorites INT(11) DEFAULT 0,
         NumComments INT(11) DEFAULT 0,
@@ -209,7 +209,7 @@ do_or_die(sql_query(
         FileSize VARCHAR(8) NOT NULL,
         Status CHAR(1) DEFAULT 'P',".  // P for pending, A for approved, F for flagged for deletion, D for deleted (L for linked to source?)
        "FlaggerUserId INT(11) DEFAULT -1 NOT NULL,
-        FlagReason VARCHAR(".MAX_GALLERY_POST_FLAG_REASON_LENGTH.") NOT NULL,
+        FlagReason VARCHAR(".MAX_GALLERY_POST_FLAG_REASON_LENGTH.") DEFAULT '' NOT NULL,
         PRIMARY KEY(PostId)
     ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 // Tag Types: A=Artist, B=Copyright, C=Character, D=Species, M=General
@@ -242,7 +242,7 @@ do_or_die(sql_query(
         PoolId INT(11) AUTO_INCREMENT,
         CreatorUserId INT(11) NOT NULL,
         Name VARCHAR(".MAX_GALLERY_POOL_NAME_LENGTH.") NOT NULL,
-        Description TEXT(".MAX_GALLERY_POOL_DESCRIPTION_LENGTH.") NOT NULL,
+        Description TEXT(".MAX_GALLERY_POOL_DESCRIPTION_LENGTH.") DEFAULT '' NOT NULL,
         PRIMARY KEY(PoolId)
     ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 // Table containing comments on posts. TODO: Comment Score?
@@ -297,13 +297,13 @@ do_or_die(sql_query(
        "ApprovalStatus CHAR(1) DEFAULT 'A',".  // P - Pending, A - Approved, D - Deleted (Pending not used).
        "Completed TINYINT(1) DEFAULT FALSE,
         Featured CHAR(1) DEFAULT '".FICS_NOT_FEATURED."',".  // D/F/f/G/g/S/s/Z/z (upper-case current, lower-case retired).
-       "StoryNotes TEXT(".MAX_FICS_STORY_NOTES_LENGTH.") NOT NULL,
+       "StoryNotes TEXT(".MAX_FICS_STORY_NOTES_LENGTH.") DEFAULT '' NOT NULL,
         ChapterCount INT(11) NOT NULL,
         WordCount INT(11) NOT NULL,
-        Views INT(11) NOT NULL,
-        TotalStars INT(11) NOT NULL,
-        TotalRatings INT(11) NOT NULL,
-        NumReviews INT(11) NOT NULL,
+        Views INT(11) DEFAULT 0 NOT NULL,
+        TotalStars INT(11) DEFAULT 0 NOT NULL,
+        TotalRatings INT(11) DEFAULT 0 NOT NULL,
+        NumReviews INT(11) DEFAULT 0 NOT NULL,
         PRIMARY KEY(StoryId)
     ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 // Fics table that stores all the chapter metadata.
@@ -317,10 +317,10 @@ do_or_die(sql_query(
         ChapterNotes TEXT(".MAX_FICS_CHAPTER_NOTES_LENGTH.") NOT NULL,
         ChapterEndNotes TEXT(".MAX_FICS_CHAPTER_NOTES_LENGTH.") NOT NULL,
         WordCount INT(11) NOT NULL,
-        Views INT(11) NOT NULL,
-        TotalStars INT(11) NOT NULL,
-        TotalRatings INT(11) NOT NULL,
-        NumReviews INT(11) NOT NULL,
+        Views INT(11) DEFAULT 0 NOT NULL,
+        TotalStars INT(11) DEFAULT 0 NOT NULL,
+        TotalRatings INT(11) DEFAULT 0 NOT NULL,
+        NumReviews INT(11) DEFAULT 0 NOT NULL,
         ApprovalStatus CHAR(1) DEFAULT 'A',".  // P - Pending, A - Approved, D - Deleted (Pending not used).
        "PRIMARY KEY(ChapterId)
     ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));  // NOTE: WordCount, TotalStars and TotalRatings not implemented yet.
@@ -333,7 +333,7 @@ do_or_die(sql_query(
         ReviewerUserId INT(11) NOT NULL,
         ReviewDate INT(11) NOT NULL,
         ReviewText TEXT(".MAX_FICS_COMMENT_LENGTH.") NOT NULL,
-        AuthorResponseText TEXT(".MAX_FICS_COMMENT_LENGTH.") NOT NULL,
+        AuthorResponseText TEXT(".MAX_FICS_COMMENT_LENGTH.") DEFAULT '' NOT NULL,
         ReviewScore INT(11) NOT NULL,
         IsReview TINYINT(1) NOT NULL,
         IsComment TINYINT(1) NOT NULL,
@@ -463,9 +463,9 @@ function CreateItemTagTables($tag_table_name, $item_tag_table_name, $alias_table
             CreatorUserId INT(11) DEFAULT 0 NOT NULL,
             ChangeTypeUserId INT(11) DEFAULT 0 NOT NULL,
             ChangeTypeTimestamp INT(11) DEFAULT 0 NOT NULL,
-            Note TEXT(".MAX_TAG_NOTE_LENGTH.") NOT NULL,
+            Note TEXT(".MAX_TAG_NOTE_LENGTH.") DEFAULT '' NOT NULL,
             HideTag TINYINT(1) DEFAULT 0 NOT NULL,
-            ItemCount INT(11) NOT NULL,
+            ItemCount INT(11) DEFAULT 0 NOT NULL,
             PRIMARY KEY(TagId, Name)
         ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
     // Table for item-tag mapping.
