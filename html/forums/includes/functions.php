@@ -354,14 +354,12 @@ function TagThreadsAsUnread($user, &$thread_posts) {
     $tids = array_map(function($thread) { return $thread['PostId']; }, $thread_posts);
     $joined_tids = implode(",", $tids);
     $maybe_read_up_to = $user['MaybeReadUpTo'];
-		try {
-				if (!sql_query_into($result,
-						"SELECT * FROM ".FORUMS_POST_TABLE." T WHERE
-								IsThread=1 AND PostId IN ($joined_tids) AND
-								EXISTS(SELECT 1 FROM ".FORUMS_POST_TABLE." S WHERE
-										(S.PostId=T.PostId OR (S.ParentId=T.PostId AND S.IsThread=0)) AND
-										(S.PostId >= $maybe_read_up_to OR EXISTS(SELECT 1 FROM ".FORUMS_UNREAD_POST_TABLE." U WHERE U.UserId=$uid AND U.PostId=S.PostId)));", 1)) return;
-		} catch(Exception $e) {return;}
+    if (!sql_query_into($result,
+        "SELECT * FROM ".FORUMS_POST_TABLE." T WHERE
+        IsThread=1 AND PostId IN ($joined_tids) AND
+        EXISTS(SELECT 1 FROM ".FORUMS_POST_TABLE." S WHERE
+        (S.PostId=T.PostId OR (S.ParentId=T.PostId AND S.IsThread=0)) AND
+        (S.PostId >= $maybe_read_up_to OR EXISTS(SELECT 1 FROM ".FORUMS_UNREAD_POST_TABLE." U WHERE U.UserId=$uid AND U.PostId=S.PostId)));", 1)) return;
     $unread_tids = array();
     while ($row = $result->fetch_assoc()) {
         $tid = $row['PostId'];

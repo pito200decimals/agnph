@@ -101,19 +101,17 @@ if ($sid > 0) {
         }
     }
     // Validate coauthors.
-		try{
-				if (CanUserSetCoAuthors($story, $user) &&
-						sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId<>".$user['UserId']." AND UserId IN (".implode(",", $coauthor_ids).") LIMIT ".FICS_MAX_NUM_COAUTHORS.";", 0)) {
-						$coauthor_ids = array();
-						while ($row = $result->fetch_assoc()) {
-								$coauthor_ids[] = $row['UserId'];
-						}
-						$coauthors = implode(",", $coauthor_ids);
-						if ($coauthors != $story['CoAuthors']) {
-								$sets[] = "CoAuthors='$coauthors'";
-						}
-				}
-		} catch(Exception $e) {}
+        if (CanUserSetCoAuthors($story, $user) &&
+            sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId<>".$user['UserId']." AND UserId IN (".implode(",", $coauthor_ids).") LIMIT ".FICS_MAX_NUM_COAUTHORS.";", 0)) {
+            $coauthor_ids = array();
+            while ($row = $result->fetch_assoc()) {
+                $coauthor_ids[] = $row['UserId'];
+            }
+            $coauthors = implode(",", $coauthor_ids);
+            if ($coauthors != $story['CoAuthors']) {
+                $sets[] = "CoAuthors='$coauthors'";
+            }
+        }
     if ($summary != $story['Summary']) {
         $escaped_summary = sql_escape($summary);
         $sets[] = "Summary='$escaped_summary'";
@@ -164,18 +162,14 @@ if ($sid > 0) {
         $author_uid = $user['UserId'];
     }
     // Validate coauthors. Don't check perms, since you can always set coauthors on your new story.
-    try{
-        if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId<>$author_uid AND UserId IN (".implode(",", $coauthor_ids).") LIMIT ".FICS_MAX_NUM_COAUTHORS.";", 0)) {
-            $coauthor_ids = array();
-            while ($row = $result->fetch_assoc()) {
-                $coauthor_ids[] = $row['UserId'];
-            }
-            $escaped_coauthors = sql_escape(implode(",", $coauthor_ids));
-        } else {
-            $escaped_coauthors = "";
+    if (sql_query_into($result, "SELECT * FROM ".USER_TABLE." WHERE UserId<>$author_uid AND UserId IN (".implode(",", $coauthor_ids).") LIMIT ".FICS_MAX_NUM_COAUTHORS.";", 0)) {
+        $coauthor_ids = array();
+        while ($row = $result->fetch_assoc()) {
+            $coauthor_ids[] = $row['UserId'];
         }
-    } catch(Exception $e) {
-        $escaped_coauthors = '';
+        $escaped_coauthors = sql_escape(implode(",", $coauthor_ids));
+    } else {
+        $escaped_coauthors = "";
     }
     // Create new story.
     $escaped_title = sql_escape($title);
@@ -218,7 +212,7 @@ if ($sid > 0) {
     $success = SetChapterText($cid, $chaptertext);
     if (!$success) {
         // Delete story.
-        sql_query("DELETE FROM ".FICS_CHAPTER_TABLE." WHERE ParentStoryId=$cid;");
+        sql_query("DELETE FROM ".FICS_CHAPTER_TABLE." WHERE ChapterId=$cid;");
         sql_query("DELETE FROM ".FICS_STORY_TABLE." WHERE StoryId=$sid;");
         return;
     }
@@ -239,9 +233,7 @@ function ProcessTagChanges($tag_string, $story_id) {
     UpdateStoryTags($descriptors, $story_id, $user);
     UpdateTagTypes(FICS_TAG_TABLE, $FICS_TAG_TYPES, $descriptors, $user);  // Do after creating tags above when setting post tags.
     $tag_ids = array_unique(array_merge($tag_ids, GetTagsIdsForStory($story_id)));  // Add tag ids after edit.
-    try{
-        UpdateTagItemCounts(FICS_TAG_TABLE, FICS_STORY_TAG_TABLE, FICS_STORY_TABLE, "StoryId", "I.ApprovalStatus<>'D'", $tag_ids);  // Update tag counts on touched tags.
-    }catch(Exception $e) {}
+    UpdateTagItemCounts(FICS_TAG_TABLE, FICS_STORY_TAG_TABLE, FICS_STORY_TABLE, "StoryId", "I.ApprovalStatus<>'D'", $tag_ids);  // Update tag counts on touched tags.
 }
 
 // Updates tags attached to a story.

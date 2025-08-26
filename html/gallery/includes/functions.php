@@ -231,12 +231,8 @@ function UpdatePost($tag_string, $post_id, $user, $update_tag_types=true, $batch
     $tag_ids = GetPostTags($post_id);  // Get tags after post was edited.
     $tags_added = array_diff($tag_ids, $old_tag_ids);
     $tags_removed = array_diff($old_tag_ids, $tag_ids);
-    try{
-        IncrementTagCounts(GALLERY_TAG_TABLE, $tags_added, /*increment=*/1);
-    }catch(Exception $e) {}
-    try{
+    IncrementTagCounts(GALLERY_TAG_TABLE, $tags_added, /*increment=*/1);
     IncrementTagCounts(GALLERY_TAG_TABLE, $tags_removed, /*increment=*/-1);
-    }catch(Exception $e) {}
 }
 
 function GetPostTags($pid) {
