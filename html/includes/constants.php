@@ -222,7 +222,7 @@ define("ADMIN_LOG_ENTRIES_PER_PAGE", 50);
 define("IMPORT_USER_WELCOME_PM_KEY", "ImportUserLoginPMKey");
 
 // Other default constant values.
-define("SITE_DOMAIN", "http://localhost:8000");  // Used for post-image-search urls, email auth.
+define("SITE_DOMAIN", "https://agn.ph");  // Used for post-image-search urls, email auth.
 define("VERSION", "2.0");
 define("SITE_WELCOME_MESSAGE_KEY", "SiteWelcomeMessage");
 define("REGISTER_DISCLAIMER_KEY", "RegisterDisclaimer");

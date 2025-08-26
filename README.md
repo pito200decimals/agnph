@@ -8,7 +8,22 @@ Simply run
 ./setup
 ```
 
-Then run
+Then setup the config in `html/includes/config.php` with
+
+```php
+$dbhost = "db";
+$dbuser = "root";
+$dbpass = "root";
+$dbname = "agnph";
+```
+
+And `html/includes/constants.php`
+
+```php
+define("SITE_DOMAIN", "http://localhost:8000");
+```
+
+Finally, simply run
 
 ```bash
 docker compose up -d
