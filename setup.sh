@@ -4,6 +4,17 @@ if [ "$1" = "clean" ]; then
     echo Cleaning up AGNPH site!
     # Removing dependencies
     rm -rf html/vendor
+		# Removing Custom Data
+		rm -r \
+			html/uploads \
+			html/user/bio \
+			html/user/data \
+			html/gallery/data \
+			html/fics/data \
+			html/user/data \
+			html/images/uploads \
+			html/images/staff \
+			html/skin_template_cache
     # Remove database
     docker compose up -d db && sleep 10
     docker compose exec -it db mariadb -uagnph -pagnph -e "DROP DATABASE IF EXISTS agnph; CREATE DATABASE agnph;"
@@ -13,6 +24,25 @@ if [ "$1" = "clean" ]; then
 fi
 
 echo Setting up AGNPH site!
+# Removing Custom Data
+rm -r \
+	html/uploads \
+	html/user/bio \
+	html/user/data \
+	html/gallery/data \
+	html/fics/data \
+	html/user/data \
+	html/images/uploads \
+	html/images/staff \
+	html/skin_template_cache
+# Bring back custom directories
+ mkdir -p \
+	html/user/data \
+	html/data/bio \
+	html/gallery/data \
+	html/uploads \
+	html/fics/data/chapters \
+	html/images/uploads/avatars
 
 # Composer
 echo Downloading Composer Dependencies

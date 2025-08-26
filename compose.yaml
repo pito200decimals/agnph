@@ -8,7 +8,7 @@ services:
     user: 1000:1000
     volumes:
       - ./html:/var/www/html
-      - ./docker-data/php/logging.ini:/usr/local/etc/php/conf.d/logging.ini
+      - ./docker-data/php/agnph.ini:/usr/local/etc/php/conf.d/agnph.ini
       - ./docker-data/php/msmtp.rc:/etc/msmtprc
     depends_on:
       - db

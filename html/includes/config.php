@@ -15,14 +15,14 @@ if (USE_DEBUG_PHP_SETTINGS) {
     ini_set("display_startup_errors", "Off");
     ini_set("error_reporting", E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
     set_time_limit(120);
-    ini_set('memory_limit', '100M');
+    ini_set('memory_limit', '600M');
 }
 
 
 // MySQL DB settings.
-$dbhost = "db";
-$dbuser = "root";  // Don't show this in github :)
-$dbpass = "root";  // Don't show this in github :)
+$dbhost = "localhost";
+$dbuser = "";  // Don't show this in github :)
+$dbpass = "";  // Don't show this in github :)
 $dbname = "agnph";
 define("GALLERY_CRYPT_SALT", "");  // Don't show this in github :)
 define("OEKAKI_CRYPT_SALT", "");  // Don't show this in github :)

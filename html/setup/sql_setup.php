@@ -316,7 +316,7 @@ do_or_die(sql_query(
         ChapterItemOrder INT(11) NOT NULL,
         ChapterNotes TEXT(".MAX_FICS_CHAPTER_NOTES_LENGTH.") NOT NULL,
         ChapterEndNotes TEXT(".MAX_FICS_CHAPTER_NOTES_LENGTH.") NOT NULL,
-        WordCount INT(11) NOT NULL,
+        WordCount INT(11) DEFAULT 0 NOT NULL,
         Views INT(11) DEFAULT 0 NOT NULL,
         TotalStars INT(11) DEFAULT 0 NOT NULL,
         TotalRatings INT(11) DEFAULT 0 NOT NULL,

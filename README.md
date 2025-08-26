@@ -1,14 +1,5 @@
 # agnph
 
-## TODOS
-
-This repo is not at parity with its production state, with bugs present.
-
-* SQL query failure when publishing fic
-* Check on gallery publishing
-* Oekaki fails to load
-* Check on admin controls
-
 ### Development Environment Setup
 
 Simply run
@@ -24,6 +15,16 @@ docker compose up -d
 ```
 
 to deploy a local instance of the website. The site can be found at `http://localhost:8000`, and the mailcatcher site is at `http://localhost:8001`
+
+#### Cleaning
+
+Simply run
+
+```bash
+./setup clean
+```
+
+to remove any generated content that was created while using the site
 
 ### Manual Setup
 

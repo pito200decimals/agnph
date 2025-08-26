@@ -130,12 +130,14 @@ function GetAliasedAndImpliedTags($tag_table_name, $alias_table_name, $implicati
             } catch(Exception $e) {}
             if (!$alias_removes_tags) {
                 // When expanding aliases without removing tags, expand in both directions.
-                if (sql_query_into($result, "SELECT * FROM $alias_table_name WHERE AliasTagId IN ($joined);", 1)) {
-                    while ($row = $result->fetch_assoc()) {
-                        $tid = $row['TagId'];
-                        $tag_ids[] = $tid;
-                    }
-                }
+								try{
+										if (sql_query_into($result, "SELECT * FROM $alias_table_name WHERE AliasTagId IN ($joined);", 1)) {
+												while ($row = $result->fetch_assoc()) {
+														$tid = $row['TagId'];
+														$tag_ids[] = $tid;
+												}
+										}
+								} catch(Exception $e) {}
             }
         }
         if ($do_implication) {
