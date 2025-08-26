@@ -1,7 +1,7 @@
 <?php
 // General image utility classes and functions.
 
-include_once(SITE_ROOT."../lib/getid3/getid3.php");
+include_once(SITE_ROOT."/vendor/autoload.php");
 include_once(SITE_ROOT."includes/util/core.php");
 
 class SimpleImage

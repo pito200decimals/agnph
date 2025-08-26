@@ -1,6 +1,8 @@
 <?php
 // General script to load mock data into the SQL tables for testing purposes.
 
+define("SITE_ROOT", "../");
+
 include_once("../includes/config.php");
 include_once("../includes/constants.php");
 include_once("../includes/util/core.php");
@@ -33,11 +35,11 @@ $now = time();
 // Populate User table.
 do_or_die(sql_query(
     "INSERT INTO ".USER_TABLE."
-    (UserID, UserName, DisplayName, Email, Password, Usermode, DOB, Permissions, Title, Species, JoinTime, LastVisitTime, RegisterIP)
+    (UserID, UserName, DisplayName, Email, Password, Usermode, DOB, Permissions, Title, Species, JoinTime, LastVisitTime, RegisterIP, BanReason, BanExpireTime, Location, KnownIPs, ImportForumsPassword, ImportGalleryPassword, ImportFicsPassword, ImportOekakiPassword)
     VALUES
-    (1, 'User1', 'User1', 'user1@example.com', '".md5("Password 1")."', 1, '2003-02-01', 'A', 'Most Awesome Cyndaquil', 'Cyndaquil', $now, $now, '127.0.0.1'),
-    (2, 'User2', 'User2', 'user2@example.com', '".md5("Password 2")."', 1, '2006-05-04', 'F', 'Hungry Resident', 'Totodile', $now, $now, '127.0.0.1'),
-    (3, 'User3', 'User3', 'user3@example.com', '".md5("Password 3")."', 1, '2009-08-07', '', 'Generic Title', 'Chikorita', $now, $now, '127.0.0.1');"));
+    (1, 'User1', 'User1', 'user1@example.com', '".md5("Password 1")."', 1, '2003-02-01', 'A', 'Most Awesome Cyndaquil', 'Cyndaquil', $now, $now, '127.0.0.1', '', 0, 'US', '127.0.0.1', '', '', '', ''),
+    (2, 'User2', 'User2', 'user2@example.com', '".md5("Password 2")."', 1, '2006-05-04', 'F', 'Hungry Resident', 'Totodile', $now, $now, '127.0.0.1', '', 0, 'US', '127.0.0.1', '', '', '', ''),
+    (3, 'User3', 'User3', 'user3@example.com', '".md5("Password 3")."', 1, '2009-08-07', '', 'Generic Title', 'Chikorita', $now, $now, '127.0.0.1', '', 0, 'US', '127.0.0.1', '', '', '', '');"));
 // Forums settings.
 do_or_die(sql_query(
     "INSERT INTO ".FORUMS_USER_PREF_TABLE."

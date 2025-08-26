@@ -23,37 +23,39 @@ include_once(SITE_ROOT."gallery/includes/functions.php");
 // database column.
 
 // If doesn't exist, is a no-op.
-sql_query("DROP TABLE ".USER_TABLE.";");
-sql_query("DROP TABLE ".USER_MAILBOX_TABLE.";");
-sql_query("DROP TABLE ".SITE_LOGGING_TABLE.";");
-sql_query("DROP TABLE ".SITE_SETTINGS_TABLE.";");
-sql_query("DROP TABLE ".SECURITY_EMAIL_TABLE.";");
-sql_query("DROP TABLE ".FORUMS_BOARD_TABLE.";");
-sql_query("DROP TABLE ".FORUMS_POST_TABLE.";");
-sql_query("DROP TABLE ".FORUMS_USER_PREF_TABLE.";");
-sql_query("DROP TABLE ".FORUMS_UNREAD_POST_TABLE.";");
-sql_query("DROP TABLE ".GALLERY_POST_TABLE.";");
-sql_query("DROP TABLE ".GALLERY_TAG_TABLE.";");
-sql_query("DROP TABLE ".GALLERY_POST_TAG_TABLE.";");
-sql_query("DROP TABLE ".GALLERY_POST_TAG_HISTORY_TABLE.";");
-sql_query("DROP TABLE ".GALLERY_DESC_HISTORY_TABLE.";");
-sql_query("DROP TABLE ".GALLERY_COMMENT_TABLE.";");
-sql_query("DROP TABLE ".GALLERY_USER_PREF_TABLE.";");
-sql_query("DROP TABLE ".GALLERY_USER_FAVORITES_TABLE.";");
-sql_query("DROP TABLE ".GALLERY_POOLS_TABLE.";");
-sql_query("DROP TABLE ".GALLERY_TAG_ALIAS_TABLE.";");
-sql_query("DROP TABLE ".GALLERY_TAG_IMPLICATION_TABLE.";");
-sql_query("DROP TABLE ".FICS_STORY_TABLE.";");
-sql_query("DROP TABLE ".FICS_CHAPTER_TABLE.";");
-sql_query("DROP TABLE ".FICS_TAG_TABLE.";");
-sql_query("DROP TABLE ".FICS_STORY_TAG_TABLE.";");
-sql_query("DROP TABLE ".FICS_REVIEW_TABLE.";");
-sql_query("DROP TABLE ".FICS_USER_PREF_TABLE.";");
-sql_query("DROP TABLE ".FICS_USER_FAVORITES_TABLE.";");
-sql_query("DROP TABLE ".FICS_TAG_ALIAS_TABLE.";");
-sql_query("DROP TABLE ".FICS_TAG_IMPLICATION_TABLE.";");
-sql_query("DROP TABLE ".OEKAKI_USER_PREF_TABLE.";");
-sql_query("DROP TABLE ".OEKAKI_POST_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".USER_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".USER_VISIT_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".USER_MAILBOX_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".SITE_LOGGING_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".SITE_SETTINGS_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".SECURITY_EMAIL_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".FORUMS_BOARD_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".FORUMS_POST_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".FORUMS_USER_PREF_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".FORUMS_UNREAD_POST_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".GALLERY_POST_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".GALLERY_TAG_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".GALLERY_POST_TAG_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".GALLERY_POST_TAG_HISTORY_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".GALLERY_DESC_HISTORY_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".GALLERY_COMMENT_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".GALLERY_USER_PREF_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".GALLERY_USER_FAVORITES_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".GALLERY_POOLS_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".GALLERY_TAG_ALIAS_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".GALLERY_TAG_IMPLICATION_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".FICS_STORY_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".FICS_CHAPTER_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".FICS_TAG_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".FICS_STORY_TAG_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".FICS_REVIEW_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".FICS_USER_PREF_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".FICS_USER_FAVORITES_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".FICS_TAG_ALIAS_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".FICS_TAG_IMPLICATION_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".OEKAKI_USER_PREF_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".OEKAKI_POST_TABLE.";");
+sql_query("DROP TABLE IF EXISTS ".OEKAKI_LIVESTREAM_TABLE.";");
 // NOTE: If you add another user table, make sure to update account migration.
 sql_query("DELETE FROM mysql.event");
 
@@ -68,15 +70,15 @@ do_or_die(sql_query(
         Email VARCHAR(".MAX_USER_EMAIL_LENGTH.") NOT NULL,
         Password CHAR(32) NOT NULL,".  // Requires 32 for md5
        "Usermode INT(11) DEFAULT 0 NOT NULL,".  // -1=Banned, 0=Unactivated, 1=User. Unactivated users do not have anything besides this table entry.
-       "Permissions VARCHAR(8) NOT NULL,".  // String of characters, A=Super Admin, R=Forums, G=Gallery, F=Fics, O=Oekaki, I=IRC, M=Minecraft
-       "BanReason VARCHAR(".MAX_BAN_REASON_LENGTH.") NOT NULL,
-        BanExpireTime INT(11) NOT NULL,".  // Timestamp when ban is lifted. -1 for infinite bans.
-       "Title VARCHAR(".MAX_USER_TITLE_LENGTH.") NOT NULL,
-        Location VARCHAR(".MAX_USER_LOCATION_LENGTH.") NOT NULL,
+       "Permissions VARCHAR(8) DEFAULT '' NOT NULL,".  // String of characters, A=Super Admin, R=Forums, G=Gallery, F=Fics, O=Oekaki, I=IRC, M=Minecraft
+       "BanReason VARCHAR(".MAX_BAN_REASON_LENGTH.") DEFAULT '' NOT NULL,
+        BanExpireTime INT(11) DEFAULT 0 NOT NULL,".  // Timestamp when ban is lifted. -1 for infinite bans.
+       "Title VARCHAR(".MAX_USER_TITLE_LENGTH.") DEFAULT '' NOT NULL,
+        Location VARCHAR(".MAX_USER_LOCATION_LENGTH.") DEFAULT '' NOT NULL,
         AutoDetectTimezone TINYINT(1) DEFAULT 1 NOT NULL,
         Timezone FLOAT DEFAULT 0 NOT NULL,
         ShowLocalTime TINYINT(1) DEFAULT 1 NOT NULL,
-        Species VARCHAR(".MAX_USER_SPECIES_LENGTH.") NOT NULL,
+        Species VARCHAR(".MAX_USER_SPECIES_LENGTH.") DEFAULT '' NOT NULL,
         DOB CHAR(10) NOT NULL,".  // Format: YYYY-MM-DD
        "ShowDOB TINYINT(1) DEFAULT 0,
         HideOnlineStatus TINYINT(1) DEFAULT 0,
@@ -87,14 +89,14 @@ do_or_die(sql_query(
        "Skin VARCHAR(".MAX_SKIN_STRING_LENGTH.") DEFAULT '".DEFAULT_SKIN_SETTING."' NOT NULL,".
         // Code-assigned values.
        "JoinTime INT(11) NOT NULL,
-        LastVisitTime INT(11) NOT NULL,
+        LastVisitTime INT(11) DEFAULT 0 NOT NULL,
         DisplayNameChangeTime INT(11) DEFAULT 0 NOT NULL,
         RegisterIP VARCHAR(50) NOT NULL,".  // RegisterIP will be empty-string if the user was imported from the old site software.
-       "KnownIPs VARCHAR(".MAX_KNOWN_IP_STRING_LENGTH.") NOT NULL,".  // Allocate 45 + 1 characters for each IP address. Store the past 10 addresses comma-separated.
-       "ImportForumsPassword VARCHAR(40) NOT NULL,
-        ImportGalleryPassword VARCHAR(40) NOT NULL,
-        ImportFicsPassword VARCHAR(32) NOT NULL,
-        ImportOekakiPassword VARCHAR(32) NOT NULL,
+       "KnownIPs VARCHAR(".MAX_KNOWN_IP_STRING_LENGTH.") DEFAULT '' NOT NULL,".  // Allocate 45 + 1 characters for each IP address. Store the past 10 addresses comma-separated.
+       "ImportForumsPassword VARCHAR(40) DEFAULT '' NOT NULL,
+        ImportGalleryPassword VARCHAR(40) DEFAULT '' NOT NULL,
+        ImportFicsPassword VARCHAR(32) DEFAULT '' NOT NULL,
+        ImportOekakiPassword VARCHAR(32) DEFAULT '' NOT NULL,
         PRIMARY KEY(UserId)
     ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 do_or_die(sql_query("SET GLOBAL event_scheduler = ON;"));  // Turn on cleanup scheduler.
@@ -109,7 +111,7 @@ do_or_die(sql_query(
 
 do_or_die(sql_query(
     "CREATE TABLE ".USER_VISIT_TABLE." (
-        GuestId VARCHAR(30) NOT NULL,".  // UserId or PHP Session id.
+        GuestId VARCHAR(32) NOT NULL,".  // UserId or PHP Session id.
        "VisitTime INT(11) NOT NULL,
         VisitIP VARCHAR(45) NOT NULL,
         PageUrl VARCHAR(120) NOT NULL,
@@ -257,10 +259,10 @@ do_or_die(sql_query(
 do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_USER_PREF_TABLE." (
         UserId INT(11) NOT NULL,
-        ArtistTagId INT(11) NOT NULL,
+        ArtistTagId INT(11) DEFAULT 0 NOT NULL,
         GalleryPermissions CHAR(1) DEFAULT 'N',".  // R - Restricted user, N - Normal user, C - Contributor, A - Admin
        "GalleryPostsPerPage INT(11) DEFAULT ".DEFAULT_GALLERY_POSTS_PER_PAGE.",
-        GalleryTagBlacklist TEXT(512) NOT NULL,".  // Can hold ~120 tags.
+        GalleryTagBlacklist TEXT(512) DEFAULT '' NOT NULL,".  // Can hold ~120 tags.
        "NavigateGalleryPoolsWithKeyboard TINYINT(1) DEFAULT 0,
         PrivateGalleryFavorites TINYINT(1) DEFAULT 0,
         PlainGalleryTagging TINYINT(1) DEFAULT 0,
@@ -342,10 +344,10 @@ CreateItemTagTables(FICS_TAG_TABLE, FICS_STORY_TAG_TABLE, FICS_TAG_ALIAS_TABLE, 
 do_or_die(sql_query(
    "CREATE TABLE ".FICS_USER_PREF_TABLE." (
         UserId INT(11) NOT NULL,
-        AuthorTagId INT(11) NOT NULL,
+        AuthorTagId INT(11) DEFAULT 0 NOT NULL,
         FicsPermissions CHAR(1) DEFAULT 'N',".  // R - Restricted user, N - Normal user, A - Admin
        "FicsStoriesPerPage INT(11) DEFAULT ".DEFAULT_FICS_STORIES_PER_PAGE.",
-        FicsTagBlacklist TEXT(512) NOT NULL,".  // Can hold ~120 tags.
+        FicsTagBlacklist TEXT(512) DEFAULT '' NOT NULL,".  // Can hold ~120 tags.
        "PrivateFicsFavorites TINYINT(1) DEFAULT 0,
         PlainFicsTagging TINYINT(1) DEFAULT 0,
         PRIMARY KEY(UserId)

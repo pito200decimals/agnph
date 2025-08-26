@@ -20,9 +20,9 @@ if (USE_DEBUG_PHP_SETTINGS) {
 
 
 // MySQL DB settings.
-$dbhost = "localhost";
-$dbuser = "";  // Don't show this in github :)
-$dbpass = "";  // Don't show this in github :)
+$dbhost = "db";
+$dbuser = "root";  // Don't show this in github :)
+$dbpass = "root";  // Don't show this in github :)
 $dbname = "agnph";
 define("GALLERY_CRYPT_SALT", "");  // Don't show this in github :)
 define("OEKAKI_CRYPT_SALT", "");  // Don't show this in github :)

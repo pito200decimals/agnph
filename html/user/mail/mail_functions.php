@@ -25,11 +25,15 @@ function AddMessageBodyAndMetadata($profile_user, &$messages) {
     $ids = array_map(function($msg) { return $msg['Id']; }, $messages);
     $joined = implode(",", $ids);
     $sql = "SELECT * FROM ".USER_MAILBOX_TABLE." WHERE Id IN ($joined);";
-    if (sql_query_into($result, $sql, 1)) {
-        while ($row = $result->fetch_assoc()) {
-            $msg_by_id[$row['Id']]['Content'] = $row['Content'];
+    try {
+        if (sql_query_into($result, $sql, 1)) {
+            while ($row = $result->fetch_assoc()) {
+                $msg_by_id[$row['Id']]['Content'] = $row['Content'];
+            }
+            AddMessageMetadata($profile_user, $messages);
         }
-        AddMessageMetadata($profile_user, $messages);
+    } catch (Exception $e) {
+
     }
 }
 

@@ -9,4 +9,9 @@ html/oekaki/app/*
 html/oekaki/lib/*
 html/oekaki/site/data/*
 html/images/staff/*
+html/skin_template_cache
 html/setup/*
+html/vendor
+html/composer.lock
+docker-data/mariadb
+html/includes/config.php

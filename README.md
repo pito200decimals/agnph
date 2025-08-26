@@ -1,22 +1,58 @@
 # agnph
 
-### Required Libraries
+## TODOS
 
-You should download and install the following libraries to the same location as this README.md file:
+This repo is not at parity with its production state, with bugs present.
 
-- getID3 (lib/getid3/getid3.php)
-- Twig (lib/Twig/Autoloader.php)
+* SQL query failure when publishing fic
+* Check on gallery publishing
+* Oekaki fails to load
+* Check on admin controls
 
-These libraries are required for the website to function correctly.
+### Development Environment Setup
+
+Simply run
+
+```bash
+./setup
+```
+
+Then run
+
+```bash
+docker compose up -d
+```
+
+to deploy a local instance of the website. The site can be found at `http://localhost:8000`, and the mailcatcher site is at `http://localhost:8001`
+
+### Manual Setup
+
+Start by downloading the site's libraries with `composer`, to do this with docker:
+
+```bash
+docker run -it -v ./html:/app --user $(id -u):$(id -g) composer install
+```
+
+After, you will need to have to initalize the site's database by running `html/setup/sql_setup.php`. As an example, doing this for the development environment, do:
+
+```bash
+docker compose up -d site db
+docker compose exec -it -w /var/www/html/setup site php sql_setup.php
+```
+
+That's all! The site is now ready for deployment!
 
 ### Database Auth
 
-Enter database authentication information into the file located at html/includes/config.php
+Enter database authentication information into the file located at `html/includes/config.php`
 
 **DO NOT** commit these changes to the GitHub repository.
 
-### Database Setup
+**FOR DEVELOPMENT**, use the settings:
 
-Once both of the above steps (required libraries & entering auth details) are done, you can set up your database with the required structure.
-
-Load the website in a browser, and click on the "DEBUG Setup" menu option.
+```php
+$dbhost = "db";
+$dbuser = "root";
+$dbpass = "root";
+$dbname = "agnph";
+```

@@ -1,0 +1,10 @@
+account default
+host mail
+port 1025
+tls off
+tls_starttls off
+tls_certcheck off
+auth off
+user admin@example.com
+password "password"
+from admin@example.com
