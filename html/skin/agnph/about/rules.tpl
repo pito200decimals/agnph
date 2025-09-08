@@ -114,35 +114,48 @@
         <div class="header">Gallery Rules</div>
         <div class="content">
             <ul>
-                <li>We do not accept content that is not Pokémon-themed.</li>
-                <li>Uploaded pictures must be pornographic or sexually suggestive in nature. No
-                    clean art allowed, unless it is part of a larger collection of explicit images
-                    (such as a comic). Vore and other fetish material counts as pornographic and is
-                    allowed, even without genitalia visible.</li>
-                <li>We do not allow real-life pornographic content.</li>
-                <li>Please do NOT attempt to somehow overcome any of AGNPH's filesize and
-                    dimensions limits for any upload. There's a reason we set limits and they are
-                    already pretty generous.</li>
-                <li>Don't upload, without explicit permission from the artist(s), any art involving
-                    artists listed on the <a href="/forums/thread/1600/">Do Not Post list</a>.</li>
-                <li>Don't make creepy comments on artwork. It's good to show light-hearted
-                    appreciation, but we don't need to know the sticky, disturbing details of what
-                    you want to do to whatever character. Also, remember that artists often use
-                    artwork characters to represent themselves. They might not appreciate hearing
-                    about your theoretical intentions.</li>
-                <li>Don't whine about pictures having content you don't like. You can blacklist
-                    tags you don't like in your account settings.</li>
-                <li>Follow the <a href="/about/gallery/">gallery tagging guidelines</a> when adding
-                    tags.</li>
-                <li>Don't vandalize tags. This includes adding stupid or deliberately wrong tags,
-                    or removing good ones.</li>
-                <li>Don't roleplay in the comments of gallery posts.</li>
-                <li>Acceptable reasons for flagging artwork for deletion include inferior duplicates,
-                    outdated versions of interactive works (such as Flash games), illegal content,
-                    non-Pokémon content, and terrible quality uploads such as those with rampant
-                    compression artifacts. 'Bad art', 'disgusting content' or 'I'm the artist and I
-                    want this removed' are not valid reasons for flagging. If you want to be added
-                    to the DNP list, see the relevant help page.</li>
+                <li><strong>Content</strong>
+                    <ul>
+                        <li>We do not accept content that is not Pokémon-themed.</li>
+                        <li>Uploaded pictures must be pornographic or sexually suggestive in nature. No
+                            clean art allowed, unless it is part of a larger collection of explicit images
+                            (such as a comic). Vore and other fetish material counts as pornographic and is
+                            allowed, even without genitalia visible.</li>
+                        <li>We do not allow real-life pornographic content.</li>
+                        <li>We do not allow AI-generated content or AI-assisted artwork.</li>
+                        <li>Please do NOT attempt to somehow overcome any of AGNPH's filesize and
+                            dimensions limits for any upload. There's a reason we set limits and they are
+                            already pretty generous.</li>
+                        <li>Don't upload, without explicit permission from the artist(s), any art involving
+                            artists listed on the <a href="/forums/thread/1600/">Do Not Post list</a>.</li>
+                    </ul>
+                </li>
+                <li><strong>Tagging</strong>
+                    <ul>
+                        <li>Follow the <a href="/about/gallery/">gallery tagging guidelines</a> when adding
+                            tags.</li>
+                        <li>Don't vandalize tags. This includes adding stupid or deliberately wrong tags,
+                            or removing good ones.</li>
+                        <li>Acceptable reasons for flagging artwork for deletion include inferior duplicates,
+                            outdated versions of interactive works (such as Flash games), illegal content,
+                            non-Pokémon content, and terrible quality uploads such as those with rampant
+                            compression artifacts. 'Bad art', 'disgusting content' or 'I'm the artist and I
+                            want this removed' are not valid reasons for flagging. If you want to be added
+                            to the DNP list, see the relevant help page.</li>
+                    </ul>
+                </li>
+                <li><strong>Behavior</strong>
+                    <ul>
+                        <li>Don't make creepy comments on artwork. It's good to show light-hearted
+                            appreciation, but we don't need to know the sticky, disturbing details of what
+                            you want to do to whatever character. Also, remember that artists often use
+                            artwork characters to represent themselves. They might not appreciate hearing
+                            about your theoretical intentions.</li>
+                        <li>Don't whine about pictures having content you don't like. You can blacklist
+                            tags you don't like in your account settings.</li>
+                        <li>Don't roleplay in the comments of gallery posts.</li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </div>

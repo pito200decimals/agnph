@@ -81,6 +81,7 @@
 {% block content %}
     <div class="uploadpanel">
         <h3>Upload</h3>
+        <p><strong>Reminder:</strong> AI-generated or AI-assisted artwork is prohibited.</p>
         <form action="" method="post" enctype="multipart/form-data" accept-charset="UTF-8" onsubmit="OnEditSubmit()">
             <table>
                 <tr>

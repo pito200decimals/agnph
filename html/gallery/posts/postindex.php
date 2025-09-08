@@ -115,8 +115,8 @@ if (isset($_GET['api'])) {
     }
 }
 
-// For now, show a banner to highlight the launch of the new oekaki.
-$promotion_banner_enabled = true;
+// Show a banner to highlight the launch of the new oekaki.
+$promotion_banner_enabled = false;
 if ($promotion_banner_enabled) {
     PostBanner("Check out the new Oekaki! <a href='http://agn.ph/oekaki/draw/'>Draw Now</a>", "green", true, true);
 }
