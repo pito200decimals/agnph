@@ -23,7 +23,7 @@ $sql_clause = "TRUE";
 $search = "";
 if (isset($_GET['search'])) $search = $_GET['search'];
 $escaped_search = sql_escape($search);
-$search_terms = array_filter(explode(" ", $search), mb_strlen);
+$search_terms = array_filter(explode(" ", $search), "mb_strlen");
 if (sizeof($search_terms) > 0) {
     $sql_clauses = array();
     foreach ($search_terms as $term) {

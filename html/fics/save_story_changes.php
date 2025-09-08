@@ -212,7 +212,7 @@ if ($sid > 0) {
     $success = SetChapterText($cid, $chaptertext);
     if (!$success) {
         // Delete story.
-        sql_query("DELETE FROM ".FICS_CHAPTER_TABLE." WHERE StoryId=$cid;");
+        sql_query("DELETE FROM ".FICS_CHAPTER_TABLE." WHERE ChapterId=$cid;");
         sql_query("DELETE FROM ".FICS_STORY_TABLE." WHERE StoryId=$sid;");
         return;
     }
