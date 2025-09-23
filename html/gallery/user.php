@@ -18,6 +18,13 @@ $profile_user = &$vars['profile']['user'];
 $profile_uid = $profile_user['UserId'];
 $profile_user['admin'] = GetAdminBadge($profile_user);
 
+$admin_profile_view = isset($user) && CanUserSeeAdminInfo($user);
+if (!$admin_profile_view) {
+    if (IsUserUnactivated($profile_user) || IsUserBanned($profile_user)) {
+        RenderErrorPage("Failed to fetch user profile");
+    }
+}
+
 // Fetch user statistics.
 // Posts Uploaded by user and not deleted:
 sql_query_into($result, "SELECT count(*) FROM ".GALLERY_POST_TABLE." WHERE UploaderId=$profile_uid AND (Status='P' OR Status='A' OR Status='F');", 1) or RenderErrorPage("Failed to fetch user profile");

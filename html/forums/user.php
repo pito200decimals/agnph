@@ -17,6 +17,13 @@ $profile_user = &$vars['profile']['user'];
 $profile_uid = $profile_user['UserId'];
 $profile_user['admin'] = GetAdminBadge($profile_user);
 
+$admin_profile_view = isset($user) && CanUserSeeAdminInfo($user);
+if (!$admin_profile_view) {
+    if (IsUserUnactivated($profile_user) || IsUserBanned($profile_user)) {
+        RenderErrorPage("Failed to fetch user profile");
+    }
+}
+
 // Don't count coauthors for stories uploaded.
 sql_query_into($result, "SELECT COUNT(*) AS C FROM ".FORUMS_POST_TABLE." WHERE UserId=$profile_uid;", 1) or RenderErrorPage("Failed to fetch user profile");
 $profile_user['numForumPosts'] = $result->fetch_assoc()['C'];

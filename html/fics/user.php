@@ -18,6 +18,13 @@ $profile_user = &$vars['profile']['user'];
 $profile_uid = $profile_user['UserId'];
 $profile_user['admin'] = GetAdminBadge($profile_user);
 
+$admin_profile_view = isset($user) && CanUserSeeAdminInfo($user);
+if (!$admin_profile_view) {
+    if (IsUserUnactivated($profile_user) || IsUserBanned($profile_user)) {
+        RenderErrorPage("Failed to fetch user profile");
+    }
+}
+
 // Don't count coauthors for stories uploaded.
 sql_query_into($result, "SELECT count(*) FROM ".FICS_STORY_TABLE." WHERE AuthorUserId=$profile_uid AND ApprovalStatus='A';", 1) or RenderErrorPage("Failed to fetch user profile");
 $profile_user['numStoriesUploaded'] = $result->fetch_assoc()['count(*)'];

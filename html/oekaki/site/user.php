@@ -21,6 +21,13 @@ $profile_user = &$vars['profile']['user'];
 $profile_uid = $profile_user['UserId'];
 $profile_user['admin'] = GetAdminBadge($profile_user);
 
+$admin_profile_view = isset($user) && CanUserSeeAdminInfo($user);
+if (!$admin_profile_view) {
+    if (IsUserUnactivated($profile_user) || IsUserBanned($profile_user)) {
+        RenderErrorPage("Failed to fetch user profile");
+    }
+}
+
 // Fetch user statistics.
 // Posts Uploaded by user and not deleted:
 $post_match_query = "UserId=$profile_uid OR FIND_IN_SET('$profile_uid', AdditionalUserIds)";
