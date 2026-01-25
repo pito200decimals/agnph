@@ -136,7 +136,6 @@ if (isset($_GET['api'])) {
                 'sources' => (mb_strlen($post['Source']) > 0 ? array($post['Source']) : array()),
                 'relationships' => array(
                     'parent_id' => $post['ParentPostId'] > 0 ? $post['ParentPostId'] : null,
-                    'children' => $post['children'],
                 ),
                 'description' => $post['Description'],
             );
