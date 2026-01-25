@@ -17,9 +17,15 @@ if(!defined("SITE_ROOT")) {
 unset($folder_level);
 
 // Set up charset.
-$is_api = isset($_GET['api']) && $_GET['api'] == "xml";
+$is_api = isset($_GET['api']) && ($_GET['api'] == "xml" || $_GET['api'] == "json");
 if ($is_api) {
-    header('Content-type: text/xml; charset=utf-8');
+    if ($_GET['api'] == "xml") {
+        header('Content-type: text/xml; charset=utf-8');
+    } else if ($_GET['api'] == "json") {
+        header('Content-type: application/json; charset=utf-8');
+    } else {
+        header('Content-type: text/html; charset=utf-8');
+    }
 } else {
     header('Content-type: text/html; charset=utf-8');
 }
