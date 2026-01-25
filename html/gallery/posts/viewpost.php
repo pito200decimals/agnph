@@ -103,6 +103,7 @@ $post['harryluUrl'] = "http://iqdb.harry.lu/?url=".SITE_DOMAIN.GetSiteImagePath(
 // Process tags.
 $tags = GetTags($post['PostId']);
 $tags = GetAliasedAndImpliedTags(GALLERY_TAG_TABLE, GALLERY_TAG_ALIAS_TABLE, GALLERY_TAG_IMPLICATION_TABLE, $tags, true /*do_alias*/, false /*do_implication*/, true /*alias_removes_tags*/);
+$post['rawTags'] = $tags;
 $tagNameStr = ToTagNameString($tags);
 $tagCategories = ToTagCategorized($tags);
 $post['tagstring'] = $tagNameStr;
@@ -152,6 +153,34 @@ if (isset($_GET['api'])) {
     if ($api_type == "xml") {
         RenderPage("gallery/posts/viewpost.xml.tpl");
         return;
+    } else if ($api_type == "json") {
+        $json = array(
+            'id' => $post['PostId'],
+            'created_at' => $post['DateUploaded'],
+            'file' => array(
+                'width' => $post['Width'],
+                'height' => $post['Height'],
+                'ext' => $post['Extension'],
+                'md5' => $post['Md5'],
+                'url' => SITE_DOMAIN.$post['downloadUrl'],
+            ),
+            'tags' => GetSortedTagCategories($post['rawTags']),
+            'flags' => array(
+                'pending' => ($post['Status'] == "P"),
+                'flagged' => ($post['Status'] == "F"),
+                'deleted' => ($post['Status'] == "D"),
+            ),
+            'rating' => $post['Rating'],
+            'sources' => (mb_strlen($post['Source']) > 0 ? array($post['Source']) : array()),
+            'relationships' => array(
+                'parent_id' => $post['ParentPostId'] > 0 ? $post['ParentPostId'] : null,
+                'children' => $post['children'],
+            ),
+            'description' => $post['Description'],
+        );
+        $value = json_encode($json);
+        print_r($value);
+        return;
     }
 }
 RenderPage("gallery/posts/viewpost.tpl");
@@ -168,6 +197,7 @@ function GetPost(&$pid) {
     return $post;
 }
 
+// Returns a list of tag category groups to display.
 function ToTagCategorized($allTags) {
     global $GALLERY_TAG_TYPES;
     $tagCategories = array();
@@ -187,6 +217,24 @@ function ToTagCategorized($allTags) {
             });
             $tagCategories[] = $category;
         }
+    }
+    return $tagCategories;
+}
+
+// Returns a list of tag names in each category (even if empty).
+function GetSortedTagCategories($allTags) {
+    global $GALLERY_TAG_TYPES;
+    $tagCategories = array();
+    foreach ($GALLERY_TAG_TYPES as $char => $name) {
+        $tags = array();
+        // $category['name'] = $name;
+        foreach ($allTags as $tag) {
+            if ($tag['Type'] == $char) {
+                $tags[] = $tag['Name'];
+            }
+        }
+        sort($tags);
+        $tagCategories[$name] = $tags;
     }
     return $tagCategories;
 }
@@ -340,6 +388,14 @@ function FetchPostProperties(&$post) {
     sql_query_into($result, "SELECT * FROM ".GALLERY_POST_TABLE." WHERE ParentPostId=".$post['PostId']." AND Status!='D';", 0);
     if ($result->num_rows > 0) {
         $post['hasChildren'] = true;
+        $children = array();
+        while ($row = $result->fetch_assoc()) {
+            $children[] = $row['PostId'];
+        }
+        $post['children'] = $children;
+    } else {
+        $post['hasChildren'] = false;
+        $post['children'] = array();
     }
     // Show status banners for pending, flagged, etc.
     CreateStatusBanner($post);

@@ -112,6 +112,39 @@ if (isset($_GET['api'])) {
     if ($api_type == "xml") {
         RenderPage("gallery/posts/postindex.xml.tpl");
         return;
+    } else if ($api_type == "json") {
+        $json = array(
+            'posts' => array(),
+        );
+        foreach ($posts as $post) {
+            $post_json = array(
+                'id' => $post['PostId'],
+                'created_at' => $post['DateUploaded'],
+                'file' => array(
+                    'width' => $post['Width'],
+                    'height' => $post['Height'],
+                    'ext' => $post['Extension'],
+                    'md5' => $post['Md5'],
+                    'url' => SITE_DOMAIN.$post['image_path'],
+                ),
+                'flags' => array(
+                    'pending' => ($post['Status'] == "P"),
+                    'flagged' => ($post['Status'] == "F"),
+                    'deleted' => ($post['Status'] == "D"),
+                ),
+                'rating' => $post['Rating'],
+                'sources' => (mb_strlen($post['Source']) > 0 ? array($post['Source']) : array()),
+                'relationships' => array(
+                    'parent_id' => $post['ParentPostId'] > 0 ? $post['ParentPostId'] : null,
+                    'children' => $post['children'],
+                ),
+                'description' => $post['Description'],
+            );
+            $json['posts'][] = $post_json;
+        }
+        $value = json_encode($json);
+        print_r($value);
+        return;
     }
 }
 

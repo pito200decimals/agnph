@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <post>
     <id type="integer">{{ post.PostId }}</id>
     <tags>{{ post.tagstring }}</tags>
