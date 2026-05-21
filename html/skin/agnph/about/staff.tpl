@@ -68,22 +68,9 @@
                     <div class="staff-group-img">
                         <img class="profile-img" src="/images/staff/cyn.png" />
                     </div>
-                    <a class="profile-name" href="/user/43/">Cyn</a> <strong>(Fics)</strong>
+                    <a class="profile-name" href="/user/43/">Cyn</a>
                     <p class="profile-bio">
                         Friendly resident Cyndaquil. In charge of site software and Fics.
-                    </p>
-                    <p class="contact">
-                        <span>Contact via:</span> Discord/IRC, Site PM
-                    </p>
-                    <div class="Clear">&nbsp;</div>
-                </li>
-                <li>
-                    <div class="staff-group-img">
-                        <img class="profile-img" src="/images/staff/hatch.png" />
-                    </div>
-                    <a class="profile-name" href="/user/1/">HatchlingByHeart</a>
-                    <p class="profile-bio">
-                        Chubby Dragonite. Server consultant.
                     </p>
                     <p class="contact">
                         <span>Contact via:</span> Discord/IRC, Site PM
@@ -130,19 +117,6 @@
                     <a class="profile-name" href="/user/93/">Alynna</a> <strong>(IRC)</strong>
                     <p class="profile-bio">
                         Classy, rainbow Sylveon.
-                    </p>
-                    <p class="contact">
-                        <span>Contact via:</span> Discord/IRC
-                    </p>
-                    <div class="Clear">&nbsp;</div>
-                </li>
-                <li>
-                    <div class="staff-group-img">
-                        <img class="profile-img" src="/images/staff/kupok.gif" />
-                    </div>
-                    <a class="profile-name" href="/user/6298/">Kupok</a> <strong>(IRC)</strong>
-                    <p class="profile-bio">
-                        The oldest, Grumpiest IRC Troll of a Moogle on AGNPH.
                     </p>
                     <p class="contact">
                         <span>Contact via:</span> Discord/IRC
