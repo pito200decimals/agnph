@@ -34,7 +34,7 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
     ignore_user_abort(true);  // Prevent user closing the page from stopping the upload (so as to not corrupt SQL state).
     if (!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) || empty($_FILES['file']['name']))) {
         // Try file download.
-        accept_file_upload($tmp_path) or OnFileUploadError(null);
+        accept_file_upload($tmp_path) or OnFileUploadError(null, "Error while uploading file: Could not read uploaded file");
     } else if (isset($_POST['source'])) {
         // Get file from url.
         $url = $_POST['source'];
@@ -49,7 +49,7 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
     }
     $md5 = md5_file($tmp_path);
     $ext = GetFileExtension($tmp_path);
-    if ($ext == null) OnFileUploadError($tmp_path);
+    if ($ext == null) OnFileUploadError($tmp_path, "Error while uploading file: Invalid file extension");
     $dst_path = GetSystemImagePath($md5, $ext);
     if (file_exists($dst_path)) {
         AddTagsToExistingPost($_POST['tags'], $md5);
@@ -123,10 +123,11 @@ if ((!(!isset($_FILES['file']['error']) || is_array($_FILES['file']['error']) ||
     if (!$result) {
         // Error uploading file. Clean up final data file and thumbnail/preview files.
         // Thumbs won't exist for video/flash, but these are "".
+        $msg = "Error while uploading file: Could not create post";
         if ($has_preview) {
-            OnFileUploadError(array($dst_path, $thumb_path, $preview_path));
+            OnFileUploadError(array($dst_path, $thumb_path, $preview_path), $msg);
         } else {
-            OnFileUploadError(array($dst_path, $thumb_path));
+            OnFileUploadError(array($dst_path, $thumb_path), $msg);
         }
     }
     $post_id = sql_last_id();
