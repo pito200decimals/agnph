@@ -68,15 +68,15 @@ do_or_die(sql_query(
         Email VARCHAR(".MAX_USER_EMAIL_LENGTH.") NOT NULL,
         Password CHAR(32) NOT NULL,".  // Requires 32 for md5
        "Usermode INT(11) DEFAULT 0 NOT NULL,".  // -1=Banned, 0=Unactivated, 1=User. Unactivated users do not have anything besides this table entry.
-       "Permissions VARCHAR(8) NOT NULL,".  // String of characters, A=Super Admin, R=Forums, G=Gallery, F=Fics, O=Oekaki, I=IRC, M=Minecraft
-       "BanReason VARCHAR(".MAX_BAN_REASON_LENGTH.") NOT NULL,
-        BanExpireTime INT(11) NOT NULL,".  // Timestamp when ban is lifted. -1 for infinite bans.
-       "Title VARCHAR(".MAX_USER_TITLE_LENGTH.") NOT NULL,
-        Location VARCHAR(".MAX_USER_LOCATION_LENGTH.") NOT NULL,
+       "Permissions VARCHAR(8) DEFAULT '' NOT NULL,".  // String of characters, A=Super Admin, R=Forums, G=Gallery, F=Fics, O=Oekaki, I=IRC, M=Minecraft
+       "BanReason VARCHAR(".MAX_BAN_REASON_LENGTH.") DEFAULT '' NOT NULL,
+        BanExpireTime INT(11) DEFAULT 0 NOT NULL,".  // Timestamp when ban is lifted. -1 for infinite bans.
+       "Title VARCHAR(".MAX_USER_TITLE_LENGTH.") DEFAULT '' NOT NULL,
+        Location VARCHAR(".MAX_USER_LOCATION_LENGTH.") DEFAULT '' NOT NULL,
         AutoDetectTimezone TINYINT(1) DEFAULT 1 NOT NULL,
         Timezone FLOAT DEFAULT 0 NOT NULL,
         ShowLocalTime TINYINT(1) DEFAULT 1 NOT NULL,
-        Species VARCHAR(".MAX_USER_SPECIES_LENGTH.") NOT NULL,
+        Species VARCHAR(".MAX_USER_SPECIES_LENGTH.") DEFAULT '' NOT NULL,
         DOB CHAR(10) NOT NULL,".  // Format: YYYY-MM-DD
        "ShowDOB TINYINT(1) DEFAULT 0,
         HideOnlineStatus TINYINT(1) DEFAULT 0,
@@ -87,14 +87,14 @@ do_or_die(sql_query(
        "Skin VARCHAR(".MAX_SKIN_STRING_LENGTH.") DEFAULT '".DEFAULT_SKIN_SETTING."' NOT NULL,".
         // Code-assigned values.
        "JoinTime INT(11) NOT NULL,
-        LastVisitTime INT(11) NOT NULL,
+        LastVisitTime INT(11) DEFAULT 0 NOT NULL,
         DisplayNameChangeTime INT(11) DEFAULT 0 NOT NULL,
         RegisterIP VARCHAR(50) NOT NULL,".  // RegisterIP will be empty-string if the user was imported from the old site software.
-       "KnownIPs VARCHAR(".MAX_KNOWN_IP_STRING_LENGTH.") NOT NULL,".  // Allocate 45 + 1 characters for each IP address. Store the past 10 addresses comma-separated.
-       "ImportForumsPassword VARCHAR(40) NOT NULL,
-        ImportGalleryPassword VARCHAR(40) NOT NULL,
-        ImportFicsPassword VARCHAR(32) NOT NULL,
-        ImportOekakiPassword VARCHAR(32) NOT NULL,
+       "KnownIPs VARCHAR(".MAX_KNOWN_IP_STRING_LENGTH.") DEFAULT '' NOT NULL,".  // Allocate 45 + 1 characters for each IP address. Store the past 10 addresses comma-separated.
+       "ImportForumsPassword VARCHAR(40) DEFAULT '' NOT NULL,
+        ImportGalleryPassword VARCHAR(40) DEFAULT '' NOT NULL,
+        ImportFicsPassword VARCHAR(32) DEFAULT '' NOT NULL,
+        ImportOekakiPassword VARCHAR(32) DEFAULT '' NOT NULL,
         PRIMARY KEY(UserId)
     ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 do_or_die(sql_query("SET GLOBAL event_scheduler = ON;"));  // Turn on cleanup scheduler.
@@ -134,10 +134,10 @@ do_or_die(sql_query(
         PrivateBoard TINYINT(1) DEFAULT 0 NOT NULL,
         Locked TINYINT(1) DEFAULT 0 NOT NULL,
         BoardSortOrder INT(11) DEFAULT 0 NOT NULL,
-        NumPosts INT(11) NOT NULL,
-        NumThreads INT(11) NOT NULL,
-        LastPostId INT(11) NOT NULL,
-        LastPostDate INT(11) NOT NULL,
+        NumPosts INT(11) DEFAULT 0 NOT NULL,
+        NumThreads INT(11) DEFAULT 0 NOT NULL,
+        LastPostId INT(11) DEFAULT 0 NOT NULL,
+        LastPostDate INT(11) DEFAULT 0 NOT NULL,
         PRIMARY KEY(BoardId)
     ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 // Post table. Contains both threads and posts. Threads are equal to the first post in the thread.
@@ -240,7 +240,7 @@ do_or_die(sql_query(
         PoolId INT(11) AUTO_INCREMENT,
         CreatorUserId INT(11) NOT NULL,
         Name VARCHAR(".MAX_GALLERY_POOL_NAME_LENGTH.") NOT NULL,
-        Description TEXT(".MAX_GALLERY_POOL_DESCRIPTION_LENGTH.") NOT NULL,
+        Description TEXT(".MAX_GALLERY_POOL_DESCRIPTION_LENGTH.") DEFAULT '' NOT NULL,
         PRIMARY KEY(PoolId)
     ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 // Table containing comments on posts. TODO: Comment Score?
@@ -257,10 +257,10 @@ do_or_die(sql_query(
 do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_USER_PREF_TABLE." (
         UserId INT(11) NOT NULL,
-        ArtistTagId INT(11) NOT NULL,
+        ArtistTagId INT(11) DEFAULT -1 NOT NULL,
         GalleryPermissions CHAR(1) DEFAULT 'N',".  // R - Restricted user, N - Normal user, C - Contributor, A - Admin
        "GalleryPostsPerPage INT(11) DEFAULT ".DEFAULT_GALLERY_POSTS_PER_PAGE.",
-        GalleryTagBlacklist TEXT(512) NOT NULL,".  // Can hold ~120 tags.
+        GalleryTagBlacklist TEXT(512) DEFAULT '' NOT NULL,".  // Can hold ~120 tags.
        "NavigateGalleryPoolsWithKeyboard TINYINT(1) DEFAULT 0,
         PrivateGalleryFavorites TINYINT(1) DEFAULT 0,
         PlainGalleryTagging TINYINT(1) DEFAULT 0,
@@ -272,7 +272,7 @@ do_or_die(sql_query(
     "CREATE TABLE ".GALLERY_USER_FAVORITES_TABLE." (
         UserId INT(11) NOT NULL,
         PostId INT(11) NOT NULL,
-        Timestamp INT(11) NOT NULL,
+        Timestamp INT(11) DEFAULT 0 NOT NULL,
         PRIMARY KEY(UserId, PostId)
     ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 
@@ -295,13 +295,13 @@ do_or_die(sql_query(
        "ApprovalStatus CHAR(1) DEFAULT 'A',".  // P - Pending, A - Approved, D - Deleted (Pending not used).
        "Completed TINYINT(1) DEFAULT FALSE,
         Featured CHAR(1) DEFAULT '".FICS_NOT_FEATURED."',".  // D/F/f/G/g/S/s/Z/z (upper-case current, lower-case retired).
-       "StoryNotes TEXT(".MAX_FICS_STORY_NOTES_LENGTH.") NOT NULL,
+       "StoryNotes TEXT(".MAX_FICS_STORY_NOTES_LENGTH.") DEFAULT '' NOT NULL,
         ChapterCount INT(11) NOT NULL,
         WordCount INT(11) NOT NULL,
-        Views INT(11) NOT NULL,
-        TotalStars INT(11) NOT NULL,
-        TotalRatings INT(11) NOT NULL,
-        NumReviews INT(11) NOT NULL,
+        Views INT(11) DEFAULT 0 NOT NULL,
+        TotalStars INT(11) DEFAULT 0 NOT NULL,
+        TotalRatings INT(11) DEFAULT 0 NOT NULL,
+        NumReviews INT(11) DEFAULT 0 NOT NULL,
         PRIMARY KEY(StoryId)
     ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 // Fics table that stores all the chapter metadata.
@@ -311,14 +311,14 @@ do_or_die(sql_query(
         ParentStoryId INT(11) NOT NULL,
         AuthorUserId INT(11) NOT NULL,
         Title VARCHAR(".MAX_FICS_CHAPTER_TITLE_LENGTH.") NOT NULL,
-        ChapterItemOrder INT(11) NOT NULL,
-        ChapterNotes TEXT(".MAX_FICS_CHAPTER_NOTES_LENGTH.") NOT NULL,
-        ChapterEndNotes TEXT(".MAX_FICS_CHAPTER_NOTES_LENGTH.") NOT NULL,
-        WordCount INT(11) NOT NULL,
-        Views INT(11) NOT NULL,
-        TotalStars INT(11) NOT NULL,
-        TotalRatings INT(11) NOT NULL,
-        NumReviews INT(11) NOT NULL,
+        ChapterItemOrder INT(11) DEFAULT 0 NOT NULL,
+        ChapterNotes TEXT(".MAX_FICS_CHAPTER_NOTES_LENGTH.") DEFAULT '' NOT NULL,
+        ChapterEndNotes TEXT(".MAX_FICS_CHAPTER_NOTES_LENGTH.") DEFAULT '' NOT NULL,
+        WordCount INT(11) DEFAULT 0 NOT NULL,
+        Views INT(11) DEFAULT 0 NOT NULL,
+        TotalStars INT(11) DEFAULT 0 NOT NULL,
+        TotalRatings INT(11) DEFAULT 0 NOT NULL,
+        NumReviews INT(11) DEFAULT 0 NOT NULL,
         ApprovalStatus CHAR(1) DEFAULT 'A',".  // P - Pending, A - Approved, D - Deleted (Pending not used).
        "PRIMARY KEY(ChapterId)
     ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));  // NOTE: WordCount, TotalStars and TotalRatings not implemented yet.
@@ -331,7 +331,7 @@ do_or_die(sql_query(
         ReviewerUserId INT(11) NOT NULL,
         ReviewDate INT(11) NOT NULL,
         ReviewText TEXT(".MAX_FICS_COMMENT_LENGTH.") NOT NULL,
-        AuthorResponseText TEXT(".MAX_FICS_COMMENT_LENGTH.") NOT NULL,
+        AuthorResponseText TEXT(".MAX_FICS_COMMENT_LENGTH.") DEFAULT '' NOT NULL,
         ReviewScore INT(11) NOT NULL,
         IsReview TINYINT(1) NOT NULL,
         IsComment TINYINT(1) NOT NULL,
@@ -342,10 +342,10 @@ CreateItemTagTables(FICS_TAG_TABLE, FICS_STORY_TAG_TABLE, FICS_TAG_ALIAS_TABLE, 
 do_or_die(sql_query(
    "CREATE TABLE ".FICS_USER_PREF_TABLE." (
         UserId INT(11) NOT NULL,
-        AuthorTagId INT(11) NOT NULL,
+        AuthorTagId INT(11) DEFAULT -1 NOT NULL,
         FicsPermissions CHAR(1) DEFAULT 'N',".  // R - Restricted user, N - Normal user, A - Admin
        "FicsStoriesPerPage INT(11) DEFAULT ".DEFAULT_FICS_STORIES_PER_PAGE.",
-        FicsTagBlacklist TEXT(512) NOT NULL,".  // Can hold ~120 tags.
+        FicsTagBlacklist TEXT(512) DEFAULT '' NOT NULL,".  // Can hold ~120 tags.
        "PrivateFicsFavorites TINYINT(1) DEFAULT 0,
         PlainFicsTagging TINYINT(1) DEFAULT 0,
         PRIMARY KEY(UserId)
@@ -373,13 +373,13 @@ do_or_die(sql_query(
         AdditionalUserIds VARCHAR(160) DEFAULT '' NOT NULL,
         ParentPostId INT(11) NOT NULL,
         Timestamp INT(11) NOT NULL,
-        Title VARCHAR(".MAX_OEKAKI_POST_TITLE_LENGTH.") NOT NULL,
+        Title VARCHAR(".MAX_OEKAKI_POST_TITLE_LENGTH.") DEFAULT '' NOT NULL,
         Text TEXT(".MAX_OEKAKI_POST_TEXT_LENGTH.") NOT NULL,
-        Width INT(11) NOT NULL,
-        Height INT(11) NOT NULL,
-        Extension CHAR(3) NOT NULL,
+        Width INT(11) DEFAULT 0 NOT NULL,
+        Height INT(11) DEFAULT 0 NOT NULL,
+        Extension CHAR(3) DEFAULT '' NOT NULL,
         Adult TINYINT(1) DEFAULT 0 NOT NULL,
-        Duration INT(11) NOT NULL,
+        Duration INT(11) DEFAULT 0 NOT NULL,
         HasAnimation TINYINT(1) DEFAULT 0 NOT NULL,
         Version INT(11) DEFAULT 1 NOT NULL,
         Status CHAR(1) DEFAULT 'A' NOT NULL,".  // A - Approved, M - ???, D - Deleted.
@@ -461,9 +461,9 @@ function CreateItemTagTables($tag_table_name, $item_tag_table_name, $alias_table
             CreatorUserId INT(11) DEFAULT 0 NOT NULL,
             ChangeTypeUserId INT(11) DEFAULT 0 NOT NULL,
             ChangeTypeTimestamp INT(11) DEFAULT 0 NOT NULL,
-            Note TEXT(".MAX_TAG_NOTE_LENGTH.") NOT NULL,
+            Note TEXT(".MAX_TAG_NOTE_LENGTH.") DEFAULT '' NOT NULL,
             HideTag TINYINT(1) DEFAULT 0 NOT NULL,
-            ItemCount INT(11) NOT NULL,
+            ItemCount INT(11) DEFAULT 0 NOT NULL,
             PRIMARY KEY(TagId, Name)
         ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
     // Table for item-tag mapping.
