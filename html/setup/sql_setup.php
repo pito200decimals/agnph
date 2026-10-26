@@ -151,9 +151,9 @@ do_or_die(sql_query(
         EditDate INT(11) DEFAULT 0 NOT NULL,
         ParentId INT(11) NOT NULL,
         IsThread TINYINT(1) DEFAULT 0 NOT NULL,".  // Properties below only belong to threads.
-       "Replies INT(11) NOT NULL,
-        Views INT(11) NOT NULL,
-        LastPostDate INT(11) NOT NULL,
+       "Replies INT(11) DEFAULT 0 NOT NULL,
+        Views INT(11) DEFAULT 0 NOT NULL,
+        LastPostDate INT(11) DEFAULT 0 NOT NULL,
         Sticky TINYINT(1) DEFAULT 0 NOT NULL,
         Locked TINYINT(1) DEFAULT 0 NOT NULL,
         NewsPost TINYINT(1) DEFAULT 0 NOT NULL,
@@ -192,12 +192,12 @@ do_or_die(sql_query(
         HasPreview TINYINT(1) DEFAULT 0,
         UploaderId INT(11) NOT NULL,
         DateUploaded INT(11) NOT NULL,
-        Source VARCHAR(256) NOT NULL,
+        Source VARCHAR(256) DEFAULT '' NOT NULL,
         Rating CHAR(1) DEFAULT 'q',
-        Description TEXT(512) NOT NULL,
+        Description TEXT(512) DEFAULT '' NOT NULL,
         ParentPostId INT(11) DEFAULT -1,
         ParentPoolId INT(11) DEFAULT -1,
-        PoolItemOrder INT(11) NOT NULL,
+        PoolItemOrder INT(11) DEFAULT 0 NOT NULL,
         Score INT(11) DEFAULT 0,
         NumFavorites INT(11) DEFAULT 0,
         NumComments INT(11) DEFAULT 0,
@@ -207,7 +207,7 @@ do_or_die(sql_query(
         FileSize VARCHAR(8) NOT NULL,
         Status CHAR(1) DEFAULT 'P',".  // P for pending, A for approved, F for flagged for deletion, D for deleted (L for linked to source?)
        "FlaggerUserId INT(11) DEFAULT -1 NOT NULL,
-        FlagReason VARCHAR(".MAX_GALLERY_POST_FLAG_REASON_LENGTH.") NOT NULL,
+        FlagReason VARCHAR(".MAX_GALLERY_POST_FLAG_REASON_LENGTH.") DEFAULT '' NOT NULL,
         PRIMARY KEY(PostId)
     ) DEFAULT CHARSET=utf8 COLLATE utf8_bin;"));
 // Tag Types: A=Artist, B=Copyright, C=Character, D=Species, M=General
